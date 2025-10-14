@@ -1,37 +1,40 @@
 # Levels of Measurement SPFx Assignment Web Part
 
-This SharePoint Framework (SPFx) solution delivers the first activity in the statistics assignment series: an interactive practice experience for identifying nominal, ordinal, interval, and ratio data.
+This SharePoint Framework (SPFx) solution delivers the first activity in the statistics assignment series: an interactive practice lab for recognising nominal, ordinal, interval, and ratio variables.
 
 ## Getting started
 
-1. Ensure the SPFx prerequisites (Node.js 16.x with npm 8.x, Yeoman, Gulp) are installed. See the [official setup guide](https://learn.microsoft.com/sharepoint/dev/spfx/set-up-your-development-environment).
-2. From this folder, install dependencies:
+1. Install the SPFx prerequisites (Node.js 16.13.x with npm 8.x, Yeoman, and Gulp). See the [official setup guide](https://learn.microsoft.com/sharepoint/dev/spfx/set-up-your-development-environment).
+2. Install project dependencies:
    ```bash
    npm install
    ```
 3. Start the local workbench:
    ```bash
-   gulp serve
+   npm run serve
    ```
-4. When prompted, load the `Levels of Measurement Practice` web part and interact with the scenarios.
+4. When the workbench loads, add the **Levels of Measurement Practice** web part to try the activity.
+
+> Note: This project targets SPFx 1.17.4. The toolchain supports Node versions between 16.13.x and 16.19.x. Using newer Node releases (for example Node 18 or Node 22) will block `gulp` builds.
 
 ## Packaging and deployment
 
-To create a deployable package for your SharePoint App Catalog:
+Create a deployable package for the SharePoint App Catalog:
 
 ```bash
 gulp bundle --ship
 gulp package-solution --ship
 ```
 
-The generated `.sppkg` file will be located under `sharepoint/solution`. Upload it to your tenant’s App Catalog and add the web part to the desired site collection.
+The generated `.sppkg` file appears under `sharepoint/solution`. Upload it to your tenant's App Catalog and add the web part to your target site.
 
 ## Customising the assignment
 
-- Update the scenarios in `src/webparts/levelsOfMeasurement/components/data.ts`.
-- Adjust UI copy or helper text in `LevelsOfMeasurement.tsx` and the property pane strings in `loc/en-us.js`.
-- Extend the styling in `components/LevelsOfMeasurement.module.scss` to match your site design.
+- Adjust the practice scenarios and explanations in `src/webparts/levelsOfMeasurement/components/data.ts`.
+- Update the quiz behaviour or copy in `src/webparts/levelsOfMeasurement/components/LevelsOfMeasurement.tsx`.
+- Tune the styling in `src/webparts/levelsOfMeasurement/components/LevelsOfMeasurement.module.scss` to match your site.
+- Edit property pane labels in `src/webparts/levelsOfMeasurement/loc/en-us.js`.
 
-## Next steps
+## Next steps for the assignment series
 
-Use this project as the foundation for additional assignment web parts. Create new folders under `src/webparts/` for each activity and register them in `config/config.json`.
+Use this project as the foundation for additional SharePoint web parts in the assignment series. Create a new folder under `src/webparts/` for each activity and add it to `config/config.json`.

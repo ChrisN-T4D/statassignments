@@ -28,11 +28,17 @@ const LevelsOfMeasurement: React.FC<ILevelsOfMeasurementProps> = (props) => {
   const currentResponse = currentQuestion ? responses[currentQuestion.id] : undefined;
 
   const answeredCount = React.useMemo(
-    () => Object.values(responses).filter((value) => value !== undefined).length,
+    () =>
+      questions.reduce((count, question) => {
+        return responses[question.id] ? count + 1 : count;
+      }, 0),
     [responses]
   );
   const correctCount = React.useMemo(
-    () => Object.values(responses).filter((value) => value?.correct).length,
+    () =>
+      questions.reduce((count, question) => {
+        return responses[question.id]?.correct ? count + 1 : count;
+      }, 0),
     [responses]
   );
 

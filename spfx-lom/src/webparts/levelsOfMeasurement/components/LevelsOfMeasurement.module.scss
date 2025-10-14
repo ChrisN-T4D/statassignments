@@ -8,15 +8,15 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   max-width: 960px;
   margin: 0 auto;
+}
 
-  &.dark {
-    background-color: $ms-color-neutralLighterAlt;
-    color: $ms-color-white;
-  }
+.dark {
+  background-color: $ms-color-neutralLighterAlt;
+  color: $ms-color-white;
+}
 
-  &.teams {
-    font-family: $ms-font-family-fallbacks;
-  }
+.teams {
+  font-family: $ms-font-family-fallbacks;
 }
 
 .header {

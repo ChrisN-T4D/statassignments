@@ -17,8 +17,8 @@ export interface ILevelsOfMeasurementWebPartProps {
 }
 
 export default class LevelsOfMeasurementWebPart extends BaseClientSideWebPart<ILevelsOfMeasurementWebPartProps> {
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
+  private _isDarkTheme = false;
+  private _environmentMessage = '';
 
   protected async onInit(): Promise<void> {
     this._environmentMessage = await this._getEnvironmentMessage();
@@ -32,7 +32,7 @@ export default class LevelsOfMeasurementWebPart extends BaseClientSideWebPart<IL
         description: this.properties.description,
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks?.microsoftTeams,
+        hasTeamsContext: Boolean(this.context.sdks?.microsoftTeams),
         userDisplayName: this.context.pageContext.user.displayName
       }
     );
@@ -79,7 +79,7 @@ export default class LevelsOfMeasurementWebPart extends BaseClientSideWebPart<IL
   }
 
   private async _getEnvironmentMessage(): Promise<string> {
-    if (!!this.context.sdks?.microsoftTeams) {
+    if (this.context.sdks?.microsoftTeams) {
       return strings.TeamsEnvironmentLabel;
     }
 
