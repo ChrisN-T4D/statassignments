@@ -1,0 +1,9 @@
+{
+  "extends": "@microsoft/rush-stack-compiler-4.5/includes/tsconfig-web.json",
+  "compilerOptions": {
+    "types": [
+      "es6-promise",
+      "webpack-env"
+    ]
+  }
+}

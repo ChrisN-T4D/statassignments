@@ -1,0 +1,369 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.levelsOfMeasurement {
+  padding: 24px;
+  border-radius: 12px;
+  background-color: $ms-color-white;
+  color: $ms-color-neutralPrimary;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  max-width: 960px;
+  margin: 0 auto;
+
+  &.dark {
+    background-color: $ms-color-neutralLighterAlt;
+    color: $ms-color-white;
+  }
+
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: $ms-color-neutralSecondary;
+  line-height: 1.5;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: $ms-color-neutralSecondary;
+}
+
+.environment {
+  padding: 4px 8px;
+  background-color: rgba(0, 120, 212, 0.12);
+  border-radius: 999px;
+}
+
+.progressTracker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.progressPill {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  background-color: $ms-color-neutralLighter;
+  color: $ms-color-neutralPrimary;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.progressPending {
+  background-color: $ms-color-neutralLighter;
+}
+
+.progressCorrect {
+  background-color: rgba(16, 124, 16, 0.15);
+  color: #0f6a0f;
+}
+
+.progressIncorrect {
+  background-color: rgba(196, 64, 57, 0.18);
+  color: #a4262c;
+}
+
+.progressActive {
+  border: 2px solid #0078d4;
+  color: #004578;
+}
+
+.quizCard {
+  border-radius: 12px;
+  border: 1px solid $ms-color-neutralLight;
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: rgba(0, 120, 212, 0.03);
+}
+
+.cardHeader {
+  margin-bottom: 16px;
+}
+
+.promptLabel {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #004578;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prompt {
+  margin: 8px 0 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.context {
+  margin: 12px 0 20px;
+  padding: 12px 16px;
+  border-left: 3px solid #0078d4;
+  background-color: rgba(0, 120, 212, 0.08);
+  font-size: 0.95rem;
+  color: $ms-color-neutralSecondary;
+}
+
+.options {
+  display: grid;
+  gap: 12px;
+}
+
+.optionButton {
+  text-align: left;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid $ms-color-neutralQuaternaryAlt;
+  background-color: $ms-color-white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border-color: #0078d4;
+  }
+}
+
+.optionSelected {
+  border-color: #0078d4;
+  box-shadow: 0 8px 20px rgba(0, 120, 212, 0.15);
+}
+
+.optionCorrect {
+  border-color: #0f6a0f;
+  background-color: rgba(198, 239, 206, 0.6);
+}
+
+.optionIncorrect {
+  border-color: #a4262c;
+  background-color: rgba(255, 201, 198, 0.45);
+}
+
+.optionTitle {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.optionHelp {
+  font-size: 0.9rem;
+  color: $ms-color-neutralSecondary;
+}
+
+.optionHint {
+  font-size: 0.85rem;
+  color: $ms-color-neutralSecondary;
+  font-style: italic;
+}
+
+.feedback {
+  margin-top: 20px;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.feedbackCorrect {
+  border: 1px solid #0f6a0f;
+  background-color: rgba(198, 239, 206, 0.7);
+  color: #0f6a0f;
+}
+
+.feedbackIncorrect {
+  border: 1px solid #a4262c;
+  background-color: rgba(252, 231, 228, 0.85);
+  color: #a4262c;
+}
+
+.insight {
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.cardActions {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actionGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primaryButton {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #0078d4;
+  color: $ms-color-white;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #005a9e;
+  }
+}
+
+.secondaryButton {
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #0078d4;
+  background-color: transparent;
+  color: #0078d4;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 120, 212, 0.1);
+  }
+}
+
+.summaryCard {
+  border-radius: 12px;
+  border: 1px solid $ms-color-neutralQuaternaryAlt;
+  padding: 24px;
+  background-color: rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+}
+
+.summaryList {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.summaryItem {
+  border-radius: 10px;
+  border: 1px solid $ms-color-neutralLight;
+  background-color: $ms-color-white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.summaryCorrect {
+  border-color: rgba(15, 106, 15, 0.5);
+}
+
+.summaryIncorrect {
+  border-color: rgba(164, 38, 44, 0.5);
+}
+
+.summaryQuestionButton {
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.summaryQuestionNumber {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: $ms-color-neutralSecondary;
+}
+
+.summaryQuestionPrompt {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.summaryAnswerBlock {
+  display: grid;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.summaryLabel {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.summaryRationale {
+  margin: 4px 0 0;
+  color: $ms-color-neutralSecondary;
+  line-height: 1.45;
+}
+
+.summaryActions {
+  margin-top: 24px;
+}
+
+.referencePanel {
+  border-top: 1px solid $ms-color-neutralLight;
+  padding-top: 20px;
+  margin-top: 24px;
+
+  h3 {
+    margin-bottom: 12px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+  }
+
+  li {
+    line-height: 1.5;
+  }
+}
+
+.tip {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: $ms-color-neutralSecondary;
+  background-color: rgba(0, 120, 212, 0.08);
+  padding: 12px 16px;
+  border-radius: 8px;
+}

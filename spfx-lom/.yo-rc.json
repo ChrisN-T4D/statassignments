@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.18.2",
+    "libraryId": "d62180db-a7c5-4014-bcab-dfb1c8c95649",
+    "libraryName": "spfx-lom",
+    "environment": "spo",
+    "packageManager": "npm",
+    "isCreatingSolution": true,
+    "componentType": "webpart",
+    "templateType": "react",
+    "componentName": "LevelsOfMeasurement",
+    "componentDescription": "Interactive practice web part for levels of measurement",
+    "framework": "react",
+    "solutionName": "spfx-lom"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "bundles": {
+    "levels-of-measurement-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/levelsOfMeasurement/LevelsOfMeasurementWebPart.js",
+          "manifest": "./src/webparts/levelsOfMeasurement/LevelsOfMeasurementWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "LevelsOfMeasurementWebPartStrings": "lib/webparts/levelsOfMeasurement/loc/{locale}.js"
+  }
+}

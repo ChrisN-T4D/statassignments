@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "initialPage": "?loadSPFX=true&debugManifestsFile=https://localhost:5432/temp/manifests.js",
+  "api": {
+    "port": 5432,
+    "entryPath": "node_modules/@microsoft/sp-webpart-workbench/lib/api/"
+  },
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://contoso.sharepoint.com/sites/dev/SitePages/Home.aspx",
+      "customActions": {
+        "levels-of-measurement": {
+          "location": "ClientSideExtension.WebPart",
+          "properties": {
+            "description": "Levels of Measurement practice web part"
+          }
+        }
+      }
+    }
+  }
+}
