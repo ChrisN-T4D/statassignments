@@ -1,0 +1,317 @@
+[
+  {
+    "name": "semesters",
+    "type": "base",
+    "schema": [
+      {
+        "name": "code",
+        "type": "text",
+        "required": true,
+        "options": {
+          "min": 4,
+          "max": 10
+        }
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "required": false
+      },
+      {
+        "name": "end_date",
+        "type": "date",
+        "required": false
+      },
+      {
+        "name": "is_active",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "indexes": ["CREATE UNIQUE INDEX idx_semester_code ON semesters (code)"],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "roster",
+    "type": "base",
+    "schema": [
+      {
+        "name": "semester",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "semesters",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "student_key",
+        "type": "text",
+        "required": true,
+        "options": {
+          "min": 6,
+          "max": 20
+        }
+      },
+      {
+        "name": "claim_token",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "user",
+        "type": "relation",
+        "required": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "claimed_at",
+        "type": "date",
+        "required": false
+      },
+      {
+        "name": "bb_username",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "bb_id",
+        "type": "text",
+        "required": false
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_roster_semester_key ON roster (semester, student_key)",
+      "CREATE UNIQUE INDEX idx_roster_user ON roster (user) WHERE user != ''"
+    ],
+    "listRule": "@request.auth.id != '' && (user = @request.auth.id || @request.auth.role = 'instructor')",
+    "viewRule": "@request.auth.id != '' && (user = @request.auth.id || @request.auth.role = 'instructor')",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "modules",
+    "type": "base",
+    "schema": [
+      {
+        "name": "semester",
+        "type": "relation",
+        "required": false,
+        "options": {
+          "collectionId": "semesters",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "software_type",
+        "type": "select",
+        "required": true,
+        "options": {
+          "values": ["jamovi", "r", "stata", "spss", "all"]
+        }
+      },
+      {
+        "name": "topic_id",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "items",
+    "type": "base",
+    "schema": [
+      {
+        "name": "module",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "modules",
+          "cascadeDelete": true,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "item_type",
+        "type": "select",
+        "required": true,
+        "options": {
+          "values": ["multiple_choice", "numeric", "true_false", "short_answer", "step_checklist"]
+        }
+      },
+      {
+        "name": "prompt",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "options",
+        "type": "json",
+        "required": false
+      },
+      {
+        "name": "answer_key",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "explanation",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "hint",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "difficulty",
+        "type": "select",
+        "required": false,
+        "options": {
+          "values": ["easy", "medium", "hard"]
+        }
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "json",
+        "required": false
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "attempts",
+    "type": "base",
+    "schema": [
+      {
+        "name": "semester",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "semesters",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "profile",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "roster",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "module",
+        "type": "relation",
+        "required": false,
+        "options": {
+          "collectionId": "modules",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "item",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "items",
+          "cascadeDelete": false,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "software_type",
+        "type": "select",
+        "required": true,
+        "options": {
+          "values": ["jamovi", "r", "stata", "spss"]
+        }
+      },
+      {
+        "name": "response",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "is_correct",
+        "type": "bool",
+        "required": true
+      },
+      {
+        "name": "score",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "time_spent_seconds",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "attempt_no",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "hint_used",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "listRule": "@request.auth.id != '' && (profile.user = @request.auth.id || @request.auth.role = 'instructor')",
+    "viewRule": "@request.auth.id != '' && (profile.user = @request.auth.id || @request.auth.role = 'instructor')",
+    "createRule": "@request.auth.id != '' && profile.user = @request.auth.id",
+    "updateRule": null,
+    "deleteRule": null
+  }
+]

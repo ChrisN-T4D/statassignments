@@ -1,0 +1,305 @@
+{
+  "semesters": [
+    {
+      "code": "2026SP",
+      "name": "Spring 2026",
+      "start_date": "2026-01-12",
+      "end_date": "2026-05-08",
+      "is_active": true
+    }
+  ],
+  "modules": [
+    {
+      "topic_id": "descriptive-stats",
+      "software_type": "all",
+      "title": "Descriptive Statistics",
+      "description": "Measures of central tendency and variability",
+      "order": 1
+    },
+    {
+      "topic_id": "visualizations",
+      "software_type": "all",
+      "title": "Data Visualization",
+      "description": "Creating and interpreting statistical graphs",
+      "order": 2
+    },
+    {
+      "topic_id": "normal-distribution",
+      "software_type": "all",
+      "title": "Normal Distribution",
+      "description": "Properties of the normal curve",
+      "order": 3
+    },
+    {
+      "topic_id": "z-scores",
+      "software_type": "all",
+      "title": "Z-Scores & Standardization",
+      "description": "Converting raw scores to z-scores",
+      "order": 4
+    },
+    {
+      "topic_id": "probability",
+      "software_type": "all",
+      "title": "Probability Basics",
+      "description": "Fundamental probability concepts",
+      "order": 5
+    },
+    {
+      "topic_id": "sampling",
+      "software_type": "all",
+      "title": "Sampling & Distributions",
+      "description": "Sampling methods and the central limit theorem",
+      "order": 6
+    },
+    {
+      "topic_id": "hypothesis-testing",
+      "software_type": "all",
+      "title": "Hypothesis Testing",
+      "description": "Null hypothesis significance testing",
+      "order": 7
+    },
+    {
+      "topic_id": "t-tests",
+      "software_type": "all",
+      "title": "T-Tests",
+      "description": "Comparing means with t-tests",
+      "order": 8
+    },
+    {
+      "topic_id": "correlation",
+      "software_type": "all",
+      "title": "Correlation",
+      "description": "Measuring relationships between variables",
+      "order": 9
+    },
+    {
+      "topic_id": "regression",
+      "software_type": "all",
+      "title": "Simple Regression",
+      "description": "Predicting outcomes with linear regression",
+      "order": 10
+    }
+  ],
+  "items": [
+    {
+      "module_topic": "descriptive-stats",
+      "item_type": "numeric",
+      "prompt": "A dataset has the following values: 5, 8, 12, 15, 20. What is the mean?",
+      "options": null,
+      "answer_key": "12",
+      "explanation": "Mean = (5 + 8 + 12 + 15 + 20) / 5 = 60 / 5 = 12",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "descriptive-stats",
+      "item_type": "numeric",
+      "prompt": "For the dataset: 3, 7, 7, 9, 12, what is the median?",
+      "options": null,
+      "answer_key": "7",
+      "explanation": "The median is the middle value when data is ordered. With 5 values, the median is the 3rd value: 7",
+      "difficulty": "easy",
+      "order": 2
+    },
+    {
+      "module_topic": "descriptive-stats",
+      "item_type": "multiple_choice",
+      "prompt": "Which measure of central tendency is most affected by outliers?",
+      "options": ["Mean", "Median", "Mode", "Range"],
+      "answer_key": "Mean",
+      "explanation": "The mean includes every value in its calculation, so extreme values (outliers) pull it toward them. The median only depends on the middle position.",
+      "difficulty": "easy",
+      "order": 3
+    },
+    {
+      "module_topic": "descriptive-stats",
+      "item_type": "numeric",
+      "prompt": "A sample has variance of 16. What is the standard deviation?",
+      "options": null,
+      "answer_key": "4",
+      "explanation": "Standard deviation is the square root of variance. √16 = 4",
+      "difficulty": "easy",
+      "order": 4
+    },
+    {
+      "module_topic": "descriptive-stats",
+      "item_type": "multiple_choice",
+      "prompt": "When should you use the median instead of the mean?",
+      "options": ["When data is normally distributed", "When data has outliers or is skewed", "When you have categorical data", "When sample size is large"],
+      "answer_key": "When data has outliers or is skewed",
+      "explanation": "The median is resistant to outliers and is the better measure of center for skewed distributions.",
+      "difficulty": "medium",
+      "order": 5
+    },
+    {
+      "module_topic": "z-scores",
+      "item_type": "numeric",
+      "prompt": "A score of 85 comes from a distribution with M = 100 and SD = 15. What is the z-score?",
+      "options": null,
+      "answer_key": "-1",
+      "explanation": "z = (X - M) / SD = (85 - 100) / 15 = -15 / 15 = -1",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "z-scores",
+      "item_type": "multiple_choice",
+      "prompt": "A z-score of +2.0 means the score is:",
+      "options": ["2 points above the mean", "2 standard deviations above the mean", "In the top 2% of scores", "Twice the mean"],
+      "answer_key": "2 standard deviations above the mean",
+      "explanation": "A z-score indicates how many standard deviations a score is from the mean. z = +2 means 2 SDs above.",
+      "difficulty": "easy",
+      "order": 2
+    },
+    {
+      "module_topic": "z-scores",
+      "item_type": "numeric",
+      "prompt": "What percentage of scores fall below a z-score of 0?",
+      "options": null,
+      "answer_key": "50",
+      "explanation": "A z-score of 0 is exactly at the mean, and 50% of scores fall below the mean in a normal distribution.",
+      "difficulty": "easy",
+      "order": 3
+    },
+    {
+      "module_topic": "normal-distribution",
+      "item_type": "numeric",
+      "prompt": "In a normal distribution, approximately what percentage of scores fall within 1 standard deviation of the mean?",
+      "options": null,
+      "answer_key": "68",
+      "explanation": "The empirical rule states that 68% of data falls within ±1 SD of the mean.",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "normal-distribution",
+      "item_type": "true_false",
+      "prompt": "In a normal distribution, the mean equals the median.",
+      "options": ["True", "False"],
+      "answer_key": "True",
+      "explanation": "The normal distribution is symmetric, so the mean and median are equal and located at the center.",
+      "difficulty": "easy",
+      "order": 2
+    },
+    {
+      "module_topic": "normal-distribution",
+      "item_type": "multiple_choice",
+      "prompt": "A distribution has positive skew. Which statement is true?",
+      "options": ["Mean < Median", "Mean > Median", "Mean = Median", "Cannot determine"],
+      "answer_key": "Mean > Median",
+      "explanation": "In a positively skewed distribution, the tail extends to the right, pulling the mean higher than the median.",
+      "difficulty": "medium",
+      "order": 3
+    },
+    {
+      "module_topic": "hypothesis-testing",
+      "item_type": "multiple_choice",
+      "prompt": "The null hypothesis typically states that:",
+      "options": ["There is an effect", "There is no effect", "The sample is biased", "The test is significant"],
+      "answer_key": "There is no effect",
+      "explanation": "The null hypothesis (H₀) represents the default position that there is no effect, no difference, or no relationship.",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "hypothesis-testing",
+      "item_type": "multiple_choice",
+      "prompt": "If p = .03 and α = .05, you should:",
+      "options": ["Reject the null hypothesis", "Fail to reject the null hypothesis", "Accept the null hypothesis", "Increase sample size"],
+      "answer_key": "Reject the null hypothesis",
+      "explanation": "Since p (.03) is less than α (.05), the result is statistically significant and we reject H₀.",
+      "difficulty": "easy",
+      "order": 2
+    },
+    {
+      "module_topic": "hypothesis-testing",
+      "item_type": "multiple_choice",
+      "prompt": "A Type I error occurs when you:",
+      "options": ["Reject a true null hypothesis", "Fail to reject a false null hypothesis", "Accept the alternative hypothesis correctly", "Use too small a sample"],
+      "answer_key": "Reject a true null hypothesis",
+      "explanation": "Type I error (false positive) means concluding there is an effect when there actually is not.",
+      "difficulty": "medium",
+      "order": 3
+    },
+    {
+      "module_topic": "t-tests",
+      "item_type": "multiple_choice",
+      "prompt": "Which t-test should you use to compare scores before and after an intervention in the same participants?",
+      "options": ["One-sample t-test", "Independent samples t-test", "Paired samples t-test", "One-way ANOVA"],
+      "answer_key": "Paired samples t-test",
+      "explanation": "The paired (dependent) samples t-test is used when comparing two measurements from the same participants.",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "t-tests",
+      "item_type": "numeric",
+      "prompt": "The degrees of freedom for an independent samples t-test with n₁=15 and n₂=20 is:",
+      "options": null,
+      "answer_key": "33",
+      "explanation": "df = n₁ + n₂ - 2 = 15 + 20 - 2 = 33",
+      "difficulty": "medium",
+      "order": 2
+    },
+    {
+      "module_topic": "correlation",
+      "item_type": "multiple_choice",
+      "prompt": "A correlation of r = -0.85 indicates:",
+      "options": ["A weak positive relationship", "A strong positive relationship", "A weak negative relationship", "A strong negative relationship"],
+      "answer_key": "A strong negative relationship",
+      "explanation": "The absolute value |r| = 0.85 is strong (> 0.5), and the negative sign indicates an inverse relationship.",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "correlation",
+      "item_type": "numeric",
+      "prompt": "If r = 0.60, what is r² (coefficient of determination)?",
+      "options": null,
+      "answer_key": "0.36",
+      "explanation": "r² = 0.60² = 0.36, meaning 36% of the variance in one variable is explained by the other.",
+      "difficulty": "easy",
+      "order": 2
+    },
+    {
+      "module_topic": "correlation",
+      "item_type": "true_false",
+      "prompt": "A significant correlation proves causation.",
+      "options": ["True", "False"],
+      "answer_key": "False",
+      "explanation": "Correlation does not imply causation. A relationship between variables does not mean one causes the other.",
+      "difficulty": "easy",
+      "order": 3
+    },
+    {
+      "module_topic": "probability",
+      "item_type": "multiple_choice",
+      "prompt": "If you flip a fair coin twice, what is the probability of getting two heads?",
+      "options": ["0.50", "0.25", "0.75", "0.125"],
+      "answer_key": "0.25",
+      "explanation": "P(H on first) × P(H on second) = 0.5 × 0.5 = 0.25",
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "module_topic": "sampling",
+      "item_type": "multiple_choice",
+      "prompt": "The standard error of the mean decreases as:",
+      "options": ["Sample size decreases", "Sample size increases", "Population variance increases", "The mean increases"],
+      "answer_key": "Sample size increases",
+      "explanation": "SE = s / √n. As n increases, the denominator gets larger, making SE smaller.",
+      "difficulty": "medium",
+      "order": 1
+    },
+    {
+      "module_topic": "regression",
+      "item_type": "multiple_choice",
+      "prompt": "In the regression equation Ŷ = 10 + 3X, what does the 3 represent?",
+      "options": ["The intercept", "The slope", "The correlation", "The error term"],
+      "answer_key": "The slope",
+      "explanation": "The slope (b) indicates how much Y changes for each 1-unit increase in X. Here, Y increases by 3 for each 1-unit increase in X.",
+      "difficulty": "easy",
+      "order": 1
+    }
+  ]
+}

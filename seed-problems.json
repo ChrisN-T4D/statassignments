@@ -1,0 +1,200 @@
+[
+  {
+    "topic_id": "descriptive-stats",
+    "question": "A dataset has the following values: 5, 8, 12, 15, 20. What is the mean?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "12",
+    "explanation": "Mean = (5 + 8 + 12 + 15 + 20) / 5 = 60 / 5 = 12",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "descriptive-stats",
+    "question": "For the dataset: 3, 7, 7, 9, 12, what is the median?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "7",
+    "explanation": "The median is the middle value when data is ordered. With 5 values, the median is the 3rd value: 7",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "descriptive-stats",
+    "question": "Which measure of central tendency is most affected by outliers?",
+    "question_type": "multiple_choice",
+    "options": ["Mean", "Median", "Mode", "Range"],
+    "correct_answer": "Mean",
+    "explanation": "The mean includes every value in its calculation, so extreme values (outliers) pull it toward them. The median only depends on the middle position.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "descriptive-stats",
+    "question": "A sample has variance of 16. What is the standard deviation?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "4",
+    "explanation": "Standard deviation is the square root of variance. √16 = 4",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "descriptive-stats",
+    "question": "When should you use the median instead of the mean?",
+    "question_type": "multiple_choice",
+    "options": ["When data is normally distributed", "When data has outliers or is skewed", "When you have categorical data", "When sample size is large"],
+    "correct_answer": "When data has outliers or is skewed",
+    "explanation": "The median is resistant to outliers and is the better measure of center for skewed distributions.",
+    "difficulty": "medium"
+  },
+  {
+    "topic_id": "z-scores",
+    "question": "A score of 85 comes from a distribution with M = 100 and SD = 15. What is the z-score?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "-1",
+    "explanation": "z = (X - M) / SD = (85 - 100) / 15 = -15 / 15 = -1",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "z-scores",
+    "question": "A z-score of +2.0 means the score is:",
+    "question_type": "multiple_choice",
+    "options": ["2 points above the mean", "2 standard deviations above the mean", "In the top 2% of scores", "Twice the mean"],
+    "correct_answer": "2 standard deviations above the mean",
+    "explanation": "A z-score indicates how many standard deviations a score is from the mean. z = +2 means 2 SDs above.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "z-scores",
+    "question": "What percentage of scores fall below a z-score of 0?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "50",
+    "explanation": "A z-score of 0 is exactly at the mean, and 50% of scores fall below the mean in a normal distribution.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "normal-distribution",
+    "question": "In a normal distribution, approximately what percentage of scores fall within 1 standard deviation of the mean?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "68",
+    "explanation": "The empirical rule states that 68% of data falls within ±1 SD of the mean.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "normal-distribution",
+    "question": "In a normal distribution, the mean equals the median.",
+    "question_type": "true_false",
+    "options": ["True", "False"],
+    "correct_answer": "True",
+    "explanation": "The normal distribution is symmetric, so the mean and median are equal and located at the center.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "normal-distribution",
+    "question": "A distribution has positive skew. Which statement is true?",
+    "question_type": "multiple_choice",
+    "options": ["Mean < Median", "Mean > Median", "Mean = Median", "Cannot determine"],
+    "correct_answer": "Mean > Median",
+    "explanation": "In a positively skewed distribution, the tail extends to the right, pulling the mean higher than the median.",
+    "difficulty": "medium"
+  },
+  {
+    "topic_id": "hypothesis-testing",
+    "question": "The null hypothesis typically states that:",
+    "question_type": "multiple_choice",
+    "options": ["There is an effect", "There is no effect", "The sample is biased", "The test is significant"],
+    "correct_answer": "There is no effect",
+    "explanation": "The null hypothesis (H₀) represents the default position that there is no effect, no difference, or no relationship.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "hypothesis-testing",
+    "question": "If p = .03 and α = .05, you should:",
+    "question_type": "multiple_choice",
+    "options": ["Reject the null hypothesis", "Fail to reject the null hypothesis", "Accept the null hypothesis", "Increase sample size"],
+    "correct_answer": "Reject the null hypothesis",
+    "explanation": "Since p (.03) is less than α (.05), the result is statistically significant and we reject H₀.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "hypothesis-testing",
+    "question": "A Type I error occurs when you:",
+    "question_type": "multiple_choice",
+    "options": ["Reject a true null hypothesis", "Fail to reject a false null hypothesis", "Accept the alternative hypothesis correctly", "Use too small a sample"],
+    "correct_answer": "Reject a true null hypothesis",
+    "explanation": "Type I error (false positive) means concluding there is an effect when there actually is not.",
+    "difficulty": "medium"
+  },
+  {
+    "topic_id": "t-tests",
+    "question": "Which t-test should you use to compare scores before and after an intervention in the same participants?",
+    "question_type": "multiple_choice",
+    "options": ["One-sample t-test", "Independent samples t-test", "Paired samples t-test", "One-way ANOVA"],
+    "correct_answer": "Paired samples t-test",
+    "explanation": "The paired (dependent) samples t-test is used when comparing two measurements from the same participants.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "t-tests",
+    "question": "The degrees of freedom for an independent samples t-test with n₁=15 and n₂=20 is:",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "33",
+    "explanation": "df = n₁ + n₂ - 2 = 15 + 20 - 2 = 33",
+    "difficulty": "medium"
+  },
+  {
+    "topic_id": "correlation",
+    "question": "A correlation of r = -0.85 indicates:",
+    "question_type": "multiple_choice",
+    "options": ["A weak positive relationship", "A strong positive relationship", "A weak negative relationship", "A strong negative relationship"],
+    "correct_answer": "A strong negative relationship",
+    "explanation": "The absolute value |r| = 0.85 is strong (> 0.5), and the negative sign indicates an inverse relationship.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "correlation",
+    "question": "If r = 0.60, what is r² (coefficient of determination)?",
+    "question_type": "numeric",
+    "options": null,
+    "correct_answer": "0.36",
+    "explanation": "r² = 0.60² = 0.36, meaning 36% of the variance in one variable is explained by the other.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "correlation",
+    "question": "A significant correlation proves causation.",
+    "question_type": "true_false",
+    "options": ["True", "False"],
+    "correct_answer": "False",
+    "explanation": "Correlation does not imply causation. A relationship between variables does not mean one causes the other.",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "probability",
+    "question": "If you flip a fair coin twice, what is the probability of getting two heads?",
+    "question_type": "multiple_choice",
+    "options": ["0.50", "0.25", "0.75", "0.125"],
+    "correct_answer": "0.25",
+    "explanation": "P(H on first) × P(H on second) = 0.5 × 0.5 = 0.25",
+    "difficulty": "easy"
+  },
+  {
+    "topic_id": "sampling",
+    "question": "The standard error of the mean decreases as:",
+    "question_type": "multiple_choice",
+    "options": ["Sample size decreases", "Sample size increases", "Population variance increases", "The mean increases"],
+    "correct_answer": "Sample size increases",
+    "explanation": "SE = s / √n. As n increases, the denominator gets larger, making SE smaller.",
+    "difficulty": "medium"
+  },
+  {
+    "topic_id": "regression",
+    "question": "In the regression equation Ŷ = 10 + 3X, what does the 3 represent?",
+    "question_type": "multiple_choice",
+    "options": ["The intercept", "The slope", "The correlation", "The error term"],
+    "correct_answer": "The slope",
+    "explanation": "The slope (b) indicates how much Y changes for each 1-unit increase in X. Here, Y increases by 3 for each 1-unit increase in X.",
+    "difficulty": "easy"
+  }
+]
