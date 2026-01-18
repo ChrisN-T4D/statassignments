@@ -155,12 +155,79 @@ export function useAttempts() {
     }
   }
 
+  // Get module progress for sequential unlock logic
+  // Returns { completed: number, total: number, completedItemIds: Set, nextItemId: string | null }
+  async function getModuleProgress(moduleId, items) {
+    if (!profile.value) {
+      return {
+        completed: 0,
+        total: items.length,
+        completedItemIds: new Set(),
+        nextItemId: items.length > 0 ? items[0].id : null
+      }
+    }
+
+    try {
+      // Get all correct attempts for this module
+      const attempts = await pb.collection('attempts').getFullList({
+        filter: `profile = "${profile.value.id}" && module = "${moduleId}" && is_correct = true`
+      })
+
+      // Build set of completed item IDs
+      const completedItemIds = new Set(attempts.map(a => a.item))
+
+      // Items should be sorted by order already
+      // Find the first incomplete item
+      let nextItemId = null
+      for (const item of items) {
+        if (!completedItemIds.has(item.id)) {
+          nextItemId = item.id
+          break
+        }
+      }
+
+      return {
+        completed: completedItemIds.size,
+        total: items.length,
+        completedItemIds,
+        nextItemId
+      }
+    } catch (err) {
+      console.error('Error getting module progress:', err)
+      return {
+        completed: 0,
+        total: items.length,
+        completedItemIds: new Set(),
+        nextItemId: items.length > 0 ? items[0].id : null
+      }
+    }
+  }
+
+  // Check if an item is unlocked (either completed or is the next item)
+  function isItemUnlocked(itemId, items, completedItemIds) {
+    // If already completed, it's unlocked
+    if (completedItemIds.has(itemId)) return true
+
+    // Find the item's position
+    const itemIndex = items.findIndex(i => i.id === itemId)
+    if (itemIndex === -1) return false
+
+    // First item is always unlocked
+    if (itemIndex === 0) return true
+
+    // Item is unlocked if the previous item is completed
+    const prevItem = items[itemIndex - 1]
+    return completedItemIds.has(prevItem.id)
+  }
+
   return {
     loading,
     submitAttempt,
     fetchUserAttempts,
     fetchUserStats,
     hasAttempted,
-    getBestAttempt
+    getBestAttempt,
+    getModuleProgress,
+    isItemUnlocked
   }
 }

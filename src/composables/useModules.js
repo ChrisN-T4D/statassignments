@@ -6,12 +6,15 @@ const items = ref([])
 const loading = ref(false)
 
 export function useModules() {
-  async function fetchModules(softwareType = null, semesterId = null) {
+  async function fetchModules(classId = null, softwareType = null, semesterId = null) {
     loading.value = true
     try {
       let filter = ''
       const filters = []
 
+      if (classId) {
+        filters.push(`class = "${classId}"`)
+      }
       if (softwareType) {
         filters.push(`(software_type = "${softwareType}" || software_type = "all")`)
       }
@@ -25,7 +28,8 @@ export function useModules() {
 
       const records = await pb.collection('modules').getFullList({
         filter,
-        sort: 'order,title'
+        sort: 'order,title',
+        expand: 'class'
       })
 
       modules.value = records
@@ -144,6 +148,47 @@ export function useModules() {
     }
   }
 
+  // Fetch the next unlocked item for a module (for sequential progression)
+  // Requires completedItemIds from useAttempts.getModuleProgress()
+  async function fetchNextItem(moduleId, completedItemIds = new Set()) {
+    loading.value = true
+    try {
+      const moduleItems = await fetchItems(moduleId)
+
+      // Find the first item that hasn't been completed correctly
+      for (const item of moduleItems) {
+        if (!completedItemIds.has(item.id)) {
+          return item
+        }
+      }
+
+      // All items completed, return null
+      return null
+    } catch (err) {
+      console.error('Error fetching next item:', err)
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Get items with unlock status for display
+  // Useful for showing a list of items with locked/unlocked states
+  function getItemsWithUnlockStatus(itemsList, completedItemIds = new Set()) {
+    return itemsList.map((item, index) => {
+      const isCompleted = completedItemIds.has(item.id)
+      // Item is unlocked if: it's the first item, it's completed, or the previous item is completed
+      const isUnlocked = index === 0 || isCompleted || completedItemIds.has(itemsList[index - 1]?.id)
+
+      return {
+        ...item,
+        isCompleted,
+        isUnlocked,
+        isCurrent: isUnlocked && !isCompleted
+      }
+    })
+  }
+
   return {
     modules,
     items,
@@ -151,6 +196,8 @@ export function useModules() {
     fetchModules,
     fetchItems,
     fetchItemsByTopic,
-    fetchRandomItem
+    fetchRandomItem,
+    fetchNextItem,
+    getItemsWithUnlockStatus
   }
 }

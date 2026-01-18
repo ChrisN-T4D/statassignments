@@ -42,16 +42,16 @@
             />
           </div>
 
-          <div v-if="error" class="error-message">
-            {{ error }}
+          <div v-if="localError || authError" class="error-message">
+            {{ localError || authError }}
           </div>
 
           <div v-if="success" class="success-message">
             {{ success }}
           </div>
 
-          <button type="submit" class="btn-primary" :disabled="submitting">
-            {{ submitting ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account') }}
+          <button type="submit" class="btn-primary" :disabled="loading">
+            {{ loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account') }}
           </button>
         </form>
 
@@ -97,51 +97,71 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
-const { signIn, signUp, resetPassword } = useAuth()
+const { signIn, signUp, resetPassword, authError, loading, clearError } = useAuth()
 
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
 const fullName = ref('')
-const error = ref('')
+const localError = ref('')
 const success = ref('')
-const submitting = ref(false)
 
 const showResetPassword = ref(false)
 const resetEmail = ref('')
 const resetSuccess = ref('')
 
-async function handleSubmit() {
-  error.value = ''
+// Clear errors when switching between login/signup
+watch(isLogin, () => {
+  localError.value = ''
   success.value = ''
-  submitting.value = true
+  clearError()
+})
 
-  try {
-    if (isLogin.value) {
-      await signIn(email.value, password.value)
-      router.push('/')
+async function handleSubmit() {
+  localError.value = ''
+  success.value = ''
+  clearError()
+
+  if (isLogin.value) {
+    const result = await signIn(email.value, password.value)
+    if (result.error) {
+      localError.value = result.error
     } else {
-      await signUp(email.value, password.value, fullName.value)
-      success.value = 'Account created! Check your email to confirm your account.'
+      // Route based on user role
+      const userRole = result.data?.record?.role
+      if (userRole === 'instructor') {
+        router.push('/instructor')
+      } else {
+        // Students go to home or claim if no profile linked
+        router.push('/')
+      }
     }
-  } catch (e) {
-    error.value = e.message
-  } finally {
-    submitting.value = false
+  } else {
+    const result = await signUp(email.value, password.value, fullName.value)
+    if (result.error) {
+      localError.value = result.error
+    } else {
+      success.value = 'Account created successfully! You are now signed in.'
+      // Auto-redirect after signup
+      setTimeout(() => router.push('/'), 1500)
+    }
   }
 }
 
 async function handleResetPassword() {
-  try {
-    await resetPassword(resetEmail.value)
+  localError.value = ''
+  resetSuccess.value = ''
+
+  const result = await resetPassword(resetEmail.value)
+  if (result.error) {
+    localError.value = result.error
+  } else {
     resetSuccess.value = 'Check your email for the reset link!'
-  } catch (e) {
-    error.value = e.message
   }
 }
 </script>
@@ -197,12 +217,19 @@ async function handleResetPassword() {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   font-size: 1rem;
+  background: var(--bg-input);
+  color: var(--text-primary);
   transition: border-color 0.2s;
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
 }
 
 .form-group input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: var(--focus-ring);
 }
 
 .btn-primary {
@@ -238,19 +265,21 @@ async function handleResetPassword() {
 }
 
 .error-message {
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--danger-bg);
+  color: var(--danger);
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;
+  border: 1px solid var(--danger);
 }
 
 .success-message {
-  background: #ecfdf5;
-  color: #059669;
+  background: var(--success-bg);
+  color: var(--success);
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;
+  border: 1px solid var(--success);
 }
 
 .auth-footer {

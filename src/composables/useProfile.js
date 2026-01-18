@@ -86,21 +86,31 @@ export function useProfile() {
       })
 
       if (semesters.items.length === 0) {
-        throw new Error('Invalid semester code')
+        throw new Error('Semester not found. Please check the semester selection.')
       }
 
       const semester = semesters.items[0]
 
-      // Find unclaimed roster entry with this student key
+      // Verify semester is active
+      if (!semester.is_active) {
+        throw new Error('This semester is no longer active. Please contact your instructor.')
+      }
+
+      // Find roster entry with this student key for this semester
       const records = await pb.collection('roster').getList(1, 1, {
-        filter: `student_key = "${studentKey}" && semester = "${semester.id}" && user = ""`
+        filter: `student_key = "${studentKey}" && semester = "${semester.id}"`
       })
 
       if (records.items.length === 0) {
-        throw new Error('Invalid student key or already claimed')
+        throw new Error('Student key not found. Please check your key and try again.')
       }
 
       const rosterEntry = records.items[0]
+
+      // Check if already claimed
+      if (rosterEntry.user) {
+        throw new Error('This student key has already been claimed. If this is your key, please contact your instructor.')
+      }
 
       // Update roster entry to link to current user
       const updated = await pb.collection('roster').update(rosterEntry.id, {

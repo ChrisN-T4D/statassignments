@@ -49,6 +49,39 @@
 
         <component :is="softwareComponent" />
       </div>
+
+      <!-- Practice Section -->
+      <div class="content-section practice-section">
+        <h2>Let's Practice!</h2>
+        <p class="practice-intro">
+          Ready to apply what you've learned? Practice using statistical software
+          in our interactive simulator. Keep trying until you master each concept!
+        </p>
+
+        <div class="practice-cards">
+          <router-link
+            v-for="sw in software"
+            :key="sw.id"
+            :to="`/software-practice/${id}?software=${sw.id}`"
+            class="practice-card"
+            :style="{ '--sw-color': sw.color }"
+          >
+            <div class="practice-card-icon">{{ getSoftwareIcon(sw.id) }}</div>
+            <div class="practice-card-content">
+              <h3>Practice in {{ sw.name }}</h3>
+              <p>Interactive {{ sw.id === 'r' || sw.id === 'stata' ? 'code' : 'menu' }} exercises</p>
+            </div>
+            <span class="practice-arrow">→</span>
+          </router-link>
+        </div>
+
+        <router-link
+          :to="`/software-practice/${id}`"
+          class="practice-all-link"
+        >
+          View all practice exercises for this topic →
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -137,6 +170,17 @@ const softwareComponent = computed(() => {
 watch(() => props.id, () => {
   activeSoftware.value = 'spss'
 })
+
+function getSoftwareIcon(swId) {
+  const icons = {
+    spss: '📊',
+    r: '📈',
+    excel: '📗',
+    stata: '📉',
+    jamovi: '🔬'
+  }
+  return icons[swId] || '💻'
+}
 </script>
 
 <style scoped>
@@ -169,5 +213,92 @@ watch(() => props.id, () => {
   background: var(--primary);
   color: white;
   border-color: var(--primary);
+}
+
+/* Practice Section Styles */
+.practice-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.practice-intro {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+}
+
+.practice-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.practice-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.practice-card:hover {
+  border-color: var(--sw-color, var(--primary));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.practice-card-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+}
+
+.practice-card-content h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.practice-card-content p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.practice-arrow {
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+
+.practice-card:hover .practice-arrow {
+  transform: translateX(4px);
+  color: var(--sw-color, var(--primary));
+}
+
+.practice-all-link {
+  display: inline-block;
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.practice-all-link:hover {
+  text-decoration: underline;
 }
 </style>
