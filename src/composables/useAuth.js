@@ -40,15 +40,28 @@ export function useAuth() {
 
       if (pb.authStore.isValid) {
         // Refresh the token to ensure it's still valid on the server
+        // Use a timeout to avoid hanging if server is unreachable
         try {
           logAuth('Refreshing auth token...')
-          const refreshed = await pb.collection('users').authRefresh()
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Auth refresh timeout')), 5000)
+          )
+          const refreshed = await Promise.race([
+            pb.collection('users').authRefresh(),
+            timeoutPromise
+          ])
           logAuth('Auth refresh successful', { userId: refreshed.record?.id, role: refreshed.record?.role })
         } catch (err) {
-          // Token refresh failed, clear auth
+          // Token refresh failed
           logAuth('Auth refresh failed', { error: err.message, status: err.status })
-          authError.value = 'Session expired. Please sign in again.'
-          pb.authStore.clear()
+          // Only clear auth if it's an actual auth error, not a network timeout
+          if (err.status === 401 || err.status === 403) {
+            authError.value = 'Session expired. Please sign in again.'
+            pb.authStore.clear()
+          } else {
+            // Network error - keep existing auth, user can try again
+            logAuth('Network error during refresh, keeping existing auth')
+          }
         }
       } else if (hasStoredAuth) {
         // Had a token but it's not valid

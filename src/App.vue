@@ -13,7 +13,7 @@
         <nav class="nav">
           <router-link to="/">Home</router-link>
           <router-link v-if="selectedClass" :to="`/class/${selectedClassId}`">
-            {{ selectedClass.shortName }}
+            {{ selectedClass.short_name }}
           </router-link>
           <router-link to="/practice">Practice</router-link>
           <router-link v-if="isInstructor" to="/instructor">Dashboard</router-link>
@@ -40,13 +40,13 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from './composables/useAuth'
-import { useClass } from './composables/useClass'
+import { useClasses } from './composables/useClasses'
 import ThemeToggle from './components/ThemeToggle.vue'
 import ClassSelector from './components/ClassSelector.vue'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
-const { selectedClass, selectedClassId } = useClass()
+const { selectedClass, selectedClassId } = useClasses()
 
 const isInstructor = computed(() => user.value?.role === 'instructor')
 

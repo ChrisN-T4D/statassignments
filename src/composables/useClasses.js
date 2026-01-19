@@ -50,12 +50,6 @@ const FALLBACK_CLASSES = [
   }
 ]
 
-// Global state
-const classes = ref([])
-const loading = ref(false)
-const initialized = ref(false)
-const selectedClassId = ref(getStoredClassId())
-
 // localStorage helpers
 const STORAGE_KEY = 'selectedClassId'
 
@@ -72,14 +66,28 @@ function storeClassId(id) {
   }
 }
 
+// Global state
+const classes = ref([])
+const loading = ref(false)
+const initialized = ref(false)
+const selectedClassId = ref(getStoredClassId())
+
 // Persist selection
 watch(selectedClassId, (newId) => {
   storeClassId(newId)
 })
 
 export function useClasses() {
-  const router = useRouter()
-  const route = useRoute()
+  // Router/route are optional - only used for navigation functions
+  // Use try-catch because these can fail if called outside component setup
+  let router = null
+  let route = null
+  try {
+    router = useRouter()
+    route = useRoute()
+  } catch {
+    // Not in a component context - navigation functions won't work
+  }
 
   const selectedClass = computed(() => {
     if (!selectedClassId.value) return null
@@ -153,6 +161,7 @@ export function useClasses() {
 
   // Sync selection with route params
   function syncWithRoute() {
+    if (!route) return
     const urlClassId = route.params.classId
     if (urlClassId && urlClassId !== selectedClassId.value) {
       const cls = classes.value.find(c => c.id === urlClassId)
@@ -165,7 +174,9 @@ export function useClasses() {
   // Navigate to a class
   function navigateToClass(classId) {
     selectClass(classId)
-    router.push({ name: 'class-home', params: { classId } })
+    if (router) {
+      router.push({ name: 'class-home', params: { classId } })
+    }
   }
 
   return {

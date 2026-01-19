@@ -10,61 +10,147 @@
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <router-link
-          :to="`/class/${classId}/topics`"
-          class="action-card"
-        >
-          <div class="action-icon">📖</div>
-          <div class="action-content">
-            <h3>Learn Topics</h3>
-            <p>Study concepts and software tutorials</p>
-          </div>
-          <span class="action-arrow">→</span>
-        </router-link>
-
-        <router-link
-          :to="`/class/${classId}/practice`"
-          class="action-card"
-        >
-          <div class="action-icon">✏️</div>
-          <div class="action-content">
-            <h3>Practice</h3>
-            <p>Test your knowledge with exercises</p>
-          </div>
-          <span class="action-arrow">→</span>
-        </router-link>
-
-        <router-link
-          :to="`/class/${classId}/software`"
-          class="action-card"
-        >
-          <div class="action-icon">💻</div>
-          <div class="action-content">
-            <h3>Software Practice</h3>
-            <p>Interactive software simulations</p>
-          </div>
-          <span class="action-arrow">→</span>
-        </router-link>
+      <!-- Module Navigation -->
+      <div class="module-nav">
+        <h2 class="section-title">Course Modules</h2>
+        <div class="module-list">
+          <button
+            v-for="mod in contentModules"
+            :key="mod.id"
+            class="module-btn"
+            :class="{ active: selectedModuleId === mod.id }"
+            :style="{ '--module-color': mod.color }"
+            @click="selectModule(mod.id)"
+          >
+            <span class="module-icon">{{ mod.icon }}</span>
+            <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
+            <span class="module-title">{{ mod.shortTitle }}</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Topics for this class -->
-      <div class="topics-section">
-        <h2>Topics in This Course</h2>
-        <div class="topics-grid">
-          <router-link
-            v-for="topicId in currentClass.topics"
-            :key="topicId"
-            :to="`/topic/${topicId}`"
-            class="topic-card"
+      <!-- Selected Module Content -->
+      <div v-if="selectedModule" class="module-content">
+        <div class="module-header" :style="{ '--module-color': selectedModule.color }">
+          <div class="module-header-icon">{{ selectedModule.icon }}</div>
+          <div class="module-header-info">
+            <h2>
+              <span v-if="selectedModule.number">Module {{ selectedModule.number }}: </span>
+              {{ selectedModule.title }}
+            </h2>
+            <p>{{ selectedModule.description }}</p>
+          </div>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div v-if="selectedModule.learningObjectives?.length" class="learning-objectives">
+          <h3>Learning Objectives</h3>
+          <ul>
+            <li v-for="(obj, idx) in selectedModule.learningObjectives" :key="idx">
+              {{ obj }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Content Tabs -->
+        <div class="content-tabs">
+          <button
+            v-for="tab in contentTabs"
+            :key="tab.id"
+            class="content-tab"
+            :class="{ active: activeContentTab === tab.id }"
+            @click="activeContentTab = tab.id"
           >
-            <span class="topic-icon">{{ getTopicIcon(topicId) }}</span>
-            <div class="topic-info">
-              <h3>{{ getTopicTitle(topicId) }}</h3>
-              <p>{{ getTopicDescription(topicId) }}</p>
+            <span class="tab-icon">{{ tab.icon }}</span>
+            <span class="tab-label">{{ tab.label }}</span>
+            <span class="tab-count" v-if="getTabCount(tab.id) > 0">{{ getTabCount(tab.id) }}</span>
+          </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+          <!-- Topics Tab -->
+          <div v-if="activeContentTab === 'topics'" class="tab-panel">
+            <div v-if="moduleTopics.length === 0" class="empty-state">
+              <p>No topics available for this module yet.</p>
             </div>
-          </router-link>
+            <div v-else class="topics-grid">
+              <router-link
+                v-for="topic in moduleTopics"
+                :key="topic.id"
+                :to="`/topic/${topic.id}`"
+                class="topic-card"
+              >
+                <span class="topic-icon">{{ topic.icon }}</span>
+                <div class="topic-info">
+                  <h3>{{ topic.title }}</h3>
+                  <p>{{ topic.description }}</p>
+                </div>
+                <span class="card-arrow">→</span>
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Concept Review Tab -->
+          <div v-if="activeContentTab === 'concepts'" class="tab-panel">
+            <div v-if="moduleTopics.length === 0" class="empty-state">
+              <p>No concept review questions available for this module yet.</p>
+            </div>
+            <router-link
+              v-else
+              :to="`/class/${classId}/practice?module=${selectedModuleId}`"
+              class="practice-link-card"
+            >
+              <div class="link-card-icon">🧠</div>
+              <div class="link-card-content">
+                <h3>Start Concept Review</h3>
+                <p>Practice questions covering {{ selectedModule.shortTitle }} concepts</p>
+              </div>
+              <span class="card-arrow">→</span>
+            </router-link>
+          </div>
+
+          <!-- Software Practice Tab -->
+          <div v-if="activeContentTab === 'software'" class="tab-panel">
+            <div v-if="moduleLessons.length === 0" class="empty-state">
+              <p>No software lessons available for this module yet.</p>
+            </div>
+            <div v-else class="lessons-grid">
+              <router-link
+                v-for="lesson in moduleLessons"
+                :key="lesson.id"
+                :to="`/class/${classId}/software/${lesson.id}`"
+                class="lesson-card"
+              >
+                <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(lesson.software) }">
+                  {{ lesson.software }}
+                </div>
+                <div class="lesson-info">
+                  <h3>{{ lesson.title }}</h3>
+                  <p>{{ lesson.objectives[0] }}</p>
+                </div>
+                <span class="card-arrow">→</span>
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benchmarks Section -->
+      <div v-if="benchmarkModules.length > 0" class="benchmarks-section">
+        <h2 class="section-title">Assessments</h2>
+        <div class="benchmarks-list">
+          <div
+            v-for="benchmark in benchmarkModules"
+            :key="benchmark.id"
+            class="benchmark-card"
+          >
+            <span class="benchmark-icon">{{ benchmark.icon }}</span>
+            <div class="benchmark-info">
+              <h3>{{ benchmark.title }}</h3>
+              <p>{{ benchmark.description }}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -107,23 +193,80 @@
 </template>
 
 <script setup>
-import { computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
-import { topics } from '../data/topics'
+import { courseModules } from '../data/modules'
+import { getTopicsByModule } from '../data/topics'
+import { getLessonsByModule, software } from '../data/softwareLessons'
 
 const route = useRoute()
-const { selectClass, syncWithRoute, getClassById, fetchClasses, classes } = useClasses()
+const { selectClass, fetchClasses, classes } = useClasses()
 const { isAuthenticated } = useAuth()
 const { hasProfile } = useProfile()
 
 const classId = computed(() => route.params.classId)
+const selectedModuleId = ref('module-1')
+const activeContentTab = ref('topics')
+
+const contentTabs = [
+  { id: 'topics', label: 'Topics', icon: '📚' },
+  { id: 'concepts', label: 'Concept Review', icon: '🧠' },
+  { id: 'software', label: 'Software Practice', icon: '💻' }
+]
 
 const currentClass = computed(() => {
   return classes.value.find(c => c.id === classId.value) || null
 })
+
+// Split modules into content modules and benchmarks
+const contentModules = computed(() => {
+  return courseModules.filter(m => !m.isBenchmark)
+})
+
+const benchmarkModules = computed(() => {
+  return courseModules.filter(m => m.isBenchmark)
+})
+
+const selectedModule = computed(() => {
+  return courseModules.find(m => m.id === selectedModuleId.value)
+})
+
+// Get topics for the selected module
+const moduleTopics = computed(() => {
+  return getTopicsByModule(selectedModuleId.value)
+})
+
+// Get software lessons for the selected module
+const moduleLessons = computed(() => {
+  return getLessonsByModule(selectedModuleId.value)
+})
+
+// Get count for each tab
+function getTabCount(tabId) {
+  switch (tabId) {
+    case 'topics':
+      return moduleTopics.value.length
+    case 'concepts':
+      return moduleTopics.value.length > 0 ? 1 : 0 // 1 if there are topics to review
+    case 'software':
+      return moduleLessons.value.length
+    default:
+      return 0
+  }
+}
+
+function selectModule(moduleId) {
+  selectedModuleId.value = moduleId
+  activeContentTab.value = 'topics'
+}
+
+function getSoftwareColor(softwareId) {
+  const sw = software.find(s => s.id === softwareId)
+  return sw?.color || '#6366f1'
+}
 
 // Placeholder stats (would come from useAttempts in real implementation)
 const stats = computed(() => ({
@@ -131,18 +274,6 @@ const stats = computed(() => ({
   practiced: 15,
   accuracy: 78
 }))
-
-function getTopicTitle(topicId) {
-  return topics.find(t => t.id === topicId)?.title || topicId
-}
-
-function getTopicDescription(topicId) {
-  return topics.find(t => t.id === topicId)?.description || ''
-}
-
-function getTopicIcon(topicId) {
-  return topics.find(t => t.id === topicId)?.icon || '📝'
-}
 
 // Sync class selection with URL
 onMounted(async () => {
@@ -162,6 +293,12 @@ watch(classId, (newId) => {
 <style scoped>
 .class-home {
   padding: 2rem 0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 .class-header {
@@ -198,37 +335,84 @@ watch(classId, (newId) => {
   color: var(--text-secondary);
 }
 
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+/* Section Title */
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+/* Module Navigation */
+.module-nav {
   margin-bottom: 2rem;
 }
 
-.action-card {
+.module-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.module-btn {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.module-btn:hover {
+  border-color: var(--module-color, var(--primary));
+  background: color-mix(in srgb, var(--module-color, var(--primary)) 5%, var(--bg-card));
+}
+
+.module-btn.active {
+  border-color: var(--module-color, var(--primary));
+  background: color-mix(in srgb, var(--module-color, var(--primary)) 15%, var(--bg-card));
+}
+
+.module-icon {
+  font-size: 1.25rem;
+}
+
+.module-number {
+  font-weight: 700;
+  color: var(--module-color, var(--primary));
+}
+
+.module-title {
+  color: var(--text-primary);
+}
+
+/* Module Content */
+.module-content {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.action-card:hover {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+.module-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
 }
 
-.action-icon {
+.module-header-icon {
   width: 48px;
   height: 48px;
-  background: var(--bg-elevated);
-  border-radius: 0.625rem;
+  background: color-mix(in srgb, var(--module-color, var(--primary)) 15%, transparent);
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,50 +420,124 @@ watch(classId, (newId) => {
   flex-shrink: 0;
 }
 
-.action-content h3 {
+.module-header-info h2 {
   margin: 0 0 0.25rem 0;
-  font-size: 1rem;
+  font-size: 1.25rem;
 }
 
-.action-content p {
+.module-header-info p {
   margin: 0;
-  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* Learning Objectives */
+.learning-objectives {
+  background: var(--bg-elevated);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.learning-objectives h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.learning-objectives ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.learning-objectives li {
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+/* Content Tabs */
+.content-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.content-tab:hover {
+  background: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.content-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.tab-icon {
+  font-size: 1.125rem;
+}
+
+.tab-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.content-tab:not(.active) .tab-count {
+  background: var(--bg-main);
   color: var(--text-secondary);
 }
 
-.action-arrow {
-  margin-left: auto;
-  color: var(--text-muted);
-  font-size: 1.25rem;
-  transition: transform 0.2s, color 0.2s;
+/* Tab Content */
+.tab-panel {
+  animation: fadeIn 0.2s ease;
 }
 
-.action-card:hover .action-arrow {
-  transform: translateX(4px);
-  color: var(--primary);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.topics-section {
-  margin-bottom: 2rem;
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
 }
 
-.topics-section h2 {
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-}
-
+/* Topics Grid */
 .topics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .topic-card {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: var(--bg-card);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   text-decoration: none;
@@ -290,6 +548,7 @@ watch(classId, (newId) => {
 .topic-card:hover {
   border-color: var(--primary);
   box-shadow: var(--shadow);
+  transform: translateY(-2px);
 }
 
 .topic-icon {
@@ -297,9 +556,13 @@ watch(classId, (newId) => {
   line-height: 1;
 }
 
+.topic-info {
+  flex: 1;
+}
+
 .topic-info h3 {
   margin: 0 0 0.25rem 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .topic-info p {
@@ -311,6 +574,159 @@ watch(classId, (newId) => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.card-arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.topic-card:hover .card-arrow,
+.practice-link-card:hover .card-arrow,
+.lesson-card:hover .card-arrow {
+  transform: translateX(4px);
+  color: var(--primary);
+}
+
+/* Practice Link Card */
+.practice-link-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.practice-link-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.link-card-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.link-card-content {
+  flex: 1;
+}
+
+.link-card-content h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+}
+
+.link-card-content p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Lessons Grid */
+.lessons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lesson-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.lesson-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.lesson-software {
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.25rem;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.lesson-info p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Benchmarks Section */
+.benchmarks-section {
+  margin-bottom: 2rem;
+}
+
+.benchmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.benchmark-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  border-left: 3px solid #f59e0b;
+}
+
+.benchmark-icon {
+  font-size: 1.5rem;
+}
+
+.benchmark-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.benchmark-info p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+/* Progress Section */
+.progress-section {
+  margin-top: 2rem;
 }
 
 .progress-section h2 {
@@ -351,6 +767,7 @@ watch(classId, (newId) => {
   border: 1px solid var(--primary);
   border-radius: 0.75rem;
   text-align: center;
+  margin-top: 2rem;
 }
 
 .class-not-found {
@@ -388,6 +805,24 @@ watch(classId, (newId) => {
   .class-header {
     flex-direction: column;
     text-align: center;
+  }
+
+  .module-list {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+  }
+
+  .module-btn {
+    flex-shrink: 0;
+  }
+
+  .content-tabs {
+    flex-direction: column;
+  }
+
+  .content-tab {
+    justify-content: flex-start;
   }
 
   .progress-card {

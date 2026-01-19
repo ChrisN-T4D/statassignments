@@ -15,6 +15,7 @@ import Profile from './views/Profile.vue'
 import ClaimProfile from './views/ClaimProfile.vue'
 import InstructorDashboard from './views/InstructorDashboard.vue'
 import ClassHome from './views/ClassHome.vue'
+import SoftwareLesson from './views/SoftwareLesson.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -46,6 +47,18 @@ const routes = [
     path: '/class/:classId/software',
     name: 'class-software',
     component: SoftwarePractice,
+    props: true
+  },
+  {
+    path: '/lesson/:lessonId',
+    name: 'lesson',
+    component: SoftwareLesson,
+    props: true
+  },
+  {
+    path: '/class/:classId/lesson/:lessonId',
+    name: 'class-lesson',
+    component: SoftwareLesson,
     props: true
   },
   {
@@ -103,8 +116,12 @@ router.beforeEach((to, from, next) => {
 const app = createApp(App)
 app.use(router)
 
-// Initialize auth before mounting
+// Initialize auth before mounting (with fallback to mount anyway on error)
 const { initAuth } = useAuth()
-initAuth().then(() => {
-  app.mount('#app')
-})
+initAuth()
+  .catch(err => {
+    console.warn('Auth initialization failed:', err)
+  })
+  .finally(() => {
+    app.mount('#app')
+  })

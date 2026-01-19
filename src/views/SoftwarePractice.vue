@@ -3,8 +3,8 @@
     <div class="container">
       <!-- Header -->
       <div class="page-header">
-        <router-link to="/" class="back-link">← Back to Topics</router-link>
-        <h1>{{ topicTitle }} Practice</h1>
+        <a href="#" @click.prevent="goBack" class="back-link">← Back</a>
+        <h1>{{ pageTitle }}</h1>
         <p>Practice until you get it right. Take your time and retry as many times as needed.</p>
       </div>
 
@@ -33,6 +33,31 @@
             class="progress-fill"
             :style="{ width: `${(progress.completed / progress.total) * 100}%` }"
           ></div>
+        </div>
+      </div>
+
+      <!-- Scaffolded Lessons Section -->
+      <div v-if="!currentExercise && filteredLessons.length > 0" class="lessons-section">
+        <h2>Guided Lessons</h2>
+        <p class="section-desc">Step-by-step lessons: Learn concepts, Practice with guidance, Apply independently</p>
+        <div class="lessons-grid">
+          <router-link
+            v-for="lesson in filteredLessons"
+            :key="lesson.id"
+            :to="classId ? `/class/${classId}/lesson/${lesson.id}` : `/lesson/${lesson.id}`"
+            class="lesson-card"
+          >
+            <div class="lesson-icon">📚</div>
+            <div class="lesson-info">
+              <h3>{{ lesson.title }}</h3>
+              <p>{{ lesson.objectives[0] }}</p>
+              <div class="lesson-meta">
+                <span class="time-badge">{{ lesson.estimatedTime }} min</span>
+                <span class="phases-badge">3 phases</span>
+              </div>
+            </div>
+            <span class="lesson-arrow">→</span>
+          </router-link>
         </div>
       </div>
 
@@ -134,10 +159,13 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, shallowRef, defineAsyncComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { topics, software } from '../data/topics.js'
+import { statisticsExercises, statisticsModules } from '../data/statisticsPractices.js'
+import { softwareLessons, getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useSimulation } from '../composables/useSimulation'
 import { useAuth } from '../composables/useAuth'
+import { useClasses } from '../composables/useClasses'
 
 // Async load simulator components
 const JamoviSimulator = defineAsyncComponent(() =>
@@ -154,18 +182,20 @@ const StataCodeEditor = defineAsyncComponent(() =>
 )
 
 const route = useRoute()
+const router = useRouter()
 const { isAuthenticated } = useAuth()
+const { selectedClass, fetchClasses } = useClasses()
 const {
-  currentExercise,
+  currentExercise: pbExercise,
   attemptCount,
   isCorrect,
-  loading,
+  loading: pbLoading,
   hintUsed,
-  fetchExercise,
+  fetchExercise: pbFetchExercise,
   recordAttempt,
   resetExercise,
-  getSimulationProgress,
-  getNextExercise
+  getSimulationProgress: pbGetProgress,
+  getNextExercise: pbGetNext
 } = useSimulation()
 
 // State
@@ -173,16 +203,46 @@ const selectedSoftware = ref('jamovi')
 const progress = ref({ completed: 0, total: 0, exercises: [] })
 const showRetryPrompt = ref(false)
 const simulatorRef = shallowRef(null)
+const currentExercise = ref(null)
+const loading = ref(false)
+const completedExerciseIds = ref(new Set())
 
 // Computed
+const classId = computed(() => route.params.classId)
 const topicId = computed(() => route.params.topicId || route.params.id)
 
-const topicTitle = computed(() => {
+const pageTitle = computed(() => {
+  if (classId.value && selectedClass.value) {
+    return `${selectedClass.value.name} - Software Practice`
+  }
   const topic = topics.find(t => t.id === topicId.value)
-  return topic?.title || 'Practice'
+  return topic?.title ? `${topic.title} Practice` : 'Software Practice'
 })
 
 const availableSoftware = computed(() => software)
+
+// Get lessons for selected software
+const filteredLessons = computed(() => {
+  return getLessonsBySoftware(selectedSoftware.value)
+})
+
+// Get exercises from static data based on class/topic
+const staticExercises = computed(() => {
+  // If we have a classId, show all exercises for that class (e.g., statistics)
+  if (classId.value === 'statistics') {
+    return statisticsExercises.filter(ex =>
+      ex.software_type === selectedSoftware.value
+    )
+  }
+  // If we have a topicId, filter by topic
+  if (topicId.value) {
+    return statisticsExercises.filter(ex =>
+      ex.topic === topicId.value && ex.software_type === selectedSoftware.value
+    )
+  }
+  // Default: show all jamovi exercises
+  return statisticsExercises.filter(ex => ex.software_type === selectedSoftware.value)
+})
 
 // Methods
 function getSoftwareName(id) {
@@ -203,25 +263,55 @@ function getSimulatorComponent(softwareType) {
 async function selectSoftware(swId) {
   selectedSoftware.value = swId
   currentExercise.value = null
-  await loadProgress()
+  loadProgress()
 }
 
-async function loadProgress() {
-  progress.value = await getSimulationProgress(topicId.value, selectedSoftware.value)
+function loadProgress() {
+  // Use static exercises with simulated progress
+  const exercises = staticExercises.value.map((ex, index) => {
+    const uniqueId = `${ex.module}-${ex.topic}-${index}`
+    const isCompleted = completedExerciseIds.value.has(uniqueId)
+    // For now, all exercises are unlocked (no sequential requirement)
+    const isUnlocked = true
+    return {
+      ...ex,
+      id: uniqueId,
+      isCompleted,
+      isUnlocked,
+      isCurrent: isUnlocked && !isCompleted
+    }
+  })
+
+  progress.value = {
+    completed: exercises.filter(ex => ex.isCompleted).length,
+    total: exercises.length,
+    exercises
+  }
 }
 
-async function startExercise(exercise) {
+function startExercise(exercise) {
   showRetryPrompt.value = false
-  await fetchExercise(exercise.id)
+  // Convert static exercise to the format expected by simulators
+  currentExercise.value = {
+    ...exercise,
+    expectedSelections: exercise.expected_selections,
+    expectedCode: exercise.expected_code,
+    sampleData: exercise.sample_data,
+    highlightPath: exercise.highlight_path,
+    successMessage: exercise.success_message
+  }
 }
 
-async function loadNextExercise() {
+function loadNextExercise() {
   showRetryPrompt.value = false
-  const next = await getNextExercise(topicId.value, selectedSoftware.value)
-  if (!next) {
+  // Find next uncompleted exercise
+  const nextIndex = progress.value.exercises.findIndex(ex => !ex.isCompleted)
+  if (nextIndex >= 0) {
+    startExercise(progress.value.exercises[nextIndex])
+  } else {
     // All exercises completed
     currentExercise.value = null
-    await loadProgress()
+    loadProgress()
   }
 }
 
@@ -231,13 +321,15 @@ function exitExercise() {
   loadProgress()
 }
 
-async function handleCorrect() {
-  await recordAttempt(true)
-  await loadProgress()
+function handleCorrect() {
+  // Mark exercise as completed
+  if (currentExercise.value?.id) {
+    completedExerciseIds.value.add(currentExercise.value.id)
+  }
+  loadProgress()
 }
 
-async function handleIncorrect() {
-  await recordAttempt(false)
+function handleIncorrect() {
   showRetryPrompt.value = true
 }
 
@@ -256,25 +348,34 @@ function retryExercise() {
   }
 }
 
+function goBack() {
+  if (classId.value) {
+    router.push(`/class/${classId.value}`)
+  } else {
+    router.push('/')
+  }
+}
+
 // Lifecycle
 onMounted(async () => {
+  await fetchClasses()
   if (route.query.software) {
     selectedSoftware.value = route.query.software
   }
-  await loadProgress()
+  loadProgress()
 
   // Auto-start first unlocked exercise if coming from topic page
   if (route.query.autostart === 'true') {
     const current = progress.value.exercises.find(ex => ex.isCurrent)
     if (current) {
-      await startExercise(current)
+      startExercise(current)
     }
   }
 })
 
-watch(topicId, async () => {
+watch([classId, topicId, selectedSoftware], () => {
   currentExercise.value = null
-  await loadProgress()
+  loadProgress()
 })
 </script>
 
@@ -669,5 +770,102 @@ watch(topicId, async () => {
 .hint-text {
   font-size: 0.875rem;
   margin-top: 0.5rem;
+}
+
+/* Lessons Section */
+.lessons-section {
+  margin-bottom: 2rem;
+}
+
+.lessons-section h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.25rem;
+}
+
+.section-desc {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.lessons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lesson-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.lesson-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.lesson-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.lesson-info > p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lesson-meta {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.time-badge,
+.phases-badge {
+  font-size: 0.6875rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 1rem;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+
+.lesson-arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.lesson-card:hover .lesson-arrow {
+  transform: translateX(4px);
+  color: var(--primary);
 }
 </style>

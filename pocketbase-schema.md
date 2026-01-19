@@ -174,58 +174,95 @@ Tracks student attempts on simulation exercises.
 
 ## Sample Data for Testing
 
-You can use the exercises defined in `src/data/sampleExercises.js` to seed the `simulation_exercises` collection.
+The full set of exercises is in `src/data/statisticsPractices.js`. Below are a few examples.
 
-### Quick Seed Script
+### Statistics Class - Jamovi Exercises (Sample)
 
 Run this in your PocketBase Admin UI → Collections → simulation_exercises → Import:
+
+**Note:** Replace `CLASS_ID` with the actual ID of your Statistics class from the `classes` collection.
 
 ```json
 [
   {
+    "class": "CLASS_ID",
     "topic": "descriptive-stats",
-    "title": "Calculate Mean and Standard Deviation",
-    "description": "Navigate to the correct menu to calculate descriptive statistics",
-    "instructions": "You have a dataset with exam scores. Find the menu path in jamovi to calculate the mean and standard deviation.",
+    "title": "Calculate Basic Descriptive Statistics",
+    "description": "Find the menu to calculate mean, median, and standard deviation",
+    "instructions": "Calculate the mean, median, and standard deviation for exam scores. Navigate to the correct analysis.",
     "software_type": "jamovi",
     "exercise_type": "menu_navigation",
-    "hint": "Look under the Analyses menu for Exploration options",
+    "hint": "Descriptive statistics are under Analyses > Exploration",
     "expected_selections": [{"menu": "analyses", "option": "exploration", "subOption": "descriptives"}],
-    "sample_data": {"columns": ["StudentID", "ExamScore", "StudyHours"], "rows": [{"StudentID": 1, "ExamScore": 85, "StudyHours": 4}]},
-    "highlight_path": [{"menu": "analyses"}, {"menu": "analyses", "option": "exploration"}],
-    "success_message": "Correct! Analyses → Exploration → Descriptives is where you find measures of central tendency and variability.",
+    "sample_data": {"columns": ["StudentID", "ExamScore"], "rows": [{"StudentID": 1, "ExamScore": 78}, {"StudentID": 2, "ExamScore": 85}]},
+    "success_message": "Correct! Analyses > Exploration > Descriptives provides measures of central tendency (mean, median, mode) and variability (SD, variance, range).",
     "order": 1,
     "is_active": true
   },
   {
-    "topic": "descriptive-stats",
-    "title": "Calculate Mean in R",
-    "description": "Write R code to calculate the mean of a variable",
-    "instructions": "You have a vector called 'scores' containing exam scores. Write the R code to calculate its mean.",
-    "software_type": "r",
-    "exercise_type": "code",
-    "hint": "Use the mean() function with the variable name as the argument",
-    "starter_code": "# Calculate the mean of scores\n",
-    "expected_code": {"patterns": ["mean\\\\s*\\\\(\\\\s*scores\\\\s*\\\\)"], "requiredFunctions": ["mean"]},
-    "success_message": "Correct! mean(scores) returns the arithmetic mean of the scores vector.",
-    "order": 1,
-    "is_active": true
-  },
-  {
-    "topic": "t-tests",
-    "title": "Independent Samples T-Test",
-    "description": "Navigate to run an independent samples t-test",
-    "instructions": "You want to compare test scores between two groups (Control vs Treatment). Find the correct analysis.",
+    "class": "CLASS_ID",
+    "topic": "z-scores",
+    "title": "Calculate Z-Scores in Jamovi",
+    "description": "Standardize scores by converting them to z-scores",
+    "instructions": "You need to convert raw test scores to z-scores (standardized scores). Find how to create z-scores in Jamovi.",
     "software_type": "jamovi",
     "exercise_type": "menu_navigation",
-    "hint": "T-Tests are under Analyses, and you need the Independent Samples version",
+    "hint": "Z-scores can be calculated through Exploration > Descriptives with the 'Z-scores' option checked",
+    "expected_selections": [{"menu": "analyses", "option": "exploration", "subOption": "descriptives"}],
+    "sample_data": {"columns": ["StudentID", "TestScore"], "rows": [{"StudentID": 1, "TestScore": 85}, {"StudentID": 2, "TestScore": 72}]},
+    "success_message": "Correct! In Descriptives, check 'Z-scores' under the options to add a standardized version of your variable to the dataset.",
+    "order": 2,
+    "is_active": true
+  },
+  {
+    "class": "CLASS_ID",
+    "topic": "t-tests",
+    "title": "Run an Independent Samples T-Test",
+    "description": "Compare means between two independent groups",
+    "instructions": "Compare test scores between the treatment and control groups using an independent samples t-test.",
+    "software_type": "jamovi",
+    "exercise_type": "menu_navigation",
+    "hint": "Independent Samples T-Test is under Analyses > T-Tests",
     "expected_selections": [{"menu": "analyses", "option": "ttests", "subOption": "independent"}],
-    "sample_data": {"columns": ["ID", "Score", "Group"], "rows": [{"ID": 1, "Score": 78, "Group": "Control"}]},
+    "sample_data": {"columns": ["ID", "Group", "Score"], "rows": [{"ID": 1, "Group": "Treatment", "Score": 85}, {"ID": 2, "Group": "Control", "Score": 72}]},
+    "success_message": "Correct! Analyses > T-Tests > Independent Samples T-Test. Add your DV to 'Dependent Variables' and your grouping variable to 'Grouping Variable'.",
+    "order": 1,
+    "is_active": true
+  },
+  {
+    "class": "CLASS_ID",
+    "topic": "correlation",
+    "title": "Calculate Pearson Correlation",
+    "description": "Measure the linear relationship between two continuous variables",
+    "instructions": "Calculate the correlation between study hours and exam scores.",
+    "software_type": "jamovi",
+    "exercise_type": "menu_navigation",
+    "hint": "Correlation is under Analyses > Regression",
+    "expected_selections": [{"menu": "analyses", "option": "regression", "subOption": "correlation"}],
+    "sample_data": {"columns": ["ID", "StudyHours", "ExamScore"], "rows": [{"ID": 1, "StudyHours": 5, "ExamScore": 85}, {"ID": 2, "StudyHours": 3, "ExamScore": 72}]},
+    "success_message": "Correct! Analyses > Regression > Correlation Matrix. Add both variables to see Pearson's r.",
+    "order": 1,
+    "is_active": true
+  },
+  {
+    "class": "CLASS_ID",
+    "topic": "anova",
+    "title": "Run One-Way ANOVA",
+    "description": "Compare means across three or more groups",
+    "instructions": "Compare test scores across three teaching methods (Traditional, Online, Hybrid) using ANOVA.",
+    "software_type": "jamovi",
+    "exercise_type": "menu_navigation",
+    "hint": "ANOVA is under Analyses > ANOVA",
+    "expected_selections": [{"menu": "analyses", "option": "anova", "subOption": "oneway"}],
+    "sample_data": {"columns": ["ID", "Method", "Score"], "rows": [{"ID": 1, "Method": "Traditional", "Score": 78}, {"ID": 2, "Method": "Online", "Score": 82}]},
+    "success_message": "Correct! Analyses > ANOVA > One-Way ANOVA. Add your DV to 'Dependent Variable' and grouping variable to 'Fixed Factors'.",
     "order": 1,
     "is_active": true
   }
 ]
 ```
+
+See `src/data/statisticsPractices.js` for the complete list of 20+ exercises covering all modules.
 
 ---
 

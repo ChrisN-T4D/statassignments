@@ -43,18 +43,22 @@ export function useSimulation() {
     }
   }
 
-  // Fetch exercises for a topic and software type
-  async function fetchExercises(topicId, softwareType = null) {
+  // Fetch exercises for a topic and software type, optionally filtered by class
+  async function fetchExercises(topicId, softwareType = null, classId = null) {
     loading.value = true
     try {
       const filters = [`topic = "${topicId}"`]
       if (softwareType) {
         filters.push(`software_type = "${softwareType}"`)
       }
+      if (classId) {
+        filters.push(`class = "${classId}"`)
+      }
 
       const records = await pb.collection('simulation_exercises').getFullList({
         filter: filters.join(' && '),
-        sort: 'order,created'
+        sort: 'order,created',
+        expand: 'class'
       })
 
       return records.map(parseExercise)
@@ -148,7 +152,7 @@ export function useSimulation() {
   }
 
   // Get user's progress on simulation exercises
-  async function getSimulationProgress(topicId = null, softwareType = null) {
+  async function getSimulationProgress(topicId = null, softwareType = null, classId = null) {
     if (!profile.value) {
       return { completed: 0, total: 0, exercises: [] }
     }
@@ -158,6 +162,7 @@ export function useSimulation() {
       const exerciseFilters = []
       if (topicId) exerciseFilters.push(`topic = "${topicId}"`)
       if (softwareType) exerciseFilters.push(`software_type = "${softwareType}"`)
+      if (classId) exerciseFilters.push(`class = "${classId}"`)
 
       const exercises = await pb.collection('simulation_exercises').getFullList({
         filter: exerciseFilters.length > 0 ? exerciseFilters.join(' && ') : undefined,
