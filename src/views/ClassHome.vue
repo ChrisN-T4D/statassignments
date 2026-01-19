@@ -198,9 +198,9 @@ import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
-import { courseModules } from '../data/modules'
-import { getTopicsByModule } from '../data/topics'
-import { getLessonsByModule, software } from '../data/softwareLessons'
+import { getModulesByClassId, getContentModulesByClass, getBenchmarksByClass, getTopicsForModule } from '../data/modules'
+import { software } from '../data/topics'
+import { getLessonsByModule } from '../data/softwareLessons'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes } = useClasses()
@@ -208,7 +208,7 @@ const { isAuthenticated } = useAuth()
 const { hasProfile } = useProfile()
 
 const classId = computed(() => route.params.classId)
-const selectedModuleId = ref('module-1')
+const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 
 const contentTabs = [
@@ -221,22 +221,27 @@ const currentClass = computed(() => {
   return classes.value.find(c => c.id === classId.value) || null
 })
 
+// Get modules for the current class
+const classModules = computed(() => {
+  return getModulesByClassId(classId.value)
+})
+
 // Split modules into content modules and benchmarks
 const contentModules = computed(() => {
-  return courseModules.filter(m => !m.isBenchmark)
+  return getContentModulesByClass(classId.value)
 })
 
 const benchmarkModules = computed(() => {
-  return courseModules.filter(m => m.isBenchmark)
+  return getBenchmarksByClass(classId.value)
 })
 
 const selectedModule = computed(() => {
-  return courseModules.find(m => m.id === selectedModuleId.value)
+  return classModules.value.find(m => m.id === selectedModuleId.value)
 })
 
 // Get topics for the selected module
 const moduleTopics = computed(() => {
-  return getTopicsByModule(selectedModuleId.value)
+  return getTopicsForModule(selectedModuleId.value)
 })
 
 // Get software lessons for the selected module
@@ -268,6 +273,13 @@ function getSoftwareColor(softwareId) {
   return sw?.color || '#6366f1'
 }
 
+// Set default module when class modules load
+function setDefaultModule() {
+  if (contentModules.value.length > 0 && !selectedModuleId.value) {
+    selectedModuleId.value = contentModules.value[0].id
+  }
+}
+
 // Placeholder stats (would come from useAttempts in real implementation)
 const stats = computed(() => ({
   completed: 3,
@@ -280,13 +292,21 @@ onMounted(async () => {
   await fetchClasses()
   if (classId.value) {
     selectClass(classId.value)
+    setDefaultModule()
   }
 })
 
 watch(classId, (newId) => {
   if (newId) {
     selectClass(newId)
+    selectedModuleId.value = null // Reset module selection
+    setDefaultModule()
   }
+})
+
+// Watch for modules loading
+watch(contentModules, () => {
+  setDefaultModule()
 })
 </script>
 

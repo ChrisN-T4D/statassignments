@@ -1,9 +1,16 @@
-// Course Modules - Based on "Learning Statistics with Jamovi"
-// https://www.learnstatswithjamovi.com/
+// Course Modules - Organized by Class
+// Each class has its own set of modules
 
-export const courseModules = [
+// ============================================================
+// STATISTICS CLASS MODULES
+// Based on "Learning Statistics with Jamovi"
+// https://www.learnstatswithjamovi.com/
+// ============================================================
+
+export const statisticsModules = [
   {
-    id: 'module-1',
+    id: 'stats-module-1',
+    classId: 'statistics',
     number: 1,
     title: 'Introductions and Why Learn Stats',
     shortTitle: 'Why Stats?',
@@ -19,7 +26,8 @@ export const courseModules = [
     ]
   },
   {
-    id: 'module-2',
+    id: 'stats-module-2',
+    classId: 'statistics',
     number: 2,
     title: 'Research Design & Measurement',
     shortTitle: 'Research Design',
@@ -36,7 +44,8 @@ export const courseModules = [
     ]
   },
   {
-    id: 'module-3',
+    id: 'stats-module-3',
+    classId: 'statistics',
     number: 3,
     title: 'Jamovi and Data Handling',
     shortTitle: 'Jamovi Basics',
@@ -54,7 +63,8 @@ export const courseModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'benchmark-1',
+    id: 'stats-benchmark-1',
+    classId: 'statistics',
     number: null,
     title: 'Benchmark 1',
     shortTitle: 'Benchmark 1',
@@ -65,7 +75,8 @@ export const courseModules = [
     isBenchmark: true
   },
   {
-    id: 'module-4',
+    id: 'stats-module-4',
+    classId: 'statistics',
     number: 4,
     title: 'Descriptive Statistics',
     shortTitle: 'Descriptives',
@@ -83,7 +94,8 @@ export const courseModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'module-5',
+    id: 'stats-module-5',
+    classId: 'statistics',
     number: 5,
     title: 'Graphing and Visualization',
     shortTitle: 'Visualization',
@@ -101,7 +113,8 @@ export const courseModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'benchmark-2',
+    id: 'stats-benchmark-2',
+    classId: 'statistics',
     number: null,
     title: 'Benchmark 2',
     shortTitle: 'Benchmark 2',
@@ -112,7 +125,8 @@ export const courseModules = [
     isBenchmark: true
   },
   {
-    id: 'module-6',
+    id: 'stats-module-6',
+    classId: 'statistics',
     number: 6,
     title: 'Probability and Sampling',
     shortTitle: 'Probability',
@@ -133,7 +147,8 @@ export const courseModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'module-7',
+    id: 'stats-module-7',
+    classId: 'statistics',
     number: 7,
     title: 'Hypothesis Testing',
     shortTitle: 'Hypothesis Testing',
@@ -151,7 +166,8 @@ export const courseModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'module-8',
+    id: 'stats-module-8',
+    classId: 'statistics',
     number: 8,
     title: 'Comparing Groups/Relationships',
     shortTitle: 'Comparisons',
@@ -173,9 +189,260 @@ export const courseModules = [
   }
 ]
 
-// Topics organized by module
+// ============================================================
+// INTRO TO RESEARCH CLASS MODULES
+// PSYC 5033: Introduction to Research
+// ============================================================
+
+export const introResearchModules = [
+  {
+    id: 'intro-week-1',
+    classId: 'intro-research',
+    number: 1,
+    title: 'Course Introduction & Expectations',
+    shortTitle: 'Introduction',
+    description: 'Get oriented to the course, review essential materials, policies, and expectations.',
+    icon: '👋',
+    color: '#6366f1',
+    topics: ['course-overview', 'expectations'],
+    learningObjectives: [
+      'Review essential course materials and policies',
+      'Understand course expectations',
+      'Introduce yourself to classmates'
+    ]
+  },
+  {
+    id: 'intro-week-2',
+    classId: 'intro-research',
+    number: 2,
+    title: 'Article Critique & Research Interest',
+    shortTitle: 'Article Critique',
+    description: 'Build foundational skills for reading scholarly work and clarifying research interests.',
+    icon: '📰',
+    color: '#8b5cf6',
+    topics: ['article-critique', 'research-interest'],
+    learningObjectives: [
+      'Read and critique peer-reviewed journal articles',
+      'Evaluate article strengths and weaknesses',
+      'Identify topics and populations of interest',
+      'Practice APA writing and critical analysis'
+    ],
+    assignments: [
+      'Article Critique (2–3 pages)',
+      'Research Interest Statement (1–2 pages)'
+    ]
+  },
+  {
+    id: 'intro-week-3',
+    classId: 'intro-research',
+    number: 3,
+    title: 'Research Problems, Questions, & Hypotheses',
+    shortTitle: 'Research Questions',
+    description: 'Formulate clear, researchable problems and questions from broad topics of interest.',
+    icon: '❓',
+    color: '#0ea5e9',
+    topics: ['research-problems', 'research-questions', 'hypotheses'],
+    learningObjectives: [
+      'Apply the "So What?" test to research problems',
+      'Distinguish between topics, problems, and questions',
+      'Draft hypotheses or guiding questions',
+      'Support problems with current literature (within 3 years)'
+    ],
+    assignments: [
+      'Research Problem, Question & Hypotheses (1–2 pages)'
+    ]
+  },
+  {
+    id: 'intro-week-4',
+    classId: 'intro-research',
+    number: 4,
+    title: 'Annotated Bibliography & Theoretical Frameworks',
+    shortTitle: 'Annotated Bib',
+    description: 'Conduct systematic reviews of scholarly literature and connect work to theoretical frameworks.',
+    icon: '📚',
+    color: '#10b981',
+    topics: ['annotated-bibliography', 'theoretical-frameworks'],
+    learningObjectives: [
+      'Identify, summarize, and evaluate peer-reviewed sources',
+      'Think critically about how theories shape research',
+      'Write 150-200 word annotations for each source',
+      'Connect evidence to theoretical frameworks'
+    ],
+    assignments: [
+      'Annotated Bibliography (5–7 sources)'
+    ]
+  },
+  {
+    id: 'intro-week-5',
+    classId: 'intro-research',
+    number: 5,
+    title: 'Partial Literature Review',
+    shortTitle: 'Lit Review',
+    description: 'Move from summarizing articles to synthesizing scholarly literature.',
+    icon: '📖',
+    color: '#ec4899',
+    topics: ['literature-review', 'synthesis'],
+    learningObjectives: [
+      'Distinguish between summary and synthesis',
+      'Organize research into thematic categories',
+      'Identify gaps and contradictions in literature',
+      'Apply APA 7th edition formatting'
+    ],
+    assignments: [
+      'Partial Literature Review (5–7 pages, 10+ sources)'
+    ]
+  },
+  {
+    id: 'intro-week-6',
+    classId: 'intro-research',
+    number: 6,
+    title: 'Methods Section Draft',
+    shortTitle: 'Methods',
+    description: 'Design the methodology of your proposed study with IRB-style formatting.',
+    icon: '🔬',
+    color: '#14b8a6',
+    topics: ['research-design', 'methods-section', 'participants'],
+    learningObjectives: [
+      'Explain research design choices',
+      'Describe participants and recruitment',
+      'Detail instruments and procedures',
+      'Demonstrate feasibility and ethical considerations'
+    ],
+    assignments: [
+      'Methods Section Draft (3–5 pages)'
+    ]
+  },
+  {
+    id: 'intro-week-7',
+    classId: 'intro-research',
+    number: 7,
+    title: 'Ethics in Research',
+    shortTitle: 'Ethics',
+    description: 'Explore research ethics as the foundation of all human-subject research.',
+    icon: '⚖️',
+    color: '#f97316',
+    topics: ['research-ethics', 'irb', 'informed-consent'],
+    learningObjectives: [
+      'Address participant risks and confidentiality',
+      'Understand informed consent requirements',
+      'Complete formal ethics training',
+      'Anticipate and navigate ethical dilemmas'
+    ],
+    assignments: [
+      'IRB/Ethics Summary (2–3 pages)',
+      'Research Ethics Training & Certificate'
+    ]
+  },
+  {
+    id: 'intro-week-8',
+    classId: 'intro-research',
+    number: 8,
+    title: 'Recruitment, Consent, and Instruments',
+    shortTitle: 'IRB Materials',
+    description: 'Build IRB-ready materials including instruments and informed consent forms.',
+    icon: '📋',
+    color: '#dc2626',
+    topics: ['instruments', 'consent-forms', 'appendices'],
+    learningObjectives: [
+      'Develop and justify research instruments',
+      'Create professional informed consent forms',
+      'Organize appendices following IRB template',
+      'Demonstrate reliability and validity of measures'
+    ],
+    assignments: [
+      'Instruments, Consent, and Appendices Draft (3–5 pages)'
+    ]
+  },
+  {
+    id: 'intro-week-9',
+    classId: 'intro-research',
+    number: 9,
+    title: 'Mid-Term & Proposal Integration',
+    shortTitle: 'Mid-Term',
+    description: 'Assess understanding of Modules 1–8 and integrate proposal sections.',
+    icon: '📝',
+    color: '#f59e0b',
+    topics: ['proposal-integration', 'revision'],
+    learningObjectives: [
+      'Demonstrate understanding of research concepts',
+      'Merge proposal sections into cohesive study',
+      'Revise each component for consistency',
+      'Prepare unified IRB-style proposal draft'
+    ],
+    assignments: [
+      'Mid-Term Exam',
+      'Proposal Integration & Revisions'
+    ],
+    isMidterm: true
+  },
+  {
+    id: 'intro-week-11',
+    classId: 'intro-research',
+    number: 11,
+    title: 'Data Analysis Planning',
+    shortTitle: 'Data Analysis',
+    description: 'Plan data analysis approaches for quantitative and qualitative research.',
+    icon: '📊',
+    color: '#6366f1',
+    topics: ['quantitative-analysis', 'qualitative-analysis', 'data-planning'],
+    learningObjectives: [
+      'Distinguish quantitative vs qualitative approaches',
+      'Plan appropriate analysis methods',
+      'Align analysis with research questions',
+      'Prepare for data collection'
+    ]
+  }
+]
+
+// ============================================================
+// ALL MODULES BY CLASS
+// ============================================================
+
+export const modulesByClass = {
+  'statistics': statisticsModules,
+  'intro-research': introResearchModules
+}
+
+// Legacy export for backwards compatibility
+export const courseModules = statisticsModules
+
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
+export function getModulesByClassId(classId) {
+  return modulesByClass[classId] || []
+}
+
+export function getModuleById(moduleId) {
+  for (const modules of Object.values(modulesByClass)) {
+    const module = modules.find(m => m.id === moduleId)
+    if (module) return module
+  }
+  return null
+}
+
+export function getContentModulesByClass(classId) {
+  const modules = modulesByClass[classId] || []
+  return modules.filter(m => !m.isBenchmark && !m.isMidterm)
+}
+
+export function getBenchmarksByClass(classId) {
+  const modules = modulesByClass[classId] || []
+  return modules.filter(m => m.isBenchmark || m.isMidterm)
+}
+
+export function getModulesWithContent() {
+  return statisticsModules.filter(m => !m.isBenchmark)
+}
+
+export function getBenchmarks() {
+  return statisticsModules.filter(m => m.isBenchmark)
+}
+
+// Topics organized by module (for Statistics class - backwards compatible)
 export const topicsByModule = {
-  'module-1': [
+  'stats-module-1': [
     {
       id: 'intro-to-stats',
       title: 'Introduction to Statistics',
@@ -189,7 +456,7 @@ export const topicsByModule = {
       icon: '💡'
     }
   ],
-  'module-2': [
+  'stats-module-2': [
     {
       id: 'variables-measurement',
       title: 'Variables and Measurement',
@@ -209,7 +476,7 @@ export const topicsByModule = {
       icon: '🔬'
     }
   ],
-  'module-3': [
+  'stats-module-3': [
     {
       id: 'jamovi-interface',
       title: 'The Jamovi Interface',
@@ -229,7 +496,7 @@ export const topicsByModule = {
       icon: '🏷️'
     }
   ],
-  'module-4': [
+  'stats-module-4': [
     {
       id: 'central-tendency',
       title: 'Measures of Central Tendency',
@@ -249,7 +516,7 @@ export const topicsByModule = {
       icon: '📋'
     }
   ],
-  'module-5': [
+  'stats-module-5': [
     {
       id: 'histograms',
       title: 'Histograms',
@@ -275,7 +542,7 @@ export const topicsByModule = {
       icon: '📈'
     }
   ],
-  'module-6': [
+  'stats-module-6': [
     {
       id: 'probability-basics',
       title: 'Probability Basics',
@@ -301,7 +568,7 @@ export const topicsByModule = {
       icon: '🎯'
     }
   ],
-  'module-7': [
+  'stats-module-7': [
     {
       id: 'hypothesis-testing',
       title: 'Hypothesis Testing Logic',
@@ -327,7 +594,7 @@ export const topicsByModule = {
       icon: '🎯'
     }
   ],
-  'module-8': [
+  'stats-module-8': [
     {
       id: 't-tests',
       title: 'T-Tests',
@@ -346,24 +613,182 @@ export const topicsByModule = {
       description: 'Predicting outcomes with regression equations.',
       icon: '📉'
     }
+  ],
+  // Intro to Research topics
+  'intro-week-1': [
+    {
+      id: 'course-overview',
+      title: 'Course Overview',
+      description: 'Introduction to PSYC 5033 and course structure.',
+      icon: '👋'
+    },
+    {
+      id: 'expectations',
+      title: 'Course Expectations',
+      description: 'Policies, requirements, and academic expectations.',
+      icon: '📋'
+    }
+  ],
+  'intro-week-2': [
+    {
+      id: 'article-critique',
+      title: 'Writing Article Critiques',
+      description: 'How to read, evaluate, and critique peer-reviewed articles.',
+      icon: '📰'
+    },
+    {
+      id: 'research-interest',
+      title: 'Identifying Research Interests',
+      description: 'Reflecting on professional goals and research directions.',
+      icon: '🎯'
+    }
+  ],
+  'intro-week-3': [
+    {
+      id: 'research-problems',
+      title: 'Research Problems',
+      description: 'Identifying meaningful, researchable problems.',
+      icon: '🔍'
+    },
+    {
+      id: 'research-questions',
+      title: 'Research Questions',
+      description: 'Formulating clear, focused research questions.',
+      icon: '❓'
+    },
+    {
+      id: 'hypotheses',
+      title: 'Hypotheses & Guiding Questions',
+      description: 'Developing testable hypotheses or qualitative questions.',
+      icon: '💡'
+    }
+  ],
+  'intro-week-4': [
+    {
+      id: 'annotated-bibliography',
+      title: 'Annotated Bibliographies',
+      description: 'Summarizing and evaluating sources systematically.',
+      icon: '📚'
+    },
+    {
+      id: 'theoretical-frameworks',
+      title: 'Theoretical Frameworks',
+      description: 'Connecting research to established theories.',
+      icon: '🏗️'
+    }
+  ],
+  'intro-week-5': [
+    {
+      id: 'literature-review',
+      title: 'Writing Literature Reviews',
+      description: 'Synthesizing sources into thematic narratives.',
+      icon: '📖'
+    },
+    {
+      id: 'synthesis',
+      title: 'Synthesis vs Summary',
+      description: 'Moving beyond summary to analytical synthesis.',
+      icon: '🔗'
+    }
+  ],
+  'intro-week-6': [
+    {
+      id: 'research-design',
+      title: 'Research Design',
+      description: 'Choosing appropriate research methodologies.',
+      icon: '🔬'
+    },
+    {
+      id: 'methods-section',
+      title: 'Writing Methods Sections',
+      description: 'Documenting procedures for replication.',
+      icon: '📝'
+    },
+    {
+      id: 'participants',
+      title: 'Participants & Sampling',
+      description: 'Describing and recruiting study participants.',
+      icon: '👥'
+    }
+  ],
+  'intro-week-7': [
+    {
+      id: 'research-ethics',
+      title: 'Research Ethics Principles',
+      description: 'Core ethical principles in human subjects research.',
+      icon: '⚖️'
+    },
+    {
+      id: 'irb',
+      title: 'IRB Process',
+      description: 'Understanding Institutional Review Board requirements.',
+      icon: '🏛️'
+    },
+    {
+      id: 'informed-consent',
+      title: 'Informed Consent',
+      description: 'Creating ethical consent procedures.',
+      icon: '✍️'
+    }
+  ],
+  'intro-week-8': [
+    {
+      id: 'instruments',
+      title: 'Research Instruments',
+      description: 'Selecting and justifying measurement tools.',
+      icon: '📋'
+    },
+    {
+      id: 'consent-forms',
+      title: 'Consent Form Writing',
+      description: 'Creating IRB-compliant consent documents.',
+      icon: '📄'
+    },
+    {
+      id: 'appendices',
+      title: 'Organizing Appendices',
+      description: 'Structuring supplementary materials.',
+      icon: '📁'
+    }
+  ],
+  'intro-week-9': [
+    {
+      id: 'proposal-integration',
+      title: 'Proposal Integration',
+      description: 'Combining sections into a cohesive proposal.',
+      icon: '🔗'
+    },
+    {
+      id: 'revision',
+      title: 'Revision Strategies',
+      description: 'Techniques for improving academic writing.',
+      icon: '✏️'
+    }
+  ],
+  'intro-week-11': [
+    {
+      id: 'quantitative-analysis',
+      title: 'Quantitative Analysis Planning',
+      description: 'Planning statistical analyses for quantitative studies.',
+      icon: '📊'
+    },
+    {
+      id: 'qualitative-analysis',
+      title: 'Qualitative Analysis Planning',
+      description: 'Planning thematic or content analysis.',
+      icon: '📝'
+    },
+    {
+      id: 'data-planning',
+      title: 'Data Collection Planning',
+      description: 'Preparing for ethical data collection.',
+      icon: '📋'
+    }
   ]
-}
-
-// Helper functions
-export function getModuleById(moduleId) {
-  return courseModules.find(m => m.id === moduleId)
 }
 
 export function getTopicsForModule(moduleId) {
   return topicsByModule[moduleId] || []
-}
-
-export function getModulesWithContent() {
-  return courseModules.filter(m => !m.isBenchmark)
-}
-
-export function getBenchmarks() {
-  return courseModules.filter(m => m.isBenchmark)
 }
 
 export function getAllTopics() {

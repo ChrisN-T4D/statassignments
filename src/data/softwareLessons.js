@@ -25,10 +25,10 @@ Assessment Types:
 */
 
 export const softwareLessons = [
-  // ============ MODULE 3: Jamovi Basics ============
+  // ============ STATISTICS MODULE 3: Jamovi Basics ============
   {
     id: 'jamovi-intro-interface',
-    module: 'module-3',
+    module: 'stats-module-3',
     title: 'Getting to Know the Jamovi Interface',
     software: 'jamovi',
     objectives: [
@@ -175,7 +175,7 @@ export const softwareLessons = [
 
   {
     id: 'jamovi-variable-types',
-    module: 'module-3',
+    module: 'stats-module-3',
     title: 'Setting Variable Types in Jamovi',
     software: 'jamovi',
     objectives: [
@@ -356,7 +356,7 @@ export const softwareLessons = [
 
   {
     id: 'jamovi-descriptive-stats',
-    module: 'module-4',
+    module: 'stats-module-4',
     title: 'Running Descriptive Statistics in Jamovi',
     software: 'jamovi',
     objectives: [
@@ -534,12 +534,12 @@ export function getLessonById(lessonId) {
   return softwareLessons.find(lesson => lesson.id === lessonId)
 }
 
-// Export modules metadata
+// Export modules metadata (Statistics class)
 export const softwareModules = [
-  { id: 'module-3', title: 'Jamovi Basics', description: 'Getting started with the Jamovi interface' },
-  { id: 'module-4', title: 'Descriptive Statistics', description: 'Summarizing your data' },
-  { id: 'module-5', title: 'Data Visualization', description: 'Creating charts and graphs' },
-  { id: 'module-6', title: 'Probability & Distributions', description: 'Working with the normal distribution' },
-  { id: 'module-7', title: 'Hypothesis Testing', description: 'T-tests and significance testing' },
-  { id: 'module-8', title: 'Correlation & Regression', description: 'Analyzing relationships' }
+  { id: 'stats-module-3', title: 'Jamovi Basics', description: 'Getting started with the Jamovi interface' },
+  { id: 'stats-module-4', title: 'Descriptive Statistics', description: 'Summarizing your data' },
+  { id: 'stats-module-5', title: 'Data Visualization', description: 'Creating charts and graphs' },
+  { id: 'stats-module-6', title: 'Probability & Distributions', description: 'Working with the normal distribution' },
+  { id: 'stats-module-7', title: 'Hypothesis Testing', description: 'T-tests and significance testing' },
+  { id: 'stats-module-8', title: 'Correlation & Regression', description: 'Analyzing relationships' }
 ]
