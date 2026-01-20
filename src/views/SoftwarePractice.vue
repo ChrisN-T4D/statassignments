@@ -331,6 +331,44 @@ function formatCompletionTime(date) {
   return date.toLocaleString()
 }
 
+function getExerciseStorageId(exercise, fallbackIndex = 0) {
+  if (!exercise) return ''
+  const order = exercise.order ?? fallbackIndex
+  return [
+    exercise.software_type || 'unknown',
+    exercise.module || 'module',
+    exercise.topic || 'topic',
+    order,
+    exercise.title || 'title'
+  ].join('|')
+}
+
+function getCompletedExerciseIds() {
+  try {
+    const raw = localStorage.getItem('completedSoftwareExercises')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed software exercises:', err)
+    return new Set()
+  }
+}
+
+function saveCompletedExerciseId(exerciseId) {
+  if (!exerciseId) return
+  try {
+    const raw = localStorage.getItem('completedSoftwareExercises')
+    const parsed = raw ? JSON.parse(raw) : []
+    const ids = Array.isArray(parsed) ? parsed : []
+    if (!ids.includes(exerciseId)) {
+      ids.push(exerciseId)
+      localStorage.setItem('completedSoftwareExercises', JSON.stringify(ids))
+    }
+  } catch (err) {
+    console.warn('Unable to save completed software exercises:', err)
+  }
+}
+
 function buildSummaryText() {
   return [
     'Exercise Completion Summary',
@@ -373,19 +411,22 @@ function selectModule(moduleId) {
 
 function loadProgress() {
   // Use static exercises with simulated progress
+  const completedSet = getCompletedExerciseIds()
   const exercises = staticExercises.value.map((ex, index) => {
-    const uniqueId = `${ex.module}-${ex.topic}-${index}`
-    const isCompleted = completedExerciseIds.value.has(uniqueId)
+    const storageId = getExerciseStorageId(ex, index)
+    const isCompleted = completedSet.has(storageId)
     // For now, all exercises are unlocked (no sequential requirement)
     const isUnlocked = true
     return {
       ...ex,
-      id: uniqueId,
+      id: storageId,
       isCompleted,
       isUnlocked,
       isCurrent: isUnlocked && !isCompleted
     }
   })
+
+  completedExerciseIds.value = completedSet
 
   progress.value = {
     completed:
@@ -431,6 +472,7 @@ function handleCorrect() {
   // Mark exercise as completed
   if (currentExercise.value?.id) {
     completedExerciseIds.value.add(currentExercise.value.id)
+    saveCompletedExerciseId(currentExercise.value.id)
   }
   loadProgress()
   completionSummary.value = {
@@ -552,6 +594,7 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
   border: 2px solid var(--border);
   border-radius: 2rem;
   background: white;
+  color: #111827;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -566,7 +609,7 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
 .software-btn.active {
   background: var(--sw-color, var(--primary));
   border-color: var(--sw-color, var(--primary));
-  color: white;
+  color: #111827;
 }
 
 .module-selector {

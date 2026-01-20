@@ -30,9 +30,9 @@
         <!-- Overall Stats -->
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-value">{{ completedCount }}</div>
+            <div class="stat-value">{{ readTopicsCount }}</div>
             <div class="stat-label">Topics Completed</div>
-            <div class="stat-subtext">of {{ topics.length }} total</div>
+            <div class="stat-subtext">of {{ totalTopics }} total</div>
           </div>
           <div class="stat-card">
             <div class="stat-value">{{ practiceStats?.total || 0 }}</div>
@@ -44,30 +44,24 @@
           </div>
         </div>
 
-        <!-- Topic Progress -->
+        <!-- Module Progress -->
         <div class="content-section">
-          <h2>Topic Progress</h2>
-          <div class="topic-progress-list">
+          <h2>Module Progress</h2>
+          <div class="module-progress-list">
             <div
-              v-for="topic in topics"
-              :key="topic.id"
-              class="topic-progress-item"
+              v-for="module in modules"
+              :key="module.id"
+              class="module-progress-item"
             >
-              <div class="topic-info">
-                <span class="topic-icon">{{ topic.icon }}</span>
-                <span class="topic-title">{{ topic.title }}</span>
+              <div class="module-info">
+                <span class="module-title">{{ module.title }}</span>
+                <span class="module-count">{{ getModuleProgress(module).completed }} / {{ getModuleProgress(module).total }}</span>
               </div>
-              <div class="topic-actions">
-                <button
-                  class="complete-btn"
-                  :class="{ completed: isTopicComplete(topic.id) }"
-                  @click="toggleComplete(topic.id)"
-                >
-                  {{ isTopicComplete(topic.id) ? 'Completed' : 'Mark Complete' }}
-                </button>
-                <router-link :to="`/practice/${topic.id}`" class="practice-link">
-                  Practice
-                </router-link>
+              <div class="module-progress-bar">
+                <div
+                  class="module-progress-fill"
+                  :style="{ width: `${getModuleProgress(module).percent}%` }"
+                ></div>
               </div>
             </div>
           </div>
@@ -87,7 +81,6 @@
               You've answered <strong>{{ practiceStats.correct }}</strong> out of
               <strong>{{ practiceStats.total }}</strong> questions correctly.
             </p>
-            <router-link to="/practice" class="btn-primary">Continue Practicing</router-link>
           </div>
         </div>
       </div>
@@ -98,17 +91,21 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { topics } from '../data/topics.js'
+import { getContentModulesByClass, getTopicsForModule, getAllTopics } from '../data/modules.js'
+import { getLessonsByModule } from '../data/softwareLessons.js'
+import { statisticsExercises } from '../data/statisticsPractices.js'
 import { useAuth } from '../composables/useAuth'
-import { useProgress } from '../composables/useProgress'
 import { usePractice } from '../composables/usePractice'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
-const { fetchProgress, markTopicComplete, markTopicIncomplete, isTopicComplete, completedCount } = useProgress()
 const { fetchUserStats } = usePractice()
 
 const practiceStats = ref(null)
+const modules = computed(() => getContentModulesByClass('statistics'))
+const totalTopics = computed(() => getAllTopics().length)
+const readTopicIds = ref(new Set())
+const readTopicsCount = computed(() => readTopicIds.value.size)
 
 const userName = computed(() => {
   return user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || 'Student'
@@ -119,12 +116,88 @@ const userInitials = computed(() => {
   return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
 })
 
-async function toggleComplete(topicId) {
-  if (isTopicComplete(topicId)) {
-    await markTopicIncomplete(topicId)
-  } else {
-    await markTopicComplete(topicId)
+function getModuleProgress(module) {
+  const moduleTopics = getTopicsForModule(module.id)
+  const totalTopicsCount = moduleTopics.length
+  const completedSet = getCompletedConceptReviewIds()
+  const readCount = moduleTopics.filter(topic => readTopicIds.value.has(topic.id)).length
+  const contentReviewComplete = completedSet.has(module.id)
+  const moduleLessons = getLessonsByModule(module.id)
+  const completedLessonsSet = getCompletedSoftwareLessonIds()
+  const totalLessons = moduleLessons.length
+  const completedLessons = moduleLessons.filter(lesson => completedLessonsSet.has(lesson.id)).length
+  const practiceModuleId = toPracticeModuleId(module.id)
+  const todoExercises = statisticsExercises.filter(ex =>
+    ex.software_type === 'jamovi' &&
+    ex.module === practiceModuleId &&
+    ex.exercise_type !== 'menu_navigation'
+  )
+  const completedExercisesSet = getCompletedSoftwareExerciseIds()
+  const todoCompleted = todoExercises.length > 0 && todoExercises.every((ex, index) => {
+    const order = ex.order ?? index
+    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
+    return completedExercisesSet.has(id)
+  })
+  const totalTodo = todoExercises.length > 0 ? 1 : 0
+  const completedTodo = todoCompleted ? 1 : 0
+  const total = totalTopicsCount + (totalTopicsCount > 0 ? 1 : 0) + totalLessons + totalTodo
+  const completed = readCount + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
+  const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+  return { total, completed, percent }
+}
+
+function refreshReadTopics() {
+  readTopicIds.value = getReadTopicIds()
+}
+
+function getReadTopicIds() {
+  try {
+    const raw = localStorage.getItem('readTopics')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read readTopics:', err)
+    return new Set()
   }
+}
+
+function getCompletedConceptReviewIds() {
+  try {
+    const raw = localStorage.getItem('completedConceptReviewsV2')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed concept reviews:', err)
+    return new Set()
+  }
+}
+
+function getCompletedSoftwareLessonIds() {
+  try {
+    const raw = localStorage.getItem('completedSoftwareLessons')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed software lessons:', err)
+    return new Set()
+  }
+}
+
+function getCompletedSoftwareExerciseIds() {
+  try {
+    const raw = localStorage.getItem('completedSoftwareExercises')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed software exercises:', err)
+    return new Set()
+  }
+}
+
+function toPracticeModuleId(value) {
+  if (!value) return null
+  if (value.startsWith('stats-module-')) return value.replace('stats-module-', 'module-')
+  return value
 }
 
 async function handleSignOut() {
@@ -134,8 +207,8 @@ async function handleSignOut() {
 
 async function loadData() {
   if (isAuthenticated.value) {
-    await fetchProgress()
     practiceStats.value = await fetchUserStats()
+    refreshReadTopics()
   }
 }
 
@@ -235,75 +308,49 @@ watch(isAuthenticated, (newVal) => {
   color: var(--text-secondary);
 }
 
-.topic-progress-list {
+.module-progress-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.topic-progress-item {
+.module-progress-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
   padding: 1rem 1.25rem;
   background: var(--bg-main);
   border-radius: 0.5rem;
 }
 
-.topic-info {
+.module-info {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.topic-icon {
-  font-size: 1.25rem;
-}
-
-.topic-title {
-  font-weight: 500;
-}
-
-.topic-actions {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
 }
 
-.complete-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  background: var(--bg-card);
+.module-title {
+  font-weight: 600;
+}
+
+.module-count {
+  font-size: 0.875rem;
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
-.complete-btn:hover {
-  border-color: var(--success);
-  color: var(--success);
+.module-progress-bar {
+  height: 0.5rem;
+  background: var(--bg-card);
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-.complete-btn.completed {
-  background: #ecfdf5;
-  border-color: var(--success);
-  color: var(--success);
-}
-
-.practice-link {
-  padding: 0.5rem 1rem;
-  background: var(--primary);
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.practice-link:hover {
-  text-decoration: none;
-  background: var(--primary-dark);
+.module-progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 999px;
+  transition: width 0.3s ease;
 }
 
 .practice-summary {

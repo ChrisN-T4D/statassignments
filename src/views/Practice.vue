@@ -206,9 +206,6 @@ const hintText = computed(() => {
   return currentProblem.value.hint || ''
 })
 
-const masteryCompleted = computed(() => {
-  return Boolean(masteryTotal.value && !currentProblem.value)
-})
 
 function normalizeAnswerValue(value) {
   return value.toString().trim().toLowerCase()
@@ -249,12 +246,12 @@ function toStatsModuleId(value) {
 function recordConceptReviewComplete(moduleId) {
   if (!moduleId) return
   try {
-    const raw = localStorage.getItem('completedConceptReviews')
+    const raw = localStorage.getItem('completedConceptReviewsV2')
     const parsed = raw ? JSON.parse(raw) : []
     const ids = Array.isArray(parsed) ? parsed : []
     if (!ids.includes(moduleId)) {
       ids.push(moduleId)
-      localStorage.setItem('completedConceptReviews', JSON.stringify(ids))
+      localStorage.setItem('completedConceptReviewsV2', JSON.stringify(ids))
     }
   } catch (err) {
     console.warn('Unable to save concept review completion:', err)
@@ -270,6 +267,16 @@ async function loadNextProblem() {
   isCorrect.value = false
   feedbackMessage.value = ''
   await nextMasteryProblem()
+  if (masteryTotal.value > 0 && masteryIndex.value >= masteryTotal.value) {
+    const moduleFromQuery = getActiveModuleId()
+    if (moduleFromQuery) {
+      recordConceptReviewComplete(toStatsModuleId(moduleFromQuery))
+      return
+    }
+    const topic = topics.find(t => t.id === selectedTopic.value)
+    const moduleId = toStatsModuleId(topic?.moduleId || null)
+    recordConceptReviewComplete(moduleId)
+  }
 }
 
 function selectAnswer(answer) {
@@ -364,17 +371,6 @@ watch(currentProblem, (problem) => {
   feedbackMessage.value = ''
 })
 
-watch([masteryCompleted, selectedTopic], ([completed]) => {
-  if (!completed) return
-  const moduleFromQuery = getActiveModuleId()
-  if (moduleFromQuery) {
-    recordConceptReviewComplete(toStatsModuleId(moduleFromQuery))
-    return
-  }
-  const topic = topics.find(t => t.id === selectedTopic.value)
-  const moduleId = toStatsModuleId(topic?.moduleId || null)
-  recordConceptReviewComplete(moduleId)
-})
 </script>
 
 <style scoped>

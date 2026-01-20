@@ -17,13 +17,13 @@
           @click="removeImage"
           aria-label="Remove image"
         >
-          âœ•
+          Ã¢Å“â€¢
         </button>
       </div>
 
       <!-- Upload prompt -->
       <div v-else class="upload-prompt">
-        <div class="upload-icon">ðŸ“·</div>
+        <div class="upload-icon">Ã°Å¸â€œÂ·</div>
         <p>Drag and drop a screenshot here, or click to browse</p>
         <p class="upload-hint">PNG, JPG, or GIF up to 10MB</p>
       </div>
@@ -52,7 +52,7 @@
 
     <!-- Manual grading notice -->
     <div class="grading-notice" v-if="!submitted">
-      <span class="notice-icon">â„¹ï¸</span>
+      <span class="notice-icon">Ã¢â€žÂ¹Ã¯Â¸Â</span>
       <span>This question will be reviewed {{ question.autoGrade ? 'automatically' : 'manually' }}</span>
     </div>
 
@@ -315,7 +315,8 @@ function onDrop(event) {
   border: 1px solid var(--primary);
 }
 
-.feedback p {\n  color: #111827;
+.feedback p {
+  color: #111827;
   margin: 0;
   font-size: 0.9375rem;
 }

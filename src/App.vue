@@ -15,7 +15,6 @@
           <router-link v-if="selectedClass" :to="`/class/${selectedClassId}`">
             {{ selectedClass.short_name }}
           </router-link>
-          <router-link to="/practice">Practice</router-link>
           <router-link v-if="isInstructor" to="/instructor">Dashboard</router-link>
           <router-link v-if="isAuthenticated" to="/profile">Profile</router-link>
           <template v-if="isAuthenticated">

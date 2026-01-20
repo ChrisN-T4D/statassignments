@@ -64,6 +64,8 @@
           <div class="module-progress-meta">
             <span>Topics read: {{ moduleProgress.openedTopics }} / {{ moduleProgress.totalTopics }}</span>
             <span>Content review: {{ moduleProgress.contentReviewComplete ? 'Done' : 'Not yet' }}</span>
+            <span>Software practice: {{ moduleProgress.completedLessons }} / {{ moduleProgress.totalLessons }}</span>
+            <span v-if="moduleProgress.totalTodo">To do list: {{ moduleProgress.completedTodo ? 'Done' : 'Not yet' }}</span>
           </div>
         </div>
 
@@ -137,17 +139,17 @@
               <p>No software lessons available for this module yet.</p>
             </div>
             <div v-else>
-            <router-link
-              :to="`/class/${classId}/software?module=${selectedModuleId}`"
-              class="practice-link-card"
-            >
-              <div class="link-card-icon">
-                <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
-              </div>
-              <div class="link-card-content">
-                <h3>Start Software Practice</h3>
-                <p>Hands-on exercises for {{ selectedModule.shortTitle }}</p>
-              </div>
+              <router-link
+                :to="`/class/${classId}/software?module=${selectedModuleId}`"
+                class="practice-link-card"
+              >
+                <div class="link-card-icon">
+                  <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
+                </div>
+                <div class="link-card-content">
+                  <h3>Start Software Practice</h3>
+                  <p>Hands-on exercises for {{ selectedModule.shortTitle }}</p>
+                </div>
                 <span class="card-arrow">-></span>
               </router-link>
             </div>
@@ -168,6 +170,20 @@
                 <span class="card-arrow">-></span>
               </router-link>
             </div>
+            <router-link
+              v-if="todoExercises.length > 0"
+              :to="`/class/${classId}/software?module=${selectedModuleId}&software=jamovi`"
+              class="practice-link-card"
+            >
+              <div class="link-card-icon">
+                <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>To Do in Software</h3>
+                <p>{{ todoExercises.length }} tasks • {{ todoCompleted ? 'Complete' : 'In progress' }}</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </router-link>
           </div>
         </div>
       </div>
@@ -218,6 +234,7 @@ import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
 import { getModulesByClassId, getContentModulesByClass, getTopicsForModule } from '../data/modules'
 import { software } from '../data/topics'
+import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
 
 const route = useRoute()
@@ -230,7 +247,7 @@ const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 
 const contentTabs = [
-  { id: 'topics', label: 'Topics', icon: 'T' },
+  { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
   { id: 'concepts', label: 'Concept Review', iconSrc: '/content-review-icon.png' },
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
@@ -265,6 +282,43 @@ const moduleLessons = computed(() => {
 
 const hasSoftwareLessons = computed(() => moduleLessons.value.length > 0)
 
+function toPracticeModuleId(value) {
+  if (!value) return null
+  if (value.startsWith('stats-module-')) return value.replace('stats-module-', 'module-')
+  return value
+}
+
+const todoExercises = computed(() => {
+  if (!selectedModuleId.value) return []
+  const practiceModuleId = toPracticeModuleId(selectedModuleId.value)
+  return statisticsExercises.filter(ex =>
+    ex.software_type === 'jamovi' &&
+    ex.module === practiceModuleId &&
+    ex.exercise_type !== 'menu_navigation'
+  )
+})
+
+function getCompletedSoftwareExerciseIds() {
+  try {
+    const raw = localStorage.getItem('completedSoftwareExercises')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed software exercises:', err)
+    return new Set()
+  }
+}
+
+const todoCompleted = computed(() => {
+  if (todoExercises.value.length === 0) return false
+  const completedSet = getCompletedSoftwareExerciseIds()
+  return todoExercises.value.every((ex, index) => {
+    const order = ex.order ?? index
+    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
+    return completedSet.has(id)
+  })
+})
+
 const readTopicIds = ref(new Set())
 
 function getReadTopicIds() {
@@ -288,11 +342,22 @@ function isTopicRead(topicId) {
 
 function getCompletedConceptReviewIds() {
   try {
-    const raw = localStorage.getItem('completedConceptReviews')
+    const raw = localStorage.getItem('completedConceptReviewsV2')
     const parsed = raw ? JSON.parse(raw) : []
     return new Set(Array.isArray(parsed) ? parsed : [])
   } catch (err) {
     console.warn('Unable to read concept reviews:', err)
+    return new Set()
+  }
+}
+
+function getCompletedSoftwareLessonIds() {
+  try {
+    const raw = localStorage.getItem('completedSoftwareLessons')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read completed software lessons:', err)
     return new Set()
   }
 }
@@ -304,8 +369,13 @@ const moduleProgress = computed(() => {
   const contentReviewComplete = selectedModuleId.value
     ? completedSet.has(selectedModuleId.value)
     : false
-  const total = totalTopics + (totalTopics > 0 ? 1 : 0)
-  const completed = openedTopics + (contentReviewComplete ? 1 : 0)
+  const completedLessonsSet = getCompletedSoftwareLessonIds()
+  const totalLessons = moduleLessons.value.length
+  const completedLessons = moduleLessons.value.filter(lesson => completedLessonsSet.has(lesson.id)).length
+  const totalTodo = todoExercises.value.length > 0 ? 1 : 0
+  const completedTodo = todoCompleted.value ? 1 : 0
+  const total = totalTopics + (totalTopics > 0 ? 1 : 0) + totalLessons + totalTodo
+  const completed = openedTopics + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
   const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
 
   return {
@@ -314,7 +384,11 @@ const moduleProgress = computed(() => {
     percent,
     totalTopics,
     openedTopics,
-    contentReviewComplete
+    contentReviewComplete,
+    totalLessons,
+    completedLessons,
+    totalTodo,
+    completedTodo
   }
 })
 
@@ -621,6 +695,7 @@ watch(() => route.fullPath, () => {
   gap: 1rem;
   font-size: 0.75rem;
   color: var(--text-secondary);
+  flex-wrap: wrap;
 }
 
 /* Content Tabs */
