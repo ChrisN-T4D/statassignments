@@ -24,7 +24,7 @@
           >
             <span class="module-icon">{{ mod.icon }}</span>
             <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
-            <span class="module-title">{{ mod.shortTitle }}</span>
+            <span class="module-title">{{ getModuleDisplayShortTitle(mod) }}</span>
           </button>
         </div>
       </div>
@@ -36,9 +36,9 @@
           <div class="module-header-info">
             <h2>
               <span v-if="selectedModule.number">Module {{ selectedModule.number }}: </span>
-              {{ selectedModule.title }}
+              {{ getModuleDisplayTitle(selectedModule) }}
             </h2>
-            <p>{{ selectedModule.description }}</p>
+            <p>{{ getModuleDisplayDescription(selectedModule) }}</p>
           </div>
         </div>
 
@@ -47,7 +47,7 @@
           <h3>Learning Objectives</h3>
           <ul>
             <li v-for="(obj, idx) in selectedModule.learningObjectives" :key="idx">
-              {{ obj }}
+              {{ replaceJamoviLabel(obj, selectedModule.id) }}
             </li>
           </ul>
         </div>
@@ -63,9 +63,9 @@
           </div>
           <div class="module-progress-meta">
             <span>Topics read: {{ moduleProgress.openedTopics }} / {{ moduleProgress.totalTopics }}</span>
-            <span>Content review: {{ moduleProgress.contentReviewComplete ? 'Done' : 'Not yet' }}</span>
-            <span>Software practice: {{ moduleProgress.completedLessons }} / {{ moduleProgress.totalLessons }}</span>
-            <span v-if="moduleProgress.totalTodo">To do list: {{ moduleProgress.completedTodo ? 'Done' : 'Not yet' }}</span>
+            <span>Content review: {{ moduleProgress.contentReviewComplete ? 1 : 0 }} / {{ moduleProgress.totalTopics > 0 ? 1 : 0 }}</span>
+            <span>Learn: {{ moduleProgress.completedLessons }} / {{ moduleProgress.totalLessons }}</span>
+            <span v-if="moduleProgress.totalTodo">To do list: {{ moduleProgress.completedTodo }} / {{ moduleProgress.totalTodo }}</span>
           </div>
         </div>
 
@@ -103,8 +103,8 @@
               >
                 <img src="/topic-icon.png" alt="" class="topic-icon-img" />
                 <div class="topic-info">
-                  <h3>{{ topic.title }}</h3>
-                  <p>{{ topic.description }}</p>
+                  <h3>{{ replaceJamoviLabel(topic.title, selectedModuleId) }}</h3>
+                  <p>{{ replaceJamoviLabel(topic.description, selectedModuleId) }}</p>
                 </div>
                 <span v-if="isTopicRead(topic.id)" class="topic-status">Read</span>
                 <span class="card-arrow">-></span>
@@ -135,55 +135,71 @@
 
           <!-- Software Practice Tab -->
           <div v-if="activeContentTab === 'software'" class="tab-panel">
-            <div v-if="moduleLessons.length === 0" class="empty-state">
+            <div v-if="filteredModuleLessons.length > 0" class="practice-link-card learn-card">
+              <div class="link-card-icon">
+                <img src="/software-practice-icon.png" alt="Software lessons" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Learn</h3>
+                <p>All software lessons for this module.</p>
+                <div class="lessons-grid">
+                  <router-link
+                    v-for="lesson in filteredModuleLessons"
+                    :key="lesson.id"
+                    :to="`/class/${classId}/lesson/${lesson.id}`"
+                    class="lesson-card"
+                  >
+                    <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(lesson.software) }">
+                      <img
+                        v-if="getSoftwareIcon(lesson.software)"
+                        :src="getSoftwareIcon(lesson.software)"
+                        :alt="`${lesson.software} icon`"
+                        class="lesson-software-icon"
+                      />
+                    </div>
+                    <div class="lesson-info">
+                      <h3>{{ lesson.title }}</h3>
+                      <p>{{ lesson.objectives[0] }}</p>
+                    </div>
+                    <span class="card-arrow">-></span>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+            <div v-else class="empty-state">
               <p>No software lessons available for this module yet.</p>
             </div>
-            <div v-else>
-              <router-link
-                :to="`/class/${classId}/software?module=${selectedModuleId}`"
-                class="practice-link-card"
-              >
-                <div class="link-card-icon">
-                  <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
-                </div>
-                <div class="link-card-content">
-                  <h3>Start Software Practice</h3>
-                  <p>Hands-on exercises for {{ selectedModule.shortTitle }}</p>
-                </div>
-                <span class="card-arrow">-></span>
-              </router-link>
-            </div>
-            <div v-if="moduleLessons.length > 0" class="lessons-grid">
-              <router-link
-                v-for="lesson in moduleLessons"
-                :key="lesson.id"
-                :to="`/class/${classId}/lesson/${lesson.id}`"
-                class="lesson-card"
-              >
-                <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(lesson.software) }">
-                  {{ lesson.software }}
-                </div>
-                <div class="lesson-info">
-                  <h3>{{ lesson.title }}</h3>
-                  <p>{{ lesson.objectives[0] }}</p>
-                </div>
-                <span class="card-arrow">-></span>
-              </router-link>
-            </div>
-            <router-link
-              v-if="todoExercises.length > 0"
-              :to="`/class/${classId}/software?module=${selectedModuleId}&software=jamovi`"
-              class="practice-link-card"
-            >
+            <div v-if="todoExercises.length > 0" class="practice-link-card learn-card">
               <div class="link-card-icon">
                 <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
               </div>
               <div class="link-card-content">
                 <h3>To Do in Software</h3>
-                <p>{{ todoExercises.length }} tasks • {{ todoCompleted ? 'Complete' : 'In progress' }}</p>
+                <p>{{ todoExercises.length }} tasks > {{ todoCompleted ? 'Complete' : 'In progress' }}</p>
+                <div class="lessons-grid">
+                  <router-link
+                    v-for="(exercise, index) in todoExercises"
+                    :key="`${exercise.module}-${exercise.topic}-${index}`"
+                    :to="`/class/${classId}/software?module=${selectedModuleId}&software=${preferredSoftware}`"
+                    class="lesson-card"
+                  >
+                    <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(exercise.software_type) }">
+                      <img
+                        v-if="getSoftwareIcon(exercise.software_type)"
+                        :src="getSoftwareIcon(exercise.software_type)"
+                        :alt="`${exercise.software_type} icon`"
+                        class="lesson-software-icon"
+                      />
+                    </div>
+                    <div class="lesson-info">
+                      <h3>{{ exercise.title }}</h3>
+                      <p>{{ exercise.description }}</p>
+                    </div>
+                    <span class="card-arrow">-></span>
+                  </router-link>
+                </div>
               </div>
-              <span class="card-arrow">-></span>
-            </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -245,6 +261,8 @@ const { hasProfile } = useProfile()
 const classId = computed(() => route.params.classId)
 const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
+const preferredSoftware = ref('jamovi')
+const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 
 const contentTabs = [
   { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
@@ -280,7 +298,12 @@ const moduleLessons = computed(() => {
   return getLessonsByModule(selectedModuleId.value)
 })
 
-const hasSoftwareLessons = computed(() => moduleLessons.value.length > 0)
+const filteredModuleLessons = computed(() => {
+  if (!preferredSoftware.value) return moduleLessons.value
+  return moduleLessons.value.filter(lesson => lesson.software === preferredSoftware.value)
+})
+
+const hasSoftwareLessons = computed(() => filteredModuleLessons.value.length > 0)
 
 function toPracticeModuleId(value) {
   if (!value) return null
@@ -292,7 +315,7 @@ const todoExercises = computed(() => {
   if (!selectedModuleId.value) return []
   const practiceModuleId = toPracticeModuleId(selectedModuleId.value)
   return statisticsExercises.filter(ex =>
-    ex.software_type === 'jamovi' &&
+    ex.software_type === preferredSoftware.value &&
     ex.module === practiceModuleId &&
     ex.exercise_type !== 'menu_navigation'
   )
@@ -318,6 +341,17 @@ const todoCompleted = computed(() => {
     return completedSet.has(id)
   })
 })
+
+function getPreferredSoftwareId() {
+  try {
+    const raw = localStorage.getItem('preferredSoftware')
+    if (!raw) return 'jamovi'
+    return software.find(sw => sw.id === raw)?.id || 'jamovi'
+  } catch (err) {
+    console.warn('Unable to read preferred software:', err)
+    return 'jamovi'
+  }
+}
 
 const readTopicIds = ref(new Set())
 
@@ -370,10 +404,14 @@ const moduleProgress = computed(() => {
     ? completedSet.has(selectedModuleId.value)
     : false
   const completedLessonsSet = getCompletedSoftwareLessonIds()
-  const totalLessons = moduleLessons.value.length
-  const completedLessons = moduleLessons.value.filter(lesson => completedLessonsSet.has(lesson.id)).length
-  const totalTodo = todoExercises.value.length > 0 ? 1 : 0
-  const completedTodo = todoCompleted.value ? 1 : 0
+  const totalLessons = filteredModuleLessons.value.length
+  const completedLessons = filteredModuleLessons.value.filter(lesson => completedLessonsSet.has(lesson.id)).length
+  const totalTodo = todoExercises.value.length
+  const completedTodo = todoExercises.value.filter((ex, index) => {
+    const order = ex.order ?? index
+    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
+    return completedSet.has(id)
+  }).length
   const total = totalTopics + (totalTopics > 0 ? 1 : 0) + totalLessons + totalTodo
   const completed = openedTopics + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
   const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
@@ -400,7 +438,7 @@ function getTabCount(tabId) {
     case 'concepts':
       return moduleTopics.value.length > 0 ? 1 : 0 // 1 if there are topics to review
     case 'software':
-      return moduleLessons.value.length
+      return filteredModuleLessons.value.length
     default:
       return 0
   }
@@ -437,6 +475,36 @@ function getSoftwareColor(softwareId) {
   return sw?.color || '#6366f1'
 }
 
+function getSoftwareName(softwareId) {
+  return software.find(s => s.id === softwareId)?.name || softwareId
+}
+
+function getSoftwareIcon(softwareId) {
+  if (softwareId === 'jamovi') return '/jamovi-icon.png'
+  if (softwareId === 'r') return '/r-icon.png'
+  if (softwareId === 'spss') return '/SPSS-icon.png'
+  if (softwareId === 'excel') return '/excel-icon.png'
+  if (softwareId === 'stata') return '/stata-icon.png'
+  return ''
+}
+
+function replaceJamoviLabel(text, moduleId) {
+  if (!text || !moduleId || !moduleId.includes('module-3')) return text
+  return text.replace(/Jamovi/gi, preferredSoftwareName.value)
+}
+
+function getModuleDisplayTitle(module) {
+  return replaceJamoviLabel(module?.title, module?.id)
+}
+
+function getModuleDisplayShortTitle(module) {
+  return replaceJamoviLabel(module?.shortTitle, module?.id)
+}
+
+function getModuleDisplayDescription(module) {
+  return replaceJamoviLabel(module?.description, module?.id)
+}
+
 // Set default module when class modules load
 function setDefaultModule() {
   if (contentModules.value.length > 0 && !selectedModuleId.value) {
@@ -459,6 +527,7 @@ onMounted(async () => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
   }
+  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
@@ -469,6 +538,7 @@ watch(classId, (newId) => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
   }
+  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
@@ -476,15 +546,18 @@ watch(classId, (newId) => {
 watch(contentModules, () => {
   setDefaultModule()
   syncSelectedModuleFromQuery()
+  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
 watch(() => route.query.module, () => {
   syncSelectedModuleFromQuery()
+  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
 watch(() => route.fullPath, () => {
+  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 </script>
@@ -925,6 +998,21 @@ watch(() => route.fullPath, () => {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.learn-card {
+  align-items: flex-start;
+}
+
+.learn-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+.learn-card .link-card-content {
+  flex: 1;
 }
 
 .lesson-card {
@@ -953,6 +1041,15 @@ watch(() => route.fullPath, () => {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lesson-software-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .lesson-info {
@@ -1079,6 +1176,7 @@ watch(() => route.fullPath, () => {
   }
 }
 </style>
+
 
 
 

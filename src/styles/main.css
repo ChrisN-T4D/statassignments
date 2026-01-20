@@ -263,6 +263,46 @@ a:hover {
   margin-bottom: 0.5rem;
 }
 
+.module-content {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.module-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.module-content h3 {
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.module-content h4 {
+  font-size: 1rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.module-content p {
+  margin-bottom: 1rem;
+}
+
+.module-content ul,
+.module-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.module-content li {
+  margin-bottom: 0.5rem;
+}
+
 /* Formula display */
 .formula {
   background: var(--formula-bg);
@@ -303,6 +343,26 @@ a:hover {
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 0.5rem;
+}
+
+.callout,
+.knowledge-check {
+  background: var(--bg-elevated);
+  border-left: 4px solid var(--primary);
+  padding: 1rem 1.25rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 1rem 0;
+}
+
+.knowledge-check {
+  border-left-color: var(--success);
+  background: var(--tip-bg);
+}
+
+.callout h4,
+.knowledge-check h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
 }
 
 /* Page header */

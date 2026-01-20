@@ -44,6 +44,32 @@
           </div>
         </div>
 
+        <!-- Preferred Software -->
+        <div class="content-section">
+          <h2>Preferred Software</h2>
+          <p class="section-subtext">
+            This selection controls the software practice list and your to do items.
+          </p>
+          <div class="software-preference">
+            <button
+              v-for="sw in softwareOptions"
+              :key="sw.id"
+              class="software-option"
+              :class="{ active: preferredSoftware === sw.id }"
+              :style="{ '--sw-color': sw.color }"
+              @click="setPreferredSoftware(sw.id)"
+            >
+              <img
+                v-if="getSoftwareIcon(sw.id)"
+                :src="getSoftwareIcon(sw.id)"
+                :alt="`${sw.name} icon`"
+                class="software-option-icon"
+              />
+              {{ sw.name }}
+            </button>
+          </div>
+        </div>
+
         <!-- Module Progress -->
         <div class="content-section">
           <h2>Module Progress</h2>
@@ -53,10 +79,10 @@
               :key="module.id"
               class="module-progress-item"
             >
-              <div class="module-info">
-                <span class="module-title">{{ module.title }}</span>
+            <div class="module-info">
+                <span class="module-title">{{ getModuleDisplayTitle(module) }}</span>
                 <span class="module-count">{{ getModuleProgress(module).completed }} / {{ getModuleProgress(module).total }}</span>
-              </div>
+            </div>
               <div class="module-progress-bar">
                 <div
                   class="module-progress-fill"
@@ -94,6 +120,7 @@ import { useRouter } from 'vue-router'
 import { getContentModulesByClass, getTopicsForModule, getAllTopics } from '../data/modules.js'
 import { getLessonsByModule } from '../data/softwareLessons.js'
 import { statisticsExercises } from '../data/statisticsPractices.js'
+import { software } from '../data/topics.js'
 import { useAuth } from '../composables/useAuth'
 import { usePractice } from '../composables/usePractice'
 
@@ -106,6 +133,9 @@ const modules = computed(() => getContentModulesByClass('statistics'))
 const totalTopics = computed(() => getAllTopics().length)
 const readTopicIds = ref(new Set())
 const readTopicsCount = computed(() => readTopicIds.value.size)
+const preferredSoftware = ref('jamovi')
+const softwareOptions = computed(() => software)
+const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 
 const userName = computed(() => {
   return user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || 'Student'
@@ -128,7 +158,7 @@ function getModuleProgress(module) {
   const completedLessons = moduleLessons.filter(lesson => completedLessonsSet.has(lesson.id)).length
   const practiceModuleId = toPracticeModuleId(module.id)
   const todoExercises = statisticsExercises.filter(ex =>
-    ex.software_type === 'jamovi' &&
+    ex.software_type === preferredSoftware.value &&
     ex.module === practiceModuleId &&
     ex.exercise_type !== 'menu_navigation'
   )
@@ -200,6 +230,48 @@ function toPracticeModuleId(value) {
   return value
 }
 
+function getSoftwareName(softwareId) {
+  return software.find(s => s.id === softwareId)?.name || softwareId
+}
+
+function replaceJamoviLabel(text, moduleId) {
+  if (!text || !moduleId || !moduleId.includes('module-3')) return text
+  return text.replace(/Jamovi/gi, preferredSoftwareName.value)
+}
+
+function getModuleDisplayTitle(module) {
+  return replaceJamoviLabel(module?.title, module?.id)
+}
+
+function getPreferredSoftwareId() {
+  try {
+    const raw = localStorage.getItem('preferredSoftware')
+    if (!raw) return 'jamovi'
+    return software.find(sw => sw.id === raw)?.id || 'jamovi'
+  } catch (err) {
+    console.warn('Unable to read preferred software:', err)
+    return 'jamovi'
+  }
+}
+
+function setPreferredSoftware(swId) {
+  preferredSoftware.value = swId
+  try {
+    localStorage.setItem('preferredSoftware', swId)
+  } catch (err) {
+    console.warn('Unable to save preferred software:', err)
+  }
+}
+
+function getSoftwareIcon(softwareId) {
+  if (softwareId === 'jamovi') return '/jamovi-icon.png'
+  if (softwareId === 'r') return '/r-icon.png'
+  if (softwareId === 'spss') return '/SPSS-icon.png'
+  if (softwareId === 'excel') return '/excel-icon.png'
+  if (softwareId === 'stata') return '/stata-icon.png'
+  return ''
+}
+
 async function handleSignOut() {
   await signOut()
   router.push('/')
@@ -209,6 +281,7 @@ async function loadData() {
   if (isAuthenticated.value) {
     practiceStats.value = await fetchUserStats()
     refreshReadTopics()
+    preferredSoftware.value = getPreferredSoftwareId()
   }
 }
 
@@ -370,6 +443,50 @@ watch(isAuthenticated, (newVal) => {
   background: var(--success);
   border-radius: 1rem;
   transition: width 0.3s;
+}
+
+.section-subtext {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+}
+
+.software-preference {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.software-option {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 2rem;
+  background: white;
+  color: #111827;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.software-option:hover {
+  border-color: var(--sw-color, var(--primary));
+  color: var(--sw-color, var(--primary));
+}
+
+.software-option.active {
+  background: var(--sw-color, var(--primary));
+  border-color: var(--sw-color, var(--primary));
+  color: #111827;
+}
+
+.software-option-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .practice-summary p {

@@ -3,7 +3,7 @@
     <div class="container">
       <!-- Lesson Header -->
       <div class="lesson-header">
-        <router-link :to="backLink" class="back-link">← Back to Lessons</router-link>
+        <router-link :to="backLink" class="back-link">Back</router-link>
         <div class="lesson-meta">
           <span class="software-badge" :class="lesson.software">{{ lesson.software }}</span>
           <span class="time-estimate">{{ lesson.estimatedTime }} min</span>
@@ -266,7 +266,8 @@
         </div>
       </div>
     </div>
-  </div>    <div v-if="showSummary" class="summary-overlay">
+    <!-- Completion Summary -->
+    <div v-if="showSummary" class="summary-overlay">
       <div class="summary-card">
         <h3>Lesson Completion Summary</h3>
         <p class="summary-status">Status: Completed</p>
@@ -283,6 +284,7 @@
         </div>
       </div>
     </div>
+  </div>
   <!-- Lesson Not Found -->
   <div v-else class="not-found">
     <div class="container">
@@ -338,8 +340,12 @@ const phases = {
 
 // Computed
 const backLink = computed(() => {
-  const classId = route.params.classId
-  return classId ? `/class/${classId}/software` : '/practice'
+  const classId = route.params.classId || 'statistics'
+  const moduleId = lesson.value?.module || ''
+  if (moduleId) {
+    return `/class/${classId}?module=${moduleId}`
+  }
+  return `/class/${classId}`
 })
 
 const totalQuestions = computed(() => {
@@ -727,6 +733,7 @@ watch(() => route.params.lessonId, () => {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+  color: #111827;
 }
 
 .callout.tip { background: #f0fdf4; border-color: #86efac; }

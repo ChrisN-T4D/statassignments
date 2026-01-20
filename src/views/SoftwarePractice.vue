@@ -31,7 +31,7 @@
           :class="{ active: selectedModule === mod.id }"
           @click="selectModule(mod.id)"
         >
-          <span class="module-select-title">{{ mod.title }}</span>
+          <span class="module-select-title">{{ getPracticeModuleTitle(mod) }}</span>
         </button>
       </div>
 
@@ -109,6 +109,19 @@
                   {{ getSoftwareName(exercise.software_type) }}
                 </span>
               </div>
+              <div class="dataset-links">
+                <span class="dataset-label">Datasets:</span>
+                <a
+                  v-for="dataset in datasetLinks"
+                  :key="dataset.path"
+                  :href="dataset.path"
+                  download
+                  class="dataset-link"
+                  @click.stop
+                >
+                  {{ dataset.name }}
+                </a>
+              </div>
             </div>
           </div>
           <div v-else class="empty-state">
@@ -142,6 +155,18 @@
             </p>
             <div v-if="currentExercise.submission" class="submission-note">
               Submit: {{ currentExercise.submission }}
+            </div>
+            <div class="dataset-links">
+              <span class="dataset-label">Datasets:</span>
+              <a
+                v-for="dataset in datasetLinks"
+                :key="dataset.path"
+                :href="dataset.path"
+                download
+                class="dataset-link"
+              >
+                {{ dataset.name }}
+              </a>
             </div>
             <div class="instruction-actions">
               <button class="btn-primary" @click="handleCorrect">Mark Complete</button>
@@ -207,6 +232,11 @@ const completionSummary = ref({
   username: '',
   completedAt: ''
 })
+const datasetLinks = [
+  { name: 'bmi_and_exercise.csv', path: '/bmi_and_exercise.csv' },
+  { name: 'Normality data.csv', path: '/Normality%20data.csv' },
+  { name: 'personality_data.csv', path: '/personality_data.csv' }
+]
 
 // Computed
 const classId = computed(() => route.params.classId)
@@ -284,7 +314,7 @@ const availableModules = computed(() => {
 
 const selectedModuleTitle = computed(() => {
   const module = statisticsModules.find(mod => mod.id === selectedModule.value)
-  return module?.title || ''
+  return getPracticeModuleTitle(module)
 })
 
 
@@ -320,6 +350,13 @@ const staticExercises = computed(() => {
 function getSoftwareName(id) {
   return software.find(s => s.id === id)?.name || id
 }
+
+function getPracticeModuleTitle(module) {
+  if (!module?.title) return ''
+  if (!module.id || !module.id.includes('module-3')) return module.title
+  return module.title.replace(/Jamovi/gi, selectedSoftwareName.value)
+}
+
 
 function getModuleTitle(moduleId) {
   if (!moduleId) return ''
@@ -392,8 +429,28 @@ function getCompletedLessonIds() {
     return new Set()
   }
 }
+
+function getPreferredSoftwareId() {
+  try {
+    const raw = localStorage.getItem('preferredSoftware')
+    if (!raw) return 'jamovi'
+    return software.find(sw => sw.id === raw)?.id || 'jamovi'
+  } catch (err) {
+    console.warn('Unable to read preferred software:', err)
+    return 'jamovi'
+  }
+}
+
+function savePreferredSoftwareId(swId) {
+  try {
+    localStorage.setItem('preferredSoftware', swId)
+  } catch (err) {
+    console.warn('Unable to save preferred software:', err)
+  }
+}
 async function selectSoftware(swId) {
   selectedSoftware.value = swId
+  savePreferredSoftwareId(swId)
   currentExercise.value = null
   showSummary.value = false
   if (!availableModules.value.find(mod => mod.id === selectedModule.value)) {
@@ -516,6 +573,9 @@ onMounted(async () => {
   await fetchClasses()
   if (route.query.software) {
     selectedSoftware.value = route.query.software
+    savePreferredSoftwareId(route.query.software)
+  } else {
+    selectedSoftware.value = getPreferredSoftwareId()
   }
   if (requestedModuleId.value) {
     selectedModule.value = requestedModuleId.value
@@ -611,6 +671,7 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
   border-color: var(--sw-color, var(--primary));
   color: #111827;
 }
+
 
 .module-selector {
   display: flex;
@@ -805,6 +866,32 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
 .software-tag.r { background: #dbeafe; color: #2563eb; }
 .software-tag.stata { background: #e0e7ff; color: #4338ca; }
 .software-tag.excel { background: #dcfce7; color: #16a34a; }
+
+.dataset-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.dataset-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dataset-link {
+  font-size: 0.75rem;
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.dataset-link:hover {
+  border-bottom-color: var(--primary);
+}
 
 .exercise-container {
   position: relative;

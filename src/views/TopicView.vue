@@ -32,6 +32,9 @@
         ></iframe>
       </div>
 
+      <!-- Topic Content -->
+      <div v-if="topic?.contentHtml" class="topic-content" v-html="topic.contentHtml"></div>
+
       <!-- Key Points -->
       <div v-if="topic?.keyPoints?.length" class="content-section key-points-section">
         <div class="key-points-header">
@@ -76,8 +79,7 @@ const topicId = computed(() => route.params.id)
 const topic = computed(() => topics.find(t => t.id === topicId.value))
 
 const pageTitle = computed(() => {
-  if (topicId.value === 'intro-to-stats') return 'Why do We Learn Statistics'
-  if (topicId.value === 'why-stats-matter') return 'A Brief Introduction to Research Design'
+  if (topicId.value === 'intro-to-stats') return 'Why Do We Learn Statistics?'
   return topic.value?.title || 'Topic'
 })
 

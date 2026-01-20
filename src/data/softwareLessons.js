@@ -354,6 +354,854 @@ export const softwareLessons = [
     }
   },
 
+  // ============ STATISTICS MODULE 3: SPSS Basics ============
+  {
+    id: 'spss-intro-interface',
+    module: 'stats-module-3',
+    title: 'Getting to Know the SPSS Interface',
+    software: 'spss',
+    objectives: [
+      'Identify the Data View and Variable View tabs',
+      'Locate the Output window and Syntax editor',
+      'Run a simple command from the menus'
+    ],
+    estimatedTime: 15,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Tour of the SPSS Workspace',
+        content: [
+          {
+            type: 'text',
+            content: 'SPSS has three core areas: the Data Editor (Data View and Variable View), the Output window, and the Syntax editor.'
+          },
+          {
+            type: 'annotated_image',
+            image: '/images/lessons/spss-interface-overview.png',
+            alt: 'SPSS Data Editor with Data View and Variable View tabs',
+            annotations: [
+              { x: 10, y: 5, label: 'Data View', description: 'Rows are cases, columns are variables' },
+              { x: 30, y: 5, label: 'Variable View', description: 'Define type, labels, and missing values' },
+              { x: 70, y: 5, label: 'Output window', description: 'Tables and charts appear here' }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'You can paste most menu actions to Syntax (Paste) and run them later for reproducibility.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Open SPSS and follow these steps.',
+        steps: [
+          {
+            instruction: 'Open SPSS and create a new blank dataset (File > New > Data).',
+            hint: 'You should see a grid of rows and columns in Data View.',
+            checkpoint: 'Data View shows variables as columns and cases as rows.'
+          },
+          {
+            instruction: 'Click the Variable View tab.',
+            hint: 'It is at the bottom of the Data Editor window.',
+            checkpoint: 'You should see columns like Name, Type, Label, and Measure.'
+          },
+          {
+            instruction: 'Return to Data View and enter a few numbers in a column.',
+            hint: 'Create a column named Score and type 70, 82, 95.',
+            checkpoint: 'You should see values in the Data View grid.'
+          },
+          {
+            instruction: 'Go to Analyze > Descriptive Statistics > Frequencies and click Paste.',
+            hint: 'Paste opens the Syntax editor without running the command.',
+            checkpoint: 'The Syntax window should open with a FREQUENCIES command.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Where do you define variable types and labels in SPSS?',
+            options: [
+              { id: 'a', text: 'Output window' },
+              { id: 'b', text: 'Variable View' },
+              { id: 'c', text: 'Data View' },
+              { id: 'd', text: 'Chart Builder' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! Variable View is where you define name, type, labels, and measurement level.',
+              incorrect: 'Use Variable View to define properties like type, label, and measurement level.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'multiple_choice',
+            question: 'Where do statistical output tables appear after running an analysis?',
+            options: [
+              { id: 'a', text: 'Data View' },
+              { id: 'b', text: 'Output window' },
+              { id: 'c', text: 'Variable View' },
+              { id: 'd', text: 'Syntax editor' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Yes. Results appear in the Output window.',
+              incorrect: 'SPSS sends results to the Output window.'
+            }
+          },
+          {
+            id: 'q3',
+            type: 'fill_blank',
+            question: 'The two tabs in the SPSS Data Editor are ____ and ____.',
+            answer: ['Data View and Variable View', 'Variable View and Data View'],
+            caseSensitive: false,
+            feedback: {
+              correct: 'Correct! Data View and Variable View are the two tabs.',
+              incorrect: 'The tabs are Data View and Variable View.'
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'spss-import-data',
+    module: 'stats-module-3',
+    title: 'Importing Data and Defining Variables in SPSS',
+    software: 'spss',
+    objectives: [
+      'Import a CSV or Excel file',
+      'Set variable types and measurement levels',
+      'Apply variable and value labels'
+    ],
+    estimatedTime: 20,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Import and Set Up Variables',
+        content: [
+          {
+            type: 'text',
+            content: 'SPSS can import CSV and Excel files. After import, always check variable types and measurement levels in Variable View.'
+          },
+          {
+            type: 'definition_list',
+            items: [
+              {
+                term: 'Type',
+                icon: 'T',
+                definition: 'Numeric, String, or Date; controls how SPSS reads values.',
+                color: '#dc2626'
+              },
+              {
+                term: 'Label',
+                icon: 'L',
+                definition: 'Longer description used in output.',
+                color: '#7c3aed'
+              },
+              {
+                term: 'Measure',
+                icon: 'M',
+                definition: 'Nominal, Ordinal, or Scale.',
+                color: '#0ea5e9'
+              }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'warning',
+            content: 'If a numeric column imports as text, you must change Type to Numeric or analyses will fail.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Use a small CSV or Excel file and follow these steps.',
+        steps: [
+          {
+            instruction: 'Import a CSV (File > Open > Data) and select your file.',
+            hint: 'Choose Files of Type: CSV or Excel.',
+            checkpoint: 'Your data should appear in Data View.'
+          },
+          {
+            instruction: 'Go to Variable View and check Type for each variable.',
+            hint: 'Click the Type cell and choose Numeric or String as needed.',
+            checkpoint: 'Each variable should have the correct Type.'
+          },
+          {
+            instruction: 'Set Measure for each variable (Nominal, Ordinal, Scale).',
+            hint: 'Use Nominal for categories, Ordinal for ranked categories, Scale for numeric values.',
+            checkpoint: 'The Measure column should be filled in.'
+          },
+          {
+            instruction: 'Add a Variable Label for at least one variable.',
+            hint: 'Labels appear in output tables and charts.',
+            checkpoint: 'You should see your label in the Label column.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Which Measure level should you use for test scores?',
+            options: [
+              { id: 'a', text: 'Nominal' },
+              { id: 'b', text: 'Ordinal' },
+              { id: 'c', text: 'Scale' },
+              { id: 'd', text: 'String' }
+            ],
+            correct: 'c',
+            feedback: {
+              correct: 'Correct! Test scores are numeric and should be Scale.',
+              incorrect: 'Use Scale for numeric variables like test scores.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'multiple_select',
+            question: 'Which actions should you do after importing data? (Select all that apply)',
+            options: [
+              { id: 'a', text: 'Check variable Type' },
+              { id: 'b', text: 'Set Measure level' },
+              { id: 'c', text: 'Add variable labels' },
+              { id: 'd', text: 'Delete the Output window' }
+            ],
+            correct: ['a', 'b', 'c'],
+            feedback: {
+              correct: 'Yes. Type, Measure, and labels should be reviewed after import.',
+              incorrect: 'After import, verify Type, set Measure, and add labels as needed.'
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  // ============ STATISTICS MODULE 3: R Basics ============
+  {
+    id: 'r-rstudio-basics',
+    module: 'stats-module-3',
+    title: 'Getting Started with RStudio',
+    software: 'r',
+    objectives: [
+      'Identify the four main RStudio panes',
+      'Run commands in the Console and from a script',
+      'Locate objects in the Environment'
+    ],
+    estimatedTime: 15,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Tour of RStudio',
+        content: [
+          {
+            type: 'text',
+            content: 'RStudio is an IDE that makes working with R easier. The interface is divided into four main panes.'
+          },
+          {
+            type: 'annotated_image',
+            image: '/images/lessons/rstudio-overview.png',
+            alt: 'RStudio interface with labeled panes',
+            annotations: [
+              { x: 5, y: 10, label: 'Source', description: 'Where you write and save scripts' },
+              { x: 55, y: 10, label: 'Environment', description: 'Objects in memory (data, variables)' },
+              { x: 5, y: 60, label: 'Console', description: 'Where commands run' },
+              { x: 55, y: 60, label: 'Files/Plots/Help', description: 'Outputs and file browser' }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'Use Ctrl+Enter (Cmd+Enter on Mac) to run the current line or selection in a script.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Open RStudio and follow these steps.',
+        steps: [
+          {
+            instruction: 'Open RStudio and locate the Console pane.',
+            hint: 'The Console usually appears in the lower-left pane.',
+            checkpoint: 'You should see a prompt that looks like >.'
+          },
+          {
+            instruction: 'Type 2 + 2 in the Console and press Enter.',
+            hint: 'You should see the result appear immediately in the Console.',
+            checkpoint: 'You should see [1] 4.'
+          },
+          {
+            instruction: 'Create a new R script (File > New File > R Script).',
+            hint: 'A blank script tab should open in the Source pane.',
+            checkpoint: 'You should see a new tab named Untitled1.'
+          },
+          {
+            instruction: 'Type x <- 10 in the script and run it with Ctrl+Enter.',
+            hint: 'This sends the line to the Console and saves x in memory.',
+            checkpoint: 'Look in the Environment pane for x = 10.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Where do objects you create (like x <- 10) appear in RStudio?',
+            options: [
+              { id: 'a', text: 'Console pane' },
+              { id: 'b', text: 'Environment pane' },
+              { id: 'c', text: 'Files pane' },
+              { id: 'd', text: 'Help pane' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! The Environment pane lists objects currently in memory.',
+              incorrect: 'Objects appear in the Environment pane (upper-right by default).'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'ordering',
+            question: 'Put these RStudio panes in their usual positions (top-left to bottom-right):',
+            items: [
+              { id: 'a', text: 'Console' },
+              { id: 'b', text: 'Environment' },
+              { id: 'c', text: 'Source' },
+              { id: 'd', text: 'Files/Plots/Help' }
+            ],
+            correctOrder: ['c', 'b', 'a', 'd'],
+            feedback: {
+              correct: 'Right! Source, Environment, Console, Files/Plots/Help.',
+              incorrect: 'The default layout is Source (top-left), Environment (top-right), Console (bottom-left), Files/Plots/Help (bottom-right).'
+            }
+          },
+          {
+            id: 'q3',
+            type: 'fill_blank',
+            question: 'The shortcut to run a line from a script is ____ + Enter.',
+            answer: ['Ctrl', 'Control', 'Cmd', 'Command'],
+            caseSensitive: false,
+            feedback: {
+              correct: 'Yes! Ctrl+Enter (Windows) or Cmd+Enter (Mac).',
+              incorrect: 'Use Ctrl+Enter on Windows or Cmd+Enter on Mac.'
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'r-import-data',
+    module: 'stats-module-3',
+    title: 'Importing Data and Inspecting Data Frames',
+    software: 'r',
+    objectives: [
+      'Import a CSV file with read.csv()',
+      'Check data structure with str() and head()',
+      'Summarize variables with summary()'
+    ],
+    estimatedTime: 20,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Import and Inspect Data',
+        content: [
+          {
+            type: 'text',
+            content: 'In R, data are often stored in data frames. You can import CSV files using read.csv().'
+          },
+          {
+            type: 'definition_list',
+            items: [
+              {
+                term: 'read.csv()',
+                icon: 'R',
+                definition: 'Reads a CSV file into a data frame.',
+                color: '#2563eb'
+              },
+              {
+                term: 'head()',
+                icon: 'H',
+                definition: 'Shows the first 6 rows of a data frame.',
+                color: '#16a34a'
+              },
+              {
+                term: 'str()',
+                icon: 'S',
+                definition: 'Shows the structure and data types.',
+                color: '#7c3aed'
+              },
+              {
+                term: 'summary()',
+                icon: 'U',
+                definition: 'Gives a quick statistical summary.',
+                color: '#b45309'
+              }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'If your CSV is in your project folder, use read.csv("myfile.csv"). Otherwise, set your working directory first.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Use a small CSV file (e.g., data.csv) and follow these steps.',
+        steps: [
+          {
+            instruction: 'Set your working directory to the folder with your CSV.',
+            hint: 'Session > Set Working Directory > Choose Directory.',
+            checkpoint: 'Use getwd() to confirm the path.'
+          },
+          {
+            instruction: 'Import the file with: data <- read.csv("data.csv").',
+            hint: 'Replace data.csv with your actual file name.',
+            checkpoint: 'You should see data in the Environment pane.'
+          },
+          {
+            instruction: 'Run head(data) to view the first rows.',
+            hint: 'This helps confirm the file imported correctly.'
+          },
+          {
+            instruction: 'Run str(data) to check variable types.',
+            hint: 'Look for numeric vs character vs factor.'
+          },
+          {
+            instruction: 'Run summary(data) for quick descriptives.',
+            hint: 'This gives min, max, quartiles for numeric variables.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Which function reads a CSV file into R?',
+            options: [
+              { id: 'a', text: 'read.table()' },
+              { id: 'b', text: 'read.csv()' },
+              { id: 'c', text: 'import.csv()' },
+              { id: 'd', text: 'load.csv()' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! read.csv() is the standard base R function for CSVs.',
+              incorrect: 'Use read.csv() to import CSV files in base R.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'multiple_select',
+            question: 'Which functions help you quickly inspect a data frame? (Select all that apply)',
+            options: [
+              { id: 'a', text: 'head()' },
+              { id: 'b', text: 'str()' },
+              { id: 'c', text: 'summary()' },
+              { id: 'd', text: 'sqrt()' }
+            ],
+            correct: ['a', 'b', 'c'],
+            feedback: {
+              correct: 'Correct! head(), str(), and summary() are all common inspection tools.',
+              incorrect: 'head(), str(), and summary() are used for inspection. sqrt() is not.'
+            }
+          },
+          {
+            id: 'q3',
+            type: 'fill_blank',
+            question: 'To view the first 6 rows of a data frame named df, type ____.',
+            answer: ['head(df)', 'head( df )', 'head( df)'],
+            caseSensitive: false,
+            feedback: {
+              correct: 'Yes. head(df) shows the first rows of the data frame.',
+              incorrect: 'Use head(df) to view the first rows.'
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  // ============ STATISTICS MODULE 3: Excel Basics ============
+  {
+    id: 'excel-intro-interface',
+    module: 'stats-module-3',
+    title: 'Getting Started with Excel for Data',
+    software: 'excel',
+    objectives: [
+      'Identify key worksheet elements (rows, columns, cells)',
+      'Enter data in a clean, rectangular format',
+      'Use simple formulas to check values'
+    ],
+    estimatedTime: 15,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Excel Workspace Overview',
+        content: [
+          {
+            type: 'text',
+            content: 'In Excel, each dataset should be a clean rectangle: one row per case and one column per variable.'
+          },
+          {
+            type: 'annotated_image',
+            image: '/images/lessons/excel-interface-overview.png',
+            alt: 'Excel worksheet with column headers and data rows',
+            annotations: [
+              { x: 10, y: 15, label: 'Column headers', description: 'Variable names in row 1' },
+              { x: 10, y: 30, label: 'Rows', description: 'Each row is a case' },
+              { x: 70, y: 10, label: 'Formula bar', description: 'View and edit cell values' }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'Avoid merged cells and blank rows or columns inside your dataset.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Open Excel and follow these steps.',
+        steps: [
+          {
+            instruction: 'Create a new workbook and enter column headers: ID, Score, Group.',
+            hint: 'Put headers in row 1.',
+            checkpoint: 'You should see three headers in row 1.'
+          },
+          {
+            instruction: 'Enter 5 rows of data beneath the headers.',
+            hint: 'Use numeric IDs and scores, and a text Group label.',
+            checkpoint: 'Your data should be a solid rectangle with no blank rows.'
+          },
+          {
+            instruction: 'Use the formula =AVERAGE(B2:B6) to compute the mean score.',
+            hint: 'Place the formula below your data.',
+            checkpoint: 'You should see a numeric average.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'In a clean dataset, each column should represent:',
+            options: [
+              { id: 'a', text: 'A case (participant)' },
+              { id: 'b', text: 'A variable' },
+              { id: 'c', text: 'A worksheet' },
+              { id: 'd', text: 'A formula' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! Columns are variables.',
+              incorrect: 'Columns should represent variables.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'fill_blank',
+            question: 'The Excel function to calculate a mean is ____.',
+            answer: ['AVERAGE', 'average', 'Average'],
+            caseSensitive: false,
+            feedback: {
+              correct: 'Yes. Use AVERAGE().',
+              incorrect: 'Use the AVERAGE() function.'
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'excel-import-clean',
+    module: 'stats-module-3',
+    title: 'Importing and Cleaning Data in Excel',
+    software: 'excel',
+    objectives: [
+      'Import a CSV file into Excel',
+      'Check for blank rows/columns',
+      'Set clear, consistent variable names'
+    ],
+    estimatedTime: 20,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Import and Clean',
+        content: [
+          {
+            type: 'text',
+            content: 'Excel can open CSV files directly. After import, check that your dataset is tidy and variables are clearly named.'
+          },
+          {
+            type: 'callout',
+            style: 'warning',
+            content: 'Avoid spaces and special characters in variable names. Use names like test_score instead of Test Score.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Use a small CSV file and follow these steps.',
+        steps: [
+          {
+            instruction: 'Open a CSV in Excel (File > Open).',
+            hint: 'Choose the CSV file and open it directly.',
+            checkpoint: 'Your data should appear in rows and columns.'
+          },
+          {
+            instruction: 'Check for blank rows or columns inside the dataset.',
+            hint: 'Delete any empty rows/columns that split the data.',
+            checkpoint: 'You should have one continuous data block.'
+          },
+          {
+            instruction: 'Rename headers to short, consistent names (e.g., score, group).',
+            hint: 'Use lowercase with underscores if needed.',
+            checkpoint: 'Headers should be concise and consistent.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_select',
+            question: 'Which are good practices for Excel datasets? (Select all that apply)',
+            options: [
+              { id: 'a', text: 'Use one row per case and one column per variable' },
+              { id: 'b', text: 'Leave blank rows inside the data' },
+              { id: 'c', text: 'Use clear variable names' },
+              { id: 'd', text: 'Merge header cells across columns' }
+            ],
+            correct: ['a', 'c'],
+            feedback: {
+              correct: 'Correct! Keep data rectangular and headers clear.',
+              incorrect: 'Keep data rectangular and avoid blanks or merged cells.'
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  // ============ STATISTICS MODULE 3: Stata Basics ============
+  {
+    id: 'stata-intro-interface',
+    module: 'stats-module-3',
+    title: 'Getting Started with Stata',
+    software: 'stata',
+    objectives: [
+      'Identify the Command window and Results window',
+      'Understand the Variables and Properties panes',
+      'Run a basic command'
+    ],
+    estimatedTime: 15,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Stata Workspace Overview',
+        content: [
+          {
+            type: 'text',
+            content: 'Stata has a Command window for typing commands and a Results window that shows output.'
+          },
+          {
+            type: 'annotated_image',
+            image: '/images/lessons/stata-interface-overview.png',
+            alt: 'Stata interface with Command and Results windows',
+            annotations: [
+              { x: 10, y: 60, label: 'Command', description: 'Type commands here' },
+              { x: 10, y: 10, label: 'Results', description: 'Output appears here' },
+              { x: 70, y: 10, label: 'Variables', description: 'List of variables in the dataset' },
+              { x: 70, y: 50, label: 'Properties', description: 'Details about selected variable' }
+            ]
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'Use the up arrow to recall previous commands.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Open Stata and follow these steps.',
+        steps: [
+          {
+            instruction: 'Open Stata and type sysuse auto in the Command window, then press Enter.',
+            hint: 'This loads a sample dataset.',
+            checkpoint: 'You should see the auto dataset loaded in memory.'
+          },
+          {
+            instruction: 'Type describe and press Enter.',
+            hint: 'This shows variable names and types.',
+            checkpoint: 'You should see a list of variables in the Results window.'
+          },
+          {
+            instruction: 'Type summarize price mpg and press Enter.',
+            hint: 'This gives basic descriptive statistics.',
+            checkpoint: 'You should see N, mean, SD, min, max for price and mpg.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Where do you type Stata commands?',
+            options: [
+              { id: 'a', text: 'Results window' },
+              { id: 'b', text: 'Command window' },
+              { id: 'c', text: 'Variables pane' },
+              { id: 'd', text: 'Do-file editor only' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! Commands are typed in the Command window.',
+              incorrect: 'Use the Command window to enter commands.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'fill_blank',
+            question: 'The command to list variable types and labels is ____.',
+            answer: ['describe', 'Describe'],
+            caseSensitive: false,
+            feedback: {
+              correct: 'Yes. describe lists variable information.',
+              incorrect: 'Use describe to view variable information.'
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    id: 'stata-import-data',
+    module: 'stats-module-3',
+    title: 'Importing Data in Stata',
+    software: 'stata',
+    objectives: [
+      'Import a CSV with import delimited',
+      'Inspect variables with describe and codebook',
+      'Save a Stata dataset'
+    ],
+    estimatedTime: 20,
+    phases: {
+      iDo: {
+        type: 'demonstration',
+        title: 'Import and Inspect Data',
+        content: [
+          {
+            type: 'text',
+            content: 'Use import delimited to load CSV files in Stata. Then inspect with describe or codebook.'
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: 'Always save your data as a .dta file after import.'
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Let\'s Practice Together',
+        instructions: 'Use a CSV file and follow these steps.',
+        steps: [
+          {
+            instruction: 'Import a CSV with: import delimited using "data.csv", clear',
+            hint: 'Replace data.csv with your file name.',
+            checkpoint: 'You should see variables listed in the Variables pane.'
+          },
+          {
+            instruction: 'Run describe to check variable types.',
+            hint: 'Numeric variables should be int/float, strings are str.',
+            checkpoint: 'Verify types look correct.'
+          },
+          {
+            instruction: 'Run codebook on a categorical variable.',
+            hint: 'Example: codebook group',
+            checkpoint: 'You should see value distributions.'
+          },
+          {
+            instruction: 'Save the dataset: save "data_clean.dta", replace',
+            hint: 'This stores the cleaned Stata file.',
+            checkpoint: 'Stata should confirm the file was saved.'
+          }
+        ]
+      },
+      youDo: {
+        type: 'assessment',
+        title: 'Check Your Understanding',
+        questions: [
+          {
+            id: 'q1',
+            type: 'multiple_choice',
+            question: 'Which command imports a CSV in Stata?',
+            options: [
+              { id: 'a', text: 'read.csv' },
+              { id: 'b', text: 'import delimited' },
+              { id: 'c', text: 'use' },
+              { id: 'd', text: 'open' }
+            ],
+            correct: 'b',
+            feedback: {
+              correct: 'Correct! import delimited reads CSV files.',
+              incorrect: 'Use import delimited to read CSV files.'
+            }
+          },
+          {
+            id: 'q2',
+            type: 'multiple_select',
+            question: 'Which commands help inspect variables? (Select all that apply)',
+            options: [
+              { id: 'a', text: 'describe' },
+              { id: 'b', text: 'codebook' },
+              { id: 'c', text: 'summarize' },
+              { id: 'd', text: 'regress' }
+            ],
+            correct: ['a', 'b', 'c'],
+            feedback: {
+              correct: 'Correct! describe, codebook, and summarize are all inspection tools.',
+              incorrect: 'Use describe, codebook, and summarize to inspect variables.'
+            }
+          }
+        ]
+      }
+    }
+  },
+
   {
     id: 'jamovi-descriptive-stats',
     module: 'stats-module-4',

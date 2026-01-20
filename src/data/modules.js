@@ -17,7 +17,7 @@ export const statisticsModules = [
     description: 'Introduction to the course and the importance of statistics in psychology and research.',
     icon: 'M1',
     color: '#6366f1',
-    topics: ['intro-to-stats', 'why-stats-matter'],
+    topics: ['intro-to-stats'],
     textbookChapters: ['Chapter 1: Why do we learn statistics?'],
     textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/01-Why-do-we-learn-statistics.html',
     learningObjectives: [
@@ -35,7 +35,7 @@ export const statisticsModules = [
     description: 'Learn about variables, measurement levels, and research design fundamentals.',
     icon: 'M2',
     color: '#8b5cf6',
-    topics: ['variables-measurement', 'research-design', 'scales-of-measurement'],
+    topics: ['variables-measurement', 'scales-of-measurement', 'validity', 'research-design'],
     textbookChapters: ['Chapter 2: A brief introduction to research design'],
     textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/02-A-brief-introduction-to-research-design.html',
     learningObjectives: [
@@ -423,14 +423,8 @@ export const topicsByModule = {
   'stats-module-1': [
     {
       id: 'intro-to-stats',
-      title: 'Introduction to Statistics',
+      title: 'Why Do We Learn Statistics?',
       description: 'What is statistics and why does it matter for psychology?',
-      icon: 'T'
-    },
-    {
-      id: 'why-stats-matter',
-      title: 'Why Statistics Matters',
-      description: 'Real-world applications and the importance of data literacy.',
       icon: 'T'
     }
   ],
@@ -445,6 +439,12 @@ export const topicsByModule = {
       id: 'scales-of-measurement',
       title: 'Scales of Measurement',
       description: 'Nominal, Ordinal, Interval, and Ratio (NOIR) scales.',
+      icon: 'T'
+    },
+    {
+      id: 'validity',
+      title: 'Validity',
+      description: 'Threats to internal, external, construct, face, and ecological validity.',
       icon: 'T'
     },
     {
