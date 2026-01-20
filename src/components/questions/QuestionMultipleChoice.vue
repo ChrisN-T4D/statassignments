@@ -24,8 +24,8 @@
         />
         <span class="option-marker">{{ option.id.toUpperCase() }}</span>
         <span class="option-text">{{ option.text }}</span>
-        <span v-if="submitted && option.id === question.correct" class="result-icon correct">✓</span>
-        <span v-if="submitted && answer === option.id && option.id !== question.correct" class="result-icon incorrect">✗</span>
+        <span v-if="submitted && option.id === question.correct" class="result-icon correct">âœ“</span>
+        <span v-if="submitted && answer === option.id && option.id !== question.correct" class="result-icon incorrect">âœ—</span>
       </label>
     </div>
 
@@ -163,7 +163,7 @@ const isCorrect = computed(() => props.answer === props.question.correct)
   border: 1px solid var(--danger);
 }
 
-.feedback p {
+.feedback p {\n  color: #111827;
   margin: 0;
   font-size: 0.9375rem;
 }

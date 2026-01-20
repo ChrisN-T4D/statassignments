@@ -23,11 +23,11 @@
           @change="toggleOption(option.id)"
         />
         <span class="checkbox-marker">
-          <span v-if="isSelected(option.id)" class="check">✓</span>
+          <span v-if="isSelected(option.id)" class="check">âœ“</span>
         </span>
         <span class="option-text">{{ option.text }}</span>
-        <span v-if="submitted && question.correct.includes(option.id)" class="result-icon correct">✓</span>
-        <span v-if="submitted && isSelected(option.id) && !question.correct.includes(option.id)" class="result-icon incorrect">✗</span>
+        <span v-if="submitted && question.correct.includes(option.id)" class="result-icon correct">âœ“</span>
+        <span v-if="submitted && isSelected(option.id) && !question.correct.includes(option.id)" class="result-icon incorrect">âœ—</span>
       </label>
     </div>
 
@@ -197,7 +197,7 @@ const isCorrect = computed(() => {
   border: 1px solid var(--danger);
 }
 
-.feedback p {
+.feedback p {\n  color: #111827;
   margin: 0;
   font-size: 0.9375rem;
 }

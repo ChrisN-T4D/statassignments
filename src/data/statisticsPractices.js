@@ -162,6 +162,90 @@ export const statisticsExercises = [
     order: 3,
     is_active: true
   },
+  {
+    module: 'module-3',
+    topic: 'add-ons',
+    title: 'Install Add-On Modules (scatr and GAMLj)',
+    phase: 'practice',
+    description: 'Install required modules from the jamovi Library',
+    instructions: 'Use the + / Modules interface in jamovi to install scatr and GAMLj. Confirm they appear as installed.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Open the Modules library, search for scatr and GAMLj, and click Install for each.',
+    submission: 'Screenshot showing scatr and GAMLj listed as installed modules.',
+    order: 4,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'data-handling',
+    title: 'Import CSV and Set Measurement Levels',
+    phase: 'practice',
+    description: 'Import a CSV and set measurement levels for at least 5 variables',
+    instructions: 'Import a CSV file into jamovi and set the correct measurement levels (nominal/ordinal/continuous) for at least five variables.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use File > Open to import, then edit variable types in the variable editor.',
+    submission: 'Saved .omv file showing measurement levels set correctly.',
+    order: 5,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'computation',
+    title: 'Create a Computed Variable',
+    phase: 'practice',
+    description: 'Use jamovi formulas to create a total score variable',
+    instructions: 'Create a computed variable using jamovi formula syntax (e.g., total score from multiple items).',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Data > Add > Computed Variable, then use a formula like SUM(Item1, Item2, Item3).',
+    submission: 'Screenshot of the formula panel and the new computed column.',
+    order: 6,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'computation',
+    title: 'Reverse-Score a Likert Item',
+    phase: 'practice',
+    description: 'Reverse-score an item and verify with paired values',
+    instructions: 'Reverse-score one Likert item using Compute or Transform, then show five paired original/reversed values.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'For a 1-5 scale, a common transform is 6 - original.',
+    submission: 'Screenshot showing the transform and five paired original/reversed values.',
+    order: 7,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'computation',
+    title: 'Recode Continuous to 3-Level Category',
+    phase: 'practice',
+    description: 'Create Low/Medium/High categories using a recode rule',
+    instructions: 'Recode a continuous variable into three categories (Low/Medium/High) using a Transform or recode rules.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use a Transform with conditional rules based on cut points.',
+    submission: 'Screenshot of the transform definition.',
+    order: 8,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'data-handling',
+    title: 'Apply a Filter and Compare Descriptives',
+    phase: 'apply',
+    description: 'Use a filter to exclude cases and compare outputs',
+    instructions: 'Create and apply a filter (e.g., Age < 18). Run Descriptives with the filter ON and OFF to show the impact.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use the Filters panel and toggle the filter while running Descriptives.',
+    submission: 'Screenshots of outputs with filter ON and OFF.',
+    order: 9,
+    is_active: true
+  },
 
   // ============ MODULE 4: Descriptive Statistics ============
   {
@@ -234,6 +318,62 @@ export const statisticsExercises = [
     },
     success_message: 'Correct! In Descriptives, expand "Statistics" and check "Shapiro-Wilk" under normality tests. p > .05 suggests normal distribution.',
     order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-4',
+    topic: 'descriptive-stats',
+    title: 'Report Descriptives for One Variable',
+    phase: 'practice',
+    description: 'Summarize mean, median, SD, and min/max from Descriptives',
+    instructions: 'Run Exploration > Descriptives for one continuous variable and write a short summary of mean, median, SD, and min/max.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use the Descriptives table and read off the required statistics.',
+    submission: 'Screenshot of jamovi output and a short write-up.',
+    order: 4,
+    is_active: true
+  },
+  {
+    module: 'module-4',
+    topic: 'descriptive-stats',
+    title: 'Descriptives Split by Group',
+    phase: 'practice',
+    description: 'Compare center and spread between two groups',
+    instructions: 'Run Descriptives split by a grouping variable and identify which group has higher center and larger spread.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Split by to separate groups, then compare means/medians and SD/IQR.',
+    submission: 'Output screenshot and 2-3 sentences comparing groups.',
+    order: 5,
+    is_active: true
+  },
+  {
+    module: 'module-4',
+    topic: 'z-scores',
+    title: 'Create and Inspect Z-Scores',
+    phase: 'practice',
+    description: 'Create z-scores and identify extreme values',
+    instructions: 'Create a z-score version of a variable and identify any cases with extreme standardized values.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Descriptives or a computed variable with Z(). Choose a cutoff such as |z| >= 2.',
+    submission: 'Screenshot showing the z-score column and identified rows.',
+    order: 6,
+    is_active: true
+  },
+  {
+    module: 'module-4',
+    topic: 'descriptive-stats',
+    title: 'Evaluate Skew and Outliers',
+    phase: 'apply',
+    description: 'Use plots to justify reporting median/IQR',
+    instructions: 'Use Descriptives plots (histogram/boxplot) to argue whether the distribution is skewed or outlier-prone and justify reporting median/IQR.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Look for asymmetry, long tails, and isolated points.',
+    submission: 'Plot screenshot and a short justification.',
+    order: 7,
     is_active: true
   },
 
@@ -309,6 +449,62 @@ export const statisticsExercises = [
     order: 3,
     is_active: true
   },
+  {
+    module: 'module-5',
+    topic: 'visualizations',
+    title: 'Histogram with Two Bin Widths',
+    phase: 'practice',
+    description: 'Compare histogram interpretations using different bin widths',
+    instructions: 'Produce a histogram for a continuous variable with two different bin widths and compare the interpretations.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'In Descriptives > Plots, adjust bin width and take two screenshots.',
+    submission: 'Two histogram screenshots and 1-2 sentences on differences.',
+    order: 4,
+    is_active: true
+  },
+  {
+    module: 'module-5',
+    topic: 'visualizations',
+    title: 'Scatterplot Matrix (Correlation Matrix Plot)',
+    phase: 'practice',
+    description: 'Create a scatterplot matrix for 3+ continuous variables',
+    instructions: 'Use the Correlation Matrix plot option to create a scatterplot matrix and identify one visible relationship.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Analyses > Regression > Correlation Matrix and enable plots.',
+    submission: 'Scatterplot matrix screenshot and one identified relationship.',
+    order: 5,
+    is_active: true
+  },
+  {
+    module: 'module-5',
+    topic: 'visualizations',
+    title: 'scatr Scatterplot with Regression Line',
+    phase: 'apply',
+    description: 'Use scatr to create a scatterplot with a fitted line',
+    instructions: 'Using the scatr add-on, create a scatterplot with a fitted regression line (and marginal densities if available). Interpret direction and strength.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Open scatr from the Analyses menu after installing the add-on.',
+    submission: 'Plot screenshot and a brief interpretation.',
+    order: 6,
+    is_active: true
+  },
+  {
+    module: 'module-5',
+    topic: 'visualizations',
+    title: 'scatr Grouped Scatterplots',
+    phase: 'apply',
+    description: 'Compare relationships by group using color or facets',
+    instructions: 'Use scatr to produce grouped scatterplots (color by a categorical variable) and compare relationships by group.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use a grouping variable to color points or facet the plot.',
+    submission: 'Plot screenshot and a 3-4 sentence interpretation.',
+    order: 7,
+    is_active: true
+  },
 
   // ============ MODULE 6: Probability and Sampling ============
   {
@@ -352,6 +548,48 @@ export const statisticsExercises = [
     order: 2,
     is_active: true
   },
+  {
+    module: 'module-6',
+    topic: 'simulation',
+    title: 'Generate a Random Variable and Plot It',
+    phase: 'practice',
+    description: 'Use compute formulas to generate random values and graph them',
+    instructions: 'Create a random variable using jamovi compute formulas (e.g., random uniform) and plot a histogram. Explain whether the shape matches expectation.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use a computed variable like RAND() or a uniform formula, then plot in Descriptives.',
+    submission: 'Histogram screenshot and a short explanation.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-6',
+    topic: 'simulation',
+    title: 'Compare Two Random Samples',
+    phase: 'practice',
+    description: 'Demonstrate sampling variability with two random columns',
+    instructions: 'Create two random samples (or two random columns) of the same size and compare their means/SDs in Descriptives.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Generate two columns using the same random formula and compare summaries.',
+    submission: 'Descriptives output screenshot.',
+    order: 4,
+    is_active: true
+  },
+  {
+    module: 'module-6',
+    topic: 'simulation',
+    title: 'Mini Sampling Distribution',
+    phase: 'apply',
+    description: 'Approximate a sampling distribution of the mean',
+    instructions: 'Generate many random values and summarize the distribution of the sample mean. Describe what the spread implies about uncertainty.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use computed variables to create sample means and then plot their distribution.',
+    submission: 'Plot/output screenshot and a short interpretation.',
+    order: 5,
+    is_active: true
+  },
 
   // ============ MODULE 7: Hypothesis Testing ============
   {
@@ -376,6 +614,48 @@ export const statisticsExercises = [
     },
     success_message: 'Correct! Analyses > T-Tests > One Sample T-Test. Enter your test value (100) and add your variable.',
     order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-7',
+    topic: 'hypothesis-testing',
+    title: 'Identify Test Statistic and P-Value',
+    phase: 'practice',
+    description: 'Locate and interpret the key outputs from a one-sample t-test',
+    instructions: 'Run a one-sample t-test and identify where the test statistic and p-value appear. Write 2 sentences interpreting the decision.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Look in the main results table for t and p.',
+    submission: 'Output screenshot and 2 sentences interpreting the decision.',
+    order: 2,
+    is_active: true
+  },
+  {
+    module: 'module-7',
+    topic: 'hypothesis-testing',
+    title: 'Independent Samples T-Test Report',
+    phase: 'practice',
+    description: 'Report group means, mean difference, p-value, and effect size',
+    instructions: 'Run an independent-samples t-test and report group means, mean difference, p-value, and an effect size if provided.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Analyses > T-Tests > Independent Samples and check effect sizes.',
+    submission: 'Output screenshot and one APA-style results sentence.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-7',
+    topic: 'hypothesis-testing',
+    title: 'Robustness to an Outlier Filter',
+    phase: 'apply',
+    description: 'Compare results before and after filtering an outlier',
+    instructions: 'Re-run the same test after applying a filter that removes an outlier and discuss what changed and what stayed stable.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use the Filters panel and compare outputs side by side.',
+    submission: 'Two outputs and a short robustness discussion.',
+    order: 4,
     is_active: true
   },
 
@@ -519,6 +799,63 @@ export const statisticsExercises = [
     order: 6,
     is_active: true
   }
+  ,
+  {
+    module: 'module-8',
+    topic: 'correlation',
+    title: 'Pearson Correlation with Interpretation',
+    phase: 'practice',
+    description: 'Run a correlation and interpret numeric and visual evidence',
+    instructions: 'Run a Pearson correlation and interpret both the numeric correlation and the scatterplot evidence.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Regression > Correlation Matrix and enable plots.',
+    submission: 'Output screenshot and 2-3 sentences of interpretation.',
+    order: 7,
+    is_active: true
+  },
+  {
+    module: 'module-8',
+    topic: 'regression',
+    title: 'Simple Linear Regression Interpretation',
+    phase: 'practice',
+    description: 'Interpret slope and R-squared from output',
+    instructions: 'Run a simple linear regression (DV ~ IV) and interpret the slope and R-squared from the output.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use Analyses > Regression > Linear Regression.',
+    submission: 'Output screenshot and a short interpretation.',
+    order: 8,
+    is_active: true
+  },
+  {
+    module: 'module-8',
+    topic: 'anova',
+    title: 'One-Way ANOVA in GAMLj',
+    phase: 'apply',
+    description: 'Run an ANOVA with post-hoc comparisons using GAMLj',
+    instructions: 'Using GAMLj, run a one-way ANOVA with 3+ groups and obtain omnibus results plus post-hoc comparisons if available.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Open GAMLj from the Analyses menu after installing the add-on.',
+    submission: 'GAMLj output screenshot.',
+    order: 9,
+    is_active: true
+  },
+  {
+    module: 'module-8',
+    topic: 'anova',
+    title: 'Factorial ANOVA with Interaction Plot',
+    phase: 'apply',
+    description: 'Run a factorial ANOVA and interpret an interaction plot',
+    instructions: 'Using GAMLj, run a factorial ANOVA and create/interpret an interaction plot.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use GAMLj ANOVA and enable interaction plots.',
+    submission: 'Interaction plot and a 4-5 sentence interpretation.',
+    order: 10,
+    is_active: true
+  }
 ]
 
 // Helper to get exercises by module
@@ -549,3 +886,4 @@ export function getExercisesForPocketBase(classId) {
     is_active: ex.is_active
   }))
 }
+

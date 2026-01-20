@@ -15,10 +15,11 @@ export const statisticsModules = [
     title: 'Introductions and Why Learn Stats',
     shortTitle: 'Why Stats?',
     description: 'Introduction to the course and the importance of statistics in psychology and research.',
-    icon: '👋',
+    icon: 'M1',
     color: '#6366f1',
     topics: ['intro-to-stats', 'why-stats-matter'],
     textbookChapters: ['Chapter 1: Why do we learn statistics?'],
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/01-Why-do-we-learn-statistics.html',
     learningObjectives: [
       'Understand why statistics is essential for psychology',
       'Identify real-world applications of statistical thinking',
@@ -32,10 +33,11 @@ export const statisticsModules = [
     title: 'Research Design & Measurement',
     shortTitle: 'Research Design',
     description: 'Learn about variables, measurement levels, and research design fundamentals.',
-    icon: '🔬',
+    icon: 'M2',
     color: '#8b5cf6',
     topics: ['variables-measurement', 'research-design', 'scales-of-measurement'],
     textbookChapters: ['Chapter 2: A brief introduction to research design'],
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/02-A-brief-introduction-to-research-design.html',
     learningObjectives: [
       'Distinguish between independent and dependent variables',
       'Identify the four scales of measurement (NOIR)',
@@ -50,7 +52,7 @@ export const statisticsModules = [
     title: 'Jamovi and Data Handling',
     shortTitle: 'Jamovi Basics',
     description: 'Get hands-on with Jamovi software for data entry, import, and basic manipulation.',
-    icon: '💻',
+    icon: 'M3',
     color: '#0ea5e9',
     topics: ['jamovi-interface', 'data-entry', 'variable-types'],
     textbookChapters: ['Chapter 3: Getting started with Jamovi'],
@@ -63,25 +65,13 @@ export const statisticsModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'stats-benchmark-1',
-    classId: 'statistics',
-    number: null,
-    title: 'Benchmark 1',
-    shortTitle: 'Benchmark 1',
-    description: 'Assessment covering Modules 1-3.',
-    icon: '📝',
-    color: '#f59e0b',
-    topics: [],
-    isBenchmark: true
-  },
-  {
     id: 'stats-module-4',
     classId: 'statistics',
     number: 4,
     title: 'Descriptive Statistics',
     shortTitle: 'Descriptives',
     description: 'Calculate and interpret measures of central tendency and variability.',
-    icon: '📊',
+    icon: 'M4',
     color: '#10b981',
     topics: ['central-tendency', 'variability', 'descriptive-stats'],
     textbookChapters: ['Chapter 4: Descriptive statistics'],
@@ -100,7 +90,7 @@ export const statisticsModules = [
     title: 'Graphing and Visualization',
     shortTitle: 'Visualization',
     description: 'Create and interpret various types of statistical graphs and charts.',
-    icon: '📈',
+    icon: 'M5',
     color: '#ec4899',
     topics: ['histograms', 'boxplots', 'bar-charts', 'scatterplots'],
     textbookChapters: ['Chapter 5: Drawing graphs'],
@@ -113,25 +103,13 @@ export const statisticsModules = [
     hasSoftwarePractice: true
   },
   {
-    id: 'stats-benchmark-2',
-    classId: 'statistics',
-    number: null,
-    title: 'Benchmark 2',
-    shortTitle: 'Benchmark 2',
-    description: 'Assessment covering Modules 4-5.',
-    icon: '📝',
-    color: '#f59e0b',
-    topics: [],
-    isBenchmark: true
-  },
-  {
     id: 'stats-module-6',
     classId: 'statistics',
     number: 6,
     title: 'Probability and Sampling',
     shortTitle: 'Probability',
     description: 'Understand probability concepts and sampling distributions.',
-    icon: '🎲',
+    icon: 'M6',
     color: '#14b8a6',
     topics: ['probability-basics', 'normal-distribution', 'z-scores', 'sampling-distributions'],
     textbookChapters: [
@@ -153,7 +131,7 @@ export const statisticsModules = [
     title: 'Hypothesis Testing',
     shortTitle: 'Hypothesis Testing',
     description: 'Learn the logic and process of null hypothesis significance testing.',
-    icon: '🔍',
+    icon: 'M7',
     color: '#f97316',
     topics: ['hypothesis-testing', 'p-values', 'effect-size', 'confidence-intervals'],
     textbookChapters: ['Chapter 9: Hypothesis testing'],
@@ -172,7 +150,7 @@ export const statisticsModules = [
     title: 'Comparing Groups/Relationships',
     shortTitle: 'Comparisons',
     description: 'Apply t-tests and correlation to compare groups and examine relationships.',
-    icon: '⚖️',
+    icon: 'M8',
     color: '#dc2626',
     topics: ['t-tests', 'correlation', 'regression'],
     textbookChapters: [
@@ -202,7 +180,7 @@ export const introResearchModules = [
     title: 'Course Introduction & Expectations',
     shortTitle: 'Introduction',
     description: 'Get oriented to the course, review essential materials, policies, and expectations.',
-    icon: '👋',
+    icon: 'W1',
     color: '#6366f1',
     topics: ['course-overview', 'expectations'],
     learningObjectives: [
@@ -218,7 +196,7 @@ export const introResearchModules = [
     title: 'Article Critique & Research Interest',
     shortTitle: 'Article Critique',
     description: 'Build foundational skills for reading scholarly work and clarifying research interests.',
-    icon: '📰',
+    icon: 'W2',
     color: '#8b5cf6',
     topics: ['article-critique', 'research-interest'],
     learningObjectives: [
@@ -228,8 +206,8 @@ export const introResearchModules = [
       'Practice APA writing and critical analysis'
     ],
     assignments: [
-      'Article Critique (2–3 pages)',
-      'Research Interest Statement (1–2 pages)'
+      'Article Critique (2ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ3 pages)',
+      'Research Interest Statement (1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ2 pages)'
     ]
   },
   {
@@ -239,7 +217,7 @@ export const introResearchModules = [
     title: 'Research Problems, Questions, & Hypotheses',
     shortTitle: 'Research Questions',
     description: 'Formulate clear, researchable problems and questions from broad topics of interest.',
-    icon: '❓',
+    icon: 'W3',
     color: '#0ea5e9',
     topics: ['research-problems', 'research-questions', 'hypotheses'],
     learningObjectives: [
@@ -249,7 +227,7 @@ export const introResearchModules = [
       'Support problems with current literature (within 3 years)'
     ],
     assignments: [
-      'Research Problem, Question & Hypotheses (1–2 pages)'
+      'Research Problem, Question & Hypotheses (1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ2 pages)'
     ]
   },
   {
@@ -259,7 +237,7 @@ export const introResearchModules = [
     title: 'Annotated Bibliography & Theoretical Frameworks',
     shortTitle: 'Annotated Bib',
     description: 'Conduct systematic reviews of scholarly literature and connect work to theoretical frameworks.',
-    icon: '📚',
+    icon: 'W4',
     color: '#10b981',
     topics: ['annotated-bibliography', 'theoretical-frameworks'],
     learningObjectives: [
@@ -269,7 +247,7 @@ export const introResearchModules = [
       'Connect evidence to theoretical frameworks'
     ],
     assignments: [
-      'Annotated Bibliography (5–7 sources)'
+      'Annotated Bibliography (5ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ7 sources)'
     ]
   },
   {
@@ -279,7 +257,7 @@ export const introResearchModules = [
     title: 'Partial Literature Review',
     shortTitle: 'Lit Review',
     description: 'Move from summarizing articles to synthesizing scholarly literature.',
-    icon: '📖',
+    icon: 'W5',
     color: '#ec4899',
     topics: ['literature-review', 'synthesis'],
     learningObjectives: [
@@ -289,7 +267,7 @@ export const introResearchModules = [
       'Apply APA 7th edition formatting'
     ],
     assignments: [
-      'Partial Literature Review (5–7 pages, 10+ sources)'
+      'Partial Literature Review (5ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ7 pages, 10+ sources)'
     ]
   },
   {
@@ -299,7 +277,7 @@ export const introResearchModules = [
     title: 'Methods Section Draft',
     shortTitle: 'Methods',
     description: 'Design the methodology of your proposed study with IRB-style formatting.',
-    icon: '🔬',
+    icon: 'W6',
     color: '#14b8a6',
     topics: ['research-design', 'methods-section', 'participants'],
     learningObjectives: [
@@ -309,7 +287,7 @@ export const introResearchModules = [
       'Demonstrate feasibility and ethical considerations'
     ],
     assignments: [
-      'Methods Section Draft (3–5 pages)'
+      'Methods Section Draft (3ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ5 pages)'
     ]
   },
   {
@@ -319,7 +297,7 @@ export const introResearchModules = [
     title: 'Ethics in Research',
     shortTitle: 'Ethics',
     description: 'Explore research ethics as the foundation of all human-subject research.',
-    icon: '⚖️',
+    icon: 'W7',
     color: '#f97316',
     topics: ['research-ethics', 'irb', 'informed-consent'],
     learningObjectives: [
@@ -329,7 +307,7 @@ export const introResearchModules = [
       'Anticipate and navigate ethical dilemmas'
     ],
     assignments: [
-      'IRB/Ethics Summary (2–3 pages)',
+      'IRB/Ethics Summary (2ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ3 pages)',
       'Research Ethics Training & Certificate'
     ]
   },
@@ -340,7 +318,7 @@ export const introResearchModules = [
     title: 'Recruitment, Consent, and Instruments',
     shortTitle: 'IRB Materials',
     description: 'Build IRB-ready materials including instruments and informed consent forms.',
-    icon: '📋',
+    icon: 'W8',
     color: '#dc2626',
     topics: ['instruments', 'consent-forms', 'appendices'],
     learningObjectives: [
@@ -350,7 +328,7 @@ export const introResearchModules = [
       'Demonstrate reliability and validity of measures'
     ],
     assignments: [
-      'Instruments, Consent, and Appendices Draft (3–5 pages)'
+      'Instruments, Consent, and Appendices Draft (3ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ5 pages)'
     ]
   },
   {
@@ -359,8 +337,8 @@ export const introResearchModules = [
     number: 9,
     title: 'Mid-Term & Proposal Integration',
     shortTitle: 'Mid-Term',
-    description: 'Assess understanding of Modules 1–8 and integrate proposal sections.',
-    icon: '📝',
+    description: 'Assess understanding of Modules 1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ8 and integrate proposal sections.',
+    icon: 'W9',
     color: '#f59e0b',
     topics: ['proposal-integration', 'revision'],
     learningObjectives: [
@@ -382,7 +360,7 @@ export const introResearchModules = [
     title: 'Data Analysis Planning',
     shortTitle: 'Data Analysis',
     description: 'Plan data analysis approaches for quantitative and qualitative research.',
-    icon: '📊',
+    icon: 'W11',
     color: '#6366f1',
     topics: ['quantitative-analysis', 'qualitative-analysis', 'data-planning'],
     learningObjectives: [
@@ -447,13 +425,13 @@ export const topicsByModule = {
       id: 'intro-to-stats',
       title: 'Introduction to Statistics',
       description: 'What is statistics and why does it matter for psychology?',
-      icon: '📖'
+      icon: 'T'
     },
     {
       id: 'why-stats-matter',
       title: 'Why Statistics Matters',
       description: 'Real-world applications and the importance of data literacy.',
-      icon: '💡'
+      icon: 'T'
     }
   ],
   'stats-module-2': [
@@ -461,19 +439,19 @@ export const topicsByModule = {
       id: 'variables-measurement',
       title: 'Variables and Measurement',
       description: 'Independent vs dependent variables, operationalization.',
-      icon: '📏'
+      icon: 'T'
     },
     {
       id: 'scales-of-measurement',
       title: 'Scales of Measurement',
       description: 'Nominal, Ordinal, Interval, and Ratio (NOIR) scales.',
-      icon: '📐'
+      icon: 'T'
     },
     {
       id: 'research-design',
       title: 'Research Design Basics',
       description: 'Experimental, quasi-experimental, and correlational designs.',
-      icon: '🔬'
+      icon: 'T'
     }
   ],
   'stats-module-3': [
@@ -481,19 +459,19 @@ export const topicsByModule = {
       id: 'jamovi-interface',
       title: 'The Jamovi Interface',
       description: 'Navigate the spreadsheet, results panel, and ribbon tabs.',
-      icon: '💻'
+      icon: 'T'
     },
     {
       id: 'data-entry',
       title: 'Entering and Importing Data',
       description: 'Manual entry, CSV import, and data validation.',
-      icon: '📥'
+      icon: 'T'
     },
     {
       id: 'variable-types',
       title: 'Variable Types in Jamovi',
       description: 'Setting measurement levels and data types correctly.',
-      icon: '🏷️'
+      icon: 'T'
     }
   ],
   'stats-module-4': [
@@ -501,19 +479,19 @@ export const topicsByModule = {
       id: 'central-tendency',
       title: 'Measures of Central Tendency',
       description: 'Mean, median, and mode - when to use each.',
-      icon: '🎯'
+      icon: 'T'
     },
     {
       id: 'variability',
       title: 'Measures of Variability',
       description: 'Range, variance, standard deviation, and IQR.',
-      icon: '📊'
+      icon: 'T'
     },
     {
       id: 'descriptive-stats',
       title: 'Descriptive Statistics in Practice',
       description: 'Running and interpreting descriptives in Jamovi.',
-      icon: '📋'
+      icon: 'T'
     }
   ],
   'stats-module-5': [
@@ -521,25 +499,25 @@ export const topicsByModule = {
       id: 'histograms',
       title: 'Histograms',
       description: 'Visualize distributions and identify shape, center, spread.',
-      icon: '📊'
+      icon: 'T'
     },
     {
       id: 'boxplots',
       title: 'Box Plots',
       description: 'Display five-number summary and identify outliers.',
-      icon: '📦'
+      icon: 'T'
     },
     {
       id: 'bar-charts',
       title: 'Bar Charts',
       description: 'Visualize categorical data with bar and pie charts.',
-      icon: '📶'
+      icon: 'T'
     },
     {
       id: 'scatterplots',
       title: 'Scatter Plots',
       description: 'Visualize relationships between two continuous variables.',
-      icon: '📈'
+      icon: 'T'
     }
   ],
   'stats-module-6': [
@@ -547,25 +525,25 @@ export const topicsByModule = {
       id: 'probability-basics',
       title: 'Probability Basics',
       description: 'Fundamental probability rules and calculations.',
-      icon: '🎲'
+      icon: 'T'
     },
     {
       id: 'normal-distribution',
       title: 'The Normal Distribution',
       description: 'Properties of the bell curve and the empirical rule.',
-      icon: '🔔'
+      icon: 'T'
     },
     {
       id: 'z-scores',
       title: 'Z-Scores and Standardization',
       description: 'Converting raw scores and using z-tables.',
-      icon: '📐'
+      icon: 'T'
     },
     {
       id: 'sampling-distributions',
       title: 'Sampling Distributions',
       description: 'The central limit theorem and standard error.',
-      icon: '🎯'
+      icon: 'T'
     }
   ],
   'stats-module-7': [
@@ -573,25 +551,25 @@ export const topicsByModule = {
       id: 'hypothesis-testing',
       title: 'Hypothesis Testing Logic',
       description: 'Null and alternative hypotheses, decision making.',
-      icon: '🔍'
+      icon: 'T'
     },
     {
       id: 'p-values',
       title: 'Understanding P-Values',
       description: 'What p-values mean and common misinterpretations.',
-      icon: '📊'
+      icon: 'T'
     },
     {
       id: 'effect-size',
       title: 'Effect Sizes',
       description: "Cohen's d, r, and practical significance.",
-      icon: '📏'
+      icon: 'T'
     },
     {
       id: 'confidence-intervals',
       title: 'Confidence Intervals',
       description: 'Estimating population parameters with uncertainty.',
-      icon: '🎯'
+      icon: 'T'
     }
   ],
   'stats-module-8': [
@@ -599,19 +577,19 @@ export const topicsByModule = {
       id: 't-tests',
       title: 'T-Tests',
       description: 'One-sample, independent, and paired t-tests.',
-      icon: '⚖️'
+      icon: 'T'
     },
     {
       id: 'correlation',
       title: 'Correlation',
       description: 'Pearson and Spearman correlation coefficients.',
-      icon: '🔗'
+      icon: 'T'
     },
     {
       id: 'regression',
       title: 'Simple Linear Regression',
       description: 'Predicting outcomes with regression equations.',
-      icon: '📉'
+      icon: 'T'
     }
   ],
   // Intro to Research topics
@@ -620,13 +598,13 @@ export const topicsByModule = {
       id: 'course-overview',
       title: 'Course Overview',
       description: 'Introduction to PSYC 5033 and course structure.',
-      icon: '👋'
+      icon: 'T'
     },
     {
       id: 'expectations',
       title: 'Course Expectations',
       description: 'Policies, requirements, and academic expectations.',
-      icon: '📋'
+      icon: 'T'
     }
   ],
   'intro-week-2': [
@@ -634,13 +612,13 @@ export const topicsByModule = {
       id: 'article-critique',
       title: 'Writing Article Critiques',
       description: 'How to read, evaluate, and critique peer-reviewed articles.',
-      icon: '📰'
+      icon: 'T'
     },
     {
       id: 'research-interest',
       title: 'Identifying Research Interests',
       description: 'Reflecting on professional goals and research directions.',
-      icon: '🎯'
+      icon: 'T'
     }
   ],
   'intro-week-3': [
@@ -648,19 +626,19 @@ export const topicsByModule = {
       id: 'research-problems',
       title: 'Research Problems',
       description: 'Identifying meaningful, researchable problems.',
-      icon: '🔍'
+      icon: 'T'
     },
     {
       id: 'research-questions',
       title: 'Research Questions',
       description: 'Formulating clear, focused research questions.',
-      icon: '❓'
+      icon: 'T'
     },
     {
       id: 'hypotheses',
       title: 'Hypotheses & Guiding Questions',
       description: 'Developing testable hypotheses or qualitative questions.',
-      icon: '💡'
+      icon: 'T'
     }
   ],
   'intro-week-4': [
@@ -668,13 +646,13 @@ export const topicsByModule = {
       id: 'annotated-bibliography',
       title: 'Annotated Bibliographies',
       description: 'Summarizing and evaluating sources systematically.',
-      icon: '📚'
+      icon: 'T'
     },
     {
       id: 'theoretical-frameworks',
       title: 'Theoretical Frameworks',
       description: 'Connecting research to established theories.',
-      icon: '🏗️'
+      icon: 'T'
     }
   ],
   'intro-week-5': [
@@ -682,13 +660,13 @@ export const topicsByModule = {
       id: 'literature-review',
       title: 'Writing Literature Reviews',
       description: 'Synthesizing sources into thematic narratives.',
-      icon: '📖'
+      icon: 'T'
     },
     {
       id: 'synthesis',
       title: 'Synthesis vs Summary',
       description: 'Moving beyond summary to analytical synthesis.',
-      icon: '🔗'
+      icon: 'T'
     }
   ],
   'intro-week-6': [
@@ -696,19 +674,19 @@ export const topicsByModule = {
       id: 'research-design',
       title: 'Research Design',
       description: 'Choosing appropriate research methodologies.',
-      icon: '🔬'
+      icon: 'T'
     },
     {
       id: 'methods-section',
       title: 'Writing Methods Sections',
       description: 'Documenting procedures for replication.',
-      icon: '📝'
+      icon: 'T'
     },
     {
       id: 'participants',
       title: 'Participants & Sampling',
       description: 'Describing and recruiting study participants.',
-      icon: '👥'
+      icon: 'T'
     }
   ],
   'intro-week-7': [
@@ -716,19 +694,19 @@ export const topicsByModule = {
       id: 'research-ethics',
       title: 'Research Ethics Principles',
       description: 'Core ethical principles in human subjects research.',
-      icon: '⚖️'
+      icon: 'T'
     },
     {
       id: 'irb',
       title: 'IRB Process',
       description: 'Understanding Institutional Review Board requirements.',
-      icon: '🏛️'
+      icon: 'T'
     },
     {
       id: 'informed-consent',
       title: 'Informed Consent',
       description: 'Creating ethical consent procedures.',
-      icon: '✍️'
+      icon: 'T'
     }
   ],
   'intro-week-8': [
@@ -736,19 +714,19 @@ export const topicsByModule = {
       id: 'instruments',
       title: 'Research Instruments',
       description: 'Selecting and justifying measurement tools.',
-      icon: '📋'
+      icon: 'T'
     },
     {
       id: 'consent-forms',
       title: 'Consent Form Writing',
       description: 'Creating IRB-compliant consent documents.',
-      icon: '📄'
+      icon: 'T'
     },
     {
       id: 'appendices',
       title: 'Organizing Appendices',
       description: 'Structuring supplementary materials.',
-      icon: '📁'
+      icon: 'T'
     }
   ],
   'intro-week-9': [
@@ -756,13 +734,13 @@ export const topicsByModule = {
       id: 'proposal-integration',
       title: 'Proposal Integration',
       description: 'Combining sections into a cohesive proposal.',
-      icon: '🔗'
+      icon: 'T'
     },
     {
       id: 'revision',
       title: 'Revision Strategies',
       description: 'Techniques for improving academic writing.',
-      icon: '✏️'
+      icon: 'T'
     }
   ],
   'intro-week-11': [
@@ -770,19 +748,19 @@ export const topicsByModule = {
       id: 'quantitative-analysis',
       title: 'Quantitative Analysis Planning',
       description: 'Planning statistical analyses for quantitative studies.',
-      icon: '📊'
+      icon: 'T'
     },
     {
       id: 'qualitative-analysis',
       title: 'Qualitative Analysis Planning',
       description: 'Planning thematic or content analysis.',
-      icon: '📝'
+      icon: 'T'
     },
     {
       id: 'data-planning',
       title: 'Data Collection Planning',
       description: 'Preparing for ethical data collection.',
-      icon: '📋'
+      icon: 'T'
     }
   ]
 }

@@ -8,14 +8,40 @@ export const topics = [
     moduleId: 'module-1',
     title: 'Introduction to Statistics',
     description: 'What is statistics and why does it matter for psychology?',
-    icon: '📖'
+    icon: 'T',
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/01-Why-do-we-learn-statistics.html',
+    keyPoints: [
+      'Statistics is needed because human reasoning is limited and biased; we should not rely on intuition alone.',
+      'Statistics acts as a safeguard against belief-driven errors when evaluating evidence.',
+      'Belief bias: conclusions that seem believable can distort judgments of logical validity.',
+      'Classic syllogism studies (Evans, Barston, & Pollard, 1983) show systematic errors when belief conflicts with logic.',
+      "Simpson's paradox shows aggregated data can reverse conclusions compared with disaggregated data.",
+      'Real-world examples (e.g., admissions data by group) show how confounding can flip apparent effects.',
+      'Psychology relies on statistics to make sense of noisy human data.',
+      'Reading psychological research requires understanding statistical analyses and interpretation.',
+      'Statistical literacy supports everyday decisions and critical reading of media reports.',
+      'Statistics appears early in psychology curricula and supports later course performance.'
+    ]
   },
   {
     id: 'why-stats-matter',
     moduleId: 'module-1',
     title: 'Why Statistics Matters',
     description: 'Real-world applications and the importance of data literacy.',
-    icon: '💡'
+    icon: 'T',
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/02-A-brief-introduction-to-research-design.html',
+    keyPoints: [
+      'Research design is the overall plan that links questions, variables, sampling, data collection, and analysis.',
+      'The chapter aims to give enough design logic to evaluate studies (validity and fit), not to make expert designers.',
+      'Psychological measurement turns abstract constructs (e.g., anxiety, intelligence) into measurable variables.',
+      'Operationalisation and measurement scales matter; poor measurement undermines later statistical analysis.',
+      'Reliability is consistency across time/items/raters; low reliability limits interpretability.',
+      'Validity means measuring what you intend; internal validity supports causal inference, external validity supports generalisation.',
+      'Variables can be predictors or outcomes: variables that explain vs variables being explained.',
+      'These roles align with independent vs dependent variables and how analyses are framed.',
+      'Experimental designs involve researcher control and manipulation of predictors to test causal effects.',
+      'Non-experimental designs measure variables without manipulation, limiting causal claims.'
+    ]
   },
 
   // Module 2: Research Design & Measurement
@@ -24,21 +50,21 @@ export const topics = [
     moduleId: 'module-2',
     title: 'Variables and Measurement',
     description: 'Independent vs dependent variables, operationalization.',
-    icon: '📏'
+    icon: 'T'
   },
   {
     id: 'scales-of-measurement',
     moduleId: 'module-2',
     title: 'Scales of Measurement',
     description: 'Nominal, Ordinal, Interval, and Ratio (NOIR) scales.',
-    icon: '📐'
+    icon: 'T'
   },
   {
     id: 'research-design',
     moduleId: 'module-2',
     title: 'Research Design Basics',
     description: 'Experimental, quasi-experimental, and correlational designs.',
-    icon: '🔬'
+    icon: 'T'
   },
 
   // Module 3: Jamovi and Data Handling
@@ -47,21 +73,21 @@ export const topics = [
     moduleId: 'module-3',
     title: 'The Jamovi Interface',
     description: 'Navigate the spreadsheet, results panel, and ribbon tabs.',
-    icon: '💻'
+    icon: 'T'
   },
   {
     id: 'data-entry',
     moduleId: 'module-3',
     title: 'Entering and Importing Data',
     description: 'Manual entry, CSV import, and data validation.',
-    icon: '📥'
+    icon: 'T'
   },
   {
     id: 'variable-types',
     moduleId: 'module-3',
     title: 'Variable Types in Jamovi',
     description: 'Setting measurement levels and data types correctly.',
-    icon: '🏷️'
+    icon: 'T'
   },
 
   // Module 4: Descriptive Statistics
@@ -70,21 +96,21 @@ export const topics = [
     moduleId: 'module-4',
     title: 'Measures of Central Tendency',
     description: 'Mean, median, and mode - when to use each.',
-    icon: '🎯'
+    icon: 'T'
   },
   {
     id: 'variability',
     moduleId: 'module-4',
     title: 'Measures of Variability',
     description: 'Range, variance, standard deviation, and IQR.',
-    icon: '📊'
+    icon: 'T'
   },
   {
     id: 'descriptive-stats',
     moduleId: 'module-4',
     title: 'Descriptive Statistics in Practice',
     description: 'Running and interpreting descriptives in Jamovi.',
-    icon: '📋'
+    icon: 'T'
   },
 
   // Module 5: Graphing and Visualization
@@ -93,28 +119,28 @@ export const topics = [
     moduleId: 'module-5',
     title: 'Histograms',
     description: 'Visualize distributions and identify shape, center, spread.',
-    icon: '📊'
+    icon: 'T'
   },
   {
     id: 'boxplots',
     moduleId: 'module-5',
     title: 'Box Plots',
     description: 'Display five-number summary and identify outliers.',
-    icon: '📦'
+    icon: 'T'
   },
   {
     id: 'bar-charts',
     moduleId: 'module-5',
     title: 'Bar Charts',
     description: 'Visualize categorical data with bar and pie charts.',
-    icon: '📶'
+    icon: 'T'
   },
   {
     id: 'scatterplots',
     moduleId: 'module-5',
     title: 'Scatter Plots',
     description: 'Visualize relationships between two continuous variables.',
-    icon: '📈'
+    icon: 'T'
   },
 
   // Module 6: Probability and Sampling
@@ -123,28 +149,28 @@ export const topics = [
     moduleId: 'module-6',
     title: 'Probability Basics',
     description: 'Fundamental probability rules and calculations.',
-    icon: '🎲'
+    icon: 'T'
   },
   {
     id: 'normal-distribution',
     moduleId: 'module-6',
     title: 'The Normal Distribution',
     description: 'Properties of the bell curve and the empirical rule.',
-    icon: '🔔'
+    icon: 'T'
   },
   {
     id: 'z-scores',
     moduleId: 'module-6',
     title: 'Z-Scores and Standardization',
     description: 'Converting raw scores and using z-tables.',
-    icon: '📐'
+    icon: 'T'
   },
   {
     id: 'sampling-distributions',
     moduleId: 'module-6',
     title: 'Sampling Distributions',
     description: 'The central limit theorem and standard error.',
-    icon: '🎯'
+    icon: 'T'
   },
 
   // Module 7: Hypothesis Testing
@@ -153,28 +179,28 @@ export const topics = [
     moduleId: 'module-7',
     title: 'Hypothesis Testing Logic',
     description: 'Null and alternative hypotheses, decision making.',
-    icon: '🔍'
+    icon: 'T'
   },
   {
     id: 'p-values',
     moduleId: 'module-7',
     title: 'Understanding P-Values',
     description: 'What p-values mean and common misinterpretations.',
-    icon: '📊'
+    icon: 'T'
   },
   {
     id: 'effect-size',
     moduleId: 'module-7',
     title: 'Effect Sizes',
     description: "Cohen's d, r, and practical significance.",
-    icon: '📏'
+    icon: 'T'
   },
   {
     id: 'confidence-intervals',
     moduleId: 'module-7',
     title: 'Confidence Intervals',
     description: 'Estimating population parameters with uncertainty.',
-    icon: '🎯'
+    icon: 'T'
   },
 
   // Module 8: Comparing Groups/Relationships
@@ -183,21 +209,21 @@ export const topics = [
     moduleId: 'module-8',
     title: 'T-Tests',
     description: 'One-sample, independent, and paired t-tests.',
-    icon: '⚖️'
+    icon: 'T'
   },
   {
     id: 'correlation',
     moduleId: 'module-8',
     title: 'Correlation',
     description: 'Pearson and Spearman correlation coefficients.',
-    icon: '🔗'
+    icon: 'T'
   },
   {
     id: 'regression',
     moduleId: 'module-8',
     title: 'Simple Linear Regression',
     description: 'Predicting outcomes with regression equations.',
-    icon: '📉'
+    icon: 'T'
   }
 ]
 

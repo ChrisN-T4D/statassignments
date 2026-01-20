@@ -1,13 +1,22 @@
 import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
-import { allStatisticsQuestions, getQuestionsByModule, getRandomQuestions } from '../data/conceptQuestions'
+import { allStatisticsQuestions, getQuestionsByModule } from '../data/conceptQuestions'
 
 export function usePractice() {
   const { user } = useAuth()
   const problems = ref([])
   const loading = ref(false)
   const currentProblem = ref(null)
+  const masteryQueue = ref([])
+  const masteryIndex = ref(0)
+  const masteryTotal = ref(0)
+
+  const masteryConfig = {
+    easy: 2,
+    medium: 2,
+    hard: 2
+  }
 
   // Convert static question format to the format expected by Practice.vue
   function convertQuestion(q) {
@@ -26,14 +35,15 @@ export function usePractice() {
     let options = []
     let correct_answer = ''
 
-    if (q.type === 'multiple_choice' || q.type === 'multiple_select') {
+    if (q.type === 'multiple_choice') {
       options = q.options.map(opt => opt.text)
-      const correctOpt = q.options.find(opt =>
-        q.type === 'multiple_select'
-          ? q.correct.includes(opt.id)
-          : opt.id === q.correct
-      )
+      const correctOpt = q.options.find(opt => opt.id === q.correct)
       correct_answer = correctOpt?.text || ''
+    } else if (q.type === 'multiple_select') {
+      options = q.options.map(opt => opt.text)
+      correct_answer = q.options
+        .filter(opt => q.correct.includes(opt.id))
+        .map(opt => opt.text)
     } else if (q.type === 'true_false') {
       options = ['True', 'False']
       correct_answer = q.correct ? 'True' : 'False'
@@ -52,11 +62,11 @@ export function usePractice() {
       id: q.id,
       topic_id: q.moduleId,
       question: q.question,
-      question_type,
+      question_type: q.type === 'multiple_select' ? 'multiple_select' : question_type,
       options,
       correct_answer,
-      explanation: q.feedback?.correct || q.feedback?.incorrect || '',
-      hint: null,
+      explanation: q.feedback?.correct || '',
+      hint: q.hint || q.feedback?.incorrect || null,
       difficulty: q.difficulty || 'medium'
     }
   }
@@ -151,6 +161,66 @@ export function usePractice() {
     return currentProblem.value
   }
 
+  function shuffleList(items) {
+    return [...items].sort(() => Math.random() - 0.5)
+  }
+
+  function normalizeDifficulty(problem) {
+    return (problem.difficulty || 'medium').toLowerCase()
+  }
+
+  async function buildMasteryQueue(topicId = null) {
+    const allProblems = await fetchProblems(topicId)
+    const grouped = {
+      easy: [],
+      medium: [],
+      hard: []
+    }
+
+    allProblems.forEach(problem => {
+      const difficulty = normalizeDifficulty(problem)
+      if (difficulty === 'easy') grouped.easy.push(problem)
+      else if (difficulty === 'hard') grouped.hard.push(problem)
+      else grouped.medium.push(problem)
+    })
+
+    const easy = shuffleList(grouped.easy)
+    const medium = shuffleList(grouped.medium)
+    const hard = shuffleList(grouped.hard)
+
+    const queue = []
+    queue.push(...easy.splice(0, masteryConfig.easy))
+    queue.push(...medium.splice(0, masteryConfig.medium))
+    queue.push(...hard.splice(0, masteryConfig.hard))
+
+    masteryQueue.value = queue
+    masteryIndex.value = 0
+    masteryTotal.value = queue.length
+    return queue
+  }
+
+  async function startMastery(topicId = null) {
+    await buildMasteryQueue(topicId)
+    currentProblem.value = masteryQueue.value[0] || null
+    return currentProblem.value
+  }
+
+  async function nextMasteryProblem() {
+    if (masteryQueue.value.length === 0) {
+      currentProblem.value = null
+      return currentProblem.value
+    }
+
+    masteryIndex.value += 1
+    if (masteryIndex.value >= masteryQueue.value.length) {
+      currentProblem.value = null
+      return currentProblem.value
+    }
+
+    currentProblem.value = masteryQueue.value[masteryIndex.value]
+    return currentProblem.value
+  }
+
   async function submitAnswer(problemId, answer, isCorrect) {
     if (!user.value) return { data: null, error: 'Not authenticated' }
 
@@ -203,6 +273,10 @@ export function usePractice() {
     currentProblem,
     fetchProblems,
     fetchRandomProblem,
+    startMastery,
+    nextMasteryProblem,
+    masteryIndex,
+    masteryTotal,
     submitAnswer,
     fetchUserStats
   }

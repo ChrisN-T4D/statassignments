@@ -19,11 +19,11 @@
               incorrect: submitted && !isItemCorrect(index)
             }"
           >
-            <span class="drag-handle" v-if="!submitted">⋮⋮</span>
+            <span class="drag-handle" v-if="!submitted">â‹®â‹®</span>
             <span class="item-number">{{ index + 1 }}</span>
             <span class="item-text">{{ element.text }}</span>
-            <span v-if="submitted && isItemCorrect(index)" class="result-icon correct">✓</span>
-            <span v-if="submitted && !isItemCorrect(index)" class="result-icon incorrect">✗</span>
+            <span v-if="submitted && isItemCorrect(index)" class="result-icon correct">âœ“</span>
+            <span v-if="submitted && !isItemCorrect(index)" class="result-icon incorrect">âœ—</span>
           </div>
         </template>
       </draggable>
@@ -224,7 +224,7 @@ const isCorrect = computed(() => {
   border: 1px solid var(--danger);
 }
 
-.feedback p {
+.feedback p {\n  color: #111827;
   margin: 0 0 0.75rem 0;
   font-size: 0.9375rem;
 }

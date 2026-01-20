@@ -266,8 +266,23 @@
         </div>
       </div>
     </div>
-  </div>
-
+  </div>    <div v-if="showSummary" class="summary-overlay">
+      <div class="summary-card">
+        <h3>Lesson Completion Summary</h3>
+        <p class="summary-status">Status: Completed</p>
+        <div class="summary-details">
+          <div><strong>User:</strong> {{ completionSummary.username }}</div>
+          <div><strong>Lesson:</strong> {{ completionSummary.title }}</div>
+          <div v-if="completionSummary.moduleTitle"><strong>Module:</strong> {{ completionSummary.moduleTitle }}</div>
+          <div><strong>Completed:</strong> {{ completionSummary.completedAt }}</div>
+        </div>
+        <div class="summary-actions print-hide">
+          <button class="btn-primary" @click="printSummary">Print / Save PDF</button>
+          <button class="btn-secondary" @click="copySummary">Copy Summary</button>
+          <button class="btn-secondary" @click="closeSummary">Back to Software Practice</button>
+        </div>
+      </div>
+    </div>
   <!-- Lesson Not Found -->
   <div v-else class="not-found">
     <div class="container">
@@ -281,7 +296,9 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 import { getLessonById } from '../data/softwareLessons'
+import { getModuleById } from '../data/modules'
 
 // Question Components
 import QuestionMultipleChoice from '../components/questions/QuestionMultipleChoice.vue'
@@ -293,6 +310,7 @@ import QuestionScreenshot from '../components/questions/QuestionScreenshot.vue'
 
 const route = useRoute()
 const router = useRouter()
+const { user } = useAuth()
 
 // State
 const lesson = ref(null)
@@ -303,6 +321,13 @@ const showHint = ref(false)
 const answers = ref({})
 const submitted = ref(false)
 const score = ref(0)
+const showSummary = ref(false)
+const completionSummary = ref({
+  title: '',
+  moduleTitle: '',
+  username: '',
+  completedAt: ''
+})
 
 // Phase configuration
 const phases = {
@@ -432,8 +457,67 @@ function resetAssessment() {
   score.value = 0
 }
 
+function getModuleTitle(moduleId) {
+  if (!moduleId) return ''
+  const module = getModuleById(moduleId)
+  return module?.title || moduleId
+}
+
+function formatCompletionTime(date) {
+  return date.toLocaleString()
+}
+
+function buildSummaryText() {
+  return [
+    'Lesson Completion Summary',
+    'Status: Completed',
+    `User: ${completionSummary.value.username}`,
+    `Lesson: ${completionSummary.value.title}`,
+    completionSummary.value.moduleTitle ? `Module: ${completionSummary.value.moduleTitle}` : null,
+    `Completed: ${completionSummary.value.completedAt}`
+  ].filter(Boolean).join('\n')
+}
+
+function recordLessonCompletion() {
+  if (!lesson.value?.id) return
+  try {
+    const raw = localStorage.getItem('completedSoftwareLessons')
+    const parsed = raw ? JSON.parse(raw) : []
+    const ids = Array.isArray(parsed) ? parsed : []
+    if (!ids.includes(lesson.value.id)) {
+      ids.push(lesson.value.id)
+      localStorage.setItem('completedSoftwareLessons', JSON.stringify(ids))
+    }
+  } catch (err) {
+    console.warn('Unable to save lesson completion:', err)
+  }
+}
+
 function completeLesson() {
-  // TODO: Save progress to backend
+  completionSummary.value = {
+    title: lesson.value?.title || 'Lesson',
+    moduleTitle: getModuleTitle(lesson.value?.module),
+    username: user.value?.name || user.value?.email || 'Unknown',
+    completedAt: formatCompletionTime(new Date())
+  }
+  recordLessonCompletion()
+  showSummary.value = true
+}
+
+async function copySummary() {
+  try {
+    await navigator.clipboard.writeText(buildSummaryText())
+  } catch (err) {
+    console.warn('Unable to copy summary:', err)
+  }
+}
+
+function printSummary() {
+  window.print()
+}
+
+function closeSummary() {
+  showSummary.value = false
   router.push(backLink.value)
 }
 
@@ -1068,7 +1152,85 @@ watch(() => route.params.lessonId, () => {
   color: var(--primary);
 }
 
-/* Not Found */
+.summary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+}
+
+.summary-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: #111827;
+}
+
+.summary-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.summary-status {
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  color: #111827;
+}
+
+.summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.summary-details strong {
+  color: #111827;
+}
+
+.summary-actions {
+  color: #111827;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media print {
+  .lesson-page .container > :not(.summary-overlay) {
+    display: none !important;
+  }
+
+  .summary-overlay {
+    position: static;
+    background: transparent;
+    padding: 0;
+  }
+
+  .summary-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: #111827;
+}
+
+  .print-hide {
+    display: none !important;
+  }
+}
+\/\* Not Found \*\/
 .not-found {
   min-height: 50vh;
   display: flex;
@@ -1076,4 +1238,9 @@ watch(() => route.params.lessonId, () => {
   justify-content: center;
   text-align: center;
 }
+.summary-actions .btn-secondary {
+  color: #111827;
+}
 </style>
+
+

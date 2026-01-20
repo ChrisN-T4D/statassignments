@@ -4,26 +4,10 @@
       <div class="page-header">
         <h1>Practice Problems</h1>
         <p>Test your understanding with interactive practice questions.</p>
-      </div>
-
-      <!-- Topic Filter -->
-      <div class="topic-filter">
-        <button
-          class="filter-btn"
-          :class="{ active: !selectedTopic }"
-          @click="selectTopic(null)"
-        >
-          All Topics
-        </button>
-        <button
-          v-for="topic in topics"
-          :key="topic.id"
-          class="filter-btn"
-          :class="{ active: selectedTopic === topic.id }"
-          @click="selectTopic(topic.id)"
-        >
-          {{ topic.title }}
-        </button>
+        <div v-if="masteryTotal" class="mastery-progress">
+          <span class="mastery-label">Mastery progress</span>
+          <span class="mastery-value">{{ masteryIndex + (currentProblem ? 1 : 0) }} / {{ masteryTotal }}</span>
+        </div>
       </div>
 
       <!-- Stats (if logged in) -->
@@ -56,6 +40,7 @@
             {{ currentProblem.difficulty }}
           </span>
           <span class="topic-badge">{{ getTopicName(currentProblem.topic_id) }}</span>
+          <span class="attempts-badge">Attempts: {{ attemptCount }}</span>
         </div>
 
         <h2 class="problem-question">{{ currentProblem.question }}</h2>
@@ -75,6 +60,32 @@
             @click="selectAnswer(option)"
           >
             {{ option }}
+          </button>
+        </div>
+
+        <!-- Multiple Select -->
+        <div v-else-if="currentProblem.question_type === 'multiple_select'" class="options">
+          <button
+            v-for="(option, index) in currentProblem.options"
+            :key="index"
+            class="option-btn"
+            :class="{
+              selected: selectedAnswers.includes(option),
+              correct: showResult && currentProblem.correct_answer?.includes(option),
+              incorrect: showResult && selectedAnswers.includes(option) && !currentProblem.correct_answer?.includes(option)
+            }"
+            :disabled="showResult"
+            @click="selectAnswer(option)"
+          >
+            {{ option }}
+          </button>
+          <button
+            v-if="!showResult"
+            class="btn-primary"
+            :disabled="selectedAnswers.length === 0"
+            @click="submitMultiSelectAnswer"
+          >
+            Submit
           </button>
         </div>
 
@@ -115,12 +126,11 @@
           </button>
         </div>
 
+        <p v-if="feedbackMessage" class="feedback-message">{{ feedbackMessage }}</p>
+
         <!-- Hint -->
-        <div v-if="currentProblem.hint && !showResult" class="hint-section">
-          <button class="hint-btn" @click="showHint = !showHint">
-            {{ showHint ? 'Hide Hint' : 'Show Hint' }}
-          </button>
-          <p v-if="showHint" class="hint-text">{{ currentProblem.hint }}</p>
+        <div v-if="hintText && showHint && !showResult" class="hint-section">
+          <p class="hint-text">{{ hintText }}</p>
         </div>
 
         <!-- Result -->
@@ -147,17 +157,15 @@
       </div>
 
       <div v-else class="empty-state">
-        <p>No practice problems available for this topic yet.</p>
-        <button class="btn-primary" @click="selectTopic(null)">
-          Try All Topics
-        </button>
+        <p v-if="masteryTotal">You completed this mastery set.</p>
+        <p v-else>No practice problems available for this topic yet.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { usePractice } from '../composables/usePractice'
@@ -168,28 +176,88 @@ const { isAuthenticated } = useAuth()
 const {
   currentProblem,
   loading,
-  fetchRandomProblem,
+  startMastery,
+  nextMasteryProblem,
+  masteryIndex,
+  masteryTotal,
   submitAnswer,
   fetchUserStats
 } = usePractice()
 
 const selectedTopic = ref(null)
 const selectedAnswer = ref(null)
+const selectedAnswers = ref([])
 const numericAnswer = ref('')
 const showResult = ref(false)
 const showHint = ref(false)
 const isCorrect = ref(false)
 const stats = ref(null)
+const attemptsByProblem = ref({})
+const feedbackMessage = ref('')
+const hintThreshold = 2
+
+const attemptCount = computed(() => {
+  if (!currentProblem.value) return 0
+  return attemptsByProblem.value[currentProblem.value.id] || 0
+})
+
+const hintText = computed(() => {
+  if (!currentProblem.value) return ''
+  return currentProblem.value.hint || ''
+})
+
+const masteryCompleted = computed(() => {
+  return Boolean(masteryTotal.value && !currentProblem.value)
+})
+
+function normalizeAnswerValue(value) {
+  return value.toString().trim().toLowerCase()
+}
+
+function normalizeAnswerList(values) {
+  return values.map(normalizeAnswerValue).sort()
+}
 
 function getTopicName(topicId) {
   return topics.find(t => t.id === topicId)?.title || topicId
 }
 
-async function selectTopic(topicId) {
-  selectedTopic.value = topicId
-  await loadNextProblem()
-  if (isAuthenticated.value) {
-    stats.value = await fetchUserStats(topicId)
+function normalizeRouteValue(value) {
+  if (Array.isArray(value)) return value[0] || null
+  return value || null
+}
+
+function getActiveModuleId() {
+  return normalizeRouteValue(route.query.module)
+}
+
+function getActiveTopicId() {
+  return normalizeRouteValue(route.params.topicId)
+}
+
+function getSelectedTopicId() {
+  return getActiveModuleId() || getActiveTopicId()
+}
+
+function toStatsModuleId(value) {
+  if (!value) return null
+  if (value.startsWith('stats-module-')) return value
+  if (value.startsWith('module-')) return value.replace('module-', 'stats-module-')
+  return value
+}
+
+function recordConceptReviewComplete(moduleId) {
+  if (!moduleId) return
+  try {
+    const raw = localStorage.getItem('completedConceptReviews')
+    const parsed = raw ? JSON.parse(raw) : []
+    const ids = Array.isArray(parsed) ? parsed : []
+    if (!ids.includes(moduleId)) {
+      ids.push(moduleId)
+      localStorage.setItem('completedConceptReviews', JSON.stringify(ids))
+    }
+  } catch (err) {
+    console.warn('Unable to save concept review completion:', err)
   }
 }
 
@@ -197,13 +265,23 @@ async function loadNextProblem() {
   showResult.value = false
   showHint.value = false
   selectedAnswer.value = null
+  selectedAnswers.value = []
   numericAnswer.value = ''
   isCorrect.value = false
-  await fetchRandomProblem(selectedTopic.value)
+  feedbackMessage.value = ''
+  await nextMasteryProblem()
 }
 
 function selectAnswer(answer) {
   if (showResult.value) return
+  if (currentProblem.value.question_type === 'multiple_select') {
+    if (selectedAnswers.value.includes(answer)) {
+      selectedAnswers.value = selectedAnswers.value.filter(item => item !== answer)
+    } else {
+      selectedAnswers.value = [...selectedAnswers.value, answer]
+    }
+    return
+  }
   selectedAnswer.value = answer
   checkAnswer(answer)
 }
@@ -213,64 +291,93 @@ function submitNumericAnswer() {
   checkAnswer(numericAnswer.value.trim())
 }
 
+function submitMultiSelectAnswer() {
+  if (showResult.value || selectedAnswers.value.length === 0) return
+  checkAnswer(selectedAnswers.value)
+}
+
 async function checkAnswer(answer) {
-  const correct = answer.toString().toLowerCase() === currentProblem.value.correct_answer.toString().toLowerCase()
+  let correct = false
+  if (currentProblem.value.question_type === 'multiple_select') {
+    const expected = Array.isArray(currentProblem.value.correct_answer)
+      ? currentProblem.value.correct_answer
+      : []
+    const normalizedExpected = normalizeAnswerList(expected)
+    const normalizedAnswer = normalizeAnswerList(Array.isArray(answer) ? answer : [])
+    correct =
+      normalizedExpected.length === normalizedAnswer.length &&
+      normalizedExpected.every((value, index) => value === normalizedAnswer[index])
+  } else {
+    correct = normalizeAnswerValue(answer) === normalizeAnswerValue(currentProblem.value.correct_answer)
+  }
+  if (!attemptsByProblem.value[currentProblem.value.id]) {
+    attemptsByProblem.value[currentProblem.value.id] = 0
+  }
+  attemptsByProblem.value[currentProblem.value.id] += 1
   isCorrect.value = correct
-  showResult.value = true
 
   if (isAuthenticated.value) {
     await submitAnswer(currentProblem.value.id, answer, correct)
     stats.value = await fetchUserStats(selectedTopic.value)
   }
+
+  if (correct) {
+    showResult.value = true
+    feedbackMessage.value = ''
+  } else {
+    feedbackMessage.value = 'Incorrect. Try again.'
+    if (attemptsByProblem.value[currentProblem.value.id] >= hintThreshold) {
+      showHint.value = true
+    }
+    selectedAnswer.value = null
+    numericAnswer.value = ''
+  }
 }
 
 onMounted(async () => {
-  if (route.params.topicId) {
-    selectedTopic.value = route.params.topicId
-  }
-  await loadNextProblem()
+  selectedTopic.value = getSelectedTopicId()
+  await startMastery(selectedTopic.value)
   if (isAuthenticated.value) {
     stats.value = await fetchUserStats(selectedTopic.value)
   }
 })
 
-watch(() => route.params.topicId, async (newTopicId) => {
-  if (newTopicId) {
-    await selectTopic(newTopicId)
+watch(() => [route.query.module, route.params.topicId], async () => {
+  selectedTopic.value = getSelectedTopicId()
+  await startMastery(selectedTopic.value)
+  if (isAuthenticated.value) {
+    stats.value = await fetchUserStats(selectedTopic.value)
   }
+})
+
+watch(currentProblem, (problem) => {
+  if (!problem) return
+  if (!attemptsByProblem.value[problem.id]) {
+    attemptsByProblem.value[problem.id] = 0
+  }
+  showResult.value = false
+  showHint.value = false
+  selectedAnswer.value = null
+  selectedAnswers.value = []
+  numericAnswer.value = ''
+  isCorrect.value = false
+  feedbackMessage.value = ''
+})
+
+watch([masteryCompleted, selectedTopic], ([completed]) => {
+  if (!completed) return
+  const moduleFromQuery = getActiveModuleId()
+  if (moduleFromQuery) {
+    recordConceptReviewComplete(toStatsModuleId(moduleFromQuery))
+    return
+  }
+  const topic = topics.find(t => t.id === selectedTopic.value)
+  const moduleId = toStatsModuleId(topic?.moduleId || null)
+  recordConceptReviewComplete(moduleId)
 })
 </script>
 
 <style scoped>
-.topic-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-}
-
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 2rem;
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.filter-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.filter-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
-}
-
 .stats-bar {
   display: flex;
   gap: 2rem;
@@ -306,6 +413,27 @@ watch(() => route.params.topicId, async (newTopicId) => {
   text-align: center;
 }
 
+.mastery-progress {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.mastery-label {
+  font-weight: 600;
+}
+
+.mastery-value {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
 .problem-card {
   background: var(--bg-card);
   border-radius: 1rem;
@@ -317,6 +445,7 @@ watch(() => route.params.topicId, async (newTopicId) => {
 .problem-header {
   display: flex;
   gap: 0.75rem;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
 
@@ -351,6 +480,14 @@ watch(() => route.params.topicId, async (newTopicId) => {
   color: var(--text-secondary);
 }
 
+.attempts-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
 .problem-question {
   font-size: 1.25rem;
   line-height: 1.5;
@@ -381,6 +518,7 @@ watch(() => route.params.topicId, async (newTopicId) => {
 .option-btn.selected {
   border-color: var(--primary);
   background: #eff6ff;
+  color: #111827;
 }
 
 .option-btn.correct {
@@ -419,20 +557,18 @@ watch(() => route.params.topicId, async (newTopicId) => {
   margin-top: 1.5rem;
 }
 
-.hint-btn {
-  background: none;
-  border: none;
-  color: var(--primary);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
 .hint-text {
-  margin-top: 0.5rem;
   padding: 0.75rem 1rem;
   background: #fef3c7;
   border-radius: 0.5rem;
   font-size: 0.875rem;
+  color: #111827;
+}
+
+.feedback-message {
+  margin-top: 1rem;
+  color: #dc2626;
+  font-size: 0.9rem;
 }
 
 .result-section {
@@ -464,6 +600,7 @@ watch(() => route.params.topicId, async (newTopicId) => {
   padding: 1rem 1.25rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
+  color: #111827;
 }
 
 .explanation h4 {

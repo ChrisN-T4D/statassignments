@@ -52,16 +52,33 @@
           </ul>
         </div>
 
+        <!-- Module Progress -->
+        <div v-if="moduleProgress.total > 0" class="module-progress">
+          <div class="module-progress-header">
+            <span>Module progress</span>
+            <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
+          </div>
+          <div class="module-progress-bar">
+            <div class="module-progress-fill" :style="{ width: `${moduleProgress.percent}%` }"></div>
+          </div>
+          <div class="module-progress-meta">
+            <span>Topics read: {{ moduleProgress.openedTopics }} / {{ moduleProgress.totalTopics }}</span>
+            <span>Content review: {{ moduleProgress.contentReviewComplete ? 'Done' : 'Not yet' }}</span>
+          </div>
+        </div>
+
         <!-- Content Tabs -->
         <div class="content-tabs">
           <button
             v-for="tab in contentTabs"
             :key="tab.id"
             class="content-tab"
-            :class="{ active: activeContentTab === tab.id }"
+            :class="{ active: activeContentTab === tab.id, disabled: tab.id === 'software' && !hasSoftwareLessons }"
+            :disabled="tab.id === 'software' && !hasSoftwareLessons"
             @click="activeContentTab = tab.id"
           >
-            <span class="tab-icon">{{ tab.icon }}</span>
+            <span class="tab-icon" v-if="!tab.iconSrc">{{ tab.icon }}</span>
+            <img v-else :src="tab.iconSrc" :alt="tab.label" class="tab-icon-img" />
             <span class="tab-label">{{ tab.label }}</span>
             <span class="tab-count" v-if="getTabCount(tab.id) > 0">{{ getTabCount(tab.id) }}</span>
           </button>
@@ -80,13 +97,15 @@
                 :key="topic.id"
                 :to="`/topic/${topic.id}`"
                 class="topic-card"
+                :class="{ read: isTopicRead(topic.id) }"
               >
-                <span class="topic-icon">{{ topic.icon }}</span>
+                <img src="/topic-icon.png" alt="" class="topic-icon-img" />
                 <div class="topic-info">
                   <h3>{{ topic.title }}</h3>
                   <p>{{ topic.description }}</p>
                 </div>
-                <span class="card-arrow">→</span>
+                <span v-if="isTopicRead(topic.id)" class="topic-status">Read</span>
+                <span class="card-arrow">-></span>
               </router-link>
             </div>
           </div>
@@ -101,12 +120,14 @@
               :to="`/class/${classId}/practice?module=${selectedModuleId}`"
               class="practice-link-card"
             >
-              <div class="link-card-icon">🧠</div>
+              <div class="link-card-icon">
+                <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
+              </div>
               <div class="link-card-content">
                 <h3>Start Concept Review</h3>
                 <p>Practice questions covering {{ selectedModule.shortTitle }} concepts</p>
               </div>
-              <span class="card-arrow">→</span>
+              <span class="card-arrow">-></span>
             </router-link>
           </div>
 
@@ -115,11 +136,26 @@
             <div v-if="moduleLessons.length === 0" class="empty-state">
               <p>No software lessons available for this module yet.</p>
             </div>
-            <div v-else class="lessons-grid">
+            <div v-else>
+            <router-link
+              :to="`/class/${classId}/software?module=${selectedModuleId}`"
+              class="practice-link-card"
+            >
+              <div class="link-card-icon">
+                <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Start Software Practice</h3>
+                <p>Hands-on exercises for {{ selectedModule.shortTitle }}</p>
+              </div>
+                <span class="card-arrow">-></span>
+              </router-link>
+            </div>
+            <div v-if="moduleLessons.length > 0" class="lessons-grid">
               <router-link
                 v-for="lesson in moduleLessons"
                 :key="lesson.id"
-                :to="`/class/${classId}/software/${lesson.id}`"
+                :to="`/class/${classId}/lesson/${lesson.id}`"
                 class="lesson-card"
               >
                 <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(lesson.software) }">
@@ -129,26 +165,8 @@
                   <h3>{{ lesson.title }}</h3>
                   <p>{{ lesson.objectives[0] }}</p>
                 </div>
-                <span class="card-arrow">→</span>
+                <span class="card-arrow">-></span>
               </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Benchmarks Section -->
-      <div v-if="benchmarkModules.length > 0" class="benchmarks-section">
-        <h2 class="section-title">Assessments</h2>
-        <div class="benchmarks-list">
-          <div
-            v-for="benchmark in benchmarkModules"
-            :key="benchmark.id"
-            class="benchmark-card"
-          >
-            <span class="benchmark-icon">{{ benchmark.icon }}</span>
-            <div class="benchmark-info">
-              <h3>{{ benchmark.title }}</h3>
-              <p>{{ benchmark.description }}</p>
             </div>
           </div>
         </div>
@@ -198,7 +216,7 @@ import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
-import { getModulesByClassId, getContentModulesByClass, getBenchmarksByClass, getTopicsForModule } from '../data/modules'
+import { getModulesByClassId, getContentModulesByClass, getTopicsForModule } from '../data/modules'
 import { software } from '../data/topics'
 import { getLessonsByModule } from '../data/softwareLessons'
 
@@ -212,9 +230,9 @@ const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 
 const contentTabs = [
-  { id: 'topics', label: 'Topics', icon: '📚' },
-  { id: 'concepts', label: 'Concept Review', icon: '🧠' },
-  { id: 'software', label: 'Software Practice', icon: '💻' }
+  { id: 'topics', label: 'Topics', icon: 'T' },
+  { id: 'concepts', label: 'Concept Review', iconSrc: '/content-review-icon.png' },
+  { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
 
 const currentClass = computed(() => {
@@ -226,13 +244,9 @@ const classModules = computed(() => {
   return getModulesByClassId(classId.value)
 })
 
-// Split modules into content modules and benchmarks
+// Filter modules to content modules only
 const contentModules = computed(() => {
   return getContentModulesByClass(classId.value)
-})
-
-const benchmarkModules = computed(() => {
-  return getBenchmarksByClass(classId.value)
 })
 
 const selectedModule = computed(() => {
@@ -247,6 +261,61 @@ const moduleTopics = computed(() => {
 // Get software lessons for the selected module
 const moduleLessons = computed(() => {
   return getLessonsByModule(selectedModuleId.value)
+})
+
+const hasSoftwareLessons = computed(() => moduleLessons.value.length > 0)
+
+const readTopicIds = ref(new Set())
+
+function getReadTopicIds() {
+  try {
+    const raw = localStorage.getItem('readTopics')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read opened topics:', err)
+    return new Set()
+  }
+}
+
+function refreshReadTopics() {
+  readTopicIds.value = getReadTopicIds()
+}
+
+function isTopicRead(topicId) {
+  return readTopicIds.value.has(topicId)
+}
+
+function getCompletedConceptReviewIds() {
+  try {
+    const raw = localStorage.getItem('completedConceptReviews')
+    const parsed = raw ? JSON.parse(raw) : []
+    return new Set(Array.isArray(parsed) ? parsed : [])
+  } catch (err) {
+    console.warn('Unable to read concept reviews:', err)
+    return new Set()
+  }
+}
+
+const moduleProgress = computed(() => {
+  const totalTopics = moduleTopics.value.length
+  const openedTopics = moduleTopics.value.filter(topic => readTopicIds.value.has(topic.id)).length
+  const completedSet = getCompletedConceptReviewIds()
+  const contentReviewComplete = selectedModuleId.value
+    ? completedSet.has(selectedModuleId.value)
+    : false
+  const total = totalTopics + (totalTopics > 0 ? 1 : 0)
+  const completed = openedTopics + (contentReviewComplete ? 1 : 0)
+  const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
+
+  return {
+    total,
+    completed,
+    percent,
+    totalTopics,
+    openedTopics,
+    contentReviewComplete
+  }
 })
 
 // Get count for each tab
@@ -266,6 +335,27 @@ function getTabCount(tabId) {
 function selectModule(moduleId) {
   selectedModuleId.value = moduleId
   activeContentTab.value = 'topics'
+}
+
+function normalizeRouteValue(value) {
+  if (Array.isArray(value)) return value[0] || null
+  return value || null
+}
+
+function toStatsModuleId(value) {
+  if (!value) return null
+  if (value.startsWith('stats-module-')) return value
+  if (value.startsWith('module-')) return value.replace('module-', 'stats-module-')
+  return value
+}
+
+function syncSelectedModuleFromQuery() {
+  const queryModule = normalizeRouteValue(route.query.module)
+  if (!queryModule) return
+  const moduleId = toStatsModuleId(queryModule)
+  if (contentModules.value.find(mod => mod.id === moduleId)) {
+    selectedModuleId.value = moduleId
+  }
 }
 
 function getSoftwareColor(softwareId) {
@@ -293,7 +383,9 @@ onMounted(async () => {
   if (classId.value) {
     selectClass(classId.value)
     setDefaultModule()
+    syncSelectedModuleFromQuery()
   }
+  refreshReadTopics()
 })
 
 watch(classId, (newId) => {
@@ -301,12 +393,25 @@ watch(classId, (newId) => {
     selectClass(newId)
     selectedModuleId.value = null // Reset module selection
     setDefaultModule()
+    syncSelectedModuleFromQuery()
   }
+  refreshReadTopics()
 })
 
 // Watch for modules loading
 watch(contentModules, () => {
   setDefaultModule()
+  syncSelectedModuleFromQuery()
+  refreshReadTopics()
+})
+
+watch(() => route.query.module, () => {
+  syncSelectedModuleFromQuery()
+  refreshReadTopics()
+})
+
+watch(() => route.fullPath, () => {
+  refreshReadTopics()
 })
 </script>
 
@@ -478,6 +583,46 @@ watch(contentModules, () => {
   color: var(--text-primary);
 }
 
+/* Module Progress */
+.module-progress {
+  background: var(--bg-elevated);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.module-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.module-progress-bar {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.module-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #10b981 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.module-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 /* Content Tabs */
 .content-tabs {
   display: flex;
@@ -506,6 +651,19 @@ watch(contentModules, () => {
   color: var(--text-primary);
 }
 
+.content-tab:disabled,
+.content-tab.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+
+.content-tab:disabled:hover {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+
 .content-tab.active {
   background: var(--primary);
   color: white;
@@ -514,6 +672,12 @@ watch(contentModules, () => {
 
 .tab-icon {
   font-size: 1.125rem;
+}
+
+.tab-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .tab-count {
@@ -571,9 +735,28 @@ watch(contentModules, () => {
   transform: translateY(-2px);
 }
 
+.topic-card.read {
+  border-color: #10b981;
+}
+
+.topic-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #10b981;
+  background: #ecfdf5;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+}
+
 .topic-icon {
   font-size: 1.5rem;
   line-height: 1;
+}
+
+.topic-icon-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .topic-info {
@@ -639,6 +822,12 @@ watch(contentModules, () => {
   justify-content: center;
   font-size: 1.75rem;
   flex-shrink: 0;
+}
+
+.link-card-icon-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
 }
 
 .link-card-content {
@@ -708,42 +897,6 @@ watch(contentModules, () => {
 }
 
 /* Benchmarks Section */
-.benchmarks-section {
-  margin-bottom: 2rem;
-}
-
-.benchmarks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.benchmark-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  border-left: 3px solid #f59e0b;
-}
-
-.benchmark-icon {
-  font-size: 1.5rem;
-}
-
-.benchmark-info h3 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1rem;
-}
-
-.benchmark-info p {
-  margin: 0;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
 /* Progress Section */
 .progress-section {
   margin-top: 2rem;
@@ -851,3 +1004,8 @@ watch(contentModules, () => {
   }
 }
 </style>
+
+
+
+
+

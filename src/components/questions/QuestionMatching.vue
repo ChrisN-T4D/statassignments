@@ -17,7 +17,7 @@
           <span class="term-label">{{ index + 1 }}.</span>
           <span class="term-text">{{ pair.left }}</span>
           <span v-if="submitted" class="result-icon">
-            {{ isCorrect(index) ? '✓' : '✗' }}
+            {{ isCorrect(index) ? 'âœ“' : 'âœ—' }}
           </span>
         </div>
       </div>
@@ -58,7 +58,7 @@
         <strong>Correct matches:</strong>
         <ul>
           <li v-for="(pair, index) in question.pairs" :key="'answer-' + index">
-            {{ pair.left }} → {{ pair.right }}
+            {{ pair.left }} â†’ {{ pair.right }}
           </li>
         </ul>
       </div>
@@ -243,7 +243,7 @@ const allCorrect = computed(() => {
   border: 1px solid var(--danger);
 }
 
-.feedback p {
+.feedback p {\n  color: #111827;
   margin: 0;
   font-size: 0.9375rem;
 }

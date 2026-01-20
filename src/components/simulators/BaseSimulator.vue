@@ -181,6 +181,7 @@ const softwareLabel = computed(() => {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   font-size: 0.875rem;
+  color: #111827;
 }
 
 .actions {
@@ -289,3 +290,4 @@ const softwareLabel = computed(() => {
   color: var(--text-secondary);
 }
 </style>
+

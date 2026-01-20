@@ -15,8 +15,8 @@
         @input="onInput"
         @keyup.enter="$emit('submit')"
       />
-      <span v-if="submitted && isCorrect" class="result-icon correct">✓</span>
-      <span v-if="submitted && !isCorrect" class="result-icon incorrect">✗</span>
+      <span v-if="submitted && isCorrect" class="result-icon correct">âœ“</span>
+      <span v-if="submitted && !isCorrect" class="result-icon incorrect">âœ—</span>
     </div>
 
     <div v-if="submitted" class="feedback" :class="isCorrect ? 'correct' : 'incorrect'">
@@ -148,7 +148,7 @@ const isCorrect = computed(() => {
   border: 1px solid var(--danger);
 }
 
-.feedback p {
+.feedback p {\n  color: #111827;
   margin: 0;
   font-size: 0.9375rem;
 }
