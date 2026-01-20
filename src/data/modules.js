@@ -373,12 +373,262 @@ export const introResearchModules = [
 ]
 
 // ============================================================
+// RESEARCH METHODS CLASS MODULES
+// ============================================================
+
+const researchMethodsModuleColors = [
+  '#6366f1',
+  '#8b5cf6',
+  '#0ea5e9',
+  '#10b981',
+  '#ec4899',
+  '#f97316',
+  '#14b8a6',
+  '#dc2626',
+  '#f59e0b',
+  '#3b82f6',
+  '#22c55e',
+  '#a855f7'
+]
+
+export const researchMethodsModules = [
+  {
+    id: 'rm-module-1',
+    classId: 'research-methods',
+    number: 1,
+    title: 'Module 1: Research Thinking: Biases, Theories, and Hypotheses',
+    shortTitle: 'Research Thinking',
+    description: 'Research Thinking: Biases, Theories, and Hypotheses',
+    icon: 'M1',
+    color: researchMethodsModuleColors[0],
+    topics: [
+      'rm-1-research-matters',
+      'rm-1-limited-information-processing',
+      'rm-1-heuristics-and-bias',
+      'rm-1-thinking-goes-wrong',
+      'rm-1-laws-theories-hypotheses'
+    ]
+  },
+  {
+    id: 'rm-module-2',
+    classId: 'research-methods',
+    number: 2,
+    title: 'Module 2: From Ideas to Articles: Literature Search and Question Refinement',
+    shortTitle: 'Ideas to Articles',
+    description: 'From Ideas to Articles: Literature Search and Question Refinement',
+    icon: 'M2',
+    color: researchMethodsModuleColors[1],
+    topics: [
+      'rm-2-generating-ideas',
+      'rm-2-literature-searching',
+      'rm-2-evaluating-evidence',
+      'rm-2-question-to-plan'
+    ]
+  },
+  {
+    id: 'rm-module-3',
+    classId: 'research-methods',
+    number: 3,
+    title: 'Module 3: Research Design Logic: Correlation, Causation, and Validity',
+    shortTitle: 'Design Logic',
+    description: 'Research Design Logic: Correlation, Causation, and Validity',
+    icon: 'M3',
+    color: researchMethodsModuleColors[2],
+    topics: [
+      'rm-3-certainty-and-causation',
+      'rm-3-core-design-concepts',
+      'rm-3-internal-validity-threats',
+      'rm-3-external-ecological-validity',
+      'rm-3-statistical-decision-risks'
+    ]
+  },
+  {
+    id: 'rm-module-4',
+    classId: 'research-methods',
+    number: 4,
+    title: 'Module 4: Ethics and Human Subjects: Consent, Risk, and IRB Basics',
+    shortTitle: 'Ethics & Subjects',
+    description: 'Ethics and Human Subjects: Consent, Risk, and IRB Basics',
+    icon: 'M4',
+    color: researchMethodsModuleColors[3],
+    topics: [
+      'rm-4-ethics-history',
+      'rm-4-irb-purpose-structure',
+      'rm-4-ethics-tools',
+      'rm-4-special-ethical-issues',
+      'rm-4-researcher-preparation'
+    ]
+  },
+  {
+    id: 'rm-module-5',
+    classId: 'research-methods',
+    number: 5,
+    title: 'Module 5: Measurement Foundations: Reliability, Validity, and Scale Quality',
+    shortTitle: 'Measurement',
+    description: 'Measurement Foundations: Reliability, Validity, and Scale Quality',
+    icon: 'M5',
+    color: researchMethodsModuleColors[4],
+    topics: [
+      'rm-5-measurement-ideal-real',
+      'rm-5-scale-types-sensitivity',
+      'rm-5-finding-measures',
+      'rm-5-reliability-forms',
+      'rm-5-validity-selection-issues'
+    ]
+  },
+  {
+    id: 'rm-module-6',
+    classId: 'research-methods',
+    number: 6,
+    title: 'Module 6: Survey Research: Item Writing, Formats, and Online Tools',
+    shortTitle: 'Survey Research',
+    description: 'Survey Research: Item Writing, Formats, and Online Tools',
+    icon: 'M6',
+    color: researchMethodsModuleColors[5],
+    topics: [
+      'rm-6-develop-your-own-measure',
+      'rm-6-item-writing-formats',
+      'rm-6-demographics-sensitivity',
+      'rm-6-survey-structure',
+      'rm-6-online-survey-administration'
+    ]
+  },
+  {
+    id: 'rm-module-7',
+    classId: 'research-methods',
+    number: 7,
+    title: 'Module 7: Correlational and Group-Comparison Designs (Core Analytic Approaches)',
+    shortTitle: 'Correlation & Group',
+    description: 'Correlational and Group-Comparison Designs (Core Analytic Approaches)',
+    icon: 'M7',
+    color: researchMethodsModuleColors[6],
+    topics: [
+      'rm-7-correlational-logic',
+      'rm-7-quasi-experimental-logic',
+      'rm-7-choosing-analyses',
+      'rm-7-validity-interpretation'
+    ]
+  },
+  {
+    id: 'rm-module-8',
+    classId: 'research-methods',
+    number: 8,
+    title: 'Module 8: Qualitative Research: Interviews, Coding, and Trustworthiness',
+    shortTitle: 'Qualitative',
+    description: 'Qualitative Research: Interviews, Coding, and Trustworthiness',
+    icon: 'M8',
+    color: researchMethodsModuleColors[7],
+    topics: [
+      'rm-8-qualitative-purpose',
+      'rm-8-qualitative-collection',
+      'rm-8-qualitative-meaning-making',
+      'rm-8-qualitative-quality-ethics'
+    ]
+  },
+  {
+    id: 'rm-module-9',
+    classId: 'research-methods',
+    number: 9,
+    title: 'Module 9: Between-Subjects Experiments: Manipulation, Control, and Inference',
+    shortTitle: 'Between-Subjects',
+    description: 'Between-Subjects Experiments: Manipulation, Control, and Inference',
+    icon: 'M9',
+    color: researchMethodsModuleColors[8],
+    topics: [
+      'rm-9-between-subjects-structure',
+      'rm-9-control-internal-validity',
+      'rm-9-manipulation-checks',
+      'rm-9-interpreting-outcomes'
+    ]
+  },
+  {
+    id: 'rm-module-10',
+    classId: 'research-methods',
+    number: 10,
+    title: 'Module 10: Within-Subjects Designs: Counterbalancing and Repeated Measures',
+    shortTitle: 'Within-Subjects',
+    description: 'Within-Subjects Designs: Counterbalancing and Repeated Measures',
+    icon: 'M10',
+    color: researchMethodsModuleColors[9],
+    topics: [
+      'rm-10-within-subjects-logic',
+      'rm-10-order-carryover-effects',
+      'rm-10-practical-implementation',
+      'rm-10-interpreting-within-subjects'
+    ]
+  },
+  {
+    id: 'rm-module-11',
+    classId: 'research-methods',
+    number: 11,
+    title: 'Module 11: Sampling and Recruiting Participants: Field and Online Strategies',
+    shortTitle: 'Sampling & Recruiting',
+    description: 'Sampling and Recruiting Participants: Field and Online Strategies',
+    icon: 'M11',
+    color: researchMethodsModuleColors[10],
+    topics: [
+      'rm-11-participants-representativeness',
+      'rm-11-recruitment-channels',
+      'rm-11-ethics-of-recruitment',
+      'rm-11-data-quality-control'
+    ]
+  },
+  {
+    id: 'rm-module-12',
+    classId: 'research-methods',
+    number: 12,
+    title: 'Module 12: Bringing It Together: Applied Decisions and Research Integration',
+    shortTitle: 'Integration',
+    description: 'Bringing It Together: Applied Decisions and Research Integration',
+    icon: 'M12',
+    color: researchMethodsModuleColors[11],
+    topics: [
+      'rm-12-integrating-process',
+      'rm-12-interpreting-results',
+      'rm-12-research-products'
+    ]
+  }
+]
+
+// ============================================================
+// STATISTICS FOR ASSESSMENT CLASS MODULES
+// ============================================================
+
+const statsAssessmentModuleColors = [
+  '#0ea5e9',
+  '#10b981',
+  '#f59e0b',
+  '#8b5cf6',
+  '#14b8a6',
+  '#dc2626',
+  '#3b82f6',
+  '#22c55e'
+]
+
+export const statsAssessmentModules = Array.from({ length: 8 }, (_, index) => {
+  const number = index + 1
+  return {
+    id: `s4a-module-${number}`,
+    classId: 'stats-assessment',
+    number,
+    title: `Module ${number}`,
+    shortTitle: `M${number}`,
+    description: `Module ${number}`,
+    icon: `M${number}`,
+    color: statsAssessmentModuleColors[index % statsAssessmentModuleColors.length],
+    topics: []
+  }
+})
+
+// ============================================================
 // ALL MODULES BY CLASS
 // ============================================================
 
 export const modulesByClass = {
   'statistics': statisticsModules,
-  'intro-research': introResearchModules
+  'intro-research': introResearchModules,
+  'research-methods': researchMethodsModules,
+  'stats-assessment': statsAssessmentModules
 }
 
 // Legacy export for backwards compatibility
@@ -760,6 +1010,343 @@ export const topicsByModule = {
       id: 'data-planning',
       title: 'Data Collection Planning',
       description: 'Preparing for ethical data collection.',
+      icon: 'T'
+    }
+  ],
+  // Research Methods topics
+  'rm-module-1': [
+    {
+      id: 'rm-1-research-matters',
+      title: 'Why research matters: evaluating credibility/claims.',
+      description: 'Why research matters: evaluating credibility/claims.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-1-limited-information-processing',
+      title: 'Humans as limited information processors: schemas, categorization, and stereotyping.',
+      description: 'Humans as limited information processors: schemas, categorization, and stereotyping.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-1-heuristics-and-bias',
+      title: 'Heuristics and bias in judgment: representativeness, availability, and confirmation bias (e.g., Wason task).',
+      description: 'Heuristics and bias in judgment: representativeness, availability, and confirmation bias (e.g., Wason task).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-1-thinking-goes-wrong',
+      title: 'How thinking goes wrong (Shermer\'s four categories) and implications for research skepticism.',
+      description: 'How thinking goes wrong (Shermer\'s four categories) and implications for research skepticism.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-1-laws-theories-hypotheses',
+      title: 'Laws, theories, and hypotheses; what makes a good research question (and why theory matters).',
+      description: 'Laws, theories, and hypotheses; what makes a good research question (and why theory matters).',
+      icon: 'T'
+    }
+  ],
+  'rm-module-2': [
+    {
+      id: 'rm-2-generating-ideas',
+      title: 'Generating research ideas and moving from broad interests to researchable questions.',
+      description: 'Generating research ideas and moving from broad interests to researchable questions.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-2-literature-searching',
+      title: 'Literature searching and "working backward" through citations to map a topic area.',
+      description: 'Literature searching and "working backward" through citations to map a topic area.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-2-evaluating-evidence',
+      title: 'Evaluating evidence and building the rationale (identifying gaps; third-variable thinking).',
+      description: 'Evaluating evidence and building the rationale (identifying gaps; third-variable thinking).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-2-question-to-plan',
+      title: 'From question to plan: aligning question to design to measures to feasibility/timeline.',
+      description: 'From question to plan: aligning question to design to measures to feasibility/timeline.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-3': [
+    {
+      id: 'rm-3-certainty-and-causation',
+      title: 'What research can tell you: continuum of certainty; correlation versus causation; language that matches design.',
+      description: 'What research can tell you: continuum of certainty; correlation versus causation; language that matches design.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-3-core-design-concepts',
+      title: 'Core design concepts: experimental vs quasi-experimental vs correlational; IV/DV and quasi-IV; reframing a study.',
+      description: 'Core design concepts: experimental vs quasi-experimental vs correlational; IV/DV and quasi-IV; reframing a study.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-3-internal-validity-threats',
+      title: 'Internal validity threats and remedies (e.g., demand characteristics; blinding; pilot studies; manipulation checks).',
+      description: 'Internal validity threats and remedies (e.g., demand characteristics; blinding; pilot studies; manipulation checks).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-3-external-ecological-validity',
+      title: 'External/ecological validity and research settings (lab, field study/experiment, survey, VR).',
+      description: 'External/ecological validity and research settings (lab, field study/experiment, survey, VR).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-3-statistical-decision-risks',
+      title: 'Statistical decision risks: Type I/Type II error, power, effect size, sample size, multiple testing logic.',
+      description: 'Statistical decision risks: Type I/Type II error, power, effect size, sample size, multiple testing logic.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-4': [
+    {
+      id: 'rm-4-ethics-history',
+      title: 'Why ethical review exists: history and cases motivating oversight (e.g., Belmont principles).',
+      description: 'Why ethical review exists: history and cases motivating oversight (e.g., Belmont principles).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-4-irb-purpose-structure',
+      title: 'IRB purpose, structure, and review types; what counts as "research" and "human subject" (revised Common Rule framing).',
+      description: 'IRB purpose, structure, and review types; what counts as "research" and "human subject" (revised Common Rule framing).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-4-ethics-tools',
+      title: 'Core ethics tools: informed consent and debriefing; confidentiality and risk/benefit logic.',
+      description: 'Core ethics tools: informed consent and debriefing; confidentiality and risk/benefit logic.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-4-special-ethical-issues',
+      title: 'Special ethical issues: deception, incentives, participant pools/alternatives, and research with children.',
+      description: 'Special ethical issues: deception, incentives, participant pools/alternatives, and research with children.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-4-researcher-preparation',
+      title: 'Researcher preparation: IRB proposal components and required training (e.g., CITI-type modules).',
+      description: 'Researcher preparation: IRB proposal components and required training (e.g., CITI-type modules).',
+      icon: 'T'
+    }
+  ],
+  'rm-module-5': [
+    {
+      id: 'rm-5-measurement-ideal-real',
+      title: 'Measurement as "ideal vs real": constructs, operationalization, and why measures never fully capture concepts.',
+      description: 'Measurement as "ideal vs real": constructs, operationalization, and why measures never fully capture concepts.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-5-scale-types-sensitivity',
+      title: 'Scale types and sensitivity: nominal/ordinal/interval/ratio; anchors and what they allow you to conclude.',
+      description: 'Scale types and sensitivity: nominal/ordinal/interval/ratio; anchors and what they allow you to conclude.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-5-finding-measures',
+      title: 'Finding measures: literature mining + databases/resources (e.g., PsycTESTS; HaPI; books/department resources).',
+      description: 'Finding measures: literature mining + databases/resources (e.g., PsycTESTS; HaPI; books/department resources).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-5-reliability-forms',
+      title: 'Reliability: forms of reliability; internal consistency and Cronbach\'s alpha (including calculation concept).',
+      description: 'Reliability: forms of reliability; internal consistency and Cronbach\'s alpha (including calculation concept).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-5-validity-selection-issues',
+      title: 'Validity and practical selection issues: content/criterion/construct validity; scoring, length, qualifications, cost/copyright, social desirability.',
+      description: 'Validity and practical selection issues: content/criterion/construct validity; scoring, length, qualifications, cost/copyright, social desirability.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-6': [
+    {
+      id: 'rm-6-develop-your-own-measure',
+      title: 'When/why to develop your own measure (and when to avoid it).',
+      description: 'When/why to develop your own measure (and when to avoid it).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-6-item-writing-formats',
+      title: 'Item writing and response format choices: stems, anchors (odd vs even), open vs closed-ended, scale flexibility.',
+      description: 'Item writing and response format choices: stems, anchors (odd vs even), open vs closed-ended, scale flexibility.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-6-demographics-sensitivity',
+      title: 'Demographics and social sensitivity: gender/race/ethnicity/income item approaches; self-identification and bias-aware wording.',
+      description: 'Demographics and social sensitivity: gender/race/ethnicity/income item approaches; self-identification and bias-aware wording.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-6-survey-structure',
+      title: 'Survey design structure: question order, sensitive questions placement, pilot testing to reduce misunderstanding/bias.',
+      description: 'Survey design structure: question order, sensitive questions placement, pilot testing to reduce misunderstanding/bias.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-6-online-survey-administration',
+      title: 'Online survey administration: tools/features tradeoffs (e.g., SurveyMonkey vs Qualtrics), exporting data, and internal-validity concerns of remote completion.',
+      description: 'Online survey administration: tools/features tradeoffs (e.g., SurveyMonkey vs Qualtrics), exporting data, and internal-validity concerns of remote completion.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-7': [
+    {
+      id: 'rm-7-correlational-logic',
+      title: 'Correlational logic in practice: predicting/estimating relationships and using appropriate "association" language.',
+      description: 'Correlational logic in practice: predicting/estimating relationships and using appropriate "association" language.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-7-quasi-experimental-logic',
+      title: 'Quasi-experimental/group-difference logic: preexisting groups, quasi-IVs, and limits on causal inference.',
+      description: 'Quasi-experimental/group-difference logic: preexisting groups, quasi-IVs, and limits on causal inference.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-7-choosing-analyses',
+      title: 'Choosing analyses conceptually by question/design (the chapter sequence builds toward Ch. 7-10 as design-specific detail).',
+      description: 'Choosing analyses conceptually by question/design (the chapter sequence builds toward Ch. 7-10 as design-specific detail).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-7-validity-interpretation',
+      title: 'Validity and interpretation issues specific to non-randomized/group comparisons (confounds; alternative explanations).',
+      description: 'Validity and interpretation issues specific to non-randomized/group comparisons (confounds; alternative explanations).',
+      icon: 'T'
+    }
+  ],
+  'rm-module-8': [
+    {
+      id: 'rm-8-qualitative-purpose',
+      title: 'What qualitative research is for: kinds of questions it answers and how it differs from quantitative approaches.',
+      description: 'What qualitative research is for: kinds of questions it answers and how it differs from quantitative approaches.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-8-qualitative-collection',
+      title: 'Qualitative data collection strategies (e.g., interviews/focus groups/case-based approaches as framed in the text\'s qualitative discussion).',
+      description: 'Qualitative data collection strategies (e.g., interviews/focus groups/case-based approaches as framed in the text\'s qualitative discussion).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-8-qualitative-meaning-making',
+      title: 'Making meaning from qualitative data: organizing, coding, theme development, and transparency of interpretation.',
+      description: 'Making meaning from qualitative data: organizing, coding, theme development, and transparency of interpretation.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-8-qualitative-quality-ethics',
+      title: 'Quality/ethics in qualitative work: credibility, reflexivity, and protections for participants when data are personal/sensitive.',
+      description: 'Quality/ethics in qualitative work: credibility, reflexivity, and protections for participants when data are personal/sensitive.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-9': [
+    {
+      id: 'rm-9-between-subjects-structure',
+      title: 'Between-subjects experimental structure: random assignment, manipulated IVs, and DV selection.',
+      description: 'Between-subjects experimental structure: random assignment, manipulated IVs, and DV selection.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-9-control-internal-validity',
+      title: 'Control and internal validity in experiments: preventing demand characteristics; blinding; standardized procedures.',
+      description: 'Control and internal validity in experiments: preventing demand characteristics; blinding; standardized procedures.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-9-manipulation-checks',
+      title: 'Manipulation checks, pilot testing, and cover stories as design tools.',
+      description: 'Manipulation checks, pilot testing, and cover stories as design tools.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-9-interpreting-outcomes',
+      title: 'Interpreting outcomes: causal language, effect size/power thinking, and limits to generalization.',
+      description: 'Interpreting outcomes: causal language, effect size/power thinking, and limits to generalization.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-10': [
+    {
+      id: 'rm-10-within-subjects-logic',
+      title: 'Within-subjects logic: why use it and what it changes about inference and procedure.',
+      description: 'Within-subjects logic: why use it and what it changes about inference and procedure.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-10-order-carryover-effects',
+      title: 'Order/carryover effects and counterbalancing strategies.',
+      description: 'Order/carryover effects and counterbalancing strategies.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-10-practical-implementation',
+      title: 'Practical implementation: fatigue, learning, and participant experience as threats to validity.',
+      description: 'Practical implementation: fatigue, learning, and participant experience as threats to validity.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-10-interpreting-within-subjects',
+      title: 'Interpreting within-subjects findings: what conclusions are warranted and what caveats to report.',
+      description: 'Interpreting within-subjects findings: what conclusions are warranted and what caveats to report.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-11': [
+    {
+      id: 'rm-11-participants-representativeness',
+      title: 'Who are the participants? Representativeness, sampling decisions, and generalizability.',
+      description: 'Who are the participants? Representativeness, sampling decisions, and generalizability.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-11-recruitment-channels',
+      title: 'Recruitment channels and constraints (participant pools, community samples, and online options such as MTurk-style recruitment).',
+      description: 'Recruitment channels and constraints (participant pools, community samples, and online options such as MTurk-style recruitment).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-11-ethics-of-recruitment',
+      title: 'Ethics of recruitment and incentives: voluntariness, coercion risk, and justice/fairness concerns.',
+      description: 'Ethics of recruitment and incentives: voluntariness, coercion risk, and justice/fairness concerns.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-11-data-quality-control',
+      title: 'Data quality and procedure control in field/online contexts as internal validity issues.',
+      description: 'Data quality and procedure control in field/online contexts as internal validity issues.',
+      icon: 'T'
+    }
+  ],
+  'rm-module-12': [
+    {
+      id: 'rm-12-integrating-process',
+      title: 'Integrating the research process: aligning question, design, measures, sampling, and ethics into a coherent plan.',
+      description: 'Integrating the research process: aligning question, design, measures, sampling, and ethics into a coherent plan.',
+      icon: 'T'
+    },
+    {
+      id: 'rm-12-interpreting-results',
+      title: 'Interpreting results responsibly: alternative explanations, limits, and accurate research language (correlation vs causation).',
+      description: 'Interpreting results responsibly: alternative explanations, limits, and accurate research language (correlation vs causation).',
+      icon: 'T'
+    },
+    {
+      id: 'rm-12-research-products',
+      title: 'Preparing research products: documentation needed for replication/credibility and clean reporting workflow expectations.',
+      description: 'Preparing research products: documentation needed for replication/credibility and clean reporting workflow expectations.',
       icon: 'T'
     }
   ]
