@@ -146,6 +146,14 @@ export function useClasses() {
     return classes.value.find(c => c.id === classId) || null
   }
 
+  // Get a single class by slug
+  async function getClassBySlug(slug) {
+    if (!initialized.value) {
+      await fetchClasses()
+    }
+    return classes.value.find(c => c.slug === slug) || null
+  }
+
   // Select a class
   function selectClass(classId) {
     const cls = classes.value.find(c => c.id === classId)
@@ -159,23 +167,32 @@ export function useClasses() {
     selectedClassId.value = null
   }
 
-  // Sync selection with route params
-  function syncWithRoute() {
+  // Sync selection with route params (supports both ID and slug)
+  async function syncWithRoute() {
     if (!route) return
     const urlClassId = route.params.classId
     if (urlClassId && urlClassId !== selectedClassId.value) {
-      const cls = classes.value.find(c => c.id === urlClassId)
+      // Try to find by slug first, then by ID
+      let cls = classes.value.find(c => c.slug === urlClassId)
+      if (!cls) {
+        cls = classes.value.find(c => c.id === urlClassId)
+      }
       if (cls?.is_active) {
-        selectedClassId.value = urlClassId
+        selectedClassId.value = cls.id
       }
     }
   }
 
-  // Navigate to a class
-  function navigateToClass(classId) {
-    selectClass(classId)
-    if (router) {
-      router.push({ name: 'class-home', params: { classId } })
+  // Navigate to a class (uses slug if available, falls back to ID)
+  function navigateToClass(classIdOrSlug) {
+    const cls = classes.value.find(c => c.slug === classIdOrSlug || c.id === classIdOrSlug)
+    if (cls) {
+      selectClass(cls.id)
+      if (router) {
+        // Use slug for URL if available
+        const urlParam = cls.slug || cls.id
+        router.push({ name: 'class-home', params: { classId: urlParam } })
+      }
     }
   }
 
@@ -189,6 +206,7 @@ export function useClasses() {
     initialized,
     fetchClasses,
     getClassById,
+    getClassBySlug,
     selectClass,
     clearSelection,
     syncWithRoute,

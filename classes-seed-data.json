@@ -1,0 +1,16 @@
+{
+  "classes": [
+    {
+      "code": "PSY302",
+      "name": "Introduction to Statistics for Psychology",
+      "description": "A comprehensive introduction to statistical methods used in psychological research, covering descriptive statistics, probability, hypothesis testing, and basic inferential statistics.",
+      "is_active": true
+    },
+    {
+      "code": "PSY303",
+      "name": "Research Methods in Psychology",
+      "description": "Practical application of research methods and statistical analysis in psychology. Includes hands-on practice with statistical software.",
+      "is_active": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"\nprocess.env.PB_ADMIN_EMAIL = ''[REDACTED]'';\nprocess.env.PB_ADMIN_PASSWORD = ''[REDACTED]'';\n\")",
+      "Bash(PB_ADMIN_EMAIL=\"[REDACTED]\" PB_ADMIN_PASSWORD=\"[REDACTED]\" node:*)",
+      "Bash(node add-class-slugs.js:*)",
+      "Bash(xargs ls:*)"
+    ]
+  }
+}
