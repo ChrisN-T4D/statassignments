@@ -97,6 +97,14 @@ const researchMethodsModules = [
 async function importResearchMethodsModules() {
   console.log('=== Importing Research Methods Modules ===\n')
 
+  // Check environment variables
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.error('✗ Error: PB_ADMIN_EMAIL and PB_ADMIN_PASSWORD environment variables must be set')
+    console.error('   Example: export PB_ADMIN_EMAIL="your-email@example.com"')
+    console.error('            export PB_ADMIN_PASSWORD="your-password"')
+    process.exit(1)
+  }
+
   // Step 1: Authenticate
   try {
     console.log('1. Authenticating as admin...')

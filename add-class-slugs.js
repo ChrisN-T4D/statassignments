@@ -9,9 +9,22 @@ const ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD
 async function addClassSlugs() {
   console.log('Adding slug field to classes...\n')
 
+  // Check environment variables
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.error('✗ Error: PB_ADMIN_EMAIL and PB_ADMIN_PASSWORD environment variables must be set')
+    console.error('   Example: export PB_ADMIN_EMAIL="your-email@example.com"')
+    console.error('            export PB_ADMIN_PASSWORD="your-password"')
+    process.exit(1)
+  }
+
   // Authenticate
-  await pb.collection('_superusers').authWithPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-  console.log('✓ Authenticated\n')
+  try {
+    await pb.collection('_superusers').authWithPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+    console.log('✓ Authenticated\n')
+  } catch (err) {
+    console.error('✗ Authentication failed:', err.message)
+    process.exit(1)
+  }
 
   // Get collections
   const collections = await pb.send('/api/collections', { method: 'GET' })

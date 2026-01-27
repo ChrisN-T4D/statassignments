@@ -22,16 +22,27 @@ Your PocketBase is deployed at: `https://pb.c.robpneu.com`
 Follow the steps in [QUICK-FIX.md](QUICK-FIX.md) to:
 - Allow public read access to the `semesters` collection
 
-### 3. Import Seed Data
+### 3. Set Environment Variables
+
+Copy `.env.example` to `.env` and add your credentials:
+
+```bash
+cp .env.example .env
+# Edit .env with your actual credentials
+```
+
+Or export them directly:
+
+```bash
+export PB_ADMIN_EMAIL="your-admin@email.com"
+export PB_ADMIN_PASSWORD="your-password"
+```
+
+### 4. Import Seed Data
 
 **Option A: Automatic (recommended)**
 
 ```bash
-# Set your admin credentials
-export PB_ADMIN_EMAIL="your-admin@email.com"
-export PB_ADMIN_PASSWORD="your-password"
-
-# Run import script
 node import-seed-data.js
 ```
 
@@ -42,7 +53,7 @@ node import-seed-data.js
 3. Import modules from `seed-data.json`
 4. Import items from `seed-data.json` (link to module IDs)
 
-### 4. Verify Setup
+### 5. Verify Setup
 
 ```bash
 node test-connection.js
@@ -56,7 +67,7 @@ Should show:
 ✓ Items: 23 found
 ```
 
-### 5. Run the Frontend
+### 6. Run the Frontend
 
 ```bash
 npm install

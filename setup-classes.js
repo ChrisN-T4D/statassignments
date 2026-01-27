@@ -9,6 +9,14 @@ const ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD
 async function setupClasses() {
   console.log('=== Setting up Classes System ===\n')
 
+  // Check environment variables
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    console.error('✗ Error: PB_ADMIN_EMAIL and PB_ADMIN_PASSWORD environment variables must be set')
+    console.error('   Example: export PB_ADMIN_EMAIL="your-email@example.com"')
+    console.error('            export PB_ADMIN_PASSWORD="your-password"')
+    process.exit(1)
+  }
+
   // Step 1: Authenticate as admin
   try {
     console.log('1. Authenticating as admin...')
@@ -23,7 +31,6 @@ async function setupClasses() {
   console.log('2. Getting collections...')
   let collections = await pb.send('/api/collections', { method: 'GET' })
   let classesCol = collections.items.find(c => c.name === 'classes')
-  let modulesCol = collections.items.find(c => c.name === 'modules')
   const semestersCol = collections.items.find(c => c.name === 'semesters')
   const usersCol = collections.items.find(c => c.name === 'users')
   console.log('   ✓ Found collections\n')
