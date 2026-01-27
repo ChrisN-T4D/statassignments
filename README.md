@@ -4,131 +4,73 @@ A Vue 3 + PocketBase web application for teaching introductory statistics in psy
 
 ## Features
 
-- **Student Authentication** - Students create accounts and link to roster via claim keys
-- **Pseudonymous Tracking** - All analytics use `student_key`, no PII in exports
-- **Practice System** - Interactive practice problems for SPSS, R, Stata, Excel, jamovi
-- **Progress Tracking** - Students track completed topics and practice stats
-- **Instructor Analytics** - Export attempt-level or student-summary CSVs
-- **Roster Management** - Import Blackboard exports, generate student keys
+- **Student Authentication** - Pseudonymous student tracking with claim keys
+- **Interactive Practice** - SPSS, R, Stata, Excel, and Jamovi simulators
+- **Progress Tracking** - Complete topic and practice tracking
+- **Instructor Analytics** - CSV exports and roster management
+- **Two Course Tracks** - Statistics (PSYC 4213) and Research Methods (PSYC 4223)
 
 ## Quick Start
 
-### 1. PocketBase is Running ✓
-
-Your PocketBase is deployed at: `https://pb.c.robpneu.com`
-
-### 2. Fix API Rules
-
-Follow the steps in [QUICK-FIX.md](QUICK-FIX.md) to:
-- Allow public read access to the `semesters` collection
-
-### 3. Set Environment Variables
-
-Copy `.env.example` to `.env` and add your credentials:
-
 ```bash
-cp .env.example .env
-# Edit .env with your actual credentials
-```
-
-Or export them directly:
-
-```bash
-export PB_ADMIN_EMAIL="your-admin@email.com"
-export PB_ADMIN_PASSWORD="your-password"
-```
-
-### 4. Import Seed Data
-
-**Option A: Automatic (recommended)**
-
-```bash
-node import-seed-data.js
-```
-
-**Option B: Manual**
-
-1. Go to `https://pb.c.robpneu.com/_/`
-2. Create a semester in the `semesters` collection
-3. Import modules from `seed-data.json`
-4. Import items from `seed-data.json` (link to module IDs)
-
-### 5. Verify Setup
-
-```bash
-node test-connection.js
-```
-
-Should show:
-```
-✓ All collections accessible
-✓ Semesters: 1 found
-✓ Modules: 23 found (11 Statistics + 12 Research Methods)
-✓ Items: 23 found
-```
-
-### 6. Run the Frontend
-
-```bash
+# Install dependencies
 npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your PocketBase credentials
+
+# Import seed data
+node scripts/import/import-seed-data.js
+
+# Run development server
 npm run dev
 ```
 
 Visit `http://localhost:5173`
 
-## Next Steps
-
-### For Instructors
-
-1. **Create your account** at `/auth`
-2. **Set your role** to `instructor`:
-   - Go to PocketBase Admin `https://pb.c.robpneu.com/_/`
-   - Click **Collections → users**
-   - Find your user record
-   - Set `role` = `instructor`
-3. **Import roster** at `/instructor`:
-   - Upload Blackboard CSV export
-   - Download student keys CSV
-   - Distribute keys to students
-
-### For Students
-
-1. **Create account** at `/auth`
-2. **Claim student key** at `/claim` (enter key from instructor)
-3. **Start practicing** at `/practice`
-
 ## Project Structure
 
 ```
-src/
-├── composables/
-│   ├── useAuth.js              # Authentication
-│   ├── useProfile.js           # Student profile claiming
-│   ├── useModules.js           # Fetch modules/items
-│   ├── useAttempts.js          # Log attempts & stats
-│   └── useInstructorAnalytics.js # CSV exports & roster management
-├── views/
-│   ├── Auth.vue                # Login/signup
-│   ├── ClaimProfile.vue        # Claim student key
-│   ├── Practice.vue            # Practice problems
-│   ├── Profile.vue             # Student progress
-│   └── InstructorDashboard.vue # Analytics & roster
-└── ...
+statassignments/
+├── docs/              # Full documentation
+├── scripts/           # Setup and import scripts
+├── src/               # Frontend source code
+│   ├── router/        # Vue Router
+│   ├── composables/   # Business logic
+│   ├── views/         # Pages
+│   ├── components/    # UI components
+│   ├── data/          # Static data
+│   └── content/       # Course content
+└── public/            # Static assets
 ```
 
 ## Documentation
 
-- [SETUP.md](SETUP.md) - Detailed setup guide
-- [QUICK-FIX.md](QUICK-FIX.md) - Fix common issues
+- **[Full Setup Guide](docs/README-FULL.md)** - Complete setup instructions
+- **[Setup Guide](docs/SETUP.md)** - Detailed configuration steps
+- **[Troubleshooting](docs/QUICK-FIX.md)** - Common issues and fixes
+- **[Database Schema](docs/pocketbase-schema.md)** - PocketBase schema reference
 
 ## Tech Stack
 
 - **Frontend:** Vue 3 + Vite + Vue Router
-- **Backend:** PocketBase (SQLite + realtime subscriptions)
-- **Auth:** PocketBase built-in (email/password)
-- **Deployment:**
-  - Backend: Docker (Portainer)
-  - Frontend: Static build (nginx/Caddy/Vercel/Netlify)
+- **Backend:** PocketBase (SQLite)
+- **Auth:** PocketBase email/password
+- **Deployment:** Docker + Static hosting
+
+## For Instructors
+
+1. Create account at `/auth`
+2. Set role to `instructor` in PocketBase admin panel
+3. Import roster at `/instructor`
+4. Distribute student claim keys
+
+## For Students
+
+1. Create account at `/auth`
+2. Claim student key at `/claim`
+3. Start practicing at `/practice`
 
 ## License
 
