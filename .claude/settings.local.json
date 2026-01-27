@@ -10,7 +10,10 @@
       "Bash(git filter-repo:*)",
       "Bash(git filter-branch --force --tree-filter \"python \"\"C:\\\\Users\\\\couga\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-couga-Documents-statassignments\\\\de5ab07b-2d84-49e4-9c44-8316ca0c6bc7\\\\scratchpad\\\\clean-credentials.py\"\" add-class-slugs.js 2>/dev/null; python \"\"C:\\\\Users\\\\couga\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-couga-Documents-statassignments\\\\de5ab07b-2d84-49e4-9c44-8316ca0c6bc7\\\\scratchpad\\\\clean-credentials.py\"\" import-research-methods-modules.js 2>/dev/null; python \"\"C:\\\\Users\\\\couga\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-couga-Documents-statassignments\\\\de5ab07b-2d84-49e4-9c44-8316ca0c6bc7\\\\scratchpad\\\\clean-credentials.py\"\" setup-classes.js 2>/dev/null; true\" --prune-empty --tag-name-filter cat -- --all)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(where:*)"
     ]
   }
 }
