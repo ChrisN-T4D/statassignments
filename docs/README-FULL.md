@@ -1,6 +1,6 @@
-# Statistics Teaching Site
+# Methods Market
 
-A Vue 3 + PocketBase web application for teaching introductory statistics in psychology with pseudonymous student tracking.
+Research methods modules, statistics support, and software how-tos for psychology.
 
 ## Features
 

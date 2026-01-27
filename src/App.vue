@@ -3,7 +3,7 @@
     <header class="header">
       <div class="container header-content">
         <router-link to="/" class="logo">
-          Stats<span>Psych</span>
+          Methods<span>Market</span>
         </router-link>
 
         <div class="header-center">

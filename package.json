@@ -1,7 +1,7 @@
 {
-  "name": "stats-teaching-site",
+  "name": "methods-market",
   "version": "1.0.0",
-  "description": "A companion website for teaching introductory statistics in psychology",
+  "description": "Research methods modules, statistics support, and software how-tos for psychology",
   "type": "module",
   "scripts": {
     "dev": "vite",

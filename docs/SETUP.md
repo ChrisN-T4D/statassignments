@@ -1,6 +1,6 @@
-# Statistics Teaching Site - Setup Guide
+# Methods Market - Setup Guide
 
-This guide walks you through setting up the backend (PocketBase) and frontend (Vue) for the psychology statistics practice site with pseudonymous student tracking.
+This guide walks you through setting up the backend (PocketBase) and frontend (Vue) for Methods Market, providing research methods modules, statistics support, and software how-tos for psychology with pseudonymous student tracking.
 
 ## Architecture Overview
 

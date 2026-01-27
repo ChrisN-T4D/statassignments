@@ -3,8 +3,8 @@
     <div class="container">
       <!-- Hero Section -->
       <div class="hero">
-        <h1>Statistics for Psychology</h1>
-        <p>Learn introductory statistics with practical examples in SPSS, R, Excel, Stata, and jamovi.</p>
+        <h1>Methods Market</h1>
+        <p>Research methods modules, statistics support, and software how-tos for psychology.</p>
       </div>
 
       <!-- Class Selection -->
