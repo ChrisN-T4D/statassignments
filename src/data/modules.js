@@ -49,20 +49,21 @@ export const statisticsModules = [
     id: 'stats-module-3',
     classId: 'statistics',
     number: 3,
-    title: 'Jamovi and Data Handling',
-    shortTitle: 'Jamovi Basics',
-    description: 'Get hands-on with Jamovi software for data entry, import, and basic manipulation.',
+    title: 'Software Basics and Data Handling',
+    shortTitle: 'Software Basics',
+    description: 'Get hands-on with your chosen statistical software for data entry, import, and basic manipulation.',
     icon: 'M3',
     color: '#0ea5e9',
-    topics: ['jamovi-interface', 'data-entry', 'variable-types'],
-    textbookChapters: ['Chapter 3: Getting started with Jamovi'],
+    topics: ['software-interface', 'data-entry', 'variable-types'],
+    textbookChapters: ['Chapter 3: Getting started with statistical software'],
     learningObjectives: [
-      'Navigate the Jamovi interface',
+      'Navigate your statistical software interface',
       'Enter and import data correctly',
       'Set appropriate variable types and measurement levels',
-      'Save and export Jamovi files'
+      'Save and export data files'
     ],
-    hasSoftwarePractice: true
+    hasSoftwarePractice: true,
+    isDynamicSoftware: true  // Flag to indicate this module adapts to software preference
   },
   {
     id: 'stats-module-4',
@@ -706,9 +707,9 @@ export const topicsByModule = {
   ],
   'stats-module-3': [
     {
-      id: 'jamovi-interface',
-      title: 'The Jamovi Interface',
-      description: 'Navigate the spreadsheet, results panel, and ribbon tabs.',
+      id: 'software-interface',
+      title: 'The Software Interface',
+      description: 'Navigate the workspace, menus, and key features of your statistical software.',
       icon: 'T'
     },
     {
@@ -719,7 +720,7 @@ export const topicsByModule = {
     },
     {
       id: 'variable-types',
-      title: 'Variable Types in Jamovi',
+      title: 'Variable Types and Measurement Levels',
       description: 'Setting measurement levels and data types correctly.',
       icon: 'T'
     }

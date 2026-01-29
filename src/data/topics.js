@@ -353,25 +353,31 @@ export const topics = [
 
   // Module 3: Jamovi and Data Handling
   {
-    id: 'jamovi-interface',
+    id: 'software-interface',
     moduleId: 'module-3',
-    title: 'The Jamovi Interface',
-    description: 'Navigate the spreadsheet, results panel, and ribbon tabs.',
-    icon: 'T'
+    title: 'The Software Interface',
+    description: 'Navigate the workspace, menus, and key features of your statistical software.',
+    icon: 'T',
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/03-Getting-started-with-jamovi.html',
+    isDynamicSoftware: true  // Content adapts to software preference
   },
   {
     id: 'data-entry',
     moduleId: 'module-3',
     title: 'Entering and Importing Data',
     description: 'Manual entry, CSV import, and data validation.',
-    icon: 'T'
+    icon: 'T',
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/03-Getting-started-with-jamovi.html',
+    isDynamicSoftware: true  // Content adapts to software preference
   },
   {
     id: 'variable-types',
     moduleId: 'module-3',
-    title: 'Variable Types in Jamovi',
+    title: 'Variable Types and Measurement Levels',
     description: 'Setting measurement levels and data types correctly.',
-    icon: 'T'
+    icon: 'T',
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/03-Getting-started-with-jamovi.html',
+    isDynamicSoftware: true  // Content adapts to software preference
   },
 
   // Module 4: Descriptive Statistics

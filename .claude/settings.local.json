@@ -15,7 +15,8 @@
       "Bash(python3:*)",
       "Bash(where:*)",
       "Bash(git ls-tree:*)",
-      "Bash(git cat-file:*)"
+      "Bash(git cat-file:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

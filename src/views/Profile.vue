@@ -9,8 +9,18 @@
 
       <div v-else>
         <div class="page-header">
-          <h1>Your Progress</h1>
-          <p>Track your learning journey through introductory statistics.</p>
+          <div>
+            <h1>Your Progress</h1>
+            <p>Track your learning journey through introductory statistics.</p>
+          </div>
+          <div class="header-actions">
+            <router-link v-if="user?.role === 'admin'" to="/admin" class="btn-primary">
+              Admin Dashboard
+            </router-link>
+            <router-link to="/bkt-tester" class="btn-secondary">
+              BKT Testing Interface
+            </router-link>
+          </div>
         </div>
 
         <!-- User Info -->
@@ -78,16 +88,51 @@
               v-for="module in modules"
               :key="module.id"
               class="module-progress-item"
+              :class="{ expanded: expandedModules.has(module.id) }"
             >
-            <div class="module-info">
-                <span class="module-title">{{ getModuleDisplayTitle(module) }}</span>
-                <span class="module-count">{{ getModuleProgress(module).completed }} / {{ getModuleProgress(module).total }}</span>
-            </div>
-              <div class="module-progress-bar">
-                <div
-                  class="module-progress-fill"
-                  :style="{ width: `${getModuleProgress(module).percent}%` }"
-                ></div>
+              <div class="module-header" @click="toggleModuleExpansion(module.id)">
+                <div class="module-info">
+                  <span class="module-expand-icon">
+                    {{ expandedModules.has(module.id) ? '▼' : '▶' }}
+                  </span>
+                  <span class="module-title">{{ getModuleDisplayTitle(module) }}</span>
+                  <span class="module-count">{{ getModuleProgress(module).completed }} / {{ getModuleProgress(module).total }}</span>
+                </div>
+                <div class="module-progress-bar">
+                  <div
+                    class="module-progress-fill"
+                    :style="{ width: `${getModuleProgress(module).percent}%` }"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Objectives Breakdown -->
+              <div v-if="expandedModules.has(module.id)" class="objectives-section">
+                <h3>Learning Objectives</h3>
+                <div class="objectives-list">
+                  <div
+                    v-for="objective in getModuleObjectives(module)"
+                    :key="objective.objectiveId"
+                    class="objective-item"
+                  >
+                    <div class="objective-header">
+                      <span class="objective-id">{{ objective.objectiveId }}</span>
+                      <span class="objective-type" :class="`type-${objective.objectiveType}`">
+                        {{ objective.objectiveType }}
+                      </span>
+                      <span class="objective-mastery">
+                        {{ getObjectiveMastery(objective.objectiveId) }}% mastery
+                      </span>
+                    </div>
+                    <p class="objective-text">{{ objective.objective }}</p>
+                    <div class="objective-progress-bar">
+                      <div
+                        class="objective-progress-fill"
+                        :style="{ width: `${getObjectiveMastery(objective.objectiveId)}%` }"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -121,12 +166,15 @@ import { getContentModulesByClass, getTopicsForModule, getAllTopics } from '../d
 import { getLessonsByModule } from '../data/softwareLessons.js'
 import { statisticsExercises } from '../data/statisticsPractices.js'
 import { software } from '../data/topics.js'
+import { getObjectivesByModule, getModuleNumber } from '../data/objectives.js'
 import { useAuth } from '../composables/useAuth'
 import { usePractice } from '../composables/usePractice'
+import { useBKT } from '../composables/useBKT'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
 const { fetchUserStats } = usePractice()
+const { getMasteryPercent, getAllBKTStates } = useBKT()
 
 const practiceStats = ref(null)
 const modules = computed(() => getContentModulesByClass('statistics'))
@@ -136,6 +184,8 @@ const readTopicsCount = computed(() => readTopicIds.value.size)
 const preferredSoftware = ref('jamovi')
 const softwareOptions = computed(() => software)
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
+const expandedModules = ref(new Set())
+const masteryData = ref({})
 
 const userName = computed(() => {
   return user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || 'Student'
@@ -239,6 +289,37 @@ function replaceJamoviLabel(text, moduleId) {
   return text.replace(/Jamovi/gi, preferredSoftwareName.value)
 }
 
+function toggleModuleExpansion(moduleId) {
+  if (expandedModules.value.has(moduleId)) {
+    expandedModules.value.delete(moduleId)
+  } else {
+    expandedModules.value.add(moduleId)
+  }
+  // Force reactivity
+  expandedModules.value = new Set(expandedModules.value)
+}
+
+function getModuleObjectives(module) {
+  const moduleNum = getModuleNumber(module.id)
+  if (!moduleNum) return []
+  return getObjectivesByModule(moduleNum)
+}
+
+function getObjectiveMastery(objectiveId) {
+  // Use BKT to calculate mastery percentage (from cache)
+  return masteryData.value[objectiveId] || 0
+}
+
+async function loadMasteryData() {
+  // Load all BKT states and cache the mastery percentages
+  const states = await getAllBKTStates()
+  const newMasteryData = {}
+  for (const [objectiveId, state] of Object.entries(states)) {
+    newMasteryData[objectiveId] = Math.round(state.pL * 100)
+  }
+  masteryData.value = newMasteryData
+}
+
 function getModuleDisplayTitle(module) {
   return replaceJamoviLabel(module?.title, module?.id)
 }
@@ -273,8 +354,9 @@ function getSoftwareIcon(softwareId) {
 }
 
 async function handleSignOut() {
-  await signOut()
-  router.push('/')
+  signOut()
+  // Force full page reload to clear all state and refresh auth
+  window.location.href = '/'
 }
 
 async function loadData() {
@@ -282,6 +364,7 @@ async function loadData() {
     practiceStats.value = await fetchUserStats()
     refreshReadTopics()
     preferredSoftware.value = getPreferredSoftwareId()
+    await loadMasteryData()
   }
 }
 
@@ -390,26 +473,48 @@ watch(isAuthenticated, (newVal) => {
 .module-progress-item {
   display: flex;
   flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.module-progress-item:hover {
+  border-color: var(--primary);
+}
+
+.module-header {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   padding: 1rem 1.25rem;
-  background: var(--bg-main);
-  border-radius: 0.5rem;
+  cursor: pointer;
+  user-select: none;
 }
 
 .module-info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+}
+
+.module-expand-icon {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  min-width: 1rem;
 }
 
 .module-title {
   font-weight: 600;
+  flex: 1;
 }
 
 .module-count {
   font-size: 0.875rem;
   color: var(--text-secondary);
+  margin-left: auto;
 }
 
 .module-progress-bar {
@@ -491,6 +596,114 @@ watch(isAuthenticated, (newVal) => {
 
 .practice-summary p {
   margin-bottom: 1.5rem;
+}
+
+.objectives-section {
+  padding: 1rem 1.25rem;
+  background: var(--bg-main);
+  border-top: 1px solid var(--border);
+}
+
+.objectives-section h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.objective-item {
+  padding: 0.75rem;
+  background: #374151;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+}
+
+.objective-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.objective-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #111827;
+  background: #9ca3af;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.objective-type {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.objective-type.type-content {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.objective-type.type-software {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.objective-type.type-hybrid {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.objective-mastery {
+  font-size: 0.75rem;
+  color: #d1d5db;
+  margin-left: auto;
+}
+
+.objective-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #f3f4f6;
+  margin-bottom: 0.5rem;
+}
+
+.objective-progress-bar {
+  height: 0.375rem;
+  background: var(--bg-main);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.objective-progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .btn-primary {

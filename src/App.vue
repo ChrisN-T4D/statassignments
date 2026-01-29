@@ -15,6 +15,7 @@
           <router-link v-if="selectedClass" :to="`/class/${selectedClassId}`">
             {{ selectedClass.short_name }}
           </router-link>
+          <router-link v-if="isAdmin" to="/admin">Admin</router-link>
           <router-link v-if="isInstructor" to="/instructor">Dashboard</router-link>
           <router-link v-if="isAuthenticated" to="/profile">Profile</router-link>
           <template v-if="isAuthenticated">
@@ -48,10 +49,12 @@ const { user, isAuthenticated, signOut } = useAuth()
 const { selectedClass, selectedClassId } = useClasses()
 
 const isInstructor = computed(() => user.value?.role === 'instructor')
+const isAdmin = computed(() => user.value?.role === 'admin')
 
 function handleSignOut() {
   signOut()
-  router.push('/')
+  // Force full page reload to clear all state and refresh auth
+  window.location.href = '/'
 }
 </script>
 

@@ -2,6 +2,8 @@ import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
 import { allStatisticsQuestions, getQuestionsByModule } from '../data/conceptQuestions'
+import { updateBKT } from './useBKT'
+import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
 
 export function usePractice() {
   const { user } = useAuth()
@@ -221,10 +223,25 @@ export function usePractice() {
     return currentProblem.value
   }
 
-  async function submitAnswer(problemId, answer, isCorrect) {
+  async function submitAnswer(problemId, answer, isCorrect, difficulty = 'medium') {
     if (!user.value) return { data: null, error: 'Not authenticated' }
 
     try {
+      // Update BKT for all objectives associated with this question
+      // Use difficulty-adjusted parameters (IRT-based tuning)
+      const objectives = getObjectivesForQuestion(problemId)
+      for (const objectiveId of objectives) {
+        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty)
+        console.log(`BKT updated for ${objectiveId} (${difficulty}):`, {
+          mastery: Math.round(updatedState.pL * 100) + '%',
+          attempts: updatedState.attempts,
+          correct: updatedState.correct,
+          slip: updatedState.pS,
+          guess: updatedState.pG
+        })
+      }
+
+      // Store attempt in PocketBase
       const data = await pb.collection('practice_attempts').create({
         user: user.value.id,
         problem: problemId,

@@ -324,7 +324,8 @@ async function checkAnswer(answer) {
   isCorrect.value = correct
 
   if (isAuthenticated.value) {
-    await submitAnswer(currentProblem.value.id, answer, correct)
+    const difficulty = currentProblem.value.difficulty || 'medium'
+    await submitAnswer(currentProblem.value.id, answer, correct, difficulty)
     stats.value = await fetchUserStats(selectedTopic.value)
   }
 

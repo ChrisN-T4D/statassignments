@@ -134,11 +134,14 @@ async function handleSubmit() {
     } else {
       // Route based on user role
       const userRole = result.data?.record?.role
-      if (userRole === 'instructor') {
-        router.push('/instructor')
+      // Force full page reload to properly load auth state with role
+      if (userRole === 'admin') {
+        window.location.href = '/admin'
+      } else if (userRole === 'instructor') {
+        window.location.href = '/instructor'
       } else {
         // Students go to home or claim if no profile linked
-        router.push('/')
+        window.location.href = '/'
       }
     }
   } else {
@@ -147,8 +150,8 @@ async function handleSubmit() {
       localError.value = result.error
     } else {
       success.value = 'Account created successfully! You are now signed in.'
-      // Auto-redirect after signup
-      setTimeout(() => router.push('/'), 1500)
+      // Auto-redirect after signup - force full page reload to properly load auth state
+      setTimeout(() => window.location.href = '/', 1500)
     }
   }
 }

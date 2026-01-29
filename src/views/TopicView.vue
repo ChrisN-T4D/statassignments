@@ -32,6 +32,11 @@
         ></iframe>
       </div>
 
+      <!-- Dynamic Software Content (Module 3) -->
+      <div v-if="topic?.isDynamicSoftware && softwareContentComponent" class="content-section">
+        <component :is="softwareContentComponent" />
+      </div>
+
       <!-- Topic Content -->
       <div v-if="topic?.contentHtml" class="topic-content" v-html="topic.contentHtml"></div>
 
@@ -65,15 +70,22 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { getModuleById } from '../data/modules.js'
 
-// Concept explanations
-// Software instructions
 const route = useRoute()
 const router = useRouter()
+
+// Get user's preferred software from localStorage
+const preferredSoftware = ref('jamovi')
+try {
+  const stored = localStorage.getItem('preferredSoftware')
+  if (stored) preferredSoftware.value = stored
+} catch (err) {
+  console.warn('Unable to read preferred software:', err)
+}
 
 const topicId = computed(() => route.params.id)
 const topic = computed(() => topics.find(t => t.id === topicId.value))
@@ -120,6 +132,42 @@ const prevTopic = computed(() => {
   return moduleTopics.value[index - 1] || null
 })
 
+// Dynamic software content component (Module 3)
+const softwareContentComponent = computed(() => {
+  if (!topic.value?.isDynamicSoftware) return null
+
+  const topicId = topic.value.id
+  const software = preferredSoftware.value
+
+  // Capitalize software name for component file naming
+  const softwareCap = software.charAt(0).toUpperCase() + software.slice(1)
+
+  // Map combinations to dynamic imports
+  // Vite requires static import paths, so we map each combination explicitly
+  if (topicId === 'software-interface') {
+    if (software === 'spss') return defineAsyncComponent(() => import('../content/software/module-3/Interface-SPSS.vue'))
+    if (software === 'jamovi') return defineAsyncComponent(() => import('../content/software/module-3/Interface-Jamovi.vue'))
+    if (software === 'r') return defineAsyncComponent(() => import('../content/software/module-3/Interface-R.vue'))
+    if (software === 'excel') return defineAsyncComponent(() => import('../content/software/module-3/Interface-Excel.vue'))
+    if (software === 'stata') return defineAsyncComponent(() => import('../content/software/module-3/Interface-Stata.vue'))
+  }
+  if (topicId === 'data-entry') {
+    if (software === 'spss') return defineAsyncComponent(() => import('../content/software/module-3/DataEntry-SPSS.vue'))
+    if (software === 'jamovi') return defineAsyncComponent(() => import('../content/software/module-3/DataEntry-Jamovi.vue'))
+    if (software === 'r') return defineAsyncComponent(() => import('../content/software/module-3/DataEntry-R.vue'))
+    if (software === 'excel') return defineAsyncComponent(() => import('../content/software/module-3/DataEntry-Excel.vue'))
+    if (software === 'stata') return defineAsyncComponent(() => import('../content/software/module-3/DataEntry-Stata.vue'))
+  }
+  if (topicId === 'variable-types') {
+    if (software === 'spss') return defineAsyncComponent(() => import('../content/software/module-3/VariableTypes-SPSS.vue'))
+    if (software === 'jamovi') return defineAsyncComponent(() => import('../content/software/module-3/VariableTypes-Jamovi.vue'))
+    if (software === 'r') return defineAsyncComponent(() => import('../content/software/module-3/VariableTypes-R.vue'))
+    if (software === 'excel') return defineAsyncComponent(() => import('../content/software/module-3/VariableTypes-Excel.vue'))
+    if (software === 'stata') return defineAsyncComponent(() => import('../content/software/module-3/VariableTypes-Stata.vue'))
+  }
+
+  return null
+})
 
 function toStatsModuleId(value) {
   if (!value) return null

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { pb } from '../lib/pocketbase'
+import { useAuth } from '../composables/useAuth'
 
 // Import views
 import Home from '../views/Home.vue'
@@ -12,6 +13,9 @@ import ClaimProfile from '../views/ClaimProfile.vue'
 import InstructorDashboard from '../views/InstructorDashboard.vue'
 import ClassHome from '../views/ClassHome.vue'
 import SoftwareLesson from '../views/SoftwareLesson.vue'
+import BKTTester from '../components/BKTTester.vue'
+import Admin from '../views/Admin.vue'
+import RoleChecker from '../views/RoleChecker.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -71,6 +75,21 @@ const routes = [
     path: '/instructor',
     component: InstructorDashboard,
     meta: { requiresAuth: true, requiresInstructor: true }
+  },
+  {
+    path: '/admin',
+    component: Admin,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/bkt-tester',
+    component: BKTTester,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/role-checker',
+    component: RoleChecker,
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -80,13 +99,21 @@ const router = createRouter({
 })
 
 // Navigation guards
+const { user: authUser } = useAuth()
+
 router.beforeEach((to, from, next) => {
   const isAuthenticated = pb.authStore.isValid
-  const userRole = pb.authStore.record?.role
+  const userRole = authUser.value?.role
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/auth')
+    return
+  }
+
+  // Check if route requires admin role
+  if (to.meta.requiresAdmin && userRole !== 'admin') {
+    next('/')
     return
   }
 
@@ -98,7 +125,9 @@ router.beforeEach((to, from, next) => {
 
   // Redirect authenticated users away from auth page
   if (to.path === '/auth' && isAuthenticated) {
-    if (userRole === 'instructor') {
+    if (userRole === 'admin') {
+      next('/admin')
+    } else if (userRole === 'instructor') {
       next('/instructor')
     } else {
       next('/')

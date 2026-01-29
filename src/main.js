@@ -7,12 +7,14 @@ import { useAuth } from './composables/useAuth'
 const app = createApp(App)
 app.use(router)
 
-// Initialize auth before mounting (with fallback to mount anyway on error)
+// Initialize auth before mounting
 const { initAuth } = useAuth()
 initAuth()
+  .then(() => {
+    app.mount('#app')
+  })
   .catch(err => {
     console.warn('Auth initialization failed:', err)
-  })
-  .finally(() => {
+    // Mount anyway on error
     app.mount('#app')
   })
