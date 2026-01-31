@@ -10,27 +10,40 @@
         </div>
       </div>
 
-      <!-- Stats (if logged in) -->
-      <div v-if="isAuthenticated && stats" class="stats-bar">
-        <div class="stat">
-          <span class="stat-value">{{ stats.total }}</span>
-          <span class="stat-label">Attempted</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">{{ stats.correct }}</span>
-          <span class="stat-label">Correct</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">{{ stats.accuracy }}%</span>
-          <span class="stat-label">Accuracy</span>
-        </div>
-      </div>
-
       <!-- Login prompt -->
       <div v-if="!isAuthenticated" class="login-prompt">
         <p>
           <router-link to="/auth">Sign in</router-link> to track your practice progress!
         </p>
+      </div>
+
+      <!-- Learning Objectives (BKT Mastery Tracking) -->
+      <div v-if="isAuthenticated && currentObjectives.length > 0" class="objectives-tracker">
+        <h3 class="objectives-title">Learning Objectives Being Assessed</h3>
+        <div class="objectives-list">
+          <div
+            v-for="objective in currentObjectives"
+            :key="objective.objectiveId"
+            class="objective-card"
+          >
+            <div class="objective-header">
+              <span class="objective-id">{{ objective.objectiveId }}</span>
+              <span class="objective-type" :class="`type-${objective.objectiveType}`">
+                {{ objective.objectiveType }}
+              </span>
+              <span class="objective-mastery-badge" :class="getMasteryClass(objectiveMastery[objective.objectiveId])">
+                {{ objectiveMastery[objective.objectiveId] || 0 }}% mastery
+              </span>
+            </div>
+            <p class="objective-text">{{ objective.objective }}</p>
+            <div class="objective-progress-bar">
+              <div
+                class="objective-progress-fill"
+                :style="{ width: `${objectiveMastery[objective.objectiveId] || 0}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Problem Card -->
@@ -170,6 +183,9 @@ import { useRoute } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { usePractice } from '../composables/usePractice'
 import { useAuth } from '../composables/useAuth'
+import { useBKT } from '../composables/useBKT'
+import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
+import { getObjectiveById } from '../data/objectives'
 
 const route = useRoute()
 const { isAuthenticated } = useAuth()
@@ -180,9 +196,9 @@ const {
   nextMasteryProblem,
   masteryIndex,
   masteryTotal,
-  submitAnswer,
-  fetchUserStats
+  submitAnswer
 } = usePractice()
+const { getMasteryPercent } = useBKT()
 
 const selectedTopic = ref(null)
 const selectedAnswer = ref(null)
@@ -191,10 +207,11 @@ const numericAnswer = ref('')
 const showResult = ref(false)
 const showHint = ref(false)
 const isCorrect = ref(false)
-const stats = ref(null)
 const attemptsByProblem = ref({})
 const feedbackMessage = ref('')
 const hintThreshold = 2
+const currentObjectives = ref([])
+const objectiveMastery = ref({})
 
 const attemptCount = computed(() => {
   if (!currentProblem.value) return 0
@@ -243,6 +260,42 @@ function toStatsModuleId(value) {
   return value
 }
 
+async function loadObjectivesForCurrentProblem() {
+  if (!currentProblem.value || !isAuthenticated.value) {
+    currentObjectives.value = []
+    objectiveMastery.value = {}
+    return
+  }
+
+  console.log('Loading objectives for question:', currentProblem.value.id)
+  const objectiveIds = getObjectivesForQuestion(currentProblem.value.id)
+  console.log('Found objective IDs:', objectiveIds)
+
+  const objectives = objectiveIds
+    .map(id => getObjectiveById(id))
+    .filter(Boolean)
+
+  console.log('Loaded objectives:', objectives)
+  currentObjectives.value = objectives
+
+  // Load mastery percentages
+  const masteryData = {}
+  for (const obj of objectives) {
+    const mastery = await getMasteryPercent(obj.objectiveId)
+    masteryData[obj.objectiveId] = mastery
+    console.log(`Mastery for ${obj.objectiveId}:`, mastery)
+  }
+  objectiveMastery.value = masteryData
+  console.log('Final mastery data:', objectiveMastery.value)
+}
+
+function getMasteryClass(mastery) {
+  if (mastery >= 90) return 'mastered'
+  if (mastery >= 75) return 'proficient'
+  if (mastery >= 60) return 'developing'
+  return 'not-mastered'
+}
+
 function recordConceptReviewComplete(moduleId) {
   if (!moduleId) return
   try {
@@ -267,6 +320,10 @@ async function loadNextProblem() {
   isCorrect.value = false
   feedbackMessage.value = ''
   await nextMasteryProblem()
+
+  // Reload objectives and mastery for the new problem
+  await loadObjectivesForCurrentProblem()
+
   if (masteryTotal.value > 0 && masteryIndex.value >= masteryTotal.value) {
     const moduleFromQuery = getActiveModuleId()
     if (moduleFromQuery) {
@@ -326,7 +383,8 @@ async function checkAnswer(answer) {
   if (isAuthenticated.value) {
     const difficulty = currentProblem.value.difficulty || 'medium'
     await submitAnswer(currentProblem.value.id, answer, correct, difficulty)
-    stats.value = await fetchUserStats(selectedTopic.value)
+    // Update mastery display after answer is submitted
+    await loadObjectivesForCurrentProblem()
   }
 
   if (correct) {
@@ -345,20 +403,14 @@ async function checkAnswer(answer) {
 onMounted(async () => {
   selectedTopic.value = getSelectedTopicId()
   await startMastery(selectedTopic.value)
-  if (isAuthenticated.value) {
-    stats.value = await fetchUserStats(selectedTopic.value)
-  }
 })
 
 watch(() => [route.query.module, route.params.topicId], async () => {
   selectedTopic.value = getSelectedTopicId()
   await startMastery(selectedTopic.value)
-  if (isAuthenticated.value) {
-    stats.value = await fetchUserStats(selectedTopic.value)
-  }
 })
 
-watch(currentProblem, (problem) => {
+watch(currentProblem, async (problem) => {
   if (!problem) return
   if (!attemptsByProblem.value[problem.id]) {
     attemptsByProblem.value[problem.id] = 0
@@ -370,38 +422,13 @@ watch(currentProblem, (problem) => {
   numericAnswer.value = ''
   isCorrect.value = false
   feedbackMessage.value = ''
+  // Load objectives for new problem
+  await loadObjectivesForCurrentProblem()
 })
 
 </script>
 
 <style scoped>
-.stats-bar {
-  display: flex;
-  gap: 2rem;
-  background: var(--bg-card);
-  padding: 1rem 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-}
-
 .login-prompt {
   background: #eff6ff;
   padding: 1rem;
@@ -630,5 +657,134 @@ watch(currentProblem, (problem) => {
   text-align: center;
   padding: 3rem;
   color: var(--text-secondary);
+}
+
+/* Learning Objectives Tracker */
+.objectives-tracker {
+  background: var(--bg-card);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.objectives-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.objective-card {
+  padding: 1rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.objective-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.objective-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.objective-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #111827;
+  background: #9ca3af;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.objective-type {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.objective-type.type-content {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.objective-type.type-software {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.objective-type.type-hybrid {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.objective-mastery-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-left: auto;
+  transition: all 0.3s ease;
+}
+
+.objective-mastery-badge.mastered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.objective-mastery-badge.proficient {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.objective-mastery-badge.developing {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.objective-mastery-badge.not-mastered {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.objective-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.objective-progress-bar {
+  height: 0.5rem;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.objective-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+  border-radius: 999px;
+  transition: width 0.5s ease;
 }
 </style>
