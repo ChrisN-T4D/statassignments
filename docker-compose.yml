@@ -15,6 +15,33 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - stats-network
+
+  fastapi:
+    build: ./backend
+    container_name: stats-fastapi
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - POCKETBASE_URL=http://pocketbase:8090
+      - ENVIRONMENT=production
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - pocketbase
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - stats-network
+
+networks:
+  stats-network:
+    driver: bridge
 
 volumes:
   pocketbase_data:

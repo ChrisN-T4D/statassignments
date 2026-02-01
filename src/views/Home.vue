@@ -3,7 +3,7 @@
     <div class="container">
       <!-- Hero Section -->
       <div class="hero">
-        <h1>Methods Market</h1>
+        <h1>Methods<span>Market</span></h1>
         <p>Research methods modules, statistics support, and software how-tos for psychology.</p>
       </div>
 
@@ -18,21 +18,21 @@
         </div>
 
         <div v-else class="classes-grid">
-          <router-link
-            v-for="cls in classes"
-            :key="cls.id"
-            :to="`/class/${cls.id}`"
-            class="class-card"
-            :style="{ '--class-color': cls.color }"
-            @click="selectClass(cls.id)"
-          >
-            <div class="class-icon">{{ cls.icon }}</div>
-            <div class="class-content">
-              <h3>{{ cls.name }}</h3>
-              <p>{{ cls.description }}</p>
-            </div>
-            <span class="class-arrow">→</span>
-          </router-link>
+            <router-link
+              v-for="cls in classes"
+              :key="cls.id"
+              :to="`/class/${cls.slug || cls.id}`"
+              class="class-card"
+              :style="{ '--class-color': cls.color }"
+              @click="selectClass(cls.id)"
+            >
+              <div class="class-icon">{{ cls.icon }}</div>
+              <div class="class-content">
+                <h3>{{ cls.name }}</h3>
+                <p>{{ cls.description }}</p>
+              </div>
+              <span class="class-arrow">→</span>
+            </router-link>
         </div>
       </div>
 
@@ -91,12 +91,16 @@ onMounted(() => {
 }
 
 .hero h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.hero h1 span {
+  color: var(--primary);
 }
 
 .hero p {
@@ -274,7 +278,7 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .hero h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
 
   .classes-grid {

@@ -232,6 +232,14 @@
     </div>
   </div>
 
+  <!-- Loading state -->
+  <div v-else-if="classesLoading" class="class-loading">
+    <div class="container">
+      <div class="spinner"></div>
+      <p>Loading class...</p>
+    </div>
+  </div>
+
   <!-- Class not found -->
   <div v-else class="class-not-found">
     <div class="container">
@@ -254,7 +262,7 @@ import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
 
 const route = useRoute()
-const { selectClass, fetchClasses, classes } = useClasses()
+const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated } = useAuth()
 const { hasProfile } = useProfile()
 
@@ -271,17 +279,21 @@ const contentTabs = [
 ]
 
 const currentClass = computed(() => {
-  return classes.value.find(c => c.id === classId.value) || null
+  const param = classId.value
+  // Try to find by slug first, then by ID
+  return classes.value.find(c => c.slug === param || c.id === param) || null
 })
 
 // Get modules for the current class
 const classModules = computed(() => {
-  return getModulesByClassId(classId.value)
+  const slug = currentClass.value?.slug || classId.value
+  return getModulesByClassId(slug)
 })
 
 // Filter modules to content modules only
 const contentModules = computed(() => {
-  return getContentModulesByClass(classId.value)
+  const slug = currentClass.value?.slug || classId.value
+  return getContentModulesByClass(slug)
 })
 
 const selectedModule = computed(() => {
@@ -1113,6 +1125,32 @@ watch(() => route.fullPath, () => {
   border-radius: 0.75rem;
   text-align: center;
   margin-top: 2rem;
+}
+
+.class-loading {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.class-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.class-loading p {
+  color: var(--text-secondary);
 }
 
 .class-not-found {

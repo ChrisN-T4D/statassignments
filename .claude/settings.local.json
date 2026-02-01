@@ -16,7 +16,21 @@
       "Bash(where:*)",
       "Bash(git ls-tree:*)",
       "Bash(git cat-file:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cygpath:*)",
+      "Bash(dir:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(timeout 5 tail:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(curl:*)",
+      "Bash(npm run import-questions:*)",
+      "Bash(node scripts/import-questions.js:*)",
+      "Bash(docker logs:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git push)",
+      "Bash(git config:*)"
     ]
   }
 }

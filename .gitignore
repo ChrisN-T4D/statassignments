@@ -32,3 +32,6 @@ Thumbs.db
 
 # Local overrides
 *.local
+
+# Scripts with potential credentials
+scripts/import-questions.js

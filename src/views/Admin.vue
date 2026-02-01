@@ -800,7 +800,6 @@ onMounted(() => {
 <style scoped>
 .admin-page {
   min-height: 100vh;
-  background: var(--bg-main);
   padding: 2rem 0;
 }
 

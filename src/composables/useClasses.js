@@ -107,11 +107,13 @@ export function useClasses() {
     if (initialized.value) return classes.value
 
     loading.value = true
+    console.log('[useClasses] Fetching classes from PocketBase...')
     try {
       const records = await pb.collection('classes').getFullList({
         filter: 'is_active = true',
         sort: 'order'
       })
+      console.log('[useClasses] Fetched', records.length, 'classes:', records)
       classes.value = records
       initialized.value = true
 
@@ -124,6 +126,7 @@ export function useClasses() {
     } catch (err) {
       // Collection might not exist yet - use fallback
       console.warn('Could not fetch classes from PocketBase, using fallback data:', err.message)
+      console.log('[useClasses] Using', FALLBACK_CLASSES.length, 'fallback classes')
       classes.value = FALLBACK_CLASSES
       initialized.value = true
 
@@ -135,6 +138,7 @@ export function useClasses() {
       return FALLBACK_CLASSES
     } finally {
       loading.value = false
+      console.log('[useClasses] Final classes array:', classes.value)
     }
   }
 

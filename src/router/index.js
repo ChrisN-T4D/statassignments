@@ -16,9 +16,11 @@ import SoftwareLesson from '../views/SoftwareLesson.vue'
 import BKTTester from '../components/BKTTester.vue'
 import Admin from '../views/Admin.vue'
 import RoleChecker from '../views/RoleChecker.vue'
+import About from '../views/About.vue'
 
 const routes = [
   { path: '/', component: Home },
+  { path: '/about', component: About },
   { path: '/topic/:id', component: TopicView, props: true },
   { path: '/auth', component: Auth },
   { path: '/practice', component: Practice },

@@ -12,7 +12,11 @@ import { pb } from '../lib/pocketbase'
  * - P(G): Guess probability (doesn't know skill but answers correctly)
  */
 
-// Default BKT parameters
+// Configuration
+const USE_NEURAL_BKT = true  // Set to false to use local BKT only
+const FASTAPI_URL = import.meta.env.VITE_FASTAPI_URL || 'http://localhost:8000'
+
+// Default BKT parameters (for local fallback)
 const DEFAULT_PARAMS = {
   pL0: 0.1,    // Low prior knowledge (10%)
   pT: 0.15,    // Moderate learning rate (15% per correct answer)
@@ -104,13 +108,104 @@ export async function initializeBKT(objectiveId, customParams = {}) {
 }
 
 /**
+ * Call FastAPI Neural BKT backend
+ */
+async function callNeuralBKT(objectiveId, isCorrect, difficulty) {
+  let userId = pb.authStore.record?.id
+
+  // If token exists but no record, try refreshing auth to get the record
+  if (pb.authStore.isValid && !userId) {
+    console.log('[Neural BKT] Token exists but no record, refreshing auth...')
+    try {
+      const authData = await pb.collection('users').authRefresh()
+      userId = authData.record?.id
+      console.log('[Neural BKT] Auth refresh successful, got userId:', userId)
+    } catch (err) {
+      console.warn('[Neural BKT] Auth refresh failed:', err.message)
+    }
+  }
+
+  console.log('[Neural BKT] Auth check:', {
+    isValid: pb.authStore.isValid,
+    hasRecord: !!pb.authStore.record,
+    userId,
+    record: pb.authStore.record
+  })
+  if (!userId) {
+    console.warn('[Neural BKT] No user ID found, falling back to local BKT')
+    return null
+  }
+
+  try {
+    const response = await fetch(`${FASTAPI_URL}/bkt/update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        objective_id: objectiveId,
+        is_correct: isCorrect,
+        difficulty: difficulty
+      })
+    })
+
+    if (!response.ok) {
+      console.warn('FastAPI BKT update failed, falling back to local BKT')
+      return null
+    }
+
+    const data = await response.json()
+
+    // Convert from API format to app format
+    return {
+      objectiveId: data.objective_id,
+      pL: data.pL,
+      pL0: data.pL0,
+      pT: data.pT,
+      pS: data.pS,
+      pG: data.pG,
+      attempts: data.attempts,
+      correct: data.correct,
+      incorrect: data.incorrect,
+      lastUpdated: data.last_updated
+    }
+  } catch (error) {
+    console.warn('Neural BKT API error, falling back to local BKT:', error.message)
+    return null
+  }
+}
+
+/**
  * Update BKT model after an assessment response
+ *
+ * Uses Neural BKT (FastAPI) if available, falls back to local BKT
+ *
  * @param {string} objectiveId - The objective being assessed
  * @param {boolean} isCorrect - Whether the answer was correct
  * @param {string} difficulty - Question difficulty ('easy', 'medium', 'hard')
  * @returns {object} Updated BKT state with new mastery probability
  */
 export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium') {
+  // Try Neural BKT first if enabled
+  if (USE_NEURAL_BKT) {
+    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty)
+    if (neuralState) {
+      // Save to localStorage for caching (Neural BKT already saved to its database)
+      try {
+        localStorage.setItem(`bkt-${objectiveId}`, JSON.stringify(neuralState))
+      } catch (err) {
+        console.warn('Failed to cache Neural BKT state to localStorage:', err)
+      }
+      console.log(`[Neural BKT] Updated ${objectiveId}:`, {
+        mastery: Math.round(neuralState.pL * 100) + '%',
+        prototype: 'multidimensional'
+      })
+      return neuralState
+    }
+  }
+
+  // Fallback to local BKT
   let state = await loadBKTState(objectiveId)
 
   // Initialize if doesn't exist
@@ -164,6 +259,7 @@ export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium') {
   // Save updated state
   await saveBKTState(objectiveId, state)
 
+  console.log(`[Local BKT] Updated ${objectiveId}`)
   return state
 }
 
@@ -400,6 +496,90 @@ async function loadBKTState(objectiveId) {
 }
 
 /**
+ * Get student's multidimensional ability profile from Neural BKT
+ *
+ * Returns which prototype the student matches (Fast Learner, Careful Student, etc.)
+ */
+export async function getStudentProfile() {
+  const userId = pb.authStore.record?.id
+  if (!userId || !USE_NEURAL_BKT) return null
+
+  try {
+    const response = await fetch(`${FASTAPI_URL}/student/profile/${userId}`)
+    if (!response.ok) return null
+
+    const data = await response.json()
+    return {
+      userId: data.user_id,
+      prototypeId: data.prototype_id,
+      prototypeName: data.prototype_name,
+      guessingTendency: data.guessing_tendency,
+      notSlippingBoost: data.not_slipping_boost,
+      learningRate: data.learning_rate,
+      retention: data.retention,
+      confidence: data.confidence
+    }
+  } catch (error) {
+    console.warn('Failed to get student profile:', error.message)
+    return null
+  }
+}
+
+/**
+ * Get predictions for multiple objectives
+ *
+ * Uses Neural BKT to predict probability of correct response
+ */
+export async function predictPerformance(objectiveIds) {
+  const userId = pb.authStore.record?.id
+  if (!userId || !USE_NEURAL_BKT) return []
+
+  try {
+    const response = await fetch(`${FASTAPI_URL}/predict`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        objective_ids: objectiveIds
+      })
+    })
+
+    if (!response.ok) return []
+
+    const data = await response.json()
+    return data.map(pred => ({
+      objectiveId: pred.objective_id,
+      predictedCorrectProb: pred.predicted_correct_prob,
+      recommendedDifficulty: pred.recommended_difficulty,
+      masteryLevel: pred.mastery_level
+    }))
+  } catch (error) {
+    console.warn('Failed to get predictions:', error.message)
+    return []
+  }
+}
+
+/**
+ * Get all student prototypes from Neural BKT
+ */
+export async function getAllPrototypes() {
+  if (!USE_NEURAL_BKT) return []
+
+  try {
+    const response = await fetch(`${FASTAPI_URL}/admin/prototypes`)
+    if (!response.ok) return []
+
+    const data = await response.json()
+    return data.prototypes
+  } catch (error) {
+    console.warn('Failed to get prototypes:', error.message)
+    return []
+  }
+}
+
+/**
  * Export for use in Vue components
  */
 export function useBKT() {
@@ -413,6 +593,10 @@ export function useBKT() {
     resetBKT,
     getAllBKTStates,
     getAdjustedParams,
-    adaptPrior
+    adaptPrior,
+    // Neural BKT functions
+    getStudentProfile,
+    predictPerformance,
+    getAllPrototypes
   }
 }

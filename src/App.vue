@@ -3,7 +3,8 @@
     <header class="header">
       <div class="container header-content">
         <router-link to="/" class="logo">
-          Methods<span>Market</span>
+          <img src="/logo_gif.gif" alt="Methods Market" class="logo-img" />
+          <span class="logo-text">Methods<span class="logo-market">Market</span></span>
         </router-link>
 
         <div class="header-center">
@@ -12,6 +13,7 @@
 
         <nav class="nav">
           <router-link to="/">Home</router-link>
+          <router-link to="/about">About</router-link>
           <router-link v-if="selectedClass" :to="`/class/${selectedClassId}`">
             {{ selectedClass.short_name }}
           </router-link>
@@ -59,6 +61,31 @@ function handleSignOut() {
 </script>
 
 <style scoped>
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.logo-market {
+  color: var(--primary);
+}
+
 .header-center {
   display: flex;
   align-items: center;

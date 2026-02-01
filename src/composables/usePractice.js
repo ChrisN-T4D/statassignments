@@ -88,10 +88,48 @@ export function usePractice() {
       })
 
       if (records.length > 0) {
-        problems.value = records.map(p => ({
-          ...p,
-          options: typeof p.options === 'string' ? JSON.parse(p.options) : p.options
-        }))
+        problems.value = records.map(p => {
+          let options = typeof p.options === 'string' ? JSON.parse(p.options) : p.options
+
+          // Safe JSON parsing for correct_answer
+          let correctAnswer = p.correct_answer
+          if (typeof p.correct_answer === 'string') {
+            try {
+              correctAnswer = JSON.parse(p.correct_answer)
+            } catch {
+              // If parsing fails, it's a plain string like "b" - keep as is
+              correctAnswer = p.correct_answer
+            }
+          }
+
+          // Store original options for ID mapping
+          const originalOptions = [...(options || [])]
+
+          // Extract text from option objects if needed
+          if (options && Array.isArray(options) && options[0]?.text) {
+            options = options.map(opt => opt.text)
+          }
+
+          // Map correct answer IDs to text
+          if (correctAnswer && originalOptions[0]?.id) {
+            if (Array.isArray(correctAnswer)) {
+              correctAnswer = correctAnswer.map(id => {
+                const opt = originalOptions.find(o => o.id === id)
+                return opt ? opt.text : id
+              })
+            } else {
+              const opt = originalOptions.find(o => o.id === correctAnswer)
+              correctAnswer = opt ? opt.text : correctAnswer
+            }
+          }
+
+          return {
+            ...p,
+            id: p.question_id || p.id, // Use question_id for BKT mapping, fallback to PocketBase id
+            options,
+            correct_answer: correctAnswer
+          }
+        })
       } else {
         // Fallback to static questions
         let staticQuestions = topicId
@@ -127,9 +165,45 @@ export function usePractice() {
       if (records.length > 0) {
         const randomIndex = Math.floor(Math.random() * records.length)
         const problem = records[randomIndex]
+        let options = typeof problem.options === 'string' ? JSON.parse(problem.options) : problem.options
+
+        // Safe JSON parsing for correct_answer
+        let correctAnswer = problem.correct_answer
+        if (typeof problem.correct_answer === 'string') {
+          try {
+            correctAnswer = JSON.parse(problem.correct_answer)
+          } catch {
+            // If parsing fails, it's a plain string like "b" - keep as is
+            correctAnswer = problem.correct_answer
+          }
+        }
+
+        // Store original options for ID mapping
+        const originalOptions = [...(options || [])]
+
+        // Extract text from option objects if needed
+        if (options && Array.isArray(options) && options[0]?.text) {
+          options = options.map(opt => opt.text)
+        }
+
+        // Map correct answer IDs to text
+        if (correctAnswer && originalOptions[0]?.id) {
+          if (Array.isArray(correctAnswer)) {
+            correctAnswer = correctAnswer.map(id => {
+              const opt = originalOptions.find(o => o.id === id)
+              return opt ? opt.text : id
+            })
+          } else {
+            const opt = originalOptions.find(o => o.id === correctAnswer)
+            correctAnswer = opt ? opt.text : correctAnswer
+          }
+        }
+
         currentProblem.value = {
           ...problem,
-          options: typeof problem.options === 'string' ? JSON.parse(problem.options) : problem.options
+          id: problem.question_id || problem.id, // Use question_id for BKT mapping, fallback to PocketBase id
+          options,
+          correct_answer: correctAnswer
         }
       } else {
         // Fallback to static questions
