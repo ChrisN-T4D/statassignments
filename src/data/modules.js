@@ -35,14 +35,15 @@ export const statisticsModules = [
     description: 'Learn about variables, measurement levels, and research design fundamentals.',
     icon: 'M2',
     color: '#8b5cf6',
-    topics: ['variables-measurement', 'scales-of-measurement', 'validity', 'research-design'],
+    topics: ['variables-measurement', 'scales-of-measurement', 'validity', 'reliability', 'research-design'],
     textbookChapters: ['Chapter 2: A brief introduction to research design'],
     textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/02-A-brief-introduction-to-research-design.html',
     learningObjectives: [
       'Distinguish between independent and dependent variables',
       'Identify the four scales of measurement (NOIR)',
       'Understand experimental vs. correlational designs',
-      'Recognize threats to validity'
+      'Recognize threats to validity',
+      'Assess reliability of measurements'
     ]
   },
   {
@@ -74,13 +75,16 @@ export const statisticsModules = [
     description: 'Calculate and interpret measures of central tendency and variability.',
     icon: 'M4',
     color: '#10b981',
-    topics: ['central-tendency', 'variability', 'descriptive-stats'],
+    topics: ['central-tendency', 'variability', 'skew-kurtosis', 'grouped-descriptives', 'standard-scores'],
     textbookChapters: ['Chapter 4: Descriptive statistics'],
+    textbookUrl: 'https://davidfoxcroft.github.io/lsj-book/04-Descriptive-statistics.html',
     learningObjectives: [
-      'Calculate mean, median, and mode',
-      'Calculate range, variance, and standard deviation',
-      'Choose appropriate measures for different data types',
-      'Interpret descriptive statistics in context'
+      'Calculate and interpret mean, median, and mode',
+      'Calculate and interpret range, IQR, variance, and standard deviation',
+      'Assess skewness and kurtosis of distributions',
+      'Generate and compare descriptive statistics across groups',
+      'Compute and interpret z-scores for standardizing data',
+      'Choose appropriate measures for different data types and distributions'
     ],
     hasSoftwarePractice: true
   },
@@ -699,6 +703,12 @@ export const topicsByModule = {
       icon: 'T'
     },
     {
+      id: 'reliability',
+      title: 'Reliability',
+      description: 'Consistency and repeatability of measurements.',
+      icon: 'T'
+    },
+    {
       id: 'research-design',
       title: 'Research Design Basics',
       description: 'Experimental, quasi-experimental, and correlational designs.',
@@ -735,13 +745,25 @@ export const topicsByModule = {
     {
       id: 'variability',
       title: 'Measures of Variability',
-      description: 'Range, variance, standard deviation, and IQR.',
+      description: 'Range, IQR, variance, and standard deviation.',
       icon: 'T'
     },
     {
-      id: 'descriptive-stats',
-      title: 'Descriptive Statistics in Practice',
-      description: 'Running and interpreting descriptives in Jamovi.',
+      id: 'skew-kurtosis',
+      title: 'Skewness and Kurtosis',
+      description: 'Measuring the shape of distributions.',
+      icon: 'T'
+    },
+    {
+      id: 'grouped-descriptives',
+      title: 'Grouped Descriptive Statistics',
+      description: 'Computing and comparing statistics across groups.',
+      icon: 'T'
+    },
+    {
+      id: 'standard-scores',
+      title: 'Standard Scores (Z-scores)',
+      description: 'Standardizing scores for comparison across scales.',
       icon: 'T'
     }
   ],

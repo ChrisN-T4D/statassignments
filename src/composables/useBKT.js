@@ -110,7 +110,7 @@ export async function initializeBKT(objectiveId, customParams = {}) {
 /**
  * Call FastAPI Neural BKT backend
  */
-async function callNeuralBKT(objectiveId, isCorrect, difficulty) {
+async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null) {
   let userId = pb.authStore.record?.id
 
   // If token exists but no record, try refreshing auth to get the record
@@ -137,17 +137,28 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty) {
   }
 
   try {
+    // Prepare request body with time data
+    const requestBody = {
+      user_id: userId,
+      objective_id: objectiveId,
+      is_correct: isCorrect,
+      difficulty: difficulty
+    }
+
+    // Add time data if available
+    if (timeData) {
+      requestBody.active_time_seconds = timeData.activeTimeSeconds
+      requestBody.total_time_seconds = timeData.totalTimeSeconds
+      requestBody.was_maxed_out = timeData.wasMaxedOut
+      requestBody.idle_detected = timeData.idleDetected
+    }
+
     const response = await fetch(`${FASTAPI_URL}/bkt/update`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        user_id: userId,
-        objective_id: objectiveId,
-        is_correct: isCorrect,
-        difficulty: difficulty
-      })
+      body: JSON.stringify(requestBody)
     })
 
     if (!response.ok) {
@@ -184,12 +195,17 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty) {
  * @param {string} objectiveId - The objective being assessed
  * @param {boolean} isCorrect - Whether the answer was correct
  * @param {string} difficulty - Question difficulty ('easy', 'medium', 'hard')
+ * @param {object} timeData - Time tracking data from useTimeTracking (optional)
+ * @param {number} timeData.activeTimeSeconds - Active engagement time
+ * @param {number} timeData.totalTimeSeconds - Total elapsed time
+ * @param {boolean} timeData.wasMaxedOut - Whether max time was reached
+ * @param {boolean} timeData.idleDetected - Whether significant idle time was detected
  * @returns {object} Updated BKT state with new mastery probability
  */
-export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium') {
+export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium', timeData = null) {
   // Try Neural BKT first if enabled
   if (USE_NEURAL_BKT) {
-    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty)
+    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty, timeData)
     if (neuralState) {
       // Save to localStorage for caching (Neural BKT already saved to its database)
       try {
@@ -199,7 +215,9 @@ export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium') {
       }
       console.log(`[Neural BKT] Updated ${objectiveId}:`, {
         mastery: Math.round(neuralState.pL * 100) + '%',
-        prototype: 'multidimensional'
+        prototype: 'multidimensional',
+        activeTime: timeData?.activeTimeSeconds,
+        totalTime: timeData?.totalTimeSeconds
       })
       return neuralState
     }

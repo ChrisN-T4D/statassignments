@@ -69,7 +69,7 @@
               correct: showResult && option === currentProblem.correct_answer,
               incorrect: showResult && selectedAnswer === option && option !== currentProblem.correct_answer
             }"
-            :disabled="showResult"
+            :disabled="showResult || isSubmitting"
             @click="selectAnswer(option)"
           >
             {{ option }}
@@ -87,7 +87,7 @@
               correct: showResult && currentProblem.correct_answer?.includes(option),
               incorrect: showResult && selectedAnswers.includes(option) && !currentProblem.correct_answer?.includes(option)
             }"
-            :disabled="showResult"
+            :disabled="showResult || isSubmitting"
             @click="selectAnswer(option)"
           >
             {{ option }}
@@ -95,10 +95,11 @@
           <button
             v-if="!showResult"
             class="btn-primary"
-            :disabled="selectedAnswers.length === 0"
+            :disabled="selectedAnswers.length === 0 || isSubmitting"
             @click="submitMultiSelectAnswer"
           >
-            Submit
+            <span v-if="isSubmitting" class="spinner"></span>
+            <span v-else>Submit</span>
           </button>
         </div>
 
@@ -113,7 +114,7 @@
               correct: showResult && option === currentProblem.correct_answer,
               incorrect: showResult && selectedAnswer === option && option !== currentProblem.correct_answer
             }"
-            :disabled="showResult"
+            :disabled="showResult || isSubmitting"
             @click="selectAnswer(option)"
           >
             {{ option }}
@@ -126,16 +127,58 @@
             v-model="numericAnswer"
             type="text"
             placeholder="Enter your answer"
-            :disabled="showResult"
+            :disabled="showResult || isSubmitting"
             @keyup.enter="submitNumericAnswer"
           />
           <button
             v-if="!showResult"
             class="btn-primary"
-            :disabled="!numericAnswer"
+            :disabled="!numericAnswer || isSubmitting"
             @click="submitNumericAnswer"
           >
-            Submit
+            <span v-if="isSubmitting" class="spinner"></span>
+            <span v-else>Submit</span>
+          </button>
+        </div>
+
+        <!-- Matching -->
+        <div v-else-if="currentProblem.question_type === 'matching'" class="matching-question">
+          <div class="matching-pairs">
+            <div
+              v-for="(pair, index) in currentProblem.pairs"
+              :key="index"
+              class="matching-pair"
+            >
+              <div class="matching-left">{{ pair.left }}</div>
+              <select
+                v-model="matchingAnswers[pair.left]"
+                class="matching-select"
+                :disabled="showResult || isSubmitting"
+                @change="trackAnswerChange"
+              >
+                <option value="">Select match...</option>
+                <option
+                  v-for="(p, i) in currentProblem.pairs"
+                  :key="i"
+                  :value="p.right"
+                >
+                  {{ p.right }}
+                </option>
+              </select>
+              <div v-if="showResult" class="matching-result-icon">
+                <span v-if="matchingAnswers[pair.left] === pair.right" class="correct-icon">✓</span>
+                <span v-else class="incorrect-icon">✗</span>
+              </div>
+            </div>
+          </div>
+          <button
+            v-if="!showResult"
+            class="btn-primary"
+            :disabled="!isMatchingComplete || isSubmitting"
+            @click="submitMatchingAnswer"
+          >
+            <span v-if="isSubmitting" class="spinner"></span>
+            <span v-else>Submit</span>
           </button>
         </div>
 
@@ -184,11 +227,13 @@ import { topics } from '../data/topics.js'
 import { usePractice } from '../composables/usePractice'
 import { useAuth } from '../composables/useAuth'
 import { useBKT } from '../composables/useBKT'
+import { useTimeTracking } from '../composables/useTimeTracking'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { getObjectiveById } from '../data/objectives'
+import { pb } from '../lib/pocketbase'
 
 const route = useRoute()
-const { isAuthenticated } = useAuth()
+const { isAuthenticated, user } = useAuth()
 const {
   currentProblem,
   loading,
@@ -199,11 +244,13 @@ const {
   submitAnswer
 } = usePractice()
 const { getMasteryPercent } = useBKT()
+const timeTracker = useTimeTracking('multiple-choice')
 
 const selectedTopic = ref(null)
 const selectedAnswer = ref(null)
 const selectedAnswers = ref([])
 const numericAnswer = ref('')
+const matchingAnswers = ref({})
 const showResult = ref(false)
 const showHint = ref(false)
 const isCorrect = ref(false)
@@ -212,6 +259,19 @@ const feedbackMessage = ref('')
 const hintThreshold = 2
 const currentObjectives = ref([])
 const objectiveMastery = ref({})
+const isSubmitting = ref(false)
+
+// Answer confidence tracking
+const questionDisplayTime = ref(null)
+const firstSelectionTime = ref(null)
+const answerChanges = ref(0)
+
+// Sequence/spacing context tracking
+const lastTopicReadTime = ref(null)
+const lastAttemptTime = ref(null)
+const timeSinceReading = ref(null)
+const timeSinceLastAttempt = ref(null)
+const hasReadTopicBefore = ref(false)
 
 const attemptCount = computed(() => {
   if (!currentProblem.value) return 0
@@ -221,6 +281,12 @@ const attemptCount = computed(() => {
 const hintText = computed(() => {
   if (!currentProblem.value) return ''
   return currentProblem.value.hint || ''
+})
+
+const isMatchingComplete = computed(() => {
+  if (!currentProblem.value || currentProblem.value.question_type !== 'matching') return false
+  const pairs = currentProblem.value.pairs || []
+  return pairs.every(pair => matchingAnswers.value[pair.left] && matchingAnswers.value[pair.left] !== '')
 })
 
 
@@ -311,12 +377,68 @@ function recordConceptReviewComplete(moduleId) {
   }
 }
 
+async function loadSequenceContext() {
+  // Reset sequence/spacing data
+  lastTopicReadTime.value = null
+  lastAttemptTime.value = null
+  timeSinceReading.value = null
+  timeSinceLastAttempt.value = null
+  hasReadTopicBefore.value = false
+
+  if (!isAuthenticated.value || !user.value || !currentProblem.value) return
+
+  try {
+    const topicId = currentProblem.value.topic_id
+    const now = Date.now()
+
+    // Query last time user read this topic
+    const topicReadings = await pb.collection('topic_readings').getList(1, 1, {
+      filter: `user = "${user.value.id}" && topic_id = "${topicId}"`,
+      sort: '-created'
+    })
+
+    if (topicReadings.items.length > 0) {
+      const lastReading = topicReadings.items[0]
+      const readingTime = new Date(lastReading.created).getTime()
+      lastTopicReadTime.value = readingTime
+      timeSinceReading.value = Math.round((now - readingTime) / 1000) // seconds
+      hasReadTopicBefore.value = true
+    }
+
+    // Query last attempt on this topic (any problem in the topic)
+    const lastAttempts = await pb.collection('practice_attempts').getList(1, 1, {
+      filter: `user = "${user.value.id}"`,
+      sort: '-created',
+      expand: 'problem'
+    })
+
+    for (const attempt of lastAttempts.items) {
+      if (attempt.expand?.problem?.topic_id === topicId) {
+        const attemptTime = new Date(attempt.created).getTime()
+        lastAttemptTime.value = attemptTime
+        timeSinceLastAttempt.value = Math.round((now - attemptTime) / 1000) // seconds
+        break
+      }
+    }
+
+    console.log('[Sequence Context]', {
+      topicId,
+      hasReadBefore: hasReadTopicBefore.value,
+      timeSinceReading: timeSinceReading.value,
+      timeSinceLastAttempt: timeSinceLastAttempt.value
+    })
+  } catch (err) {
+    console.warn('Unable to load sequence context:', err)
+  }
+}
+
 async function loadNextProblem() {
   showResult.value = false
   showHint.value = false
   selectedAnswer.value = null
   selectedAnswers.value = []
   numericAnswer.value = ''
+  matchingAnswers.value = {}
   isCorrect.value = false
   feedbackMessage.value = ''
   await nextMasteryProblem()
@@ -338,6 +460,14 @@ async function loadNextProblem() {
 
 function selectAnswer(answer) {
   if (showResult.value) return
+
+  // Track first selection time (confidence indicator)
+  if (!firstSelectionTime.value) {
+    const now = Date.now()
+    firstSelectionTime.value = questionDisplayTime.value ?
+      Math.round((now - questionDisplayTime.value) / 1000) : null
+  }
+
   if (currentProblem.value.question_type === 'multiple_select') {
     if (selectedAnswers.value.includes(answer)) {
       selectedAnswers.value = selectedAnswers.value.filter(item => item !== answer)
@@ -346,6 +476,12 @@ function selectAnswer(answer) {
     }
     return
   }
+
+  // Track answer changes (hesitation indicator)
+  if (selectedAnswer.value && selectedAnswer.value !== answer) {
+    answerChanges.value++
+  }
+
   selectedAnswer.value = answer
   checkAnswer(answer)
 }
@@ -360,7 +496,31 @@ function submitMultiSelectAnswer() {
   checkAnswer(selectedAnswers.value)
 }
 
+function submitMatchingAnswer() {
+  if (showResult.value || !isMatchingComplete.value) return
+  checkAnswer(matchingAnswers.value)
+}
+
+function recordIncorrectAnswer(topicId) {
+  if (!topicId) return
+  try {
+    const timestamp = Date.now()
+    const errorData = {
+      topicId,
+      timestamp,
+      expiresAt: timestamp + (5 * 60 * 1000) // Expires in 5 minutes
+    }
+    localStorage.setItem('recentError', JSON.stringify(errorData))
+    console.log('[Return Visit] Recorded error for topic:', topicId)
+  } catch (err) {
+    console.warn('Unable to record error for return visit tracking:', err)
+  }
+}
+
 async function checkAnswer(answer) {
+  isSubmitting.value = true
+
+  // Calculate correctness immediately
   let correct = false
   if (currentProblem.value.question_type === 'multiple_select') {
     const expected = Array.isArray(currentProblem.value.correct_answer)
@@ -371,32 +531,69 @@ async function checkAnswer(answer) {
     correct =
       normalizedExpected.length === normalizedAnswer.length &&
       normalizedExpected.every((value, index) => value === normalizedAnswer[index])
+  } else if (currentProblem.value.question_type === 'matching') {
+    // Check if all pairs match correctly
+    const pairs = currentProblem.value.pairs || []
+    correct = pairs.every(pair => answer[pair.left] === pair.right)
   } else {
     correct = normalizeAnswerValue(answer) === normalizeAnswerValue(currentProblem.value.correct_answer)
   }
+
   if (!attemptsByProblem.value[currentProblem.value.id]) {
     attemptsByProblem.value[currentProblem.value.id] = 0
   }
   attemptsByProblem.value[currentProblem.value.id] += 1
   isCorrect.value = correct
 
-  if (isAuthenticated.value) {
-    const difficulty = currentProblem.value.difficulty || 'medium'
-    await submitAnswer(currentProblem.value.id, answer, correct, difficulty)
-    // Update mastery display after answer is submitted
-    await loadObjectivesForCurrentProblem()
+  // Stop time tracking and get time data
+  const timeData = timeTracker.stop()
+
+  // Collect confidence indicators
+  const confidenceData = {
+    time_to_first_selection: firstSelectionTime.value,
+    answer_changes: answerChanges.value,
+    total_deliberation_time: timeData.activeTimeSeconds
   }
 
+  // Collect sequence/spacing context
+  const sequenceData = {
+    time_since_reading: timeSinceReading.value,
+    time_since_last_attempt: timeSinceLastAttempt.value,
+    has_read_topic_before: hasReadTopicBefore.value,
+    last_topic_read_time: lastTopicReadTime.value,
+    last_attempt_time: lastAttemptTime.value
+  }
+
+  // Show result immediately to user
   if (correct) {
     showResult.value = true
     feedbackMessage.value = ''
   } else {
+    // Track incorrect answer for return visit detection
+    recordIncorrectAnswer(currentProblem.value.topic_id)
+
     feedbackMessage.value = 'Incorrect. Try again.'
     if (attemptsByProblem.value[currentProblem.value.id] >= hintThreshold) {
       showHint.value = true
     }
     selectedAnswer.value = null
     numericAnswer.value = ''
+    // Don't clear matchingAnswers on incorrect - let user see what they selected
+  }
+
+  isSubmitting.value = false
+
+  // Submit to backend in background (don't await)
+  if (isAuthenticated.value) {
+    const difficulty = currentProblem.value.difficulty || 'medium'
+    submitAnswer(currentProblem.value.id, answer, correct, difficulty, timeData, confidenceData, sequenceData)
+      .then(() => {
+        // Update mastery display after answer is submitted
+        return loadObjectivesForCurrentProblem()
+      })
+      .catch(err => {
+        console.error('Error submitting answer:', err)
+      })
   }
 }
 
@@ -420,8 +617,20 @@ watch(currentProblem, async (problem) => {
   selectedAnswer.value = null
   selectedAnswers.value = []
   numericAnswer.value = ''
+  matchingAnswers.value = {}
   isCorrect.value = false
   feedbackMessage.value = ''
+
+  // Reset confidence tracking
+  questionDisplayTime.value = Date.now()
+  firstSelectionTime.value = null
+  answerChanges.value = 0
+
+  // Load sequence/spacing context
+  await loadSequenceContext()
+
+  // Start time tracking for new problem
+  timeTracker.start()
   // Load objectives for new problem
   await loadObjectivesForCurrentProblem()
 })
@@ -556,7 +765,8 @@ watch(currentProblem, async (problem) => {
 }
 
 .option-btn:disabled {
-  cursor: default;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .numeric-input {
@@ -786,5 +996,90 @@ watch(currentProblem, async (problem) => {
   background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
   border-radius: 999px;
   transition: width 0.5s ease;
+}
+
+/* Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Matching Question Styles */
+.matching-question {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.matching-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.matching-pair {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+}
+
+.matching-left {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.matching-select {
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.matching-select:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.matching-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.matching-select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.matching-result-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.correct-icon {
+  color: #10b981;
+}
+
+.incorrect-icon {
+  color: #ef4444;
 }
 </style>

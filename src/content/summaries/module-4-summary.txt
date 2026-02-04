@@ -1,0 +1,229 @@
+MODULE 4: DESCRIPTIVE STATISTICS - SUMMARY
+===========================================
+
+OVERVIEW
+--------
+Calculating descriptive statistics is one of the very first things you do when analyzing real data.
+Descriptive statistics are simpler to understand than inferential statistics, but choosing good
+descriptives is crucial for understanding and communicating about data.
+
+MEASURES OF CENTRAL TENDENCY (Section 4.1)
+-------------------------------------------
+Central tendency measures tell you WHERE the data are located - the "typical" or "middle" value.
+
+Key Measures:
+• MEAN (X̄): The arithmetic average
+  - Formula: X̄ = (1/N)Σ(Xi)
+  - Interpretation: "Center of gravity" of the data
+  - Sensitive to outliers and extreme values
+  - Best for: Interval/ratio scale data with symmetric distributions
+
+• MEDIAN: The middle value when data are sorted
+  - 50th percentile of the distribution
+  - Robust to outliers
+  - Best for: Ordinal data or skewed distributions
+
+• MODE: The most frequently occurring value
+  - Can have multiple modes (bimodal, multimodal)
+  - Only measure suitable for nominal data
+  - Best for: Categorical/nominal data
+
+When to Use Each:
+- Nominal data → Mode
+- Ordinal data → Median (preferred) or Mode
+- Interval/Ratio data → Mean (if symmetric) or Median (if skewed)
+
+Important Example: Housing Price Data
+The Commonwealth Bank used MEAN incomes with MEDIAN house prices, which artificially
+lowered the price-to-income ratio. The correct approach (Demographia) used median incomes
+with median prices. This shows why choosing appropriate descriptives matters!
+
+MEASURES OF VARIABILITY (Section 4.2)
+--------------------------------------
+Variability measures tell you how "SPREAD OUT" the data are.
+
+Key Measures:
+• RANGE: Maximum - Minimum
+  - Simple but very sensitive to outliers
+  - Rarely used except when extremes matter
+
+• INTERQUARTILE RANGE (IQR): 75th percentile - 25th percentile
+  - Range of the "middle 50%" of data
+  - Robust to outliers
+  - Complements the median nicely
+  - Commonly used in practice
+
+• MEAN ABSOLUTE DEVIATION (AAD): Average distance from the mean
+  - Formula: AAD(X) = (1/N)Σ|Xi - X̄|
+  - Interpretable but has mathematical limitations
+  - Rarely used in psychology
+
+• VARIANCE (σ²): Average squared deviation from the mean
+  - Formula: Var(X) = (1/N)Σ(Xi - X̄)²
+  - Sample version: s² = [1/(N-1)]Σ(Xi - X̄)²
+  - Mathematically elegant, additive property
+  - Problem: Expressed in squared units (uninterpretable!)
+  - Almost never reported directly
+
+• STANDARD DEVIATION (σ or s): Square root of variance
+  - Formula: σ̂ = √{[1/(N-1)]Σ(Xi - X̄)²}
+  - Expressed in original units (interpretable!)
+  - Most popular measure of variability
+  - Default when mean is used for central tendency
+
+The "68-95-99.7 Rule":
+For approximately normal distributions:
+- 68% of data fall within 1 SD of the mean
+- 95% of data fall within 2 SD of the mean
+- 99.7% of data fall within 3 SD of the mean
+
+Why N-1 Instead of N?
+jamovi (and most software) divides by N-1 when calculating variance and SD. This is because
+we're usually estimating population parameters from a sample, not just describing the sample
+itself. The N-1 adjustment provides an unbiased estimate. This distinction becomes important
+in Chapter 8 (Estimation).
+
+Most Commonly Used:
+• IQR and Standard Deviation are by far the two most popular measures
+• IQR pairs well with the median
+• Standard deviation pairs well with the mean
+
+SKEWNESS AND KURTOSIS (Section 4.3)
+------------------------------------
+These describe the SHAPE of the distribution.
+
+SKEWNESS: Measure of asymmetry
+• Negative skew (left skew): Long tail to the left, mode > median > mean
+• Zero skew: Symmetric distribution, mean ≈ median ≈ mode
+• Positive skew (right skew): Long tail to the right, mean > median > mode
+
+Formula: skewness(X) = [1/(Nσ̂³)]Σ(Xi - X̄)³
+
+Interpretation Rule of Thumb:
+• If |skewness/SE| > 2, data are significantly skewed (especially in samples N < 50)
+• May affect suitability for certain statistical tests
+
+KURTOSIS: Measure of "pointiness"
+• Negative (Platykurtic): "Too flat" - fewer extreme values than normal
+• Zero (Mesokurtic): "Just right" - like a normal distribution
+• Positive (Leptokurtic): "Too pointy" - more extreme values than normal
+
+Formula: kurtosis(X) = [1/(Nσ̂⁴)]Σ(Xi - X̄)⁴ - 3
+
+Note: The "-3" adjustment makes the normal distribution have kurtosis = 0
+
+In Practice:
+• Skewness is reported fairly often
+• Kurtosis is rarely reported in psychology research
+
+DESCRIPTIVE STATISTICS BY GROUP (Section 4.4)
+----------------------------------------------
+Often need to compare descriptive statistics across groups.
+
+In jamovi:
+• Use the "Split by" function in Descriptives
+• Can split by one or more grouping variables
+• Useful for comparing groups before formal hypothesis testing
+
+Example: Clinical trial data comparing therapy types
+• No therapy, CBT, drug treatment
+• Compare mean mood gain across groups
+• Check variability within each group
+
+Warning: Splitting by too many variables can result in very small subgroup sizes,
+leading to unstable estimates (jamovi may show NaN or Inf).
+
+STANDARD SCORES (Z-SCORES) (Section 4.5)
+-----------------------------------------
+Z-scores standardize raw scores relative to their distribution.
+
+Formula: z = (X - X̄)/σ̂
+
+Interpretation:
+• z-score = number of standard deviations above (+) or below (-) the mean
+• z = 0 means the score equals the mean
+• z = 1 means one SD above the mean
+• z = -2 means two SD below the mean
+
+Why Use Z-Scores?
+1. Interpret position within a distribution
+   - z = 3.6 means you're in the top ~0.02% (very extreme!)
+   - z = -0.5 means you're slightly below average
+
+2. Compare scores across different scales
+   - Can't compare raw score of 35 on grumpiness (max 50) with raw score of 2 on
+     extraversion (max 24)
+   - But CAN compare z-grumpiness = 3.6 with z-extraversion = -2.75
+   - Shows you're more extremely grumpy than you are non-extraverted
+
+Important:
+• Z-scores are a bridge between descriptive and inferential statistics
+• They appear throughout statistics (hypothesis testing, regression, etc.)
+• Make sure you understand this concept - it comes back repeatedly!
+
+KEY TAKEAWAYS
+-------------
+1. Always start data analysis with descriptive statistics
+2. Choose measures appropriate for your data type and distribution
+3. Report both central tendency AND variability
+4. Most common combinations:
+   - Mean + Standard Deviation (for symmetric data)
+   - Median + IQR (for skewed data or ordinal scales)
+5. Understand what each statistic tells you AND what it doesn't tell you
+6. Z-scores let you standardize and compare across different measures
+
+CRITICAL INSIGHT: Good Descriptive Statistics Are DESCRIPTIVE!
+---------------------------------------------------------------
+"The death of one man is a tragedy. The death of millions is a statistic."
+- Josef Stalin
+
+This quote reminds us that:
+• Statistics are abstractions - they summarize individual events
+• Numbers alone don't tell the full story
+• Our job is to turn statistics into meaningful DESCRIPTIONS
+• Always think about context, framing, and the human audience
+• The goal is COMMUNICATION, not just calculation
+
+As a data analyst, you must:
+✓ Choose statistics that accurately represent the data
+✓ Put numbers into context that audiences can understand
+✓ Remember the individual cases behind the aggregated numbers
+✓ Think critically about what statistics reveal AND what they hide
+
+Statistics can clarify the scale of events beyond our experience, but only when
+combined with thoughtful interpretation and presentation.
+
+FORMULA REFERENCE
+-----------------
+Mean: X̄ = (1/N)Σ(Xi)
+Variance: s² = [1/(N-1)]Σ(Xi - X̄)²
+Standard Deviation: s = √{[1/(N-1)]Σ(Xi - X̄)²}
+Z-score: z = (X - X̄)/σ̂
+Skewness: skewness(X) = [1/(Nσ̂³)]Σ(Xi - X̄)³
+Kurtosis: kurtosis(X) = [1/(Nσ̂⁴)]Σ(Xi - X̄)⁴ - 3
+
+Where:
+N = number of observations
+Xi = individual observation
+X̄ = sample mean
+σ̂ = sample standard deviation
+Σ = summation (add up all values)
+
+SOFTWARE NOTES (jamovi)
+-----------------------
+• Exploration → Descriptives for basic statistics
+• Can select multiple variables at once
+• Use "Split by" for group comparisons
+• Check boxes for desired statistics (mean, median, SD, variance, etc.)
+• Statistics panel has options for:
+  - Central Tendency (mean, median, mode)
+  - Dispersion (SD, variance, range, IQR)
+  - Distribution (skewness, kurtosis)
+  - Percentile Values (quartiles, custom percentiles)
+• Frequency tables option for categorical variables
+• Results update automatically when you change selections
+
+NEXT STEPS
+----------
+In Chapter 5, we'll learn how to visualize data through graphs and plots -
+because sometimes a picture really is worth a thousand words (or statistics)!

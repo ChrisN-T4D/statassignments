@@ -14,24 +14,6 @@
         </h1>
       </div>
 
-      <!-- Textbook Chapter -->
-      <div v-if="textbookUrl" class="content-section textbook-section">
-        <div class="textbook-header">
-          <h2>Textbook Chapter</h2>
-          <a class="textbook-link" :href="textbookUrl" target="_blank" rel="noopener">
-            Open chapter
-          </a>
-        </div>
-        <iframe
-          class="textbook-iframe"
-          :src="textbookUrl"
-          title="Textbook chapter"
-          loading="lazy"
-          sandbox="allow-same-origin allow-scripts allow-forms"
-          referrerpolicy="no-referrer"
-        ></iframe>
-      </div>
-
       <!-- Dynamic Software Content (Module 3) -->
       <div v-if="topic?.isDynamicSoftware && softwareContentComponent" class="content-section">
         <component :is="softwareContentComponent" />
@@ -70,13 +52,25 @@
 </template>
 
 <script setup>
-import { computed, ref, defineAsyncComponent } from 'vue'
+import { computed, ref, defineAsyncComponent, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { getModuleById } from '../data/modules.js'
+import { useTimeTracking } from '../composables/useTimeTracking'
+import { useAuth } from '../composables/useAuth'
+import { pb } from '../lib/pocketbase'
 
 const route = useRoute()
 const router = useRouter()
+const { isAuthenticated, user } = useAuth()
+const timeTracker = useTimeTracking('reading') // Reading mode: 1 hour max, 10 min idle timeout
+
+// Scroll depth tracking
+const maxScrollDepth = ref(0) // Maximum scroll depth percentage (0-100)
+
+// Return visit tracking
+const triggeredByError = ref(false)
+const errorProblemId = ref(null)
 
 // Get user's preferred software from localStorage
 const preferredSoftware = ref('jamovi')
@@ -100,10 +94,6 @@ const moduleId = computed(() => topic.value?.moduleId || null)
 const moduleInfo = computed(() => {
   const statsModuleId = toStatsModuleId(moduleId.value)
   return statsModuleId ? getModuleById(statsModuleId) : null
-})
-
-const textbookUrl = computed(() => {
-  return topic.value?.textbookUrl || moduleInfo.value?.textbookUrl || null
 })
 
 const moduleTopics = computed(() => {
@@ -169,6 +159,77 @@ const softwareContentComponent = computed(() => {
   return null
 })
 
+// Check if this topic view was triggered by a recent error
+function checkIfTriggeredByError() {
+  triggeredByError.value = false
+  errorProblemId.value = null
+
+  try {
+    const raw = localStorage.getItem('recentError')
+    if (!raw) return
+
+    const errorData = JSON.parse(raw)
+    const now = Date.now()
+
+    // Check if error is still valid (not expired) and matches current topic
+    if (errorData.expiresAt > now && errorData.topicId === topicId.value) {
+      triggeredByError.value = true
+      errorProblemId.value = errorData.problemId || null
+      console.log('[Return Visit] Topic view triggered by recent error')
+
+      // Clear the error data after detecting it (one-time use)
+      localStorage.removeItem('recentError')
+    } else if (errorData.expiresAt <= now) {
+      // Clean up expired error data
+      localStorage.removeItem('recentError')
+    }
+  } catch (err) {
+    console.warn('Unable to check return visit trigger:', err)
+  }
+}
+
+// Track scroll depth
+function handleScroll() {
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+  // Calculate scroll depth percentage
+  const scrollableHeight = documentHeight - windowHeight
+  const scrollDepth = scrollableHeight > 0 ? Math.round((scrollTop / scrollableHeight) * 100) : 100
+
+  // Update max scroll depth
+  if (scrollDepth > maxScrollDepth.value) {
+    maxScrollDepth.value = Math.min(scrollDepth, 100)
+  }
+}
+
+async function saveTopicReadingTime() {
+  if (!isAuthenticated.value || !user.value || !topicId.value) return
+
+  const timeData = timeTracker.stop()
+
+  // Only save if there was meaningful engagement (> 10 seconds active time)
+  if (timeData.activeTimeSeconds < 10) return
+
+  try {
+    await pb.collection('topic_readings').create({
+      user: user.value.id,
+      topic_id: topicId.value,
+      module_id: moduleId.value,
+      active_time_seconds: timeData.activeTimeSeconds,
+      total_time_seconds: timeData.totalTimeSeconds,
+      time_maxed_out: timeData.wasMaxedOut,
+      idle_detected: timeData.idleDetected,
+      max_scroll_depth: maxScrollDepth.value,
+      triggered_by_error: triggeredByError.value
+    })
+    console.log(`[Topic Reading] Saved ${timeData.activeTimeSeconds}s for topic ${topicId.value}, scroll depth: ${maxScrollDepth.value}%, return visit: ${triggeredByError.value}`)
+  } catch (err) {
+    console.warn('Unable to save topic reading time:', err)
+  }
+}
+
 function toStatsModuleId(value) {
   if (!value) return null
   if (value.startsWith('stats-module-')) return value
@@ -176,7 +237,8 @@ function toStatsModuleId(value) {
   return value
 }
 
-function goToModule() {
+async function goToModule() {
+  await saveTopicReadingTime()
   const statsModuleId = toStatsModuleId(moduleId.value)
   if (statsModuleId) {
     router.push(`/class/statistics?module=${statsModuleId}`)
@@ -185,7 +247,8 @@ function goToModule() {
   router.push('/class/statistics')
 }
 
-function goToNext() {
+async function goToNext() {
+  await saveTopicReadingTime()
   recordTopicRead(topicId.value)
   if (nextTopic.value) {
     router.push(`/topic/${nextTopic.value.id}`)
@@ -198,8 +261,9 @@ function goToNext() {
   router.push(reviewPath)
 }
 
-function goToPrev() {
+async function goToPrev() {
   if (!prevTopic.value) return
+  await saveTopicReadingTime()
   router.push(`/topic/${prevTopic.value.id}`)
 }
 
@@ -221,6 +285,43 @@ function recordTopicRead(topicId) {
     console.warn('Unable to save opened topic:', err)
   }
 }
+
+// Start time tracking when component mounts
+onMounted(() => {
+  // Check if this view was triggered by an error
+  checkIfTriggeredByError()
+
+  timeTracker.start()
+  // Set up scroll tracking
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  // Initial scroll check (in case page loads scrolled)
+  handleScroll()
+})
+
+// Save time before component unmounts (e.g., user closes tab)
+onUnmounted(async () => {
+  await saveTopicReadingTime()
+  // Clean up scroll listener
+  window.removeEventListener('scroll', handleScroll)
+})
+
+// Watch for topic changes and restart timer
+watch(topicId, async (newTopicId, oldTopicId) => {
+  if (oldTopicId) {
+    // Save time for previous topic
+    await saveTopicReadingTime()
+  }
+  if (newTopicId) {
+    // Check if new topic view was triggered by an error
+    checkIfTriggeredByError()
+
+    // Reset scroll depth for new topic
+    maxScrollDepth.value = 0
+    handleScroll() // Check initial scroll position
+    // Start tracking new topic
+    timeTracker.start()
+  }
+})
 </script>
 
 <style scoped>
@@ -271,40 +372,6 @@ function recordTopicRead(topicId) {
 .btn-secondary:hover {
   border-color: var(--primary);
   color: var(--primary);
-}
-
-.textbook-section {
-  margin-top: 1.5rem;
-}
-
-.textbook-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.textbook-header h2 {
-  margin: 0;
-  font-size: 1.125rem;
-}
-
-.textbook-link {
-  color: var(--primary);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.textbook-link:hover {
-  text-decoration: underline;
-}
-
-.textbook-iframe {
-  width: 100%;
-  min-height: 520px;
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  background: white;
 }
 
 .key-points-section {

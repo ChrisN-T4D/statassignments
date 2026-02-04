@@ -47,8 +47,6 @@
             <option value="modules">Modules</option>
             <option value="roster">Roster</option>
             <option value="semesters">Semesters</option>
-            <option value="simulation_attempts">Simulation Attempts</option>
-            <option value="simulation_exercises">Simulation Exercises</option>
             <option value="practice_attempts">Practice Attempts</option>
             <option value="practice_problems">Practice Problems</option>
             <option value="read_topics">Read Topics</option>

@@ -1,0 +1,17 @@
+# FastAPI and server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+
+# Scientific computing
+numpy==1.26.3
+
+# HTTP client (for PocketBase integration)
+httpx==0.26.0
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Optional: PyTorch (for future neural network training)
+# torch==2.1.2
+# Uncomment above line if you want to add full PyTorch support later

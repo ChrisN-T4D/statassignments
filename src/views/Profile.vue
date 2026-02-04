@@ -54,6 +54,117 @@
           </div>
         </div>
 
+        <!-- Learning Analytics (BKT) -->
+        <div v-if="bktAnalytics" class="content-section">
+          <h2>Learning Analytics</h2>
+          <p class="section-subtext">
+            Your learning progress tracked using Bayesian Knowledge Tracing (BKT)
+          </p>
+
+          <!-- Mastery Distribution -->
+          <div class="analytics-card">
+            <h3>Mastery Distribution</h3>
+            <p class="analytics-subtext">Number of learning objectives at each mastery level</p>
+            <div class="mastery-distribution">
+              <div
+                v-for="bucket in bktAnalytics.masteryBuckets"
+                :key="bucket.label"
+                class="mastery-bucket"
+              >
+                <div class="mastery-bar-container">
+                  <div
+                    class="mastery-bar"
+                    :class="bucket.class"
+                    :style="{ height: bucket.height + '%' }"
+                  >
+                    <span class="mastery-count">{{ bucket.count }}</span>
+                  </div>
+                </div>
+                <div class="mastery-label">{{ bucket.label }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Learning Parameters -->
+          <div class="analytics-card">
+            <h3>Learning Parameters</h3>
+            <p class="analytics-subtext">Average BKT model parameters across all objectives</p>
+            <div class="parameters-grid">
+              <div class="parameter-item">
+                <div class="parameter-label">
+                  <span class="parameter-name">P(L)</span>
+                  <span class="parameter-desc">Current Mastery</span>
+                </div>
+                <div class="parameter-bar-bg">
+                  <div
+                    class="parameter-bar"
+                    :style="{ width: bktAnalytics.avgParams.pL + '%' }"
+                  ></div>
+                </div>
+                <div class="parameter-value">{{ bktAnalytics.avgParams.pL }}%</div>
+              </div>
+
+              <div class="parameter-item">
+                <div class="parameter-label">
+                  <span class="parameter-name">P(T)</span>
+                  <span class="parameter-desc">Learning Rate</span>
+                </div>
+                <div class="parameter-bar-bg">
+                  <div
+                    class="parameter-bar learning-rate"
+                    :style="{ width: bktAnalytics.avgParams.pT + '%' }"
+                  ></div>
+                </div>
+                <div class="parameter-value">{{ bktAnalytics.avgParams.pT }}%</div>
+              </div>
+
+              <div class="parameter-item">
+                <div class="parameter-label">
+                  <span class="parameter-name">P(G)</span>
+                  <span class="parameter-desc">Guess Probability</span>
+                </div>
+                <div class="parameter-bar-bg">
+                  <div
+                    class="parameter-bar guess"
+                    :style="{ width: bktAnalytics.avgParams.pG + '%' }"
+                  ></div>
+                </div>
+                <div class="parameter-value">{{ bktAnalytics.avgParams.pG }}%</div>
+              </div>
+
+              <div class="parameter-item">
+                <div class="parameter-label">
+                  <span class="parameter-name">P(S)</span>
+                  <span class="parameter-desc">Slip Probability</span>
+                </div>
+                <div class="parameter-bar-bg">
+                  <div
+                    class="parameter-bar slip"
+                    :style="{ width: bktAnalytics.avgParams.pS + '%' }"
+                  ></div>
+                </div>
+                <div class="parameter-value">{{ bktAnalytics.avgParams.pS }}%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Stats -->
+          <div class="analytics-summary">
+            <div class="summary-stat">
+              <div class="summary-value">{{ bktAnalytics.totalObjectives }}</div>
+              <div class="summary-label">Objectives Tracked</div>
+            </div>
+            <div class="summary-stat">
+              <div class="summary-value">{{ bktAnalytics.masteredCount }}</div>
+              <div class="summary-label">Mastered (≥80%)</div>
+            </div>
+            <div class="summary-stat">
+              <div class="summary-value">{{ bktAnalytics.totalAttempts }}</div>
+              <div class="summary-label">Total Attempts</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Preferred Software -->
         <div class="content-section">
           <h2>Preferred Software</h2>
@@ -186,6 +297,59 @@ const softwareOptions = computed(() => software)
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 const expandedModules = ref(new Set())
 const masteryData = ref({})
+const bktStates = ref({})
+const bktAnalytics = computed(() => {
+  const states = Object.values(bktStates.value)
+  if (states.length === 0) return null
+
+  // Calculate mastery distribution buckets
+  const buckets = [
+    { label: '0-20%', min: 0, max: 20, count: 0, class: 'not-mastered', height: 0 },
+    { label: '20-40%', min: 20, max: 40, count: 0, class: 'developing', height: 0 },
+    { label: '40-60%', min: 40, max: 60, count: 0, class: 'developing', height: 0 },
+    { label: '60-80%', min: 60, max: 80, count: 0, class: 'proficient', height: 0 },
+    { label: '80-100%', min: 80, max: 100, count: 0, class: 'mastered', height: 0 }
+  ]
+
+  states.forEach(state => {
+    const mastery = Math.round(state.pL * 100)
+    const bucket = buckets.find(b => mastery >= b.min && mastery <= b.max)
+    if (bucket) bucket.count++
+  })
+
+  // Calculate heights for visualization (max height = 100%)
+  const maxCount = Math.max(...buckets.map(b => b.count), 1)
+  buckets.forEach(b => {
+    // Show minimum 15% height for bars with 0 count (for visibility)
+    // Scale bars with counts proportionally from 20% to 100%
+    if (b.count === 0) {
+      b.height = 15
+    } else {
+      b.height = 20 + ((b.count / maxCount) * 80)
+    }
+  })
+
+  // Calculate average parameters
+  const avgParams = {
+    pL: Math.round(states.reduce((sum, s) => sum + (s.pL * 100), 0) / states.length),
+    pT: Math.round(states.reduce((sum, s) => sum + (s.pT * 100), 0) / states.length),
+    pG: Math.round(states.reduce((sum, s) => sum + (s.pG * 100), 0) / states.length),
+    pS: Math.round(states.reduce((sum, s) => sum + (s.pS * 100), 0) / states.length)
+  }
+
+  // Calculate summary stats
+  const totalObjectives = states.length
+  const masteredCount = states.filter(s => s.pL >= 0.8).length
+  const totalAttempts = states.reduce((sum, s) => sum + (s.attempts || 0), 0)
+
+  return {
+    masteryBuckets: buckets,
+    avgParams,
+    totalObjectives,
+    masteredCount,
+    totalAttempts
+  }
+})
 
 const userName = computed(() => {
   return user.value?.user_metadata?.full_name || user.value?.email?.split('@')[0] || 'Student'
@@ -313,6 +477,7 @@ function getObjectiveMastery(objectiveId) {
 async function loadMasteryData() {
   // Load all BKT states and cache the mastery percentages
   const states = await getAllBKTStates()
+  bktStates.value = states  // Store full states for analytics
   const newMasteryData = {}
   for (const [objectiveId, state] of Object.entries(states)) {
     newMasteryData[objectiveId] = Math.round(state.pL * 100)
@@ -737,5 +902,187 @@ watch(isAuthenticated, (newVal) => {
 .btn-secondary:hover {
   border-color: var(--text-primary);
   color: var(--text-primary);
+}
+
+/* Learning Analytics Styles */
+.analytics-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.analytics-card h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.analytics-subtext {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Mastery Distribution Chart */
+.mastery-distribution {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  height: 200px;
+  padding: 1rem 0;
+}
+
+.mastery-bucket {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.mastery-bar-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  min-height: 150px;
+}
+
+.mastery-bar {
+  width: 100%;
+  min-height: 30px;
+  border-radius: 0.375rem 0.375rem 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.5rem;
+  transition: height 0.3s ease;
+}
+
+.mastery-bar.not-mastered {
+  background: linear-gradient(180deg, #fca5a5 0%, #ef4444 100%);
+}
+
+.mastery-bar.developing {
+  background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+}
+
+.mastery-bar.proficient {
+  background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
+}
+
+.mastery-bar.mastered {
+  background: linear-gradient(180deg, #86efac 0%, #10b981 100%);
+}
+
+.mastery-count {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.mastery-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Learning Parameters */
+.parameters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.parameter-item {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.parameter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.parameter-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.parameter-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.parameter-bar-bg {
+  height: 24px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.parameter-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.parameter-bar.learning-rate {
+  background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.parameter-bar.guess {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.parameter-bar.slip {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.parameter-value {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Analytics Summary */
+.analytics-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.summary-stat {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 0.5rem;
+}
+
+.summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 </style>

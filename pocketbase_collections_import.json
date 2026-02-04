@@ -1,0 +1,261 @@
+[
+  {
+    "name": "classes",
+    "type": "base",
+    "schema": [
+      {
+        "name": "name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "short_name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "color",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "icon",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "topics",
+        "type": "json",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "is_active",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "@request.auth.role = 'admin'",
+    "updateRule": "@request.auth.role = 'admin'",
+    "deleteRule": "@request.auth.role = 'admin'"
+  },
+  {
+    "name": "bkt_states",
+    "type": "base",
+    "schema": [
+      {
+        "name": "user",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": true,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "objective_id",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "pL",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "pL0",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "pT",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "pS",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "pG",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "attempts",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "correct",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "incorrect",
+        "type": "number",
+        "required": true
+      },
+      {
+        "name": "last_updated",
+        "type": "date",
+        "required": true
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_user_objective ON bkt_states (user, objective_id)"
+    ],
+    "listRule": "@request.auth.id = user",
+    "viewRule": "@request.auth.id = user",
+    "createRule": "@request.auth.id = user",
+    "updateRule": "@request.auth.id = user",
+    "deleteRule": "@request.auth.id = user"
+  },
+  {
+    "name": "practice_attempts",
+    "type": "base",
+    "schema": [
+      {
+        "name": "user",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": true,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "problem",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "answer",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "is_correct",
+        "type": "bool",
+        "required": true
+      }
+    ],
+    "indexes": [],
+    "listRule": "@request.auth.id = user",
+    "viewRule": "@request.auth.id = user",
+    "createRule": "@request.auth.id = user",
+    "updateRule": "@request.auth.id = user",
+    "deleteRule": "@request.auth.id = user"
+  },
+  {
+    "name": "practice_problems",
+    "type": "base",
+    "schema": [
+      {
+        "name": "topic_id",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "question",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "question_type",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "options",
+        "type": "json",
+        "required": false
+      },
+      {
+        "name": "correct_answer",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "explanation",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "hint",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "difficulty",
+        "type": "text",
+        "required": false
+      }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "user_progress",
+    "type": "base",
+    "schema": [
+      {
+        "name": "user",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": true,
+          "maxSelect": 1
+        }
+      },
+      {
+        "name": "topic_id",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "completed",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "name": "completed_at",
+        "type": "date",
+        "required": false
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_user_topic ON user_progress (user, topic_id)"
+    ],
+    "listRule": "@request.auth.id = user",
+    "viewRule": "@request.auth.id = user",
+    "createRule": "@request.auth.id = user",
+    "updateRule": "@request.auth.id = user",
+    "deleteRule": "@request.auth.id = user"
+  }
+]

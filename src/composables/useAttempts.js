@@ -16,6 +16,10 @@ export function useAttempts() {
     isCorrect,
     score = null,
     timeSpentSeconds = null,
+    activeTimeSeconds = null,
+    totalTimeSeconds = null,
+    timeMaxedOut = false,
+    idleDetected = false,
     hintUsed = false
   }) {
     if (!user.value || !profile.value) {
@@ -43,7 +47,11 @@ export function useAttempts() {
         response: response,
         is_correct: isCorrect,
         score: score,
-        time_spent_seconds: timeSpentSeconds,
+        time_spent_seconds: timeSpentSeconds || activeTimeSeconds, // Backwards compatible
+        active_time_seconds: activeTimeSeconds,
+        total_time_seconds: totalTimeSeconds,
+        time_maxed_out: timeMaxedOut,
+        idle_detected: idleDetected,
         attempt_no: attemptNo,
         hint_used: hintUsed
       })

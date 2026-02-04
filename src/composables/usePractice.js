@@ -297,31 +297,78 @@ export function usePractice() {
     return currentProblem.value
   }
 
-  async function submitAnswer(problemId, answer, isCorrect, difficulty = 'medium') {
+  async function submitAnswer(problemId, answer, isCorrect, difficulty = 'medium', timeData = null, confidenceData = null, sequenceData = null) {
     if (!user.value) return { data: null, error: 'Not authenticated' }
 
     try {
       // Update BKT for all objectives associated with this question
-      // Use difficulty-adjusted parameters (IRT-based tuning)
+      // Use difficulty-adjusted parameters (IRT-based tuning) and time data
       const objectives = getObjectivesForQuestion(problemId)
       for (const objectiveId of objectives) {
-        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty)
+        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty, timeData)
+
+        // Determine confidence level based on answer changes and deliberation time
+        let confidenceLevel = 'unknown'
+        if (confidenceData) {
+          const hasChanges = confidenceData.answer_changes > 0
+          const quickResponse = confidenceData.time_to_first_selection < 5
+          const slowResponse = confidenceData.time_to_first_selection > 30
+
+          if (hasChanges || slowResponse) {
+            confidenceLevel = 'low'
+          } else if (quickResponse && !hasChanges) {
+            confidenceLevel = isCorrect ? 'high' : 'guessing'
+          } else {
+            confidenceLevel = 'medium'
+          }
+        }
+
         console.log(`BKT updated for ${objectiveId} (${difficulty}):`, {
           mastery: Math.round(updatedState.pL * 100) + '%',
           attempts: updatedState.attempts,
           correct: updatedState.correct,
           slip: updatedState.pS,
-          guess: updatedState.pG
+          guess: updatedState.pG,
+          activeTime: timeData?.activeTimeSeconds,
+          totalTime: timeData?.totalTimeSeconds,
+          confidence: confidenceLevel,
+          answerChanges: confidenceData?.answer_changes,
+          timeSinceReading: sequenceData?.time_since_reading,
+          timeSinceLastAttempt: sequenceData?.time_since_last_attempt,
+          hasReadBefore: sequenceData?.has_read_topic_before
         })
       }
 
-      // Store attempt in PocketBase
-      const data = await pb.collection('practice_attempts').create({
+      // Store attempt in PocketBase with time tracking data
+      const attemptData = {
         user: user.value.id,
         problem: problemId,
         answer: answer,
         is_correct: isCorrect
-      })
+      }
+
+      // Add time data if available
+      if (timeData) {
+        attemptData.active_time_seconds = timeData.activeTimeSeconds
+        attemptData.total_time_seconds = timeData.totalTimeSeconds
+        attemptData.time_maxed_out = timeData.wasMaxedOut
+        attemptData.idle_detected = timeData.idleDetected
+      }
+
+      // Add confidence indicators if available
+      if (confidenceData) {
+        attemptData.time_to_first_selection = confidenceData.time_to_first_selection
+        attemptData.answer_changes = confidenceData.answer_changes
+      }
+
+      // Add sequence/spacing context if available
+      if (sequenceData) {
+        attemptData.time_since_reading = sequenceData.time_since_reading
+        attemptData.time_since_last_attempt = sequenceData.time_since_last_attempt
+        attemptData.has_read_topic_before = sequenceData.has_read_topic_before
+      }
+
+      const data = await pb.collection('practice_attempts').create(attemptData)
       return { data, error: null }
     } catch (err) {
       return { data: null, error: err }

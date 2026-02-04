@@ -1,5 +1,5 @@
 // Statistics Class - Jamovi Practice Exercises
-// These are simulation exercises for practicing Jamovi software skills
+// Practice problems for learning statistical concepts and Jamovi software skills
 // Organized by module to match the course structure
 
 export const statisticsModules = [
@@ -47,7 +47,7 @@ export const statisticsModules = [
   }
 ]
 
-// Jamovi simulation exercises organized by module
+// Software practice tasks ('To Do in Software') organized by module
 export const statisticsExercises = [
   // ============ MODULE 2: Research Design & Measurement ============
   {
@@ -706,7 +706,7 @@ export const statisticsExercises = [
   },
   {
     module: 'module-6',
-    topic: 'simulation',
+    topic: 'random-sampling',
     title: 'Generate a Random Variable and Plot It',
     phase: 'practice',
     description: 'Use compute formulas to generate random values and graph them',
@@ -720,7 +720,7 @@ export const statisticsExercises = [
   },
   {
     module: 'module-6',
-    topic: 'simulation',
+    topic: 'random-sampling',
     title: 'Compare Two Random Samples',
     phase: 'practice',
     description: 'Demonstrate sampling variability with two random columns',
@@ -734,7 +734,7 @@ export const statisticsExercises = [
   },
   {
     module: 'module-6',
-    topic: 'simulation',
+    topic: 'random-sampling',
     title: 'Mini Sampling Distribution',
     phase: 'apply',
     description: 'Approximate a sampling distribution of the mean',

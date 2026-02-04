@@ -315,7 +315,7 @@ const filteredModuleLessons = computed(() => {
   return moduleLessons.value.filter(lesson => lesson.software === preferredSoftware.value)
 })
 
-const hasSoftwareLessons = computed(() => filteredModuleLessons.value.length > 0)
+const hasSoftwareLessons = computed(() => filteredModuleLessons.value.length > 0 || todoExercises.value.length > 0)
 
 function toPracticeModuleId(value) {
   if (!value) return null
@@ -450,7 +450,7 @@ function getTabCount(tabId) {
     case 'concepts':
       return moduleTopics.value.length > 0 ? 1 : 0 // 1 if there are topics to review
     case 'software':
-      return filteredModuleLessons.value.length
+      return filteredModuleLessons.value.length + todoExercises.value.length
     default:
       return 0
   }
