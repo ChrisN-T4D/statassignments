@@ -1,0 +1,347 @@
+MODULE 7: COMPARING TWO MEANS (CHAPTER 11)
+=============================================
+
+OVERVIEW
+--------
+This module covers t-tests and related procedures for comparing means. These are among the most commonly used statistical tests in psychological research for comparing sample means against hypothesized values or comparing means between groups.
+
+KEY CONCEPTS
+------------
+
+1. THE ONE-SAMPLE Z-TEST (11.1)
+   - Rarely used in practice (requires known population SD)
+   - Test statistic: z = (X̄ - μ₀)/(σ/√N)
+   - Sampling distribution: Normal(0,1)
+   - Critical values: ±1.96 (α = .05, two-tailed)
+   - Used mainly as a teaching tool leading to t-test
+
+2. THE ONE-SAMPLE T-TEST (11.2)
+   - Most common single-sample test
+   - Used when population SD is unknown
+   - Test statistic: t = (X̄ - μ)/(σ̂/√N)
+   - Sampling distribution: t-distribution with N-1 df
+   - Hypotheses:
+     * H₀: μ = μ₀
+     * H₁: μ ≠ μ₀ (two-tailed)
+   - In jamovi: Analyses → T-Tests → One Sample T-Test
+   - Assumptions:
+     * Normality: Population is normally distributed
+     * Independence: Observations are independent
+
+3. THE INDEPENDENT SAMPLES T-TEST: STUDENT TEST (11.3)
+   - Compares means of two independent groups
+   - Assumes equal variances (homogeneity)
+   - Test statistic: t = (X̄₁ - X̄₂)/SE(X̄₁ - X̄₂)
+   - Uses pooled standard deviation
+   - Degrees of freedom: N₁ + N₂ - 2
+
+   Pooled Standard Deviation:
+   - σ̂ₚ = √[(w₁σ̂₁² + w₂σ̂₂²)/(w₁ + w₂)]
+   - Where w₁ = N₁ - 1 and w₂ = N₂ - 1
+
+   Standard Error:
+   - SE(X̄₁ - X̄₂) = σ̂ₚ√(1/N₁ + 1/N₂)
+
+   Assumptions:
+   - Normality: Both populations normally distributed
+   - Independence: Observations independent within and between groups
+   - Homogeneity of variance: Equal population standard deviations
+
+4. THE INDEPENDENT SAMPLES T-TEST: WELCH TEST (11.4)
+   - Does NOT assume equal variances
+   - More robust than Student's t-test
+   - Preferred in most real-world applications
+   - Test statistic: Same form as Student's t
+   - Different standard error calculation:
+     * SE(X̄₁ - X̄₂) = √(σ̂₁²/N₁ + σ̂₂²/N₂)
+   - Degrees of freedom: Calculated using complex formula
+   - df typically non-integer and smaller than Student's test
+   - In jamovi: Welch's option in Independent Samples T-Test
+
+5. THE PAIRED-SAMPLES T-TEST (11.5)
+   - Used for repeated measures or matched pairs
+   - Each participant measured twice
+   - Analyzes difference scores: Dᵢ = X₁ᵢ - X₂ᵢ
+   - Essentially a one-sample t-test on differences
+   - Test statistic: t = D̄/(σ̂_D/√N)
+   - Degrees of freedom: N - 1
+   - Controls for between-subject variability
+   - More powerful than independent samples test
+   - In jamovi: Analyses → T-Tests → Paired Samples T-Test
+
+   Assumptions:
+   - Normality: Difference scores normally distributed
+   - Independence: Pairs are independent of each other
+
+6. ONE-SIDED TESTS (11.6)
+   - Use when direction is predicted a priori
+   - Never switch after seeing data!
+   - Hypotheses:
+     * H₀: μ ≤ μ₀ or H₀: μ ≥ μ₀
+     * H₁: μ > μ₀ or H₁: μ < μ₀
+   - p-value is half of two-sided test
+   - Critical region only on one side
+   - Must be pre-planned, not post-hoc
+   - Available for all t-test variants
+
+7. EFFECT SIZE: COHEN'S d (11.7)
+   - Standardized measure of difference
+   - Independent of sample size
+   - Formula: d = (mean difference)/SD
+
+   For One Sample:
+   - d = (X̄ - μ₀)/σ̂
+
+   For Independent Samples:
+   - d = (X̄₁ - X̄₂)/σ̂ₚ (pooled SD)
+
+   For Paired Samples:
+   - d = D̄/σ̂_D (relative to difference scores)
+   - OR d relative to original scale
+
+   Interpretation (rough guide):
+   - d ≈ 0.2: Small effect
+   - d ≈ 0.5: Medium effect
+   - d ≈ 0.8: Large effect
+
+   Also known as Hedges' g in jamovi
+
+8. CHECKING NORMALITY (11.8)
+
+   a) QQ Plots (Quantile-Quantile):
+      - Visual check of normality
+      - Plot theoretical vs. sample quantiles
+      - Normal data → straight line
+      - Curved upward → positive skew
+      - Curved downward → negative skew
+      - S-shaped → heavy tails (high kurtosis)
+
+   b) Shapiro-Wilk Test:
+      - Formal hypothesis test of normality
+      - H₀: Data are normally distributed
+      - Test statistic: W (ranges from 0 to 1)
+      - W = 1: Perfect normality
+      - Smaller W: Greater departure from normality
+      - In jamovi: Check "Normality" under Assumptions
+      - Sensitive to sample size
+      - Large samples: Even small deviations significant
+
+9. WILCOXON TESTS (11.9)
+   - Nonparametric alternatives to t-tests
+   - Don't assume normality
+   - Based on ranks, not raw scores
+   - Generally less powerful than t-tests
+   - Use when normality violated
+
+   a) Mann-Whitney U Test:
+      - Alternative to independent samples t-test
+      - Compares distributions of two groups
+      - Based on ranking all observations
+      - Test statistic: U or W
+      - H₀: Two groups have same distribution
+      - In jamovi: "Mann-Whitney U" option
+
+   b) Wilcoxon Signed-Rank Test:
+      - Alternative to one-sample or paired t-test
+      - Ranks absolute differences
+      - Considers sign of differences
+      - Test statistic: W
+      - H₀: Median difference = 0
+      - In jamovi: "Wilcoxon rank" option
+
+KEY FORMULAS
+------------
+- One-sample t: t = (X̄ - μ)/(σ̂/√N)
+- Independent t: t = (X̄₁ - X̄₂)/SE(X̄₁ - X̄₂)
+- Paired t: t = D̄/(σ̂_D/√N)
+- Pooled SD: σ̂ₚ = √[(w₁σ̂₁² + w₂σ̂₂²)/(w₁ + w₂)]
+- Cohen's d: d = (mean difference)/SD
+- Degrees of freedom:
+  * One sample: N - 1
+  * Independent: N₁ + N₂ - 2
+  * Paired: N - 1
+
+JAMOVI PROCEDURES
+-----------------
+
+1. One Sample T-Test:
+   - Analyses → T-Tests → One Sample T-Test
+   - Variables: Select variable to test
+   - Test value: Enter hypothesized mean (μ₀)
+   - Options:
+     * Hypothesis: Choose two-sided or one-sided
+     * Student's t (default)
+     * Mean difference: Shows difference from μ₀
+     * Effect size: Cohen's d
+     * Confidence interval: 95% CI
+     * Descriptives: Sample statistics
+     * Normality: Shapiro-Wilk test
+
+2. Independent Samples T-Test:
+   - Analyses → T-Tests → Independent Samples T-Test
+   - Dependent Variables: Outcome variable
+   - Grouping Variable: Group membership
+   - Tests:
+     * Student's t: Assumes equal variances
+     * Welch's t: Does not assume equal variances
+     * Mann-Whitney U: Nonparametric alternative
+   - Additional Statistics:
+     * Mean difference
+     * Effect size (Cohen's d)
+     * Confidence interval
+     * Descriptives
+   - Assumption Checks:
+     * Normality (Shapiro-Wilk)
+     * Equality of variances (Levene's test)
+
+3. Paired Samples T-Test:
+   - Analyses → T-Tests → Paired Samples T-Test
+   - Paired Variables: Select variable pairs
+   - Tests:
+     * Student's t
+     * Wilcoxon rank (nonparametric)
+   - Additional Statistics:
+     * Mean difference
+     * SE difference
+     * Effect size
+     * Confidence interval
+   - Assumption Checks:
+     * Normality: Test on difference scores
+
+4. Checking Assumptions:
+   - Normality:
+     * Shapiro-Wilk test (check "Normality")
+     * QQ plots (not currently in jamovi)
+     * Histograms: Exploration → Descriptives
+   - Homogeneity of variance:
+     * Levene's test (independent samples only)
+     * Check "Equality of variances"
+
+DECISION TREE FOR CHOOSING TESTS
+---------------------------------
+
+Start Here: What are you comparing?
+│
+├─ One sample mean vs. hypothesized value
+│  ├─ Normal data? → One-sample t-test
+│  └─ Non-normal? → Wilcoxon signed-rank test
+│
+├─ Two independent groups
+│  ├─ Normal data?
+│  │  ├─ Equal variances? → Student's t-test
+│  │  └─ Unequal variances? → Welch's t-test
+│  └─ Non-normal? → Mann-Whitney U test
+│
+└─ Two related/paired samples
+   ├─ Normal differences? → Paired t-test
+   └─ Non-normal? → Wilcoxon signed-rank test
+
+COMMON PITFALLS
+---------------
+- Using independent t-test for paired data
+- Ignoring normality assumption
+- Assuming equal variances without checking
+- One-sided tests chosen after seeing data
+- Confusing practical vs. statistical significance
+- Not reporting effect sizes
+- Using t-tests with categorical outcomes
+- Ignoring independence assumption
+- Multiple testing without correction
+- Reporting only p-values without descriptive statistics
+
+INTERPRETATION TIPS
+-------------------
+
+1. Report Completely:
+   - Descriptive statistics (means, SDs, Ns)
+   - Test statistic and degrees of freedom
+   - p-value (exact when possible)
+   - Effect size (Cohen's d)
+   - Confidence interval
+
+   Example: "Students in Group A (M = 74.5, SD = 9.0) scored
+   significantly higher than Group B (M = 69.1, SD = 5.8),
+   t(31) = 2.1, p = .04, d = 0.74, 95% CI[0.2, 10.8]"
+
+2. Interpret Effect Sizes:
+   - Don't rely solely on p-values
+   - Small p doesn't mean large effect
+   - Consider practical significance
+   - Use Cohen's guidelines cautiously
+   - Context matters!
+
+3. Check Assumptions:
+   - Always run Shapiro-Wilk for normality
+   - Check Levene's test for equal variances
+   - Visual inspection of distributions
+   - If violated, use nonparametric alternatives
+
+4. Confidence Intervals:
+   - More informative than p-values alone
+   - Shows range of plausible values
+   - Indicates precision of estimate
+   - CI excluding zero → significant result
+
+5. One-Sided vs. Two-Sided:
+   - Default to two-sided unless strong justification
+   - Pre-specify one-sided in hypothesis
+   - Never switch after seeing data
+   - Be conservative
+
+REAL-WORLD APPLICATIONS
+-----------------------
+- Clinical trials: Treatment vs. control group
+- Educational research: Comparing teaching methods
+- Psychology: Pre-test/post-test designs
+- Consumer research: Product preference testing
+- Quality control: Meeting specifications
+- Sports science: Training interventions
+- Neuroscience: Comparing experimental conditions
+- Market research: A/B testing
+
+COMPARISON OF T-TESTS
+---------------------
+
+| Test Type | Use When | Assumptions | jamovi Location |
+|-----------|----------|-------------|-----------------|
+| One-sample | Compare sample to known value | Normal, Independent | One Sample T-Test |
+| Independent (Student) | Two unrelated groups | Normal, Independent, Equal variances | Independent Samples (Student's) |
+| Independent (Welch) | Two unrelated groups | Normal, Independent | Independent Samples (Welch's) |
+| Paired | Two related measurements | Normal differences, Paired independence | Paired Samples T-Test |
+
+RELATIONSHIP TO OTHER TESTS
+---------------------------
+- One-sample t-test → Z-test (when σ known)
+- Independent t-test → ANOVA (when >2 groups)
+- Paired t-test → Repeated measures ANOVA (when >2 times)
+- t-test → Regression (t-test is special case)
+- Wilcoxon → t-test (nonparametric analog)
+
+POWER AND SAMPLE SIZE
+---------------------
+- Larger samples → More power
+- Larger effect sizes → More power
+- Smaller α → Less power
+- Two-sided tests → Less power than one-sided
+- Welch test slightly less powerful than Student (if equal variance assumption met)
+- Paired tests more powerful than independent (controls between-subject variation)
+- Nonparametric tests typically less powerful (but more robust)
+
+WHEN ASSUMPTIONS ARE VIOLATED
+------------------------------
+
+If Normality Violated:
+- Small samples (N < 30): Use nonparametric tests
+- Large samples (N > 30): t-test often robust (Central Limit Theorem)
+- Severe skew: Transform data or use nonparametric
+- Outliers: Check for errors, consider robust methods
+
+If Independence Violated:
+- Use different analysis (e.g., mixed models)
+- Account for clustering/nesting
+- Can't fix with alternative test
+
+If Equal Variance Violated:
+- Use Welch's t-test instead of Student's
+- Welch is robust to unequal variances
+- Generally safer default choice

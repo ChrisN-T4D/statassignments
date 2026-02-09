@@ -86,6 +86,40 @@ const topic = computed(() => topics.find(t => t.id === topicId.value))
 
 const pageTitle = computed(() => {
   if (topicId.value === 'intro-to-stats') return 'Why Do We Learn Statistics?'
+
+  // Add chapter and section number for topics with chapter field
+  if (topic.value?.chapter) {
+    // Extract chapter number (e.g., 'chapter-12' -> '12')
+    const chapterParts = topic.value.chapter.split('-')
+    const chapterNum = chapterParts.length >= 2 ? chapterParts[1] : null
+
+    if (!chapterNum) {
+      return topic.value?.title || 'Topic'
+    }
+
+    // Get all topics in the same chapter to determine section number
+    const chapterTopics = topics
+      .filter(t => t.chapter === topic.value.chapter)
+      .sort((a, b) => {
+        // Sort by their order in the module
+        const statsModuleId = toStatsModuleId(moduleId.value)
+        const module = statsModuleId ? getModuleById(statsModuleId) : null
+        if (module?.topics?.length) {
+          const indexA = module.topics.indexOf(a.id)
+          const indexB = module.topics.indexOf(b.id)
+          return indexA - indexB
+        }
+        return 0
+      })
+
+    // Find section number (position in chapter)
+    const sectionNum = chapterTopics.findIndex(t => t.id === topic.value.id) + 1
+
+    if (sectionNum > 0) {
+      return `${chapterNum}.${sectionNum} ${topic.value.title}`
+    }
+  }
+
   return topic.value?.title || 'Topic'
 })
 
@@ -100,12 +134,23 @@ const moduleTopics = computed(() => {
   if (!moduleId.value) return []
   const statsModuleId = toStatsModuleId(moduleId.value)
   const module = statsModuleId ? getModuleById(statsModuleId) : null
+
+  // Get all topics in the module
+  let allTopics = []
   if (module?.topics?.length) {
-    return module.topics
+    allTopics = module.topics
       .map(topicKey => topics.find(t => t.id === topicKey))
       .filter(Boolean)
+  } else {
+    allTopics = topics.filter(t => t.moduleId === moduleId.value)
   }
-  return topics.filter(t => t.moduleId === moduleId.value)
+
+  // If current topic has a chapter field, filter to only that chapter
+  if (topic.value?.chapter) {
+    return allTopics.filter(t => t.chapter === topic.value.chapter)
+  }
+
+  return allTopics
 })
 
 const nextTopic = computed(() => {

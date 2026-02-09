@@ -1,0 +1,471 @@
+MODULE 5: DATA MANIPULATION - SUMMARY
+======================================
+
+OVERVIEW
+--------
+Real-world data rarely arrives in analysis-ready form. Before you can run statistical tests
+or create visualizations, you often need to clean, transform, and restructure your data.
+This module teaches you the essential data manipulation skills that every data analyst needs.
+
+Good data manipulation is about more than technical skills - it's about developing a systematic
+workflow that ensures data quality, reduces errors, and makes analysis reproducible.
+
+FILTERING DATA (Section 6.1)
+-----------------------------
+Filtering lets you include only specific cases (rows) in your analysis based on logical conditions.
+
+Purpose:
+• Analyze subsets of your data (e.g., only participants over 18)
+• Remove problematic cases (e.g., outliers, failed attention checks)
+• Compare different subgroups separately
+• Test hypotheses on specific populations
+
+Basic Filtering in jamovi:
+• Data → Filters
+• Create logical expressions using comparison operators:
+  - == (equals)
+  - != (not equal)
+  - > (greater than)
+  - < (less than)
+  - >= (greater than or equal to)
+  - <= (less than or equal to)
+
+Example Filters:
+• age > 18                           → Only adults
+• gender == "female"                 → Only female participants
+• score >= 80                        → Only high performers
+• condition != "control"             → Exclude control group
+
+Combining Conditions:
+• AND: Both conditions must be true
+  - age >= 18 and age <= 65         → Working-age adults
+  - score > 50 and passed == "yes"  → High scorers who passed
+
+• OR: At least one condition must be true
+  - gender == "male" or gender == "female"  → Binary gender responses
+  - score < 40 or score > 90               → Extreme scores only
+
+• NOT: Negates a condition
+  - not(dropped == "yes")            → Participants who didn't drop out
+
+Complex Filters Using Parentheses:
+(age >= 18 and age <= 25) or status == "student"
+→ Young adults OR students of any age
+
+Important Notes:
+• Filters affect ALL analyses while active
+• Filtered cases are hidden, not deleted (can toggle filter on/off)
+• jamovi shows how many cases remain after filtering
+• Always document your filtering criteria
+
+Common Pitfall:
+Forgetting a filter is active! Always check filter status before running new analyses.
+
+SELECTING AND DROPPING VARIABLES (Section 6.2)
+-----------------------------------------------
+Not every variable in your dataset needs to be in every analysis.
+
+When to Drop Variables:
+• Administrative variables (participant ID, timestamp) not needed for analysis
+• Failed measures (equipment malfunction, incomplete data collection)
+• Redundant variables (keeping transformed version, dropping original)
+• Simplifying dataset for sharing or presentation
+
+In jamovi:
+• Data view: Click variable name → Setup → Delete
+• Or: Right-click column header → Delete
+
+Best Practice:
+Keep the original dataset intact! Work on a copy if you're permanently removing variables.
+
+COMPUTING NEW VARIABLES (Section 6.3)
+--------------------------------------
+Creating new variables is one of the most common data manipulation tasks.
+
+Common Reasons to Compute New Variables:
+1. Combine existing variables (e.g., total score from item scores)
+2. Transform variables (e.g., log transformation, centering)
+3. Recode variables (e.g., continuous → categorical)
+4. Calculate derived measures (e.g., change scores, percentages)
+
+Basic Computed Variables in jamovi:
+• Data → Compute
+• Enter formula using variable names and operations
+• New variable appears in the dataset
+
+Arithmetic Operations:
+• Addition: score1 + score2 + score3
+• Subtraction: posttest - pretest
+• Multiplication: height * width
+• Division: correct / total
+• Exponentiation: value^2
+• Parentheses for order: (score - mean) / SD
+
+Example: Total Score
+total_score = item1 + item2 + item3 + item4 + item5
+
+Example: Change Score
+improvement = posttest - baseline
+
+Example: Percentage
+accuracy = (correct / total) * 100
+
+Mathematical Functions:
+• SQRT(x): Square root → SQRT(25) = 5
+• LOG10(x): Base-10 logarithm → LOG10(100) = 2
+• LN(x): Natural logarithm (base e)
+• EXP(x): Exponential (e^x)
+• ABS(x): Absolute value → ABS(-5) = 5
+• ROUND(x): Round to nearest integer
+
+When to Use LOG Transformations:
+• Right-skewed distributions (income, reaction time)
+• Data with multiplicative relationships
+• Stabilizing variance across groups
+• Making proportional differences more symmetric
+
+Conditional Formulas Using IF():
+IF(condition, value_if_true, value_if_false)
+
+Example: Pass/Fail Variable
+status = IF(score >= 60, "Pass", "Fail")
+
+Example: Age Groups
+age_group = IF(age < 18, "Child", IF(age < 65, "Adult", "Senior"))
+
+Nested IF statements let you create multiple categories from continuous variables.
+
+CENTERING AND STANDARDIZING (Section 6.4)
+------------------------------------------
+Transforming variables to change their scale without changing the pattern of scores.
+
+Centering (Mean-Centering):
+Formula: centered = X - mean(X)
+Result: New mean = 0, but SD unchanged
+
+Example: Centering Likert Scale
+• Original scale: 1-7 (mean = 4)
+• Centered: -3 to +3 (mean = 0)
+• Formula in jamovi: likert_item - 4
+
+Why Center Variables?
+• Makes 0 a meaningful value (the average)
+• Improves interpretation in regression (intercept = value when predictors are average)
+• Required for some interaction analyses
+• Useful when combining variables with different scales
+
+Standardizing (Z-Scores):
+Formula: z = (X - mean) / SD
+Result: Mean = 0, SD = 1
+
+Why Standardize?
+• Compare variables on different scales
+• Remove arbitrary units
+• Identify outliers (|z| > 3 is very extreme)
+• Required for some multivariate analyses
+
+Example: Comparing Academic Performance
+• Can't compare Math score (out of 100) with English score (out of 50)
+• But CAN compare z_math = 1.5 with z_english = -0.5
+• Shows you're 1.5 SD above average in math, 0.5 SD below average in English
+
+TRANSFORMING VARIABLES (Section 6.5)
+-------------------------------------
+The Transform feature creates reusable transformation rules.
+
+Data → Transform:
+• Define transformation once
+• Apply to multiple variables
+• Uses $source as placeholder for the variable being transformed
+
+Example: Multiple Likert Items
+Transform: $source - 4
+Apply to: item1, item2, item3, item4, item5
+Result: All items centered at once
+
+Advantages:
+• Consistency across variables
+• Saves time with multiple similar transformations
+• Reduces copy-paste errors
+• Easier to document and reproduce
+
+Transform with Conditions:
+Click "+" to add conditional rules
+• IF condition 1 → use formula 1
+• ELSE IF condition 2 → use formula 2
+• ELSE → use default formula
+
+Example: Categorizing Multiple Test Scores
+• IF $source >= 90 → "A"
+• ELSE IF $source >= 80 → "B"
+• ELSE IF $source >= 70 → "C"
+• ELSE → "F"
+
+RECODING VARIABLES (Section 6.6)
+---------------------------------
+Changing how variables are coded or categorized.
+
+Numeric to Categorical:
+age_category = IF(age < 30, "Young", IF(age < 60, "Middle", "Older"))
+
+Collapsing Categories:
+Original: "Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"
+Collapsed: disagree_or_not = IF(response == "Agree" or response == "Strongly Agree",
+                                 "Agree", "Disagree")
+
+Reverse Coding:
+For negatively-worded items on scales (e.g., "I am NOT anxious")
+reverse_scored = (max_value + 1) - original_score
+
+Example with 7-point scale:
+reversed = 8 - original
+• Original 1 → Reversed 7
+• Original 7 → Reversed 1
+• Original 4 → Reversed 4 (midpoint stays same)
+
+MISSING DATA HANDLING (Section 6.7)
+------------------------------------
+Missing data is inevitable in real research. How you handle it affects your results.
+
+Types of Missing Data:
+• Structural (question doesn't apply) → usually okay to leave missing
+• Random (participant skipped by accident) → less problematic
+• Systematic (participants avoid sensitive questions) → more problematic
+
+In jamovi:
+• Empty cells are automatically coded as missing (NA)
+• Most analyses exclude cases with missing data by default (listwise deletion)
+• Check how many cases are dropped due to missing data
+
+Options for Handling Missing Data:
+1. Listwise deletion: Drop any case with ANY missing value
+   - Simple but wastes data
+   - Default in most software including jamovi
+
+2. Pairwise deletion: Use all available data for each analysis
+   - Maximizes sample size
+   - Can lead to inconsistent sample sizes across analyses
+
+3. Imputation: Fill in missing values based on other data
+   - Mean imputation (simple but can distort variance)
+   - Multiple imputation (sophisticated, requires specialized tools)
+
+Best Practice:
+• Report how much data is missing and why
+• Consider whether missingness is related to your variables of interest
+• Use sensitivity analyses to check if results change with different approaches
+
+CREATING AGGREGATE SCORES (Section 6.8)
+----------------------------------------
+Combining multiple items into composite scores or scale totals.
+
+Sum Scores:
+total_anxiety = anxiety1 + anxiety2 + anxiety3 + anxiety4 + anxiety5
+
+Mean Scores (handles missing data better):
+mean_anxiety = (anxiety1 + anxiety2 + anxiety3 + anxiety4 + anxiety5) / 5
+
+Advantages of Mean Scores:
+• If one item is missing, can still calculate mean from remaining items
+• Same scale as individual items (easier to interpret)
+• Less affected by number of items
+
+When Using Multiple-Item Scales:
+1. Check reliability first (Cronbach's alpha, typically want > .70)
+2. Reverse-code negatively-worded items before combining
+3. Decide on sum vs. mean based on how you'll use the score
+4. Check for floor/ceiling effects in composite score
+
+LOGICAL EXPRESSIONS AND OPERATORS (Section 6.9)
+------------------------------------------------
+Understanding logical operators is essential for filtering and computing variables.
+
+Comparison Operators:
+• == (exactly equal): gender == "male"
+• != (not equal): condition != "control"
+• > (greater than): age > 18
+• < (less than): score < 50
+• >= (greater than or equal): score >= 60
+• <= (less than or equal): age <= 65
+
+Logical Operators:
+• and: Both conditions must be true
+  - score > 50 and passed == "yes"
+
+• or: At least one condition must be true
+  - failed == "yes" or incomplete == "yes"
+
+• not: Negates the condition
+  - not(dropped == "yes")
+
+Order of Operations:
+1. Parentheses first
+2. not
+3. and
+4. or
+
+Example Requiring Parentheses:
+(age < 18 or age > 65) and consent == "yes"
+→ Minors OR seniors who gave consent
+
+Without parentheses, this means something different:
+age < 18 or (age > 65 and consent == "yes")
+→ All minors OR seniors who gave consent
+
+Common Mistakes:
+✗ WRONG: age = 18 (single = is assignment, not comparison)
+✓ RIGHT: age == 18
+
+✗ WRONG: 18 < age < 65 (doesn't work in jamovi)
+✓ RIGHT: age > 18 and age < 65
+
+✗ WRONG: gender == "male" or "female" (syntax error)
+✓ RIGHT: gender == "male" or gender == "female"
+
+WORKING WITH TEXT/STRING VARIABLES (Section 6.10)
+--------------------------------------------------
+Sometimes you need to manipulate text responses or categorical labels.
+
+Common text operations (vary by software):
+• UPPER(): Convert to uppercase
+• LOWER(): Convert to lowercase
+• SUBSTR(): Extract part of text
+• CONCAT(): Combine text strings
+
+In jamovi, text manipulation is limited. Most commonly:
+• Use filters with == or != for exact text matches
+• Recode text variables into numeric codes if needed for analysis
+
+Best Practice:
+Plan your variable coding scheme in advance to minimize need for text recoding.
+
+PRACTICAL WORKFLOW FOR DATA MANIPULATION
+-----------------------------------------
+A systematic approach prevents errors and ensures reproducibility:
+
+1. START WITH CLEAN BACKUP
+   Always keep an untouched copy of raw data
+
+2. DOCUMENT EVERYTHING
+   • What variables you created
+   • What transformations you applied
+   • Why you made these decisions
+   • What filters are active
+
+3. CHECK YOUR WORK
+   • Look at first few cases to verify formulas worked correctly
+   • Check min/max values for impossible values
+   • Compare descriptive stats before/after transformation
+   • Verify sample sizes match expectations after filtering
+
+4. CREATE VARIABLES IN LOGICAL ORDER
+   • Do transformations before aggregations
+   • Create component scores before composite scores
+   • Apply filters last (so you can see what's being excluded)
+
+5. USE CLEAR, DESCRIPTIVE NAMES
+   • age_centered (good)
+   • var27 (bad)
+   • scale_total_reversed (good)
+   • final (bad)
+
+6. SAVE WORK INCREMENTALLY
+   Save jamovi file after each major step, with version numbers if needed
+
+COMMON DATA MANIPULATION TASKS
+-------------------------------
+Task: Calculate total score from multiple items
+Formula: total = item1 + item2 + item3 + item4
+
+Task: Calculate percentage correct
+Formula: pct_correct = (correct / total) * 100
+
+Task: Create age groups
+Formula: age_group = IF(age < 18, "Child", IF(age < 65, "Adult", "Senior"))
+
+Task: Center a variable
+Formula: var_centered = var - mean_value
+
+Task: Reverse-code a 5-point item
+Formula: item_reversed = 6 - item_original
+
+Task: Flag outliers (>3 SD from mean)
+Formula: outlier = IF(ABS(z_score) > 3, "yes", "no")
+
+Task: Create change score
+Formula: change = timepoint2 - timepoint1
+
+Task: Log-transform skewed variable
+Formula: log_income = LOG10(income)
+
+KEY TAKEAWAYS
+-------------
+1. Data manipulation is a critical skill for every data analyst
+2. Always keep original data intact - work on copies
+3. Document every transformation so analyses are reproducible
+4. Verify transformations worked correctly before proceeding
+5. Use clear, descriptive variable names
+6. Understand logical operators (and, or, not) for filtering
+7. Center variables to make 0 meaningful; standardize to compare across scales
+8. Handle missing data thoughtfully and report your approach
+9. Create composite scores from multi-item scales after checking reliability
+
+CRITICAL INSIGHT: Garbage In, Garbage Out
+------------------------------------------
+"Torture the data, and it will confess to anything."
+- Ronald Coase
+
+Data manipulation is powerful, but power requires responsibility:
+• Every transformation changes your data
+• Wrong transformations lead to wrong conclusions
+• Document WHY you made each choice, not just WHAT you did
+• Be transparent about data cleaning and exclusions
+• Always ask: "Does this transformation make theoretical sense?"
+
+The goal is to prepare data that accurately represents the phenomenon you're studying,
+not to manipulate data until it shows what you want to see.
+
+FORMULA REFERENCE FOR COMMON TRANSFORMATIONS
+---------------------------------------------
+Centering: X_centered = X - mean(X)
+Standardizing: z = (X - mean(X)) / SD(X)
+Reverse coding (k-point scale): X_reversed = (k + 1) - X
+Log transformation: X_log = LOG10(X)  or  X_ln = LN(X)
+Square root: X_sqrt = SQRT(X)
+Sum score: total = X1 + X2 + X3 + ... + Xn
+Mean score: mean = (X1 + X2 + ... + Xn) / n
+Percentage: pct = (part / whole) * 100
+Change score: change = Time2 - Time1
+
+SOFTWARE NOTES (jamovi)
+-----------------------
+• Data → Compute: Create new variables using formulas
+• Data → Transform: Create reusable transformations for multiple variables
+• Data → Filters: Include only specific cases in analyses
+• Setup tab: Change variable properties (name, type, levels)
+• Use $source in Transform formulas as placeholder
+• Click fx button to see available functions
+• Use "Add condition" (+) for conditional transforms
+• Formulas are case-sensitive for variable names
+• Missing values coded as empty cells or NA
+
+TROUBLESHOOTING COMMON ERRORS
+------------------------------
+Error: "NaN" or "Inf" in results
+→ Check for division by zero or operations on missing data
+
+Error: Formula doesn't work
+→ Check spelling of variable names (case-sensitive)
+→ Verify you used == (not =) for comparisons
+→ Check parentheses are balanced
+
+Unexpected values after transformation
+→ Look at first few cases to verify formula
+→ Check if variables are the expected type (numeric vs. text)
+→ Verify order of operations with parentheses
+
+NEXT STEPS
+----------
+In Module 6, we'll learn about probability and sampling - the bridge between
+descriptive statistics (what we observe in our data) and inferential statistics
+(what we can conclude about populations beyond our sample).

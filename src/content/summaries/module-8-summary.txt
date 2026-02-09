@@ -1,0 +1,223 @@
+MODULE 8: CORRELATION AND LINEAR REGRESSION
+===============================================
+
+OVERVIEW
+--------
+This module covers correlation and linear regression, the standard tools statisticians use when analyzing relationships between continuous predictors and continuous outcomes.
+
+KEY CONCEPTS
+------------
+
+1. CORRELATION (12.1)
+   - Measures the strength and direction of relationships between variables
+   - Pearson correlation coefficient (r): ranges from -1 to +1
+     * r = 1: perfect positive relationship
+     * r = -1: perfect negative relationship
+     * r = 0: no relationship
+   - Interpretation guidelines (rough guide):
+     * ±0.9 to ±1.0: Very strong
+     * ±0.7 to ±0.9: Strong
+     * ±0.4 to ±0.7: Moderate
+     * ±0.2 to ±0.4: Weak
+     * 0 to ±0.2: Negligible
+
+   - Covariance: Cov(X,Y) = (1/(N-1)) Σ(Xi - X̄)(Yi - Ȳ)
+   - Pearson correlation: rXY = Cov(X,Y) / (σ̂X × σ̂Y)
+
+   - Spearman's Rank Correlation (ρ):
+     * Used when relationship isn't linear but is monotonic
+     * Based on ranks rather than raw values
+     * Perfect for ordinal relationships
+
+2. SCATTERPLOTS (12.2)
+   - Visual tool for examining relationships between two variables
+   - Each observation = one dot
+   - Horizontal location = value on one variable
+   - Vertical location = value on other variable
+   - Convention: plot cause variable on x-axis, effect on y-axis
+
+3. LINEAR REGRESSION MODEL (12.3)
+   - Basic equation: Ŷi = b0 + b1Xi
+   - b0 = intercept (expected value of Y when X = 0)
+   - b1 = slope (change in Y for 1-unit change in X)
+   - εi = Yi - Ŷi (residual/error term)
+   - Complete model: Yi = b0 + b1Xi + εi
+
+4. ESTIMATING REGRESSION MODELS (12.4)
+   - Ordinary Least Squares (OLS): minimizes Σεi²
+   - Goal: find b0 and b1 that minimize sum of squared residuals
+   - In jamovi: Regression → Linear Regression
+   - Interpreting coefficients:
+     * Intercept: predicted Y when all X = 0
+     * Slope: change in Y for 1-unit increase in X
+
+5. MULTIPLE LINEAR REGRESSION (12.5)
+   - Extends to multiple predictors
+   - Model: Yi = b0 + b1Xi1 + b2Xi2 + ... + bKXiK + εi
+   - Each coefficient represents effect of that predictor holding others constant
+   - In jamovi: add multiple variables to "Covariates" box
+
+6. MODEL FIT (12.6)
+   - R² (coefficient of determination):
+     * R² = 1 - (SSres/SStot)
+     * Proportion of variance explained by model
+     * Range: 0 to 1 (higher is better)
+   - Adjusted R²:
+     * Adj. R² = 1 - (SSres/SStot) × ((N-1)/(N-K-1))
+     * Adjusts for number of predictors
+     * Useful when comparing models with different numbers of predictors
+   - For simple regression with one predictor: r² = R²
+
+7. HYPOTHESIS TESTS (12.7)
+
+   a) Testing the Overall Model:
+      - F-test: F = (MSmod)/(MSres)
+      - H0: No relationship between predictors and outcome
+      - H1: Model predicts outcome better than chance
+      - df: K and N-K-1
+
+   b) Testing Individual Coefficients:
+      - t-test: t = b̂/SE(b̂)
+      - H0: b = 0 (predictor has no effect)
+      - H1: b ≠ 0 (predictor has significant effect)
+      - df: N-K-1
+
+8. REGRESSION COEFFICIENTS (12.8)
+
+   - Confidence Intervals:
+     * CI(b) = b̂ ± (tcrit × SE(b̂))
+     * Shows uncertainty in coefficient estimates
+
+   - Standardized Coefficients (β):
+     * βX = bX × (σX/σY)
+     * Allow comparison of predictors on different scales
+     * Interpretation: SD change in Y per SD change in X
+     * Use when comparing relative importance of predictors
+
+9. ASSUMPTIONS OF REGRESSION (12.9)
+   - Normality: residuals should be normally distributed
+   - Linearity: relationship between X and Y should be linear
+   - Homogeneity of variance: constant σ across all Y values
+   - Uncorrelated predictors: avoid multicollinearity
+   - Independent residuals: no patterns in residuals
+   - No bad outliers: check influential points
+
+10. MODEL CHECKING (12.10)
+
+    a) Types of Residuals:
+       - Ordinary: εi = Yi - Ŷi
+       - Standardized: ε'i = εi/(σ̂√(1-hi))
+       - Studentized: ε*i = εi/(σ̂(-i)√(1-hi))
+
+    b) Anomalous Data:
+       - Outliers: large Studentized residuals
+       - High leverage: unusual X values (high hat values)
+       - High influence: both outlier AND high leverage
+       - Cook's Distance: Di = (ε*i²/(K+1)) × (hi/(1-hi))
+         * Rule of thumb: D > 1 indicates high influence
+
+    c) Checking Normality:
+       - Q-Q plot of residuals
+       - Residuals plots (should show random scatter)
+       - Box-Cox transformation if needed
+
+    d) Checking Collinearity:
+       - Variance Inflation Factor (VIF): VIFk = 1/(1-R²(-k))
+       - Rule of thumb: VIF > 10 problematic, > 5 concerning
+       - √VIF shows how much wider CI is due to collinearity
+
+11. MODEL SELECTION (12.11)
+
+    - Principles:
+      * Base choices on substantive theory when possible
+      * Balance simplicity vs. goodness of fit (Ockham's razor)
+
+    - Akaike Information Criterion (AIC):
+      * AIC = (SSres/σ̂²) + 2K
+      * Lower AIC = better model
+      * Balances fit and complexity
+
+    - Methods:
+      * Backward elimination: start full, remove predictors
+      * Forward selection: start minimal, add predictors
+      * Hierarchical regression: compare nested models
+
+    - Comparing Models:
+      * Use AIC/BIC for model selection
+      * F-test for nested models:
+        F = ((SS¹res - SS²res)/k) / (SS²res/(N-p-1))
+      * Model Builder in jamovi for hierarchical comparison
+
+KEY FORMULAS
+------------
+- Pearson correlation: r = Cov(X,Y)/(σX × σY)
+- Simple regression: Ŷ = b0 + b1X
+- Multiple regression: Ŷ = b0 + b1X1 + b2X2 + ... + bKXK
+- R²: 1 - (SSres/SStot)
+- F-statistic: MSmodel/MSresidual
+- t-statistic: b̂/SE(b̂)
+- Standardized coefficient: β = b × (σX/σY)
+- Cook's Distance: D = (ε*²/(K+1)) × (h/(1-h))
+
+JAMOVI PROCEDURES
+-----------------
+1. Correlation Matrix:
+   - Analyses → Regression → Correlation Matrix
+   - Select variables
+   - Check "Pearson" or "Spearman"
+   - Check "Report significance" for hypothesis tests
+
+2. Simple Linear Regression:
+   - Analyses → Regression → Linear Regression
+   - Dependent Variable: outcome (Y)
+   - Covariates: predictor (X)
+   - Model Fit: R, R², Adjusted R²
+   - Model Coefficients: estimates, CI, t-tests
+
+3. Multiple Regression:
+   - Same as simple, but add multiple Covariates
+   - Check "Standardized estimate" for β coefficients
+
+4. Assumption Checks:
+   - Q-Q plot of residuals
+   - Residuals plots
+   - Cook's distance
+   - Collinearity statistics (VIF)
+
+5. Model Comparison:
+   - Use Model Builder
+   - Block 1: first set of predictors
+   - Block 2: additional predictors
+   - View Model Comparisons table for F-test
+
+COMMON PITFALLS
+---------------
+- Confusing correlation with causation
+- Ignoring non-linear relationships
+- Not checking assumptions
+- Including highly correlated predictors (multicollinearity)
+- Over-interpreting R² in small samples
+- Using regression with categorical outcomes
+- Extrapolating beyond data range
+- Not considering influential observations
+- Automated model selection without theory
+
+INTERPRETATION TIPS
+-------------------
+1. Always create scatterplots before running correlations/regression
+2. Report both b (unstandardized) and β (standardized) coefficients
+3. For b: interpret in original units of measurement
+4. For β: interpret as SD changes
+5. Check VIF before interpreting coefficients in multiple regression
+6. Report R² and adjusted R² for model fit
+7. Always check assumptions before trusting results
+8. Consider practical significance, not just statistical significance
+
+REAL-WORLD APPLICATIONS
+-----------------------
+- Predicting student performance from study hours
+- Examining relationship between sleep and mood
+- Modeling house prices from property features
+- Analyzing relationship between exercise and health outcomes
+- Predicting sales from advertising spend
+- Examining factors affecting employee satisfaction

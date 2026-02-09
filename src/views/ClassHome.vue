@@ -90,25 +90,56 @@
         <div class="tab-content">
           <!-- Topics Tab -->
           <div v-if="activeContentTab === 'topics'" class="tab-panel">
-            <div v-if="moduleTopics.length === 0" class="empty-state">
+            <div v-if="moduleItems.length === 0" class="empty-state">
               <p>No topics available for this module yet.</p>
             </div>
-            <div v-else class="topics-grid">
-              <router-link
-                v-for="topic in moduleTopics"
-                :key="topic.id"
-                :to="`/topic/${topic.id}`"
-                class="topic-card"
-                :class="{ read: isTopicRead(topic.id) }"
-              >
-                <img src="/topic-icon.png" alt="" class="topic-icon-img" />
-                <div class="topic-info">
-                  <h3>{{ replaceJamoviLabel(topic.title, selectedModuleId) }}</h3>
-                  <p>{{ replaceJamoviLabel(topic.description, selectedModuleId) }}</p>
+            <div v-else>
+              <template v-for="item in moduleItems" :key="item.id">
+                <!-- Chapter section with collapsible card -->
+                <div v-if="item.type === 'chapter'" class="practice-link-card learn-card chapter-card">
+                  <div class="link-card-icon">
+                    <img src="/topic-icon.png" alt="Chapter" class="link-card-icon-img" />
+                  </div>
+                  <div class="link-card-content">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                    <div class="topics-grid">
+                      <router-link
+                        v-for="topic in item.topics"
+                        :key="topic.id"
+                        :to="`/topic/${topic.id}`"
+                        class="topic-card"
+                        :class="{ read: isTopicRead(topic.id) }"
+                      >
+                        <img src="/topic-icon.png" alt="" class="topic-icon-img" />
+                        <div class="topic-info">
+                          <h3>{{ replaceJamoviLabel(topic.title, selectedModuleId) }}</h3>
+                          <p>{{ replaceJamoviLabel(topic.description, selectedModuleId) }}</p>
+                        </div>
+                        <span v-if="isTopicRead(topic.id)" class="topic-status">Read</span>
+                        <span class="card-arrow">-></span>
+                      </router-link>
+                    </div>
+                  </div>
                 </div>
-                <span v-if="isTopicRead(topic.id)" class="topic-status">Read</span>
-                <span class="card-arrow">-></span>
-              </router-link>
+
+                <!-- Regular topic (not in a chapter) -->
+                <div v-else class="topics-grid">
+                  <router-link
+                    :to="`/topic/${item.id}`"
+                    class="topic-card"
+                    :class="{ read: isTopicRead(item.id) }"
+                  >
+                    <img src="/topic-icon.png" alt="" class="topic-icon-img" />
+                    <div class="topic-info">
+                      <h3>{{ replaceJamoviLabel(item.title, selectedModuleId) }}</h3>
+                      <p>{{ replaceJamoviLabel(item.description, selectedModuleId) }}</p>
+                    </div>
+                    <span v-if="isTopicRead(item.id)" class="topic-status">Read</span>
+                    <span class="card-arrow">-></span>
+                  </router-link>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -176,27 +207,36 @@
               <div class="link-card-content">
                 <h3>To Do in Software</h3>
                 <p>{{ todoExercises.length }} tasks > {{ todoCompleted ? 'Complete' : 'In progress' }}</p>
-                <div class="lessons-grid">
-                  <router-link
-                    v-for="(exercise, index) in todoExercises"
-                    :key="`${exercise.module}-${exercise.topic}-${index}`"
-                    :to="`/class/${classId}/software?module=${selectedModuleId}&software=${preferredSoftware}`"
-                    class="lesson-card"
-                  >
-                    <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(exercise.software_type) }">
-                      <img
-                        v-if="getSoftwareIcon(exercise.software_type)"
-                        :src="getSoftwareIcon(exercise.software_type)"
-                        :alt="`${exercise.software_type} icon`"
-                        class="lesson-software-icon"
-                      />
-                    </div>
-                    <div class="lesson-info">
-                      <h3>{{ exercise.title }}</h3>
-                      <p>{{ exercise.description }}</p>
-                    </div>
-                    <span class="card-arrow">-></span>
-                  </router-link>
+
+                <!-- Exercises grouped by chapter -->
+                <div
+                  v-for="chapter in todoExercisesByChapter"
+                  :key="chapter.id"
+                  class="chapter-section"
+                >
+                  <h4 class="chapter-header">{{ chapter.title }}</h4>
+                  <div class="lessons-grid">
+                    <router-link
+                      v-for="(exercise, index) in chapter.exercises"
+                      :key="`${exercise.module}-${exercise.topic}-${index}`"
+                      :to="`/class/${classId}/software?module=${selectedModuleId}&software=${preferredSoftware}`"
+                      class="lesson-card"
+                    >
+                      <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(exercise.software_type) }">
+                        <img
+                          v-if="getSoftwareIcon(exercise.software_type)"
+                          :src="getSoftwareIcon(exercise.software_type)"
+                          :alt="`${exercise.software_type} icon`"
+                          class="lesson-software-icon"
+                        />
+                      </div>
+                      <div class="lesson-info">
+                        <h3>{{ exercise.title }}</h3>
+                        <p>{{ exercise.description }}</p>
+                      </div>
+                      <span class="card-arrow">-></span>
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -256,7 +296,7 @@ import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
-import { getModulesByClassId, getContentModulesByClass, getTopicsForModule } from '../data/modules'
+import { getModulesByClassId, getContentModulesByClass, getTopicsForModule, getModuleItemsWithChapters } from '../data/modules'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -305,6 +345,11 @@ const moduleTopics = computed(() => {
   return getTopicsForModule(selectedModuleId.value)
 })
 
+// Get module items with chapters preserved (for UI rendering)
+const moduleItems = computed(() => {
+  return getModuleItemsWithChapters(selectedModuleId.value)
+})
+
 // Get software lessons for the selected module
 const moduleLessons = computed(() => {
   return getLessonsByModule(selectedModuleId.value)
@@ -331,6 +376,38 @@ const todoExercises = computed(() => {
     ex.module === practiceModuleId &&
     ex.exercise_type !== 'menu_navigation'
   )
+})
+
+const todoExercisesByChapter = computed(() => {
+  const exercises = todoExercises.value
+  if (exercises.length === 0) return []
+
+  // Group exercises by chapter
+  const chapters = {}
+  exercises.forEach(ex => {
+    const chapterId = ex.chapter || 'no-chapter'
+    if (!chapters[chapterId]) {
+      chapters[chapterId] = []
+    }
+    chapters[chapterId].push(ex)
+  })
+
+  // Convert to array format with chapter metadata
+  const chapterOrder = ['chapter-10', 'chapter-11', 'chapter-12', 'chapter-13']
+  const chapterTitles = {
+    'chapter-10': 'Chapter 10: Categorical Data Analysis',
+    'chapter-11': 'Chapter 11: Comparing Two Means',
+    'chapter-12': 'Chapter 12: Correlation and Linear Regression',
+    'chapter-13': 'Chapter 13: Comparing Several Means (One-Way ANOVA)'
+  }
+
+  return chapterOrder
+    .filter(chapterId => chapters[chapterId])
+    .map(chapterId => ({
+      id: chapterId,
+      title: chapterTitles[chapterId],
+      exercises: chapters[chapterId]
+    }))
 })
 
 function getCompletedSoftwareExerciseIds() {
@@ -1005,12 +1082,30 @@ watch(() => route.fullPath, () => {
   color: var(--text-secondary);
 }
 
+/* Chapter Sections */
+.chapter-section {
+  margin-top: 1.5rem;
+}
+
+.chapter-section:first-of-type {
+  margin-top: 1rem;
+}
+
+.chapter-header {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
 /* Lessons Grid */
 .lessons-grid {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .learn-card {
@@ -1025,6 +1120,10 @@ watch(() => route.fullPath, () => {
 
 .learn-card .link-card-content {
   flex: 1;
+}
+
+.chapter-card {
+  margin-bottom: 1.5rem;
 }
 
 .lesson-card {

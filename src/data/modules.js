@@ -97,13 +97,28 @@ export const statisticsModules = [
     description: 'Create and interpret various types of statistical graphs and charts.',
     icon: 'M5',
     color: '#ec4899',
-    topics: ['histograms', 'boxplots', 'bar-charts', 'scatterplots'],
-    textbookChapters: ['Chapter 5: Drawing graphs'],
+    topics: [
+      'histograms',
+      'boxplots',
+      'bar-charts',
+      'scatterplots',
+      'tabulating-data',
+      'logical-expressions',
+      'transforming-variables',
+      'mathematical-functions',
+      'filtering-data'
+    ],
+    textbookChapters: ['Chapter 5: Drawing graphs', 'Chapter 6: Pragmatic matters'],
     learningObjectives: [
       'Create histograms and interpret distributions',
       'Build and read box plots',
       'Construct bar charts for categorical data',
-      'Use scatter plots to visualize relationships'
+      'Use scatter plots to visualize relationships',
+      'Create frequency tables and contingency tables',
+      'Use logical expressions for data filtering and transformations',
+      'Transform and recode variables using computed formulas',
+      'Apply mathematical functions like logarithms and absolute values',
+      'Extract subsets of data using filters'
     ],
     hasSoftwarePractice: true
   },
@@ -116,16 +131,31 @@ export const statisticsModules = [
     description: 'Understand probability concepts and sampling distributions.',
     icon: 'M6',
     color: '#14b8a6',
-    topics: ['probability-basics', 'normal-distribution', 'z-scores', 'sampling-distributions'],
+    topics: [
+      'probability-concepts',
+      'probability-rules',
+      'binomial-distribution',
+      'normal-distribution',
+      'other-distributions',
+      'sampling-theory',
+      'law-of-large-numbers',
+      'central-limit-theorem',
+      'parameter-estimation',
+      'confidence-intervals'
+    ],
     textbookChapters: [
-      'Chapter 7: Probability',
+      'Chapter 7: Introduction to probability',
       'Chapter 8: Estimating unknown quantities from a sample'
     ],
     learningObjectives: [
-      'Calculate basic probabilities',
-      'Understand the normal distribution and its properties',
-      'Convert scores to z-scores and use z-tables',
-      'Explain the central limit theorem'
+      'Distinguish between frequentist and Bayesian interpretations of probability',
+      'Calculate probabilities using basic probability rules',
+      'Work with binomial and normal distributions',
+      'Understand the t, χ², and F distributions',
+      'Explain sampling theory and different sampling methods',
+      'Apply the law of large numbers and central limit theorem',
+      'Estimate population parameters from sample statistics',
+      'Construct and interpret confidence intervals'
     ],
     hasSoftwarePractice: true
   },
@@ -138,7 +168,7 @@ export const statisticsModules = [
     description: 'Learn the logic and process of null hypothesis significance testing.',
     icon: 'M7',
     color: '#f97316',
-    topics: ['hypothesis-testing', 'p-values', 'effect-size', 'confidence-intervals'],
+    topics: ['hypothesis-testing', 'p-values', 'effect-size'],
     textbookChapters: ['Chapter 9: Hypothesis testing'],
     learningObjectives: [
       'State null and alternative hypotheses',
@@ -152,21 +182,57 @@ export const statisticsModules = [
     id: 'stats-module-8',
     classId: 'statistics',
     number: 8,
-    title: 'Comparing Groups/Relationships',
-    shortTitle: 'Comparisons',
-    description: 'Apply t-tests and correlation to compare groups and examine relationships.',
+    title: 'Categorical Data Analysis, T-Tests, Regression, & ANOVA',
+    shortTitle: 'Analysis Methods',
+    description: 'Analyze categorical data with chi-square tests, compare means with t-tests and ANOVA, and explore relationships with correlation and regression.',
     icon: 'M8',
     color: '#dc2626',
-    topics: ['t-tests', 'correlation', 'regression'],
+    topics: [
+      'chi-square-goodness-of-fit',
+      'chi-square-independence',
+      'chi-square-corrections-effect-size',
+      'chi-square-assumptions-fisher',
+      'mcnemar-test',
+      'one-sample-z-test',
+      'one-sample-t-test',
+      'independent-t-test',
+      'welch-t-test',
+      'paired-t-test',
+      'correlation',
+      'scatterplots',
+      'simple-regression',
+      'multiple-regression',
+      'regression-inference',
+      'regression-assumptions',
+      'model-selection',
+      'one-way-anova-basics',
+      'post-hoc-tests-anova',
+      'anova-assumptions',
+      'repeated-measures-anova'
+    ],
     textbookChapters: [
-      'Chapter 10: Comparing two means',
-      'Chapter 11: Correlation and linear regression'
+      'Chapter 10: Categorical data analysis',
+      'Chapter 11: Comparing two means',
+      'Chapter 12: Correlation and linear regression',
+      'Chapter 13: Comparing several means (one-way ANOVA)'
     ],
     learningObjectives: [
-      'Conduct and interpret independent samples t-tests',
-      'Conduct and interpret paired samples t-tests',
-      'Calculate and interpret Pearson correlation',
-      'Perform simple linear regression'
+      'Conduct chi-square goodness-of-fit and independence tests',
+      'Apply Fisher exact test and McNemar test when appropriate',
+      'Calculate and interpret Cramér\'s V and other effect sizes',
+      'Perform one-sample, independent, and paired t-tests',
+      'Check assumptions and use non-parametric alternatives',
+      'Calculate and interpret Pearson and Spearman correlations',
+      'Perform simple and multiple linear regression',
+      'Assess model fit using R² and adjusted R²',
+      'Check regression assumptions and identify influential observations',
+      'Compare and select models using AIC',
+      'Run one-way ANOVA to compare three or more groups',
+      'Conduct post-hoc tests with Bonferroni and Holm corrections',
+      'Check ANOVA assumptions using Levene test and Q-Q plots',
+      'Apply Welch ANOVA and Kruskal-Wallis when assumptions are violated',
+      'Perform repeated measures ANOVA for within-subjects designs',
+      'Calculate and interpret effect sizes (η² and ω²)'
     ],
     hasSoftwarePractice: true
   }
@@ -769,100 +835,357 @@ export const topicsByModule = {
   ],
   'stats-module-5': [
     {
-      id: 'histograms',
-      title: 'Histograms',
-      description: 'Visualize distributions and identify shape, center, spread.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-5',
+      title: 'Chapter 5: Drawing Graphs',
+      description: 'Create and interpret various types of statistical graphs',
+      topics: [
+        {
+          id: 'histograms',
+          title: 'Histograms',
+          description: 'Visualize distributions and identify shape, center, spread.',
+          icon: '📊'
+        },
+        {
+          id: 'boxplots',
+          title: 'Box Plots',
+          description: 'Display five-number summary and identify outliers.',
+          icon: '📦'
+        },
+        {
+          id: 'bar-charts',
+          title: 'Bar Charts',
+          description: 'Visualize categorical data with bar and pie charts.',
+          icon: '📊'
+        },
+        {
+          id: 'scatterplots',
+          title: 'Scatter Plots',
+          description: 'Visualize relationships between two continuous variables.',
+          icon: '⋅⋅'
+        }
+      ]
     },
     {
-      id: 'boxplots',
-      title: 'Box Plots',
-      description: 'Display five-number summary and identify outliers.',
-      icon: 'T'
-    },
-    {
-      id: 'bar-charts',
-      title: 'Bar Charts',
-      description: 'Visualize categorical data with bar and pie charts.',
-      icon: 'T'
-    },
-    {
-      id: 'scatterplots',
-      title: 'Scatter Plots',
-      description: 'Visualize relationships between two continuous variables.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-6',
+      title: 'Chapter 6: Pragmatic Matters',
+      description: 'Data manipulation, transformation, and filtering techniques',
+      topics: [
+        {
+          id: 'tabulating-data',
+          title: 'Tabulating and Cross-Tabulating Data',
+          description: 'Create frequency tables and contingency tables to summarize categorical data.',
+          icon: '⊞'
+        },
+        {
+          id: 'logical-expressions',
+          title: 'Logical Expressions',
+          description: 'Use logical operators to create conditional statements and filter data.',
+          icon: '∧∨'
+        },
+        {
+          id: 'transforming-variables',
+          title: 'Transforming and Recoding Variables',
+          description: 'Create new variables by transforming or recoding existing ones.',
+          icon: '↻'
+        },
+        {
+          id: 'mathematical-functions',
+          title: 'Mathematical Functions',
+          description: 'Use mathematical functions like logarithms, square roots, and exponentials.',
+          icon: 'ƒ(x)'
+        },
+        {
+          id: 'filtering-data',
+          title: 'Extracting Subsets with Filters',
+          description: 'Use filters to include only specific cases in your analysis.',
+          icon: '⊂'
+        }
+      ]
     }
   ],
   'stats-module-6': [
     {
-      id: 'probability-basics',
-      title: 'Probability Basics',
-      description: 'Fundamental probability rules and calculations.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-7',
+      title: 'Chapter 7: Introduction to Probability',
+      description: 'Fundamentals of probability theory and distributions',
+      topics: [
+        {
+          id: 'probability-concepts',
+          title: 'Probability Concepts',
+          description: 'Probability vs statistics, frequentist vs Bayesian interpretations.',
+          icon: 'P'
+        },
+        {
+          id: 'probability-rules',
+          title: 'Basic Probability Theory',
+          description: 'Fundamental probability rules, sample spaces, and elementary events.',
+          icon: '∩∪'
+        },
+        {
+          id: 'binomial-distribution',
+          title: 'The Binomial Distribution',
+          description: 'Understanding and working with the binomial distribution.',
+          icon: 'B'
+        },
+        {
+          id: 'normal-distribution',
+          title: 'The Normal Distribution',
+          description: 'Properties of the bell curve, probability density, and the empirical rule.',
+          icon: '𝒩'
+        },
+        {
+          id: 'other-distributions',
+          title: 'Other Important Distributions',
+          description: 'The t, χ², and F distributions.',
+          icon: 't,χ²,F'
+        }
+      ]
     },
     {
-      id: 'normal-distribution',
-      title: 'The Normal Distribution',
-      description: 'Properties of the bell curve and the empirical rule.',
-      icon: 'T'
-    },
-    {
-      id: 'z-scores',
-      title: 'Z-Scores and Standardization',
-      description: 'Converting raw scores and using z-tables.',
-      icon: 'T'
-    },
-    {
-      id: 'sampling-distributions',
-      title: 'Sampling Distributions',
-      description: 'The central limit theorem and standard error.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-8',
+      title: 'Chapter 8: Estimating Unknown Quantities from a Sample',
+      description: 'Sampling theory, estimation, and confidence intervals',
+      topics: [
+        {
+          id: 'sampling-theory',
+          title: 'Sampling Theory',
+          description: 'Samples, populations, and sampling methods.',
+          icon: '⊃'
+        },
+        {
+          id: 'law-of-large-numbers',
+          title: 'Law of Large Numbers',
+          description: 'How larger samples provide more accurate estimates.',
+          icon: '→∞'
+        },
+        {
+          id: 'central-limit-theorem',
+          title: 'Central Limit Theorem',
+          description: 'Sampling distributions and the central limit theorem.',
+          icon: 'CLT'
+        },
+        {
+          id: 'parameter-estimation',
+          title: 'Estimating Parameters',
+          description: 'Estimating population means and standard deviations from samples.',
+          icon: 'θ̂'
+        },
+        {
+          id: 'confidence-intervals',
+          title: 'Confidence Intervals',
+          description: 'Constructing and interpreting confidence intervals.',
+          icon: 'CI'
+        }
+      ]
     }
   ],
   'stats-module-7': [
+    // Chapter 9: Hypothesis Testing (original Module 7 content)
     {
       id: 'hypothesis-testing',
-      title: 'Hypothesis Testing Logic',
-      description: 'Null and alternative hypotheses, decision making.',
+      title: 'Hypothesis Testing',
+      description: 'The logic of null hypothesis significance testing.',
       icon: 'T'
     },
     {
       id: 'p-values',
-      title: 'Understanding P-Values',
-      description: 'What p-values mean and common misinterpretations.',
+      title: 'P-Values',
+      description: 'Understanding and interpreting p-values correctly.',
       icon: 'T'
     },
     {
       id: 'effect-size',
-      title: 'Effect Sizes',
-      description: "Cohen's d, r, and practical significance.",
-      icon: 'T'
-    },
-    {
-      id: 'confidence-intervals',
-      title: 'Confidence Intervals',
-      description: 'Estimating population parameters with uncertainty.',
+      title: 'Effect Size',
+      description: 'Measuring practical significance beyond p-values.',
       icon: 'T'
     }
   ],
   'stats-module-8': [
     {
-      id: 't-tests',
-      title: 'T-Tests',
-      description: 'One-sample, independent, and paired t-tests.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-10',
+      title: 'Chapter 10: Categorical Data Analysis',
+      description: 'Chi-square tests and related procedures for categorical data',
+      topics: [
+        {
+          id: 'chi-square-goodness-of-fit',
+          title: 'Chi-Square Goodness-of-Fit Test',
+          description: 'Testing if observed frequencies match expected probabilities.',
+          icon: 'χ²'
+        },
+        {
+          id: 'chi-square-independence',
+          title: 'Chi-Square Test of Independence',
+          description: 'Testing association between two categorical variables.',
+          icon: 'χ²'
+        },
+        {
+          id: 'chi-square-corrections-effect-size',
+          title: 'Continuity Correction and Effect Size',
+          description: 'Yates correction and measures of association strength.',
+          icon: 'V'
+        },
+        {
+          id: 'chi-square-assumptions-fisher',
+          title: 'Assumptions and Fisher Exact Test',
+          description: 'When chi-square fails and alternatives for small samples.',
+          icon: 'F'
+        },
+        {
+          id: 'mcnemar-test',
+          title: "McNemar's Test",
+          description: 'Chi-square test for paired categorical data.',
+          icon: 'M'
+        }
+      ]
     },
     {
-      id: 'correlation',
-      title: 'Correlation',
-      description: 'Pearson and Spearman correlation coefficients.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-11',
+      title: 'Chapter 11: Comparing Two Means',
+      description: 'T-tests and related procedures for comparing means',
+      topics: [
+        {
+          id: 'one-sample-z-test',
+          title: 'One-Sample Z-Test',
+          description: 'Testing a sample mean against a known population (σ known).',
+          icon: 'z'
+        },
+        {
+          id: 'one-sample-t-test',
+          title: 'One-Sample T-Test',
+          description: 'Testing a sample mean when population SD is unknown.',
+          icon: 't'
+        },
+        {
+          id: 'independent-t-test',
+          title: "Independent Samples T-Test (Student's)",
+          description: 'Comparing two independent groups with equal variances.',
+          icon: 't₁₂'
+        },
+        {
+          id: 'welch-t-test',
+          title: "Independent Samples T-Test (Welch's)",
+          description: 'Comparing two independent groups without assuming equal variances.',
+          icon: 'tʷ'
+        },
+        {
+          id: 'paired-t-test',
+          title: 'Paired-Samples T-Test',
+          description: 'Comparing two related measurements from the same participants.',
+          icon: 't_D'
+        },
+        {
+          id: 'one-sided-tests',
+          title: 'One-Sided Tests',
+          description: 'Directional hypothesis testing.',
+          icon: '→'
+        },
+        {
+          id: 'effect-size-cohens-d',
+          title: "Effect Size: Cohen's d",
+          description: 'Standardized measure of mean differences.',
+          icon: 'd'
+        },
+        {
+          id: 'checking-normality',
+          title: 'Checking Normality',
+          description: 'QQ plots and Shapiro-Wilk test for assessing normality.',
+          icon: 'Q-Q'
+        },
+        {
+          id: 'wilcoxon-tests',
+          title: 'Wilcoxon Tests',
+          description: 'Nonparametric alternatives to t-tests.',
+          icon: 'W'
+        }
+      ]
     },
     {
-      id: 'regression',
-      title: 'Simple Linear Regression',
-      description: 'Predicting outcomes with regression equations.',
-      icon: 'T'
+      type: 'chapter',
+      id: 'chapter-12',
+      title: 'Chapter 12: Correlation and Linear Regression',
+      description: 'Analyzing relationships between continuous variables',
+      topics: [
+        {
+          id: 'correlation',
+          title: 'Correlation',
+          description: 'Pearson and Spearman correlation coefficients.',
+          icon: 'r'
+        },
+        {
+          id: 'scatterplots',
+          title: 'Scatterplots',
+          description: 'Visualizing relationships between variables.',
+          icon: '📊'
+        },
+        {
+          id: 'simple-regression',
+          title: 'Simple Linear Regression',
+          description: 'Building regression models with one predictor.',
+          icon: 'ŷ'
+        },
+        {
+          id: 'multiple-regression',
+          title: 'Multiple Regression',
+          description: 'Extending to multiple predictors.',
+          icon: 'Ŷ'
+        },
+        {
+          id: 'regression-inference',
+          title: 'Hypothesis Tests',
+          description: 'Testing coefficients and model fit.',
+          icon: 'F'
+        },
+        {
+          id: 'regression-assumptions',
+          title: 'Diagnostics & Assumptions',
+          description: 'Checking model assumptions.',
+          icon: '✓'
+        },
+        {
+          id: 'model-selection',
+          title: 'Model Selection',
+          description: 'Comparing and choosing models.',
+          icon: 'Δ'
+        }
+      ]
+    },
+    {
+      type: 'chapter',
+      id: 'chapter-13',
+      title: 'Chapter 13: Comparing Several Means (One-Way ANOVA)',
+      description: 'ANOVA and related procedures for comparing three or more groups',
+      topics: [
+        {
+          id: 'one-way-anova-basics',
+          title: 'One-Way ANOVA Basics',
+          description: 'Comparing means across three or more groups.',
+          icon: 'F'
+        },
+        {
+          id: 'post-hoc-tests-anova',
+          title: 'Post-Hoc Tests & Multiple Comparisons',
+          description: 'Identifying which specific groups differ after a significant ANOVA.',
+          icon: 'pH'
+        },
+        {
+          id: 'anova-assumptions',
+          title: 'ANOVA Assumptions',
+          description: 'Checking normality, homogeneity of variance, and independence.',
+          icon: '✓'
+        },
+        {
+          id: 'repeated-measures-anova',
+          title: 'Repeated Measures ANOVA',
+          description: 'Comparing means when the same participants are in all groups.',
+          icon: 'RM'
+        }
+      ]
     }
   ],
   // Intro to Research topics
@@ -1375,26 +1698,69 @@ export const topicsByModule = {
   ]
 }
 
-export function getTopicsForModule(moduleId) {
+// Get module items with chapter structure preserved (for UI rendering)
+export function getModuleItemsWithChapters(moduleId) {
   return topicsByModule[moduleId] || []
 }
 
+export function getTopicsForModule(moduleId) {
+  const items = topicsByModule[moduleId] || []
+  // Flatten chapter structure to return actual topics
+  const topics = []
+  for (const item of items) {
+    if (item.type === 'chapter' && item.topics) {
+      // If it's a chapter, add all its topics
+      topics.push(...item.topics)
+    } else {
+      // Otherwise, it's a regular topic
+      topics.push(item)
+    }
+  }
+  return topics
+}
+
 export function getAllTopics() {
-  return Object.values(topicsByModule).flat()
+  const allTopics = []
+  for (const items of Object.values(topicsByModule)) {
+    for (const item of items) {
+      if (item.type === 'chapter' && item.topics) {
+        allTopics.push(...item.topics)
+      } else {
+        allTopics.push(item)
+      }
+    }
+  }
+  return allTopics
 }
 
 export function getTopicById(topicId) {
-  for (const topics of Object.values(topicsByModule)) {
-    const topic = topics.find(t => t.id === topicId)
-    if (topic) return topic
+  for (const items of Object.values(topicsByModule)) {
+    for (const item of items) {
+      if (item.type === 'chapter' && item.topics) {
+        // Search within chapter topics
+        const topic = item.topics.find(t => t.id === topicId)
+        if (topic) return topic
+      } else if (item.id === topicId) {
+        // Regular topic
+        return item
+      }
+    }
   }
   return null
 }
 
 export function getModuleForTopic(topicId) {
-  for (const [moduleId, topics] of Object.entries(topicsByModule)) {
-    if (topics.some(t => t.id === topicId)) {
-      return getModuleById(moduleId)
+  for (const [moduleId, items] of Object.entries(topicsByModule)) {
+    for (const item of items) {
+      if (item.type === 'chapter' && item.topics) {
+        // Check if topic is in this chapter
+        if (item.topics.some(t => t.id === topicId)) {
+          return getModuleById(moduleId)
+        }
+      } else if (item.id === topicId) {
+        // Regular topic found
+        return getModuleById(moduleId)
+      }
     }
   }
   return null

@@ -1,0 +1,324 @@
+MODULE 8: CATEGORICAL DATA ANALYSIS (CHAPTER 10)
+==================================================
+
+OVERVIEW
+--------
+This module covers statistical tests for categorical (nominal scale) data. The chapter introduces chi-square tests and related procedures commonly used when analyzing frequency data and contingency tables.
+
+KEY CONCEPTS
+------------
+
+1. THE χ² GOODNESS-OF-FIT TEST (10.1)
+   - One of the oldest hypothesis tests (Pearson 1900)
+   - Tests whether observed frequency distribution matches expected distribution
+   - Compares observed frequencies to expected frequencies
+
+   Test Statistic:
+   - χ² = Σ[(Oi - Ei)²/Ei]
+   - Oi = observed frequency for category i
+   - Ei = expected frequency for category i
+   - Expected frequency: Ei = N × Pi (where Pi is expected probability)
+
+   Sampling Distribution:
+   - Follows χ² distribution with k-1 degrees of freedom
+   - k = number of categories
+   - Large χ² values indicate poor fit to null hypothesis
+
+   In jamovi:
+   - Frequencies → One Sample Proportion Tests → N Outcomes
+   - Can specify custom expected proportions
+   - Shows observed vs. expected frequencies
+
+2. THE χ² TEST OF INDEPENDENCE (10.2)
+   - Used for contingency tables (cross-tabulation of two variables)
+   - Tests whether two categorical variables are independent
+   - H₀: Variables are independent (no association)
+   - H₁: Variables are associated
+
+   Test Statistic:
+   - χ² = ΣΣ[(Eij - Oij)²/Eij]
+   - Sum over all rows (i) and columns (j)
+   - Expected frequency: Eij = (Ri × Cj)/N
+
+   Degrees of Freedom:
+   - df = (r-1)(c-1)
+   - r = number of rows
+   - c = number of columns
+
+   In jamovi:
+   - Frequencies → Contingency Tables → Independent Samples
+   - Shows contingency table and χ² test results
+   - Can display expected counts
+
+3. THE CONTINUITY CORRECTION (10.3)
+   - Yates correction for 2×2 tables (df = 1)
+   - Corrects for approximation error with small samples
+   - Modified statistic: χ² = Σ[(|Ei - Oi| - 0.5)²/Ei]
+   - Subtracts 0.5 from absolute differences
+   - Makes test more conservative
+   - Available as checkbox option in jamovi
+
+4. EFFECT SIZE (10.4)
+
+   a) Phi (φ) Statistic:
+      - φ = √(χ²/N)
+      - Ranges 0-1 for 2×2 tables
+      - Can exceed 1 for larger tables (problematic)
+
+   b) Cramér's V (Preferred):
+      - V = √[χ²/(N(k-1))]
+      - k = min(r, c) (smaller of rows or columns)
+      - Always ranges from 0 (no association) to 1 (perfect association)
+      - Works for any table size
+      - Available in jamovi Statistics options
+
+5. ASSUMPTIONS OF THE TESTS (10.5)
+
+   a) Expected Frequencies Sufficiently Large:
+      - General rule: All expected frequencies > 5
+      - For larger tables: 80% of cells > 5, none < 1
+      - These are guidelines, not hard rules
+      - Small expected frequencies → use Fisher exact test
+
+   b) Independence of Observations:
+      - Each observation counted only once
+      - No observation influences another
+      - Violation → inflated or deflated significance
+      - If violated → consider McNemar test (for paired data)
+
+6. THE FISHER EXACT TEST (10.6)
+   - Used when expected frequencies too small for χ² test
+   - Calculates exact p-value (no approximation)
+   - Treats row and column totals as fixed
+   - Based on hypergeometric distribution
+   - Computes probability of observed table (or more extreme)
+   - Most common for 2×2 tables
+   - In jamovi: checkbox in Statistics options
+   - No test statistic reported, only p-value
+
+7. THE MCNEMAR TEST (10.7)
+   - For repeated measures with categorical data
+   - Tests marginal homogeneity (paired data)
+   - Same participants measured twice
+   - H₀: Pb = Pc (off-diagonal frequencies equal)
+
+   Test Statistic (with Yates correction):
+   - χ² = (|b - c| - 0.5)²/(b + c)
+   - b = number who changed from category 1 to 2
+   - c = number who changed from category 2 to 1
+   - df = 1
+
+   In jamovi:
+   - Frequencies → Contingency Tables → Paired Samples
+   - Each participant appears once in table
+   - Tests if proportions changed between measurements
+
+8. INDEPENDENCE VS. MCNEMAR (10.8)
+
+   Use Independence Test when:
+   - Testing if two variables are related
+   - Different participants in different cells
+   - Interested in relationship between variables
+
+   Use McNemar Test when:
+   - Testing if proportions changed over time
+   - Same participants measured twice
+   - Interested in whether row totals differ from column totals
+   - Repeated measures design
+
+KEY FORMULAS
+------------
+- Goodness-of-fit: χ² = Σ[(Oi - Ei)²/Ei], df = k-1
+- Independence: χ² = ΣΣ[(Eij - Oij)²/Eij], df = (r-1)(c-1)
+- Expected frequency (GOF): Ei = N × Pi
+- Expected frequency (Independence): Eij = (Ri × Cj)/N
+- Phi: φ = √(χ²/N)
+- Cramér's V: V = √[χ²/(N(k-1))]
+- McNemar: χ² = (|b - c| - 0.5)²/(b + c), df = 1
+
+JAMOVI PROCEDURES
+-----------------
+
+1. Chi-Square Goodness-of-Fit Test:
+   - Frequencies → One Sample Proportion Tests → N Outcomes
+   - Variable: Select categorical variable
+   - Expected Proportions: Adjust ratios if needed
+   - Statistics:
+     * χ² goodness-of-fit (automatic)
+     * Expected counts (checkbox)
+   - Results show:
+     * Observed and expected frequencies
+     * χ² statistic, df, p-value
+
+2. Chi-Square Test of Independence:
+   - Frequencies → Contingency Tables → Independent Samples
+   - Rows: One categorical variable
+   - Columns: Other categorical variable
+   - Statistics:
+     * χ² (automatic)
+     * Cramér's V (checkbox)
+     * Fisher's exact test (checkbox for small samples)
+   - Cells:
+     * Expected counts (checkbox)
+   - Results show:
+     * Contingency table
+     * χ² statistic, df, p-value
+     * Effect size if requested
+
+3. McNemar Test:
+   - Frequencies → Contingency Tables → Paired Samples
+   - Rows: First measurement
+   - Columns: Second measurement
+   - Statistics:
+     * χ² continuity correction (automatic)
+   - Results show:
+     * Paired contingency table
+     * McNemar χ² statistic, df, p-value
+
+4. Fisher Exact Test:
+   - Use with Independence or McNemar when expected counts small
+   - Check "Fisher's exact test" option
+   - Ignore test Value, focus on p-value
+   - No minimum sample size requirement
+
+DECISION TREE FOR CHOOSING TESTS
+---------------------------------
+
+Start: What type of categorical data?
+│
+├─ One categorical variable
+│  └─ Compare to expected distribution → χ² Goodness-of-Fit Test
+│     ├─ Expected frequencies large? → Standard test
+│     └─ Expected frequencies small? → Proceed with caution
+│
+├─ Two categorical variables, independent groups
+│  └─ Test for association → χ² Test of Independence
+│     ├─ Expected frequencies large? → Standard test
+│     └─ Expected frequencies small? → Fisher Exact Test
+│
+└─ Two categorical variables, paired/repeated measures
+   └─ Test for change → McNemar Test
+      ├─ Expected frequencies large? → Standard test
+      └─ Expected frequencies small? → Fisher Exact variant
+
+COMMON PITFALLS
+---------------
+- Confusing independence test with McNemar (different research questions)
+- Using χ² test when expected frequencies too small
+- Violating independence assumption (same person counted multiple times)
+- Not reporting effect sizes (only p-values)
+- Treating χ² value as effect size (it's not!)
+- Using independence test for repeated measures data
+- Not checking assumptions before running test
+- Over-interpreting significant results with tiny effect sizes
+- Confusing observed vs. expected frequencies
+- Using continuity correction for large tables (only for df=1)
+
+INTERPRETATION TIPS
+-------------------
+
+1. Reporting Results:
+   - Descriptive statistics: observed frequencies
+   - Test statistic: χ²(df) = value, p = ...
+   - Effect size: Cramér's V = ...
+   - Interpretation in context
+
+   Example: "A chi-square test of independence revealed a significant
+   association between species and choice (χ²(2) = 10.7, p < .01, V = .24).
+   Robots were more likely to prefer flowers, while humans preferred data files."
+
+2. Effect Size Interpretation (Cramér's V):
+   - Small: V ≈ .10
+   - Medium: V ≈ .30
+   - Large: V ≈ .50
+   - Context-dependent (use as rough guide only)
+
+3. Statistical vs. Practical Significance:
+   - Large samples → small effects become significant
+   - Always report and interpret effect size
+   - Consider practical importance of findings
+
+4. Assumption Checking:
+   - Always examine expected frequencies
+   - Check independence assumption based on design
+   - Use appropriate alternative if violated
+   - Report which test variant used (Student/Welch/Fisher/etc.)
+
+ASSUMPTIONS CHECKLIST
+---------------------
+
+For All Chi-Square Tests:
+☐ Expected frequencies ≥ 5 (or 80% of cells ≥ 5, none < 1)
+☐ Observations are independent
+☐ Categories are mutually exclusive
+☐ Each observation counted in exactly one cell
+☐ Random sampling or randomization used
+
+For Test of Independence Specifically:
+☐ Both variables are categorical
+☐ All participants provide data for both variables
+
+For McNemar Test Specifically:
+☐ Same participants measured twice (paired design)
+☐ Binary or categorical outcomes
+☐ Interested in change/difference, not association
+
+REAL-WORLD APPLICATIONS
+-----------------------
+- Clinical trials: Response rates (improved/same/worse)
+- Education: Comparing pass/fail rates across methods
+- Psychology: Testing preference patterns
+- Marketing: Customer choice behavior
+- Survey research: Association between demographic and opinion variables
+- Quality control: Defect rates across production lines
+- Medicine: Disease prevalence across groups
+- Political science: Voting behavior by demographic
+- Before-after studies: Did intervention change outcomes? (McNemar)
+
+COMPARISON OF CHI-SQUARE TESTS
+-------------------------------
+
+| Test | Use When | Null Hypothesis | jamovi Location |
+|------|----------|-----------------|-----------------|
+| Goodness-of-Fit | One variable, known expected distribution | Observed matches expected | One Sample Proportion Tests |
+| Independence | Two variables, independent groups | No association between variables | Independent Samples |
+| McNemar | Two variables, paired data | No change in proportions | Paired Samples |
+| Fisher Exact | Small expected frequencies | Same as Independence/McNemar | Checkbox option |
+
+RELATIONSHIP TO OTHER TESTS
+----------------------------
+- χ² test → Z-test (for proportions)
+- χ² test → ANOVA (both compare groups, different scales)
+- McNemar → Paired t-test (categorical vs. continuous)
+- Fisher exact → χ² test (exact vs. approximate)
+- Independence → Correlation (categorical vs. continuous variables)
+
+CONTINUITY CORRECTION NOTES
+----------------------------
+- Only for df = 1 (2×2 tables or 2-category GOF)
+- Makes test more conservative (larger p-values)
+- Corrects for discrete distribution approximated by continuous
+- Historical rule of thumb, not universally required
+- Optional in jamovi (checkbox)
+- Decision: use for small samples with df=1, skip otherwise
+
+KEY DISTINCTIONS
+----------------
+
+Chi-Square vs. McNemar:
+- χ² Independence: Are variables related?
+- McNemar: Did proportions change?
+- Different research questions!
+- Same data can yield both tests with different interpretations
+
+Effect Size Reporting:
+- Always report Cramér's V (not just χ²)
+- χ² increases with sample size (not pure effect measure)
+- V is standardized and comparable across studies
+- Essential for meta-analysis and comparing studies
+
+Statistical Notation:
+- χ²(df) in report = both distribution and test statistic value
+- Common convention: χ²(3) = 8.44, p < .05
+- Technically conflates distribution with observed value
+- Universally accepted notation despite ambiguity

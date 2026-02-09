@@ -1,0 +1,671 @@
+MODULE 6: PROBABILITY AND SAMPLING - SUMMARY
+============================================
+
+OVERVIEW
+--------
+Probability and sampling form the bridge between descriptive statistics (summarizing data
+we have) and inferential statistics (drawing conclusions about populations we can't fully
+measure). This module covers two critical chapters that lay the mathematical foundation
+for hypothesis testing and statistical inference.
+
+Understanding probability helps you reason about uncertainty. Understanding sampling helps
+you know when sample statistics reliably reflect population parameters. Together, these
+concepts explain WHY statistical inference works.
+
+PART 1: PROBABILITY (CHAPTER 7)
+================================
+
+PROBABILITY VS. STATISTICS (Section 7.1)
+-----------------------------------------
+Probability and statistics are inverse processes:
+
+PROBABILITY: Rules → Predictions
+• Start with known properties of a system
+• Predict what data to expect
+• Example: If a coin is fair (known rule), what proportion of heads in 100 flips?
+  Answer: Expect about 50 heads
+
+STATISTICS: Data → Inferences
+• Start with observed data
+• Infer properties of the underlying system
+• Example: Observed 62 heads in 100 flips. Is the coin fair?
+  Answer: Statistical test needed to evaluate this
+
+Key Difference:
+Probability moves from general (population) to specific (sample predictions)
+Statistics moves from specific (sample data) to general (population inferences)
+
+WHAT DOES PROBABILITY MEAN? (Section 7.2)
+------------------------------------------
+Two main philosophical interpretations of probability:
+
+FREQUENTIST INTERPRETATION:
+Probability = long-run relative frequency
+
+Definition: The probability of an event is the proportion of times it occurs in an
+infinitely long sequence of identical, independent repetitions.
+
+Example: P(heads) = 0.5 means if you flip a fair coin infinitely many times, the
+proportion of heads approaches 50%.
+
+Strengths:
+• Objective - doesn't depend on personal beliefs
+• Works well for repeatable random processes
+
+Limitations:
+• Requires events that can be repeated many times under identical conditions
+• Cannot assign probabilities to one-time events ("Will it rain tomorrow?")
+• Cannot assign probabilities to hypotheses ("Is this theory true?")
+
+BAYESIAN INTERPRETATION:
+Probability = degree of belief or confidence
+
+Definition: Probability quantifies our uncertainty about whether something is true,
+based on available evidence.
+
+Example: "There's a 70% chance it will rain tomorrow" expresses degree of confidence,
+not a long-run frequency (there's only one tomorrow).
+
+Strengths:
+• Can assign probabilities to one-time events
+• Can assign probabilities to hypotheses
+• Updates beliefs as new evidence arrives (Bayes' theorem)
+• Philosophically aligns with how people naturally think about uncertainty
+
+Limitations:
+• Subjective - different people may assign different probabilities
+• Requires specifying prior beliefs
+
+In Practice:
+Most introductory statistics courses (including this one) use frequentist methods,
+but Bayesian approaches are increasingly popular in many fields.
+
+BASIC PROBABILITY RULES (Section 7.3)
+--------------------------------------
+All probabilities follow fundamental rules:
+
+RULE 1: Non-negativity
+Probabilities cannot be negative: P(A) ≥ 0
+
+RULE 2: Normalization
+Probabilities of all possible outcomes sum to 1
+Example: P(heads) + P(tails) = 0.5 + 0.5 = 1
+
+RULE 3: Additivity (for mutually exclusive events)
+If events A and B cannot both occur: P(A or B) = P(A) + P(B)
+Example: P(roll 2 or 5) = P(2) + P(5) = 1/6 + 1/6 = 2/6
+
+Key Concepts:
+
+ELEMENTARY EVENT: A single possible outcome
+Example: Rolling a 4 on a die
+
+SAMPLE SPACE: Set of all possible elementary events
+Example: {1, 2, 3, 4, 5, 6} for a die roll
+
+PROBABILITY DISTRIBUTION: Specification of probability for each elementary event
+Example: Fair die → each outcome has probability 1/6
+
+COMPLEMENT RULE:
+P(not A) = 1 - P(A)
+Example: If P(rain) = 0.3, then P(no rain) = 1 - 0.3 = 0.7
+
+MULTIPLICATION RULE (independent events):
+If A and B are independent: P(A and B) = P(A) × P(B)
+Example: P(two heads in a row) = 0.5 × 0.5 = 0.25
+
+GENERAL ADDITION RULE:
+For events that can both occur: P(A or B) = P(A) + P(B) - P(A and B)
+We subtract P(A and B) to avoid double-counting the overlap.
+
+CONDITIONAL PROBABILITY:
+P(A|B) = probability of A given that B has occurred
+Formula: P(A|B) = P(A and B) / P(B)
+
+Independence:
+Events A and B are independent if P(A|B) = P(A)
+Knowing B occurred doesn't change the probability of A
+
+THE BINOMIAL DISTRIBUTION (Section 7.4)
+----------------------------------------
+The binomial distribution models the number of successes in a fixed number of independent
+trials, where each trial has only two outcomes.
+
+Requirements:
+1. Fixed number of trials (n)
+2. Two possible outcomes per trial (success/failure)
+3. Constant probability of success (p) on each trial
+4. Independent trials
+
+Examples:
+• Number of heads in 10 coin flips
+• Number of correct answers on a 20-question multiple-choice test (if guessing randomly)
+• Number of defective items in a sample of 100 products
+
+Parameters:
+• n = number of trials
+• p = probability of success on each trial
+• X = random variable representing number of successes
+
+Binomial Probability Formula:
+P(X = k) = C(n,k) × p^k × (1-p)^(n-k)
+
+where C(n,k) = n! / (k!(n-k)!) is the binomial coefficient
+
+Example: Probability of exactly 6 heads in 10 coin flips?
+n = 10, k = 6, p = 0.5
+C(10,6) = 210
+P(X = 6) = 210 × (0.5)^6 × (0.5)^4 = 210 × 0.015625 × 0.0625 ≈ 0.205
+
+Mean and Standard Deviation:
+• Mean: μ = n × p
+• Standard deviation: σ = √(n × p × (1-p))
+
+Example: 100 coin flips
+• Expected heads: μ = 100 × 0.5 = 50
+• Standard deviation: σ = √(100 × 0.5 × 0.5) = 5
+
+Interpretation: In 100 flips, we expect about 50 heads, typically varying by about 5
+heads in either direction.
+
+THE NORMAL DISTRIBUTION (Section 7.5)
+--------------------------------------
+The normal distribution (Gaussian distribution, bell curve) is the most important
+continuous probability distribution in statistics.
+
+Properties:
+• Continuous (not discrete like binomial)
+• Symmetric and bell-shaped
+• Completely specified by two parameters: mean (μ) and standard deviation (σ)
+• Notation: X ~ N(μ, σ²) means "X is normally distributed with mean μ and variance σ²"
+
+Key Features:
+• Mean = median = mode (all at the center)
+• Tails extend to infinity (but probability becomes vanishingly small)
+• About 68% of values within ±1 SD of mean
+• About 95% of values within ±2 SD of mean
+• About 99.7% of values within ±3 SD of mean
+
+THE EMPIRICAL RULE (68-95-99.7 RULE):
+For any normal distribution:
+• 68% of data fall within μ ± 1σ
+• 95% of data fall within μ ± 2σ
+• 99.7% of data fall within μ ± 3σ
+
+Example: IQ scores ~ N(100, 15)
+• 68% of people: IQ between 85 and 115
+• 95% of people: IQ between 70 and 130
+• 99.7% of people: IQ between 55 and 145
+• IQ > 130 is rare (top 2.5%)
+
+PROBABILITY DENSITY:
+For continuous distributions, we work with probability density rather than probability
+of exact values. The area under the curve between two points = probability that X falls
+in that range.
+
+Z-SCORES (Standard Scores):
+Formula: z = (X - μ) / σ
+Interpretation: Number of standard deviations X is from the mean
+
+The STANDARD NORMAL DISTRIBUTION:
+Z ~ N(0, 1) — mean = 0, SD = 1
+Any normal distribution can be converted to standard normal using z-scores.
+
+Why Z-Scores Matter:
+• Compare values across different distributions
+• Look up probabilities in standard normal tables
+• Identify outliers (|z| > 3 is very extreme)
+
+Example: Someone with IQ = 125
+z = (125 - 100) / 15 = 1.67
+This person is 1.67 standard deviations above average — smarter than about 95% of people.
+
+Why the Normal Distribution is Important:
+1. Many natural phenomena are approximately normal (heights, test scores, measurement errors)
+2. Central Limit Theorem (see Section 8.3)
+3. Foundation for many statistical tests (t-tests, ANOVA, regression)
+4. Mathematically tractable (easy to work with)
+
+OTHER USEFUL DISTRIBUTIONS (Section 7.6)
+-----------------------------------------
+Several other distributions appear frequently in statistics:
+
+THE t-DISTRIBUTION (Student's t):
+• Similar to normal distribution but with heavier tails
+• One parameter: degrees of freedom (df)
+• As df increases, approaches normal distribution
+• For df > 30, nearly identical to normal
+
+When to use:
+• Testing means when population SD is unknown (almost always in practice)
+• Small sample sizes (n < 30)
+• Confidence intervals for means
+
+Why heavier tails?
+Accounts for extra uncertainty when estimating σ from sample data
+
+THE CHI-SQUARE (χ²) DISTRIBUTION:
+• Right-skewed, positive values only
+• One parameter: degrees of freedom (df)
+• As df increases, becomes less skewed
+
+When to use:
+• Tests of independence (contingency tables)
+• Goodness-of-fit tests (do observed frequencies match expected?)
+• Tests about variance
+
+Example: Testing whether gender and voting preference are related
+
+THE F-DISTRIBUTION:
+• Right-skewed, positive values only
+• Two parameters: numerator df and denominator df
+• Ratio of two chi-square distributions
+
+When to use:
+• Comparing variances between two groups
+• ANOVA (comparing means across 3+ groups)
+• Testing overall significance in regression
+
+Distribution Decision Guide:
+• Normal (z): Known population SD, large sample, or z-scores
+• t: Unknown population SD (most common in practice)
+• χ²: Categorical data, tests of independence, variance tests
+• F: Comparing multiple means (ANOVA) or comparing variances
+
+
+PART 2: SAMPLING (CHAPTER 8)
+=============================
+
+SAMPLES, POPULATIONS, AND SAMPLING (Section 8.1)
+-------------------------------------------------
+Statistical inference is about learning about populations by studying samples.
+
+Key Definitions:
+
+POPULATION: The complete set of all individuals/objects we want to study
+• Usually too large to measure completely
+• Example: All adults in the UK, all high school students
+
+SAMPLE: A subset of the population that we actually observe and measure
+• More practical and feasible than measuring entire population
+• Example: 1,000 randomly selected UK adults
+
+PARAMETER: Numerical characteristic of a population
+• Usually unknown (reason we do research!)
+• Denoted with Greek letters: μ (mean), σ (standard deviation), p (proportion)
+
+STATISTIC: Numerical characteristic calculated from a sample
+• What we actually compute from data
+• Denoted with Roman letters: M or X̄ (mean), s (SD), p̂ (proportion)
+
+Goal of Inference:
+Use sample statistics to estimate unknown population parameters
+
+SIMPLE RANDOM SAMPLING:
+Gold standard sampling method where:
+• Every member of population has equal probability of selection
+• Each selection is independent
+• All possible samples of size n are equally likely
+
+Why it matters:
+Statistical theory assumes simple random sampling. When this assumption is violated,
+p-values and confidence intervals may not be accurate.
+
+Reality Check:
+Most real studies use convenience samples (easily accessible participants), not true
+random samples. This limits generalizability but doesn't necessarily invalidate results—
+just be clear about what population your sample represents.
+
+SAMPLING WITH vs. WITHOUT REPLACEMENT:
+• With replacement: Selected individual goes back in the pool (can be selected again)
+• Without replacement: Selected individual is removed (more common in practice)
+
+For large populations, the distinction barely matters.
+
+Parameters vs. Statistics Table:
+┌─────────────┬────────────────────┬──────────────────┐
+│ Measure     │ Population Param.  │ Sample Statistic │
+├─────────────┼────────────────────┼──────────────────┤
+│ Mean        │ μ (mu)             │ M or X̄          │
+│ Std. Dev.   │ σ (sigma)          │ s or SD          │
+│ Variance    │ σ²                 │ s²               │
+│ Proportion  │ p                  │ p̂ (p-hat)       │
+└─────────────┴────────────────────┴──────────────────┘
+
+Remember: Greek letters = population (unknown), Roman letters = sample (known)
+
+THE LAW OF LARGE NUMBERS (Section 8.2)
+---------------------------------------
+One of the most fundamental principles in statistics.
+
+Statement:
+As sample size (n) increases, the sample mean (M) converges to the population mean (μ).
+More generally: larger samples give more accurate estimates.
+
+Intuition:
+Random sampling errors cancel out over many observations. Some samples overshoot the
+true value, others undershoot, but the average gets closer to truth as n grows.
+
+Example: Coin Flipping
+• 10 flips: Might get 7 heads (70%) — far from true p = 0.5
+• 100 flips: Likely get 45-55 heads (45-55%) — closer to 50%
+• 1,000 flips: Very likely get 480-520 heads (48-52%) — very close to 50%
+• 10,000 flips: Almost certainly very close to 5,000 heads (very close to 50%)
+
+Why It Works:
+Random errors are symmetric. With unbiased sampling, errors in both directions are equally
+likely and tend to cancel out as n increases.
+
+Implications:
+1. Larger samples produce more precise estimates (smaller standard errors)
+2. Provides confidence that sample statistics approximate population parameters
+3. Justifies using samples to learn about populations
+
+Critical Limitation:
+The law of large numbers DOES NOT fix bias!
+
+If your sampling method is systematically biased (e.g., only sampling college students
+to study all adults), increasing sample size just gives you a more precise WRONG answer.
+
+Bias vs. Random Error:
+• Random error: Natural variability due to sampling — LLN reduces this
+• Bias: Systematic error pushing estimates in one direction — LLN does NOT reduce this
+
+A large biased sample can be precisely wrong!
+
+SAMPLING DISTRIBUTIONS AND THE CENTRAL LIMIT THEOREM (Section 8.3)
+-------------------------------------------------------------------
+The most remarkable result in statistics.
+
+SAMPLING DISTRIBUTION:
+The probability distribution of a statistic (e.g., sample mean) across all possible
+samples of size n.
+
+Thought experiment:
+1. Draw a sample of size n, calculate M
+2. Draw another sample of size n, calculate M
+3. Repeat thousands of times
+4. Make a histogram of all the sample means
+→ This histogram is the sampling distribution of M
+
+The sampling distribution is theoretical—it describes what would happen across all
+possible samples, not just the one sample you have.
+
+THE CENTRAL LIMIT THEOREM (CLT):
+For a random sample of size n from ANY population with mean μ and finite SD σ,
+the sampling distribution of the sample mean approaches a normal distribution as n increases.
+
+Specifically: M ~ N(μ, σ²/n)
+Or equivalently: Standard error of mean = σ/√n
+
+The Magic of the CLT:
+"ANY population" — doesn't matter if the population is normal, skewed, uniform, bimodal,
+or anything else. The sampling distribution of M becomes approximately normal for large n.
+
+Example: Rolling Dice
+• Single die roll: Uniform distribution (each value 1-6 equally likely) — NOT normal
+• Average of 2 dice: Distribution starts looking triangular
+• Average of 5 dice: Distribution looks more bell-shaped
+• Average of 30 dice: Distribution is approximately normal
+
+Even though individual rolls are uniform (flat), the distribution of averages is normal!
+
+Properties of the Sampling Distribution of M:
+1. SHAPE: Approximately normal (for large n), regardless of population shape
+2. CENTER: Mean of sampling distribution = μ (same as population mean)
+3. SPREAD: SD of sampling distribution (standard error) = σ/√n
+
+Standard Error of the Mean (SEM):
+SEM = σ / √n
+
+This formula shows:
+• SEM decreases as n increases (larger samples → more precision)
+• To cut SEM in half, need 4× as many observations (because of the √n)
+
+How Large is "Large Enough"?
+• If population is already normal: CLT applies for ANY n
+• If population is moderately skewed: n ≥ 30 usually sufficient
+• If population is heavily skewed or has extreme outliers: may need n ≥ 100
+• If population is symmetric but not normal: even n = 10-20 may be enough
+
+The "n ≥ 30 rule" is a guideline, not a law!
+
+Why the CLT Matters:
+1. Justifies using z and t distributions for hypothesis tests about means
+2. Enables confidence intervals for means using normal distribution
+3. Explains why normal distribution appears so frequently in statistics
+4. Allows valid inference even when population distribution is unknown
+5. Foundation of most classical statistical methods
+
+What the CLT Does NOT Say:
+✗ Your data will become normal with large samples (population shape doesn't change!)
+✗ All statistics have normal sampling distributions (CLT specifically applies to means)
+✗ Bias disappears with large samples (bias is unaffected by sample size)
+
+The CLT is about the distribution of sample means across many hypothetical samples,
+not about the distribution of raw data in your one sample.
+
+ESTIMATING POPULATION PARAMETERS (Section 8.4)
+-----------------------------------------------
+Using sample statistics to estimate unknown population parameters.
+
+ESTIMATING THE MEAN:
+Use the sample mean M as the estimator for μ
+
+Key property: M is an UNBIASED estimator
+Unbiased means: E[M] = μ (expected value equals true parameter)
+Across many samples, the average of all sample means equals the population mean.
+
+ESTIMATING STANDARD DEVIATION:
+This is trickier than estimating the mean!
+
+If we use: s = √[Σ(Xi - M)² / n]
+→ This tends to UNDERESTIMATE σ
+
+Why? Because deviations from the sample mean M are smaller than deviations from the
+(unknown) population mean μ. We've used up information to estimate M, leaving less
+independent information for estimating variability.
+
+THE n-1 CORRECTION (Bessel's Correction):
+To get an unbiased estimate of σ², use:
+
+s² = Σ(Xi - M)² / (n - 1)
+s = √[Σ(Xi - M)² / (n - 1)]
+
+Why n-1?
+• Called "degrees of freedom" (df = n - 1)
+• Represents independent pieces of information available
+• Deviations from M must sum to zero, so only n-1 are truly independent
+• Corrects for bias in variance estimation
+
+Impact of n-1 Correction:
+• Large samples: n=1000 vs. n-1=999 barely matters
+• Small samples: n=5 vs. n-1=4 makes noticeable difference
+
+ALL statistical software (including jamovi) uses n-1 by default when calculating SD.
+
+UNBIASED ESTIMATORS:
+• Sample mean M: unbiased estimator of μ
+• Sample variance s² (with n-1): unbiased estimator of σ²
+• Sample proportion p̂: unbiased estimator of p
+
+Note: Sample SD s is technically slightly biased for σ (because of square root), but
+the bias is tiny and decreases rapidly with n. In practice, we use s to estimate σ.
+
+STANDARD ERROR OF THE MEAN:
+Measures how much sample means vary around the population mean.
+
+If we know σ: SEM = σ / √n
+If we estimate σ from sample: SEM = s / √n
+
+Example: Measuring IQ (σ = 15) with n = 25
+SEM = 15/√25 = 15/5 = 3
+Sample means typically vary by about 3 IQ points around true mean.
+
+With n = 100:
+SEM = 15/√100 = 15/10 = 1.5
+Larger sample → smaller SEM → more precise estimate
+
+POINT ESTIMATES vs. INTERVAL ESTIMATES:
+• Point estimate: Single number (e.g., M = 103.5)
+  - Simple but provides no information about uncertainty
+
+• Interval estimate: Range of plausible values (e.g., 95% CI [98, 109])
+  - Shows both the estimate AND the precision
+
+Always report uncertainty, not just point estimates!
+
+ESTIMATING CONFIDENCE INTERVALS (Section 8.5)
+----------------------------------------------
+Confidence intervals quantify uncertainty about parameter estimates.
+
+WHAT IS A CONFIDENCE INTERVAL?
+A range of plausible values for a population parameter, calculated from sample data,
+with a specified level of confidence (usually 95%).
+
+General Formula:
+CI = Estimate ± (Critical value × Standard error)
+
+For the mean:
+95% CI = M ± (t* × SEM)
+
+where:
+• M = sample mean
+• SEM = s / √n
+• t* = critical value from t-distribution with df = n-1
+
+Why t-distribution?
+Because we estimate σ from the sample. For large samples (n > 30), t ≈ z ≈ 1.96.
+For small samples, t has heavier tails to account for extra uncertainty.
+
+WORKED EXAMPLE:
+Reaction times: n = 25, M = 420 ms, s = 80 ms
+
+Step 1: Calculate SEM
+SEM = 80 / √25 = 80 / 5 = 16 ms
+
+Step 2: Find critical value
+For 95% CI with df = 24, t* ≈ 2.064
+
+Step 3: Calculate margin of error
+Margin of error = 2.064 × 16 = 33.0 ms
+
+Step 4: Construct CI
+Lower bound = 420 - 33 = 387 ms
+Upper bound = 420 + 33 = 453 ms
+
+Result: 95% CI [387, 453] ms
+
+CORRECT INTERPRETATION:
+"We are 95% confident that the true population mean reaction time lies between 387
+and 453 milliseconds."
+
+More technically: "If we repeated this study many times and calculated a 95% CI each
+time, approximately 95% of those intervals would contain the true population mean."
+
+COMMON MISINTERPRETATIONS TO AVOID:
+✗ "There's a 95% probability the true mean is in this interval"
+   → NO: The parameter is fixed (not random); the interval is random
+
+✗ "95% of the data falls in this interval"
+   → NO: The CI is about the parameter (mean), not individual data points
+
+✗ "If we collect more data, there's a 95% chance the new mean will be in this interval"
+   → NO: A new sample would produce a different CI
+
+FACTORS AFFECTING CI WIDTH:
+1. Sample size (n): Larger n → narrower CI (more precision)
+2. Variability (s): More variable data → wider CI (more uncertainty)
+3. Confidence level: Higher confidence (e.g., 99% vs 95%) → wider CI
+
+Common Confidence Levels:
+• 90% CI: Narrowest, less confident
+• 95% CI: Standard choice, balances precision and confidence
+• 99% CI: Widest, more confident
+
+USING CONFIDENCE INTERVALS:
+1. Communicate uncertainty: Shows precision of estimate
+2. Assess practical significance: Even if statistically significant, is the effect large
+   enough to matter? CI shows effect size and precision.
+3. Informal hypothesis testing: If a 95% CI doesn't include a null hypothesis value
+   (e.g., μ = 0), you can reject that hypothesis at α = 0.05 level.
+
+Modern Practice:
+Statistical reporting increasingly emphasizes confidence intervals over p-values because
+CIs provide more information (both effect size and precision).
+
+KEY TAKEAWAYS
+-------------
+1. Probability and statistics are inverse processes (rules→data vs. data→rules)
+2. Frequentist probability = long-run frequency; Bayesian probability = degree of belief
+3. Normal distribution is foundational: symmetric, bell-shaped, defined by μ and σ
+4. The empirical rule: 68-95-99.7 for normal distributions
+5. Binomial distribution models discrete success/failure trials
+6. t, χ², and F distributions serve specific purposes in inference
+7. Samples represent populations imperfectly due to sampling error
+8. Law of Large Numbers: Larger samples → more accurate estimates
+9. Central Limit Theorem: Sampling distribution of means is approximately normal
+10. Standard error (SEM) measures variability of sample means
+11. Use n-1 when calculating sample variance and SD for unbiased estimation
+12. Confidence intervals quantify uncertainty about parameter estimates
+13. Always report CIs, not just point estimates
+
+CRITICAL INSIGHT: Uncertainty is Fundamental
+---------------------------------------------
+"The only certainty is that nothing is certain."
+- Pliny the Elder
+
+Statistical inference acknowledges uncertainty:
+• We never know population parameters with certainty
+• Samples provide imperfect information about populations
+• Probability quantifies uncertainty in a principled way
+• Confidence intervals express our uncertainty about parameters
+
+The goal is NOT to eliminate uncertainty (impossible!) but to:
+✓ Quantify uncertainty precisely
+✓ Make inferences despite uncertainty
+✓ Communicate uncertainty honestly
+✓ Make decisions rationally under uncertainty
+
+Good statistics means being honest about what we know and what we don't know.
+
+FORMULA REFERENCE
+-----------------
+Complement: P(not A) = 1 - P(A)
+Multiplication (independent): P(A and B) = P(A) × P(B)
+Addition (general): P(A or B) = P(A) + P(B) - P(A and B)
+Conditional: P(A|B) = P(A and B) / P(B)
+
+Binomial mean: μ = n × p
+Binomial SD: σ = √(n × p × (1-p))
+
+Z-score: z = (X - μ) / σ
+Standard error of mean: SEM = σ / √n  or  s / √n
+Sample variance: s² = Σ(Xi - M)² / (n-1)
+Sample SD: s = √[Σ(Xi - M)² / (n-1)]
+
+Confidence interval: CI = M ± (t* × SEM)
+
+Where:
+μ = population mean
+σ = population standard deviation
+M or X̄ = sample mean
+s = sample standard deviation
+n = sample size
+p = probability of success
+t* = critical value from t-distribution
+
+SOFTWARE NOTES (jamovi)
+-----------------------
+• Distribution calculators available for normal, t, χ², F distributions
+• Descriptive statistics automatically calculate M, s (using n-1)
+• Confidence intervals available in most analyses (check CI checkbox)
+• Default CI is usually 95%, but can select 90% or 99%
+• t-tests automatically use t-distribution with appropriate df
+• Z-scores can be created using Compute: (variable - mean) / SD
+
+NEXT STEPS
+----------
+In Module 7, we'll put these probability and sampling concepts to work in
+HYPOTHESIS TESTING - the core method for making decisions and drawing
+conclusions from data in the face of uncertainty.

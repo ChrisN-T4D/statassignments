@@ -1473,6 +1473,234 @@ export const statsModule5Questions = [
       incorrect: 'Use plots that show distribution shape, like box/violin with points.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m5-q17',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'What is the main difference between a frequency table and a contingency table?',
+    options: [
+      { id: 'a', text: 'Frequency tables show one variable, contingency tables show two variables' },
+      { id: 'b', text: 'Frequency tables show percentages, contingency tables show counts' },
+      { id: 'c', text: 'Frequency tables are for continuous data, contingency tables are for categorical data' },
+      { id: 'd', text: 'They are the same thing with different names' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'Frequency tables tabulate one categorical variable, while contingency tables (cross-tabs) show the relationship between two categorical variables.',
+      incorrect: 'Frequency tables display counts/percentages for one variable. Contingency tables cross-tabulate two categorical variables to show their relationship.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q18',
+    moduleId: 'stats-module-5',
+    type: 'true_false',
+    question: 'A contingency table shows the relationship between two categorical variables by displaying counts in each combination of categories.',
+    correct: true,
+    feedback: {
+      correct: 'Contingency tables (also called cross-tabs) display frequencies for each combination of two categorical variables.',
+      incorrect: 'This is true. Contingency tables cross-tabulate two categorical variables, showing counts for each combination of categories.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q19',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'Which logical operator tests if two values are equal in jamovi?',
+    options: [
+      { id: 'a', text: '=' },
+      { id: 'b', text: '==' },
+      { id: 'c', text: 'EQUALS()' },
+      { id: 'd', text: 'IS' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The == operator (double equals) tests for equality. A single = is used for assignment in many languages.',
+      incorrect: 'Use == (double equals) to test equality. Single = is for assignment, not comparison.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q20',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'What does the expression "age > 18 and gender == \'Female\'" select?',
+    options: [
+      { id: 'a', text: 'All females or anyone over 18' },
+      { id: 'b', text: 'All females who are over 18' },
+      { id: 'c', text: 'All people over 18, then all females' },
+      { id: 'd', text: 'Only people exactly 18 years old' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The "and" operator requires BOTH conditions to be true, so only females over 18 are selected.',
+      incorrect: 'The "and" operator means both conditions must be true simultaneously. This selects females who are also over 18.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q21',
+    moduleId: 'stats-module-5',
+    type: 'true_false',
+    question: 'The NOT operator reverses a logical condition, making TRUE become FALSE and vice versa.',
+    correct: true,
+    feedback: {
+      correct: 'NOT inverts logical values. For example, NOT(age > 18) is true when age > 18 is false.',
+      incorrect: 'This is true. NOT reverses logical conditions: NOT(TRUE) = FALSE and NOT(FALSE) = TRUE.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q22',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'When centering a variable, you subtract what value from each observation?',
+    options: [
+      { id: 'a', text: 'The median' },
+      { id: 'b', text: 'The mode' },
+      { id: 'c', text: 'The mean' },
+      { id: 'd', text: 'The standard deviation' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: 'Centering subtracts the mean from each value, so the new variable has a mean of zero.',
+      incorrect: 'To center a variable, subtract the mean from each observation. This creates a new variable with mean = 0.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q23',
+    moduleId: 'stats-module-5',
+    type: 'multiple_select',
+    question: 'What can you create using the Compute function in jamovi? (Select all that apply)',
+    options: [
+      { id: 'a', text: 'New variables from mathematical transformations' },
+      { id: 'b', text: 'Conditional variables using IF statements' },
+      { id: 'c', text: 'Centered or standardized variables' },
+      { id: 'd', text: 'New datasets from scratch' }
+    ],
+    correct: ['a', 'b', 'c'],
+    feedback: {
+      correct: 'The Compute function creates new variables through transformations, conditional logic, and mathematical operations. It doesn\'t create new datasets.',
+      incorrect: 'Compute creates new variables using math, IF statements, and transformations. It modifies existing datasets, not create new ones.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q24',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'What does the expression IF(score > 50, \'Pass\', \'Fail\') do?',
+    options: [
+      { id: 'a', text: 'Creates a variable that is "Pass" when score > 50, otherwise "Fail"' },
+      { id: 'b', text: 'Checks if the word "Pass" is greater than 50' },
+      { id: 'c', text: 'Deletes all scores below 50' },
+      { id: 'd', text: 'Sorts scores into Pass and Fail categories equally' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'IF statements create new variables based on conditions: IF(condition, value_if_true, value_if_false).',
+      incorrect: 'This IF statement evaluates the condition (score > 50) and returns "Pass" if true, "Fail" if false.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q25',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'Which function computes the natural logarithm (base e) in jamovi?',
+    options: [
+      { id: 'a', text: 'LOG()' },
+      { id: 'b', text: 'LOG10()' },
+      { id: 'c', text: 'LN()' },
+      { id: 'd', text: 'NLOG()' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: 'LN() computes the natural logarithm (base e). LOG10() computes base-10 logarithms.',
+      incorrect: 'Use LN() for natural logarithms (base e) and LOG10() for base-10 logarithms.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q26',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'What does the SQRT() function calculate?',
+    options: [
+      { id: 'a', text: 'The square of a number' },
+      { id: 'b', text: 'The square root of a number' },
+      { id: 'c', text: 'The absolute value of a number' },
+      { id: 'd', text: 'The exponential of a number' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'SQRT() computes the square root. For example, SQRT(25) = 5.',
+      incorrect: 'SQRT() calculates the square root. SQRT(x) finds the number that when squared equals x.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q27',
+    moduleId: 'stats-module-5',
+    type: 'true_false',
+    question: 'The functions LOG10() and LN() produce the same results because they are both logarithms.',
+    correct: false,
+    feedback: {
+      correct: 'LOG10() uses base 10, while LN() uses base e (≈2.718). They produce different values.',
+      incorrect: 'These produce different results. LOG10() is base-10 logarithm, LN() is natural logarithm (base e).'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q28',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'What does applying a filter in jamovi do?',
+    options: [
+      { id: 'a', text: 'Permanently deletes rows from the dataset' },
+      { id: 'b', text: 'Temporarily excludes rows from analyses based on a condition' },
+      { id: 'c', text: 'Creates a new dataset with selected rows' },
+      { id: 'd', text: 'Sorts the data in ascending order' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Filters temporarily exclude cases from analyses without deleting data. You can remove filters to include all cases again.',
+      incorrect: 'Filters temporarily exclude rows from analyses based on conditions. They don\'t permanently delete data or create new datasets.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q29',
+    moduleId: 'stats-module-5',
+    type: 'true_false',
+    question: 'Filters permanently delete rows from your dataset that do not meet the filter criteria.',
+    correct: false,
+    feedback: {
+      correct: 'Filters are non-destructive. They temporarily exclude rows from analyses but don\'t delete data.',
+      incorrect: 'This is false. Filters are temporary and non-destructive. Removing a filter restores all rows to analyses.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m5-q30',
+    moduleId: 'stats-module-5',
+    type: 'multiple_select',
+    question: 'When might you use filters in jamovi? (Select all that apply)',
+    options: [
+      { id: 'a', text: 'To analyze only a subset of participants (e.g., only adults)' },
+      { id: 'b', text: 'To exclude outliers or invalid data from analyses' },
+      { id: 'c', text: 'To compare results with and without certain cases' },
+      { id: 'd', text: 'To permanently remove data from the file' }
+    ],
+    correct: ['a', 'b', 'c'],
+    feedback: {
+      correct: 'Filters are useful for subsetting data, excluding problematic cases, and comparing analyses. They don\'t permanently delete data.',
+      incorrect: 'Use filters to analyze subsets, exclude outliers, and compare results. Filters are temporary and don\'t permanently delete data.'
+    },
+    difficulty: 'medium'
   }
 ]
 
@@ -1776,6 +2004,126 @@ export const statsModule6Questions = [
       incorrect: 'Averages of many influences tend toward normality.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m6-q18',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'Which characteristic is required for a binomial distribution?',
+    options: [
+      { id: 'a', text: 'The data must be continuous' },
+      { id: 'b', text: 'Each trial has exactly two possible outcomes' },
+      { id: 'c', text: 'The probability changes on each trial' },
+      { id: 'd', text: 'The number of trials must be infinite' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Binomial distributions model situations with exactly two outcomes (success/failure) per trial.',
+      incorrect: 'Binomial distributions require: fixed number of trials, two outcomes per trial, constant probability, and independent trials.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m6-q19',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'What is the Law of Large Numbers?',
+    options: [
+      { id: 'a', text: 'Large samples always produce significant results' },
+      { id: 'b', text: 'As sample size increases, sample statistics converge toward population parameters' },
+      { id: 'c', text: 'Large populations have larger means' },
+      { id: 'd', text: 'Standard error increases with sample size' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The Law of Large Numbers states that larger samples produce more accurate estimates that converge on true population values.',
+      incorrect: 'The Law of Large Numbers says sample statistics approach population parameters as sample size grows.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m6-q20',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'When should you use a t-distribution instead of a normal (z) distribution?',
+    options: [
+      { id: 'a', text: 'When the population is normal' },
+      { id: 'b', text: 'When the sample size is small and population SD is unknown' },
+      { id: 'c', text: 'When data is categorical' },
+      { id: 'd', text: 'When testing differences between three or more groups' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Use t-distribution when population SD is unknown and sample size is small. It accounts for extra uncertainty.',
+      incorrect: 'The t-distribution is appropriate for small samples when population standard deviation is unknown.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m6-q21',
+    moduleId: 'stats-module-6',
+    type: 'true_false',
+    question: 'The chi-square (χ²) distribution is used for analyzing categorical data and variance estimates.',
+    correct: true,
+    feedback: {
+      correct: 'χ² tests are commonly used for categorical data (goodness of fit, independence) and for testing variance.',
+      incorrect: 'This is true. The χ² distribution is used for categorical data analysis and variance-related tests.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m6-q22',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'What is the key difference between frequentist and Bayesian interpretations of probability?',
+    options: [
+      { id: 'a', text: 'Frequentists use samples; Bayesians use populations' },
+      { id: 'b', text: 'Frequentists define probability as long-run frequency; Bayesians define it as degree of belief' },
+      { id: 'c', text: 'Frequentists always get different answers than Bayesians' },
+      { id: 'd', text: 'Bayesians cannot use data; frequentists cannot use prior knowledge' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Frequentist: probability = long-run relative frequency. Bayesian: probability = degree of belief updated with evidence.',
+      incorrect: 'The key difference is in interpretation: frequentists view probability as long-run frequency, while Bayesians view it as subjective degree of belief that can be updated.'
+    },
+    difficulty: 'hard'
+  },
+  {
+    id: 'stats-m6-q23',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'An unbiased estimator means:',
+    options: [
+      { id: 'a', text: 'The estimate is always exactly correct' },
+      { id: 'b', text: 'The sampling distribution centers on the true parameter value' },
+      { id: 'c', text: 'There is no sampling error' },
+      { id: 'd', text: 'The sample was collected without bias' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'An unbiased estimator\'s sampling distribution is centered on the population parameter—on average, it hits the target.',
+      incorrect: 'Unbiased means the expected value of the estimator equals the population parameter, though individual samples vary.'
+    },
+    difficulty: 'hard'
+  },
+  {
+    id: 'stats-m6-q24',
+    moduleId: 'stats-module-6',
+    type: 'multiple_choice',
+    question: 'The F-distribution is primarily used for:',
+    options: [
+      { id: 'a', text: 'Comparing two means with a t-test' },
+      { id: 'b', text: 'Comparing variances or testing multiple group means simultaneously' },
+      { id: 'c', text: 'Calculating confidence intervals for proportions' },
+      { id: 'd', text: 'Testing assumptions of normality' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The F-distribution is used in ANOVA (comparing multiple means) and tests comparing variances.',
+      incorrect: 'F-distributions are used in ANOVA to compare multiple group means and in tests comparing variances.'
+    },
+    difficulty: 'medium'
   }
 ]
 
