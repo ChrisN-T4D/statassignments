@@ -109,19 +109,6 @@
                   {{ getSoftwareName(exercise.software_type) }}
                 </span>
               </div>
-              <div class="dataset-links">
-                <span class="dataset-label">Datasets:</span>
-                <a
-                  v-for="dataset in datasetLinks"
-                  :key="dataset.path"
-                  :href="dataset.path"
-                  download
-                  class="dataset-link"
-                  @click.stop
-                >
-                  {{ dataset.name }}
-                </a>
-              </div>
             </div>
           </div>
           <div v-else class="empty-state">
@@ -147,6 +134,15 @@
 
         <!-- Instructional Exercise -->
         <div class="instructional-exercise">
+          <!-- Assignment Tools are now in the floating ResourcesDrawer -->
+          <!-- Instructions content -->
+          <div class="exercise-instructions-inline">
+            <div class="instructions-header">
+              <h3>{{ currentExercise.title }}</h3>
+            </div>
+            <div class="instructions-content" v-html="getExerciseInstructions()"></div>
+          </div>
+
           <div class="instruction-card">
             <h3>Instructions</h3>
             <p>{{ currentExercise.instructions }}</p>
@@ -155,18 +151,6 @@
             </p>
             <div v-if="currentExercise.submission" class="submission-note">
               Submit: {{ currentExercise.submission }}
-            </div>
-            <div class="dataset-links">
-              <span class="dataset-label">Datasets:</span>
-              <a
-                v-for="dataset in datasetLinks"
-                :key="dataset.path"
-                :href="dataset.path"
-                download
-                class="dataset-link"
-              >
-                {{ dataset.name }}
-              </a>
             </div>
             <div class="instruction-actions">
               <button class="btn-primary" @click="handleCorrect">Mark Complete</button>
@@ -205,18 +189,23 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { topics, software } from '../data/topics.js'
 import { statisticsExercises, statisticsModules } from '../data/statisticsPractices.js'
 import { getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
+import { useModule8Preferences } from '../composables/useModule8Preferences'
+
+// Assignment Tools Component - Now in global ResourcesDrawer
+// import ScreenRecorder from '../components/ScreenRecorder.vue'
 
 const route = useRoute()
 const router = useRouter()
 const { user } = useAuth()
 const { selectedClass, fetchClasses } = useClasses()
+const module8Prefs = useModule8Preferences()
 
 // State
 const selectedSoftware = ref('jamovi')
@@ -330,11 +319,18 @@ const selectedSoftwareName = computed(() =>
 const staticExercises = computed(() => {
   // If we have a classId, show all exercises for that class (e.g., statistics)
   if (classId.value === 'statistics') {
-    return statisticsExercises.filter(ex => {
+    let filtered = statisticsExercises.filter(ex => {
       const matchesSoftware = ex.software_type === selectedSoftware.value
       const matchesModule = selectedModule.value ? ex.module === selectedModule.value : true
       return matchesSoftware && matchesModule && ex.exercise_type !== "menu_navigation"
     })
+
+    // For Module 8, further filter by selected topics
+    if (selectedModule.value === 'module-8' && module8Prefs.selectedTopics.value.size > 0) {
+      filtered = filtered.filter(ex => module8Prefs.isTopicSelected(ex.topic))
+    }
+
+    return filtered
   }
   // If we have a topicId, filter by topic
   if (topicId.value) {
@@ -568,6 +564,111 @@ function goBack() {
   }
 }
 
+/**
+ * Generate HTML content for pop-out exercise instructions
+ */
+function getExerciseInstructions() {
+  if (!currentExercise.value) return ''
+
+  let html = `
+    <h1>${currentExercise.value.title}</h1>
+    <div class="content-box">
+      <h3>Instructions</h3>
+      <p>${currentExercise.value.instructions}</p>
+    </div>
+  `
+
+  if (currentExercise.value.hint) {
+    html += `
+      <div class="tip-box">
+        <strong>💡 Hint:</strong> ${currentExercise.value.hint}
+      </div>
+    `
+  }
+
+  if (currentExercise.value.submission) {
+    html += `
+      <div class="content-box">
+        <strong>Submit:</strong> ${currentExercise.value.submission}
+      </div>
+    `
+  }
+
+  // Add dataset links
+  if (datasetLinks.length > 0) {
+    html += `
+      <div class="content-box">
+        <h4>Datasets:</h4>
+        <ul>
+          ${datasetLinks.map(ds => `<li><a href="${ds.path}" download>${ds.name}</a></li>`).join('')}
+        </ul>
+      </div>
+    `
+  }
+
+  return html
+}
+
+/**
+ * Handle recording complete event
+ */
+function handleRecordingComplete(data) {
+  console.log('Exercise recording complete:', data)
+  // Could save recording info or show success message
+}
+
+/**
+ * Attach copy buttons to all terminal command boxes
+ * Runs after content is rendered via v-html
+ */
+function attachCopyButtons() {
+  nextTick(() => {
+    const commandBoxes = document.querySelectorAll('.terminal-command:not(.has-copy-btn)')
+
+    commandBoxes.forEach(box => {
+      // Mark as processed
+      box.classList.add('has-copy-btn')
+
+      // Create copy button
+      const copyBtn = document.createElement('button')
+      copyBtn.className = 'copy-command-btn'
+      copyBtn.innerHTML = '📋'
+      copyBtn.title = 'Copy command'
+
+      // Get the command text
+      const command = box.getAttribute('data-command') || box.textContent.trim()
+
+      // Copy functionality
+      copyBtn.addEventListener('click', async (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        try {
+          await navigator.clipboard.writeText(command)
+
+          // Visual feedback
+          copyBtn.innerHTML = '✓'
+          copyBtn.classList.add('copied')
+
+          setTimeout(() => {
+            copyBtn.innerHTML = '📋'
+            copyBtn.classList.remove('copied')
+          }, 2000)
+        } catch (err) {
+          console.error('Failed to copy:', err)
+          copyBtn.innerHTML = '✗'
+          setTimeout(() => {
+            copyBtn.innerHTML = '📋'
+          }, 2000)
+        }
+      })
+
+      // Add button to box
+      box.appendChild(copyBtn)
+    })
+  })
+}
+
 // Lifecycle
 onMounted(async () => {
   await fetchClasses()
@@ -591,6 +692,8 @@ onMounted(async () => {
       startExercise(current)
     }
   }
+
+  attachCopyButtons()
 })
 
 watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
@@ -601,6 +704,11 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
     selectedModule.value = availableModules.value[0]?.id || null
   }
   loadProgress()
+})
+
+// Attach copy buttons when exercise content is loaded
+watch(currentExercise, () => {
+  attachCopyButtons()
 })
 </script>
 
@@ -896,6 +1004,7 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
 .exercise-container {
   position: relative;
 }
+
 
 .instructional-exercise {
   background: var(--bg-card);
@@ -1302,6 +1411,40 @@ watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
 }
 .summary-actions .btn-secondary {
   color: #111827;
+}
+
+.exercise-instructions-inline {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 2rem;
+}
+
+.exercise-instructions-inline .instructions-header h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.exercise-instructions-inline .instructions-content {
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.exercise-instructions-inline .instructions-content ul,
+.exercise-instructions-inline .instructions-content ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.exercise-instructions-inline .instructions-content li {
+  margin: 0.5rem 0;
+}
+
+.exercise-instructions-inline .instructions-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 </style>
 

@@ -55,7 +55,7 @@ export const statisticsModules = [
     description: 'Get hands-on with your chosen statistical software for data entry, import, and basic manipulation.',
     icon: 'M3',
     color: '#0ea5e9',
-    topics: ['software-interface', 'data-entry', 'variable-types'],
+    topics: ['software-interface', 'data-entry', 'variable-types', 'screen-recording-tutorial'],
     textbookChapters: ['Chapter 3: Getting started with statistical software'],
     learningObjectives: [
       'Navigate your statistical software interface',

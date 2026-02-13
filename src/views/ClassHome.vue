@@ -40,6 +40,15 @@
             </h2>
             <p>{{ getModuleDisplayDescription(selectedModule) }}</p>
           </div>
+          <!-- Module 8 Customization Button -->
+          <button
+            v-if="selectedModuleId === 'stats-module-8' && module8Prefs.hasCompletedSelection.value"
+            @click="openModule8Selector"
+            class="module-settings-btn"
+            title="Change topic selection"
+          >
+            ⚙️ Customize
+          </button>
         </div>
 
         <!-- Learning Objectives -->
@@ -65,7 +74,6 @@
             <span>Topics read: {{ moduleProgress.openedTopics }} / {{ moduleProgress.totalTopics }}</span>
             <span>Content review: {{ moduleProgress.contentReviewComplete ? 1 : 0 }} / {{ moduleProgress.totalTopics > 0 ? 1 : 0 }}</span>
             <span>Learn: {{ moduleProgress.completedLessons }} / {{ moduleProgress.totalLessons }}</span>
-            <span v-if="moduleProgress.totalTodo">To do list: {{ moduleProgress.completedTodo }} / {{ moduleProgress.totalTodo }}</span>
           </div>
         </div>
 
@@ -166,79 +174,111 @@
 
           <!-- Software Practice Tab -->
           <div v-if="activeContentTab === 'software'" class="tab-panel">
-            <div v-if="filteredModuleLessons.length > 0" class="practice-link-card learn-card">
-              <div class="link-card-icon">
-                <img src="/software-practice-icon.png" alt="Software lessons" class="link-card-icon-img" />
-              </div>
-              <div class="link-card-content">
-                <h3>Learn</h3>
-                <p>All software lessons for this module.</p>
-                <div class="lessons-grid">
-                  <router-link
-                    v-for="lesson in filteredModuleLessons"
-                    :key="lesson.id"
-                    :to="`/class/${classId}/lesson/${lesson.id}`"
-                    class="lesson-card"
-                  >
-                    <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(lesson.software) }">
-                      <img
-                        v-if="getSoftwareIcon(lesson.software)"
-                        :src="getSoftwareIcon(lesson.software)"
-                        :alt="`${lesson.software} icon`"
-                        class="lesson-software-icon"
-                      />
-                    </div>
-                    <div class="lesson-info">
-                      <h3>{{ lesson.title }}</h3>
-                      <p>{{ lesson.objectives[0] }}</p>
-                    </div>
-                    <span class="card-arrow">-></span>
-                  </router-link>
+            <div v-if="moduleLesson" class="software-phases-container">
+              <!-- Lesson Header -->
+              <div class="lesson-header-card">
+                <div class="lesson-header-icon">
+                  <img
+                    v-if="getSoftwareIcon(moduleLesson.software)"
+                    :src="getSoftwareIcon(moduleLesson.software)"
+                    :alt="`${moduleLesson.software} icon`"
+                    class="software-icon-large"
+                  />
                 </div>
+                <div class="lesson-header-info">
+                  <h3>{{ moduleLesson.title }}</h3>
+                  <p>{{ moduleLesson.objectives ? moduleLesson.objectives[0] : '' }}</p>
+                  <div class="lesson-meta">
+                    <span class="software-badge" :style="{ backgroundColor: getSoftwareColor(moduleLesson.software) }">
+                      {{ moduleLesson.software }}
+                    </span>
+                    <span class="time-estimate" v-if="moduleLesson.estimatedTime">
+                      {{ moduleLesson.estimatedTime }} min
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phase Navigation Buttons (Practice, Self-Check, Apply greyed out until previous section completed) -->
+              <div class="phase-buttons-grid">
+                <router-link
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?phase=iDo`"
+                  class="phase-button-card i-do"
+                >
+                  <div class="phase-icon">📖</div>
+                  <div class="phase-info">
+                    <h4>Learn</h4>
+                    <p>Step-by-step demonstrations</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </router-link>
+
+                <router-link
+                  v-if="isAdmin || !isPhaseLocked('weDo', lessonCompletedPhases)"
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?phase=weDo`"
+                  class="phase-button-card we-do"
+                >
+                  <div class="phase-icon">🎯</div>
+                  <div class="phase-info">
+                    <h4>Practice</h4>
+                    <p>Guided walkthroughs</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </router-link>
+                <span v-else class="phase-button-card we-do locked" aria-disabled="true">
+                  <div class="phase-icon">🎯</div>
+                  <div class="phase-info">
+                    <h4>Practice</h4>
+                    <p>Guided walkthroughs</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </span>
+
+                <router-link
+                  v-if="isAdmin || !isPhaseLocked('selfCheck', lessonCompletedPhases)"
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?phase=selfCheck`"
+                  class="phase-button-card self-check"
+                >
+                  <div class="phase-icon">✅</div>
+                  <div class="phase-info">
+                    <h4>Self-Check</h4>
+                    <p>Verify your skills</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </router-link>
+                <span v-else class="phase-button-card self-check locked" aria-disabled="true">
+                  <div class="phase-icon">✅</div>
+                  <div class="phase-info">
+                    <h4>Self-Check</h4>
+                    <p>Verify your skills</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </span>
+
+                <router-link
+                  v-if="isAdmin || !isPhaseLocked('youDo', lessonCompletedPhases)"
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?phase=youDo`"
+                  class="phase-button-card you-do"
+                >
+                  <div class="phase-icon">✍️</div>
+                  <div class="phase-info">
+                    <h4>Apply</h4>
+                    <p>Independent practice</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </router-link>
+                <span v-else class="phase-button-card you-do locked" aria-disabled="true">
+                  <div class="phase-icon">✍️</div>
+                  <div class="phase-info">
+                    <h4>Apply</h4>
+                    <p>Independent practice</p>
+                  </div>
+                  <span class="card-arrow">→</span>
+                </span>
               </div>
             </div>
             <div v-else class="empty-state">
               <p>No software lessons available for this module yet.</p>
-            </div>
-            <div v-if="todoExercises.length > 0" class="practice-link-card learn-card">
-              <div class="link-card-icon">
-                <img src="/software-practice-icon.png" alt="Software practice" class="link-card-icon-img" />
-              </div>
-              <div class="link-card-content">
-                <h3>To Do in Software</h3>
-                <p>{{ todoExercises.length }} tasks > {{ todoCompleted ? 'Complete' : 'In progress' }}</p>
-
-                <!-- Exercises grouped by chapter -->
-                <div
-                  v-for="chapter in todoExercisesByChapter"
-                  :key="chapter.id"
-                  class="chapter-section"
-                >
-                  <h4 class="chapter-header">{{ chapter.title }}</h4>
-                  <div class="lessons-grid">
-                    <router-link
-                      v-for="(exercise, index) in chapter.exercises"
-                      :key="`${exercise.module}-${exercise.topic}-${index}`"
-                      :to="`/class/${classId}/software?module=${selectedModuleId}&software=${preferredSoftware}`"
-                      class="lesson-card"
-                    >
-                      <div class="lesson-software" :style="{ backgroundColor: getSoftwareColor(exercise.software_type) }">
-                        <img
-                          v-if="getSoftwareIcon(exercise.software_type)"
-                          :src="getSoftwareIcon(exercise.software_type)"
-                          :alt="`${exercise.software_type} icon`"
-                          class="lesson-software-icon"
-                        />
-                      </div>
-                      <div class="lesson-info">
-                        <h3>{{ exercise.title }}</h3>
-                        <p>{{ exercise.description }}</p>
-                      </div>
-                      <span class="card-arrow">-></span>
-                    </router-link>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -270,6 +310,15 @@
         </p>
       </div>
     </div>
+
+    <!-- Module 8 Selector Modal -->
+    <Teleport to="body">
+      <div v-if="showModule8Selector" class="modal-overlay" @click.self="closeModule8Selector">
+        <div class="modal-container">
+          <Module8Selector @save="closeModule8Selector" @skip="closeModule8Selector" />
+        </div>
+      </div>
+    </Teleport>
   </div>
 
   <!-- Loading state -->
@@ -300,17 +349,23 @@ import { getModulesByClassId, getContentModulesByClass, getTopicsForModule, getM
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
+import { useModule8Preferences } from '../composables/useModule8Preferences'
+import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
+import Module8Selector from '../components/Module8Selector.vue'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
-const { isAuthenticated } = useAuth()
+const { isAuthenticated, user } = useAuth()
+const isAdmin = computed(() => user.value?.role === 'admin')
 const { hasProfile } = useProfile()
+const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
 const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 const preferredSoftware = ref('jamovi')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
+const showModule8Selector = ref(false)
 
 const contentTabs = [
   { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
@@ -346,8 +401,44 @@ const moduleTopics = computed(() => {
 })
 
 // Get module items with chapters preserved (for UI rendering)
-const moduleItems = computed(() => {
+const moduleItemsRaw = computed(() => {
   return getModuleItemsWithChapters(selectedModuleId.value)
+})
+
+// Filter module items for Module 8 based on user selections
+const moduleItems = computed(() => {
+  const items = moduleItemsRaw.value
+
+  // Only filter for Module 8
+  if (selectedModuleId.value !== 'stats-module-8') {
+    return items
+  }
+
+  // If no selection made yet, show all items
+  if (module8Prefs.selectedTopics.value.size === 0) {
+    return items
+  }
+
+  // Filter items based on selection
+  return items.map(item => {
+    if (item.type === 'chapter') {
+      // Filter chapter topics
+      const filteredTopics = item.topics.filter(topic =>
+        module8Prefs.isTopicSelected(topic.id)
+      )
+
+      // Only include chapter if it has selected topics
+      if (filteredTopics.length === 0) return null
+
+      return {
+        ...item,
+        topics: filteredTopics
+      }
+    } else {
+      // Regular topic - check if selected
+      return module8Prefs.isTopicSelected(item.id) ? item : null
+    }
+  }).filter(item => item !== null)
 })
 
 // Get software lessons for the selected module
@@ -360,7 +451,30 @@ const filteredModuleLessons = computed(() => {
   return moduleLessons.value.filter(lesson => lesson.software === preferredSoftware.value)
 })
 
-const hasSoftwareLessons = computed(() => filteredModuleLessons.value.length > 0 || todoExercises.value.length > 0)
+// Get the unified lesson for the current module (new structure: one lesson per module)
+const moduleLesson = computed(() => {
+  const lessons = getLessonsByModule(selectedModuleId.value)
+  if (lessons.length === 0) return null
+
+  // Filter by preferred software if specified
+  if (preferredSoftware.value) {
+    const filtered = lessons.filter(lesson => lesson.software === preferredSoftware.value)
+    return filtered[0] || null
+  }
+
+  return lessons[0] || null
+})
+
+const hasSoftwareLessons = computed(() => {
+  return moduleLesson.value !== null || todoExercises.value.length > 0
+})
+
+const { getCompletedPhases, isPhaseLocked, phaseProgressVersion } = useLessonPhaseProgress()
+// Completed phases for current module lesson (reactive to phaseProgressVersion when SoftwareLesson saves)
+const lessonCompletedPhases = computed(() => {
+  phaseProgressVersion.value
+  return getCompletedPhases(moduleLesson.value?.id)
+})
 
 function toPracticeModuleId(value) {
   if (!value) return null
@@ -486,8 +600,16 @@ function getCompletedSoftwareLessonIds() {
 }
 
 const moduleProgress = computed(() => {
-  const totalTopics = moduleTopics.value.length
-  const openedTopics = moduleTopics.value.filter(topic => readTopicIds.value.has(topic.id)).length
+  // For Module 8, use selected topics if customization is active
+  let topicsToCount = moduleTopics.value
+  if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
+    topicsToCount = moduleTopics.value.filter(topic =>
+      module8Prefs.isTopicSelected(topic.id)
+    )
+  }
+
+  const totalTopics = topicsToCount.length
+  const openedTopics = topicsToCount.filter(topic => readTopicIds.value.has(topic.id)).length
   const completedSet = getCompletedConceptReviewIds()
   const contentReviewComplete = selectedModuleId.value
     ? completedSet.has(selectedModuleId.value)
@@ -521,11 +643,19 @@ const moduleProgress = computed(() => {
 
 // Get count for each tab
 function getTabCount(tabId) {
+  // For Module 8, use selected topics count if customization is active
+  let topicsCount = moduleTopics.value.length
+  if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
+    topicsCount = moduleTopics.value.filter(topic =>
+      module8Prefs.isTopicSelected(topic.id)
+    ).length
+  }
+
   switch (tabId) {
     case 'topics':
-      return moduleTopics.value.length
+      return topicsCount
     case 'concepts':
-      return moduleTopics.value.length > 0 ? 1 : 0 // 1 if there are topics to review
+      return topicsCount > 0 ? 1 : 0 // 1 if there are topics to review
     case 'software':
       return filteredModuleLessons.value.length + todoExercises.value.length
     default:
@@ -536,6 +666,19 @@ function getTabCount(tabId) {
 function selectModule(moduleId) {
   selectedModuleId.value = moduleId
   activeContentTab.value = 'topics'
+
+  // Show Module 8 selector if customization not completed
+  if (moduleId === 'stats-module-8' && !module8Prefs.hasCompletedSelection.value) {
+    showModule8Selector.value = true
+  }
+}
+
+function openModule8Selector() {
+  showModule8Selector.value = true
+}
+
+function closeModule8Selector() {
+  showModule8Selector.value = false
 }
 
 function normalizeRouteValue(value) {
@@ -592,6 +735,44 @@ function getModuleDisplayShortTitle(module) {
 
 function getModuleDisplayDescription(module) {
   return replaceJamoviLabel(module?.description, module?.id)
+}
+
+function getSectionCount(lesson, phase) {
+  if (!lesson || !lesson.phases || !lesson.phases[phase]) return ''
+
+  // For multi-section iDo phase
+  if (phase === 'iDo' && lesson.phases.iDo.type === 'multi_section') {
+    const sections = lesson.phases.iDo.sections || []
+    return sections.length > 1 ? `${sections.length} sections` : '1 section'
+  }
+
+  // For weDo (practice) phase
+  if (phase === 'weDo' && lesson.phases.weDo.steps) {
+    const steps = lesson.phases.weDo.steps.length
+    return `${steps} steps`
+  }
+
+  // For selfCheck phase
+  if (phase === 'selfCheck') {
+    let totalQuestions = 0
+    if (lesson.phases.selfCheck.screenshotRecognition) {
+      totalQuestions += lesson.phases.selfCheck.screenshotRecognition.length
+    }
+    if (lesson.phases.selfCheck.errorDiagnostic) {
+      totalQuestions += lesson.phases.selfCheck.errorDiagnostic.length
+    }
+    if (lesson.phases.selfCheck.outputInterpretation) {
+      totalQuestions += lesson.phases.selfCheck.outputInterpretation.length
+    }
+    return totalQuestions > 0 ? `${totalQuestions} exercises` : 'Skill verification'
+  }
+
+  // For youDo (apply) phase
+  if (phase === 'youDo') {
+    return 'Hands-on practice'
+  }
+
+  return ''
 }
 
 // Set default module when class modules load
@@ -767,6 +948,7 @@ watch(() => route.fullPath, () => {
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .module-header-icon {
@@ -1281,6 +1463,243 @@ watch(() => route.fullPath, () => {
 
 .btn-primary:hover {
   background: var(--primary-dark);
+}
+
+/* Module 8 Customization Button */
+.module-settings-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.module-settings-btn:hover {
+  border-color: var(--primary);
+  background: var(--bg-card);
+  color: var(--primary);
+}
+
+/* Modal Overlay and Container */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-container {
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Software Phases Container */
+.software-phases-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lesson-header-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.lesson-header-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.software-icon-large {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.lesson-header-info {
+  flex: 1;
+}
+
+.lesson-header-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.lesson-header-info p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.lesson-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.software-badge {
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.time-estimate {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Phase Buttons Grid */
+.phase-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.phase-button-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-button-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  transition: width 0.2s;
+}
+
+.phase-button-card.i-do::before {
+  background: #3b82f6;
+}
+
+.phase-button-card.we-do::before {
+  background: #f59e0b;
+}
+
+.phase-button-card.self-check::before {
+  background: #10b981;
+}
+
+.phase-button-card.you-do::before {
+  background: #8b5cf6;
+}
+
+.phase-button-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.phase-button-card:hover::before {
+  width: 100%;
+  opacity: 0.08;
+}
+
+.phase-button-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.phase-button-card.locked:hover {
+  border-color: var(--border);
+  box-shadow: none;
+  transform: none;
+}
+
+.phase-button-card.locked:hover::before {
+  width: 4px;
+  opacity: 1;
+}
+
+.phase-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-card);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.phase-info {
+  flex: 1;
+}
+
+.phase-info h4 {
+  margin: 0 0 0.125rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.phase-info p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.phase-button-card .card-arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.phase-button-card:hover .card-arrow {
+  transform: translateX(4px);
+  color: var(--primary);
 }
 
 @media (max-width: 768px) {

@@ -731,6 +731,57 @@ a:hover {
   font-weight: 600;
 }
 
+/* Video boxes */
+.video-box {
+  background: var(--bg-elevated);
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--primary);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.video-box .video-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.video-box .video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  background: var(--bg-main);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.video-box .video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-box .video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.video-box .video-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* Page header */
 .page-header {
   padding: 3rem 0 2rem;
@@ -792,6 +843,60 @@ a:hover {
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
+}
+
+/* Terminal Command Boxes */
+.terminal-command {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 0.5rem;
+  padding: 1rem 3rem 1rem 1rem;
+  margin: 1rem 0;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminal-command code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.copy-command-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.copy-command-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.copy-command-btn.copied {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
 }
 
 /* Responsive */

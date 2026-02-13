@@ -2915,6 +2915,327 @@ export const topics = [
 `
   },
 
+  // Screen Recording Tutorial (Module 3)
+  {
+    id: 'screen-recording-tutorial',
+    moduleId: 'module-3',
+    title: 'How to Record Your Screen',
+    description: 'Learn how to capture your statistical analysis walkthrough for documentation and submissions.',
+    icon: 'T',
+    contentHtml: `
+<section class="module-content" aria-labelledby="screen-recording-title">
+  <h2 id="screen-recording-title">How to Record Your Screen</h2>
+
+  <blockquote class="chapter-quote">
+    <p>The best way to learn is to teach. The second best way is to watch yourself work.</p>
+    <footer>– Unknown</footer>
+  </blockquote>
+
+  <h3>Why Screen Recording Matters</h3>
+
+  <p>
+    Recording your screen while conducting statistical analyses is a valuable skill that serves multiple purposes:
+  </p>
+
+  <ul>
+    <li><strong>Document your process</strong> – Create a record of the exact steps you took in your analysis</li>
+    <li><strong>Get help from instructors</strong> – Share your recording to show exactly where you're stuck</li>
+    <li><strong>Build your portfolio</strong> – Demonstrate your statistical skills to future employers or graduate programs</li>
+    <li><strong>Review your work</strong> – Watch yourself work to identify mistakes or areas for improvement</li>
+    <li><strong>Complete assignments</strong> – Many courses require you to submit screen recordings of your analyses</li>
+  </ul>
+
+  <div class="concept-box">
+    <h4>What You'll Learn</h4>
+    <p>
+      This tutorial will teach you how to use free, built-in screen recording tools on your computer.
+      You don't need to install any special software – every modern operating system includes screen
+      recording capabilities. By the end, you'll be able to record your statistical work with confidence.
+    </p>
+  </div>
+
+  <h3>Built-in Screen Recording Tools</h3>
+
+  <p>
+    All modern operating systems include free screen recording tools. These are the easiest way to get started
+    because they're already installed on your computer and require no setup.
+  </p>
+
+  <h4>Windows: Xbox Game Bar</h4>
+
+  <p>
+    Windows 10 and 11 include the Xbox Game Bar, which can record any application on your screen.
+  </p>
+
+  <div class="content-box">
+    <h5>Quick Start (Windows)</h5>
+    <ol>
+      <li>Open the application you want to record (e.g., Jamovi, SPSS, R Studio)</li>
+      <li>Press <code>Windows Key + G</code> to open Xbox Game Bar</li>
+      <li>Click the <strong>Record</strong> button (⏺) or press <code>Windows Key + Alt + R</code></li>
+      <li>A timer will appear showing you're recording</li>
+      <li>Work through your analysis as normal</li>
+      <li>Press <code>Windows Key + Alt + R</code> again to stop recording</li>
+      <li>Your video is automatically saved to <code>C:\\Users\\[YourName]\\Videos\\Captures</code></li>
+    </ol>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Tip:</strong> If you want to narrate your recording, make sure your microphone is enabled
+    in the Xbox Game Bar settings (click the settings icon before recording).
+  </div>
+
+  <h4>Mac: Screenshot Toolbar</h4>
+
+  <p>
+    macOS includes a powerful screen recording tool built into the Screenshot toolbar.
+  </p>
+
+  <div class="content-box">
+    <h5>Quick Start (Mac)</h5>
+    <ol>
+      <li>Press <code>Command + Shift + 5</code> to open the Screenshot toolbar</li>
+      <li>Click <strong>Record Entire Screen</strong> or <strong>Record Selected Portion</strong></li>
+      <li>If recording a portion, drag to select the area (e.g., just your Jamovi window)</li>
+      <li>Click <strong>Options</strong> to:
+        <ul>
+          <li>Choose where to save the recording</li>
+          <li>Enable microphone audio</li>
+          <li>Show mouse clicks</li>
+        </ul>
+      </li>
+      <li>Click <strong>Record</strong></li>
+      <li>Click the <strong>Stop</strong> button in the menu bar when finished</li>
+      <li>Your video appears as a thumbnail in the corner – click to open, edit, or share</li>
+    </ol>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Tip:</strong> You can trim the beginning and end of your recording by clicking the thumbnail
+    and using the trim tool before saving.
+  </div>
+
+  <h4>Chrome: Browser Extensions (Any OS)</h4>
+
+  <p>
+    If you're using web-based statistical software (like Jamovi in the browser), Chrome extensions
+    can be very convenient.
+  </p>
+
+  <div class="content-box">
+    <h5>Recommended Chrome Extensions</h5>
+    <ul>
+      <li><strong>Loom</strong> – Records your screen and webcam, free for up to 5-minute videos</li>
+      <li><strong>Screencastify</strong> – Simple recorder with editing tools, free tier available</li>
+      <li><strong>Nimbus Screenshot & Screen Video Recorder</strong> – Full-featured, completely free</li>
+    </ul>
+    <p>
+      Install from the <a href="https://chrome.google.com/webstore/category/extensions" target="_blank" rel="noopener noreferrer">Chrome Web Store</a>.
+      After installation, click the extension icon, choose your recording settings, and start recording.
+    </p>
+  </div>
+
+  <h3>Professional Screen Recording Tools (Optional)</h3>
+
+  <p>
+    If you need more advanced features or plan to create many recordings, consider these free professional tools:
+  </p>
+
+  <h4>OBS Studio (Windows, Mac, Linux)</h4>
+
+  <div class="content-box">
+    <p>
+      <strong>OBS Studio</strong> is a professional-grade screen recorder used by content creators worldwide.
+      It's completely free and open-source.
+    </p>
+    <p><strong>Best for:</strong> High-quality recordings, multiple scenes, advanced audio mixing</p>
+    <p><strong>Download:</strong> <a href="https://obsproject.com/" target="_blank" rel="noopener noreferrer">obsproject.com</a></p>
+
+    <h5>Quick Setup</h5>
+    <ol>
+      <li>Download and install OBS Studio</li>
+      <li>Run the Auto-Configuration Wizard (appears on first launch)</li>
+      <li>Select "Optimize for recording"</li>
+      <li>Click <strong>+</strong> under Sources → <strong>Window Capture</strong></li>
+      <li>Select your statistical software window</li>
+      <li>Click <strong>Start Recording</strong> in the bottom-right</li>
+      <li>Click <strong>Stop Recording</strong> when finished</li>
+      <li>Videos save to your Videos folder by default</li>
+    </ol>
+  </div>
+
+  <h4>ShareX (Windows Only)</h4>
+
+  <div class="content-box">
+    <p>
+      <strong>ShareX</strong> is a lightweight, powerful screen capture tool for Windows.
+    </p>
+    <p><strong>Best for:</strong> Quick recordings, automatic uploads, GIF creation</p>
+    <p><strong>Download:</strong> <a href="https://getsharex.com/" target="_blank" rel="noopener noreferrer">getsharex.com</a></p>
+  </div>
+
+  <h4>Loom (Web-based)</h4>
+
+  <div class="content-box">
+    <p>
+      <strong>Loom</strong> records your screen and webcam simultaneously, then instantly creates a shareable link.
+    </p>
+    <p><strong>Best for:</strong> Quick recordings to share with instructors, no file management needed</p>
+    <p><strong>Free tier:</strong> Unlimited videos up to 5 minutes each</p>
+    <p><strong>Website:</strong> <a href="https://www.loom.com/" target="_blank" rel="noopener noreferrer">loom.com</a></p>
+  </div>
+
+  <h3>Recording Best Practices</h3>
+
+  <p>
+    Follow these tips to create clear, professional screen recordings of your statistical analyses:
+  </p>
+
+  <h4>Before Recording</h4>
+
+  <ul>
+    <li><strong>Close unnecessary windows</strong> – Minimize distractions and protect your privacy</li>
+    <li><strong>Maximize your statistical software</strong> – Make it easy to see what you're doing</li>
+    <li><strong>Prepare your data</strong> – Load your dataset and know what analysis you'll run</li>
+    <li><strong>Test your audio</strong> – If narrating, record a 10-second test to check microphone levels</li>
+    <li><strong>Check the default save location</strong> – Know where your video will be saved</li>
+  </ul>
+
+  <h4>During Recording</h4>
+
+  <ul>
+    <li><strong>Move your mouse slowly</strong> – Rapid movements are hard to follow in playback</li>
+    <li><strong>Speak clearly (if narrating)</strong> – Explain what you're doing and why</li>
+    <li><strong>Pause before clicking</strong> – Let viewers see what you're about to select</li>
+    <li><strong>Keep it focused</strong> – Aim for 3-5 minutes per recording; break long analyses into parts</li>
+    <li><strong>Don't worry about mistakes</strong> – They show your problem-solving process</li>
+  </ul>
+
+  <h4>After Recording</h4>
+
+  <ul>
+    <li><strong>Review your recording</strong> – Watch the first minute to ensure quality</li>
+    <li><strong>Check file size</strong> – Large files (>100MB) may be slow to upload</li>
+    <li><strong>Name files clearly</strong> – Use descriptive names like "Correlation-Analysis-Week3.mp4"</li>
+    <li><strong>Trim if needed</strong> – Cut out dead time at the beginning/end</li>
+  </ul>
+
+  <div class="critical-points">
+    <h4>Privacy & Security Tips</h4>
+    <ul>
+      <li>Close email, social media, and messaging apps before recording</li>
+      <li>Hide browser bookmarks that might contain personal information</li>
+      <li>If using real data, ensure you have permission to share it</li>
+      <li>Consider using example datasets for instructional recordings</li>
+      <li>Never share passwords or sensitive information in recordings</li>
+    </ul>
+  </div>
+
+  <h3>Troubleshooting Common Issues</h3>
+
+  <div class="content-box">
+    <h4>Problem: No audio in recording</h4>
+    <p><strong>Solution:</strong> Check your recording software's audio settings. Make sure "System Audio" or
+    "Microphone" is enabled. Some tools require you to select an audio source before recording.</p>
+  </div>
+
+  <div class="content-box">
+    <h4>Problem: Video file is too large</h4>
+    <p><strong>Solution:</strong> Record at 720p instead of 1080p, or use a lower frame rate (15-30 fps).
+    You can also compress the video using free tools like HandBrake.</p>
+  </div>
+
+  <div class="content-box">
+    <h4>Problem: Recording is choppy/laggy</h4>
+    <p><strong>Solution:</strong> Close other applications to free up computer resources. Lower the recording
+    quality settings. Ensure you're saving to your local hard drive, not a network drive.</p>
+  </div>
+
+  <div class="content-box">
+    <h4>Problem: Can't find my recording</h4>
+    <p><strong>Solution:</strong> Check the default save location in your recording software's settings.
+    Common locations: Videos/Captures folder (Windows), Desktop (Mac), Downloads folder.</p>
+  </div>
+
+  <h3>Quick Reference Card</h3>
+
+  <p>
+    Print or bookmark this quick reference for easy access while recording:
+  </p>
+
+  <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+    <thead>
+      <tr style="background: var(--bg-elevated); border-bottom: 2px solid var(--border);">
+        <th style="padding: 0.75rem; text-align: left;">Operating System</th>
+        <th style="padding: 0.75rem; text-align: left;">Keyboard Shortcut</th>
+        <th style="padding: 0.75rem; text-align: left;">Tool</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 0.75rem;">Windows 10/11</td>
+        <td style="padding: 0.75rem;"><code>Win + G</code> then click Record</td>
+        <td style="padding: 0.75rem;">Xbox Game Bar</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 0.75rem;">Windows (Start/Stop)</td>
+        <td style="padding: 0.75rem;"><code>Win + Alt + R</code></td>
+        <td style="padding: 0.75rem;">Xbox Game Bar</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 0.75rem;">Mac</td>
+        <td style="padding: 0.75rem;"><code>Cmd + Shift + 5</code></td>
+        <td style="padding: 0.75rem;">Screenshot Toolbar</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.75rem;">Chrome (any OS)</td>
+        <td style="padding: 0.75rem;">Click extension icon</td>
+        <td style="padding: 0.75rem;">Loom / Screencastify</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Practice Exercise</h3>
+
+  <div class="example-box">
+    <h4>Your First Screen Recording</h4>
+    <p><strong>Task:</strong> Create a 1-2 minute recording showing yourself:</p>
+    <ol>
+      <li>Opening your statistical software (Jamovi, SPSS, R, etc.)</li>
+      <li>Loading a sample dataset</li>
+      <li>Running a simple descriptive statistics analysis (mean, standard deviation)</li>
+      <li>Showing the results output</li>
+    </ol>
+    <p><strong>Optional:</strong> Narrate your recording, explaining each step as you go.</p>
+    <p><strong>Goal:</strong> Become comfortable with the recording process before you need to use it for assignments.</p>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Assignment Integration:</strong> The ScreenRecorder tool built into this platform includes
+    many of these features automatically. Use it for assignments, and use these standalone tools when working
+    on your own computer outside of class.
+  </div>
+
+  <h3>Additional Resources</h3>
+
+  <ul>
+    <li><a href="https://support.microsoft.com/en-us/windows/record-a-game-clip-on-your-pc-with-xbox-game-bar-2f477001-54d4-1276-9144-b0416a307f3c" target="_blank" rel="noopener noreferrer">Microsoft: How to use Xbox Game Bar</a></li>
+    <li><a href="https://support.apple.com/guide/mac-help/take-screenshots-or-screen-recordings-mh26782/mac" target="_blank" rel="noopener noreferrer">Apple: Take screenshots or screen recordings on Mac</a></li>
+    <li><a href="https://obsproject.com/wiki/" target="_blank" rel="noopener noreferrer">OBS Studio Documentation</a></li>
+    <li><a href="https://www.loom.com/education" target="_blank" rel="noopener noreferrer">Loom for Education</a></li>
+  </ul>
+
+  <hr>
+
+  <div class="attribution">
+    <p>
+      Original content created for this statistics course. Free to use and adapt for educational purposes.
+    </p>
+  </div>
+</section>
+`
+  },
+
   // Module 4: Descriptive Statistics
   {
     id: 'central-tendency',
@@ -8073,6 +8394,22 @@ IF(Age >= 41 and Age <= 60, "Older")))</code></pre>
       <li>Check <strong>Report significance</strong> to get p-values</li>
       <li>Check <strong>Flag significant correlations</strong> to highlight significant results</li>
     </ol>
+  </div>
+
+  <div class="video-box">
+    <div class="video-title">📺 Video Tutorial: Running Correlation in Jamovi</div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+        title="How to Run Correlation in Jamovi"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted);">
+      Note: This is a placeholder YouTube video. Replace with your actual tutorial video ID.
+    </p>
   </div>
 
   <div class="key-points">

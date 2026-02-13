@@ -170,6 +170,24 @@ Tracks student attempts on simulation exercises.
 - Create: Authenticated users (own profile only)
 - List/View: Own records only (students), All records (instructors)
 
+### software_lesson_metrics
+
+Tracks software lesson events for analytics and optional neural-network pipeline (e.g. Docker service). The frontend also sends the same payload to `VITE_METRICS_API_URL` when set.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `user` | relation → users | Optional; set when user is authenticated |
+| `lesson_id` | text | Lesson ID (e.g. jamovi-module-3-unified) |
+| `lesson_title` | text | Lesson title |
+| `module` | text | Module ID (e.g. stats-module-3) |
+| `software` | text | jamovi, spss, r, excel, stata |
+| `event_type` | text | hint_used, phase_completed, self_check_submitted, apply_exercise_completed, lesson_completed |
+| `event_payload` | json | Event-specific data (e.g. phase, exercise_title, score, total) |
+
+**API Rules:**
+- Create: Anyone (or authenticated only if you prefer)
+- List/View: Instructors/admins for analytics; students see own only if you add filter
+
 ---
 
 ## Sample Data for Testing

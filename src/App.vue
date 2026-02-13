@@ -35,6 +35,13 @@
     <main>
       <router-view />
     </main>
+
+    <!-- Global Resources Drawer (Available on all pages) -->
+    <ResourcesDrawer
+      :show-tools="true"
+      :show-recording="true"
+      :show-software-links="true"
+    />
   </div>
 </template>
 
@@ -45,6 +52,7 @@ import { useAuth } from './composables/useAuth'
 import { useClasses } from './composables/useClasses'
 import ThemeToggle from './components/ThemeToggle.vue'
 import ClassSelector from './components/ClassSelector.vue'
+import ResourcesDrawer from './components/ResourcesDrawer.vue'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()

@@ -3,9 +3,13 @@ import App from './App.vue'
 import router from './router'
 import './styles/main.css'
 import { useAuth } from './composables/useAuth'
+import VideoBox from './components/VideoBox.vue'
 
 const app = createApp(App)
 app.use(router)
+
+// Register VideoBox globally for use in v-html content
+app.component('VideoBox', VideoBox)
 
 // Initialize auth before mounting
 const { initAuth } = useAuth()

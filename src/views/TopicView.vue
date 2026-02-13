@@ -43,7 +43,7 @@
           <button class="btn-secondary" @click="goToModule">Back to Module</button>
           <button v-if="prevTopic" class="btn-secondary" @click="goToPrev">Previous Topic</button>
           <button class="btn-primary" @click="goToNext">
-            {{ nextTopic ? 'Next Topic' : 'Content Review' }}
+            {{ getNextButtonText() }}
           </button>
         </div>
       </div>
@@ -58,11 +58,13 @@ import { topics } from '../data/topics.js'
 import { getModuleById } from '../data/modules.js'
 import { useTimeTracking } from '../composables/useTimeTracking'
 import { useAuth } from '../composables/useAuth'
+import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { pb } from '../lib/pocketbase'
 
 const route = useRoute()
 const router = useRouter()
 const { isAuthenticated, user } = useAuth()
+const module8Prefs = useModule8Preferences()
 const timeTracker = useTimeTracking('reading') // Reading mode: 1 hour max, 10 min idle timeout
 
 // Scroll depth tracking
@@ -145,6 +147,11 @@ const moduleTopics = computed(() => {
     allTopics = topics.filter(t => t.moduleId === moduleId.value)
   }
 
+  // For Module 8, filter by user selections
+  if (statsModuleId === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
+    allTopics = allTopics.filter(t => module8Prefs.isTopicSelected(t.id))
+  }
+
   // If current topic has a chapter field, filter to only that chapter
   if (topic.value?.chapter) {
     return allTopics.filter(t => t.chapter === topic.value.chapter)
@@ -153,8 +160,42 @@ const moduleTopics = computed(() => {
   return allTopics
 })
 
+// Get all selected topics across all chapters for Module 8
+const allSelectedModuleTopics = computed(() => {
+  if (!moduleId.value) return []
+  const statsModuleId = toStatsModuleId(moduleId.value)
+  const module = statsModuleId ? getModuleById(statsModuleId) : null
+
+  // Get all topics in the module
+  let allTopics = []
+  if (module?.topics?.length) {
+    allTopics = module.topics
+      .map(topicKey => topics.find(t => t.id === topicKey))
+      .filter(Boolean)
+  } else {
+    allTopics = topics.filter(t => t.moduleId === moduleId.value)
+  }
+
+  // For Module 8, filter by user selections
+  if (statsModuleId === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
+    allTopics = allTopics.filter(t => module8Prefs.isTopicSelected(t.id))
+  }
+
+  return allTopics
+})
+
 const nextTopic = computed(() => {
   if (!topic.value) return null
+
+  // For Module 8 with preferences, look across all selected topics
+  const statsModuleId = toStatsModuleId(moduleId.value)
+  if (statsModuleId === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
+    const index = allSelectedModuleTopics.value.findIndex(t => t.id === topic.value.id)
+    if (index === -1) return null
+    return allSelectedModuleTopics.value[index + 1] || null
+  }
+
+  // Default behavior for other modules
   const index = moduleTopics.value.findIndex(t => t.id === topic.value.id)
   if (index === -1) return null
   return moduleTopics.value[index + 1] || null
@@ -280,6 +321,24 @@ function toStatsModuleId(value) {
   if (value.startsWith('stats-module-')) return value
   if (value.startsWith('module-')) return value.replace('module-', 'stats-module-')
   return value
+}
+
+function getNextButtonText() {
+  if (!nextTopic.value) {
+    return 'Content Review'
+  }
+
+  // For Module 8, provide context about chapter changes
+  const statsModuleId = toStatsModuleId(moduleId.value)
+  if (statsModuleId === 'stats-module-8' && topic.value?.chapter && nextTopic.value?.chapter) {
+    if (topic.value.chapter !== nextTopic.value.chapter) {
+      // Moving to a different chapter
+      const nextChapterNum = nextTopic.value.chapter.split('-')[1]
+      return `Next: Chapter ${nextChapterNum}`
+    }
+  }
+
+  return 'Next Topic'
 }
 
 async function goToModule() {

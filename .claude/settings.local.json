@@ -35,7 +35,11 @@
       "Bash(node -e:*)",
       "Bash(node:*)",
       "Bash(npx eslint:*)",
-      "WebFetch(domain:)"
+      "WebFetch(domain:)",
+      "WebFetch(domain:docs.jamovi.org)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(git checkout:*)",
+      "Bash(echo:*)"
     ]
   }
 }
