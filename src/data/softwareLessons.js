@@ -24,1183 +24,14 @@ Assessment Types:
 - matching: Match items from two columns
 */
 
+import { module3UnifiedLessons } from './softwareLessons_module3_unified.js'
+import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
+
 export const softwareLessons = [
-  // ============ STATISTICS MODULE 3: Jamovi Basics ============
-  {
-    id: 'jamovi-intro-interface',
-    module: 'stats-module-3',
-    title: 'Getting to Know the Jamovi Interface',
-    software: 'jamovi',
-    objectives: [
-      'Identify the main areas of the Jamovi interface',
-      'Understand the difference between the Data view and Results view',
-      'Navigate between the Variables, Data, Analyses, and Edit tabs'
-    ],
-    estimatedTime: 15,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Exploring the Jamovi Interface',
-        content: [
-          {
-            type: 'text',
-            content: 'Jamovi has a clean, modern interface divided into key areas. Let\'s explore each one.'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/jamovi-interface-overview.png',
-            alt: 'Jamovi interface with labeled areas',
-            annotations: [
-              { x: 5, y: 5, label: 'Menu (hamburger icon)', description: 'Open, save, and export files' },
-              { x: 20, y: 5, label: 'Ribbon tabs', description: 'Variables, Data, Analyses, Edit' },
-              { x: 30, y: 50, label: 'Spreadsheet', description: 'Your data lives here' },
-              { x: 70, y: 50, label: 'Results panel', description: 'Output appears here' },
-              { x: 50, y: 95, label: 'Status bar', description: 'Row counts and filter info' }
-            ]
-          },
-          {
-            type: 'text',
-            content: 'The **Data tab** shows tools for working with your data: Setup, Compute, Transform, Filters, and Add/Delete variables.'
-          },
-          {
-            type: 'text',
-            content: 'The **Analyses tab** is where you\'ll run statistical tests. Each icon represents a category of analyses.'
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Double-click any column header to open the Variable Editor, where you can change variable properties.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Open Jamovi on your computer and follow along with these steps.',
-        steps: [
-          {
-            instruction: 'Open Jamovi. You should see a blank spreadsheet with columns A, B, C.',
-            hint: 'If Jamovi opens with a previous file, go to the hamburger menu (☰) and select "New".',
-            checkpoint: 'Can you see the blank spreadsheet with the Results panel on the right?'
-          },
-          {
-            instruction: 'Click on the "Variables" tab in the ribbon.',
-            hint: 'It\'s the first tab after the hamburger menu.',
-            checkpoint: 'You should now see a list view of your variables (A, B, C) instead of the spreadsheet.'
-          },
-          {
-            instruction: 'Click on the "Analyses" tab.',
-            hint: 'Look for it between Data and Edit.',
-            checkpoint: 'You should see icons for Exploration, T-Tests, ANOVA, Regression, etc.'
-          },
-          {
-            instruction: 'Click back on the "Data" tab to return to the spreadsheet view.',
-            hint: 'This is where you\'ll spend most of your time entering and viewing data.',
-            checkpoint: 'You should see the spreadsheet again with the toolbar showing Setup, Compute, etc.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        instructions: 'Answer these questions to test your knowledge of the Jamovi interface.',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Where do statistical output and results appear in Jamovi?',
-            options: [
-              { id: 'a', text: 'In a separate pop-up window' },
-              { id: 'b', text: 'In the left panel (spreadsheet area)' },
-              { id: 'c', text: 'In the right panel (Results panel)' },
-              { id: 'd', text: 'In the status bar at the bottom' }
-            ],
-            correct: 'c',
-            feedback: {
-              correct: 'Right! The Results panel on the right side displays all your statistical output.',
-              incorrect: 'Not quite. In Jamovi, results appear in the Results panel on the right side of the screen.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_choice',
-            question: 'Which tab contains the icons for running t-tests, ANOVA, and regression?',
-            options: [
-              { id: 'a', text: 'Variables' },
-              { id: 'b', text: 'Data' },
-              { id: 'c', text: 'Analyses' },
-              { id: 'd', text: 'Edit' }
-            ],
-            correct: 'c',
-            feedback: {
-              correct: 'Correct! The Analyses tab contains all the statistical analysis tools.',
-              incorrect: 'The Analyses tab is where you\'ll find all statistical tests like t-tests, ANOVA, and regression.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'matching',
-            question: 'Match each Jamovi area to its purpose:',
-            pairs: [
-              { left: 'Hamburger menu (☰)', right: 'Open, save, and export files' },
-              { left: 'Data tab', right: 'Setup variables, compute, transform, filter' },
-              { left: 'Analyses tab', right: 'Run statistical tests' },
-              { left: 'Results panel', right: 'View statistical output' }
-            ],
-            feedback: {
-              correct: 'Great job matching the interface areas!',
-              incorrect: 'Review the interface areas and their functions.'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'ordering',
-            question: 'Put these tabs in order as they appear left-to-right in Jamovi:',
-            items: [
-              { id: 'a', text: 'Edit' },
-              { id: 'b', text: 'Data' },
-              { id: 'c', text: 'Variables' },
-              { id: 'd', text: 'Analyses' }
-            ],
-            correctOrder: ['c', 'b', 'd', 'a'],
-            feedback: {
-              correct: 'Perfect! The tabs go: Variables, Data, Analyses, Edit.',
-              incorrect: 'The correct order is: Variables, Data, Analyses, Edit.'
-            }
-          }
-        ]
-      }
-    }
-  },
+  // ============ STATISTICS MODULE 3: Software Basics (Unified Lessons) ============
+  // Each software has one unified lesson with multiple sections in iDo phase
+  ...module3UnifiedLessons,
 
-  {
-    id: 'jamovi-variable-types',
-    module: 'stats-module-3',
-    title: 'Setting Variable Types in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Distinguish between Nominal, Ordinal, and Continuous measurement levels',
-      'Change a variable\'s measurement level in Jamovi',
-      'Understand why correct variable types matter for analysis'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Understanding Variable Types',
-        content: [
-          {
-            type: 'text',
-            content: 'In Jamovi, every variable has a **measurement level** that tells the software how to treat it in analyses. Getting this right is crucial!'
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: 'Nominal',
-                icon: '🔗',
-                definition: 'Categories with no natural order. Examples: Gender, Eye Color, Treatment Group',
-                color: '#e8a838'
-              },
-              {
-                term: 'Ordinal',
-                icon: '📊',
-                definition: 'Categories with a meaningful order, but unequal intervals. Examples: Education Level, Likert scales (Agree/Neutral/Disagree)',
-                color: '#e8a838'
-              },
-              {
-                term: 'Continuous',
-                icon: '📏',
-                definition: 'Numeric values where differences are meaningful. Examples: Age, Height, Test Scores',
-                color: '#5778a4'
-              },
-              {
-                term: 'ID',
-                icon: '#',
-                definition: 'Unique identifiers that shouldn\'t be analyzed. Examples: Participant ID, Student Number',
-                color: '#888888'
-              }
-            ]
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/jamovi-variable-editor.png',
-            alt: 'Variable Editor in Jamovi showing measure type dropdown',
-            annotations: [
-              { x: 50, y: 30, label: 'Variable name', description: 'The name of your variable' },
-              { x: 30, y: 50, label: 'Measure type', description: 'Click this dropdown to change the measurement level' },
-              { x: 70, y: 50, label: 'Type indicator', description: 'The icon shows the current type' }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'warning',
-            content: 'If you run an analysis with the wrong variable type, you may get incorrect or misleading results! For example, treating a categorical variable as continuous could give you a meaningless "average."'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Change Variable Types Together',
-        instructions: 'Follow these steps in Jamovi to practice changing variable types.',
-        steps: [
-          {
-            instruction: 'Create a new Jamovi file (☰ → New) or use your existing blank file.',
-            hint: 'Make sure you have a fresh file to work with.'
-          },
-          {
-            instruction: 'Double-click on the column header "A" to open the Variable Editor.',
-            hint: 'Click directly on the letter "A" at the top of the first column.',
-            checkpoint: 'You should see a panel appear with "DATA VARIABLE" at the top.'
-          },
-          {
-            instruction: 'Change the variable name from "A" to "Gender" by typing in the name field.',
-            hint: 'Click in the text box at the top where it says "A" and type "Gender".'
-          },
-          {
-            instruction: 'Click the "Measure type" dropdown and select "Nominal".',
-            hint: 'Nominal is correct because gender categories (Male, Female, etc.) have no inherent order.',
-            checkpoint: 'The icon next to the variable name should now show a chain link (🔗).'
-          },
-          {
-            instruction: 'Close the Variable Editor by clicking the X or clicking elsewhere.',
-            hint: 'Your changes are saved automatically.'
-          },
-          {
-            instruction: 'Now double-click column B and rename it to "Age". Set its type to "Continuous".',
-            hint: 'Age is a numeric measurement where differences are meaningful (30-20=10 years).',
-            checkpoint: 'The Age variable should show a ruler icon (📏).'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        instructions: 'Test your knowledge of variable types.',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_select',
-            question: 'Which of the following would be classified as NOMINAL variables? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'Blood Type (A, B, AB, O)' },
-              { id: 'b', text: 'Temperature in Fahrenheit' },
-              { id: 'c', text: 'Favorite Color' },
-              { id: 'd', text: 'Pain Rating (1-10)' },
-              { id: 'e', text: 'Country of Birth' }
-            ],
-            correct: ['a', 'c', 'e'],
-            feedback: {
-              correct: 'Correct! Blood Type, Favorite Color, and Country of Birth are all categories without inherent order.',
-              incorrect: 'Nominal variables are categories with no natural order. Temperature is continuous, and Pain Rating (1-10) is ordinal because the numbers have meaningful order.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_choice',
-            question: 'A researcher records education level as: "High School", "Some College", "Bachelor\'s", "Master\'s", "Doctorate". What measurement level should this be?',
-            options: [
-              { id: 'a', text: 'Nominal - they are just categories' },
-              { id: 'b', text: 'Ordinal - they have a meaningful order' },
-              { id: 'c', text: 'Continuous - there are 5 levels' },
-              { id: 'd', text: 'ID - each person has one' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Right! Education levels have a clear order (Doctorate > Master\'s > Bachelor\'s, etc.) but the "distance" between levels isn\'t equal or measurable.',
-              incorrect: 'Think about whether these categories can be ranked. They can! Doctorate is "higher" than High School, so this is Ordinal.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'multiple_choice',
-            question: 'How do you open the Variable Editor in Jamovi?',
-            options: [
-              { id: 'a', text: 'Click Analyses → Variable Editor' },
-              { id: 'b', text: 'Double-click on the column header' },
-              { id: 'c', text: 'Right-click and select Properties' },
-              { id: 'd', text: 'Press Ctrl+V' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Double-clicking the column header opens the Variable Editor.',
-              incorrect: 'In Jamovi, you double-click on the column header (the variable name at the top of the column) to open the Variable Editor.'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'fill_blank',
-            question: 'In Jamovi, the icon for a Nominal variable looks like a ____.',
-            answer: ['chain', 'chain link', 'link', 'links'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Yes! The chain link icon (🔗) indicates a Nominal variable.',
-              incorrect: 'The Nominal icon looks like a chain link (🔗). It might help to think of it as "linked categories."'
-            }
-          },
-          {
-            id: 'q5',
-            type: 'screenshot',
-            question: 'In Jamovi, create a variable called "Condition" and set it to Nominal. Take a screenshot showing the Variable Editor with these settings.',
-            rubric: [
-              'Variable name is "Condition"',
-              'Measure type is set to "Nominal"',
-              'Variable Editor panel is visible'
-            ],
-            placeholder: true // Will be enabled when API is configured
-          }
-        ]
-      }
-    }
-  },
-
-  // ============ STATISTICS MODULE 3: SPSS Basics ============
-  {
-    id: 'spss-intro-interface',
-    module: 'stats-module-3',
-    title: 'Getting to Know the SPSS Interface',
-    software: 'spss',
-    objectives: [
-      'Identify the Data View and Variable View tabs',
-      'Locate the Output window and Syntax editor',
-      'Run a simple command from the menus'
-    ],
-    estimatedTime: 15,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Tour of the SPSS Workspace',
-        content: [
-          {
-            type: 'text',
-            content: 'SPSS has three core areas: the Data Editor (Data View and Variable View), the Output window, and the Syntax editor.'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/spss-interface-overview.png',
-            alt: 'SPSS Data Editor with Data View and Variable View tabs',
-            annotations: [
-              { x: 10, y: 5, label: 'Data View', description: 'Rows are cases, columns are variables' },
-              { x: 30, y: 5, label: 'Variable View', description: 'Define type, labels, and missing values' },
-              { x: 70, y: 5, label: 'Output window', description: 'Tables and charts appear here' }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'You can paste most menu actions to Syntax (Paste) and run them later for reproducibility.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Open SPSS and follow these steps.',
-        steps: [
-          {
-            instruction: 'Open SPSS and create a new blank dataset (File > New > Data).',
-            hint: 'You should see a grid of rows and columns in Data View.',
-            checkpoint: 'Data View shows variables as columns and cases as rows.'
-          },
-          {
-            instruction: 'Click the Variable View tab.',
-            hint: 'It is at the bottom of the Data Editor window.',
-            checkpoint: 'You should see columns like Name, Type, Label, and Measure.'
-          },
-          {
-            instruction: 'Return to Data View and enter a few numbers in a column.',
-            hint: 'Create a column named Score and type 70, 82, 95.',
-            checkpoint: 'You should see values in the Data View grid.'
-          },
-          {
-            instruction: 'Go to Analyze > Descriptive Statistics > Frequencies and click Paste.',
-            hint: 'Paste opens the Syntax editor without running the command.',
-            checkpoint: 'The Syntax window should open with a FREQUENCIES command.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Where do you define variable types and labels in SPSS?',
-            options: [
-              { id: 'a', text: 'Output window' },
-              { id: 'b', text: 'Variable View' },
-              { id: 'c', text: 'Data View' },
-              { id: 'd', text: 'Chart Builder' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Variable View is where you define name, type, labels, and measurement level.',
-              incorrect: 'Use Variable View to define properties like type, label, and measurement level.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_choice',
-            question: 'Where do statistical output tables appear after running an analysis?',
-            options: [
-              { id: 'a', text: 'Data View' },
-              { id: 'b', text: 'Output window' },
-              { id: 'c', text: 'Variable View' },
-              { id: 'd', text: 'Syntax editor' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Yes. Results appear in the Output window.',
-              incorrect: 'SPSS sends results to the Output window.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'fill_blank',
-            question: 'The two tabs in the SPSS Data Editor are ____ and ____.',
-            answer: ['Data View and Variable View', 'Variable View and Data View'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! Data View and Variable View are the two tabs.',
-              incorrect: 'The tabs are Data View and Variable View.'
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    id: 'spss-import-data',
-    module: 'stats-module-3',
-    title: 'Importing Data and Defining Variables in SPSS',
-    software: 'spss',
-    objectives: [
-      'Import a CSV or Excel file',
-      'Set variable types and measurement levels',
-      'Apply variable and value labels'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Import and Set Up Variables',
-        content: [
-          {
-            type: 'text',
-            content: 'SPSS can import CSV and Excel files. After import, always check variable types and measurement levels in Variable View.'
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: 'Type',
-                icon: 'T',
-                definition: 'Numeric, String, or Date; controls how SPSS reads values.',
-                color: '#dc2626'
-              },
-              {
-                term: 'Label',
-                icon: 'L',
-                definition: 'Longer description used in output.',
-                color: '#7c3aed'
-              },
-              {
-                term: 'Measure',
-                icon: 'M',
-                definition: 'Nominal, Ordinal, or Scale.',
-                color: '#0ea5e9'
-              }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'warning',
-            content: 'If a numeric column imports as text, you must change Type to Numeric or analyses will fail.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Use a small CSV or Excel file and follow these steps.',
-        steps: [
-          {
-            instruction: 'Import a CSV (File > Open > Data) and select your file.',
-            hint: 'Choose Files of Type: CSV or Excel.',
-            checkpoint: 'Your data should appear in Data View.'
-          },
-          {
-            instruction: 'Go to Variable View and check Type for each variable.',
-            hint: 'Click the Type cell and choose Numeric or String as needed.',
-            checkpoint: 'Each variable should have the correct Type.'
-          },
-          {
-            instruction: 'Set Measure for each variable (Nominal, Ordinal, Scale).',
-            hint: 'Use Nominal for categories, Ordinal for ranked categories, Scale for numeric values.',
-            checkpoint: 'The Measure column should be filled in.'
-          },
-          {
-            instruction: 'Add a Variable Label for at least one variable.',
-            hint: 'Labels appear in output tables and charts.',
-            checkpoint: 'You should see your label in the Label column.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Which Measure level should you use for test scores?',
-            options: [
-              { id: 'a', text: 'Nominal' },
-              { id: 'b', text: 'Ordinal' },
-              { id: 'c', text: 'Scale' },
-              { id: 'd', text: 'String' }
-            ],
-            correct: 'c',
-            feedback: {
-              correct: 'Correct! Test scores are numeric and should be Scale.',
-              incorrect: 'Use Scale for numeric variables like test scores.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_select',
-            question: 'Which actions should you do after importing data? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'Check variable Type' },
-              { id: 'b', text: 'Set Measure level' },
-              { id: 'c', text: 'Add variable labels' },
-              { id: 'd', text: 'Delete the Output window' }
-            ],
-            correct: ['a', 'b', 'c'],
-            feedback: {
-              correct: 'Yes. Type, Measure, and labels should be reviewed after import.',
-              incorrect: 'After import, verify Type, set Measure, and add labels as needed.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  // ============ STATISTICS MODULE 3: R Basics ============
-  {
-    id: 'r-rstudio-basics',
-    module: 'stats-module-3',
-    title: 'Getting Started with RStudio',
-    software: 'r',
-    objectives: [
-      'Identify the four main RStudio panes',
-      'Run commands in the Console and from a script',
-      'Locate objects in the Environment'
-    ],
-    estimatedTime: 15,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Tour of RStudio',
-        content: [
-          {
-            type: 'text',
-            content: 'RStudio is an IDE that makes working with R easier. The interface is divided into four main panes.'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/rstudio-overview.png',
-            alt: 'RStudio interface with labeled panes',
-            annotations: [
-              { x: 5, y: 10, label: 'Source', description: 'Where you write and save scripts' },
-              { x: 55, y: 10, label: 'Environment', description: 'Objects in memory (data, variables)' },
-              { x: 5, y: 60, label: 'Console', description: 'Where commands run' },
-              { x: 55, y: 60, label: 'Files/Plots/Help', description: 'Outputs and file browser' }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Use Ctrl+Enter (Cmd+Enter on Mac) to run the current line or selection in a script.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Open RStudio and follow these steps.',
-        steps: [
-          {
-            instruction: 'Open RStudio and locate the Console pane.',
-            hint: 'The Console usually appears in the lower-left pane.',
-            checkpoint: 'You should see a prompt that looks like >.'
-          },
-          {
-            instruction: 'Type 2 + 2 in the Console and press Enter.',
-            hint: 'You should see the result appear immediately in the Console.',
-            checkpoint: 'You should see [1] 4.'
-          },
-          {
-            instruction: 'Create a new R script (File > New File > R Script).',
-            hint: 'A blank script tab should open in the Source pane.',
-            checkpoint: 'You should see a new tab named Untitled1.'
-          },
-          {
-            instruction: 'Type x <- 10 in the script and run it with Ctrl+Enter.',
-            hint: 'This sends the line to the Console and saves x in memory.',
-            checkpoint: 'Look in the Environment pane for x = 10.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Where do objects you create (like x <- 10) appear in RStudio?',
-            options: [
-              { id: 'a', text: 'Console pane' },
-              { id: 'b', text: 'Environment pane' },
-              { id: 'c', text: 'Files pane' },
-              { id: 'd', text: 'Help pane' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! The Environment pane lists objects currently in memory.',
-              incorrect: 'Objects appear in the Environment pane (upper-right by default).'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'ordering',
-            question: 'Put these RStudio panes in their usual positions (top-left to bottom-right):',
-            items: [
-              { id: 'a', text: 'Console' },
-              { id: 'b', text: 'Environment' },
-              { id: 'c', text: 'Source' },
-              { id: 'd', text: 'Files/Plots/Help' }
-            ],
-            correctOrder: ['c', 'b', 'a', 'd'],
-            feedback: {
-              correct: 'Right! Source, Environment, Console, Files/Plots/Help.',
-              incorrect: 'The default layout is Source (top-left), Environment (top-right), Console (bottom-left), Files/Plots/Help (bottom-right).'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'fill_blank',
-            question: 'The shortcut to run a line from a script is ____ + Enter.',
-            answer: ['Ctrl', 'Control', 'Cmd', 'Command'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Yes! Ctrl+Enter (Windows) or Cmd+Enter (Mac).',
-              incorrect: 'Use Ctrl+Enter on Windows or Cmd+Enter on Mac.'
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    id: 'r-import-data',
-    module: 'stats-module-3',
-    title: 'Importing Data and Inspecting Data Frames',
-    software: 'r',
-    objectives: [
-      'Import a CSV file with read.csv()',
-      'Check data structure with str() and head()',
-      'Summarize variables with summary()'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Import and Inspect Data',
-        content: [
-          {
-            type: 'text',
-            content: 'In R, data are often stored in data frames. You can import CSV files using read.csv().'
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: 'read.csv()',
-                icon: 'R',
-                definition: 'Reads a CSV file into a data frame.',
-                color: '#2563eb'
-              },
-              {
-                term: 'head()',
-                icon: 'H',
-                definition: 'Shows the first 6 rows of a data frame.',
-                color: '#16a34a'
-              },
-              {
-                term: 'str()',
-                icon: 'S',
-                definition: 'Shows the structure and data types.',
-                color: '#7c3aed'
-              },
-              {
-                term: 'summary()',
-                icon: 'U',
-                definition: 'Gives a quick statistical summary.',
-                color: '#b45309'
-              }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'If your CSV is in your project folder, use read.csv("myfile.csv"). Otherwise, set your working directory first.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Use a small CSV file (e.g., data.csv) and follow these steps.',
-        steps: [
-          {
-            instruction: 'Set your working directory to the folder with your CSV.',
-            hint: 'Session > Set Working Directory > Choose Directory.',
-            checkpoint: 'Use getwd() to confirm the path.'
-          },
-          {
-            instruction: 'Import the file with: data <- read.csv("data.csv").',
-            hint: 'Replace data.csv with your actual file name.',
-            checkpoint: 'You should see data in the Environment pane.'
-          },
-          {
-            instruction: 'Run head(data) to view the first rows.',
-            hint: 'This helps confirm the file imported correctly.'
-          },
-          {
-            instruction: 'Run str(data) to check variable types.',
-            hint: 'Look for numeric vs character vs factor.'
-          },
-          {
-            instruction: 'Run summary(data) for quick descriptives.',
-            hint: 'This gives min, max, quartiles for numeric variables.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Which function reads a CSV file into R?',
-            options: [
-              { id: 'a', text: 'read.table()' },
-              { id: 'b', text: 'read.csv()' },
-              { id: 'c', text: 'import.csv()' },
-              { id: 'd', text: 'load.csv()' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! read.csv() is the standard base R function for CSVs.',
-              incorrect: 'Use read.csv() to import CSV files in base R.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_select',
-            question: 'Which functions help you quickly inspect a data frame? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'head()' },
-              { id: 'b', text: 'str()' },
-              { id: 'c', text: 'summary()' },
-              { id: 'd', text: 'sqrt()' }
-            ],
-            correct: ['a', 'b', 'c'],
-            feedback: {
-              correct: 'Correct! head(), str(), and summary() are all common inspection tools.',
-              incorrect: 'head(), str(), and summary() are used for inspection. sqrt() is not.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'fill_blank',
-            question: 'To view the first 6 rows of a data frame named df, type ____.',
-            answer: ['head(df)', 'head( df )', 'head( df)'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Yes. head(df) shows the first rows of the data frame.',
-              incorrect: 'Use head(df) to view the first rows.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  // ============ STATISTICS MODULE 3: Excel Basics ============
-  {
-    id: 'excel-intro-interface',
-    module: 'stats-module-3',
-    title: 'Getting Started with Excel for Data',
-    software: 'excel',
-    objectives: [
-      'Identify key worksheet elements (rows, columns, cells)',
-      'Enter data in a clean, rectangular format',
-      'Use simple formulas to check values'
-    ],
-    estimatedTime: 15,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Excel Workspace Overview',
-        content: [
-          {
-            type: 'text',
-            content: 'In Excel, each dataset should be a clean rectangle: one row per case and one column per variable.'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/excel-interface-overview.png',
-            alt: 'Excel worksheet with column headers and data rows',
-            annotations: [
-              { x: 10, y: 15, label: 'Column headers', description: 'Variable names in row 1' },
-              { x: 10, y: 30, label: 'Rows', description: 'Each row is a case' },
-              { x: 70, y: 10, label: 'Formula bar', description: 'View and edit cell values' }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Avoid merged cells and blank rows or columns inside your dataset.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Open Excel and follow these steps.',
-        steps: [
-          {
-            instruction: 'Create a new workbook and enter column headers: ID, Score, Group.',
-            hint: 'Put headers in row 1.',
-            checkpoint: 'You should see three headers in row 1.'
-          },
-          {
-            instruction: 'Enter 5 rows of data beneath the headers.',
-            hint: 'Use numeric IDs and scores, and a text Group label.',
-            checkpoint: 'Your data should be a solid rectangle with no blank rows.'
-          },
-          {
-            instruction: 'Use the formula =AVERAGE(B2:B6) to compute the mean score.',
-            hint: 'Place the formula below your data.',
-            checkpoint: 'You should see a numeric average.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'In a clean dataset, each column should represent:',
-            options: [
-              { id: 'a', text: 'A case (participant)' },
-              { id: 'b', text: 'A variable' },
-              { id: 'c', text: 'A worksheet' },
-              { id: 'd', text: 'A formula' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Columns are variables.',
-              incorrect: 'Columns should represent variables.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'fill_blank',
-            question: 'The Excel function to calculate a mean is ____.',
-            answer: ['AVERAGE', 'average', 'Average'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Yes. Use AVERAGE().',
-              incorrect: 'Use the AVERAGE() function.'
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    id: 'excel-import-clean',
-    module: 'stats-module-3',
-    title: 'Importing and Cleaning Data in Excel',
-    software: 'excel',
-    objectives: [
-      'Import a CSV file into Excel',
-      'Check for blank rows/columns',
-      'Set clear, consistent variable names'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Import and Clean',
-        content: [
-          {
-            type: 'text',
-            content: 'Excel can open CSV files directly. After import, check that your dataset is tidy and variables are clearly named.'
-          },
-          {
-            type: 'callout',
-            style: 'warning',
-            content: 'Avoid spaces and special characters in variable names. Use names like test_score instead of Test Score.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Use a small CSV file and follow these steps.',
-        steps: [
-          {
-            instruction: 'Open a CSV in Excel (File > Open).',
-            hint: 'Choose the CSV file and open it directly.',
-            checkpoint: 'Your data should appear in rows and columns.'
-          },
-          {
-            instruction: 'Check for blank rows or columns inside the dataset.',
-            hint: 'Delete any empty rows/columns that split the data.',
-            checkpoint: 'You should have one continuous data block.'
-          },
-          {
-            instruction: 'Rename headers to short, consistent names (e.g., score, group).',
-            hint: 'Use lowercase with underscores if needed.',
-            checkpoint: 'Headers should be concise and consistent.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_select',
-            question: 'Which are good practices for Excel datasets? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'Use one row per case and one column per variable' },
-              { id: 'b', text: 'Leave blank rows inside the data' },
-              { id: 'c', text: 'Use clear variable names' },
-              { id: 'd', text: 'Merge header cells across columns' }
-            ],
-            correct: ['a', 'c'],
-            feedback: {
-              correct: 'Correct! Keep data rectangular and headers clear.',
-              incorrect: 'Keep data rectangular and avoid blanks or merged cells.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  // ============ STATISTICS MODULE 3: Stata Basics ============
-  {
-    id: 'stata-intro-interface',
-    module: 'stats-module-3',
-    title: 'Getting Started with Stata',
-    software: 'stata',
-    objectives: [
-      'Identify the Command window and Results window',
-      'Understand the Variables and Properties panes',
-      'Run a basic command'
-    ],
-    estimatedTime: 15,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Stata Workspace Overview',
-        content: [
-          {
-            type: 'text',
-            content: 'Stata has a Command window for typing commands and a Results window that shows output.'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/stata-interface-overview.png',
-            alt: 'Stata interface with Command and Results windows',
-            annotations: [
-              { x: 10, y: 60, label: 'Command', description: 'Type commands here' },
-              { x: 10, y: 10, label: 'Results', description: 'Output appears here' },
-              { x: 70, y: 10, label: 'Variables', description: 'List of variables in the dataset' },
-              { x: 70, y: 50, label: 'Properties', description: 'Details about selected variable' }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Use the up arrow to recall previous commands.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Open Stata and follow these steps.',
-        steps: [
-          {
-            instruction: 'Open Stata and type sysuse auto in the Command window, then press Enter.',
-            hint: 'This loads a sample dataset.',
-            checkpoint: 'You should see the auto dataset loaded in memory.'
-          },
-          {
-            instruction: 'Type describe and press Enter.',
-            hint: 'This shows variable names and types.',
-            checkpoint: 'You should see a list of variables in the Results window.'
-          },
-          {
-            instruction: 'Type summarize price mpg and press Enter.',
-            hint: 'This gives basic descriptive statistics.',
-            checkpoint: 'You should see N, mean, SD, min, max for price and mpg.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Where do you type Stata commands?',
-            options: [
-              { id: 'a', text: 'Results window' },
-              { id: 'b', text: 'Command window' },
-              { id: 'c', text: 'Variables pane' },
-              { id: 'd', text: 'Do-file editor only' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Commands are typed in the Command window.',
-              incorrect: 'Use the Command window to enter commands.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'fill_blank',
-            question: 'The command to list variable types and labels is ____.',
-            answer: ['describe', 'Describe'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Yes. describe lists variable information.',
-              incorrect: 'Use describe to view variable information.'
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    id: 'stata-import-data',
-    module: 'stats-module-3',
-    title: 'Importing Data in Stata',
-    software: 'stata',
-    objectives: [
-      'Import a CSV with import delimited',
-      'Inspect variables with describe and codebook',
-      'Save a Stata dataset'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Import and Inspect Data',
-        content: [
-          {
-            type: 'text',
-            content: 'Use import delimited to load CSV files in Stata. Then inspect with describe or codebook.'
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Always save your data as a .dta file after import.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Use a CSV file and follow these steps.',
-        steps: [
-          {
-            instruction: 'Import a CSV with: import delimited using "data.csv", clear',
-            hint: 'Replace data.csv with your file name.',
-            checkpoint: 'You should see variables listed in the Variables pane.'
-          },
-          {
-            instruction: 'Run describe to check variable types.',
-            hint: 'Numeric variables should be int/float, strings are str.',
-            checkpoint: 'Verify types look correct.'
-          },
-          {
-            instruction: 'Run codebook on a categorical variable.',
-            hint: 'Example: codebook group',
-            checkpoint: 'You should see value distributions.'
-          },
-          {
-            instruction: 'Save the dataset: save "data_clean.dta", replace',
-            hint: 'This stores the cleaned Stata file.',
-            checkpoint: 'Stata should confirm the file was saved.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'Which command imports a CSV in Stata?',
-            options: [
-              { id: 'a', text: 'read.csv' },
-              { id: 'b', text: 'import delimited' },
-              { id: 'c', text: 'use' },
-              { id: 'd', text: 'open' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! import delimited reads CSV files.',
-              incorrect: 'Use import delimited to read CSV files.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_select',
-            question: 'Which commands help inspect variables? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'describe' },
-              { id: 'b', text: 'codebook' },
-              { id: 'c', text: 'summarize' },
-              { id: 'd', text: 'regress' }
-            ],
-            correct: ['a', 'b', 'c'],
-            feedback: {
-              correct: 'Correct! describe, codebook, and summarize are all inspection tools.',
-              incorrect: 'Use describe, codebook, and summarize to inspect variables.'
-            }
-          }
-        ]
-      }
-    }
-  },
 
   {
     id: 'jamovi-descriptive-stats',
@@ -1229,25 +60,25 @@ export const softwareLessons = [
                 step: 1,
                 title: 'Go to Analyses tab',
                 description: 'Click the Analyses tab to see the analysis icons.',
-                image: '/images/lessons/jamovi-analyses-tab.png'
+                image: '/images/lessons/jamovi/jamovi-analyses-tab.png'
               },
               {
                 step: 2,
                 title: 'Click Exploration',
                 description: 'Click the bar chart icon labeled "Exploration".',
-                image: '/images/lessons/jamovi-exploration-icon.png'
+                image: '/images/lessons/jamovi/jamovi-exploration-icon.png'
               },
               {
                 step: 3,
                 title: 'Select Descriptives',
                 description: 'From the dropdown, select "Descriptives".',
-                image: '/images/lessons/jamovi-descriptives-menu.png'
+                image: '/images/lessons/jamovi/jamovi-descriptives-menu.png'
               },
               {
                 step: 4,
                 title: 'Add variables',
                 description: 'Drag your variable(s) to the "Variables" box.',
-                image: '/images/lessons/jamovi-descriptives-variables.png'
+                image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
               }
             ]
           },
@@ -1295,6 +126,50 @@ export const softwareLessons = [
             instruction: 'Look at the output. Find the Mean and Standard Deviation.',
             hint: 'The Mean should be around 81.3 and SD around 8.7.',
             checkpoint: 'Can you identify N, Mean, Median, SD, Min, and Max in the output?'
+          }
+        ]
+      },
+      selfCheck: {
+        screenshotRecognition: [
+          {
+            id: 'descriptives-screenshot-1',
+            question: 'Where does the Descriptives output appear in Jamovi?',
+            image: '/images/selfcheck/jamovi/jamovi-results-panel.png',
+            options: ['Data entry panel', 'Results panel', 'Variables tab', 'Analyses menu'],
+            correct: 1,
+            explanation: 'The Results panel (right side) shows all analysis output, including Descriptives tables.'
+          }
+        ],
+        errorDiagnostic: [
+          {
+            id: 'descriptives-error-1',
+            scenario: 'You added a variable to Descriptives but the output shows "N = 0" and no statistics.',
+            errorMessage: 'No valid cases',
+            options: [
+              'The variable is in the wrong panel',
+              'The variable has only missing values or wrong measure type',
+              'You need to click Run again',
+              'Jamovi does not support this variable'
+            ],
+            correct: 1,
+            explanation: 'When N = 0, Jamovi found no valid cases—often because the variable is set to a text/nominal type with no values, or all values are missing. Check Variable View and that you have data in the column.'
+          }
+        ],
+        outputInterpretation: [
+          {
+            id: 'descriptives-output-1',
+            question: 'Look at this Descriptives output. Two variables are listed. For the variable <strong>Height</strong> only: what is the sample size (N), the mean (or average), and the standard deviation?',
+            image: '/images/selfcheck/jamovi/jamovi-descriptives-output1.png',
+            placeholder: 'For Height: state the sample size (N), the mean, and the standard deviation (e.g. N is 49, mean is 70, SD is 1.17)...',
+            hint: 'Find the row for Height in the Descriptives table. N is the sample size; Mean is the average; SD is the standard deviation.',
+            requiredKeywords: [
+              '49', '70', '1.17',
+              'height', 'mean', 'average', 'avg',
+              'standard deviation', 'sd', 'std dev', 'std deviation', 'spread',
+              'sample size', 'n=', 'n =', 'n is', 'cases', 'participants', 'observations'
+            ],
+            minRequiredKeywords: 3,
+            feedback: 'For Height: sample size (N) is 49, mean (average) is 70, and standard deviation is 1.17. N tells you how many cases were analyzed; the mean is the average height; SD tells you how spread out the values are from the mean.'
           }
         ]
       },
@@ -1394,32 +269,31 @@ export const softwareLessons = [
                 step: 1,
                 title: 'Go to Exploration',
                 description: 'Navigate to Analyses → Exploration → Descriptives',
-                image: '/images/lessons/jamovi-exploration-menu.png'
+                image: '/images/lessons/jamovi/jamovi-exploration-menu.png'
               },
               {
                 step: 2,
                 title: 'Add your variable',
                 description: 'Drag your continuous variable to the Variables box',
-                image: '/images/lessons/jamovi-histogram-variable.png'
+                image: '/images/lessons/jamovi/jamovi-histogram-variable.png'
               },
               {
                 step: 3,
                 title: 'Enable histogram',
                 description: 'Under "Plots" section, check "Histogram"',
-                image: '/images/lessons/jamovi-histogram-checkbox.png'
+                image: '/images/lessons/jamovi/jamovi-histogram-checkbox.png'
               },
               {
                 step: 4,
-                title: 'Customize bins',
-                description: 'Click the gear icon next to Histogram to adjust bin width',
-                image: '/images/lessons/jamovi-histogram-bins.png'
+                title: 'Interpret the histogram',
+                description: 'Look at the histogram in the Results panel. Check the shape: Is it symmetric or skewed? Unimodal or bimodal? Jamovi uses automatic bin widths by default. If your version offers histogram options (e.g. by clicking the plot or in the Plots section), you can adjust bin width to smooth or refine the display.'
               }
             ]
           },
           {
             type: 'callout',
             style: 'tip',
-            content: 'If your histogram looks too choppy or too smooth, try adjusting the bin width. Too many bins create noise; too few bins hide the distribution shape.'
+            content: 'If your histogram looks too choppy or too smooth and your version of Jamovi offers bin options (in the plot or under Plots), try adjusting the bin width. Too many bins create noise; too few bins hide the distribution shape. Otherwise, the default bins are usually fine for checking shape.'
           }
         ]
       },
@@ -1452,6 +326,50 @@ export const softwareLessons = [
             instruction: 'Look at the histogram shape. Is it symmetric or skewed? Unimodal or bimodal?',
             hint: 'This distribution should look roughly symmetric and unimodal (one peak).',
             checkpoint: 'Can you identify the approximate center of the distribution?'
+          }
+        ]
+      },
+      selfCheck: {
+        screenshotRecognition: [
+          {
+            id: 'histogram-screenshot-1',
+            question: 'Where does the histogram appear when you check "Histogram" under Plots in Descriptives?',
+            image: '/images/selfcheck/jamovi/jamovi-results-panel.png',
+            options: ['Data entry panel (left)', 'Results panel (right)', 'Variables tab', 'Analyses menu'],
+            correct: 1,
+            explanation: 'The histogram appears in the Results panel on the right, along with the Descriptives table.'
+          }
+        ],
+        errorDiagnostic: [
+          {
+            id: 'histogram-error-1',
+            scenario: 'You added a variable and checked Histogram under Plots, but no histogram appears in the output.',
+            errorMessage: 'Only the Descriptives table is visible',
+            options: [
+              'The variable is not continuous',
+              'You need to expand the Plots section and ensure Histogram is checked',
+              'You need to click a "Run" button',
+              'Histogram is only available in a different analysis'
+            ],
+            correct: 1,
+            explanation: 'Make sure the Plots section is expanded in the Descriptives options and the Histogram checkbox is checked. The histogram then appears in the Results panel with the table.'
+          }
+        ],
+        outputInterpretation: [
+          {
+            id: 'histogram-output-1',
+            question: 'Look at this histogram from Jamovi. In a short answer, describe the <strong>shape</strong> of the distribution: Is it roughly symmetric or skewed? Is it unimodal (one peak) or bimodal (two peaks)? Where does the center of the distribution appear to be?',
+            image: '/images/selfcheck/jamovi/jamovi-histogram-interpretation.png',
+            placeholder: 'Describe the shape (symmetric or skewed), modality (unimodal or bimodal), and where the center appears (e.g. around 70)...',
+            hint: 'Consider whether the left and right sides are roughly mirror images (symmetric) or if one tail is longer (skewed). Count the main peaks. The center is where the bulk of the data sits.',
+            requiredKeywords: [
+              'symmetric', 'symmetrical', 'symmetry', 'balanced', 'even', 'not skewed', 'nonskewed', 'no skew', 'bell', 'bell-shaped',
+              'unimodal', 'one peak', 'single peak', 'one mode', 'one hump', '1 peak',
+              'not bimodal', "n't bimodal", 'no bimodal', 'not two peak', 'not 2 peak',
+              '70', 'center', 'centre', 'middle', 'around 70', 'about 70', 'approximately 70', '~70', 'roughly 70'
+            ],
+            minRequiredKeywords: 3,
+            feedback: 'Good interpretation. This distribution is roughly symmetric (non-skewed), unimodal (one peak), and the center is around 70.'
           }
         ]
       },
@@ -1539,25 +457,25 @@ export const softwareLessons = [
                 step: 1,
                 title: 'Open Filters',
                 description: 'Go to Data tab → Filters button',
-                image: '/images/lessons/jamovi-filters-button.png'
+                image: '/images/lessons/jamovi/jamovi-filters-button.png'
               },
               {
                 step: 2,
                 title: 'Create filter',
                 description: 'Click "New Filter" and give it a descriptive name',
-                image: '/images/lessons/jamovi-new-filter.png'
+                image: '/images/lessons/jamovi/jamovi-new-filter.png'
               },
               {
                 step: 3,
                 title: 'Write expression',
                 description: 'Enter a logical expression using comparison operators',
-                image: '/images/lessons/jamovi-filter-expression.png'
+                image: '/images/lessons/jamovi/jamovi-filter-expression.png'
               },
               {
                 step: 4,
                 title: 'Apply filter',
                 description: 'Toggle the filter on/off using the checkbox',
-                image: '/images/lessons/jamovi-filter-toggle.png'
+                image: '/images/lessons/jamovi/jamovi-filter-toggle.png'
               }
             ]
           },
@@ -1633,6 +551,34 @@ export const softwareLessons = [
             checkpoint: 'The mean age should be different with each filter.'
           }
         ]
+      },
+      selfCheck: {
+        screenshotRecognition: [
+          {
+            id: 'filter-screenshot-1',
+            question: 'Where do you create and manage filters in Jamovi?',
+            image: '/images/selfcheck/jamovi/jamovi-data-panel.png',
+            options: ['Analyses tab', 'Data tab (Filters area)', 'Variables tab', 'Results panel'],
+            correct: 1,
+            explanation: 'Filters are created and toggled in the Data tab, via the Filters button/panel.'
+          }
+        ],
+        errorDiagnostic: [
+          {
+            id: 'filter-error-1',
+            scenario: 'You created a filter with expression gender == "F" but the filter shows 0 cases matched.',
+            errorMessage: 'No cases match the filter',
+            options: [
+              'The variable is named differently (e.g. "Gender" with capital G)',
+              'You should use = instead of ==',
+              'You need to put F in single quotes',
+              'Filters only work with numeric variables'
+            ],
+            correct: 0,
+            explanation: 'Variable names in Jamovi are case-sensitive. If your column is named "Gender", use gender or Gender to match how it appears in the data. Also ensure the values in the column are exactly "F" (with quotes in the expression).'
+          }
+        ],
+        outputInterpretation: []
       },
       youDo: {
         type: 'assessment',
@@ -1729,25 +675,25 @@ export const softwareLessons = [
                 step: 1,
                 title: 'Open Compute',
                 description: 'Go to Data tab → Compute button',
-                image: '/images/lessons/jamovi-compute-button.png'
+                image: '/images/lessons/jamovi/jamovi-compute-button.png'
               },
               {
                 step: 2,
                 title: 'Name your variable',
                 description: 'Enter a descriptive name (e.g., "total_score")',
-                image: '/images/lessons/jamovi-compute-name.png'
+                image: '/images/lessons/jamovi/jamovi-compute-name.png'
               },
               {
                 step: 3,
                 title: 'Write formula',
                 description: 'Use variable names, operators, and functions',
-                image: '/images/lessons/jamovi-compute-formula.png'
+                image: '/images/lessons/jamovi/jamovi-compute-formula.png'
               },
               {
                 step: 4,
                 title: 'Check results',
                 description: 'The new column appears immediately with calculated values',
-                image: '/images/lessons/jamovi-compute-results.png'
+                image: '/images/lessons/jamovi/jamovi-compute-results.png'
               }
             ]
           },
@@ -1812,6 +758,34 @@ export const softwareLessons = [
             checkpoint: 'Students should be assigned A, B, or C based on their average.'
           }
         ]
+      },
+      selfCheck: {
+        screenshotRecognition: [
+          {
+            id: 'compute-screenshot-1',
+            question: 'Where do you open the Compute / formula editor to create a new variable in Jamovi?',
+            image: '/images/selfcheck/jamovi/jamovi-data-panel.png',
+            options: ['Variables tab', 'Data tab (Compute button)', 'Analyses tab', 'Results panel'],
+            correct: 1,
+            explanation: 'The Compute button is in the Data tab. Click it to open the formula editor and create a new variable.'
+          }
+        ],
+        errorDiagnostic: [
+          {
+            id: 'compute-error-1',
+            scenario: 'You entered the formula test1 + test2 but Jamovi shows an error or the new column is empty.',
+            errorMessage: 'Invalid formula or no values',
+            options: [
+              'Variable names might not match exactly (case-sensitive)',
+              'You need to use SUM(test1, test2) instead',
+              'Computed variables only work with text',
+              'You must click Run after typing the formula'
+            ],
+            correct: 0,
+            explanation: 'Jamovi formula variable names are case-sensitive and must match the column names exactly. Check that test1 and test2 exist and are spelled correctly. Also ensure the variables contain numeric data.'
+          }
+        ],
+        outputInterpretation: []
       },
       youDo: {
         type: 'assessment',
@@ -2214,7 +1188,7 @@ export const softwareLessons = [
           },
           {
             type: 'annotated_image',
-            imagePath: '/lessons/hypothesis-testing/binomial-setup.png',
+            imagePath: '/lessons/hypothesis-testing/jamovi/binomial-setup.png',
             annotations: [
               { x: 20, y: 15, label: '1. Click Frequencies', description: 'Start in the Analyses tab' },
               { x: 45, y: 30, label: '2. Select Proportion Test', description: 'Choose the binomial test option' },
@@ -2371,7 +1345,7 @@ export const softwareLessons = [
           },
           {
             type: 'annotated_image',
-            imagePath: '/lessons/hypothesis-testing/t-test-setup.png',
+            imagePath: '/lessons/hypothesis-testing/jamovi/t-test-setup.png',
             annotations: [
               { x: 20, y: 15, label: '1. Click T-Tests', description: 'In the Analyses tab' },
               { x: 45, y: 30, label: '2. Select One Sample T-Test', description: 'Choose the one-sample option' },
@@ -2697,202 +1671,7 @@ export const softwareLessons = [
     }
   },
 
-  // ============ STATISTICS MODULE 8: Categorical Data, T-Tests, Regression, & ANOVA ============
-  {
-    id: 'jamovi-one-way-anova',
-    module: 'stats-module-8',
-    title: 'Running a One-Way ANOVA in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Perform a one-way ANOVA to compare means across three or more groups',
-      'Interpret the F-ratio, p-value, and effect size (eta-squared)',
-      'Conduct post-hoc tests with appropriate corrections for multiple comparisons',
-      'Check assumptions using Levene\'s test and Q-Q plots'
-    ],
-    estimatedTime: 25,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: One-Way ANOVA Step-by-Step',
-        content: [
-          {
-            type: 'text',
-            content: 'One-Way ANOVA (Analysis of Variance) tests whether the means of three or more independent groups are significantly different. It answers: "Is there at least one group that differs from the others?"'
-          },
-          {
-            type: 'callout',
-            style: 'info',
-            content: '**Research Question Example:** Does study method (visual, auditory, or kinesthetic) affect exam scores?'
-          },
-          {
-            type: 'text',
-            content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **grouping variable** (categorical: which group each person is in)\n- One **dependent variable** (continuous: the outcome being measured)'
-          },
-          {
-            type: 'annotated_image',
-            image: '/images/lessons/anova-data-setup.png',
-            alt: 'Jamovi data view showing study method and exam scores',
-            annotations: [
-              { x: 20, y: 30, label: 'Grouping Variable', description: 'Categories: Visual, Auditory, Kinesthetic' },
-              { x: 50, y: 30, label: 'Dependent Variable', description: 'Continuous measure: Exam_Score' }
-            ]
-          },
-          {
-            type: 'text',
-            content: '**Step 2: Run the One-Way ANOVA**\n\n1. Click **Analyses** → **ANOVA** → **One-Way ANOVA**\n2. Move your dependent variable (e.g., Exam_Score) to **Dependent Variables**\n3. Move your grouping variable (e.g., Study_Method) to **Grouping Variable**'
-          },
-          {
-            type: 'text',
-            content: '**Step 3: Check Assumptions**\n\nExpand the **Assumption Checks** section:\n- ✓ **Homogeneity of variances** (Levene\'s test)\n- ✓ **Normality** (Q-Q plot)\n\nIf Levene\'s test is significant (p < .05), variances are unequal → use Welch ANOVA instead.'
-          },
-          {
-            type: 'text',
-            content: '**Step 4: Add Post-Hoc Tests**\n\nIf the ANOVA is significant, you need post-hoc tests to see *which* groups differ.\n\nExpand **Post-Hoc Tests** and select:\n- **Tukey** (most common, balances power and error control)\n- Or **Holm** (slightly more powerful than Bonferroni)'
-          },
-          {
-            type: 'text',
-            content: '**Step 5: Request Effect Size**\n\nExpand **Effect Size** and check:\n- **η²** (eta-squared) - shows proportion of variance explained\n  - Small: .01, Medium: .06, Large: .14'
-          },
-          {
-            type: 'callout',
-            style: 'example',
-            content: '**Interpreting Results:**\n\n**ANOVA Table:**\n- F(2, 57) = 8.42, p = .001\n- η² = .228 (large effect)\n\n**Post-Hoc:**\n- Kinesthetic > Visual (p = .002)\n- Kinesthetic > Auditory (p = .015)\n- Visual ≈ Auditory (p = .723)\n\n**Conclusion:** Kinesthetic learners scored significantly higher than both visual and auditory learners.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Together',
-        instructions: 'Download the practice dataset "therapy_effectiveness.omv" and follow along.',
-        steps: [
-          {
-            instruction: 'Open the therapy_effectiveness dataset. This study compares depression scores across three therapy types: CBT, DBT, and Psychodynamic.',
-            hint: 'You should see two columns: Therapy_Type (grouping) and Depression_Score (outcome).',
-            checkpoint: 'Can you identify which variable is categorical and which is continuous?'
-          },
-          {
-            instruction: 'Navigate to Analyses → ANOVA → One-Way ANOVA.',
-            hint: 'Look for the ANOVA icon in the Analyses ribbon.',
-            checkpoint: 'The One-Way ANOVA options panel should appear on the left.'
-          },
-          {
-            instruction: 'Move Depression_Score to "Dependent Variables" and Therapy_Type to "Grouping Variable".',
-            hint: 'Click and drag, or use the arrow buttons.',
-            checkpoint: 'Results should start appearing in the right panel showing the ANOVA table.'
-          },
-          {
-            instruction: 'Expand "Assumption Checks" and check both Homogeneity of variances and Normality (Q-Q plot).',
-            hint: 'Look for the dropdown arrow next to "Assumption Checks".',
-            checkpoint: 'Levene\'s test and Q-Q plots should now appear in the results.'
-          },
-          {
-            instruction: 'Check if assumptions are met. Is Levene\'s test p-value > .05? Do the Q-Q plot points roughly follow the diagonal line?',
-            hint: 'If Levene\'s p > .05, variances are equal (assumption met). If Q-Q points are close to the line, normality is reasonable.',
-            checkpoint: 'For this dataset, Levene\'s p = .342 (good) and Q-Q looks reasonable.'
-          },
-          {
-            instruction: 'Expand "Post-Hoc Tests" and select "Tukey" correction.',
-            hint: 'This will show you all pairwise comparisons between the three therapy types.',
-            checkpoint: 'A new table should appear showing comparisons: CBT-DBT, CBT-Psychodynamic, DBT-Psychodynamic.'
-          },
-          {
-            instruction: 'Expand "Effect Size" and check "η²".',
-            hint: 'Look for the Effect Size dropdown.',
-            checkpoint: 'Eta-squared should appear in the ANOVA table.'
-          },
-          {
-            instruction: 'Interpret: Is the overall ANOVA significant (p < .05)? Which therapy type works best based on post-hoc tests?',
-            hint: 'Look at the ANOVA p-value first. If significant, examine post-hoc comparisons to see which groups differ.',
-            checkpoint: 'F(2, 72) = 12.8, p < .001, η² = .26. Post-hoc shows CBT significantly better than both DBT and Psychodynamic.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'independent_practice',
-        title: 'Now You Try',
-        scenario: 'You\'re analyzing data from a nutrition study examining the effect of diet type (Mediterranean, Keto, Vegan) on cholesterol levels after 6 months. The dataset "cholesterol_diet.omv" contains Diet_Type and Cholesterol_Level.',
-        task: 'Run a complete one-way ANOVA with assumption checks, post-hoc tests, and effect size. Then answer the questions below.',
-        assessment: [
-          {
-            type: 'multiple_choice',
-            question: 'What is the p-value for Levene\'s test of homogeneity of variances?',
-            options: [
-              'p = .023',
-              'p = .156',
-              'p = .001',
-              'p = .489'
-            ],
-            correctAnswer: 3,
-            feedback: {
-              correct: 'Correct! p = .489 means we fail to reject the null hypothesis of equal variances. The homogeneity assumption is met.',
-              incorrect: 'Check the Homogeneity of variances test in your output. You want p > .05 to satisfy the assumption.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'Is the overall ANOVA statistically significant at α = .05?',
-            options: [
-              'Yes, F(2, 87) = 9.34, p < .001',
-              'No, F(2, 87) = 1.23, p = .298',
-              'Yes, F(2, 87) = 3.45, p = .036',
-              'No, F(2, 87) = 2.01, p = .141'
-            ],
-            correctAnswer: 0,
-            feedback: {
-              correct: 'Excellent! The ANOVA is significant (p < .001), meaning at least one diet type has a different mean cholesterol level.',
-              incorrect: 'Look at the ANOVA table. Find the F-statistic and its associated p-value. Compare p to .05.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'Based on Tukey post-hoc tests, which diet resulted in the LOWEST cholesterol levels?',
-            options: [
-              'Mediterranean diet',
-              'Keto diet',
-              'Vegan diet',
-              'All three diets had similar cholesterol levels'
-            ],
-            correctAnswer: 2,
-            feedback: {
-              correct: 'Correct! The Vegan diet group had significantly lower cholesterol than both Mediterranean (p = .002) and Keto (p < .001).',
-              incorrect: 'Review the Post-Hoc Comparisons table. Look for which group has significantly lower means compared to the others.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'What is the eta-squared (η²) effect size, and how would you interpret it?',
-            options: [
-              'η² = .03 (small effect)',
-              'η² = .18 (large effect)',
-              'η² = .08 (medium effect)',
-              'η² = .42 (very large effect)'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Right! η² = .18 indicates a large effect (> .14). About 18% of the variance in cholesterol is explained by diet type.',
-              incorrect: 'Find eta-squared in the ANOVA table. Cohen\'s benchmarks: small = .01, medium = .06, large = .14.'
-            }
-          },
-          {
-            type: 'multiple_select',
-            question: 'Select ALL correct conclusions based on this analysis:',
-            options: [
-              'Diet type has a statistically significant effect on cholesterol levels',
-              'The Vegan diet is significantly different from both other diets',
-              'Mediterranean and Keto diets do not differ significantly from each other',
-              'We should use Welch ANOVA instead because Levene\'s test was violated',
-              'About 18% of cholesterol variation is explained by diet type'
-            ],
-            correctAnswers: [0, 1, 2, 4],
-            feedback: {
-              correct: 'Perfect! You\'ve correctly interpreted all aspects of the ANOVA: overall significance, post-hoc comparisons, assumptions, and effect size.',
-              incorrect: 'Review: Levene\'s p = .489 (assumption met, no need for Welch). Check which post-hoc comparisons are significant (p < .05).'
-            }
-          }
-        ]
-      }
-    }
-  }
+  ...module8UnifiedLessons,
 ]
 
 // Helper to get lessons by module
