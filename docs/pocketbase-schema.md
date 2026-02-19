@@ -8,7 +8,8 @@ This document describes the collections needed in PocketBase.
 
 ### users
 - Standard PocketBase auth collection
-- Added field: `role` (select: 'student', 'instructor')
+- Added field: `role` (select: 'student', 'instructor', 'admin')
+- Added field: `classes` (relation → classes, multiple) – **optional**: list of classes this user is assigned to. When set, the home page shows only these classes. Admins see all classes regardless. If empty or unset, authenticated non-admins see no classes.
 
 ### classes
 
