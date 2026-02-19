@@ -25,11 +25,11 @@ Assessment Types:
 */
 
 import { module3UnifiedLessons } from './softwareLessons_module3_unified.js'
+import { module5UnifiedLessons } from './softwareLessons_module5_unified.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
 
 export const softwareLessons = [
   // ============ STATISTICS MODULE 3: Software Basics (Unified Lessons) ============
-  // Each software has one unified lesson with multiple sections in iDo phase
   ...module3UnifiedLessons,
 
 
@@ -41,91 +41,196 @@ export const softwareLessons = [
     objectives: [
       'Navigate to Descriptives in the Analyses menu',
       'Select variables for analysis',
-      'Interpret basic descriptive statistics output'
+      'Interpret basic descriptive statistics output',
+      'Use Compute to create deviation and squared deviation variables',
+      'Relate sum of squared deviations to variance and standard deviation'
     ],
-    estimatedTime: 20,
+    estimatedTime: 35,
     phases: {
       iDo: {
-        type: 'demonstration',
-        title: 'Watch: Running Descriptives',
-        content: [
+        type: 'multi_section',
+        title: 'Learn: Descriptives and Computing Variability',
+        sections: [
           {
-            type: 'text',
-            content: 'Descriptive statistics summarize your data. In Jamovi, you\'ll find them under **Analyses → Exploration → Descriptives**.'
-          },
-          {
-            type: 'step_sequence',
-            steps: [
+            id: 'running-descriptives',
+            title: 'Watch: Running Descriptives',
+            objectives: [
+              'Navigate to Descriptives in the Analyses menu',
+              'Select variables for analysis',
+              'Interpret basic descriptive statistics output'
+            ],
+            estimatedTime: 10,
+            content: [
               {
-                step: 1,
-                title: 'Go to Analyses tab',
-                description: 'Click the Analyses tab to see the analysis icons.',
-                image: '/images/lessons/jamovi/jamovi-analyses-tab.png'
+                type: 'text',
+                content: 'Descriptive statistics summarize your data. In Jamovi, you\'ll find them under **Analyses → Exploration → Descriptives**. Use your **BMI and exercise** dataset (variables such as BMI and exercise hours).'
               },
               {
-                step: 2,
-                title: 'Click Exploration',
-                description: 'Click the bar chart icon labeled "Exploration".',
-                image: '/images/lessons/jamovi/jamovi-exploration-icon.png'
+                type: 'step_sequence',
+                steps: [
+                  {
+                    step: 1,
+                    title: 'Go to Analyses tab',
+                    description: 'Click the Analyses tab to see the analysis icons. Have your BMI and exercise data open.',
+                    image: '/images/lessons/jamovi/jamovi-analyses-tab.png'
+                  },
+                  {
+                    step: 2,
+                    title: 'Click Exploration',
+                    description: 'Click the bar chart icon labeled "Exploration".',
+                    image: '/images/lessons/jamovi/jamovi-exploration-icon.png'
+                  },
+                  {
+                    step: 3,
+                    title: 'Select Descriptives',
+                    description: 'From the dropdown, select "Descriptives".',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-menu.png'
+                  },
+                  {
+                    step: 4,
+                    title: 'Add variables',
+                    description: 'Drag **BMI** and/or **exercise** (or exercise_hours) to the "Variables" box. You can add multiple variables at once.',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
+                  }
+                ]
               },
               {
-                step: 3,
-                title: 'Select Descriptives',
-                description: 'From the dropdown, select "Descriptives".',
-                image: '/images/lessons/jamovi/jamovi-descriptives-menu.png'
+                type: 'text',
+                content: 'The output will show N (count), Mean, Median, Standard Deviation, Minimum, and Maximum for each variable (e.g. BMI, exercise hours).'
               },
               {
-                step: 4,
-                title: 'Add variables',
-                description: 'Drag your variable(s) to the "Variables" box.',
-                image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
+                type: 'callout',
+                style: 'tip',
+                content: 'You can request additional statistics like Skewness, Kurtosis, or Percentiles by expanding the "Statistics" section in the options panel.'
               }
             ]
           },
           {
-            type: 'text',
-            content: 'The output will show N (count), Mean, Median, Standard Deviation, Minimum, and Maximum by default.'
+            id: 'computing-deviations',
+            title: 'Computing Deviations from the Mean',
+            objectives: [
+              'Use the Compute button to create a new variable',
+              'Create a deviation score variable (X − mean)',
+              'Understand why deviations sum to zero'
+            ],
+            estimatedTime: 10,
+            content: [
+              {
+                type: 'text',
+                content: 'The <strong>deviation</strong> of a value from the mean is how far that value is from the average: <em>deviation = X − mean</em>. With your **BMI and exercise** data, run Descriptives on **BMI** to get the mean, then use <strong>Data → Compute</strong> to create a new column of deviations: <strong>BMI − MEAN(BMI)</strong>.'
+              },
+              {
+                type: 'step_sequence',
+                steps: [
+                  {
+                    step: 1,
+                    title: 'Open Compute',
+                    description: 'Go to the <strong>Data</strong> tab and click <strong>Compute</strong> (or the formula/fx button). Have your BMI and exercise dataset open.',
+                    image: '/images/lessons/jamovi/jamovi-compute-button.png'
+                  },
+                  {
+                    step: 2,
+                    title: 'Name the variable',
+                    description: 'Give the new variable a name, e.g. <strong>bmi_deviation</strong> or <strong>dev_BMI</strong>.',
+                    image: '/images/lessons/jamovi/jamovi-compute-name.png'
+                  },
+                  {
+                    step: 3,
+                    title: 'Enter the deviation formula',
+                    description: 'In the formula box, type: <strong>BMI − MEAN(BMI)</strong>. (If your variable is named differently, e.g. <strong>bmi</strong>, use <strong>bmi − MEAN(bmi)</strong>. Jamovi is case-sensitive.) Each row will show that person\'s BMI minus the overall mean BMI.',
+                    image: '/images/lessons/jamovi/jamovi-compute-formula.png'
+                  },
+                  {
+                    step: 4,
+                    title: 'Check the result',
+                    description: 'The new column shows each person\'s BMI deviation from the mean. Some values are positive (above average BMI), some negative (below). Sum this column in Descriptives: the total is zero.',
+                    image: '/images/lessons/jamovi/jamovi-compute-results.png'
+                  }
+                ]
+              },
+              {
+                type: 'callout',
+                style: 'info',
+                content: '<strong>Why deviations sum to zero:</strong> The mean is the balance point. The sum of positive deviations equals the sum of negative deviations, so the total is always zero. That\'s why we square deviations next: to get a measure of spread that doesn\'t cancel out.'
+              }
+            ]
           },
           {
-            type: 'callout',
-            style: 'tip',
-            content: 'You can request additional statistics like Skewness, Kurtosis, or Percentiles by expanding the "Statistics" section in the options panel.'
+            id: 'squared-deviations-and-ss',
+            title: 'Computing Squared Deviations and Sum of Squared Deviations',
+            objectives: [
+              'Create a squared deviation variable (X − mean)²',
+              'Obtain the sum of squared deviations (SS)',
+              'Connect SS to variance and standard deviation'
+            ],
+            estimatedTime: 10,
+            content: [
+              {
+                type: 'text',
+                content: 'Because deviations sum to zero, we <strong>square</strong> them to measure spread. <strong>Squared deviation = (X − mean)²</strong>. With your **BMI** data, use Compute to create <strong>(BMI − MEAN(BMI))^2</strong>. The <strong>sum of squared deviations (SS)</strong> is the numerator in the variance formula; variance = SS/(N−1) and standard deviation = √variance.'
+              },
+              {
+                type: 'step_sequence',
+                steps: [
+                  {
+                    step: 1,
+                    title: 'Create a squared deviation variable',
+                    description: 'Use <strong>Data → Compute</strong> again. Name the new variable (e.g. <strong>bmi_sq_dev</strong> or <strong>sq_dev_BMI</strong>). In the formula box, type: <strong>(BMI − MEAN(BMI))^2</strong>. (Use your actual BMI variable name if different.)',
+                    image: '/images/lessons/jamovi/jamovi-compute-formula.png'
+                  },
+                  {
+                    step: 2,
+                    title: 'Check the squared deviations',
+                    description: 'The new column has only positive values (squares). Larger BMI deviations from the mean produce larger squared deviations.',
+                    image: '/images/lessons/jamovi/jamovi-compute-results.png'
+                  },
+                  {
+                    step: 3,
+                    title: 'Get the sum of squared deviations (SS)',
+                    description: 'Run <strong>Analyses → Exploration → Descriptives</strong> on your squared deviation variable. Add it to the Variables box, then in Statistics request <strong>Sum</strong>. The <strong>Sum</strong> is the sum of squared deviations (SS) for BMI.',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
+                  },
+                  {
+                    step: 4,
+                    title: 'Relate SS to variance and SD',
+                    description: 'Variance = SS ÷ (N − 1). Standard deviation = √variance. Run Descriptives on **BMI** itself: the SD there matches √(SS/(N−1)). Computing SS from BMI shows where that SD comes from.',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
+                  }
+                ]
+              },
+              {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Sample vs population:</strong> We use N−1 (not N) in the denominator for the <em>sample</em> variance so the estimate is unbiased. Jamovi uses N−1 by default for SD when you run Descriptives.'
+              }
+            ]
           }
         ]
       },
       weDo: {
         type: 'guided_practice',
-        title: 'Let\'s Run Descriptives Together',
-        instructions: 'Follow along in Jamovi with some practice data.',
+        title: 'Let\'s Run Descriptives and Compute with BMI and Exercise Data',
+        instructions: 'Follow along in Jamovi with your BMI and exercise dataset.',
         steps: [
           {
-            instruction: 'First, let\'s enter some data. In column A (rename it "Score"), enter these values: 78, 85, 92, 68, 74, 88, 95, 71, 83, 79',
-            hint: 'Click in cell A1 and type each number, pressing Enter after each.',
-            checkpoint: 'You should have 10 values in the Score column.'
+            instruction: 'Open your BMI and exercise dataset (or create one: columns BMI and exercise_hours with a few values, e.g. BMI: 22, 25, 28, 21, 26; exercise_hours: 2, 5, 1, 4, 3). Set both to Continuous.',
+            hint: 'You need at least two numeric variables: BMI and exercise (or exercise_hours).',
+            checkpoint: 'You should have BMI and exercise data in the spreadsheet.'
           },
           {
-            instruction: 'Make sure Score is set to Continuous (double-click the header to check).',
-            hint: 'Since these are test scores (numbers with meaningful differences), Continuous is correct.'
+            instruction: 'Click Analyses → Exploration → Descriptives. Drag BMI and exercise (or exercise_hours) to the Variables box.',
+            hint: 'Exploration is the bar chart icon; Descriptives is in the dropdown.',
+            checkpoint: 'The Results panel should show N, Mean, Median, SD, Min, Max for each variable.'
           },
           {
-            instruction: 'Click the Analyses tab, then click the Exploration icon (looks like a bar chart).',
-            hint: 'It\'s the first icon in the Analyses toolbar.',
-            checkpoint: 'You should see a dropdown menu appear.'
+            instruction: 'Note the mean of BMI from the output. Then use Data → Compute. Name the new variable bmi_deviation. In the formula box type: BMI − MEAN(BMI) (use your variable name, case-sensitive).',
+            hint: 'Compute is in the Data tab. The formula gives each person\'s BMI minus the mean BMI.',
+            checkpoint: 'The new column should have positive and negative values that sum to zero (check with Descriptives → Sum).'
           },
           {
-            instruction: 'Select "Descriptives" from the menu.',
-            hint: 'It should be the first option.',
-            checkpoint: 'A panel should appear on the left with options, and the Results panel should show a table starting to form.'
-          },
-          {
-            instruction: 'Drag "Score" from the variable list to the "Variables" box.',
-            hint: 'You can also double-click Score to add it.',
-            checkpoint: 'The Results panel should now show descriptive statistics for Score.'
-          },
-          {
-            instruction: 'Look at the output. Find the Mean and Standard Deviation.',
-            hint: 'The Mean should be around 81.3 and SD around 8.7.',
-            checkpoint: 'Can you identify N, Mean, Median, SD, Min, and Max in the output?'
+            instruction: 'Use Compute again. Name the variable bmi_sq_dev. Formula: (BMI − MEAN(BMI))^2. Then run Descriptives on bmi_sq_dev and request Sum. That is the sum of squared deviations (SS) for BMI.',
+            hint: 'Squared deviations are all positive. Sum them in Descriptives to get SS.',
+            checkpoint: 'You have SS for BMI. Variance = SS/(N−1); SD = √variance. Compare with the SD for BMI in Descriptives.'
           }
         ]
       },
@@ -152,7 +257,7 @@ export const softwareLessons = [
               'Jamovi does not support this variable'
             ],
             correct: 1,
-            explanation: 'When N = 0, Jamovi found no valid cases—often because the variable is set to a text/nominal type with no values, or all values are missing. Check Variable View and that you have data in the column.'
+            explanation: 'When N = 0, Jamovi found no valid cases; often because the variable is set to a text/nominal type with no values, or all values are missing. Check Variable View and that you have data in the column.'
           }
         ],
         outputInterpretation: [
@@ -241,619 +346,8 @@ export const softwareLessons = [
     }
   },
 
-  // ============ STATISTICS MODULE 5: Graphing and Data Manipulation ============
-  {
-    id: 'jamovi-create-histogram',
-    module: 'stats-module-5',
-    title: 'Creating Histograms in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Create a histogram to visualize distribution shape',
-      'Adjust bin width to improve interpretability',
-      'Identify skewness and modality from a histogram'
-    ],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Building a Histogram',
-        content: [
-          {
-            type: 'text',
-            content: 'Histograms show the distribution of a continuous variable. They help you see the shape, center, and spread of your data at a glance.'
-          },
-          {
-            type: 'step_sequence',
-            steps: [
-              {
-                step: 1,
-                title: 'Go to Exploration',
-                description: 'Navigate to Analyses → Exploration → Descriptives',
-                image: '/images/lessons/jamovi/jamovi-exploration-menu.png'
-              },
-              {
-                step: 2,
-                title: 'Add your variable',
-                description: 'Drag your continuous variable to the Variables box',
-                image: '/images/lessons/jamovi/jamovi-histogram-variable.png'
-              },
-              {
-                step: 3,
-                title: 'Enable histogram',
-                description: 'Under "Plots" section, check "Histogram"',
-                image: '/images/lessons/jamovi/jamovi-histogram-checkbox.png'
-              },
-              {
-                step: 4,
-                title: 'Interpret the histogram',
-                description: 'Look at the histogram in the Results panel. Check the shape: Is it symmetric or skewed? Unimodal or bimodal? Jamovi uses automatic bin widths by default. If your version offers histogram options (e.g. by clicking the plot or in the Plots section), you can adjust bin width to smooth or refine the display.'
-              }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'If your histogram looks too choppy or too smooth and your version of Jamovi offers bin options (in the plot or under Plots), try adjusting the bin width. Too many bins create noise; too few bins hide the distribution shape. Otherwise, the default bins are usually fine for checking shape.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Create a Histogram Together',
-        instructions: 'Follow along in Jamovi with practice data.',
-        steps: [
-          {
-            instruction: 'Enter these test scores in column A (rename to "Score"): 65, 72, 78, 81, 83, 85, 87, 88, 90, 92, 94, 95, 68, 71, 76, 79, 84, 86, 91, 93',
-            hint: 'Make sure Score is set to Continuous measurement level.',
-            checkpoint: 'You should have 20 test scores entered.'
-          },
-          {
-            instruction: 'Go to Analyses → Exploration → Descriptives',
-            hint: 'Click the Analyses tab, then the Exploration icon.',
-            checkpoint: 'The Descriptives panel should appear.'
-          },
-          {
-            instruction: 'Drag "Score" to the Variables box',
-            hint: 'You can also double-click Score to add it.',
-            checkpoint: 'Descriptive statistics for Score should appear in Results.'
-          },
-          {
-            instruction: 'Expand the "Plots" section and check "Histogram"',
-            hint: 'The Plots section is below Statistics in the options panel.',
-            checkpoint: 'A histogram should appear in the Results panel.'
-          },
-          {
-            instruction: 'Look at the histogram shape. Is it symmetric or skewed? Unimodal or bimodal?',
-            hint: 'This distribution should look roughly symmetric and unimodal (one peak).',
-            checkpoint: 'Can you identify the approximate center of the distribution?'
-          }
-        ]
-      },
-      selfCheck: {
-        screenshotRecognition: [
-          {
-            id: 'histogram-screenshot-1',
-            question: 'Where does the histogram appear when you check "Histogram" under Plots in Descriptives?',
-            image: '/images/selfcheck/jamovi/jamovi-results-panel.png',
-            options: ['Data entry panel (left)', 'Results panel (right)', 'Variables tab', 'Analyses menu'],
-            correct: 1,
-            explanation: 'The histogram appears in the Results panel on the right, along with the Descriptives table.'
-          }
-        ],
-        errorDiagnostic: [
-          {
-            id: 'histogram-error-1',
-            scenario: 'You added a variable and checked Histogram under Plots, but no histogram appears in the output.',
-            errorMessage: 'Only the Descriptives table is visible',
-            options: [
-              'The variable is not continuous',
-              'You need to expand the Plots section and ensure Histogram is checked',
-              'You need to click a "Run" button',
-              'Histogram is only available in a different analysis'
-            ],
-            correct: 1,
-            explanation: 'Make sure the Plots section is expanded in the Descriptives options and the Histogram checkbox is checked. The histogram then appears in the Results panel with the table.'
-          }
-        ],
-        outputInterpretation: [
-          {
-            id: 'histogram-output-1',
-            question: 'Look at this histogram from Jamovi. In a short answer, describe the <strong>shape</strong> of the distribution: Is it roughly symmetric or skewed? Is it unimodal (one peak) or bimodal (two peaks)? Where does the center of the distribution appear to be?',
-            image: '/images/selfcheck/jamovi/jamovi-histogram-interpretation.png',
-            placeholder: 'Describe the shape (symmetric or skewed), modality (unimodal or bimodal), and where the center appears (e.g. around 70)...',
-            hint: 'Consider whether the left and right sides are roughly mirror images (symmetric) or if one tail is longer (skewed). Count the main peaks. The center is where the bulk of the data sits.',
-            requiredKeywords: [
-              'symmetric', 'symmetrical', 'symmetry', 'balanced', 'even', 'not skewed', 'nonskewed', 'no skew', 'bell', 'bell-shaped',
-              'unimodal', 'one peak', 'single peak', 'one mode', 'one hump', '1 peak',
-              'not bimodal', "n't bimodal", 'no bimodal', 'not two peak', 'not 2 peak',
-              '70', 'center', 'centre', 'middle', 'around 70', 'about 70', 'approximately 70', '~70', 'roughly 70'
-            ],
-            minRequiredKeywords: 3,
-            feedback: 'Good interpretation. This distribution is roughly symmetric (non-skewed), unimodal (one peak), and the center is around 70.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'ordering',
-            question: 'Put these steps in order to create a histogram in Jamovi:',
-            items: [
-              { id: 'a', text: 'Check "Histogram" under Plots' },
-              { id: 'b', text: 'Go to Analyses → Exploration → Descriptives' },
-              { id: 'c', text: 'Drag variable to Variables box' },
-              { id: 'd', text: 'Examine the histogram shape' }
-            ],
-            correctOrder: ['b', 'c', 'a', 'd'],
-            feedback: {
-              correct: 'Perfect! You navigate to Descriptives, add your variable, enable histogram, then interpret it.',
-              incorrect: 'The correct order is: Navigate to Descriptives → Add variable → Enable histogram → Interpret.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_choice',
-            question: 'A histogram shows values clustered on the left with a long tail extending to the right. This distribution is:',
-            options: [
-              { id: 'a', text: 'Negatively skewed (left-skewed)' },
-              { id: 'b', text: 'Positively skewed (right-skewed)' },
-              { id: 'c', text: 'Symmetric' },
-              { id: 'd', text: 'Bimodal' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! A long tail to the right indicates positive skew (right skew).',
-              incorrect: 'When values cluster on the left with a long tail to the right, the distribution is positively skewed (right-skewed).'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'multiple_choice',
-            question: 'What should you do if your histogram looks too choppy with too many small spikes?',
-            options: [
-              { id: 'a', text: 'Delete some data points' },
-              { id: 'b', text: 'Increase the bin width (fewer bins)' },
-              { id: 'c', text: 'Decrease the bin width (more bins)' },
-              { id: 'd', text: 'Switch to a bar chart' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Right! Increasing bin width (fewer bins) smooths out the histogram.',
-              incorrect: 'When a histogram is too choppy, increase the bin width to create fewer, wider bins that better show the overall shape.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  {
-    id: 'jamovi-filter-data',
-    module: 'stats-module-5',
-    title: 'Filtering Data in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Create filters using logical expressions',
-      'Apply filters to include or exclude cases',
-      'Combine multiple conditions with AND/OR operators'
-    ],
-    estimatedTime: 25,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Using Filters',
-        content: [
-          {
-            type: 'text',
-            content: 'Filters let you analyze subsets of your data without deleting any rows. When a filter is active, only cases that meet your criteria are included in analyses.'
-          },
-          {
-            type: 'step_sequence',
-            steps: [
-              {
-                step: 1,
-                title: 'Open Filters',
-                description: 'Go to Data tab → Filters button',
-                image: '/images/lessons/jamovi/jamovi-filters-button.png'
-              },
-              {
-                step: 2,
-                title: 'Create filter',
-                description: 'Click "New Filter" and give it a descriptive name',
-                image: '/images/lessons/jamovi/jamovi-new-filter.png'
-              },
-              {
-                step: 3,
-                title: 'Write expression',
-                description: 'Enter a logical expression using comparison operators',
-                image: '/images/lessons/jamovi/jamovi-filter-expression.png'
-              },
-              {
-                step: 4,
-                title: 'Apply filter',
-                description: 'Toggle the filter on/off using the checkbox',
-                image: '/images/lessons/jamovi/jamovi-filter-toggle.png'
-              }
-            ]
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: '== (equals)',
-                icon: '=',
-                definition: 'Matches exact values. Example: gender == "female"',
-                color: '#3b82f6'
-              },
-              {
-                term: '!= (not equal)',
-                icon: '≠',
-                definition: 'Excludes values. Example: group != "control"',
-                color: '#ef4444'
-              },
-              {
-                term: '> < >= <=',
-                icon: '>',
-                definition: 'Comparison operators. Example: age >= 18',
-                color: '#8b5cf6'
-              },
-              {
-                term: 'and / or',
-                icon: '&',
-                definition: 'Combine conditions. Example: age > 18 and age < 65',
-                color: '#10b981'
-              }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'warning',
-            content: 'Remember: use == (double equals) for comparison, not = (single equals). Also, text values must be in quotes: gender == "male"'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice Filtering',
-        instructions: 'Create sample data and practice different filter types.',
-        steps: [
-          {
-            instruction: 'Create three columns: ID (1-10), Age (18, 22, 35, 45, 28, 19, 67, 30, 55, 21), Gender ("M","F","M","F","M","F","M","F","M","F")',
-            hint: 'Set ID and Age to Continuous, Gender to Nominal.',
-            checkpoint: 'You should have 10 rows of data.'
-          },
-          {
-            instruction: 'Go to Data tab → Filters',
-            hint: 'The Filters button is in the Data toolbar.',
-            checkpoint: 'The Filters panel should open on the left.'
-          },
-          {
-            instruction: 'Create a filter named "Adults_Under_40" with expression: age >= 18 and age < 40',
-            hint: 'Type the expression exactly, using lowercase variable names.',
-            checkpoint: 'The filter should show how many cases match (should be 6 cases).'
-          },
-          {
-            instruction: 'Toggle the filter on by checking its checkbox. Look at the data - filtered rows appear faded.',
-            hint: 'Active filters are indicated in the status bar at the bottom.',
-            checkpoint: 'You should see 6 active cases and 4 filtered out.'
-          },
-          {
-            instruction: 'Create another filter "Females" with: gender == "F"',
-            hint: 'Text values need quotes: == "F" not == F',
-            checkpoint: 'This filter should match 5 cases (half your data).'
-          },
-          {
-            instruction: 'Try running Descriptives on Age with different filters active. Notice how results change.',
-            hint: 'Turn filters on/off to see how they affect analyses.',
-            checkpoint: 'The mean age should be different with each filter.'
-          }
-        ]
-      },
-      selfCheck: {
-        screenshotRecognition: [
-          {
-            id: 'filter-screenshot-1',
-            question: 'Where do you create and manage filters in Jamovi?',
-            image: '/images/selfcheck/jamovi/jamovi-data-panel.png',
-            options: ['Analyses tab', 'Data tab (Filters area)', 'Variables tab', 'Results panel'],
-            correct: 1,
-            explanation: 'Filters are created and toggled in the Data tab, via the Filters button/panel.'
-          }
-        ],
-        errorDiagnostic: [
-          {
-            id: 'filter-error-1',
-            scenario: 'You created a filter with expression gender == "F" but the filter shows 0 cases matched.',
-            errorMessage: 'No cases match the filter',
-            options: [
-              'The variable is named differently (e.g. "Gender" with capital G)',
-              'You should use = instead of ==',
-              'You need to put F in single quotes',
-              'Filters only work with numeric variables'
-            ],
-            correct: 0,
-            explanation: 'Variable names in Jamovi are case-sensitive. If your column is named "Gender", use gender or Gender to match how it appears in the data. Also ensure the values in the column are exactly "F" (with quotes in the expression).'
-          }
-        ],
-        outputInterpretation: []
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'To include only participants over age 21, which filter expression should you use?',
-            options: [
-              { id: 'a', text: 'age = 21' },
-              { id: 'b', text: 'age > 21' },
-              { id: 'c', text: 'age => 21' },
-              { id: 'd', text: 'age > "21"' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Use > to mean "greater than".',
-              incorrect: 'Use age > 21 (greater than operator, no quotes for numbers).'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_select',
-            question: 'Which filter expressions are written correctly? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'gender == "female"' },
-              { id: 'b', text: 'score > 80 and score < 100' },
-              { id: 'c', text: 'age = 25' },
-              { id: 'd', text: 'group != control' }
-            ],
-            correct: ['a', 'b'],
-            feedback: {
-              correct: 'Right! Both use == for comparison and proper syntax.',
-              incorrect: 'Correct expressions: gender == "female" and score > 80 and score < 100. Use == not =, and put text in quotes.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'fill_blank',
-            question: 'To include participants who are either under 18 OR over 65, you would use: age < 18 ____ age > 65',
-            answer: ['or', 'OR', '|'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! Use OR when either condition can be true.',
-              incorrect: 'Use OR to combine conditions where either one can be true: age < 18 or age > 65'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'multiple_choice',
-            question: 'When a filter is active in Jamovi, what happens to filtered-out cases?',
-            options: [
-              { id: 'a', text: 'They are permanently deleted' },
-              { id: 'b', text: 'They appear faded but remain in the data' },
-              { id: 'c', text: 'They move to a separate sheet' },
-              { id: 'd', text: 'They are highlighted in red' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Right! Filtered cases appear faded but stay in your data file.',
-              incorrect: 'Filters don\'t delete data - filtered cases appear faded/grayed out but remain in the file.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  {
-    id: 'jamovi-compute-variables',
-    module: 'stats-module-5',
-    title: 'Computing New Variables in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Create new variables using formulas',
-      'Use arithmetic operations and mathematical functions',
-      'Apply IF() statements for conditional calculations'
-    ],
-    estimatedTime: 30,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Computing Variables',
-        content: [
-          {
-            type: 'text',
-            content: 'Computed variables let you create new columns based on existing data. This is essential for calculating totals, percentages, transformations, and recoded variables.'
-          },
-          {
-            type: 'step_sequence',
-            steps: [
-              {
-                step: 1,
-                title: 'Open Compute',
-                description: 'Go to Data tab → Compute button',
-                image: '/images/lessons/jamovi/jamovi-compute-button.png'
-              },
-              {
-                step: 2,
-                title: 'Name your variable',
-                description: 'Enter a descriptive name (e.g., "total_score")',
-                image: '/images/lessons/jamovi/jamovi-compute-name.png'
-              },
-              {
-                step: 3,
-                title: 'Write formula',
-                description: 'Use variable names, operators, and functions',
-                image: '/images/lessons/jamovi/jamovi-compute-formula.png'
-              },
-              {
-                step: 4,
-                title: 'Check results',
-                description: 'The new column appears immediately with calculated values',
-                image: '/images/lessons/jamovi/jamovi-compute-results.png'
-              }
-            ]
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: 'Basic Math',
-                icon: '+',
-                definition: '+ - * / for add, subtract, multiply, divide',
-                color: '#3b82f6'
-              },
-              {
-                term: 'IF()',
-                icon: '?',
-                definition: 'IF(condition, value_if_true, value_if_false)',
-                color: '#f59e0b'
-              },
-              {
-                term: 'Functions',
-                icon: 'ƒ',
-                definition: 'SQRT(), ABS(), LOG10(), ROUND(), etc.',
-                color: '#8b5cf6'
-              }
-            ]
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Click the fx button in the formula editor to see all available functions with examples.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Compute Variables Together',
-        instructions: 'Create different types of computed variables.',
-        steps: [
-          {
-            instruction: 'Create columns: test1 (85, 90, 78, 92, 88), test2 (82, 88, 75, 95, 90), test3 (88, 92, 80, 90, 85)',
-            hint: 'Set all to Continuous measurement level.',
-            checkpoint: 'You should have 5 rows with 3 test scores each.'
-          },
-          {
-            instruction: 'Click Data → Compute. Name the variable "total" and enter formula: test1 + test2 + test3',
-            hint: 'Variable names are case-sensitive.',
-            checkpoint: 'A new column "total" should appear with sum of three tests.'
-          },
-          {
-            instruction: 'Create another variable "average" with formula: (test1 + test2 + test3) / 3',
-            hint: 'Use parentheses to ensure addition happens before division.',
-            checkpoint: 'Average should show the mean of the three tests.'
-          },
-          {
-            instruction: 'Create "pass_fail" using: IF(average >= 80, "Pass", "Fail")',
-            hint: 'Set the variable type to Nominal after creating it.',
-            checkpoint: 'You should see Pass/Fail values based on average >= 80.'
-          },
-          {
-            instruction: 'Create "grade" using nested IFs: IF(average >= 90, "A", IF(average >= 80, "B", "C"))',
-            hint: 'Nested IFs allow multiple categories.',
-            checkpoint: 'Students should be assigned A, B, or C based on their average.'
-          }
-        ]
-      },
-      selfCheck: {
-        screenshotRecognition: [
-          {
-            id: 'compute-screenshot-1',
-            question: 'Where do you open the Compute / formula editor to create a new variable in Jamovi?',
-            image: '/images/selfcheck/jamovi/jamovi-data-panel.png',
-            options: ['Variables tab', 'Data tab (Compute button)', 'Analyses tab', 'Results panel'],
-            correct: 1,
-            explanation: 'The Compute button is in the Data tab. Click it to open the formula editor and create a new variable.'
-          }
-        ],
-        errorDiagnostic: [
-          {
-            id: 'compute-error-1',
-            scenario: 'You entered the formula test1 + test2 but Jamovi shows an error or the new column is empty.',
-            errorMessage: 'Invalid formula or no values',
-            options: [
-              'Variable names might not match exactly (case-sensitive)',
-              'You need to use SUM(test1, test2) instead',
-              'Computed variables only work with text',
-              'You must click Run after typing the formula'
-            ],
-            correct: 0,
-            explanation: 'Jamovi formula variable names are case-sensitive and must match the column names exactly. Check that test1 and test2 exist and are spelled correctly. Also ensure the variables contain numeric data.'
-          }
-        ],
-        outputInterpretation: []
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'To calculate the sum of variables score1, score2, and score3, which formula is correct?',
-            options: [
-              { id: 'a', text: 'SUM(score1, score2, score3)' },
-              { id: 'b', text: 'score1 + score2 + score3' },
-              { id: 'c', text: 'ADD(score1, score2, score3)' },
-              { id: 'd', text: 'TOTAL(score1:score3)' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Use + to add variables together.',
-              incorrect: 'In Jamovi, add variables with +: score1 + score2 + score3'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'fill_blank',
-            question: 'To create a variable that is "Yes" if age > 18, otherwise "No", use: IF(age > 18, ____, ____)',
-            answer: ['"Yes", "No"', '"yes", "no"'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Right! IF(age > 18, "Yes", "No") returns Yes when true, No when false.',
-              incorrect: 'The format is IF(condition, value_if_true, value_if_false). Text values need quotes.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'multiple_choice',
-            question: 'What does the formula: (pretest - posttest) / pretest calculate?',
-            options: [
-              { id: 'a', text: 'The total change in scores' },
-              { id: 'b', text: 'The percentage change from pretest to posttest' },
-              { id: 'c', text: 'The average of pretest and posttest' },
-              { id: 'd', text: 'The proportional change from pretest baseline' }
-            ],
-            correct: 'd',
-            feedback: {
-              correct: 'Yes! This calculates change relative to the baseline (pretest).',
-              incorrect: 'This formula calculates the proportional change: (pretest - posttest) / pretest gives the change as a proportion of the baseline.'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'multiple_select',
-            question: 'Which of these are valid Jamovi functions? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'SQRT()' },
-              { id: 'b', text: 'ABS()' },
-              { id: 'c', text: 'AVERAGE()' },
-              { id: 'd', text: 'LOG10()' }
-            ],
-            correct: ['a', 'b', 'd'],
-            feedback: {
-              correct: 'Correct! SQRT, ABS, and LOG10 are all Jamovi functions.',
-              incorrect: 'SQRT (square root), ABS (absolute value), and LOG10 (logarithm) are valid. There\'s no AVERAGE function - calculate the mean with formulas like (x1+x2)/2.'
-            }
-          }
-        ]
-      }
-    }
-  },
+  // ============ STATISTICS MODULE 5: Graphing and Data Manipulation (Unified - one lesson, multiple learn sections) ============
+  ...module5UnifiedLessons,
 
   // ============ STATISTICS MODULE 6: Probability and Sampling ============
   {

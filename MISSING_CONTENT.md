@@ -105,10 +105,12 @@ The Module 4 software lesson now includes a full self-check with:
 
 ## Module 5: Graphing and Visualization ✓ (got through Module 5)
 
+Module 5 is organized in the app as **Chapter 5: Drawing Graphs** (histograms, boxplots, bar-charts, scatterplots) and **Chapter 6: Pragmatic Matters** (tabulating-data, logical-expressions, transforming-variables, mathematical-functions, filtering-data). Software lessons are three Jamovi lessons only (no separate “learn segments” beyond these).
+
 | Category | Status |
 |----------|--------|
-| **Topics** | Present – histograms, boxplots, bar-charts, scatterplots, tabulating-data, logical-expressions, transforming-variables, mathematical-functions, filtering-data |
-| **Software lessons** | Present – Creating Histograms, Filtering Data, Compute/Transform **with self-check phase** (screenshot recognition, error diagnostic, and histogram output interpretation with expanded keyword grading) |
+| **Topics** | Present – under Chapter 5 and Chapter 6 as above |
+| **Software lessons** | Present – Creating Histograms, Filtering Data, Transforming Variables **with self-check phase** (screenshot recognition, error diagnostic, and histogram output interpretation with expanded keyword grading) |
 | **Videos** | Present – none needed |
 | **Images** | **Missing** – 12 lesson step images to upload (see below); self-check images present (jamovi-results-panel, jamovi-data-panel, jamovi-histogram-interpretation) |
 
@@ -118,33 +120,34 @@ All three Module 5 Jamovi lessons now include a Self-Check phase:
 
 - **Creating Histograms:** Screenshot recognition (where does the histogram appear? → Results panel); error diagnostic (no histogram appears → expand Plots and check Histogram); **output interpretation** (short answer: describe the histogram shape—symmetric/skewed, unimodal/bimodal, center). Uses `jamovi-results-panel.png` and `jamovi-histogram-interpretation.png`.
 - **Filtering Data:** Screenshot recognition (where do you create filters? → Data tab); error diagnostic (filter shows 0 cases → variable name case-sensitive / syntax). Uses existing `jamovi-data-panel.png`.
-- **Computing Variables:** Screenshot recognition (where is Compute? → Data tab); error diagnostic (formula error or empty column → variable names case-sensitive). Uses existing `jamovi-data-panel.png`.
+- **Transforming Variables:** Screenshot recognition (where is Transform? → Data tab); error diagnostic (recode condition wrong or empty column → check source variable and conditions). Uses existing `jamovi-data-panel.png`.
 
 ### Images to upload
 
-**Histograms lesson:**
+**Histograms lesson:** (Step 4 in the lesson is “Interpret the histogram” — no step image; self-check uses `jamovi-histogram-interpretation.png`.)
 | File | Path | Description |
 |------|------|--------------|
 | `jamovi-exploration-menu.png` | `public/images/lessons/jamovi/` | Step 1: Go to Exploration |
-| `jamovi-histogram-variable.png` | `public/images/lessons/jamovi/` | Step 2: Add variable |
+| `jamovi-histogram-variable.png` | `public/images/lessons/jamovi/` | Step 2: Add your variable |
 | `jamovi-histogram-checkbox.png` | `public/images/lessons/jamovi/` | Step 3: Enable histogram |
-| `jamovi-histogram-bins.png` | `public/images/lessons/jamovi/` | Step 4: Customize bins |
 
-**Filtering lesson:**
+**Filtering lesson:** (Steps match the lesson: Open Filters → Create filter → Write expression → Filter off → Filter on.)
 | File | Path | Description |
 |------|------|--------------|
-| `jamovi-filters-button.png` | `public/images/lessons/jamovi/` | Step 1: Filters button |
-| `jamovi-new-filter.png` | `public/images/lessons/jamovi/` | Step 2: New filter |
-| `jamovi-filter-expression.png` | `public/images/lessons/jamovi/` | Step 3: Logical expression |
-| `jamovi-filter-toggle.png` | `public/images/lessons/jamovi/` | Step 4: Toggle filter |
+| `jamovi-open-filters.png` | `public/images/lessons/jamovi/` | Step 1: Open Filters (Data tab → Filters button) |
+| `jamovi-create-filters.png` | `public/images/lessons/jamovi/` | Step 2: Create filter (New Filter, name it) |
+| `jamovi-filter-expression.png` | `public/images/lessons/jamovi/` | Step 3: Write expression (e.g. Extraversion >= 4) |
+| `jamovi-filter-off.png` | `public/images/lessons/jamovi/` | Step 4: Filter off – checkbox unchecked, all rows included |
+| `jamovi-filter-on.png` | `public/images/lessons/jamovi/` | Step 5: Filter on – checkbox checked, only matching rows; others faded |
 
-**Compute/Transform lesson:**
+**Transforming Variables lesson:** (Uses the **Transform** tool, not Compute. Steps: Select variable (Extraversion) → Open Transform → Name variable → Create new transform → Add recode condition (if Extraversion >= 4 use 'High', else use 'Low') → Check results.)
 | File | Path | Description |
 |------|------|--------------|
-| `jamovi-compute-button.png` | `public/images/lessons/jamovi/` | Step 1: Compute button |
-| `jamovi-compute-name.png` | `public/images/lessons/jamovi/` | Step 2: Name new variable |
-| `jamovi-compute-formula.png` | `public/images/lessons/jamovi/` | Step 3: Formula |
-| `jamovi-compute-results.png` | `public/images/lessons/jamovi/` | Step 4: Results |
+| `jamovi-transform-button.png` | `public/images/lessons/jamovi/` | Step 1–2: Select Extraversion; Open Transform (Data tab → Transform or right‑click column → Transform) |
+| `jamovi-transform-name.png` | `public/images/lessons/jamovi/` | Step 3: Name the transformed variable (e.g. Extraversion_category) |
+| `jamovi-transform-create-transform.png` | `public/images/lessons/jamovi/` | Step 4: Create new transform (distinct from opening Transform; the UI to start adding rules) |
+| `jamovi-transform-recode.png` | `public/images/lessons/jamovi/` | Step 5: Add recode condition (keep $source, add >= 4; use 'High'; else use 'Low') |
+| `jamovi-transform-results.png` | `public/images/lessons/jamovi/` | Step 6: Check results (new column; source unchanged) |
 
 ---
 

@@ -357,8 +357,8 @@ export const module3UnifiedLessons = [
             checkpoint: 'When you click the hamburger menu, a dropdown appears with options like New, Open, Special import, Save, and Export. You have confirmed where the main file menu is.'
           },
           {
-            instruction: 'Identify the two main panels in the Jamovi window. The left panel is where you enter and view your data in a spreadsheet. The right panel is where results (tables, graphs) appear after you run analyses. Notice the vertical divider between them—you can drag it to make one panel wider.',
-            hint: 'The left side of the window shows your data in rows and columns. The right side is often empty until you run an analysis; then output appears there. If you\'re not sure, try resizing the window—the two areas stay distinct.',
+            instruction: 'Identify the two main panels in the Jamovi window. The left panel is where you enter and view your data in a spreadsheet. The right panel is where results (tables, graphs) appear after you run analyses. Notice the vertical divider between them. You can drag it to make one panel wider.',
+            hint: 'The left side of the window shows your data in rows and columns. The right side is often empty until you run an analysis; then output appears there. If you\'re not sure, try resizing the window. The two areas stay distinct.',
             checkpoint: 'You can point to and describe each panel: "Left = data entry/spreadsheet" and "Right = results output." You understand that analyses you run will show up on the right.'
           },
           {
@@ -993,7 +993,7 @@ export const module3UnifiedLessons = [
             checkpoint: 'describe output shows that each variable has the expected type (numeric variables as int/float, text as str). You are ready to run analyses on correctly typed variables.'
           },
           {
-            instruction: 'Run codebook on one categorical (or any) variable to see value labels and distribution. Type: codebook group (replace "group" with a variable name in your dataset) and press Enter. Codebook shows the variable\'s type, labels, and a summary of values—useful for categorical or coded variables.',
+            instruction: 'Run codebook on one categorical (or any) variable to see value labels and distribution. Type: codebook group (replace "group" with a variable name in your dataset) and press Enter. Codebook shows the variable\'s type, labels, and a summary of values, useful for categorical or coded variables.',
             hint: 'codebook is especially helpful for variables with value labels (e.g., 1 = "Male", 2 = "Female"). It shows how many times each value occurs. Use it to verify that categorical variables are coded and labeled as you expect.',
             checkpoint: 'codebook has run and the Results window shows details for that variable (type, unique values, and possibly value labels and frequencies). You have inspected a variable in detail.'
           },
