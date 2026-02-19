@@ -36,34 +36,18 @@
         </div>
       </div>
 
-      <!-- Quick Info -->
-      <div class="info-section">
-        <div class="info-card">
-          <div class="info-icon">📖</div>
-          <h3>Learn Concepts</h3>
-          <p>Clear explanations of statistical concepts with real psychology examples.</p>
+      <!-- Footer: About, FAQ, Help for professors -->
+      <footer class="home-footer">
+        <div class="footer-links">
+          <router-link to="/about">About</router-link>
+          <span class="footer-sep">·</span>
+          <router-link to="/about#faq">FAQ</router-link>
         </div>
-        <div class="info-card">
-          <div class="info-icon">💻</div>
-          <h3>Software Tutorials</h3>
-          <p>Step-by-step guides for jamovi, SPSS, R, Stata, and Excel.</p>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">✏️</div>
-          <h3>Practice Until Mastery</h3>
-          <p>Interactive exercises with unlimited retries until you get it right.</p>
-        </div>
-      </div>
-
-      <!-- Software Badges -->
-      <div class="software-section">
-        <h3>Software Covered</h3>
-        <div class="software-badges">
-          <span v-for="sw in software" :key="sw.id" class="software-badge" :style="{ backgroundColor: sw.color }">
-            {{ sw.name }}
-          </span>
-        </div>
-      </div>
+        <p class="footer-help">
+          Need help? Professors using this platform:
+          <a href="mailto:support@methodsmartet.com">contact support</a>.
+        </p>
+      </footer>
     </div>
   </div>
 </template>
@@ -71,7 +55,6 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useClasses } from '../composables/useClasses'
-import { software } from '../data/topics.js'
 
 const { classes, loading, fetchClasses, selectClass } = useClasses()
 
@@ -215,65 +198,45 @@ onMounted(() => {
   color: var(--class-color, var(--primary));
 }
 
-.info-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-.info-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+.home-footer {
   text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
 }
 
-.info-icon {
-  font-size: 2rem;
+.footer-links {
   margin-bottom: 0.75rem;
 }
 
-.info-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
+.footer-links a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.info-card p {
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-sep {
+  margin: 0 0.5rem;
+  color: var(--text-muted);
+}
+
+.footer-help {
   margin: 0;
   font-size: 0.875rem;
   color: var(--text-secondary);
-  line-height: 1.5;
 }
 
-.software-section {
-  text-align: center;
-  padding: 2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
+.footer-help a {
+  color: var(--primary);
+  text-decoration: none;
 }
 
-.software-section h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1rem;
-  color: var(--text-secondary);
-}
-
-.software-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.software-badge {
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  color: white;
-  font-weight: 500;
-  font-size: 0.875rem;
+.footer-help a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

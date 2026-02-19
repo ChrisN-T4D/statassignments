@@ -1,6 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { pb } from '../lib/pocketbase'
+import { useAuth } from './useAuth'
 
 // Static fallback data for development when PocketBase collection doesn't exist yet
 const FALLBACK_CLASSES = [
@@ -78,6 +79,8 @@ watch(selectedClassId, (newId) => {
 })
 
 export function useClasses() {
+  const { user } = useAuth()
+
   // Router/route are optional - only used for navigation functions
   // Use try-catch because these can fail if called outside component setup
   let router = null
@@ -96,6 +99,17 @@ export function useClasses() {
 
   const activeClasses = computed(() => {
     return classes.value.filter(c => c.is_active)
+  })
+
+  // Only classes the user is assigned to (or all for admins / when not authenticated)
+  const assignedClasses = computed(() => {
+    const active = activeClasses.value
+    const u = user.value
+    if (!u) return active
+    if (u.role === 'admin') return active
+    const ids = u.classes
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return []
+    return active.filter(c => ids.includes(c.id))
   })
 
   const classTopics = computed(() => {
@@ -200,9 +214,17 @@ export function useClasses() {
     }
   }
 
+  // When assigned list shrinks, clear selection if current class is no longer in list
+  watch(assignedClasses, (assigned) => {
+    if (selectedClassId.value && !assigned.some(c => c.id === selectedClassId.value)) {
+      selectedClassId.value = assigned.length > 0 ? assigned[0].id : null
+    }
+  }, { immediate: true })
+
   return {
-    classes: activeClasses,
+    classes: assignedClasses,
     allClasses: classes,
+    activeClasses,
     selectedClassId,
     selectedClass,
     classTopics,

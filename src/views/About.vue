@@ -13,6 +13,25 @@
         </p>
       </section>
 
+      <!-- FAQ -->
+      <section id="faq" class="faq-section">
+        <h2>FAQ</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>How do I get access to a course?</h4>
+            <p>Your instructor will add you to a class. Sign in with the credentials they provide, then you can set your own email and password in Profile.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Where do I find software tutorials?</h4>
+            <p>From your course page, open a module and choose the Software Tutorials section. Step-by-step guides are available for jamovi, SPSS, R, Stata, and Excel.</p>
+          </div>
+          <div class="faq-item">
+            <h4>How is my progress tracked?</h4>
+            <p>When you sign in, the platform uses Bayesian Knowledge Tracing to estimate your mastery of each learning objective. You can view your progress on your Profile page.</p>
+          </div>
+        </div>
+      </section>
+
       <!-- Core Educational Theory -->
       <section class="theory-section">
         <h2>Educational Theory Foundation</h2>
@@ -576,6 +595,36 @@ section {
 .intro {
   text-align: center;
   margin-bottom: 3rem;
+}
+
+.faq-section {
+  margin-bottom: 2rem;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+}
+
+.faq-item h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.faq-item p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .lead {

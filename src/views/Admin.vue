@@ -226,7 +226,10 @@
       <div v-if="activeTab === 'users'" class="content-section">
         <div class="section-header">
           <h2>User Management</h2>
-          <button @click="loadUsers" class="btn-secondary">Refresh</button>
+          <div class="header-actions">
+            <button type="button" class="btn-primary" @click="openAddUserModal">Add user</button>
+            <button @click="loadUsers" class="btn-secondary">Refresh</button>
+          </div>
         </div>
 
         <div v-if="users.length > 0" class="table-scroll">
@@ -237,9 +240,11 @@
                 <th>Email</th>
                 <th>Username</th>
                 <th>Role</th>
+                <th>Classes</th>
                 <th>Created</th>
                 <th>Last Login</th>
                 <th>Verified</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -252,15 +257,118 @@
                     {{ user.role || 'student' }}
                   </span>
                 </td>
+                <td class="classes-cell">
+                  {{ userClassNames(user) || '—' }}
+                </td>
                 <td>{{ formatDate(user.created) }}</td>
                 <td>{{ formatDate(user.updated) }}</td>
                 <td>{{ user.verified ? '✓' : '✗' }}</td>
+                <td>
+                  <button type="button" class="btn-sm btn-secondary" @click="openAssignClasses(user)">
+                    {{ user.classes?.length ? 'Edit classes' : 'Assign classes' }}
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div v-else class="empty-state">
           No users found or unable to load user data.
+        </div>
+      </div>
+
+      <!-- Modal: Assign classes to user -->
+      <div v-if="editingUser" class="modal-overlay" @click.self="editingUser = null">
+        <div class="modal assign-classes-modal">
+          <h3>Assign classes: {{ editingUser.email }}</h3>
+          <p class="modal-hint">Select the classes this user can access on the home page. Admins see all classes regardless.</p>
+          <div class="classes-checkbox-list">
+            <label v-for="cls in adminClasses" :key="cls.id" class="checkbox-row">
+              <input type="checkbox" :value="cls.id" v-model="selectedClassIdsForEdit" />
+              <span>{{ cls.name }}</span>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" @click="editingUser = null">Cancel</button>
+            <button type="button" class="btn-primary" @click="saveUserClasses" :disabled="savingUserClasses">
+              {{ savingUserClasses ? 'Saving...' : 'Save' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal: Add user(s) with dummy credentials -->
+      <div v-if="showAddUserModal" class="modal-overlay" @click.self="closeAddUserModal">
+        <div class="modal add-user-modal" :class="{ 'modal-wide': createdCredentials.length > 0 }">
+          <h3>{{ createdCredentials.length > 0 ? 'Credentials created' : 'Add users' }}</h3>
+
+          <!-- Step 1: Form -->
+          <template v-if="createdCredentials.length === 0">
+            <p class="modal-hint">Create placeholder users with temporary login credentials. Send each student their email and password; they sign in and can then set their own email and password in Profile.</p>
+            <form @submit.prevent="createUsers" class="add-user-form">
+              <div class="form-group">
+                <label for="new-user-count">Number of users to create</label>
+                <input id="new-user-count" v-model.number="newUserCount" type="number" min="1" max="100" />
+                <p class="field-hint">Create multiple users at once for a class (e.g. 25). Each gets a unique temporary email and password.</p>
+              </div>
+              <div class="form-group">
+                <label>Role</label>
+                <select v-model="newUserRole">
+                  <option value="student">Student</option>
+                  <option value="instructor">Instructor</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Classes</label>
+                <p class="field-hint">Select classes these users can access. Admins see all classes.</p>
+                <div class="classes-checkbox-list">
+                  <label v-for="cls in adminClasses" :key="cls.id" class="checkbox-row">
+                    <input type="checkbox" :value="cls.id" v-model="newUserClassIds" />
+                    <span>{{ cls.name }}</span>
+                  </label>
+                </div>
+              </div>
+              <p v-if="addUserError" class="form-error">{{ addUserError }}</p>
+              <div class="modal-actions">
+                <button type="button" class="btn-secondary" @click="closeAddUserModal">Cancel</button>
+                <button type="submit" class="btn-primary" :disabled="savingNewUser">
+                  {{ savingNewUser ? 'Creating...' : 'Create user' + (newUserCount > 1 ? 's' : '') }}
+                </button>
+              </div>
+            </form>
+          </template>
+
+          <!-- Step 2: Show credentials to copy/send -->
+          <template v-else>
+            <p class="modal-hint">Send each student their temporary email and password. They sign in, then go to Profile to set their own email and password.</p>
+            <div class="credentials-actions">
+              <button type="button" class="btn-secondary btn-sm" @click="copyAllCredentials">Copy all</button>
+              <button type="button" class="btn-secondary btn-sm" @click="downloadCredentialsCsv">Download CSV</button>
+            </div>
+            <div class="credentials-list">
+              <table class="credentials-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Email (temporary)</th>
+                    <th>Password (temporary)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(cred, i) in createdCredentials" :key="i">
+                    <td>{{ i + 1 }}</td>
+                    <td><code>{{ cred.email }}</code></td>
+                    <td><code>{{ cred.password }}</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn-secondary" @click="closeAddUserModal">Close</button>
+              <button type="button" class="btn-primary" @click="createdCredentials = []; addUserError = ''">Create more</button>
+            </div>
+          </template>
         </div>
       </div>
 
@@ -331,7 +439,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useBKT } from '../composables/useBKT'
 import { objectives } from '../data/objectives'
@@ -412,6 +520,19 @@ const questionsWithMappings = computed(() => {
 
 // Users state
 const users = ref([])
+const adminClasses = ref([])
+const editingUser = ref(null)
+const selectedClassIdsForEdit = ref([])
+const savingUserClasses = ref(false)
+
+// Add user modal state
+const showAddUserModal = ref(false)
+const newUserCount = ref(1)
+const newUserRole = ref('student')
+const newUserClassIds = ref([])
+const savingNewUser = ref(false)
+const addUserError = ref('')
+const createdCredentials = ref([])
 
 // Classes initialization state
 const classesInitializing = ref(false)
@@ -603,17 +724,159 @@ async function migrateBKTToDatabase() {
   }
 }
 
+async function loadAdminClasses() {
+  try {
+    const records = await pb.collection('classes').getFullList({
+      filter: 'is_active = true',
+      sort: 'order'
+    })
+    adminClasses.value = records
+  } catch (err) {
+    console.error('Error loading classes for admin:', err)
+    adminClasses.value = []
+  }
+}
+
 async function loadUsers() {
   try {
     const records = await pb.collection('users').getFullList({
-      sort: '-created'
+      sort: '-created',
+      expand: 'classes'
     })
     users.value = records
+    if (adminClasses.value.length === 0) {
+      await loadAdminClasses()
+    }
   } catch (err) {
     console.error('Error loading users:', err)
     users.value = []
     alert(`Failed to load users: ${err.message}`)
   }
+}
+
+function userClassNames(user) {
+  const expanded = user.expand?.classes
+  if (expanded && Array.isArray(expanded) && expanded.length > 0) {
+    return expanded.map(c => c.name).join(', ')
+  }
+  const ids = user.classes
+  if (ids && Array.isArray(ids) && ids.length > 0 && adminClasses.value.length > 0) {
+    return ids.map(id => adminClasses.value.find(c => c.id === id)?.name || id).filter(Boolean).join(', ') || '—'
+  }
+  return null
+}
+
+function openAssignClasses(user) {
+  editingUser.value = user
+  selectedClassIdsForEdit.value = Array.isArray(user.classes) ? [...user.classes] : []
+  if (adminClasses.value.length === 0) loadAdminClasses()
+}
+
+async function saveUserClasses() {
+  if (!editingUser.value) return
+  savingUserClasses.value = true
+  try {
+    await pb.collection('users').update(editingUser.value.id, {
+      classes: selectedClassIdsForEdit.value
+    })
+    await loadUsers()
+    editingUser.value = null
+  } catch (err) {
+    console.error('Error saving user classes:', err)
+    alert(`Failed to save: ${err.message}`)
+  } finally {
+    savingUserClasses.value = false
+  }
+}
+
+function openAddUserModal() {
+  showAddUserModal.value = true
+  newUserCount.value = 1
+  newUserRole.value = 'student'
+  newUserClassIds.value = []
+  addUserError.value = ''
+  createdCredentials.value = []
+  if (adminClasses.value.length === 0) loadAdminClasses()
+}
+
+function closeAddUserModal() {
+  showAddUserModal.value = false
+  addUserError.value = ''
+  createdCredentials.value = []
+}
+
+function generateRandomString(length, chars = 'abcdefghjkmnpqrstuvwxyz23456789') {
+  let s = ''
+  for (let i = 0; i < length; i++) s += chars[Math.floor(Math.random() * chars.length)]
+  return s
+}
+
+function generateDummyCredentials() {
+  const id = generateRandomString(8) + '-' + Date.now().toString(36)
+  const email = `temp-${id}@placeholder.local`
+  const password = generateRandomString(12)
+  return { email, password }
+}
+
+async function createUsers() {
+  addUserError.value = ''
+  const count = Math.min(100, Math.max(1, Number(newUserCount.value) || 1))
+  newUserCount.value = count
+
+  const classCount = newUserClassIds.value.length
+  const confirmMessage = count === 1
+    ? 'Create 1 user with a temporary email and password? You will get the credentials to send to the student.'
+    : `Create ${count} users with temporary credentials? Each will get a unique email and password. You will get a list to copy or download and send to students.`
+  if (!window.confirm(confirmMessage)) return
+
+  savingNewUser.value = true
+  const credentials = []
+  try {
+    for (let i = 0; i < count; i++) {
+      const { email, password } = generateDummyCredentials()
+      await pb.collection('users').create({
+        email,
+        password,
+        passwordConfirm: password,
+        role: newUserRole.value,
+        classes: newUserClassIds.value
+      })
+      credentials.push({ email, password })
+    }
+    createdCredentials.value = credentials
+    await loadUsers()
+    window.alert(count === 1 ? '1 user created. Send the credentials below to the student.' : `${count} users created. Copy or download the credentials below to send to students.`)
+  } catch (err) {
+    console.error('Error creating user(s):', err)
+    addUserError.value = err.data?.data?.email?.message || err.data?.data?.password?.message || err.message || 'Failed to create user(s).'
+  } finally {
+    savingNewUser.value = false
+  }
+}
+
+function copyAllCredentials() {
+  const text = createdCredentials.value
+    .map((c, i) => `${i + 1}. Email: ${c.email}  Password: ${c.password}`)
+    .join('\n')
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard.')
+  }).catch(() => {
+    alert('Could not copy. Use Download CSV instead.')
+  })
+}
+
+function downloadCredentialsCsv() {
+  const header = 'Number,Email (temporary),Password (temporary)\n'
+  const rows = createdCredentials.value
+    .map((c, i) => `${i + 1},${c.email},${c.password}`)
+    .join('\n')
+  const blob = new Blob([header + rows], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `user-credentials-${Date.now()}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 function loadQuestionStats() {
@@ -790,8 +1053,15 @@ function resetBKTStates() {
   }
 }
 
+watch(activeTab, (tab) => {
+  if (tab === 'users') {
+    loadUsers()
+  }
+})
+
 onMounted(() => {
   loadBKTData()
+  if (activeTab.value === 'users') loadUsers()
 })
 </script>
 
@@ -1057,6 +1327,190 @@ onMounted(() => {
 .badge-admin {
   background: #fce7f3;
   color: #831843;
+}
+
+.classes-cell {
+  max-width: 200px;
+  font-size: 0.8125rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.assign-classes-modal {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.assign-classes-modal h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  color: var(--text-primary);
+}
+
+.modal-hint {
+  margin: 0 0 1rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.classes-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.checkbox-row:hover {
+  background: var(--bg-main);
+}
+
+.checkbox-row input {
+  margin: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.add-user-modal {
+  max-width: 440px;
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  width: 100%;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.add-user-modal h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  color: var(--text-primary);
+}
+
+.add-user-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.add-user-form .form-group:last-of-type {
+  margin-bottom: 1.25rem;
+}
+
+.add-user-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.add-user-form .required {
+  color: var(--danger, #dc2626);
+}
+
+.add-user-form input[type="email"],
+.add-user-form input[type="password"],
+.add-user-form input[type="text"],
+.add-user-form input[type="number"],
+.add-user-form select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+}
+
+.add-user-modal.modal-wide {
+  max-width: 560px;
+}
+
+.credentials-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.credentials-list {
+  max-height: 320px;
+  overflow: auto;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+}
+
+.credentials-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.credentials-table th,
+.credentials-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.credentials-table th {
+  background: var(--bg-main);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.credentials-table code {
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.add-user-form .field-hint {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.add-user-form .form-error {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.875rem;
+  color: var(--danger, #dc2626);
+}
+
+.add-user-form .classes-checkbox-list {
+  max-height: 200px;
+  margin-bottom: 0;
+}
+
+.content-section .header-actions {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .info-grid {

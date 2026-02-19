@@ -172,7 +172,7 @@
             </router-link>
           </div>
 
-          <!-- Software Practice Tab -->
+          <!-- Software Practice Tab (one lesson per module, like Module 8; lesson may have multiple learn sections) -->
           <div v-if="activeContentTab === 'software'" class="tab-panel">
             <div v-if="moduleLesson" class="software-phases-container">
               <!-- Lesson Header -->
@@ -199,7 +199,7 @@
                 </div>
               </div>
 
-              <!-- Phase Navigation Buttons (Practice, Self-Check, Apply greyed out until previous section completed) -->
+              <!-- Phase Navigation Buttons -->
               <div class="phase-buttons-grid">
                 <router-link
                   :to="`/class/${classId}/lesson/${moduleLesson.id}?phase=iDo`"
