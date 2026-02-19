@@ -428,7 +428,7 @@ export const module3UnifiedLessons = [
       youDo: {
         type: 'independent_practice',
         title: 'Apply Your Skills',
-        summary: 'In this Apply phase, you will independently complete hands-on exercises that reinforce the fundamentals you learned. You\'ll practice installing Jamovi (if needed), navigating the interface confidently, importing data files, setting variable types correctly, creating computed variables, and using filters. These exercises build on the Learn and Practice phases and help you become comfortable working with Jamovi on your own. Each exercise has detailed instructions and a hint button if you get stuck.',
+        summary: 'In this Apply phase, you will independently complete hands-on exercises that reinforce the fundamentals you learned. You\'ll practice opening a different data file than the one in Learn, importing data, setting measurement levels correctly, and exporting or saving your data. These exercises build on the Learn and Practice phases and keep Module 3 focused on importing, setting measurement levels, and exporting. Each exercise has detailed instructions and a hint button if you get stuck.',
         instructions: 'Complete these hands-on exercises independently. Each exercise has step-by-step instructions and a hint button if you need help. Work through them in order, and mark each as complete when you\'ve finished. You can use the recording tools to document your work if needed.'
         // Exercises are pulled from statisticsPractices.js based on module='module-3' and software='jamovi'
       }

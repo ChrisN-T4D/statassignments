@@ -102,11 +102,11 @@ export const statisticsExercises = [
     module: 'module-3',
     topic: 'jamovi-interface',
     title: 'Open a Data File in Jamovi',
-    description: 'Import a CSV data file into Jamovi',
-    instructions: 'You need to open a CSV data file in Jamovi. Find the correct menu to import your data.',
+    description: 'Open a different CSV data file than the one you used in the Learn section',
+    instructions: 'Open a different CSV data file than the one you used in the Learn section. Use File > Open (or the hamburger menu) to import it so you practice importing on your own.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Look in the File menu or use the hamburger menu (three lines) in the top-left corner',
+    hint: 'Look in the File menu or use the hamburger menu (three lines) in the top-left corner. Choose a CSV file you have not opened yet in this module.',
     expected_selections: [
       { menu: 'file', option: 'open' }
     ],
@@ -116,11 +116,11 @@ export const statisticsExercises = [
     is_active: true
   },
   {
-    module: 'module-3',
-    topic: 'jamovi-interface',
+    module: 'module-5',
+    topic: 'data-manipulation',
     title: 'Add a New Variable',
-    description: 'Add a new computed variable to your dataset',
-    instructions: 'You need to create a new variable that calculates the total score from multiple items. Find where to add a new computed variable.',
+    description: 'Using the BMI dataset, find where to add a new computed variable',
+    instructions: 'Using your BMI dataset, find where in Jamovi to add a new computed variable (e.g. for a transformation of BMI or exercise).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
     hint: 'Look in the Data tab or right-click on the variable header area',
@@ -135,30 +135,23 @@ export const statisticsExercises = [
       ]
     },
     success_message: 'Correct! Data > Add > Computed Variable lets you create new variables using formulas like SUM(Item1, Item2, Item3).',
-    order: 2,
+    order: 24,
     is_active: true
   },
   {
     module: 'module-3',
-    topic: 'descriptive-stats',
-    title: 'Calculate Basic Descriptive Statistics',
-    description: 'Calculate mean, median, and standard deviation for a variable',
-    instructions: 'Calculate the mean, median, and standard deviation for exam scores. Navigate to the correct analysis.',
+    topic: 'data-handling',
+    title: 'Export or Save Your Data',
+    description: 'Save your Jamovi file or export data to CSV',
+    instructions: 'Save your work: use the hamburger menu to Save (as .omv) or Export to export the data to CSV. Confirm where the file is saved.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Descriptive statistics are under Analyses > Exploration',
+    hint: 'Use the hamburger menu (☰) and choose Save to save as .omv, or Export to export the spreadsheet to CSV or other formats.',
     expected_selections: [
-      { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
+      { menu: 'file', option: 'save' }
     ],
-    sample_data: {
-      columns: ['StudentID', 'ExamScore'],
-      rows: [
-        { StudentID: 1, ExamScore: 78 },
-        { StudentID: 2, ExamScore: 85 },
-        { StudentID: 3, ExamScore: 92 }
-      ]
-    },
-    success_message: 'Correct! Analyses > Exploration > Descriptives provides measures of central tendency (mean, median, mode) and variability (SD, variance, range).',
+    sample_data: null,
+    success_message: 'Correct! Save stores your project as .omv; Export lets you write the data to CSV or other formats for use elsewhere.',
     order: 3,
     is_active: true
   },
@@ -191,59 +184,45 @@ export const statisticsExercises = [
     is_active: true
   },
   {
-    module: 'module-3',
-    topic: 'computation',
-    title: 'Create a Computed Variable',
+    module: 'module-5',
+    topic: 'data-manipulation',
+    title: 'Create a Computed Variable (Centered BMI)',
     phase: 'practice',
-    description: 'Create a computed variable that sums multiple item variables to calculate a total score',
-    instructions: 'Create a computed variable that calculates a total score by summing multiple item variables.',
+    description: 'Using the BMI dataset, create a computed variable (e.g. BMI minus mean)',
+    instructions: 'Using your BMI dataset, create a computed variable that centers BMI: BMI - MEAN(BMI) (or use VMEAN(BMI) in Jamovi). This reinforces transformation with the same dataset you used in Module 4 Learn.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'In the Data tab, add a Computed Variable. Use a formula like Item1 + Item2 + Item3 or SUM(Item1, Item2, Item3). Variable names are case-sensitive.',
-    submission: 'Screenshot of the formula panel and the new computed column.',
-    order: 3,
+    hint: 'Data > Add > Computed Variable. Formula: BMI - VMEAN(BMI). Variable names are case-sensitive.',
+    submission: 'Screenshot of the formula and the new centered BMI column.',
+    order: 20,
     is_active: true
   },
   {
-    module: 'module-3',
-    topic: 'computation',
-    title: 'Reverse-Score a Likert Item',
+    module: 'module-5',
+    topic: 'data-manipulation',
+    title: 'Recode BMI into Weight Categories',
     phase: 'practice',
-    description: 'Reverse-score a Likert item (1-5 scale) and verify the transformation by comparing original and reversed values',
-    instructions: 'Reverse-score one Likert item (1-5 scale) and verify the transformation by comparing at least five pairs of original and reversed values.',
+    description: 'Using the BMI dataset, recode BMI into three categories (e.g. Underweight/Normal/Overweight)',
+    instructions: 'Using your BMI dataset, use Data > Transform (Add recode condition) to recode BMI into three categories. Use standard cut points (e.g. under 18.5, 18.5 to 25, 25+) or Low/Normal/High.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Create a computed variable with formula: 6 - ItemName (for 1-5 scale). For other scales, use (max + 1) - original. Verify by checking that 1→5, 2→4, 3→3, 4→2, 5→1.',
-    submission: 'Screenshot showing the transform and five paired original/reversed values.',
-    order: 4,
+    hint: 'Transform: select BMI, Add recode condition. E.g. if $source < 18.5 use "Underweight", if $source < 25 use "Normal", else use "Overweight".',
+    submission: 'Screenshot of the transform rules and the new categorical column.',
+    order: 21,
     is_active: true
   },
   {
-    module: 'module-3',
-    topic: 'computation',
-    title: 'Recode Continuous to 3-Level Category',
-    phase: 'practice',
-    description: 'Recode a continuous variable into three categories (Low, Medium, High) using appropriate cut points',
-    instructions: 'Recode a continuous variable into three categories (Low, Medium, High) using appropriate cut points.',
-    software_type: 'jamovi',
-    exercise_type: 'instructional',
-    hint: 'Create a computed variable using nested IF statements: IF(Score < 60, "Low", IF(Score < 80, "Medium", "High")). Adjust cut points to match your data distribution. Verify categories are assigned correctly.',
-    submission: 'Screenshot of the transform definition.',
-    order: 5,
-    is_active: true
-  },
-  {
-    module: 'module-3',
-    topic: 'data-handling',
+    module: 'module-5',
+    topic: 'data-manipulation',
     title: 'Apply a Filter and Compare Descriptives',
     phase: 'apply',
-    description: 'Create a filter to exclude cases, then run Descriptives with the filter ON and OFF to compare how statistics change',
-    instructions: 'Create a filter (e.g., Age >= 18) and run Descriptives with the filter ON and OFF. Compare how the statistics change.',
+    description: 'Using the BMI dataset, create a filter and compare Descriptives with filter ON and OFF',
+    instructions: 'Using your BMI dataset, create a filter (e.g. BMI >= 25, or exercise > 0). Run Descriptives for BMI with the filter ON and OFF and compare how N, mean, and SD change.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Data > Filters to create a filter with a logical condition. Toggle it on/off and run Descriptives each time. Note how N, mean, and other statistics differ when cases are excluded.',
+    hint: 'Data > Filters: create an expression like BMI >= 25. Toggle the filter on/off and run Descriptives each time.',
     submission: 'Screenshots of outputs with filter ON and OFF.',
-    order: 6,
+    order: 23,
     is_active: true
   },
   {
@@ -404,27 +383,28 @@ export const statisticsExercises = [
   },
 
   // ============ MODULE 4: Descriptive Statistics ============
+  // Apply uses the personality dataset (Learn used BMI).
   {
     module: 'module-4',
     topic: 'descriptive-stats',
     title: 'Calculate Deviation Scores',
-    description: 'Create a computed variable for deviation scores (X - Mean)',
-    instructions: 'Create a new computed variable that calculates how far each score deviates from the mean. You\'ll need to use a formula.',
+    description: 'Using the personality dataset, create deviation scores for Extraversion (X - Mean)',
+    instructions: 'Open your personality dataset (Extraversion, Agreeableness, etc.). Create a computed variable that calculates how far each person\'s Extraversion score deviates from the mean: Extraversion - VMEAN(Extraversion).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'First add a computed variable, then use the formula: Score - VMEAN(Score)',
+    hint: 'Data > Add > Computed Variable. Formula: Extraversion - VMEAN(Extraversion). Use your variable name if different (case-sensitive).',
     expected_selections: [
       { menu: 'data', option: 'add-variable', subOption: 'computed' }
     ],
     sample_data: {
-      columns: ['ID', 'Score'],
+      columns: ['ID', 'Extraversion'],
       rows: [
-        { ID: 1, Score: 75 },
-        { ID: 2, Score: 82 },
-        { ID: 3, Score: 68 }
+        { ID: 1, Extraversion: 3 },
+        { ID: 2, Extraversion: 5 },
+        { ID: 3, Extraversion: 2 }
       ]
     },
-    success_message: 'Correct! Use Data > Add > Computed Variable with formula: Score - VMEAN(Score). Deviation scores show how far each value is from the mean.',
+    success_message: 'Correct! Deviation scores for Extraversion show how far each value is from the mean. The sum of this column is zero.',
     order: 1,
     is_active: true
   },
@@ -432,23 +412,23 @@ export const statisticsExercises = [
     module: 'module-4',
     topic: 'z-scores',
     title: 'Calculate Z-Scores in Jamovi',
-    description: 'Standardize scores by converting them to z-scores',
-    instructions: 'You need to convert raw test scores to z-scores (standardized scores). Find how to create z-scores in Jamovi.',
+    description: 'Using the personality dataset, standardize Extraversion to z-scores',
+    instructions: 'Using your personality dataset, convert Extraversion (or another scale variable) to z-scores. Find how to create z-scores in Jamovi (Exploration > Descriptives).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Z-scores can be calculated using a computed variable with the Z() function, or through Exploration > Descriptives with the "Z-scores" option checked',
+    hint: 'In Descriptives, add Extraversion to Variables, then check "Z-scores" in the options to add a standardized column.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['StudentID', 'TestScore'],
+      columns: ['ID', 'Extraversion'],
       rows: [
-        { StudentID: 1, TestScore: 85 },
-        { StudentID: 2, TestScore: 72 },
-        { StudentID: 3, TestScore: 91 }
+        { ID: 1, Extraversion: 4 },
+        { ID: 2, Extraversion: 2 },
+        { ID: 3, Extraversion: 5 }
       ]
     },
-    success_message: 'Correct! In Descriptives, check "Z-scores" under the options to add a standardized version of your variable to the dataset.',
+    success_message: 'Correct! In Descriptives, check "Z-scores" to add a standardized version of Extraversion to the dataset.',
     order: 2,
     is_active: true
   },
@@ -456,23 +436,23 @@ export const statisticsExercises = [
     module: 'module-4',
     topic: 'normality',
     title: 'Test for Normality',
-    description: 'Check if your data is normally distributed using Shapiro-Wilk test',
-    instructions: 'Before running parametric tests, you should check if your data is normally distributed. Find the normality test in Jamovi.',
+    description: 'Using the personality dataset, check if Extraversion is normally distributed (Shapiro-Wilk)',
+    instructions: 'Using your personality dataset, check whether Extraversion (or Neuroticism) is normally distributed. Find the Shapiro-Wilk normality test in Jamovi (Exploration > Descriptives > Statistics).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Normality tests are in Exploration > Descriptives, under the "Statistics" options',
+    hint: 'Add your variable to Descriptives, then expand Statistics and check "Shapiro-Wilk" under normality tests.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'ReactionTime'],
+      columns: ['ID', 'Extraversion'],
       rows: [
-        { ID: 1, ReactionTime: 245 },
-        { ID: 2, ReactionTime: 312 },
-        { ID: 3, ReactionTime: 278 }
+        { ID: 1, Extraversion: 3 },
+        { ID: 2, Extraversion: 4 },
+        { ID: 3, Extraversion: 5 }
       ]
     },
-    success_message: 'Correct! In Descriptives, expand "Statistics" and check "Shapiro-Wilk" under normality tests. p > .05 suggests normal distribution.',
+    success_message: 'Correct! p > .05 suggests the distribution is not significantly different from normal.',
     order: 3,
     is_active: true
   },
@@ -481,12 +461,12 @@ export const statisticsExercises = [
     topic: 'descriptive-stats',
     title: 'Report Descriptives for One Variable',
     phase: 'practice',
-    description: 'Summarize mean, median, SD, and min/max from Descriptives',
-    instructions: 'Run Exploration > Descriptives for one continuous variable and write a short summary of mean, median, SD, and min/max.',
+    description: 'Using the personality dataset, summarize mean, median, SD, and min/max for Extraversion',
+    instructions: 'Using your personality dataset, run Exploration > Descriptives for Extraversion (or Agreeableness). Write a short summary of mean, median, SD, and min/max.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use the Descriptives table and read off the required statistics.',
-    submission: 'Screenshot of jamovi output and a short write-up.',
+    hint: 'Add Extraversion to the Variables box and read the required statistics from the output table.',
+    submission: 'Screenshot of Descriptives output for the personality variable and a short write-up.',
     order: 4,
     is_active: true
   },
@@ -495,11 +475,11 @@ export const statisticsExercises = [
     topic: 'descriptive-stats',
     title: 'Descriptives Split by Group',
     phase: 'practice',
-    description: 'Compare center and spread between two groups',
-    instructions: 'Run Descriptives split by a grouping variable and identify which group has higher center and larger spread.',
+    description: 'Using the personality dataset, compare Extraversion (or another variable) by a grouping variable',
+    instructions: 'Using your personality dataset, run Descriptives for Extraversion (or Agreeableness) and use Split by with a grouping variable (e.g. gender, or a recoded category). Identify which group has higher center and larger spread.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Split by to separate groups, then compare means/medians and SD/IQR.',
+    hint: 'Add your scale variable to Variables and your grouping variable to Split by. Compare means/medians and SD across groups.',
     submission: 'Output screenshot and 2-3 sentences comparing groups.',
     order: 5,
     is_active: true
@@ -509,12 +489,12 @@ export const statisticsExercises = [
     topic: 'z-scores',
     title: 'Create and Inspect Z-Scores',
     phase: 'practice',
-    description: 'Create z-scores and identify extreme values',
-    instructions: 'Create a z-score version of a variable and identify any cases with extreme standardized values.',
+    description: 'Using the personality dataset, create z-scores for Extraversion and identify extreme values',
+    instructions: 'Using your personality dataset, create a z-score version of Extraversion (via Descriptives or Compute). Identify any cases with |z| >= 2 (or your chosen cutoff).',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Descriptives or a computed variable with Z(). Choose a cutoff such as |z| >= 2.',
-    submission: 'Screenshot showing the z-score column and identified rows.',
+    hint: 'In Descriptives, check Z-scores to add a standardized column, or use Z(Extraversion) in Compute. Scan for |z| >= 2.',
+    submission: 'Screenshot showing the z-score column and any identified extreme rows.',
     order: 6,
     is_active: true
   },
@@ -523,38 +503,39 @@ export const statisticsExercises = [
     topic: 'descriptive-stats',
     title: 'Evaluate Skew and Outliers',
     phase: 'apply',
-    description: 'Use plots to justify reporting median/IQR',
-    instructions: 'Use Descriptives plots (histogram/boxplot) to argue whether the distribution is skewed or outlier-prone and justify reporting median/IQR.',
+    description: 'Using the personality dataset, use Descriptives to justify reporting median/IQR when appropriate',
+    instructions: 'Using your personality dataset, run Descriptives for Extraversion (or another scale). Use skewness and kurtosis (and an optional plot) to assess whether the distribution is skewed or has outliers. Justify when reporting median and IQR would be more appropriate than mean and SD.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Look for asymmetry, long tails, and isolated points.',
-    submission: 'Plot screenshot and a short justification.',
+    hint: 'Check skewness and kurtosis in the Descriptives output; look for asymmetry or extreme values.',
+    submission: 'Descriptives output screenshot and a short justification (2-3 sentences).',
     order: 7,
     is_active: true
   },
 
   // ============ MODULE 5: Graphing and Visualization ============
+  // Apply uses the BMI dataset (Learn used personality).
   {
     module: 'module-5',
     topic: 'visualizations',
     title: 'Create a Histogram',
-    description: 'Visualize the distribution of a continuous variable',
-    instructions: 'Create a histogram to visualize the distribution of test scores. Find where to create plots in Jamovi.',
+    description: 'Using the BMI dataset, visualize the distribution of BMI',
+    instructions: 'Using your BMI and exercise dataset, create a histogram for BMI. Find where to create plots in Jamovi (Exploration > Descriptives > Plots).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Histograms can be created in Exploration > Descriptives under the "Plots" options',
+    hint: 'Histograms can be created in Exploration > Descriptives under the "Plots" options. Add BMI to Variables and check Histogram.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'TestScore'],
+      columns: ['ID', 'BMI'],
       rows: [
-        { ID: 1, TestScore: 78 },
-        { ID: 2, TestScore: 85 },
-        { ID: 3, TestScore: 62 }
+        { ID: 1, BMI: 22 },
+        { ID: 2, BMI: 28 },
+        { ID: 3, BMI: 21 }
       ]
     },
-    success_message: 'Correct! In Descriptives, expand "Plots" and check "Histogram". You can also add a density curve and Q-Q plot.',
+    success_message: 'Correct! In Descriptives, add BMI to Variables, expand "Plots" and check "Histogram".',
     order: 1,
     is_active: true
   },
@@ -562,23 +543,23 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'visualizations',
     title: 'Create a Bar Chart for Frequencies',
-    description: 'Visualize categorical data with a bar chart',
-    instructions: 'Create a bar chart showing the frequency of responses in each category. Find the appropriate menu.',
+    description: 'Using the BMI dataset, create a bar chart for a categorical variable',
+    instructions: 'Using your BMI dataset, create a bar chart for a categorical variable (e.g. gender if you have it, or a BMI category you create). Find the appropriate menu.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'For categorical variables, use Exploration > Descriptives and check "Bar plot" in Plots',
+    hint: 'For categorical variables, use Exploration > Descriptives and check "Bar plot" in Plots.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'PreferredColor'],
+      columns: ['ID', 'Gender'],
       rows: [
-        { ID: 1, PreferredColor: 'Blue' },
-        { ID: 2, PreferredColor: 'Red' },
-        { ID: 3, PreferredColor: 'Green' }
+        { ID: 1, Gender: 'Male' },
+        { ID: 2, Gender: 'Female' },
+        { ID: 3, Gender: 'Male' }
       ]
     },
-    success_message: 'Correct! For categorical variables, Descriptives will show "Bar plot" option under Plots to display frequencies.',
+    success_message: 'Correct! Add your categorical variable to Descriptives and check "Bar plot" under Plots.',
     order: 2,
     is_active: true
   },
@@ -586,42 +567,42 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'visualizations',
     title: 'Create a Boxplot',
-    description: 'Compare distributions across groups using boxplots',
-    instructions: 'Create a boxplot to compare test scores between two groups (treatment vs control).',
+    description: 'Using the BMI dataset, compare BMI across groups with a boxplot',
+    instructions: 'Using your BMI dataset, create a boxplot for BMI. If you have a grouping variable (e.g. gender), add it to Split by; otherwise create a boxplot for BMI only.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Boxplots are in Exploration > Descriptives. Add your continuous variable and split by your grouping variable.',
+    hint: 'Boxplots are in Exploration > Descriptives. Add BMI to Variables and optionally a grouping variable to Split by, then check "Box plot" in Plots.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'Group', 'Score'],
+      columns: ['ID', 'Gender', 'BMI'],
       rows: [
-        { ID: 1, Group: 'Treatment', Score: 85 },
-        { ID: 2, Group: 'Control', Score: 72 }
+        { ID: 1, Gender: 'Male', BMI: 24 },
+        { ID: 2, Gender: 'Female', BMI: 22 }
       ]
     },
-    success_message: 'Correct! In Descriptives, add your DV to Variables, your grouping variable to "Split by", then check "Box plot" in Plots.',
+    success_message: 'Correct! Add BMI to Variables, optionally Split by a grouping variable, then check "Box plot" in Plots.',
     order: 3,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'visualizations',
-    title: 'Histogram with Two Bin Widths',
+    title: 'Create a Histogram and Interpret Shape',
     phase: 'practice',
-    description: 'Compare histogram interpretations using different bin widths',
-    instructions: 'Produce a histogram for a continuous variable with two different bin widths and compare the interpretations.',
+    description: 'Using the BMI dataset, create a histogram for BMI and describe its shape',
+    instructions: 'Using your BMI dataset, produce a histogram for BMI in Descriptives > Plots. Describe the shape: symmetric or skewed? Unimodal or bimodal? Note any obvious outliers.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'In Descriptives > Plots, adjust bin width and take two screenshots.',
-    submission: 'Two histogram screenshots and 1-2 sentences on differences.',
+    hint: 'In Descriptives, add BMI to Variables and under Plots check Histogram. Use the default bins.',
+    submission: 'Histogram screenshot and 2-3 sentences describing the distribution shape.',
     order: 4,
     is_active: true
   },
   {
-    module: 'module-5',
-    topic: 'visualizations',
+    module: 'module-8',
+    topic: 'correlation',
     title: 'Scatterplot Matrix (Correlation Matrix Plot)',
     phase: 'practice',
     description: 'Create a scatterplot matrix for 3+ continuous variables',
@@ -630,12 +611,12 @@ export const statisticsExercises = [
     exercise_type: 'instructional',
     hint: 'Use Analyses > Regression > Correlation Matrix and enable plots.',
     submission: 'Scatterplot matrix screenshot and one identified relationship.',
-    order: 5,
+    order: 50,
     is_active: true
   },
   {
-    module: 'module-5',
-    topic: 'visualizations',
+    module: 'module-8',
+    topic: 'regression',
     title: 'scatr Scatterplot with Regression Line',
     phase: 'apply',
     description: 'Use scatr to create a scatterplot with a fitted line',
@@ -644,12 +625,12 @@ export const statisticsExercises = [
     exercise_type: 'instructional',
     hint: 'Open scatr from the Analyses menu after installing the add-on.',
     submission: 'Plot screenshot and a brief interpretation.',
-    order: 6,
+    order: 51,
     is_active: true
   },
   {
-    module: 'module-5',
-    topic: 'visualizations',
+    module: 'module-8',
+    topic: 'regression',
     title: 'scatr Grouped Scatterplots',
     phase: 'apply',
     description: 'Compare relationships by group using color or facets',
@@ -658,7 +639,7 @@ export const statisticsExercises = [
     exercise_type: 'instructional',
     hint: 'Use a grouping variable to color points or facet the plot.',
     submission: 'Plot screenshot and a 3-4 sentence interpretation.',
-    order: 7,
+    order: 52,
     is_active: true
   },
 
@@ -667,20 +648,20 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'data-manipulation',
     title: 'Create a Frequency Table',
-    description: 'Generate frequency counts for a categorical variable',
-    instructions: 'Create a frequency table showing counts and percentages for a categorical variable.',
+    description: 'Using the BMI dataset, create a frequency table for a categorical variable',
+    instructions: 'Using your BMI dataset, create a frequency table for a categorical variable (e.g. gender if present, or the BMI category variable you created). Use Descriptives and check "Frequency tables".',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Use Exploration > Descriptives and check "Frequency tables"',
+    hint: 'Exploration > Descriptives. Add your categorical variable and check "Frequency tables".',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'FavoriteColor'],
+      columns: ['ID', 'Gender'],
       rows: [
-        { ID: 1, FavoriteColor: 'Blue' },
-        { ID: 2, FavoriteColor: 'Red' },
-        { ID: 3, FavoriteColor: 'Blue' }
+        { ID: 1, Gender: 'Male' },
+        { ID: 2, Gender: 'Female' },
+        { ID: 3, Gender: 'Male' }
       ]
     },
     success_message: 'Correct! In Descriptives, check "Frequency tables" to see counts and percentages for categorical variables.',
@@ -691,19 +672,19 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'data-manipulation',
     title: 'Create a Contingency Table',
-    description: 'Cross-tabulate two categorical variables',
-    instructions: 'Create a contingency table (crosstab) to see the relationship between two categorical variables.',
+    description: 'Using the BMI dataset, cross-tabulate two categorical variables',
+    instructions: 'Using your BMI dataset, create a contingency table (e.g. gender by BMI category, or two other categorical variables). Use Frequencies > Contingency Tables.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Use Frequencies > Contingency Tables > Independent Samples',
+    hint: 'Frequencies > Contingency Tables > Independent Samples. Add one variable to Rows and one to Columns.',
     expected_selections: [
       { menu: 'analyses', option: 'frequencies', subOption: 'contingency' }
     ],
     sample_data: {
-      columns: ['ID', 'Gender', 'PreferredProduct'],
+      columns: ['ID', 'Gender', 'BMI_category'],
       rows: [
-        { ID: 1, Gender: 'Male', PreferredProduct: 'A' },
-        { ID: 2, Gender: 'Female', PreferredProduct: 'B' }
+        { ID: 1, Gender: 'Male', BMI_category: 'Normal' },
+        { ID: 2, Gender: 'Female', BMI_category: 'Overweight' }
       ]
     },
     success_message: 'Correct! Frequencies > Contingency Tables creates a crosstab. Add row and column percentages under "Cells" options.',
@@ -714,62 +695,62 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'data-manipulation',
     title: 'Transform Data with Logical Expressions',
-    description: 'Use logical operators to create conditional variables',
-    instructions: 'Create a computed variable that uses logical expressions (==, !=, <, >, and, or) to categorize data.',
+    description: 'Using the BMI dataset, create a category with logical expressions',
+    instructions: 'Using your BMI dataset, create a computed variable or use Transform with a logical expression to categorize BMI (e.g. BMI >= 25 → "Overweight", else "Not overweight").',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Use Data > Compute and formulas like: IF(Score >= 80, "Pass", "Fail")',
+    hint: 'Use Data > Compute with IF(BMI >= 25, "Overweight", "Not overweight") or use Transform with Add recode condition.',
     expected_selections: [
       { menu: 'data', option: 'compute' }
     ],
     sample_data: {
-      columns: ['ID', 'Score'],
+      columns: ['ID', 'BMI'],
       rows: [
-        { ID: 1, Score: 85 },
-        { ID: 2, Score: 72 },
-        { ID: 3, Score: 91 }
+        { ID: 1, BMI: 26 },
+        { ID: 2, BMI: 22 },
+        { ID: 3, BMI: 30 }
       ]
     },
-    success_message: 'Correct! Use computed variables with IF() statements and logical operators to create conditional transformations.',
+    success_message: 'Correct! Use IF() and logical operators, or Transform with recode conditions, to create categories from BMI.',
     order: 10,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'data-manipulation',
-    title: 'Center a Likert Scale Variable',
-    description: 'Transform Likert scores to center them around zero',
-    instructions: 'Transform a 1-7 Likert scale so the midpoint (4) becomes 0. This makes the scale range from -3 to +3.',
+    title: 'Center BMI (or Exercise) Around the Mean',
+    description: 'Using the BMI dataset, create a centered variable',
+    instructions: 'Using your BMI dataset, create a computed variable that centers BMI around its mean: BMI - MEAN(BMI). Optionally do the same for exercise hours.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Data > Compute with formula: LikertRaw - 4',
-    submission: 'Screenshot showing the original and centered variables side by side.',
+    hint: 'Data > Add > Computed Variable. Formula: BMI - VMEAN(BMI). The new variable has mean zero.',
+    submission: 'Screenshot showing the formula and the centered variable next to BMI.',
     order: 11,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'data-manipulation',
-    title: 'Calculate Opinion Strength with ABS()',
-    description: 'Use absolute value to measure strength regardless of direction',
-    instructions: 'Create a variable that measures opinion strength using ABS() on centered Likert data.',
+    title: 'Absolute Deviation from Mean BMI',
+    description: 'Using the BMI dataset, use ABS() for distance from mean',
+    instructions: 'Using your BMI dataset, create a variable for absolute deviation from mean BMI: ABS(BMI - MEAN(BMI)). This measures how far each person is from the average, regardless of direction.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use ABS(centered_variable) to get strength. Click fx button to find ABS function.',
-    submission: 'Screenshot of the formula and resulting opinion strength column.',
+    hint: 'Use Data > Compute with ABS(BMI - VMEAN(BMI)). Click the fx button to find ABS if needed.',
+    submission: 'Screenshot of the formula and the resulting column.',
     order: 12,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'data-manipulation',
-    title: 'Collapse Continuous Variable into Categories',
-    description: 'Recode age into young/adult/older categories',
-    instructions: 'Use nested IF statements to collapse a continuous age variable into 3 categories (e.g., 0-20, 21-40, 41-60).',
+    title: 'Recode Exercise (or BMI) into Categories',
+    description: 'Using the BMI dataset, recode a continuous variable into categories',
+    instructions: 'Using your BMI dataset, recode exercise hours (or BMI if you prefer) into 3 categories (e.g. Low/Medium/High) using Data > Transform with Add recode condition or nested IF.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use: IF(Age >= 0 and Age <= 20, 1, IF(Age >= 21 and Age <= 40, 2, IF(Age >= 41 and Age <= 60, 3)))',
-    submission: 'Screenshot showing the nested IF formula and the frequency table of the new categorical variable.',
+    hint: 'Transform: select the variable, Add recode condition. E.g. for exercise: if $source < 2 use "Low", if $source < 5 use "Medium", else use "High".',
+    submission: 'Screenshot of the transform or formula and the new categorical column.',
     order: 13,
     is_active: true
   },
@@ -777,25 +758,25 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'data-manipulation',
     title: 'Create a Reusable Transform',
-    description: 'Use Data > Transform to create a saved transformation',
-    instructions: 'Create a transformation using Data > Transform that can be applied to multiple variables. Test by applying it to at least 2 variables.',
+    description: 'Using the BMI dataset, create a Transform that can be applied to multiple variables',
+    instructions: 'Using your BMI dataset, create a transformation in Data > Transform (e.g. center with $source - MEAN($source)) that can be applied to both BMI and exercise. Apply it to at least two variables.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Transform with $source placeholder. E.g., ABS($source - 4) can be reused on different Likert items.',
-    submission: 'Screenshot showing the transform definition and two variables it was applied to.',
+    hint: 'Use Transform with $source. E.g. $source - VMEAN($source) to center. Then apply the same transform to BMI and to exercise.',
+    submission: 'Screenshot showing the transform definition and both variables it was applied to.',
     order: 14,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'data-manipulation',
-    title: 'Use Transform with Conditional Rules',
-    description: 'Create Low/Medium/High categories using Transform Add Condition',
-    instructions: 'Use Data > Transform with the "Add condition" button (+) to create multiple conditional rules.',
+    title: 'Use Transform with Conditional Rules (BMI)',
+    description: 'Using the BMI dataset, create BMI categories with Transform Add Condition',
+    instructions: 'Using your BMI dataset, use Data > Transform with Add recode condition to create BMI categories (e.g. if $source < 18.5 use "Underweight", if $source < 25 use "Normal", else use "Overweight").',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Click the + button next to the formula box. Add conditions like: if $source <= 20 use "young", if $source <= 40 use "adult", else use "older"',
-    submission: 'Screenshot showing the conditional rules in the Transform panel.',
+    hint: 'Select BMI as source, click Add recode condition. Add conditions with appropriate cut points for BMI.',
+    submission: 'Screenshot showing the conditional rules in the Transform panel and the new column.',
     order: 15,
     is_active: true
   },
@@ -803,25 +784,25 @@ export const statisticsExercises = [
     module: 'module-5',
     topic: 'data-manipulation',
     title: 'Filter Data to Extract Subsets',
-    description: 'Use filters to include only specific cases in analysis',
-    instructions: 'Create a filter to include only cases meeting specific criteria (e.g., Age > 18, or Gender == "Female"). Run Descriptives with filter on and off.',
+    description: 'Using the BMI dataset, filter cases and run Descriptives',
+    instructions: 'Using your BMI dataset, create a filter (e.g. BMI >= 25, or exercise > 0) and run Descriptives for BMI with the filter on. Compare to when the filter is off.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use Data > Filters and create expressions like: Age >= 18 or Gender == "Female"',
-    submission: 'Screenshot showing the filter formula and descriptives output with the filter active.',
+    hint: 'Data > Filters. Create an expression like BMI >= 25. Run Descriptives with filter on and off.',
+    submission: 'Screenshot showing the filter and descriptives output with the filter active.',
     order: 16,
     is_active: true
   },
   {
     module: 'module-5',
     topic: 'data-manipulation',
-    title: 'Use Mathematical Functions',
-    description: 'Apply LOG10(), LN(), SQRT(), or EXP() transformations',
-    instructions: 'Create a computed variable using at least one mathematical function (logarithm, square root, or exponential) and explain when such transformations are useful.',
+    title: 'Use Mathematical Functions on BMI',
+    description: 'Using the BMI dataset, apply a mathematical function (e.g. LOG, SQRT)',
+    instructions: 'Using your BMI dataset, create a computed variable using a mathematical function (e.g. LOG(BMI), SQRT(BMI), or LN(BMI)) and write 2-3 sentences on when such a transformation is useful (e.g. for skewed distributions).',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use fx button to find functions. LOG10() and LN() are useful for skewed data; SQRT() can stabilize variance.',
-    submission: 'Screenshot showing the function used and a 2-3 sentence explanation of when it\'s appropriate.',
+    hint: 'Use the fx button to find LOG, LN, or SQRT. These can help with right-skewed variables like BMI.',
+    submission: 'Screenshot of the formula and a short explanation of when the transformation is appropriate.',
     order: 17,
     is_active: true
   },
@@ -830,11 +811,11 @@ export const statisticsExercises = [
     topic: 'data-manipulation',
     title: 'Contingency Table with Row and Column Percentages',
     phase: 'practice',
-    description: 'Compare interpretations using row vs column percentages',
-    instructions: 'Create a contingency table and display it with row percentages, then with column percentages. Explain how the interpretation differs.',
+    description: 'Using the BMI dataset, create a contingency table with row and column percentages',
+    instructions: 'Using your BMI dataset, create a contingency table (e.g. gender by BMI category). Display it with row percentages, then with column percentages. Explain how the interpretation differs.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Under Cells options, toggle between Row and Column percentages.',
+    hint: 'Frequencies > Contingency Tables. Under Cells options, request row percentages and column percentages.',
     submission: 'Two screenshots (row % and column %) and 3-4 sentences comparing interpretations.',
     order: 18,
     is_active: true
@@ -844,12 +825,12 @@ export const statisticsExercises = [
     topic: 'data-manipulation',
     title: 'Complex Logical Expression with AND/OR',
     phase: 'apply',
-    description: 'Create a filter using multiple logical operators',
-    instructions: 'Create a computed variable or filter using complex logical expressions combining AND and OR operators (e.g., (Age >= 18 and Age <= 65) or Status == "Student").',
+    description: 'Using the BMI dataset, create a filter with AND/OR',
+    instructions: 'Using your BMI dataset, create a filter using AND and/or OR (e.g. BMI >= 25 and exercise < 2, or BMI < 18.5). Run Descriptives with the filter on and briefly explain who is included.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Use parentheses to control order of operations. AND requires both conditions true; OR requires at least one true.',
-    submission: 'Screenshot of the formula and resulting values, plus a brief explanation of the logic.',
+    hint: 'Data > Filters. Use parentheses: (BMI >= 25 and exercise < 2) or (BMI < 18.5).',
+    submission: 'Screenshot of the filter formula and output, plus a brief explanation of the logic.',
     order: 19,
     is_active: true
   },
@@ -1110,8 +1091,8 @@ export const statisticsExercises = [
     is_active: true
   },
   {
-    module: 'module-7',
-    topic: 'hypothesis-testing',
+    module: 'module-8',
+    topic: 't-tests-practice',
     title: 'Independent Samples T-Test Report',
     phase: 'practice',
     description: 'Report group means, mean difference, p-value, and effect size',
@@ -1120,7 +1101,7 @@ export const statisticsExercises = [
     exercise_type: 'instructional',
     hint: 'Use Analyses > T-Tests > Independent Samples and check effect sizes.',
     submission: 'Output screenshot and one APA-style results sentence.',
-    order: 3,
+    order: 53,
     is_active: true
   },
   {
@@ -1129,7 +1110,7 @@ export const statisticsExercises = [
     title: 'Robustness to an Outlier Filter',
     phase: 'apply',
     description: 'Compare results before and after filtering an outlier',
-    instructions: 'Re-run the same test after applying a filter that removes an outlier and discuss what changed and what stayed stable.',
+    instructions: 'Run a one-sample t-test, then re-run it after applying a filter that removes an outlier. Discuss what changed and what stayed stable.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'Use the Filters panel and compare outputs side by side.',
@@ -1230,10 +1211,10 @@ export const statisticsExercises = [
     title: 'Calculate and Report Cohen\'s d',
     phase: 'practice',
     description: 'Find effect size in Jamovi output and interpret its magnitude',
-    instructions: 'Run a one-sample or independent samples t-test. Enable "Effect size" in the options. Report the Cohen\'s d value and classify it as small (~0.2), medium (~0.5), or large (~0.8).',
+    instructions: 'Run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen\'s d value and classify it as small (~0.2), medium (~0.5), or large (~0.8).',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'In the t-test options panel, check "Effect size" under Additional Statistics.',
+    hint: 'In the one-sample t-test options panel, check "Effect size" under Additional Statistics.',
     expected_output: 'Cohen\'s d appears in the output table',
     submission: 'Screenshot showing Cohen\'s d and a sentence classifying the effect size magnitude',
     order: 10,
