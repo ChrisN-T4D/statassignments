@@ -7,6 +7,9 @@
         <div class="class-info">
           <h1>{{ currentClass.name }}</h1>
           <p>{{ currentClass.description }}</p>
+          <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+            Stuck on an assignment? Get help →
+          </router-link>
         </div>
       </div>
 
@@ -875,6 +878,19 @@ watch(() => route.fullPath, () => {
 .class-info p {
   margin: 0;
   color: var(--text-secondary);
+}
+
+.assignment-help-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--class-color, var(--primary));
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.assignment-help-link:hover {
+  text-decoration: underline;
 }
 
 /* Section Title */

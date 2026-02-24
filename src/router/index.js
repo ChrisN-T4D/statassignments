@@ -17,6 +17,9 @@ import BKTTester from '../components/BKTTester.vue'
 import Admin from '../views/Admin.vue'
 import RoleChecker from '../views/RoleChecker.vue'
 import About from '../views/About.vue'
+import AssignmentHelp from '../views/AssignmentHelp.vue'
+import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
+import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -31,6 +34,24 @@ const routes = [
     path: '/class/:classId',
     name: 'class-home',
     component: ClassHome,
+    props: true
+  },
+  {
+    path: '/class/:classId/assignment-help',
+    name: 'assignment-help',
+    component: AssignmentHelp,
+    props: true
+  },
+  {
+    path: '/class/:classId/assignment-help/:benchmarkSlug/practice',
+    name: 'benchmark-practice',
+    component: BenchmarkPractice,
+    props: true
+  },
+  {
+    path: '/class/:classId/assignment-help/:assignmentId',
+    name: 'assignment-help-detail',
+    component: AssignmentHelpDetail,
     props: true
   },
   {

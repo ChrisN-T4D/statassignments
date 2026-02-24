@@ -117,7 +117,7 @@ export const softwareLessons = [
             content: [
               {
                 type: 'text',
-                content: 'The <strong>deviation</strong> of a value from the mean is how far that value is from the average: <em>deviation = X − mean</em>. With your **BMI and exercise** data, run Descriptives on **BMI** to get the mean, then use <strong>Data → Compute</strong> to create a new column of deviations: <strong>BMI − MEAN(BMI)</strong>.'
+                content: 'The <strong>deviation</strong> of a value from the mean is how far that value is from the average: <em>deviation = X − mean</em>. With your **BMI and exercise** data, run Descriptives on **BMI** to get the mean, then use <strong>Data → Compute</strong> to create a new column of deviations: <strong>BMI − VMEAN(BMI)</strong>. (VMEAN = mean of one column; MEAN(A,B,C) = mean of several variables per row.)'
               },
               {
                 type: 'step_sequence',
@@ -137,7 +137,7 @@ export const softwareLessons = [
                   {
                     step: 3,
                     title: 'Enter the deviation formula',
-                    description: 'In the formula box, type: <strong>BMI − MEAN(BMI)</strong>. (If your variable is named differently, e.g. <strong>bmi</strong>, use <strong>bmi − MEAN(bmi)</strong>. Jamovi is case-sensitive.) Each row will show that person\'s BMI minus the overall mean BMI.',
+                    description: 'In the formula box, type: <strong>BMI − VMEAN(BMI)</strong>. (If your variable is named differently, e.g. <strong>bmi</strong>, use <strong>bmi − VMEAN(bmi)</strong>. Jamovi is case-sensitive.) VMEAN gives the mean of that single column; each row will show that person\'s BMI minus the overall mean BMI.',
                     image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
@@ -167,7 +167,7 @@ export const softwareLessons = [
             content: [
               {
                 type: 'text',
-                content: 'Because deviations sum to zero, we <strong>square</strong> them to measure spread. <strong>Squared deviation = (X − mean)²</strong>. With your **BMI** data, use Compute to create <strong>(BMI − MEAN(BMI))^2</strong>. The <strong>sum of squared deviations (SS)</strong> is the numerator in the variance formula; variance = SS/(N−1) and standard deviation = √variance.'
+                content: 'Because deviations sum to zero, we <strong>square</strong> them to measure spread. <strong>Squared deviation = (X − mean)²</strong>. With your **BMI** data, use Compute to create <strong>(BMI − VMEAN(BMI))^2</strong>. The <strong>sum of squared deviations (SS)</strong> is the numerator in the variance formula; use <strong>VSUM</strong> on that column for SS. Variance = SS/(N−1) and standard deviation = √variance.'
               },
               {
                 type: 'step_sequence',
@@ -175,7 +175,7 @@ export const softwareLessons = [
                   {
                     step: 1,
                     title: 'Create a squared deviation variable',
-                    description: 'Use <strong>Data → Compute</strong> again. Name the new variable (e.g. <strong>bmi_sq_dev</strong> or <strong>sq_dev_BMI</strong>). In the formula box, type: <strong>(BMI − MEAN(BMI))^2</strong>. (Use your actual BMI variable name if different.)',
+                    description: 'Use <strong>Data → Compute</strong> again. Name the new variable (e.g. <strong>bmi_sq_dev</strong> or <strong>sq_dev_BMI</strong>). In the formula box, type: <strong>(BMI − VMEAN(BMI))^2</strong>. (Use your actual BMI variable name if different.)',
                     image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
@@ -223,12 +223,12 @@ export const softwareLessons = [
             checkpoint: 'The Results panel should show N, Mean, Median, SD, Min, Max for each variable.'
           },
           {
-            instruction: 'Note the mean of BMI from the output. Then use Data → Compute. Name the new variable bmi_deviation. In the formula box type: BMI − MEAN(BMI) (use your variable name, case-sensitive).',
+            instruction: 'Note the mean of BMI from the output. Then use Data → Compute. Name the new variable bmi_deviation. In the formula box type: BMI − VMEAN(BMI) (use your variable name, case-sensitive).',
             hint: 'Compute is in the Data tab. The formula gives each person\'s BMI minus the mean BMI.',
             checkpoint: 'The new column should have positive and negative values that sum to zero (check with Descriptives → Sum).'
           },
           {
-            instruction: 'Use Compute again. Name the variable bmi_sq_dev. Formula: (BMI − MEAN(BMI))^2. Then run Descriptives on bmi_sq_dev and request Sum. That is the sum of squared deviations (SS) for BMI.',
+            instruction: 'Use Compute again. Name the variable bmi_sq_dev. Formula: (BMI − VMEAN(BMI))^2. Then run Descriptives on bmi_sq_dev and request Sum (or use VSUM on that column). That is the sum of squared deviations (SS) for BMI.',
             hint: 'Squared deviations are all positive. Sum them in Descriptives to get SS.',
             checkpoint: 'You have SS for BMI. Variance = SS/(N−1); SD = √variance. Compare with the SD for BMI in Descriptives.'
           }

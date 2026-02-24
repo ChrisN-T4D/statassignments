@@ -7,26 +7,8 @@
           <span class="logo-text">Methods<span class="logo-market">Market</span></span>
         </router-link>
 
-        <div class="header-center">
-          <ClassSelector />
-        </div>
-
-        <nav class="nav">
-          <router-link to="/">Home</router-link>
-          <router-link to="/about">About</router-link>
-          <router-link v-if="selectedClass" :to="`/class/${selectedClassId}`">
-            {{ selectedClass.short_name }}
-          </router-link>
-          <router-link v-if="isAdmin" to="/admin">Admin</router-link>
-          <router-link v-if="isInstructor" to="/instructor">Dashboard</router-link>
-          <router-link v-if="isAuthenticated" to="/profile">Profile</router-link>
-          <template v-if="isAuthenticated">
-            <a href="#" @click.prevent="handleSignOut" class="nav-link">Sign Out</a>
-          </template>
-          <router-link v-else to="/auth">Sign In</router-link>
-        </nav>
-
         <div class="header-actions">
+          <NavMenu />
           <ThemeToggle />
         </div>
       </div>
@@ -46,26 +28,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from './composables/useAuth'
-import { useClasses } from './composables/useClasses'
 import ThemeToggle from './components/ThemeToggle.vue'
-import ClassSelector from './components/ClassSelector.vue'
+import NavMenu from './components/NavMenu.vue'
 import ResourcesDrawer from './components/ResourcesDrawer.vue'
-
-const router = useRouter()
-const { user, isAuthenticated, signOut } = useAuth()
-const { selectedClass, selectedClassId } = useClasses()
-
-const isInstructor = computed(() => user.value?.role === 'instructor')
-const isAdmin = computed(() => user.value?.role === 'admin')
-
-function handleSignOut() {
-  signOut()
-  // Force full page reload to clear all state and refresh auth
-  window.location.href = '/'
-}
 </script>
 
 <style scoped>
@@ -94,25 +59,14 @@ function handleSignOut() {
   color: var(--primary);
 }
 
-.header-center {
-  display: flex;
-  align-items: center;
-}
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-left: 1rem;
+  margin-left: auto;
 }
 
 @media (max-width: 768px) {
-  .header-center {
-    order: 3;
-    width: 100%;
-    margin-top: 0.75rem;
-  }
-
   .header-actions {
     margin-left: 0;
     margin-top: 0.5rem;

@@ -4046,7 +4046,7 @@ export const topics = [
   <ol>
     <li>Go to 'Data' - 'Compute' in the menu bar</li>
     <li>In the 'Compute' window, give your new variable a name (e.g., <code>z_score</code>)</li>
-    <li>In the formula box, enter the formula: <code>(variable_name - MEAN(variable_name)) / STDEV(variable_name)</code></li>
+    <li>In the formula box, enter the formula: <code>(variable_name - VMEAN(variable_name)) / VSTDEV(variable_name)</code>. Use VMEAN/VSTDEV for one column; MEAN(A,B) is mean of several variables per row.</li>
     <li>Replace <code>variable_name</code> with the actual name of your variable</li>
     <li>Click the green arrow to compute the new variable</li>
   </ol>

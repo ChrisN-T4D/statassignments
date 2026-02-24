@@ -2848,3 +2848,357 @@ export function getRandomQuestions(moduleId, count = 10) {
   const shuffled = [...questions].sort(() => Math.random() - 0.5)
   return shuffled.slice(0, Math.min(count, shuffled.length))
 }
+
+// Benchmark 1 (Chapters 1–3) practice test
+const BENCHMARK1_MODULES = ['stats-module-1', 'stats-module-2', 'stats-module-3']
+
+/** BKT objective IDs per module (for mastery-weighted question selection). */
+export const BENCHMARK1_OBJECTIVES_BY_MODULE = {
+  'stats-module-1': ['M1-O1'],
+  'stats-module-2': ['M2-O1', 'M2-O2', 'M2-O3', 'M2-O4'],
+  'stats-module-3': ['M3-O1', 'M3-O2', 'M3-O3', 'M3-O4', 'M3-O5']
+}
+
+/** Human-readable label, topic links, and review links for feedback when user misses questions. */
+export const benchmark1ConceptMap = {
+  'stats-module-1': {
+    label: 'Why we learn statistics',
+    topicIds: ['intro-to-stats'],
+    classModuleId: 'stats-module-1',
+    hasSoftware: false
+  },
+  'stats-module-2': {
+    label: 'Research design & measurement',
+    topicIds: ['variables-measurement', 'scales-of-measurement', 'validity', 'reliability', 'research-design'],
+    classModuleId: 'stats-module-2',
+    hasSoftware: false
+  },
+  'stats-module-3': {
+    label: 'Jamovi & data handling',
+    topicIds: ['software-interface', 'data-entry', 'variable-types'],
+    classModuleId: 'stats-module-3',
+    hasSoftware: true
+  }
+}
+
+const BENCHMARK1_QUESTION_TYPES = ['multiple_choice', 'true_false', 'multiple_select']
+
+/**
+ * Get a shuffled set of questions for the Benchmark 1 practice test (Chapters 1–3).
+ * Only includes multiple_choice, true_false, and multiple_select for simple quiz UI.
+ * @param {number} totalCount - Total questions (default 15).
+ * @returns {Array} Raw question objects from modules 1, 2, 3.
+ */
+export function getBenchmark1Questions(totalCount = 15) {
+  const perModule = Math.max(1, Math.floor(totalCount / BENCHMARK1_MODULES.length))
+  const questions = []
+  for (const moduleId of BENCHMARK1_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      BENCHMARK1_QUESTION_TYPES.includes(q.type)
+    )
+    const shuffled = [...pool].sort(() => Math.random() - 0.5)
+    questions.push(...shuffled.slice(0, perModule))
+  }
+  return questions.sort(() => Math.random() - 0.5)
+}
+
+/**
+ * Benchmark 1 question bank: all MC / true-false / multiple-select questions from modules 1–3.
+ * Each practice test samples from this bank (e.g. 15 questions) so tests vary.
+ */
+function getBenchmark1Bank() {
+  const bank = []
+  for (const moduleId of BENCHMARK1_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      BENCHMARK1_QUESTION_TYPES.includes(q.type)
+    )
+    bank.push(...pool.map(q => ({ ...q, _moduleId: moduleId })))
+  }
+  return bank
+}
+
+/**
+ * Get a weighted set of questions: sample from the full bank, with more from modules
+ * where the user is struggling or middle, fewer from modules where they excel.
+ * Uses masteryByModule (0–1 average pL per module). Each test draws a new random sample.
+ * @param {Record<string, number>} masteryByModule - e.g. { 'stats-module-1': 0.8, 'stats-module-2': 0.3 }
+ * @param {number} totalCount - Total questions to return (default 15).
+ * @returns {Array} Raw question objects.
+ */
+export function getBenchmark1QuestionsWeighted(masteryByModule, totalCount = 15) {
+  const bank = getBenchmark1Bank()
+  if (bank.length === 0) return []
+
+  const poolByModule = {}
+  for (const moduleId of BENCHMARK1_MODULES) {
+    const pool = bank.filter(q => q._moduleId === moduleId).map(({ _moduleId, ...q }) => q)
+    if (pool.length > 0) poolByModule[moduleId] = [...pool]
+  }
+
+  const weights = {}
+  let totalWeight = 0
+  for (const moduleId of BENCHMARK1_MODULES) {
+    const mastery = typeof masteryByModule[moduleId] === 'number' ? masteryByModule[moduleId] : 0.5
+    const w = 1 + (1 - mastery)
+    weights[moduleId] = w
+    totalWeight += w
+  }
+  const probs = {}
+  for (const mid of BENCHMARK1_MODULES) {
+    probs[mid] = totalWeight > 0 ? weights[mid] / totalWeight : 1 / BENCHMARK1_MODULES.length
+  }
+
+  const chosen = []
+  const usedByModule = { 'stats-module-1': new Set(), 'stats-module-2': new Set(), 'stats-module-3': new Set() }
+
+  for (let i = 0; i < totalCount; i++) {
+    let r = Math.random()
+    let moduleId = BENCHMARK1_MODULES[0]
+    for (const mid of BENCHMARK1_MODULES) {
+      r -= probs[mid]
+      if (r <= 0) {
+        moduleId = mid
+        break
+      }
+    }
+    const pool = poolByModule[moduleId]
+    if (!pool || pool.length === 0) continue
+    const used = usedByModule[moduleId]
+    const available = pool.filter(q => !used.has(q.id))
+    if (available.length === 0) {
+      used.clear()
+      const pick = pool[Math.floor(Math.random() * pool.length)]
+      chosen.push(pick)
+      used.add(pick.id)
+    } else {
+      const pick = available[Math.floor(Math.random() * available.length)]
+      chosen.push(pick)
+      used.add(pick.id)
+    }
+  }
+
+  return chosen.sort(() => Math.random() - 0.5)
+}
+
+export function getConceptLabelForModule(moduleId) {
+  return benchmark1ConceptMap[moduleId] || { label: moduleId, topicIds: [], classModuleId: null, hasSoftware: false }
+}
+
+// ============================================================
+// BENCHMARK 2 (Chapters 4–6): Descriptives, Graphing, Probability/Sampling
+// ============================================================
+
+const BENCHMARK2_MODULES = ['stats-module-4', 'stats-module-5', 'stats-module-6']
+const BENCHMARK2_QUESTION_TYPES = ['multiple_choice', 'true_false', 'multiple_select']
+
+export const BENCHMARK2_OBJECTIVES_BY_MODULE = {
+  'stats-module-4': ['M4-O1'],
+  'stats-module-5': ['M5-O1'],
+  'stats-module-6': ['M6-O1']
+}
+
+export const benchmark2ConceptMap = {
+  'stats-module-4': {
+    label: 'Descriptive statistics',
+    topicIds: ['central-tendency', 'variability', 'skew-kurtosis', 'standard-scores'],
+    classModuleId: 'stats-module-4',
+    hasSoftware: false
+  },
+  'stats-module-5': {
+    label: 'Graphing and visualization',
+    topicIds: ['histograms', 'boxplots', 'bar-charts', 'scatterplots', 'tabulating-data', 'transforming-variables'],
+    classModuleId: 'stats-module-5',
+    hasSoftware: true
+  },
+  'stats-module-6': {
+    label: 'Probability and sampling',
+    topicIds: ['probability-concepts', 'normal-distribution', 'central-limit-theorem', 'confidence-intervals'],
+    classModuleId: 'stats-module-6',
+    hasSoftware: true
+  }
+}
+
+function getBenchmark2Bank() {
+  const bank = []
+  for (const moduleId of BENCHMARK2_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      BENCHMARK2_QUESTION_TYPES.includes(q.type)
+    )
+    bank.push(...pool.map(q => ({ ...q, _moduleId: moduleId })))
+  }
+  return bank
+}
+
+export function getBenchmark2QuestionsWeighted(masteryByModule, totalCount = 15) {
+  return getWeightedQuestions(BENCHMARK2_MODULES, getBenchmark2Bank, masteryByModule, totalCount)
+}
+
+export function getBenchmark2Questions(totalCount = 15) {
+  const perModule = Math.max(1, Math.floor(totalCount / BENCHMARK2_MODULES.length))
+  const questions = []
+  for (const moduleId of BENCHMARK2_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      BENCHMARK2_QUESTION_TYPES.includes(q.type)
+    )
+    const shuffled = [...pool].sort(() => Math.random() - 0.5)
+    questions.push(...shuffled.slice(0, perModule))
+  }
+  return questions.sort(() => Math.random() - 0.5)
+}
+
+export function getConceptLabelForBenchmark2(moduleId) {
+  return benchmark2ConceptMap[moduleId] || { label: moduleId, topicIds: [], classModuleId: null, hasSoftware: false }
+}
+
+// ============================================================
+// FINAL BENCHMARK (Chapters 7–8): Hypothesis testing, ANOVA, t-tests, regression
+// ============================================================
+
+const FINAL_MODULES = ['stats-module-7', 'stats-module-8']
+const FINAL_QUESTION_TYPES = ['multiple_choice', 'true_false', 'multiple_select']
+
+export const FINAL_OBJECTIVES_BY_MODULE = {
+  'stats-module-7': ['M7-O1'],
+  'stats-module-8': ['M8-O1']
+}
+
+export const finalConceptMap = {
+  'stats-module-7': {
+    label: 'Hypothesis testing',
+    topicIds: ['hypothesis-testing', 'p-values', 'effect-size'],
+    classModuleId: 'stats-module-7',
+    hasSoftware: false
+  },
+  'stats-module-8': {
+    label: 'Comparing groups (t-tests, ANOVA, regression)',
+    topicIds: ['chi-square-independence', 'one-sample-t-test', 'independent-t-test', 'welch-t-test'],
+    classModuleId: 'stats-module-8',
+    hasSoftware: true
+  }
+}
+
+function getFinalBank() {
+  const bank = []
+  for (const moduleId of FINAL_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      FINAL_QUESTION_TYPES.includes(q.type)
+    )
+    bank.push(...pool.map(q => ({ ...q, _moduleId: moduleId })))
+  }
+  return bank
+}
+
+export function getFinalQuestionsWeighted(masteryByModule, totalCount = 15) {
+  return getWeightedQuestions(FINAL_MODULES, getFinalBank, masteryByModule, totalCount)
+}
+
+export function getFinalQuestions(totalCount = 15) {
+  const perModule = Math.max(1, Math.floor(totalCount / FINAL_MODULES.length))
+  const questions = []
+  for (const moduleId of FINAL_MODULES) {
+    const pool = getQuestionsByModule(moduleId).filter(q =>
+      FINAL_QUESTION_TYPES.includes(q.type)
+    )
+    const shuffled = [...pool].sort(() => Math.random() - 0.5)
+    questions.push(...shuffled.slice(0, perModule))
+  }
+  return questions.sort(() => Math.random() - 0.5)
+}
+
+export function getConceptLabelForFinal(moduleId) {
+  return finalConceptMap[moduleId] || { label: moduleId, topicIds: [], classModuleId: null, hasSoftware: false }
+}
+
+// Shared weighted sampling (used by Benchmark 1, 2, and Final)
+function getWeightedQuestions(modules, getBankFn, masteryByModule, totalCount) {
+  const bank = getBankFn()
+  if (bank.length === 0) return []
+
+  const poolByModule = {}
+  for (const moduleId of modules) {
+    const pool = bank.filter(q => q._moduleId === moduleId).map(({ _moduleId, ...q }) => q)
+    if (pool.length > 0) poolByModule[moduleId] = [...pool]
+  }
+
+  const weights = {}
+  let totalWeight = 0
+  for (const moduleId of modules) {
+    const mastery = typeof masteryByModule[moduleId] === 'number' ? masteryByModule[moduleId] : 0.5
+    const w = 1 + (1 - mastery)
+    weights[moduleId] = w
+    totalWeight += w
+  }
+  const probs = {}
+  for (const mid of modules) {
+    probs[mid] = totalWeight > 0 ? weights[mid] / totalWeight : 1 / modules.length
+  }
+
+  const chosen = []
+  const usedByModule = {}
+  modules.forEach(m => { usedByModule[m] = new Set() })
+
+  for (let i = 0; i < totalCount; i++) {
+    let r = Math.random()
+    let moduleId = modules[0]
+    for (const mid of modules) {
+      r -= probs[mid]
+      if (r <= 0) {
+        moduleId = mid
+        break
+      }
+    }
+    const pool = poolByModule[moduleId]
+    if (!pool || pool.length === 0) continue
+    const used = usedByModule[moduleId]
+    const available = pool.filter(q => !used.has(q.id))
+    if (available.length === 0) {
+      used.clear()
+      const pick = pool[Math.floor(Math.random() * pool.length)]
+      chosen.push(pick)
+      used.add(pick.id)
+    } else {
+      const pick = available[Math.floor(Math.random() * available.length)]
+      chosen.push(pick)
+      used.add(pick.id)
+    }
+  }
+
+  return chosen.sort(() => Math.random() - 0.5)
+}
+
+/** Config for benchmark practice tests (benchmark-1, benchmark-2, final-benchmark). */
+export function getBenchmarkPracticeConfig(slug) {
+  const configs = {
+    'benchmark-1': {
+      title: 'Benchmark 1 Practice Test',
+      subtitle: 'Covers Chapters 1–3: Why we learn statistics, Research design & measurement, Jamovi & data handling.',
+      modules: BENCHMARK1_MODULES,
+      objectivesByModule: BENCHMARK1_OBJECTIVES_BY_MODULE,
+      conceptMap: benchmark1ConceptMap,
+      getQuestionsWeighted: getBenchmark1QuestionsWeighted,
+      getQuestions: getBenchmark1Questions,
+      getConceptLabel: getConceptLabelForModule
+    },
+    'benchmark-2': {
+      title: 'Benchmark 2 Practice Test',
+      subtitle: 'Covers Chapters 4–6: Descriptive statistics, Graphing & visualization, Probability and sampling.',
+      modules: BENCHMARK2_MODULES,
+      objectivesByModule: BENCHMARK2_OBJECTIVES_BY_MODULE,
+      conceptMap: benchmark2ConceptMap,
+      getQuestionsWeighted: getBenchmark2QuestionsWeighted,
+      getQuestions: getBenchmark2Questions,
+      getConceptLabel: getConceptLabelForBenchmark2
+    },
+    'final-benchmark': {
+      title: 'Final Benchmark Practice Test',
+      subtitle: 'Covers Chapters 7–8: Hypothesis testing, Comparing groups (t-tests, ANOVA, regression).',
+      modules: FINAL_MODULES,
+      objectivesByModule: FINAL_OBJECTIVES_BY_MODULE,
+      conceptMap: finalConceptMap,
+      getQuestionsWeighted: getFinalQuestionsWeighted,
+      getQuestions: getFinalQuestions,
+      getConceptLabel: getConceptLabelForFinal
+    }
+  }
+  return configs[slug] || null
+}
