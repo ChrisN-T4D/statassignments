@@ -2,8 +2,8 @@ import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
 import { allStatisticsQuestions, getQuestionsByModule } from '../data/conceptQuestions'
-import { updateBKT } from './useBKT'
-import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
+import { updateBKT, predictPerformance } from './useBKT'
+import { getObjectivesForQuestion, getQuestionsForObjective } from '../data/questionObjectiveMap'
 import { useModule8Preferences } from './useModule8Preferences'
 
 export function usePractice() {
@@ -331,34 +331,99 @@ export function usePractice() {
     return (problem.difficulty || 'medium').toLowerCase()
   }
 
-  async function buildMasteryQueue(topicId = null) {
-    const allProblems = await fetchProblems(topicId)
-    const grouped = {
-      easy: [],
-      medium: [],
-      hard: []
-    }
-
+  function buildFallbackQueue(allProblems) {
+    const grouped = { easy: [], medium: [], hard: [] }
     allProblems.forEach(problem => {
       const difficulty = normalizeDifficulty(problem)
       if (difficulty === 'easy') grouped.easy.push(problem)
       else if (difficulty === 'hard') grouped.hard.push(problem)
       else grouped.medium.push(problem)
     })
-
     const easy = shuffleList(grouped.easy)
     const medium = shuffleList(grouped.medium)
     const hard = shuffleList(grouped.hard)
-
     const queue = []
     queue.push(...easy.splice(0, masteryConfig.easy))
     queue.push(...medium.splice(0, masteryConfig.medium))
     queue.push(...hard.splice(0, masteryConfig.hard))
-
-    masteryQueue.value = queue
-    masteryIndex.value = 0
-    masteryTotal.value = queue.length
     return queue
+  }
+
+  async function buildMasteryQueue(topicId = null) {
+    const allProblems = await fetchProblems(topicId)
+    const minSize = masteryConfig.easy + masteryConfig.medium + masteryConfig.hard
+
+    // Collect unique objective IDs for this topic (from problems we have)
+    const objectiveIds = [...new Set(allProblems.flatMap(p => getObjectivesForQuestion(p.id).filter(Boolean)))]
+
+    if (objectiveIds.length === 0) {
+      const queue = buildFallbackQueue(allProblems)
+      masteryQueue.value = queue
+      masteryIndex.value = 0
+      masteryTotal.value = queue.length
+      return queue
+    }
+
+    let predictions = []
+    try {
+      predictions = await predictPerformance(objectiveIds)
+    } catch (_) {
+      predictions = []
+    }
+
+    if (!predictions?.length) {
+      const queue = buildFallbackQueue(allProblems)
+      masteryQueue.value = queue
+      masteryIndex.value = 0
+      masteryTotal.value = queue.length
+      return queue
+    }
+
+    // Sort by mastery (low first) to target areas that need improvement
+    const sorted = [...predictions].sort((a, b) => a.predictedCorrectProb - b.predictedCorrectProb)
+    // Optionally focus on "needs work" (e.g. not yet mastered); use all if few
+    const targetPredictions = sorted.filter(p => p.predictedCorrectProb < 0.85)
+    const toTarget = targetPredictions.length >= 2 ? targetPredictions : sorted
+
+    const queue = []
+    const usedIds = new Set()
+
+    for (const pred of toTarget) {
+      const questionIds = getQuestionsForObjective(pred.objectiveId)
+      const recDiff = (pred.recommendedDifficulty || 'medium').toLowerCase()
+      const candidates = allProblems.filter(p => questionIds.includes(p.id) && !usedIds.has(p.id))
+      const preferred = candidates.filter(p => normalizeDifficulty(p) === recDiff)
+      const pool = preferred.length ? preferred : candidates
+      if (pool.length === 0) continue
+      const chosen = shuffleList(pool).slice(0, 2)
+      for (const problem of chosen) {
+        queue.push(problem)
+        usedIds.add(problem.id)
+      }
+    }
+
+    // Fill to minimum size with remaining problems (fallback logic)
+    if (queue.length < minSize) {
+      const remaining = allProblems.filter(p => !usedIds.has(p.id))
+      const grouped = { easy: [], medium: [], hard: [] }
+      remaining.forEach(problem => {
+        const difficulty = normalizeDifficulty(problem)
+        if (difficulty === 'easy') grouped.easy.push(problem)
+        else if (difficulty === 'hard') grouped.hard.push(problem)
+        else grouped.medium.push(problem)
+      })
+      const need = minSize - queue.length
+      const easy = shuffleList(grouped.easy)
+      const medium = shuffleList(grouped.medium)
+      const hard = shuffleList(grouped.hard)
+      const takeEach = Math.max(1, Math.ceil(need / 3))
+      queue.push(...easy.splice(0, takeEach), ...medium.splice(0, takeEach), ...hard.splice(0, takeEach))
+    }
+
+    masteryQueue.value = queue.length >= minSize ? queue : buildFallbackQueue(allProblems)
+    masteryIndex.value = 0
+    masteryTotal.value = masteryQueue.value.length
+    return masteryQueue.value
   }
 
   async function startMastery(topicId = null) {
@@ -391,7 +456,7 @@ export function usePractice() {
       // Use difficulty-adjusted parameters (IRT-based tuning) and time data
       const objectives = getObjectivesForQuestion(problemId)
       for (const objectiveId of objectives) {
-        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty, timeData)
+        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty, timeData, confidenceData, sequenceData)
 
         // Determine confidence level based on answer changes and deliberation time
         let confidenceLevel = 'unknown'
@@ -425,12 +490,13 @@ export function usePractice() {
         })
       }
 
-      // Store attempt in PocketBase with time tracking data
+      // Store attempt in PocketBase with time tracking data (for BKT training)
       const attemptData = {
         user: user.value.id,
         problem: problemId,
         answer: answer,
-        is_correct: isCorrect
+        is_correct: isCorrect,
+        difficulty: (difficulty || 'medium').toLowerCase() // easy | medium | hard for PB select
       }
 
       // Add time data if available

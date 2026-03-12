@@ -272,6 +272,8 @@ const lastAttemptTime = ref(null)
 const timeSinceReading = ref(null)
 const timeSinceLastAttempt = ref(null)
 const hasReadTopicBefore = ref(false)
+const lastReadingMaxScrollDepth = ref(null)
+const lastReadingTriggeredByError = ref(null)
 
 const attemptCount = computed(() => {
   if (!currentProblem.value) return 0
@@ -384,6 +386,8 @@ async function loadSequenceContext() {
   timeSinceReading.value = null
   timeSinceLastAttempt.value = null
   hasReadTopicBefore.value = false
+  lastReadingMaxScrollDepth.value = null
+  lastReadingTriggeredByError.value = null
 
   if (!isAuthenticated.value || !user.value || !currentProblem.value) return
 
@@ -403,6 +407,8 @@ async function loadSequenceContext() {
       lastTopicReadTime.value = readingTime
       timeSinceReading.value = Math.round((now - readingTime) / 1000) // seconds
       hasReadTopicBefore.value = true
+      lastReadingMaxScrollDepth.value = lastReading.max_scroll_depth ?? null
+      lastReadingTriggeredByError.value = lastReading.triggered_by_error ?? null
     }
 
     // Query last attempt on this topic (any problem in the topic)
@@ -555,13 +561,15 @@ async function checkAnswer(answer) {
     total_deliberation_time: timeData.activeTimeSeconds
   }
 
-  // Collect sequence/spacing context
+  // Collect sequence/spacing context (and last reading engagement for BKT)
   const sequenceData = {
     time_since_reading: timeSinceReading.value,
     time_since_last_attempt: timeSinceLastAttempt.value,
     has_read_topic_before: hasReadTopicBefore.value,
     last_topic_read_time: lastTopicReadTime.value,
-    last_attempt_time: lastAttemptTime.value
+    last_attempt_time: lastAttemptTime.value,
+    last_reading_max_scroll_depth: lastReadingMaxScrollDepth.value,
+    last_reading_triggered_by_error: lastReadingTriggeredByError.value
   }
 
   // Show result immediately to user

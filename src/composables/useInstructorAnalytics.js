@@ -433,6 +433,163 @@ export function useInstructorAnalytics() {
     return generateCSV(headers, rows)
   }
 
+  // ---------- Early warning (at-risk students from attempts) ----------
+  const AT_RISK_MIN_ATTEMPTS_LOW_ACC = 5
+  const AT_RISK_ACCURACY_THRESHOLD = 50
+  const AT_RISK_MIN_ATTEMPTS_HINT = 3
+  const AT_RISK_HINT_RATE_THRESHOLD = 0.7
+  const AT_RISK_LOW_ENGAGEMENT_ATTEMPTS = 2
+
+  async function fetchAtRiskStudents(filters = {}) {
+    if (!isInstructor()) throw new Error('Instructor access required')
+    const attempts = await fetchAttempts(filters)
+    const byKey = {}
+    for (const a of attempts) {
+      const key = a.expand?.profile?.student_key || 'unknown'
+      if (!byKey[key]) {
+        byKey[key] = { total_attempts: 0, correct_attempts: 0, hint_used_count: 0 }
+      }
+      byKey[key].total_attempts++
+      if (a.is_correct) byKey[key].correct_attempts++
+      if (a.hint_used) byKey[key].hint_used_count++
+    }
+    const totalAttemptsAcrossCourse = attempts.length
+    const hasEngagement = Object.values(byKey).some(s => s.total_attempts > AT_RISK_LOW_ENGAGEMENT_ATTEMPTS)
+    const result = []
+    for (const [student_key, m] of Object.entries(byKey)) {
+      const reasons = []
+      const accuracy = m.total_attempts > 0 ? Math.round((m.correct_attempts / m.total_attempts) * 100) : 0
+      const hintRate = m.total_attempts > 0 ? m.hint_used_count / m.total_attempts : 0
+      if (m.total_attempts >= AT_RISK_MIN_ATTEMPTS_LOW_ACC && accuracy < AT_RISK_ACCURACY_THRESHOLD) {
+        reasons.push('Low accuracy')
+      }
+      if (m.total_attempts >= AT_RISK_MIN_ATTEMPTS_HINT && hintRate > AT_RISK_HINT_RATE_THRESHOLD) {
+        reasons.push('High hint use')
+      }
+      if (hasEngagement && m.total_attempts < AT_RISK_LOW_ENGAGEMENT_ATTEMPTS) {
+        reasons.push('Very low engagement')
+      }
+      if (reasons.length) {
+        result.push({
+          student_key,
+          reasons,
+          metrics: {
+            accuracy,
+            total_attempts: m.total_attempts,
+            hint_used_count: m.hint_used_count,
+            hint_used_pct: m.total_attempts > 0 ? Math.round(hintRate * 100) : 0
+          }
+        })
+      }
+    }
+    return result
+  }
+
+  async function exportAtRiskCSV(filters = {}) {
+    const atRisk = await fetchAtRiskStudents(filters)
+    const headers = ['student_key', 'reasons', 'accuracy_pct', 'total_attempts', 'hint_used_pct']
+    const rows = atRisk.map(({ student_key, reasons, metrics }) => [
+      student_key,
+      reasons.join('; '),
+      metrics.accuracy,
+      metrics.total_attempts,
+      metrics.hint_used_pct
+    ])
+    return generateCSV(headers, rows)
+  }
+
+  // ---------- Mastery and practice (BKT + practice_attempts) ----------
+  async function fetchMasteryAndPractice(semesterId) {
+    if (!isInstructor()) throw new Error('Instructor access required')
+    const roster = await fetchRoster(semesterId)
+    const rosterUserIds = roster.filter(r => r.user).map(r => r.user)
+    const userToKey = {}
+    roster.forEach(r => {
+      if (r.user) userToKey[r.user] = r.student_key || ''
+    })
+    if (rosterUserIds.length === 0) return []
+
+    let bktRecords = []
+    let practiceRecords = []
+    try {
+      bktRecords = await pb.collection('bkt_states').getFullList({ sort: 'user' })
+      practiceRecords = await pb.collection('practice_attempts').getFullList({ sort: 'user' })
+    } catch (err) {
+      console.error('Error fetching BKT/practice for instructor:', err)
+      return []
+    }
+    const rosterSet = new Set(rosterUserIds)
+    bktRecords = bktRecords.filter(r => rosterSet.has(r.user))
+    practiceRecords = practiceRecords.filter(r => rosterSet.has(r.user))
+
+    const byKey = {}
+    rosterUserIds.forEach(uid => {
+      const key = userToKey[uid] || uid
+      byKey[key] = {
+        student_key: key,
+        bkt: { objectivesCount: 0, totalPL: 0, masteredCount: 0, lowMasteryCount: 0 },
+        practice: { totalAttempts: 0, correct: 0 }
+      }
+    })
+    for (const r of bktRecords) {
+      const key = userToKey[r.user]
+      if (!key || !byKey[key]) continue
+      byKey[key].bkt.objectivesCount++
+      byKey[key].bkt.totalPL += (r.pL != null ? r.pL : 0)
+      if (r.pL >= 0.9) byKey[key].bkt.masteredCount++
+      if (r.pL < 0.6) byKey[key].bkt.lowMasteryCount++
+    }
+    for (const r of practiceRecords) {
+      const key = userToKey[r.user]
+      if (!key || !byKey[key]) continue
+      byKey[key].practice.totalAttempts++
+      if (r.is_correct) byKey[key].practice.correct++
+    }
+    return Object.values(byKey).map(row => {
+      const b = row.bkt
+      const p = row.practice
+      return {
+        student_key: row.student_key,
+        bkt: {
+          objectivesCount: b.objectivesCount,
+          avgMasteryPct: b.objectivesCount > 0 ? Math.round((b.totalPL / b.objectivesCount) * 100) : null,
+          masteredCount: b.masteredCount,
+          lowMasteryCount: b.lowMasteryCount
+        },
+        practice: {
+          totalAttempts: p.totalAttempts,
+          correct: p.correct,
+          accuracyPct: p.totalAttempts > 0 ? Math.round((p.correct / p.totalAttempts) * 100) : null
+        }
+      }
+    })
+  }
+
+  async function exportMasteryPracticeCSV(semesterId) {
+    const rows = await fetchMasteryAndPractice(semesterId)
+    const headers = [
+      'student_key',
+      'bkt_objectives_count',
+      'bkt_avg_mastery_pct',
+      'bkt_mastered_count',
+      'bkt_low_mastery_count',
+      'practice_attempts',
+      'practice_correct',
+      'practice_accuracy_pct'
+    ]
+    const csvRows = rows.map(r => [
+      r.student_key,
+      r.bkt.objectivesCount,
+      r.bkt.avgMasteryPct ?? '',
+      r.bkt.masteredCount,
+      r.bkt.lowMasteryCount,
+      r.practice.totalAttempts,
+      r.practice.correct,
+      r.practice.accuracyPct ?? ''
+    ])
+    return generateCSV(headers, csvRows)
+  }
+
   return {
     loading,
     isInstructor,
@@ -441,6 +598,10 @@ export function useInstructorAnalytics() {
     exportAttemptsCSV,
     exportStudentSummaryCSV,
     downloadCSV,
+    fetchAtRiskStudents,
+    exportAtRiskCSV,
+    fetchMasteryAndPractice,
+    exportMasteryPracticeCSV,
     // Roster management
     parseBlackboardCSV,
     generateStudentKey,

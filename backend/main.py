@@ -51,6 +51,14 @@ class BKTUpdateRequest(BaseModel):
     total_time_seconds: Optional[int] = None
     was_maxed_out: Optional[bool] = False
     idle_detected: Optional[bool] = False
+    # Confidence and sequence engagement
+    time_to_first_selection: Optional[int] = None
+    answer_changes: Optional[int] = None
+    time_since_reading: Optional[int] = None
+    time_since_last_attempt: Optional[int] = None
+    has_read_topic_before: Optional[bool] = None
+    last_reading_max_scroll_depth: Optional[int] = None
+    last_reading_triggered_by_error: Optional[bool] = None
 
 class BKTStateResponse(BaseModel):
     """BKT state for a single objective"""
@@ -153,7 +161,7 @@ async def update_bkt(request: BKTUpdateRequest):
         raise HTTPException(status_code=503, detail="Model not loaded")
 
     try:
-        # Update BKT state using neural model with time tracking data
+        # Update BKT state using neural model with time and engagement data
         updated_state = bkt_model.update(
             user_id=request.user_id,
             objective_id=request.objective_id,
@@ -162,7 +170,14 @@ async def update_bkt(request: BKTUpdateRequest):
             active_time_seconds=request.active_time_seconds,
             total_time_seconds=request.total_time_seconds,
             was_maxed_out=request.was_maxed_out,
-            idle_detected=request.idle_detected
+            idle_detected=request.idle_detected,
+            time_to_first_selection=request.time_to_first_selection,
+            answer_changes=request.answer_changes,
+            time_since_reading=request.time_since_reading,
+            time_since_last_attempt=request.time_since_last_attempt,
+            has_read_topic_before=request.has_read_topic_before,
+            last_reading_max_scroll_depth=request.last_reading_max_scroll_depth,
+            last_reading_triggered_by_error=request.last_reading_triggered_by_error
         )
 
         return BKTStateResponse(

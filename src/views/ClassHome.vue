@@ -7,9 +7,15 @@
         <div class="class-info">
           <h1>{{ currentClass.name }}</h1>
           <p>{{ currentClass.description }}</p>
-          <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-            Stuck on an assignment? Get help →
-          </router-link>
+          <div class="header-links">
+            <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+              Stuck on an assignment? Get help →
+            </router-link>
+            <span class="header-links-sep">·</span>
+            <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
+            <span class="header-links-sep">·</span>
+            <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
+          </div>
         </div>
       </div>
 
@@ -224,7 +230,7 @@
                   <div class="phase-icon">🎯</div>
                   <div class="phase-info">
                     <h4>Practice</h4>
-                    <p>Guided walkthroughs</p>
+                    <p>Guided tasks</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </router-link>
@@ -232,7 +238,7 @@
                   <div class="phase-icon">🎯</div>
                   <div class="phase-info">
                     <h4>Practice</h4>
-                    <p>Guided walkthroughs</p>
+                    <p>Guided tasks</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </span>
@@ -245,7 +251,7 @@
                   <div class="phase-icon">✅</div>
                   <div class="phase-info">
                     <h4>Self-Check</h4>
-                    <p>Verify your skills</p>
+                    <p>Test your knowledge</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </router-link>
@@ -253,7 +259,7 @@
                   <div class="phase-icon">✅</div>
                   <div class="phase-info">
                     <h4>Self-Check</h4>
-                    <p>Verify your skills</p>
+                    <p>Test your knowledge</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </span>
@@ -266,7 +272,7 @@
                   <div class="phase-icon">✍️</div>
                   <div class="phase-info">
                     <h4>Apply</h4>
-                    <p>Independent practice</p>
+                    <p>Independent tasks</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </router-link>
@@ -274,7 +280,7 @@
                   <div class="phase-icon">✍️</div>
                   <div class="phase-info">
                     <h4>Apply</h4>
-                    <p>Independent practice</p>
+                    <p>Independent tasks</p>
                   </div>
                   <span class="card-arrow">→</span>
                 </span>
@@ -880,10 +886,17 @@ watch(() => route.fullPath, () => {
   color: var(--text-secondary);
 }
 
-.assignment-help-link {
-  display: inline-block;
+.header-links {
   margin-top: 0.75rem;
   font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.assignment-help-link {
+  display: inline-block;
   color: var(--class-color, var(--primary));
   text-decoration: none;
   font-weight: 500;
@@ -891,6 +904,11 @@ watch(() => route.fullPath, () => {
 
 .assignment-help-link:hover {
   text-decoration: underline;
+}
+
+.header-links-sep {
+  color: var(--text-muted);
+  margin: 0 0.15rem;
 }
 
 /* Section Title */

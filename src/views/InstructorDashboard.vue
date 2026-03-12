@@ -270,6 +270,107 @@
           </div>
         </div>
 
+        <!-- Early Warning (at-risk students) -->
+        <div class="content-section">
+          <h2>Early Warning – At-Risk Students</h2>
+          <p class="section-description">
+            Students flagged by low accuracy, high hint use, or very low engagement (LMS attempts). Uses current filters above.
+          </p>
+          <button class="btn-secondary" @click="loadAtRisk" :disabled="loading">
+            {{ loading ? 'Loading...' : 'Load At-Risk List' }}
+          </button>
+          <button
+            v-if="atRiskList.length"
+            class="btn-primary"
+            style="margin-left: 0.5rem;"
+            @click="handleExportAtRisk"
+            :disabled="loading"
+          >
+            Download At-Risk CSV
+          </button>
+          <div v-if="atRiskList.length" class="preview-table-wrapper" style="margin-top: 1rem;">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Student key</th>
+                  <th>Reasons</th>
+                  <th>Accuracy %</th>
+                  <th>Attempts</th>
+                  <th>Hint %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in atRiskList" :key="row.student_key">
+                  <td><code>{{ row.student_key }}</code></td>
+                  <td>{{ row.reasons.join(', ') }}</td>
+                  <td>{{ row.metrics.accuracy }}</td>
+                  <td>{{ row.metrics.total_attempts }}</td>
+                  <td>{{ row.metrics.hint_used_pct }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p v-else-if="atRiskList.length === 0 && !loading" class="preview-note">Click "Load At-Risk List" to run with current filters.</p>
+        </div>
+
+        <!-- Mastery & Practice (BKT + statistics practice) -->
+        <div class="content-section">
+          <h2>Mastery & Practice</h2>
+          <p class="section-description">
+            BKT mastery and statistics practice per student for the selected semester (claimed roster only).
+          </p>
+          <div class="filters-grid" style="max-width: 300px; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label for="masterySemester">Semester</label>
+              <select id="masterySemester" v-model="masterySemesterId">
+                <option value="">Select semester</option>
+                <option v-for="sem in semesters" :key="sem.id" :value="sem.id">
+                  {{ sem.name || sem.code }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-secondary" @click="loadMasteryPractice" :disabled="loading || !masterySemesterId">
+            {{ loading ? 'Loading...' : 'Load Mastery & Practice' }}
+          </button>
+          <button
+            v-if="masteryPracticeList.length && masterySemesterId"
+            class="btn-primary"
+            style="margin-left: 0.5rem;"
+            @click="handleExportMasteryPractice"
+            :disabled="loading"
+          >
+            Download Mastery & Practice CSV
+          </button>
+          <div v-if="masteryPracticeList.length" class="preview-table-wrapper" style="margin-top: 1rem;">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Student key</th>
+                  <th>BKT objectives</th>
+                  <th>Avg mastery %</th>
+                  <th>Mastered</th>
+                  <th>Low mastery</th>
+                  <th>Practice attempts</th>
+                  <th>Practice accuracy %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in masteryPracticeList" :key="row.student_key">
+                  <td><code>{{ row.student_key }}</code></td>
+                  <td>{{ row.bkt.objectivesCount }}</td>
+                  <td>{{ row.bkt.avgMasteryPct ?? '–' }}</td>
+                  <td>{{ row.bkt.masteredCount }}</td>
+                  <td>{{ row.bkt.lowMasteryCount }}</td>
+                  <td>{{ row.practice.totalAttempts }}</td>
+                  <td>{{ row.practice.accuracyPct ?? '–' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p v-else-if="masteryPracticeList.length === 0 && !loading && masterySemesterId" class="preview-note">No data for this semester or instructor cannot read BKT/practice yet (check PocketBase rules).</p>
+        </div>
+
         <!-- Data Privacy Notice -->
         <div class="privacy-notice">
           <h3>Data Privacy</h3>
@@ -297,6 +398,10 @@ const {
   exportAttemptsCSV,
   exportStudentSummaryCSV,
   downloadCSV,
+  fetchAtRiskStudents,
+  exportAtRiskCSV,
+  fetchMasteryAndPractice,
+  exportMasteryPracticeCSV,
   parseBlackboardCSV,
   generateStudentKey,
   fetchRoster,
@@ -326,6 +431,11 @@ const csvFile = ref(null)
 const parsedRows = ref([])
 const parseError = ref('')
 const createResults = ref(null)
+
+// Early warning and mastery tab state
+const atRiskList = ref([])
+const masteryPracticeList = ref([])
+const masterySemesterId = ref('')
 
 // Computed for roster preview
 const selectedSemester = computed(() =>
@@ -466,6 +576,29 @@ async function loadPreviewStats() {
     uniqueItems: uniqueItems.size,
     overallAccuracy
   }
+}
+
+async function loadAtRisk() {
+  atRiskList.value = await fetchAtRiskStudents(filters)
+}
+
+async function handleExportAtRisk() {
+  const csv = await exportAtRiskCSV(filters)
+  const timestamp = new Date().toISOString().slice(0, 10)
+  downloadCSV(csv, `at-risk-${timestamp}.csv`)
+}
+
+async function loadMasteryPractice() {
+  if (!masterySemesterId.value) return
+  masteryPracticeList.value = await fetchMasteryAndPractice(masterySemesterId.value)
+}
+
+async function handleExportMasteryPractice() {
+  if (!masterySemesterId.value) return
+  const csv = await exportMasteryPracticeCSV(masterySemesterId.value)
+  const sem = semesters.value.find(s => s.id === masterySemesterId.value)
+  const code = sem?.code || 'mastery'
+  downloadCSV(csv, `mastery-practice-${code}.csv`)
 }
 
 onMounted(() => {

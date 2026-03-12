@@ -155,6 +155,27 @@
           <div class="drawer-section help-section">
             <h3>❓ Need Help?</h3>
             <div class="help-links">
+              <router-link
+                :to="`/class/${classIdForGuides}/jamovi-guides`"
+                class="help-link"
+                @click="closeDrawer"
+              >
+                <span>📊</span> Jamovi guides
+              </router-link>
+              <router-link
+                :to="`/class/${classIdForGuides}/excel-guides`"
+                class="help-link"
+                @click="closeDrawer"
+              >
+                <span>📗</span> Excel guides
+              </router-link>
+              <router-link
+                :to="`/class/${classIdForGuides}/assignment-help`"
+                class="help-link"
+                @click="closeDrawer"
+              >
+                <span>📋</span> Assignment help
+              </router-link>
               <button class="help-link" @click="goToSupport">
                 <span>💬</span> Get Support
               </button>
@@ -211,6 +232,7 @@ const props = defineProps({
 const emit = defineEmits(['pop-out-instructions', 'start-recording'])
 
 const route = useRoute()
+const classIdForGuides = computed(() => route.params.classId || 'statistics')
 const isOpen = ref(false)
 const microphoneEnabled = ref(false)
 const cameraEnabled = ref(false)
@@ -249,7 +271,7 @@ const toggleButtonStyle = computed(() => {
   if (p.edge === 'right') {
     return {
       ...base,
-      right: '1.5rem',
+      right: 0,
       left: 'auto',
       top: p.top != null ? `${p.top}px` : '50%',
       transform: p.top != null ? 'none' : 'translateY(-50%)',
@@ -259,7 +281,7 @@ const toggleButtonStyle = computed(() => {
   if (p.edge === 'left') {
     return {
       ...base,
-      left: '1.5rem',
+      left: 0,
       right: 'auto',
       top: p.top != null ? `${p.top}px` : '50%',
       transform: p.top != null ? 'none' : 'translateY(-50%)',
@@ -503,10 +525,10 @@ document.addEventListener('keydown', (e) => {
   z-index: 1000;
 }
 
-/* Floating Toggle Button */
+/* Floating Toggle Button - flush to viewport edge */
 .drawer-toggle-btn {
   position: fixed;
-  right: 1.5rem;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -856,6 +878,7 @@ document.addEventListener('keydown', (e) => {
   cursor: pointer;
   transition: all 0.2s;
   font-size: 0.9375rem;
+  text-decoration: none;
 }
 
 .help-link:hover {
@@ -892,7 +915,7 @@ document.addEventListener('keydown', (e) => {
   }
 
   .drawer-toggle-btn {
-    right: 1rem;
+    right: 0;
   }
 }
 </style>

@@ -27,11 +27,14 @@ Assessment Types:
 import { module3UnifiedLessons } from './softwareLessons_module3_unified.js'
 import { module5UnifiedLessons } from './softwareLessons_module5_unified.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
+import { excelGuidesLessons } from './softwareLessons_excel_guides.js'
 
 export const softwareLessons = [
   // ============ STATISTICS MODULE 3: Software Basics (Unified Lessons) ============
   ...module3UnifiedLessons,
 
+  // ============ Excel Guides (Stats Made Easy style) ============
+  ...excelGuidesLessons,
 
   {
     id: 'jamovi-descriptive-stats',

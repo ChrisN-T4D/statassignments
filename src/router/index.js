@@ -20,6 +20,7 @@ import About from '../views/About.vue'
 import AssignmentHelp from '../views/AssignmentHelp.vue'
 import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
+import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -53,6 +54,18 @@ const routes = [
     name: 'assignment-help-detail',
     component: AssignmentHelpDetail,
     props: true
+  },
+  {
+    path: '/class/:classId/jamovi-guides',
+    name: 'jamovi-guides',
+    component: SoftwareGuidesIndex,
+    props: (route) => ({ classId: route.params.classId, software: 'jamovi' })
+  },
+  {
+    path: '/class/:classId/excel-guides',
+    name: 'excel-guides',
+    component: SoftwareGuidesIndex,
+    props: (route) => ({ classId: route.params.classId, software: 'excel' })
   },
   {
     path: '/class/:classId/topics',

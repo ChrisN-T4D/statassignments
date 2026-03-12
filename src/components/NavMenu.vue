@@ -29,6 +29,24 @@
           </span>
           <span>{{ selectedClass.short_name }}</span>
         </router-link>
+        <router-link
+          v-if="selectedClass"
+          :to="`/class/${selectedClassId}/jamovi-guides`"
+          class="dropdown-item dropdown-item-sub"
+          role="menuitem"
+          @click="close"
+        >
+          Jamovi guides
+        </router-link>
+        <router-link
+          v-if="selectedClass"
+          :to="`/class/${selectedClassId}/excel-guides`"
+          class="dropdown-item dropdown-item-sub"
+          role="menuitem"
+          @click="close"
+        >
+          Excel guides
+        </router-link>
         <router-link v-if="isAdmin" to="/admin" class="dropdown-item" role="menuitem" @click="close">Admin</router-link>
         <router-link v-if="isInstructor" to="/instructor" class="dropdown-item" role="menuitem" @click="close">Dashboard</router-link>
         <router-link v-if="isAuthenticated" to="/profile" class="dropdown-item" role="menuitem" @click="close">Profile</router-link>
@@ -165,6 +183,16 @@ onUnmounted(() => {
 
 .dropdown-item:hover {
   background: var(--bg-elevated);
+}
+
+.dropdown-item-sub {
+  padding-left: 2.25rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.dropdown-item-sub:hover {
+  color: var(--text-primary);
 }
 
 .dropdown-item-class .class-icon {

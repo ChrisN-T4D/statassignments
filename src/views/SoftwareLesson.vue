@@ -9,6 +9,7 @@
           <span class="time-estimate">{{ lesson.estimatedTime }} min</span>
         </div>
         <h1>{{ lesson.title }}</h1>
+        <p v-if="lesson.overview" class="lesson-overview">{{ lesson.overview }}</p>
         <div class="objectives">
           <h3>Learning Objectives</h3>
           <ul>
@@ -64,7 +65,7 @@
             <!-- Current Section Content -->
             <div v-if="currentSection" class="section-content">
               <div class="section-header">
-                <h3>{{ currentSection.title }}</h3>
+                <h3>{{ currentSectionIndex + 1 }}. {{ currentSection.title }}</h3>
                 <span v-if="currentSection.estimatedTime" class="section-time">
                   {{ currentSection.estimatedTime }} min
                 </span>
@@ -370,6 +371,7 @@
           <div class="phase-header">
             <span class="phase-badge we-do">Practice</span>
             <h2>{{ lesson.phases.weDo.title }}</h2>
+            <p class="phase-sublabel">Guided task</p>
           </div>
 
           <p class="phase-instructions">{{ lesson.phases.weDo.instructions }}</p>
@@ -423,6 +425,7 @@
           <div class="phase-header">
             <span class="phase-badge self-check">Self-Check</span>
             <h2>Skill Verification</h2>
+            <p class="phase-sublabel">Test your knowledge</p>
           </div>
 
           <p class="phase-instructions">
@@ -724,6 +727,13 @@
           </div>
         </div>
       </div>
+
+      <!-- Next guide (when opened from Jamovi/Excel guides index) -->
+      <div v-if="nextGuideLink" class="next-guide-footer">
+        <router-link :to="nextGuideLink.to" class="next-guide-link">
+          Next guide: {{ nextGuideLink.title }} →
+        </router-link>
+      </div>
     </div>
     <!-- Completion Summary -->
     <div v-if="showSummary" class="summary-overlay">
@@ -760,6 +770,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 import { getLessonById } from '../data/softwareLessons'
 import { getModuleById } from '../data/modules'
+import { getGuidesFlat } from '../data/softwareGuides'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { useSoftwareLessonMetrics } from '../composables/useSoftwareLessonMetrics'
 import { getCompletedPhases, setCompletedPhases } from '../composables/useLessonPhaseProgress'
@@ -846,6 +857,23 @@ const backLink = computed(() => {
     return `/class/${classId}?module=${moduleId}`
   }
   return `/class/${classId}`
+})
+
+const nextGuideLink = computed(() => {
+  const from = route.query.from
+  if (from !== 'jamovi-guides' && from !== 'excel-guides') return null
+  const classId = route.params.classId || 'statistics'
+  const lessonId = route.params.lessonId
+  if (!lessonId) return null
+  const software = from === 'jamovi-guides' ? 'jamovi' : 'excel'
+  const flat = getGuidesFlat(software)
+  const idx = flat.findIndex(l => l.id === lessonId)
+  if (idx < 0 || idx >= flat.length - 1) return null
+  const next = flat[idx + 1]
+  return {
+    title: next.title,
+    to: { path: `/class/${classId}/lesson/${next.id}`, query: { from } }
+  }
 })
 
 const totalQuestions = computed(() => {
@@ -1582,6 +1610,14 @@ watch(currentPhase, () => {
   font-size: 1.75rem;
 }
 
+.lesson-overview {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
 .objectives {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -1693,6 +1729,13 @@ watch(currentPhase, () => {
 .phase-header h2 {
   margin: 0;
   font-size: 1.25rem;
+}
+
+.phase-header .phase-sublabel {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: normal;
 }
 
 /* Content Blocks */
@@ -2565,6 +2608,23 @@ watch(currentPhase, () => {
 .phase-actions {
   margin-top: 2rem;
   text-align: center;
+}
+
+.next-guide-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.next-guide-link {
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.next-guide-link:hover {
+  text-decoration: underline;
 }
 
 .btn-primary {

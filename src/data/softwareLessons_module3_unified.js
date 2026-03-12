@@ -768,6 +768,7 @@ export const module3UnifiedLessons = [
     module: 'stats-module-3',
     title: 'Excel Software Fundamentals',
     software: 'excel',
+    guideOrder: 1,
     objectives: [
       'Identify key worksheet elements (rows, columns, cells)',
       'Enter data in a clean, rectangular format',

@@ -110,7 +110,7 @@ export async function initializeBKT(objectiveId, customParams = {}) {
 /**
  * Call FastAPI Neural BKT backend
  */
-async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null) {
+async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null, confidenceData = null, sequenceData = null) {
   let userId = pb.authStore.record?.id
 
   // If token exists but no record, try refreshing auth to get the record
@@ -137,7 +137,7 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null
   }
 
   try {
-    // Prepare request body with time data
+    // Prepare request body with time and engagement data
     const requestBody = {
       user_id: userId,
       objective_id: objectiveId,
@@ -151,6 +151,21 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null
       requestBody.total_time_seconds = timeData.totalTimeSeconds
       requestBody.was_maxed_out = timeData.wasMaxedOut
       requestBody.idle_detected = timeData.idleDetected
+    }
+
+    // Add confidence indicators if available
+    if (confidenceData) {
+      if (confidenceData.time_to_first_selection != null) requestBody.time_to_first_selection = confidenceData.time_to_first_selection
+      if (confidenceData.answer_changes != null) requestBody.answer_changes = confidenceData.answer_changes
+    }
+
+    // Add sequence/spacing and reading engagement if available
+    if (sequenceData) {
+      if (sequenceData.time_since_reading != null) requestBody.time_since_reading = sequenceData.time_since_reading
+      if (sequenceData.time_since_last_attempt != null) requestBody.time_since_last_attempt = sequenceData.time_since_last_attempt
+      if (sequenceData.has_read_topic_before != null) requestBody.has_read_topic_before = sequenceData.has_read_topic_before
+      if (sequenceData.last_reading_max_scroll_depth != null) requestBody.last_reading_max_scroll_depth = sequenceData.last_reading_max_scroll_depth
+      if (sequenceData.last_reading_triggered_by_error != null) requestBody.last_reading_triggered_by_error = sequenceData.last_reading_triggered_by_error
     }
 
     const response = await fetch(`${FASTAPI_URL}/bkt/update`, {
@@ -196,16 +211,14 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null
  * @param {boolean} isCorrect - Whether the answer was correct
  * @param {string} difficulty - Question difficulty ('easy', 'medium', 'hard')
  * @param {object} timeData - Time tracking data from useTimeTracking (optional)
- * @param {number} timeData.activeTimeSeconds - Active engagement time
- * @param {number} timeData.totalTimeSeconds - Total elapsed time
- * @param {boolean} timeData.wasMaxedOut - Whether max time was reached
- * @param {boolean} timeData.idleDetected - Whether significant idle time was detected
+ * @param {object} confidenceData - Confidence indicators (optional): time_to_first_selection, answer_changes
+ * @param {object} sequenceData - Sequence/spacing and reading (optional): time_since_reading, time_since_last_attempt, has_read_topic_before, last_reading_max_scroll_depth, last_reading_triggered_by_error
  * @returns {object} Updated BKT state with new mastery probability
  */
-export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium', timeData = null) {
+export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium', timeData = null, confidenceData = null, sequenceData = null) {
   // Try Neural BKT first if enabled
   if (USE_NEURAL_BKT) {
-    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty, timeData)
+    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty, timeData, confidenceData, sequenceData)
     if (neuralState) {
       // Save to localStorage for caching (Neural BKT already saved to its database)
       try {

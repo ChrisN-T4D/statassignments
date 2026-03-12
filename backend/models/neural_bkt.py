@@ -393,6 +393,55 @@ class NeuralBKTModel:
             'pS_adjustment': pS_adj
         }
 
+    def _get_engagement_adjustments(
+        self,
+        time_to_first_selection: Optional[int],
+        answer_changes: Optional[int],
+        time_since_reading: Optional[int],
+        time_since_last_attempt: Optional[int],
+        has_read_topic_before: Optional[bool],
+        last_reading_max_scroll_depth: Optional[int],
+        last_reading_triggered_by_error: Optional[bool],
+        difficulty: str,
+        is_correct: bool
+    ) -> Dict[str, float]:
+        """
+        Heuristic adjustments from confidence, sequence, and reading engagement.
+        Returns pG_adjustment and pS_adjustment (additive to time adjustments).
+        """
+        pG_adj = 0.0
+        pS_adj = 0.0
+
+        # Confidence: fast first selection or answer changes suggest guessing if correct
+        if time_to_first_selection is not None:
+            if time_to_first_selection < 5 and is_correct:
+                pG_adj += 0.08  # Very fast correct = more guess-like
+            elif 5 <= time_to_first_selection <= 25 and is_correct:
+                pG_adj -= 0.02  # Thoughtful correct = slightly more reliable
+        if answer_changes is not None and answer_changes > 0:
+            if is_correct:
+                pG_adj += 0.05  # Changed answer then correct = less confident
+            else:
+                pS_adj -= 0.02  # Changed answer then wrong = uncertain, slight slip reduction
+
+        # Sequence: recent reading or prior reading can make correct more reliable
+        if has_read_topic_before is not None and has_read_topic_before and is_correct:
+            if time_since_reading is not None and time_since_reading < 300:
+                pG_adj -= 0.03  # Read within 5 min + correct = more likely real learning
+            else:
+                pG_adj -= 0.01  # Had read before = slightly more reliable
+
+        # Reading quality: high scroll depth = substantive reading
+        if last_reading_max_scroll_depth is not None and last_reading_max_scroll_depth >= 80 and is_correct:
+            pG_adj -= 0.02  # Read most of topic + correct = more reliable
+        # Return visit after error: they just reviewed, correct is more credible
+        if last_reading_triggered_by_error is not None and last_reading_triggered_by_error and is_correct:
+            pG_adj -= 0.04  # Came back after wrong answer and got right = likely learned
+
+        pG_adj = max(-0.08, min(0.12, pG_adj))
+        pS_adj = max(-0.04, min(0.08, pS_adj))
+        return {'pG_adjustment': pG_adj, 'pS_adjustment': pS_adj}
+
     def update(
         self,
         user_id: str,
@@ -402,7 +451,14 @@ class NeuralBKTModel:
         active_time_seconds: Optional[int] = None,
         total_time_seconds: Optional[int] = None,
         was_maxed_out: Optional[bool] = False,
-        idle_detected: Optional[bool] = False
+        idle_detected: Optional[bool] = False,
+        time_to_first_selection: Optional[int] = None,
+        answer_changes: Optional[int] = None,
+        time_since_reading: Optional[int] = None,
+        time_since_last_attempt: Optional[int] = None,
+        has_read_topic_before: Optional[bool] = None,
+        last_reading_max_scroll_depth: Optional[int] = None,
+        last_reading_triggered_by_error: Optional[bool] = None
     ) -> Dict:
         """
         Update BKT state after student response
@@ -433,7 +489,6 @@ class NeuralBKTModel:
         state = self.student_states[user_id][objective_id]
 
         # Get time-based parameter adjustments (heuristic-based for now)
-        # Future: Replace with trained neural network that learns time patterns from data
         time_adjustments = self._get_time_based_adjustments(
             active_time_seconds,
             total_time_seconds,
@@ -442,18 +497,35 @@ class NeuralBKTModel:
             difficulty,
             is_correct
         )
+        # Get engagement-based adjustments (confidence, sequence, reading)
+        engagement_adjustments = self._get_engagement_adjustments(
+            time_to_first_selection,
+            answer_changes,
+            time_since_reading,
+            time_since_last_attempt,
+            has_read_topic_before,
+            last_reading_max_scroll_depth,
+            last_reading_triggered_by_error,
+            difficulty,
+            is_correct
+        )
+        # Combine and clamp total adjustments
+        total_pG = time_adjustments['pG_adjustment'] + engagement_adjustments['pG_adjustment']
+        total_pS = time_adjustments['pS_adjustment'] + engagement_adjustments['pS_adjustment']
+        total_pG = max(-0.15, min(0.25, total_pG))
+        total_pS = max(-0.08, min(0.18, total_pS))
 
         # Update prototype probabilities
         prototype_probs = self._sequential_bayesian_update(user_id, is_correct, difficulty)
 
-        # Get weighted average of BKT updates across prototypes with time adjustments
+        # Get weighted average of BKT updates across prototypes with time + engagement adjustments
         pL_updates = []
         for i, prototype in enumerate(self.prototypes):
             params = self._get_prototype_adjusted_params(prototype, difficulty)
 
-            # Apply time-based adjustments to parameters
-            params['pG'] = max(0.01, min(0.99, params['pG'] + time_adjustments['pG_adjustment']))
-            params['pS'] = max(0.01, min(0.99, params['pS'] + time_adjustments['pS_adjustment']))
+            # Apply combined time + engagement adjustments to parameters
+            params['pG'] = max(0.01, min(0.99, params['pG'] + total_pG))
+            params['pS'] = max(0.01, min(0.99, params['pS'] + total_pS))
 
             pL_new = self._bkt_update(state['pL'], is_correct, params)
             pL_updates.append(pL_new)
