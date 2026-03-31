@@ -1,0 +1,138 @@
+<section class="module-content" aria-labelledby="independence-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="independence-title">10.2 The χ² Test of Independence</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The χ² test of independence determines whether two categorical variables are associated. It answers: "Does the distribution of Variable A depend on the value of Variable B?"</p>
+  </div>
+
+  <h3>When to Use</h3>
+  <ul>
+    <li>You have <strong>TWO categorical variables</strong></li>
+    <li>You want to test if they are associated/related</li>
+    <li>Data organized in a <strong>contingency table</strong></li>
+    <li>Example: Is species (robot/human) associated with preference (puppy/flower/data)?</li>
+  </ul>
+
+  <h3>The Chapek 9 Example</h3>
+  <div class="example-box">
+    <p>Robots and humans were asked their preference. Are species and choice independent?</p>
+    <table class="stats-table">
+      <tr>
+        <th></th>
+        <th>Robot</th>
+        <th>Human</th>
+        <th>Total</th>
+      </tr>
+      <tr><td><strong>Puppy</strong></td><td>13</td><td>15</td><td>28</td></tr>
+      <tr><td><strong>Flower</strong></td><td>30</td><td>13</td><td>43</td></tr>
+      <tr><td><strong>Data</strong></td><td>44</td><td>65</td><td>109</td></tr>
+      <tr><th>Total</th><th>87</th><th>93</th><th>180</th></tr>
+    </table>
+  </div>
+
+  <h3>Hypotheses</h3>
+  <div class="formula-box">
+    <p><strong>H₀:</strong> Species and choice are independent (no association)</p>
+    <p><strong>H₁:</strong> Species and choice are associated (related)</p>
+
+    <p><em>Equivalently:</em></p>
+    <p><strong>H₀:</strong> P(choice | robot) = P(choice | human) for all choices</p>
+    <p><strong>H₁:</strong> At least one choice probability differs by species</p>
+  </div>
+
+  <h3>Expected Frequencies</h3>
+  <p>Under independence, expected frequency for cell (row i, column j) is:</p>
+  <div class="formula-box">
+    <p><strong>E<sub>ij</sub> = (Row<sub>i</sub> Total × Column<sub>j</sub> Total) / N</strong></p>
+  </div>
+
+  <div class="example-box">
+    <h4>Calculating E for Robot-Puppy cell:</h4>
+    <p>E = (28 × 87) / 180 = 2436 / 180 = 13.53</p>
+
+    <h4>All expected frequencies:</h4>
+    <table class="stats-table">
+      <tr><th></th><th>Robot</th><th>Human</th></tr>
+      <tr><td>Puppy</td><td>13.53</td><td>14.47</td></tr>
+      <tr><td>Flower</td><td>20.78</td><td>22.22</td></tr>
+      <tr><td>Data</td><td>52.69</td><td>56.31</td></tr>
+    </table>
+  </div>
+
+  <h3>The Test Statistic</h3>
+  <div class="formula-box">
+    <p><strong>χ² = Σ Σ [(O<sub>ij</sub> - E<sub>ij</sub>)² / E<sub>ij</sub>]</strong></p>
+    <p>Sum over all rows (i) and columns (j)</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Calculation:</h4>
+    <p>χ² = (13-13.53)²/13.53 + (15-14.47)²/14.47 + ... [for all 6 cells]</p>
+    <p>χ² = 0.02 + 0.02 + 4.09 + 3.83 + 1.43 + 1.34 = <strong>10.72</strong></p>
+
+    <p><strong>Degrees of freedom:</strong></p>
+    <p>df = (r - 1)(c - 1) = (3 - 1)(2 - 1) = 2 × 1 = <strong>2</strong></p>
+
+    <p><strong>Result:</strong></p>
+    <p>χ²(2) = 10.72, p = .005</p>
+    <p>Since p < .05, <strong>reject H₀</strong></p>
+
+    <p><strong>Conclusion:</strong> There is a significant association between species and choice (χ²(2) = 10.72, p = .005). Robots prefer flowers more than humans, while humans prefer data files.</p>
+  </div>
+
+  <h3>Degrees of Freedom for r × c Tables</h3>
+  <div class="concept-box">
+    <h4>Why df = (r-1)(c-1)?</h4>
+    <p>Once you know:</p>
+    <ul>
+      <li>All row totals (r constraints)</li>
+      <li>All column totals (c constraints)</li>
+      <li>The grand total (1 constraint)</li>
+    </ul>
+    <p>Only (r-1)(c-1) cells are "free to vary." The rest are determined.</p>
+
+    <p><strong>Example (2×2 table):</strong> If you know 1 cell value + all margins, you can calculate the other 3 cells. So df = (2-1)(2-1) = 1.</p>
+  </div>
+
+  <div class="Excel-box">
+    <h3>in Excel</h3>
+    <ol>
+      <li><strong>Analyses → Frequencies → Contingency Tables → Independent Samples</strong></li>
+      <li>Move one variable to <strong>Rows</strong></li>
+      <li>Move other variable to <strong>Columns</strong></li>
+      <li>Under <strong>Statistics</strong>: χ² is shown by default</li>
+      <li>Under <strong>Cells</strong>: Check <strong>"Expected counts"</strong> to see E<sub>ij</sub></li>
+      <li>Under <strong>Statistics</strong>: Check <strong>"Cramér's V"</strong> for effect size</li>
+    </ol>
+  </div>
+
+  <h3>Writing Up Results</h3>
+  <div class="example-box">
+    <p><em>"Pearson's χ² revealed a significant association between species and choice (χ²(2) = 10.7, p < .01, Cramér's V = 0.24). Robots were more likely to choose flowers, whereas humans preferred data files."</em></p>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Tests <strong>association between two categorical variables</strong></li>
+      <li>Data in <strong>contingency table</strong> (cross-tabulation)</li>
+      <li>df = (rows - 1)(columns - 1)</li>
+      <li>Expected frequencies: E<sub>ij</sub> = (Row Total × Col Total) / N</li>
+      <li>Always report <strong>effect size</strong> (Cramér's V)</li>
+      <li>Describe the <strong>pattern</strong> of association, not just significance</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Mistakes</h3>
+    <ul>
+      <li><strong>Using percentages instead of counts:</strong> χ² requires actual frequencies</li>
+      <li><strong>Not checking expected frequencies:</strong> All E<sub>ij</sub> should be ≥ 5</li>
+      <li><strong>Confusing independence with goodness-of-fit:</strong> Independence = 2 variables, GOF = 1 variable</li>
+      <li><strong>Only reporting χ² and p:</strong> Always describe the pattern of association</li>
+    </ul>
+  </div>
+</section>

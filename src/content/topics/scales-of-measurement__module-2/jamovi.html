@@ -1,0 +1,434 @@
+<section class="module-content" aria-labelledby="scales-title">
+  <h2 id="scales-title">2.2 Scales of measurement and types of variables</h2>
+
+  <p>
+    As the previous section indicated, sometimes the data that you collect is best thought of as
+    assigning people (or other things) to categories, and sometimes the data that you collect is
+    numerical in nature. When I introduced this distinction, I was a bit cautious about distinguishing
+    between them, but now that we are going to delve more deeply into measurement it is time
+    to introduce some fundamental ideas about the <strong>scales of measurement</strong>.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Scales of Measurement (NOIR)</h4>
+    <p>
+      <strong>Scales of measurement</strong> describe the mathematical properties of variables and determine
+      which statistical operations are meaningful. The four main scales, often remembered by the
+      acronym <strong>NOIR</strong>, are:
+    </p>
+    <ul>
+      <li><strong>N</strong>ominal – Categories with no order (e.g., eye color, gender)</li>
+      <li><strong>O</strong>rdinal – Ordered categories without equal intervals (e.g., finishing positions, rankings)</li>
+      <li><strong>I</strong>nterval – Equal intervals but no true zero (e.g., temperature in Celsius, Likert scales)</li>
+      <li><strong>R</strong>atio – Equal intervals with a true zero (e.g., height, response time, age)</li>
+    </ul>
+    <p>The scale determines what statistics you can calculate—you can't meaningfully average nominal data, for example!</p>
+  </div>
+
+  <h3>Nominal scale</h3>
+  <p>
+    A <strong>nominal scale</strong> variable (also referred to as a <strong>categorical</strong> variable) is one in which
+    there is no particular relationship between the different possibilities. For these kinds of
+    variables, it doesn't make any sense to say that one of them is "bigger" or "better" than any
+    other one, and it absolutely doesn't make any sense to average them. The classic example for
+    this is "eye colour". Eyes can be blue, green and brown, among other possibilities, but none of
+    them is any "better" than any other one. As a result, it would feel really weird to talk about an
+    "average eye colour". Similarly, gender is nominal too: male isn't better or worse than female,
+    neither does it make sense to talk about an "average gender". In short, nominal scale variables
+    are those for which the only thing you can say about the different possibilities is that they are
+    different. That's it.
+  </p>
+
+  <p>
+    Let's take a slightly closer look at this. Suppose I was doing research on how people commute
+    to and from work. One variable I would have to measure would be what kind of transportation
+    people use to get to work. This "transport type" variable could have quite a few possible values,
+    including: "train", "bus", "car", "bicycle", etc. For now, let's suppose that these four are the only
+    possibilities, and suppose that when I ask 100 people how they got to work today, and I get this:
+  </p>
+
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>Transportation</th>
+        <th>Number of people</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Train</td>
+        <td>12</td>
+      </tr>
+      <tr>
+        <td>Bus</td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td>Car</td>
+        <td>48</td>
+      </tr>
+      <tr>
+        <td>Bicycle</td>
+        <td>10</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    So, what's the average transportation type? Obviously, the answer here is that there isn't one. It's
+    a silly question to ask. You can say that travel by car is the most popular method, and travel by
+    train is the least popular method, but that's about all. Similarly, notice that the order in which
+    I list the options isn't very interesting. I could have chosen to display the data like this and
+    nothing really changes:
+  </p>
+
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>Transportation</th>
+        <th>Number of people</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bicycle</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>Train</td>
+        <td>12</td>
+      </tr>
+      <tr>
+        <td>Bus</td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td>Car</td>
+        <td>48</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Ordinal scale</h3>
+  <p>
+    <strong>Ordinal scale</strong> variables have a bit more structure than nominal scale variables, but not by
+    a lot. An ordinal scale variable is one in which there is a natural, meaningful way to order the
+    different possibilities, but you can't do anything else. The usual example given of an ordinal
+    variable is "finishing position in a race". You can say that the person who finished first was
+    faster than the person who finished second, but you don't know how much faster. As a consequence, we know that 1st > 2nd, and we know that 2nd > 3rd, but the difference between 1st and
+    2nd might be much larger than the difference between 2nd and 3rd.
+  </p>
+
+  <p>
+    Here's a more psychologically interesting example. Suppose I'm interested in people's attitudes
+    towards climate change, and I ask them to pick one of these four statements that most closely
+    matches their beliefs:
+  </p>
+
+  <ul>
+    <li>(1) Temperatures are rising, because of human activity</li>
+    <li>(2) Temperatures are rising, but we don't know why</li>
+    <li>(3) Temperatures are rising, but not because of human activity</li>
+    <li>(4) Temperatures are not rising</li>
+  </ul>
+
+  <p>
+    Notice that these four statements actually do have a natural ordering, in terms of "the extent to
+    which they agree with the current science". Statement 1 is a close match, statement 2 is a reasonable match, statement 3 isn't a very good match, and statement 4 is in strong opposition to the
+    science. So, in terms of the thing I'm interested in (the extent to which people endorse the science), I can order the items as 1 > 2 > 3 > 4. Since this ordering exists, it would be very weird to
+    list the options like this:
+  </p>
+
+  <ul>
+    <li>(1) Temperatures are rising, but not because of human activity</li>
+    <li>(2) Temperatures are rising, because of human activity</li>
+    <li>(3) Temperatures are not rising</li>
+    <li>(4) Temperatures are rising, but we don't know why</li>
+  </ul>
+
+  <p>
+    This ordering is still an ordering that makes sense, in that 1 > 4, 2 > 4, 2 > 1 and 4 > 3, but
+    it's very hard to interpret because you're breaking with the natural ordering of the categories.
+    So, even though I can ordinal scale variables have a natural ordering, but you can't average
+    them. It's still ok to compute the <em>median</em> (the middle value), but you can't compute
+    the <em>mean</em>. If you average the choices of people who selected 2 and 4, it's not the
+    same as the choice of someone who selected 3.
+  </p>
+
+  <h3>Interval scale</h3>
+  <p>
+    In contrast to nominal and ordinal scale variables, <strong>interval scale</strong> and ratio scale variables
+    are variables for which the numerical value is genuinely meaningful. In the case of interval scale
+    variables, the <em>differences</em> between the numbers are interpretable, but the variable
+    doesn't have a "natural" zero value. A good example of an interval scale variable is measuring
+    temperature in degrees Celsius. For instance, if it was 15° yesterday and 18° today, then the 3°
+    difference between the two is genuinely meaningful. Moreover, that 3° difference is <em>exactly
+    the same</em> as the 3° difference between 7° and 10°. In short, addition and subtraction are
+    meaningful for interval scale variables.<sup>1</sup>
+  </p>
+
+  <p>
+    However, notice that the 0° does not mean "no temperature at all". It actually means "the
+    temperature at which water freezes", which is pretty arbitrary. As a consequence, it becomes
+    pointless to try to multiply and divide temperatures. It is wrong to say that 20° is <em>twice
+    as hot</em> as 10°, just as it is weird and meaningless to try to claim that 20° is negative two
+    times as hot as -10°.
+  </p>
+
+  <p>
+    Again, lets look at a more psychological example. Suppose I'm interested in looking at how the
+    political affiliations of voters have changed over time. One way to do this would be to ask voters to
+    self-assess where they lie on the left-right political spectrum, using a scale from 0 (far left) to 10
+    (far right). In the statistical jargon, this is a kind of <em>rating scale</em>. Let's say I ran a survey
+    in 2003 and 2008. Suppose I'm interested in the extent to which "swinging voters" changed over
+    time, so I'd look at people who said they were centrist in 2003 (say, 5) and people who said they
+    were centrist in 2008 (also 5). This is a situation where the difference between 2003 and 2008
+    is meaningful. I could also look at the number of people who shifted by, say, 2 points, from 6 to
+    8, or from 2 to 4. I can get a feel for whether voters on average shifted to the right or to the left,
+    for instance. However, it would be wrong to say that 8 is twice as conservative as 4. In the same
+    way that we don't have a genuine "zero" point on a temperature scale when using Celsius, a value
+    of 0 on the political beliefs scale doesn't mean "an absence of beliefs". It just means "as far left as
+    a person can go".
+  </p>
+
+  <h3>Ratio scale</h3>
+  <p>
+    The fourth and final type of variable to consider is a <strong>ratio scale</strong> variable, in which zero
+    really means zero, and it's okay to multiply and divide. A good psychological example of a ratio
+    scale variable is response time (RT). In a lot of tasks it's very common to record the amount
+    of time somebody takes to solve a problem or answer a question, because it's an indicator of
+    how difficult the task is. Suppose that Alan takes 2.3 seconds to respond to a question, whereas
+    Ben takes 3.1 seconds. As with an interval scale variable, addition and subtraction are both
+    meaningful here. Ben really did take 3.1 - 2.3 = 0.8 seconds longer than Alan did. However,
+    notice that multiplication and division also make sense here too: Ben took 3.1 / 2.3 = 1.35 times
+    as long as Alan did to answer the question. And the reason why you can do this is that, for a
+    ratio scale variable such as RT, "zero seconds" really does mean "no time at all".
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: The Four Scales of Measurement</h4>
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>Scale</th>
+          <th>Properties</th>
+          <th>Allowed Operations</th>
+          <th>Examples</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nominal</strong></td>
+          <td>Categories, no order</td>
+          <td>Count, mode</td>
+          <td>Eye color, gender, blood type</td>
+        </tr>
+        <tr>
+          <td><strong>Ordinal</strong></td>
+          <td>Ordered categories, unequal intervals</td>
+          <td>Count, mode, median, rank</td>
+          <td>Rankings, finishing positions, agreement scales</td>
+        </tr>
+        <tr>
+          <td><strong>Interval</strong></td>
+          <td>Equal intervals, no true zero</td>
+          <td>+, −, mean, standard deviation</td>
+          <td>Temperature (°C), calendar dates, IQ scores</td>
+        </tr>
+        <tr>
+          <td><strong>Ratio</strong></td>
+          <td>Equal intervals, true zero</td>
+          <td>×, ÷, +, −, all statistics</td>
+          <td>Height, weight, response time, age</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Why this matters:</strong> The scale determines which statistical analyses are appropriate.
+      Using the wrong analysis for your scale can lead to meaningless results!
+    </p>
+  </div>
+
+  <h3>Continuous versus discrete variables</h3>
+  <p>
+    There's a second kind of distinction that you need to be aware of, regarding what types of values
+    that a variable can take on. That is, the difference between discrete variables and continuous
+    variables.
+  </p>
+
+  <p>
+    A <strong>discrete variable</strong> is, in essence, a variable that can only take on a finite number of different
+    possible values. A good example of a discrete variable is the number of questions that you got
+    right on a true or false test. If there are 10 questions, then you might have gotten 8 of them
+    right. Or maybe 9 of them. Or maybe 10. But you can't have gotten 8.93 of them right. Notice
+    that "10" is still a finite number, in other words it's quite possible for a variable to have a lot of
+    possible values whilst still being discrete. To give a more extreme example, the number of people
+    at a sports match must be a whole number, and no stadium on Earth is big enough to hold all of
+    humanity, so the number of possible values is again finite.
+  </p>
+
+  <p>
+    Continuous variables are different. A <strong>continuous variable</strong> is one in which, for any two values
+    that you can think of, it's always logically possible to have another value in between. Height is a
+    continuous variable. If Alice's height is 180 cm and Ben's height is 181 cm, then it's possible for
+    Chris to have a height anywhere in between, such as perhaps 180.04 cm. In practice, of course,
+    our ability to measure height isn't perfect, so we might report Alice's height as 180 cm and Chris'
+    height as 180 cm also, even though Chris really is a tiny bit taller. This is very common; a lot of
+    the time when you take a real world measurement, you are <em>forced</em> to round it off to
+    some particular value. But as long as it's possible in principle to have the in-between value, the
+    variable is continuous. As such, you might have guessed that:
+  </p>
+
+  <ul>
+    <li>Nominal scale variables are always discrete</li>
+    <li>Ordinal scale variables are always discrete</li>
+    <li>Interval scale variables can be either continuous or discrete</li>
+    <li>Ratio scale variables can be either continuous or discrete</li>
+  </ul>
+
+  <div class="terminology-box">
+    <h4>Terminology: Discrete vs. Continuous Variables</h4>
+    <p>
+      <strong>Discrete variables</strong> can only take on specific, separate values (usually whole numbers).
+      You can list all possible values, even if the list is very long.
+    </p>
+    <p>
+      <strong>Examples:</strong> Number of children (0, 1, 2, 3...), test scores out of 10 (0-10), number
+      of people at an event.
+    </p>
+    <p>
+      <strong>Continuous variables</strong> can take on any value within a range, including decimals. Between
+      any two values, there's always another possible value.
+    </p>
+    <p>
+      <strong>Examples:</strong> Height (180.0 cm, 180.04 cm, 180.042 cm...), weight, response time, temperature.
+    </p>
+    <p>
+      <strong>Note:</strong> In practice, continuous variables are often recorded as discrete due to measurement
+      limitations (e.g., height rounded to nearest cm), but they remain conceptually continuous.
+    </p>
+  </div>
+
+  <p>
+    Continuous variables are very commonly seen in real-world measurement. For instance, height,
+    weight, response time, blood pressure, and IQ are all examples of continuous variables. They
+    can be contrasted with discrete variables such as the number of children in a family, your course
+    grade (A, B, C, etc.), your gender, and your country of residence. In practice, the distinction
+    between continuous and discrete variables isn't particularly important. If it becomes important
+    in a particular context, I'll note it.
+  </p>
+
+  <h3>Some complexities</h3>
+  <p>
+    Okay, I know you're going to be shocked to hear this, but …the real world is much messier than
+    this little classification scheme suggests. Very few variables in real life actually fall into these
+    neat categories, so you need to be kind of careful not to treat the scales of measurement as if they
+    were hard and fast rules. It doesn't work like that: they're guidelines, intended to help you think
+    about the situations in which it is or isn't sensible to use particular tools. Nothing more.
+  </p>
+
+  <p>
+    So let's take a classic example, maybe the classic example, of a psychological measurement tool:
+    the <strong>Likert scale</strong>. The humble Likert scale is the bread and butter tool of all survey design. You
+    yourself have filled out hundreds, maybe thousands of them, and odds are you've even used one
+    yourself. Suppose we have a survey question that looks like this:
+  </p>
+
+  <blockquote>
+    Which of the following best describes your opinion of the statement that "all pirates are
+    freaking awesome" ...
+  </blockquote>
+
+  <ul>
+    <li>1. Strongly disagree</li>
+    <li>2. Disagree</li>
+    <li>3. Neither agree nor disagree</li>
+    <li>4. Agree</li>
+    <li>5. Strongly agree</li>
+  </ul>
+
+  <p>
+    This set of items is an example of a 5-point Likert scale: people are asked to choose among one
+    of several (in this case 5) clearly ordered possibilities, generally with a verbal descriptor given in
+    each case. However, it's not necessary that all items be explicitly described. This is a perfectly
+    good example of a 5-point Likert scale too:
+  </p>
+
+  <ul>
+    <li>1. Strongly disagree</li>
+    <li>2.</li>
+    <li>3.</li>
+    <li>4.</li>
+    <li>5. Strongly agree</li>
+  </ul>
+
+  <p>
+    Likert scales are very handy, if somewhat limited, tools. The question is, what kind of variable
+    are they? They're obviously discrete, since you can't give a response of 2.5. They're obviously not
+    nominal scale, since the items are ordered; and they're not ratio scale either, since there's no
+    natural zero.
+  </p>
+
+  <p>
+    But are they ordinal scale or interval scale? One argument says that we can't really prove that the
+    difference between "strongly agree" and "agree" is of the same size as the difference between
+    "agree" and "neither agree nor disagree". In fact, in everyday life it's pretty obvious that they're
+    not the same at all. So this suggests that we ought to treat Likert scales as ordinal variables.
+    On the other hand, in practice most researchers tend to treat Likert scale data as if it were
+    interval scale, especially if the number of items is reasonably large. This is not the best of justifications to offer, but there are some good mathematical reasons for thinking that,
+    when you average across lots of people and lots of items, Likert scales are often "close enough" to
+    interval scale for practical purposes. In short, it's really a matter of judgment.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: The Likert Scale Debate</h4>
+    <p>
+      <strong>Likert scales</strong> (e.g., 1=Strongly Disagree to 5=Strongly Agree) are ubiquitous in psychology,
+      but their proper classification is debated:
+    </p>
+    <ul>
+      <li>
+        <strong>Technically ordinal:</strong> The psychological distance between "strongly agree" and "agree"
+        likely differs from the distance between "agree" and "neutral"
+      </li>
+      <li>
+        <strong>Treated as interval in practice:</strong> Most researchers analyze Likert scales using interval-level
+        statistics (means, correlations) because:
+        <ul>
+          <li>When averaged across many items and participants, they approximate interval properties</li>
+          <li>Interval-level analyses are more powerful and flexible</li>
+          <li>Results are usually similar to ordinal analyses</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      <strong>Bottom line:</strong> The classification is a matter of judgment. Be aware of the assumptions
+      you're making when you treat Likert data as interval scale, and consider whether they're reasonable
+      for your specific context.
+    </p>
+  </div>
+
+  <hr>
+
+  <h3>Footnotes</h3>
+  <p class="footnote">
+    <sup>1</sup> Actually, there's a subtlety here. If you understand what logarithms are,
+    then you can note that although Celsius and Fahrenheit are interval scale, there is
+    nevertheless a special relationship between the two: they are linear transformations of
+    each other. Technically, the class of permissible transformations for an interval scale
+    variable is any linear transformation (adding or multiplying by a constant). A ratio
+    scale permits any transformation of the form x' = cx. Annoying, I know, but this
+    confusion is not something that psychologists or statisticians have invented; it's just
+    what the concepts of temperature and time really are like. If we could measure them
+    in an absolute way, we would...but we can't.
+  </p>
+
+  <hr>
+
+  <div class="attribution">
+    <p>
+      Content adapted from <em>Learning Statistics with jamovi</em> by Danielle J. Navarro and David R. Foxcroft,
+      licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+</section>

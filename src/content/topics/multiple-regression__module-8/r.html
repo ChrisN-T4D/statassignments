@@ -1,0 +1,178 @@
+<section class="topic-content"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Multiple Linear Regression</h2>
+
+  <div class="concept-box">
+    <h3>What is Multiple Regression?</h3>
+    <p><strong>Multiple linear regression</strong> extends simple regression to include <strong>multiple predictor variables</strong>. This allows us to:</p>
+    <ul>
+      <li>Examine the <strong>unique effect</strong> of each predictor while controlling for others</li>
+      <li>Make more <strong>accurate predictions</strong> by using multiple sources of information</li>
+      <li>Understand <strong>complex relationships</strong> between variables</li>
+      <li>Control for <strong>confounding variables</strong></li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>The Multiple Regression Model</h3>
+    <div class="formula">
+      <p><strong>Y<sub>i</sub> = b<sub>0</sub> + b<sub>1</sub>X<sub>i1</sub> + b<sub>2</sub>X<sub>i2</sub> + ... + b<sub>K</sub>X<sub>iK</sub> + ε<sub>i</sub></strong></p>
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li><strong>Y<sub>i</sub></strong> = outcome variable for observation i</li>
+      <li><strong>b<sub>0</sub></strong> = intercept (predicted Y when all X = 0)</li>
+      <li><strong>b<sub>1</sub>, b<sub>2</sub>, ..., b<sub>K</sub></strong> = regression coefficients for K predictors</li>
+      <li><strong>X<sub>i1</sub>, X<sub>i2</sub>, ..., X<sub>iK</sub></strong> = predictor values for observation i</li>
+      <li><strong>ε<sub>i</sub></strong> = residual (error term)</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Interpreting Coefficients in Multiple Regression</h3>
+
+    <h4>Unstandardized Coefficients (b)</h4>
+    <p>Each coefficient represents the <strong>change in Y for a 1-unit increase in that predictor, holding all other predictors constant</strong>.</p>
+    <ul>
+      <li>Interpretation: "Controlling for other variables, a 1-unit increase in X<sub>k</sub> is associated with a b<sub>k</sub>-unit change in Y"</li>
+      <li>Useful when predictors are on <strong>meaningful scales</strong></li>
+      <li>Example: "Controlling for age, each additional hour of study increases exam scores by 2.5 points"</li>
+    </ul>
+
+    <h4>Standardized Coefficients (β)</h4>
+    <div class="formula">
+      <p><strong>β<sub>k</sub> = b<sub>k</sub> × (σ<sub>X<sub>k</sub></sub> / σ<sub>Y</sub>)</strong></p>
+    </div>
+    <p>Standardized coefficients express effects in <strong>standard deviation units</strong>, allowing direct comparison of predictor importance:</p>
+    <ul>
+      <li>Interpretation: "A 1 SD increase in X<sub>k</sub> is associated with a β<sub>k</sub> SD change in Y"</li>
+      <li>Useful for <strong>comparing relative importance</strong> of predictors on different scales</li>
+      <li>The predictor with the largest |β| has the strongest relative effect</li>
+      <li>Example: "A 1 SD increase in study hours (β = .52) has a stronger effect than a 1 SD increase in IQ (β = .38)"</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>R² and Adjusted R²</h3>
+
+    <h4>R² (Multiple Correlation Squared)</h4>
+    <ul>
+      <li>Proportion of variance in Y explained by <strong>all predictors together</strong></li>
+      <li>Always increases when adding predictors (even if they're not useful)</li>
+      <li>Can be inflated in small samples</li>
+    </ul>
+
+    <h4>Adjusted R²</h4>
+    <div class="formula">
+      <p><strong>Adj. R² = 1 - (SS<sub>res</sub>/SS<sub>tot</sub>) × ((N-1)/(N-K-1))</strong></p>
+    </div>
+    <ul>
+      <li>Adjusts for the <strong>number of predictors</strong> in the model</li>
+      <li>Penalizes adding predictors that don't improve fit enough</li>
+      <li>Use when <strong>comparing models</strong> with different numbers of predictors</li>
+      <li>Can decrease when adding unhelpful predictors</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Multicollinearity</h3>
+    <p><strong>Multicollinearity</strong> occurs when predictors are highly correlated with each other. This causes problems:</p>
+    <ul>
+      <li>Coefficients become <strong>unstable</strong> (large standard errors)</li>
+      <li>Difficult to determine the <strong>unique effect</strong> of each predictor</li>
+      <li>Coefficients may have <strong>unexpected signs</strong></li>
+    </ul>
+
+    <h4>Detecting Multicollinearity: VIF</h4>
+    <div class="formula">
+      <p><strong>VIF<sub>k</sub> = 1 / (1 - R²<sub>k</sub>)</strong></p>
+    </div>
+    <p>Where R²<sub>k</sub> is from regressing X<sub>k</sub> on all other predictors</p>
+    <ul>
+      <li><strong>VIF < 5:</strong> Generally acceptable</li>
+      <li><strong>VIF 5-10:</strong> Moderate multicollinearity (concerning)</li>
+      <li><strong>VIF > 10:</strong> Severe multicollinearity (problematic)</li>
+      <li>√VIF shows how much wider the confidence interval is due to collinearity</li>
+    </ul>
+
+    <h4>Dealing with Multicollinearity</h4>
+    <ul>
+      <li>Remove one of the highly correlated predictors</li>
+      <li>Combine correlated predictors into a single composite measure</li>
+      <li>Use dimension reduction techniques (factor analysis, PCA)</li>
+      <li>Collect more data (if possible)</li>
+    </ul>
+  </div>
+
+  <div class="R-box">
+    <h3>Running Multiple Regression in R</h3>
+    <ol>
+      <li>Go to <strong>Analyses → Regression → Linear Regression</strong></li>
+      <li>Move your outcome to <strong>Dependent Variable</strong></li>
+      <li>Move all predictors to <strong>Covariates</strong></li>
+      <li>Under <strong>Model Fit</strong>:
+        <ul>
+          <li>Check <strong>R²</strong> and <strong>Adjusted R²</strong></li>
+        </ul>
+      </li>
+      <li>Under <strong>Model Coefficients</strong>:
+        <ul>
+          <li>Check <strong>Standardized estimate</strong> to see β values</li>
+          <li>Check <strong>Confidence interval</strong></li>
+        </ul>
+      </li>
+      <li>Under <strong>Assumption Checks</strong>:
+        <ul>
+          <li>Check <strong>Collinearity statistics</strong> to see VIF values</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Each coefficient represents the <strong>unique effect holding other predictors constant</strong></li>
+      <li>Use <strong>unstandardized b</strong> when predictors are on meaningful scales</li>
+      <li>Use <strong>standardized β</strong> to compare relative importance of predictors</li>
+      <li>Check <strong>VIF</strong> before interpreting coefficients—multicollinearity is a common problem</li>
+      <li>Adjusted R² is better than R² when comparing models with different numbers of predictors</li>
+      <li>More predictors ≠ better model—balance fit with simplicity (Ockham's razor)</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example Interpretation</h3>
+    <p><strong>Research Question:</strong> Predicting exam scores from study hours, IQ, and motivation</p>
+    <p><strong>Results:</strong></p>
+    <table>
+      <tr><th>Predictor</th><th>b</th><th>SE</th><th>β</th><th>t</th><th>p</th><th>VIF</th></tr>
+      <tr><td>Intercept</td><td>15.2</td><td>8.5</td><td>—</td><td>1.8</td><td>.08</td><td>—</td></tr>
+      <tr><td>Study Hours</td><td>2.8</td><td>0.6</td><td>.52</td><td>4.7</td><td><.001</td><td>1.2</td></tr>
+      <tr><td>IQ</td><td>0.4</td><td>0.1</td><td>.38</td><td>4.0</td><td><.001</td><td>1.1</td></tr>
+      <tr><td>Motivation</td><td>1.5</td><td>0.5</td><td>.25</td><td>3.0</td><td>.004</td><td>1.3</td></tr>
+    </table>
+    <p>R² = .68, Adjusted R² = .65</p>
+
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>The model explains <strong>68% of variance</strong> in exam scores</li>
+      <li><strong>Study Hours:</strong> Controlling for IQ and motivation, each additional hour of study predicts a 2.8-point increase in exam scores (b = 2.8, p < .001)</li>
+      <li><strong>IQ:</strong> Controlling for study hours and motivation, each IQ point predicts a 0.4-point increase in exam scores (b = 0.4, p < .001)</li>
+      <li><strong>Relative importance:</strong> Study hours has the strongest effect (β = .52), followed by IQ (β = .38) and motivation (β = .25)</li>
+      <li><strong>Multicollinearity:</strong> All VIF values < 2, indicating no multicollinearity problems</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Ignoring multicollinearity:</strong> Always check VIF before interpreting coefficients</li>
+      <li><strong>Comparing b values across predictors:</strong> Use β for comparisons, not b</li>
+      <li><strong>Adding too many predictors:</strong> Risk of overfitting, especially in small samples</li>
+      <li><strong>Confusing "controlling for" with causation:</strong> Multiple regression doesn't establish causality</li>
+      <li><strong>Not checking assumptions:</strong> Multiple regression has the same assumptions as simple regression</li>
+    </ul>
+  </div>
+</section>

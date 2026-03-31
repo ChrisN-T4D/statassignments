@@ -4,6 +4,14 @@ This document describes the collections needed in PocketBase.
 
 ---
 
+## Data Contract Governance
+
+- `pb_migrations/` is the canonical PocketBase schema source used by the app.
+- `pocketbase_collections_import.json` and `scripts/seed-data/pocketbase-schema.json` must mirror migration-backed fields for runtime writes.
+- Any new frontend write field must be added to migrations first, then synced to the import/seed schema artifacts.
+
+---
+
 ## Core Collections
 
 ### users
@@ -115,8 +123,39 @@ Courses/classes that organize all content.
 - `is_correct` (bool)
 - `score` (number, optional)
 - `time_spent_seconds` (number, optional)
+- `active_time_seconds` (number, optional)
+- `total_time_seconds` (number, optional)
+- `time_maxed_out` (bool, optional)
+- `idle_detected` (bool, optional)
 - `attempt_no` (number)
 - `hint_used` (bool)
+
+### practice_attempts
+- `user` (relation → users)
+- `problem` (text) - concept question identifier
+- `answer` (text)
+- `is_correct` (bool)
+- `difficulty` (select: easy, medium, hard)
+- `active_time_seconds` (number, optional)
+- `total_time_seconds` (number, optional)
+- `time_maxed_out` (bool, optional)
+- `idle_detected` (bool, optional)
+- `time_to_first_selection` (number, optional)
+- `answer_changes` (number, optional)
+- `time_since_reading` (number, optional)
+- `time_since_last_attempt` (number, optional)
+- `has_read_topic_before` (bool, optional)
+
+### topic_readings
+- `user` (relation → users)
+- `topic_id` (text)
+- `module_id` (text, optional)
+- `active_time_seconds` (number, optional)
+- `total_time_seconds` (number, optional)
+- `time_maxed_out` (bool, optional)
+- `idle_detected` (bool, optional)
+- `max_scroll_depth` (number, optional)
+- `triggered_by_error` (bool, optional)
 
 ---
 

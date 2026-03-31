@@ -917,7 +917,8 @@ const lessonExercises = computed(() => {
   const moduleExercises = statisticsExercises.filter(ex =>
     ex.module === moduleId &&
     ex.is_active &&
-    ex.software_type === lesson.value.software
+    ex.software_type === lesson.value.software &&
+    (lesson.value.software === 'jamovi' || ex.exercise_type !== 'menu_navigation')
   )
 
   // Sort by order

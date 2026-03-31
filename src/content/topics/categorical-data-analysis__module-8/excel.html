@@ -1,0 +1,449 @@
+<section class="module-content" aria-labelledby="categorical-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="categorical-title">10. Categorical Data Analysis</h2>
+
+  <blockquote class="chapter-quote">
+    <p>"Satan delights equally in statistics and in quoting scripture"</p>
+    <footer>– H.G. Wells</footer>
+  </blockquote>
+
+  <p>
+    Now that we've covered the basic theory behind hypothesis testing, it's time to start looking
+    at specific tests that are commonly used in psychology. We'll start with <strong>χ² tests</strong>
+    (pronounced "chi-square") and t-tests. Both of these tools are very frequently used in scientific
+    practice, and whilst they're not as powerful as regression and analysis of variance, they're much
+    easier to understand.
+  </p>
+
+  <p>
+    The term <strong>"categorical data"</strong> is just another name for "nominal scale data". It's nothing that
+    we haven't already discussed, it's just that in the context of data analysis people tend to use
+    the term "categorical data" rather than "nominal scale data". Categorical data analysis refers
+    to a collection of tools that you can use when your data are nominal scale.
+  </p>
+
+  <h3>10.1 The χ² (Chi-Square) Goodness-of-Fit Test</h3>
+
+  <p>
+    The χ² goodness-of-fit test is one of the oldest hypothesis tests around. It was invented by
+    Karl Pearson around the turn of the century (Pearson 1900), with some corrections made later
+    by Sir Ronald Fisher (Fisher 1922a). It tests whether an <strong>observed frequency distribution</strong> of a
+    nominal variable matches an <strong>expected frequency distribution</strong>.
+  </p>
+
+  <div class="example-box">
+    <h4>Example: The Cards Data</h4>
+    <p>
+      Suppose we asked 200 people to imagine a shuffled deck of cards and mentally pick one card "at random".
+      We record the suit (hearts, clubs, spades, or diamonds) that people chose. Here's what we observed:
+    </p>
+    <table>
+      <tr><th>Suit</th><th>clubs</th><th>diamonds</th><th>hearts</th><th>spades</th></tr>
+      <tr><td>Count</td><td>35</td><td>51</td><td>64</td><td>50</td></tr>
+    </table>
+    <p>
+      If people were truly choosing randomly, we'd expect each suit to be chosen 50 times (200 ÷ 4 = 50).
+      The goodness-of-fit test helps us determine if the observed pattern differs significantly from this expectation.
+    </p>
+  </div>
+
+  <h4>The Null and Alternative Hypotheses</h4>
+
+  <p>
+    For the cards example, our hypotheses are:
+  </p>
+
+  <ul>
+    <li><strong>H₀:</strong> All four suits are chosen with equal probability (P = 0.25, 0.25, 0.25, 0.25)</li>
+    <li><strong>H₁:</strong> At least one of the suit-choice probabilities isn't 0.25</li>
+  </ul>
+
+  <h4>The Test Statistic</h4>
+
+  <p>
+    The goodness-of-fit statistic compares observed frequencies (O<sub>i</sub>) with expected frequencies (E<sub>i</sub>):
+  </p>
+
+  <div class="formula-box">
+    <p><strong>χ² = Σ [(O<sub>i</sub> - E<sub>i</sub>)² / E<sub>i</sub>]</strong></p>
+    <p>where the sum is over all k categories</p>
+  </div>
+
+  <p>
+    The expected frequency for each category is calculated as:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>E<sub>i</sub> = N × P<sub>i</sub></strong></p>
+    <p>where N is the total sample size and P<sub>i</sub> is the expected probability for category i</p>
+  </div>
+
+  <h4>Degrees of Freedom</h4>
+
+  <p>
+    The degrees of freedom for the goodness-of-fit test is:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>df = k - 1</strong></p>
+    <p>where k is the number of categories</p>
+  </div>
+
+  <p>
+    This is because once you know the frequencies for k-1 categories and the total N,
+    the frequency for the last category is determined.
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: Goodness-of-Fit Test</h4>
+    <ul>
+      <li>Tests whether observed frequencies match expected frequencies</li>
+      <li>Null hypothesis specifies the expected probabilities for each category</li>
+      <li>Large χ² values suggest poor fit (reject H₀)</li>
+      <li>Sampling distribution is χ² with df = k - 1</li>
+      <li>Always a one-sided test (we only reject for large values)</li>
+    </ul>
+  </div>
+
+  <h3>10.2 The χ² Test of Independence</h3>
+
+  <p>
+    The <strong>test of independence</strong> (also called the test of association) is used when you have
+    two categorical variables and want to know if there's a relationship between them. This is analyzed
+    using a <strong>contingency table</strong> (also called a cross-tabulation).
+  </p>
+
+  <div class="example-box">
+    <h4>Example: Species and Choice</h4>
+    <p>
+      Suppose we ask robots and humans which of three things they prefer: puppies, flowers, or data files.
+      Our research question is: Do robots and humans answer differently?
+    </p>
+    <table>
+      <tr><th></th><th>Robot</th><th>Human</th><th>Total</th></tr>
+      <tr><td>Puppy</td><td>13</td><td>15</td><td>28</td></tr>
+      <tr><td>Flower</td><td>30</td><td>13</td><td>43</td></tr>
+      <tr><td>Data</td><td>44</td><td>65</td><td>109</td></tr>
+      <tr><td>Total</td><td>87</td><td>93</td><td>180</td></tr>
+    </table>
+  </div>
+
+  <h4>The Null Hypothesis</h4>
+
+  <p>
+    For the test of independence:
+  </p>
+
+  <ul>
+    <li><strong>H₀:</strong> The two variables are independent (no association)</li>
+    <li><strong>H₁:</strong> The two variables are not independent (there is an association)</li>
+  </ul>
+
+  <h4>Expected Frequencies</h4>
+
+  <p>
+    For a contingency table, the expected frequency for cell (i,j) is:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>E<sub>ij</sub> = (R<sub>i</sub> × C<sub>j</sub>) / N</strong></p>
+    <p>where R<sub>i</sub> is the row total, C<sub>j</sub> is the column total, and N is the grand total</p>
+  </div>
+
+  <h4>Test Statistic</h4>
+
+  <p>
+    The test statistic is calculated the same way as the goodness-of-fit test, but now we sum over all cells:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>χ² = ΣΣ [(O<sub>ij</sub> - E<sub>ij</sub>)² / E<sub>ij</sub>]</strong></p>
+    <p>summing over all rows (i) and columns (j)</p>
+  </div>
+
+  <h4>Degrees of Freedom</h4>
+
+  <p>
+    For a contingency table with r rows and c columns:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>df = (r - 1)(c - 1)</strong></p>
+  </div>
+
+  <div class="key-points">
+    <h4>Key Points: Test of Independence</h4>
+    <ul>
+      <li>Tests whether two categorical variables are associated</li>
+      <li>Uses a contingency table (cross-tabulation)</li>
+      <li>Expected frequencies calculated from marginal totals</li>
+      <li>df = (rows - 1) × (columns - 1)</li>
+      <li>Also a one-sided test</li>
+    </ul>
+  </div>
+
+  <h3>10.3 The Continuity Correction (Yates Correction)</h3>
+
+  <p>
+    When you have only <strong>1 degree of freedom</strong> (e.g., a 2×2 contingency table), the χ² approximation
+    can be improved by applying the <strong>continuity correction</strong>. This adjustment, suggested by Yates (1934),
+    subtracts 0.5 from the absolute difference before squaring:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>χ² = Σ [(|E<sub>i</sub> - O<sub>i</sub>| - 0.5)² / E<sub>i</sub>]</strong></p>
+  </div>
+
+  <p>
+    This correction tends to make the test more conservative (less likely to reject H₀). It's especially
+    important when sample sizes are small and df = 1.
+  </p>
+
+  <h3>10.4 Effect Size</h3>
+
+  <p>
+    When you get a significant χ² result, you should report an <strong>effect size</strong> to indicate how strong
+    the association is. Two common measures are:
+  </p>
+
+  <h4>Phi (φ) Statistic</h4>
+
+  <div class="formula-box">
+    <p><strong>φ = √(χ² / N)</strong></p>
+  </div>
+
+  <p>
+    The φ statistic works well for 2×2 tables, where it ranges from 0 to 1. However, for larger tables
+    it can exceed 1, which is problematic.
+  </p>
+
+  <h4>Cramér's V</h4>
+
+  <div class="formula-box">
+    <p><strong>V = √[χ² / (N × (k - 1))]</strong></p>
+    <p>where k = min(r, c) is the smaller of the number of rows or columns</p>
+  </div>
+
+  <p>
+    Cramér's V always ranges from 0 (no association) to 1 (perfect association), making it the preferred
+    measure for larger contingency tables.
+  </p>
+
+  <div class="interpretation-guide">
+    <h4>Interpreting Cramér's V</h4>
+    <ul>
+      <li><strong>V = 0:</strong> No association at all</li>
+      <li><strong>V = 0.1:</strong> Small effect</li>
+      <li><strong>V = 0.3:</strong> Medium effect</li>
+      <li><strong>V = 0.5+:</strong> Large effect</li>
+    </ul>
+  </div>
+
+  <h3>10.5 Assumptions of the χ² Test</h3>
+
+  <p>
+    Like all statistical tests, the χ² test makes assumptions. Violating these assumptions can lead to
+    incorrect conclusions:
+  </p>
+
+  <div class="assumptions-box">
+    <h4>Assumptions</h4>
+    <ol>
+      <li>
+        <strong>Expected frequencies are sufficiently large:</strong> A common rule of thumb is that all
+        expected frequencies should be at least 5. For larger tables, it's okay if at least 80% of expected
+        frequencies are above 5 and none are below 1.
+      </li>
+      <li>
+        <strong>Data are independent:</strong> Each observation should be independent of all others. The
+        same participant cannot appear in multiple cells of the contingency table (unless you're using
+        the McNemar test for paired data).
+      </li>
+    </ol>
+  </div>
+
+  <h3>10.6 The Fisher Exact Test</h3>
+
+  <p>
+    When <strong>expected cell counts are too small</strong> for the χ² test, use the <strong>Fisher exact test</strong>.
+    This test calculates the exact probability of observing the data (or more extreme data) under the null hypothesis,
+    without relying on the χ² approximation.
+  </p>
+
+  <p>
+    The Fisher exact test works by treating the row and column totals as fixed, then calculating the probability
+    of each possible table using the <strong>hypergeometric distribution</strong>. It's most commonly used for 2×2 tables
+    with small samples.
+  </p>
+
+  <div class="key-points">
+    <h4>When to Use Fisher Exact Test</h4>
+    <ul>
+      <li>Expected cell counts are too small (< 5)</li>
+      <li>Sample size is small overall</li>
+      <li>You want an exact p-value rather than an approximation</li>
+      <li>Most commonly used for 2×2 tables</li>
+    </ul>
+  </div>
+
+  <h3>10.7 The McNemar Test</h3>
+
+  <p>
+    The <strong>McNemar test</strong> is used when you have <strong>paired categorical data</strong> – that is,
+    when the same participants are measured twice (repeated measures) or when observations are matched in pairs.
+    This violates the independence assumption of the standard χ² test.
+  </p>
+
+  <div class="example-box">
+    <h4>Example: Political Advertising</h4>
+    <p>
+      You ask 100 people if they'll vote for a political party, show them an advertisement, then ask again.
+      Since each person provides two responses, the observations aren't independent.
+    </p>
+    <table>
+      <tr><th></th><th>After: Yes</th><th>After: No</th><th>Total</th></tr>
+      <tr><td>Before: Yes</td><td>5</td><td>25</td><td>30</td></tr>
+      <tr><td>Before: No</td><td>5</td><td>65</td><td>70</td></tr>
+      <tr><td>Total</td><td>10</td><td>90</td><td>100</td></tr>
+    </table>
+  </div>
+
+  <h4>The Null Hypothesis</h4>
+
+  <p>
+    The McNemar test tests for <strong>marginal homogeneity</strong>:
+  </p>
+
+  <ul>
+    <li><strong>H₀:</strong> The marginal probabilities are equal (P<sub>row</sub> = P<sub>column</sub>)</li>
+    <li><strong>H₁:</strong> The marginal probabilities are not equal</li>
+  </ul>
+
+  <h4>Test Statistic</h4>
+
+  <p>
+    For a 2×2 table with cells labeled:
+  </p>
+
+  <table>
+    <tr><th></th><th>After: Yes</th><th>After: No</th></tr>
+    <tr><td>Before: Yes</td><td>a</td><td>b</td></tr>
+    <tr><td>Before: No</td><td>c</td><td>d</td></tr>
+  </table>
+
+  <p>
+    The McNemar test statistic (with continuity correction) is:
+  </p>
+
+  <div class="formula-box">
+    <p><strong>χ² = (|b - c| - 0.5)² / (b + c)</strong></p>
+    <p>with df = 1</p>
+  </div>
+
+  <p>
+    Notice that only the <strong>off-diagonal cells</strong> (b and c) matter – these represent people who changed
+    their response. The diagonal cells (a and d) represent people who didn't change.
+  </p>
+
+  <div class="critical-thinking-box">
+    <h4>McNemar vs. Independence Test</h4>
+    <p>
+      <strong>Use McNemar when:</strong> Same participants measured twice, or paired observations
+    </p>
+    <p>
+      <strong>Use χ² independence when:</strong> Different participants in each cell, observations are independent
+    </p>
+    <p>
+      Using the wrong test can lead to incorrect conclusions! Always check whether observations are independent.
+    </p>
+  </div>
+
+  <h3>10.8 Doing Chi-Square Tests in Excel</h3>
+
+  <h4>Goodness-of-Fit Test</h4>
+  <p>
+    in Excel: <strong>Analyses → Frequencies → One Sample Proportion Tests → N Outcomes</strong>
+  </p>
+  <ul>
+    <li>Move your variable to the 'Variable' box</li>
+    <li>Check 'Expected counts' to see expected frequencies</li>
+    <li>Use 'Expected Proportions' to specify custom null hypothesis proportions</li>
+  </ul>
+
+  <h4>Test of Independence</h4>
+  <p>
+    in Excel: <strong>Analyses → Frequencies → Contingency Tables → Independent Samples</strong>
+  </p>
+  <ul>
+    <li>Move one variable to 'Rows' and one to 'Columns'</li>
+    <li>Check 'Expected counts' under 'Cells'</li>
+    <li>Check 'χ² continuity correction' for 2×2 tables</li>
+    <li>Check 'Fisher's exact test' if expected counts are small</li>
+    <li>Check 'Cramér's V' under 'Statistics' for effect size</li>
+  </ul>
+
+  <h4>McNemar Test</h4>
+  <p>
+    in Excel: <strong>Analyses → Frequencies → Contingency Tables → Paired Samples</strong>
+  </p>
+  <ul>
+    <li>Move first measurement to 'Rows'</li>
+    <li>Move second measurement to 'Columns'</li>
+    <li>Check 'χ² continuity correction'</li>
+  </ul>
+
+  <h3>10.9 Reporting Results</h3>
+
+  <p>
+    When reporting χ² test results, include:
+  </p>
+
+  <div class="reporting-guide">
+    <h4>Essential Elements</h4>
+    <ol>
+      <li><strong>Descriptive statistics:</strong> Describe the observed frequencies or percentages</li>
+      <li><strong>The null hypothesis:</strong> Briefly state what you're testing</li>
+      <li><strong>Test statistic:</strong> Report χ²(df) = value, p = value</li>
+      <li><strong>Effect size:</strong> Report Cramér's V or φ</li>
+      <li><strong>Interpretation:</strong> Explain what the result means in plain language</li>
+    </ol>
+  </div>
+
+  <div class="example-box">
+    <h4>Example Write-Up</h4>
+    <p>
+      "Of the 200 participants in the experiment, 64 selected hearts for their first choice, 51 selected
+      diamonds, 50 selected spades, and 35 selected clubs. A chi-square goodness-of-fit test was conducted
+      to test whether the choice probabilities were identical for all four suits. The results were significant
+      (χ²(3) = 8.44, p < .05), suggesting that people did not select suits purely at random."
+    </p>
+  </div>
+
+  <h3>Summary</h3>
+
+  <div class="summary-box">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li><strong>Goodness-of-fit test:</strong> Tests if observed frequencies match expected probabilities (df = k - 1)</li>
+      <li><strong>Test of independence:</strong> Tests if two categorical variables are associated (df = (r-1)(c-1))</li>
+      <li><strong>Continuity correction:</strong> Apply when df = 1 for better approximation</li>
+      <li><strong>Effect size:</strong> Use Cramér's V to quantify strength of association (0 to 1)</li>
+      <li><strong>Assumptions:</strong> Expected frequencies ≥ 5, observations independent</li>
+      <li><strong>Fisher exact test:</strong> Use when expected frequencies are too small</li>
+      <li><strong>McNemar test:</strong> Use for paired/repeated measures categorical data</li>
+      <li><strong>Always report:</strong> Descriptive stats, test statistic with df, p-value, effect size, and interpretation</li>
+    </ul>
+  </div>
+
+  <div class="practice-tip">
+    <h4>Common Pitfalls to Avoid</h4>
+    <ul>
+      <li>❌ Using χ² test when expected frequencies are too small → Use Fisher exact test</li>
+      <li>❌ Using independence test for paired data → Use McNemar test</li>
+      <li>❌ Reporting only p-value without effect size → Always include Cramér's V</li>
+      <li>❌ Forgetting to check assumptions → Always verify expected frequencies and independence</li>
+      <li>❌ Misinterpreting significance → Significant doesn't always mean practically important</li>
+    </ul>
+  </div>
+</section>

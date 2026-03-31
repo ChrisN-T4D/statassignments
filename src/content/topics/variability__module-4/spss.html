@@ -1,0 +1,257 @@
+<section class="module-content" aria-labelledby="variability-title"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="variability-title">4.2 Measures of variability</h2>
+
+  <p>The statistics that we've discussed so far all relate to central tendency. That is, they all talk about which values are "in the middle" or "popular" in the data. However, central tendency is not the only type of summary statistic that we want to calculate. The second thing that we really want is a measure of the <strong>variability</strong> of the data. That is, how "spread out" are the data? How "far" do the observed values tend to be from the mean? For now, let's assume that the data are interval or ratio scale (section 2.2.1), and we'll continue to use the <code>afl.margins</code> data. We'll use this data to discuss several different measures of spread, each with different strengths and weaknesses.</p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Variability (Dispersion)</h4>
+    <p>
+      <strong>Variability</strong> (also called dispersion or spread) describes how much data values differ from each
+      other and from the center of the distribution. High variability means data points are spread far apart; low
+      variability means they cluster closely together.
+    </p>
+    <p>
+      <strong>Common measures of variability:</strong>
+    </p>
+    <ul>
+      <li><strong>Range</strong> – Maximum minus minimum (simple but sensitive to outliers)</li>
+      <li><strong>Interquartile Range (IQR)</strong> – Range of the middle 50% of data (robust to outliers)</li>
+      <li><strong>Variance (s²)</strong> – Average squared deviation from the mean</li>
+      <li><strong>Standard Deviation (s)</strong> – Square root of variance (same units as original data)</li>
+    </ul>
+  </div>
+
+  <h3>4.2.1 Range</h3>
+
+  <p>The <strong>range</strong> of a variable is very simple: it's the biggest value minus the smallest value. For the AFL winning margins data, the maximum value is 116, and the minimum value is 0. We can calculate these values in SPSS simply by adding them from the drop down list of statistics options in the 'Exploration' - 'Descriptives' analysis window. This gives us the following output:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>afl.margins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Minimum</td>
+        <td>0.000</td>
+      </tr>
+      <tr>
+        <td>Maximum</td>
+        <td>116.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Although the range is the simplest way to quantify the notion of "variability", it's one of the worst. Recall from our discussion of the mean that we want our summary measure to be <em>robust</em>. If the data set has one or two extremely bad values in it, we'd like our statistics not to be unduly influenced by these cases. If we look once again at our toy example of a data set containing very extreme outliers...</p>
+
+  <p class="code-block">-100, 2, 3, 4, 5, 6, 7, 8, 9, 10</p>
+
+  <p>...it is clear that the range is not robust, since this has a range of 110, but if the outlier were removed we would have a range of only 8.</p>
+
+  <h3>4.2.2 Interquartile range</h3>
+
+  <p>The <strong>interquartile range</strong> (IQR) is like the range, but instead of calculating the difference between the biggest and smallest value, it calculates the difference between the 25th quantile and the 75th quantile. Probably you already know what a quantile is (they're more commonly called <em>percentiles</em>), but just in case, let's go through it quickly.</p>
+
+  <p>Think of it like this: the 10th percentile of a data set is the smallest number <em>x</em> such that 10% of the data is less than <em>x</em>. In fact, we can be a bit more precise. Suppose we sorted the data from smallest to largest. Then the 10th percentile is the value that separates the bottom 10% of the data from the top 90% of the data. The median is the 50th percentile, since half of the data is smaller and half of the data is larger. Similarly, we can calculate 25th percentile (the <strong>lower quartile</strong>) and the 75th percentile (the <strong>upper quartile</strong>). The difference between the upper quartile and the lower quartile is the interquartile range.</p>
+
+  <p>Let's have a look at how to calculate the IQR in SPSS. In the Descriptives analysis window, select 'IQR' from the Statistics - Dispersion options. This should give us the following output:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>afl.margins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>IQR</td>
+        <td>36.50</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>While it's obvious how to interpret the range, it's a little less obvious how to interpret the IQR. The simplest way to think about it is like this: the interquartile range is the range spanned by the "middle half" of the data. That is, one quarter of the data is less than 19.00, one quarter of the data is greater than 55.50, and the remaining half of the data lies in between. The IQR is a bit more robust than the range. For example, if we go back to our toy example from the previous section, with one extremely large outlier...</p>
+
+  <p class="code-block">-100, 2, 3, 4, 5, 6, 7, 8, 9, 10</p>
+
+  <p>...the range is very large (110), but if we calculate the IQR (e.g., using the IQR function in SPSS) we see that it's much smaller, only 5. So, the IQR is much more robust to outliers than the range is.</p>
+
+  <h3>4.2.3 Mean absolute deviation</h3>
+
+  <p>The two measures we've looked at so far, the range and the interquartile range, both rely on the idea that we can measure the spread of the data by looking at the quantiles of the data. However, this isn't the only way to think about the problem. A different approach is to select a meaningful reference point (usually the mean or the median) and then report the "typical" deviations from that reference point. What do we mean by "typical" deviation? Usually, the mean or median value of these deviations! In practice, this leads to two different measures, the <strong>mean absolute deviation</strong> (from the mean) and the <strong>median absolute deviation</strong> (from the median).</p>
+
+  <p>Let's start by thinking about the first measure: we'll start by talking about how to calculate the mean absolute deviation from the mean. Firstly, let's introduce the notation <em>X̄</em> to refer to the mean of the observation <em>X<sub>i</sub></em>. The first step in calculating the mean absolute deviation is to calculate how far each observation is from the mean. That is, we take the difference <em>X<sub>i</sub></em> - <em>X̄</em>. This is illustrated in the following table, using the first five AFL games as our data:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>which game, <em>i</em></th>
+        <th>winning margin, <em>X<sub>i</sub></em></th>
+        <th>deviation from mean, <em>X<sub>i</sub></em> - <em>X̄</em></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>56</td>
+        <td>56 - 35.3 = 20.7</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>31</td>
+        <td>31 - 35.3 = -4.3</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>56</td>
+        <td>56 - 35.3 = 20.7</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>8</td>
+        <td>8 - 35.3 = -27.3</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>32</td>
+        <td>32 - 35.3 = -3.3</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Notice that these deviations can be positive or negative. If we take the mean of these deviations, we'll get zero. This should not be surprising: the big positive deviations and the big negative deviations cancel each other out. So we need a way to get rid of the signs. One way to do this is to take the <em>absolute value</em>. So instead of calculating the difference <em>X<sub>i</sub></em> - <em>X̄</em>, we calculate the absolute value of the difference, |<em>X<sub>i</sub></em> - <em>X̄</em>|. The mean of these absolute deviations is the <strong>mean absolute deviation</strong>. We can use SPSS to calculate the mean absolute deviation from the mean, although SPSS does not provide this statistic by default. However, we can use the Rj Editor (see section 3.2) to run an R command to get SPSS to calculate it for us:</p>
+
+  <p class="code-block">mean(abs(data[['afl.margins']] - mean(data[['afl.margins']])), na.rm=TRUE)</p>
+
+  <p>The output is 24.5. This means that, on average, the difference between an AFL winning margin and the mean winning margin is 24.5 points. The MAD is a bit like the IQR in that it's measuring the middle spread of the data. It has some theoretical advantages over the IQR, but it's not used as frequently in practice.</p>
+
+  <h3>4.2.4 Variance</h3>
+
+  <p>Okay, we've now seen the range, the IQR, and the mean absolute deviation. They all give slightly different answers, but they're all trying to do the same thing: they're all trying to quantify the spread of the data. However, the most commonly used measure of variability is the <strong>variance</strong>. The variance is closely related to the mean absolute deviation, so let's start by looking at what would happen if we calculated the mean <em>squared</em> deviation.</p>
+
+  <p>Let's look at an example of how to calculate the variance. The table below shows the same five AFL games, but this time we've squared all the deviations:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>which game, <em>i</em></th>
+        <th>winning margin, <em>X<sub>i</sub></em></th>
+        <th>squared deviation, (<em>X<sub>i</sub></em> - <em>X̄</em>)²</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>56</td>
+        <td>(56 - 35.3)² = 428.49</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>31</td>
+        <td>(31 - 35.3)² = 18.49</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>56</td>
+        <td>(56 - 35.3)² = 428.49</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>8</td>
+        <td>(8 - 35.3)² = 745.29</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>32</td>
+        <td>(32 - 35.3)² = 10.89</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>If we sum these squared deviations, we get a total of 1631.65. This quantity is called the "sum of squares". The name is pretty straightforward: we took a bunch of quantities (i.e., the deviations from the mean), squared them, and then added them up. If we now divide this sum of squares by 5, we get a value of 326.33. This is called the <strong>variance</strong>.</p>
+
+  <p>Notice that the variance is actually quite large relative to the original data. That's because we squared all the deviations. So what we should do is take the square root of the variance. When we do that, we get a quantity called the <strong>standard deviation</strong>, which we'll talk about in the next section. But first, let's look at the variance a bit more carefully.</p>
+
+  <p>In practice, there's actually a slight complication. What I outlined above is how to calculate the variance when you have data from a <em>population</em>. However, when you have data from a <em>sample</em> (which is almost always the case in practice), there's a subtle bias in the calculation. To remove this bias, we divide by <em>n</em> - 1 rather than <em>n</em>. So the formula for the <strong>sample variance</strong> is:</p>
+
+  <div class="formula-box">
+    <p><strong>s² = Σ(<em>X<sub>i</sub></em> - <em>X̄</em>)² / (<em>n</em> - 1)</strong></p>
+  </div>
+
+  <p>This is the formula that SPSS uses when you ask it to calculate the variance. The logic behind the <em>n</em> - 1 correction is a bit technical, but the basic idea is that when you calculate the sample variance, you're using the sample mean <em>X̄</em> as an estimate of the population mean. Because the sample mean is calculated from the same data as the variance, it tends to be "too close" to the data. To compensate for this, we divide by <em>n</em> - 1 instead of <em>n</em>.</p>
+
+  <p>Now let's try to get SPSS to calculate the variance. In the 'Descriptives' window, select the 'Variance' check box from the 'Statistics - Dispersion' options. This gives us the following output:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>afl.margins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Variance</td>
+        <td>675.9</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>One problem with the variance is that it doesn't have the same units as the data itself. Our data are measured in "points", but the variance is measured in "points-squared", whatever that means. This is a bit of a problem for interpretation. The solution is to take the square root of the variance, which gives us a quantity called the <strong>standard deviation</strong>.</p>
+
+  <h3>4.2.5 Standard deviation</h3>
+
+  <p>The <strong>standard deviation</strong> is the square root of the variance. For the sample variance, we denote the sample standard deviation as <em>s</em>, and it's defined as:</p>
+
+  <div class="formula-box">
+    <p><strong>s = √[Σ(<em>X<sub>i</sub></em> - <em>X̄</em>)² / (<em>n</em> - 1)]</strong></p>
+  </div>
+
+  <p>The standard deviation has the same units as the data, so it's easier to interpret than the variance. For the AFL margins data, SPSS tells us that the standard deviation is 26.0 points. In the 'Descriptives' window in SPSS, we can check the 'Std. deviation' option under 'Statistics - Dispersion'. This will give us the following output:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>afl.margins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Std. deviation</td>
+        <td>26.01</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>An interesting property of the standard deviation is that if the data are roughly normally distributed, then we can use it to make some general statements about how much of the data falls within various ranges:</p>
+
+  <ul>
+    <li>Approximately 68% of the data falls within 1 standard deviation of the mean</li>
+    <li>Approximately 95% of the data falls within 2 standard deviations of the mean</li>
+    <li>Approximately 99.7% of the data falls within 3 standard deviations of the mean</li>
+  </ul>
+
+  <p>This is often referred to as the <strong>68-95-99.7 rule</strong>, and it provides a nice way of thinking about what the standard deviation actually means. Of course, this rule only works when the data are normally distributed (see section 9.5), but it's still a useful thing to keep in mind.</p>
+
+  <h3>4.2.6 Which measure to use?</h3>
+
+  <p>We've discussed quite a few measures of spread (range, IQR, MAD, variance and standard deviation), and hinted at their strengths and weaknesses. Here's a quick summary:</p>
+
+  <ul>
+    <li><strong>Range</strong>. Gives you the full spread of the data, and it's very easy to calculate. But it's extremely sensitive to outliers.</li>
+    <li><strong>IQR</strong>. Tells you where the "middle half" of the data sits. It's robust to outliers, and intuitively meaningful. It pairs well with the median. Unfortunately, SPSS doesn't provide any tools to calculate the interquartile range directly (though you can calculate it manually by looking at the 25th and 75th percentiles).</li>
+    <li><strong>MAD</strong>. Measures the average deviation from a reference point (usually the mean or median). It's robust to outliers if you use the median as the reference point. Like the IQR, SPSS doesn't calculate this directly.</li>
+    <li><strong>Variance</strong>. Measures the average squared deviation from the mean. It's closely linked to many important statistical tools. However, it's not robust to outliers, and it's in squared units, which is a bit weird.</li>
+    <li><strong>Standard deviation</strong>. The square root of the variance. It's in the same units as the data, which makes it easier to interpret. If the data are roughly normally distributed, the 68-95-99.7 rule provides a nice way to interpret it. It's the measure that statisticians use most often.</li>
+  </ul>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with IBM SPSS Statistics" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

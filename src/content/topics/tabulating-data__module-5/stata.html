@@ -1,0 +1,108 @@
+<section class="module-content" aria-labelledby="tabulating-data-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="tabulating-data-title">6.1 Tabulating and Cross-Tabulating Data</h2>
+
+  <blockquote class="chapter-quote">
+    <p>The garden of life never seems to confine itself to the plots philosophers have laid out for its convenience.</p>
+    <footer>–Roger Zelazny</footer>
+  </blockquote>
+
+  <p>
+    A very common task when analysing data is the construction of <strong>frequency tables</strong>, or cross-tabulation
+    of one variable against another. These tasks can be achieved in Stata and are essential for understanding
+    categorical data.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Frequency Tables</h4>
+    <ul>
+      <li><strong>Frequency table</strong> – A table showing counts of how many times each category appears in the data</li>
+      <li><strong>Contingency table</strong> – A cross-tabulation showing the relationship between two categorical variables</li>
+      <li><strong>Row percentages</strong> – Percentages calculated within each row (show distribution across columns for each row)</li>
+      <li><strong>Column percentages</strong> – Percentages calculated within each column (show distribution across rows for each column)</li>
+    </ul>
+  </div>
+
+  <h3>6.1.1 Creating tables for single variables</h3>
+
+  <p>
+    To create a frequency table in Stata:
+  </p>
+
+  <ol>
+    <li>Navigate to <strong>Analyses → Exploration → Descriptives</strong></li>
+    <li>Add your categorical variable to the Variables box</li>
+    <li>Check the <strong>"Frequency tables"</strong> checkbox</li>
+  </ol>
+
+  <p>
+    The output will show you:
+  </p>
+
+  <ul>
+    <li><strong>Levels</strong> – All different categories in your variable</li>
+    <li><strong>Counts</strong> – How many times each category appears</li>
+    <li><strong>% of Total</strong> – The percentage each category represents</li>
+    <li><strong>Cumulative %</strong> – Running total of percentages</li>
+  </ul>
+
+  <div class="key-points">
+    <h4>Key Points: When to Use Frequency Tables</h4>
+    <ul>
+      <li><strong>Best for categorical data</strong> – Nominal or ordinal variables</li>
+      <li><strong>Quick overview</strong> – See distribution of responses at a glance</li>
+      <li><strong>Identify patterns</strong> – Find the most and least common categories</li>
+      <li><strong>Check data quality</strong> – Spot unexpected categories or data entry errors</li>
+    </ul>
+  </div>
+
+  <h3>6.1.2 Creating contingency tables</h3>
+
+  <p>
+    For a table combining two variables (a cross-tabulation), you need a contingency table:
+  </p>
+
+  <ol>
+    <li>Navigate to <strong>Analyses → Frequencies → Contingency Tables → Independent Samples</strong></li>
+    <li>Add one variable to <strong>Rows</strong></li>
+    <li>Add another variable to <strong>Columns</strong></li>
+  </ol>
+
+  <p>
+    The resulting table shows counts for each combination of categories from both variables.
+  </p>
+
+  <h3>6.1.3 Adding percentages to contingency tables</h3>
+
+  <p>
+    Raw frequencies are useful, but percentages often make interpretation easier. In the Contingency Tables options,
+    under <strong>Cells</strong>, you can check:
+  </p>
+
+  <ul>
+    <li><strong>Row percentages</strong> – Show what percentage of each row falls in each column</li>
+    <li><strong>Column percentages</strong> – Show what percentage of each column falls in each row</li>
+    <li><strong>Total percentages</strong> – Show what percentage of all observations fall in each cell</li>
+  </ul>
+
+  <div class="critical-points">
+    <h4>Critical Point: Interpreting Row vs. Column Percentages</h4>
+    <p>
+      The choice between row and column percentages depends on your research question:
+    </p>
+    <ul>
+      <li><strong>Row percentages</strong> – Use when you want to compare distribution of the column variable within each level of the row variable</li>
+      <li><strong>Column percentages</strong> – Use when you want to compare distribution of the row variable within each level of the column variable</li>
+    </ul>
+    <p>
+      Example: If rows are "Gender" and columns are "Product Preference", row percentages tell you what percentage
+      of males/females prefer each product. Column percentages tell you what percentage of people preferring each
+      product are male/female.
+    </p>
+  </div>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Stata" by Danielle J. Navarro and David R. Foxcroft, Chapter 6, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

@@ -1,0 +1,314 @@
+<section class="module-content" aria-labelledby="central-tendency-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="central-tendency-title">4.1 Measures of central tendency</h2>
+
+  <p>
+    Drawing pictures of the data is an excellent way to convey the "gist" of what the data is trying to tell you.
+    It's often extremely useful to try to condense the data into a few simple "summary" statistics. In most situations,
+    the first thing that you'll want to calculate is a measure of <strong>central tendency</strong>. That is, you'd
+    like to know something about where the "average" or "middle" of your data lies. The three most commonly used
+    measures are the mean, median and mode.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Central Tendency</h4>
+    <p>
+      <strong>Central tendency</strong> refers to statistical measures that identify the center or typical value of a dataset.
+      These measures tell us where the "middle" of the data lies and are often the first statistics calculated when
+      summarizing data.
+    </p>
+    <p>
+      <strong>The three main measures:</strong>
+    </p>
+    <ul>
+      <li><strong>Mean</strong> – The arithmetic average; sum of all values divided by the number of values</li>
+      <li><strong>Median</strong> – The middle value when data is sorted; 50th percentile</li>
+      <li><strong>Mode</strong> – The most frequently occurring value(s) in the dataset</li>
+    </ul>
+  </div>
+
+  <h3>4.1.1 The mean</h3>
+
+  <p>
+    The <strong>mean</strong> of a set of observations is just a normal, old-fashioned average. Add all of the values
+    up, and then divide by the total number of values. The first five AFL winning margins were 56, 31, 56, 8 and 32,
+    so the mean of these observations is just:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    (56 + 31 + 56 + 8 + 32) / 5 = 183 / 5 = 36.60
+  </p>
+
+  <p>
+    Of course, this definition of the mean isn't news to anyone. Averages (i.e., means) are used so often in everyday
+    life that this is pretty familiar stuff. However, since the concept of a mean is something that everyone already
+    understands, I'll use this as an excuse to start introducing some of the mathematical notation that statisticians
+    use to describe this calculation.
+  </p>
+
+  <p>
+    The first piece of notation to introduce is <em>N</em>, which we'll use to refer to the number of observations
+    that we're averaging (in this case N = 5). Next, we need to attach a label to the observations themselves. It's
+    traditional to use <em>X</em> for this, and to use subscripts to indicate which observation we're actually talking
+    about. That is, we'll use X₁ to refer to the first observation, X₂ to refer to the second observation, and so on
+    all the way up to X_N for the last one.
+  </p>
+
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>the observation</th>
+        <th>its symbol</th>
+        <th>the observed value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>winning margin, game 1</td>
+        <td>X₁</td>
+        <td>56 points</td>
+      </tr>
+      <tr>
+        <td>winning margin, game 2</td>
+        <td>X₂</td>
+        <td>31 points</td>
+      </tr>
+      <tr>
+        <td>winning margin, game 3</td>
+        <td>X₃</td>
+        <td>56 points</td>
+      </tr>
+      <tr>
+        <td>winning margin, game 4</td>
+        <td>X₄</td>
+        <td>8 points</td>
+      </tr>
+      <tr>
+        <td>winning margin, game 5</td>
+        <td>X₅</td>
+        <td>32 points</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    By tradition, we use X̄ (read as "X-bar") as the notation for the mean. The calculation for the mean could be
+    expressed using the following formula:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    X̄ = (X₁ + X₂ + ... + X_{N-1} + X_N) / N
+  </p>
+
+  <p>
+    This formula is entirely correct but it's terribly long, so we make use of the <strong>summation symbol</strong>
+    Σ to shorten it. The formula becomes:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    X̄ = (1/N) Σ Xᵢ
+  </p>
+
+  <h4>4.1.2 Calculating the mean in R</h4>
+
+  <p>
+    When the number of observations starts to become large it's much easier to do these sorts of calculations using
+    a computer. To calculate the mean using all the AFL margins data in R:
+  </p>
+
+  <ol>
+    <li>Click on the <strong>Exploration</strong> button and then click <strong>Descriptives</strong></li>
+    <li>Highlight the <strong>afl.margins</strong> variable and click the right arrow to move it into the Variables box</li>
+    <li>As soon as you do that a Table appears on the right showing descriptive statistics</li>
+  </ol>
+
+  <p>
+    The mean value for the afl.margins variable is <strong>35.30</strong>. Other information presented includes the
+    total number of observations (N=176), the number of missing values (none), and the Median, Minimum and Maximum
+    values for the variable.
+  </p>
+
+  <h3>4.1.3 The median</h3>
+
+  <p>
+    The second measure of central tendency that people use a lot is the <strong>median</strong>, and it's even easier
+    to describe than the mean. The median of a set of observations is just the middle value. As before let's imagine
+    we were interested only in the first 5 AFL winning margins: 56, 31, 56, 8 and 32. To figure out the median we
+    sort these numbers into ascending order:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    8, 31, <strong>32</strong>, 56, 56
+  </p>
+
+  <p>
+    From inspection, it's obvious that the median value of these 5 observations is 32 since that's the middle one in
+    the sorted list. But what should we do if we are interested in the first 6 games rather than the first 5? Since
+    the sixth game in the season had a winning margin of 14 points, our sorted list is now:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    8, 14, <strong>31, 32</strong>, 56, 56
+  </p>
+
+  <p>
+    and there are two middle numbers, 31 and 32. The median is defined as the average of those two numbers, which is
+    31.5. in R the Median value provided for the afl.margins variable is 30.50.
+  </p>
+
+  <h3>4.1.4 Mean or median? What's the difference?</h3>
+
+  <p>
+    Knowing how to calculate means and medians is only a part of the story. You also need to understand what each one
+    is saying about the data, and what that implies for when you should use each one. The mean is kind of like the
+    "centre of gravity" of the data set, whereas the median is the "middle value" in the data. What this implies, as
+    far as which one you should use, depends a little on what type of data you've got and what you're trying to achieve.
+  </p>
+
+  <ul>
+    <li>
+      <strong>If your data are nominal scale</strong> you probably shouldn't be using either the mean or the median.
+      Both rely on the idea that the numbers assigned to values are meaningful. If the numbering scheme is arbitrary
+      then it's probably best to use the mode instead.
+    </li>
+    <li>
+      <strong>If your data are ordinal scale</strong> you're more likely to want to use the median than the mean.
+      The median only makes use of the order information in your data (i.e., which numbers are bigger) but doesn't
+      depend on the precise numbers involved. The mean, on the other hand, makes use of the precise numeric values
+      assigned to the observations, so it's not really appropriate for ordinal data.
+    </li>
+    <li>
+      <strong>For interval and ratio scale data</strong> either one is generally acceptable. Which one you pick
+      depends a bit on what you're trying to achieve. The mean has the advantage that it uses all the information
+      in the data (which is useful when you don't have a lot of data). But it's very sensitive to extreme, outlying
+      values.
+    </li>
+  </ul>
+
+  <p>
+    One consequence is that there are systematic differences between the mean and the median when the histogram is
+    asymmetric (skewed). The median is located closer to the "body" of the histogram, whereas the mean gets dragged
+    towards the "tail" (where the extreme values are).
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: Choosing Mean vs. Median</h4>
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>Data Type</th>
+          <th>Best Measure</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nominal</strong></td>
+          <td>Mode</td>
+          <td>Numbers are arbitrary labels; mean and median are meaningless</td>
+        </tr>
+        <tr>
+          <td><strong>Ordinal</strong></td>
+          <td>Median (preferred)</td>
+          <td>Median uses only order information; mean assumes equal intervals</td>
+        </tr>
+        <tr>
+          <td><strong>Interval/Ratio</strong></td>
+          <td>Either (context-dependent)</td>
+          <td>
+            <strong>Mean:</strong> Uses all information, but sensitive to outliers<br>
+            <strong>Median:</strong> Resistant to outliers; better for skewed data
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Key insight:</strong> In skewed distributions, the mean gets "pulled" toward the tail (extreme values),
+      while the median stays near the center of the data. For income data or housing prices (typically right-skewed),
+      the median often better represents the "typical" value.
+    </p>
+  </div>
+
+  <h3>4.1.5 A real life example</h3>
+
+  <p>
+    To get a sense of why you need to pay attention to the differences between the mean and the median let's consider
+    a real life example. This is an excellent article on the ABC news website from 24 September, 2010:
+  </p>
+
+  <blockquote>
+    <p>
+      Senior Commonwealth Bank executives have travelled the world in the past couple of weeks with a presentation
+      showing how Australian house prices, and the key price to income ratios, compare favourably with similar
+      countries. "Housing affordability has actually been going sideways for the last five to six years," said
+      Craig James, the chief economist of the bank's trading arm, CommSec.
+    </p>
+  </blockquote>
+
+  <p>
+    This probably comes as a huge surprise to anyone with a mortgage. The article goes on to make the observation that:
+  </p>
+
+  <blockquote>
+    <p>
+      Many analysts say that has led the bank to use misleading figures and comparisons. If you go to page four of
+      CBA's presentation and read the source information at the bottom of the graph and table, you would notice there
+      is an additional source on the international comparison – Demographia. However, if the Commonwealth Bank had
+      also used Demographia's analysis of Australia's house price to income ratio, it would have come up with a figure
+      closer to 9 rather than 5.6 or 4.3
+    </p>
+  </blockquote>
+
+  <p>
+    That's a rather serious discrepancy. One group of people say 9, another says 4-5. Should we just split the
+    difference? Absolutely not! This is a situation where there is a right answer and a wrong answer. Demographia
+    is correct, and the Commonwealth Bank is wrong. As the article points out:
+  </p>
+
+  <blockquote>
+    <p>
+      [An] obvious problem with the Commonwealth Bank's domestic price to income figures is they compare
+      <strong>average incomes</strong> with <strong>median house prices</strong> (unlike the Demographia figures
+      that compare median incomes to median prices). The median is the mid-point, effectively cutting out the highs
+      and lows, and that means the average is generally higher when it comes to incomes and asset prices, because
+      it includes the earnings of Australia's wealthiest people.
+    </p>
+    <p>
+      To put it another way: the Commonwealth Bank's figures count Ralph Norris' multi-million dollar pay packet on
+      the income side, but not his (no doubt) very expensive house in the property price figures, thus understating
+      the house price to income ratio for middle-income Australians.
+    </p>
+  </blockquote>
+
+  <p>
+    The way that Demographia calculated the ratio is the right thing to do. The way that the Bank did it is incorrect.
+  </p>
+
+  <h3>4.1.6 Mode</h3>
+
+  <p>
+    The <strong>mode</strong> of a sample is very simple. It is the value that occurs most frequently. For the AFL
+    winning margins data, we can use R to produce a frequency table. Under 'Exploration' - 'Descriptives' click
+    the small check box labelled 'Frequency tables' and then look for the most common value. You can also check the
+    'Mode' checkbox in the Statistics section to have R calculate it directly.
+  </p>
+
+  <p>
+    The mode is most often calculated when you have nominal data, because means and medians are useless for those
+    sorts of variables. But there are some situations in which you really do want to know the mode of an ordinal,
+    interval or ratio scale variable. For instance, suppose a friend is offering a bet on a football game chosen at
+    random. Without knowing who is playing you have to guess the exact winning margin. If you guess correctly you
+    win $50. If you don't you lose $1. There are no consolation prizes for "almost" getting the right answer. For
+    this bet, the mean and the median are completely useless to you. It is the mode that you should bet on.
+  </p>
+
+  <hr>
+
+  <div class="attribution">
+    <p>
+      Content adapted from <em>Learning Statistics with R and RStudio</em> by Danielle J. Navarro and David R. Foxcroft,
+      licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+</section>

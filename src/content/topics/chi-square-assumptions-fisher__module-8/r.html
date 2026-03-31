@@ -1,0 +1,184 @@
+<section class="module-content" aria-labelledby="assumptions-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="assumptions-title">10.5-10.6 Assumptions and the Fisher Exact Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Part 1: Assumptions of Chi-Square Tests</h3>
+    <p>Chi-square tests are based on approximations that work well when certain conditions are met. Violating assumptions can lead to incorrect conclusions.</p>
+  </div>
+
+  <h3>Assumption 1: Expected Frequencies Are Large Enough</h3>
+
+  <div class="formula-box">
+    <h4>Rules of Thumb:</h4>
+    <ul>
+      <li><strong>Strict rule:</strong> All expected frequencies ≥ 5</li>
+      <li><strong>Lenient rule:</strong> At least 80% of cells have E ≥ 5, and no cell has E < 1</li>
+      <li><strong>For 2×2 tables:</strong> All four E<sub>ij</sub> ≥ 5 (strict)</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Why This Matters</h3>
+    <p>χ² uses a continuous distribution to approximate discrete count data. This approximation breaks down when expected counts are small:</p>
+    <ul>
+      <li>Test becomes too <strong>liberal</strong> (Type I error rate > α)</li>
+      <li>p-values are too small</li>
+      <li>May falsely reject true null hypothesis</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Checking in R:</h4>
+    <ol>
+      <li>Run contingency table analysis</li>
+      <li>Check <strong>"Expected counts"</strong> under Cells</li>
+      <li>Examine all E<sub>ij</sub> values</li>
+      <li>If any are < 5, consider Fisher exact test</li>
+    </ol>
+  </div>
+
+  <h3>What to Do If Expected Frequencies Are Too Small</h3>
+  <div class="concept-box">
+    <h4>Options:</h4>
+    <ol>
+      <li><strong>Collect more data</strong> (if possible)</li>
+      <li><strong>Combine categories</strong> (if theoretically justified)</li>
+      <li><strong>Use Fisher exact test</strong> (for 2×2 tables)</li>
+      <li><strong>Use simulation-based methods</strong> (advanced)</li>
+    </ol>
+  </div>
+
+  <h3>Assumption 2: Independence of Observations</h3>
+  <ul>
+    <li>Each observation counted exactly <strong>once</strong></li>
+    <li>Observations from different participants (or units)</li>
+    <li>No repeated measures from same person</li>
+  </ul>
+
+  <div class="warning-box">
+    <h3>Violations of Independence</h3>
+    <p><strong>Problem:</strong> Measuring the same people twice (e.g., before/after)</p>
+    <p><strong>Solution:</strong> Use <strong>McNemar test</strong> instead of χ² independence test</p>
+
+    <p><strong>Example of violation:</strong> You walk through a maternity ward 10 times, seeing the same 3 babies each time. You have 30 observations but only 3 independent babies!</p>
+  </div>
+
+  <div class="concept-box" style="margin-top: 2em;">
+    <h3>Part 2: Fisher's Exact Test</h3>
+    <p>When expected frequencies are too small for χ² test, Fisher's exact test provides the exact p-value using the hypergeometric distribution.</p>
+  </div>
+
+  <h3>When to Use Fisher's Exact Test</h3>
+  <ul>
+    <li><strong>2×2 contingency tables</strong> only (standard version)</li>
+    <li>Expected frequencies < 5 in one or more cells</li>
+    <li>Small sample sizes</li>
+    <li>When you need exact p-values (not approximations)</li>
+  </ul>
+
+  <h3>The Salem Witches Example</h3>
+  <div class="example-box">
+    <p>Testing emotional status of people accused of witchcraft:</p>
+    <table class="stats-table">
+      <tr><th></th><th>On Fire</th><th>Not On Fire</th></tr>
+      <tr><td>Happy</td><td>0</td><td>10</td></tr>
+      <tr><td>Unhappy</td><td>3</td><td>3</td></tr>
+    </table>
+
+    <p><strong>Expected frequencies:</strong></p>
+    <table class="stats-table">
+      <tr><th></th><th>On Fire</th><th>Not On Fire</th></tr>
+      <tr><td>Happy</td><td>1.88</td><td>8.13</td></tr>
+      <tr><td>Unhappy</td><td>1.13</td><td>4.88</td></tr>
+    </table>
+
+    <p><strong>Problem:</strong> Two cells have E < 5, so χ² may not be appropriate</p>
+    <p><strong>Solution:</strong> Use Fisher exact test</p>
+    <p><strong>Result:</strong> p = .036 (exact)</p>
+    <p><strong>Conclusion:</strong> People on fire are significantly less happy (p = .036)</p>
+  </div>
+
+  <h3>How Fisher's Exact Test Works</h3>
+  <div class="concept-box">
+    <h4>Logic:</h4>
+    <p>Treats row and column totals as <strong>fixed</strong>. Then calculates:</p>
+    <ul>
+      <li>Probability of observing this exact table</li>
+      <li>Probability of all more extreme tables</li>
+      <li>Sums these probabilities = exact p-value</li>
+    </ul>
+    <p>Uses hypergeometric distribution (drawing without replacement)</p>
+    <p><em>No approximation—calculates exact probability</em></p>
+  </div>
+
+  <div class="R-box">
+    <h3>in R</h3>
+    <ol>
+      <li><strong>Analyses → Frequencies → Contingency Tables → Independent Samples</strong></li>
+      <li>Set up your 2×2 table</li>
+      <li>Under <strong>Statistics</strong>, check <strong>"Fisher's exact test"</strong></li>
+      <li>R shows both χ² and Fisher exact p-value</li>
+      <li>Use Fisher's p-value when expected frequencies are small</li>
+    </ol>
+  </div>
+
+  <h3>Fisher vs. Chi-Square</h3>
+  <div class="formula-box">
+    <table class="stats-table">
+      <tr>
+        <th></th>
+        <th>Chi-Square</th>
+        <th>Fisher Exact</th>
+      </tr>
+      <tr>
+        <td><strong>Table size</strong></td>
+        <td>Any size</td>
+        <td>2×2 only (standard)</td>
+      </tr>
+      <tr>
+        <td><strong>Expected freq</strong></td>
+        <td>All ≥ 5</td>
+        <td>Can be < 5</td>
+      </tr>
+      <tr>
+        <td><strong>P-value</strong></td>
+        <td>Approximate</td>
+        <td>Exact</td>
+      </tr>
+      <tr>
+        <td><strong>Computation</strong></td>
+        <td>Fast</td>
+        <td>Slower (but still instant for small N)</td>
+      </tr>
+      <tr>
+        <td><strong>When to use</strong></td>
+        <td>Large samples, E ≥ 5</td>
+        <td>Small samples, E < 5</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Check assumptions</strong> before trusting χ² results</li>
+      <li><strong>Expected frequencies ≥ 5:</strong> Critical for valid results</li>
+      <li><strong>Independence:</strong> Each observation counted once</li>
+      <li><strong>Fisher exact test:</strong> Use when expected frequencies are small</li>
+      <li>Fisher gives <strong>exact p-values</strong>, not approximations</li>
+      <li>If assumptions violated, results may be completely wrong</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Mistakes</h3>
+    <ul>
+      <li><strong>Checking observed instead of expected:</strong> It's E<sub>ij</sub> that must be ≥ 5, not O<sub>ij</sub></li>
+      <li><strong>Using χ² with paired data:</strong> Use McNemar test instead</li>
+      <li><strong>Automatically deleting small cells:</strong> Use Fisher exact instead</li>
+      <li><strong>Not reporting which test was used:</strong> Always state if you used Fisher's</li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,275 @@
+<section class="module-content" aria-labelledby="normality-title">
+  <h2 id="normality-title">11.8 Checking Normality</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>Most t-tests assume that data are normally distributed. This section covers how to check this assumption using visual (QQ plots) and statistical (Shapiro-Wilk test) methods.</p>
+  </div>
+
+  <h3>Why Check Normality?</h3>
+  <p>The t-test assumes that the population from which your sample is drawn is normally distributed. When this assumption is violated, the p-values and confidence intervals may be inaccurate.</p>
+
+  <div class="warning-box">
+    <h4>When Does Normality Matter?</h4>
+    <ul>
+      <li><strong>Small samples (N < 30):</strong> Normality assumption is important</li>
+      <li><strong>Large samples (N > 30):</strong> t-test is robust due to Central Limit Theorem</li>
+      <li><strong>Severe violations:</strong> Can affect results even with large samples</li>
+      <li><strong>Outliers:</strong> Can have substantial impact regardless of sample size</li>
+    </ul>
+  </div>
+
+  <h3>Two Methods for Checking Normality</h3>
+  <ol>
+    <li><strong>Visual inspection:</strong> QQ plots (Quantile-Quantile plots)</li>
+    <li><strong>Statistical test:</strong> Shapiro-Wilk test</li>
+  </ol>
+
+  <h3>Method 1: QQ Plots (Quantile-Quantile Plots)</h3>
+  <div class="concept-box" role="note">
+    <h4>What is a QQ Plot?</h4>
+    <p>A QQ plot compares your data's quantiles to the quantiles of a theoretical normal distribution. If your data are normally distributed, the points should fall roughly on a straight diagonal line.</p>
+
+    <h4>How to Read a QQ Plot:</h4>
+    <ul>
+      <li><strong>Straight line:</strong> Data are approximately normal ✓</li>
+      <li><strong>Curved upward (right):</strong> Positive skew (long right tail)</li>
+      <li><strong>Curved downward (left):</strong> Negative skew (long left tail)</li>
+      <li><strong>S-shaped:</strong> Heavy tails (high kurtosis) or light tails (low kurtosis)</li>
+      <li><strong>Few points off line:</strong> Outliers</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Interpreting QQ Plot Patterns</h4>
+    <p><strong>Pattern 1: Approximately Normal</strong></p>
+    <p>Points fall close to diagonal line → Normality assumption met</p>
+    <p>Minor deviations are okay, especially at the extremes</p>
+
+    <p><strong>Pattern 2: Positive Skew</strong></p>
+    <p>Points curve upward on right side → Long right tail</p>
+    <p>Example: Income data, reaction times</p>
+    <p>Solution: Consider log transformation or nonparametric test</p>
+
+    <p><strong>Pattern 3: Negative Skew</strong></p>
+    <p>Points curve downward on left side → Long left tail</p>
+    <p>Example: Test scores with ceiling effect</p>
+    <p>Solution: Reflect and transform, or use nonparametric test</p>
+
+    <p><strong>Pattern 4: Heavy Tails (High Kurtosis)</strong></p>
+    <p>S-shaped curve (steep middle, flatter ends) → More extreme values than normal</p>
+    <p>Example: Financial returns, outlier-prone data</p>
+    <p>Solution: Check for outliers, consider robust methods</p>
+
+    <p><strong>Pattern 5: Light Tails (Low Kurtosis)</strong></p>
+    <p>Reverse S-shape → Fewer extreme values than normal</p>
+    <p>Example: Truncated or bounded data</p>
+    <p>Less common in practice</p>
+  </div>
+
+  <h3>Method 2: Shapiro-Wilk Test</h3>
+  <div class="formula-box">
+    <h4>Hypotheses:</h4>
+    <p>H₀: Data are normally distributed</p>
+    <p>H₁: Data are not normally distributed</p>
+
+    <h4>Test Statistic: W</h4>
+    <ul>
+      <li>Ranges from 0 to 1</li>
+      <li>W = 1: Perfect normality</li>
+      <li>W < 1: Departure from normality</li>
+      <li>Smaller W → Greater departure</li>
+    </ul>
+
+    <h4>Interpretation:</h4>
+    <ul>
+      <li><strong>p > .05:</strong> Fail to reject H₀ → Data consistent with normality ✓</li>
+      <li><strong>p < .05:</strong> Reject H₀ → Data significantly non-normal ✗</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h4>Important Caveats about Shapiro-Wilk:</h4>
+    <ul>
+      <li><strong>Sensitive to sample size:</strong>
+        <ul>
+          <li>Small samples: Hard to detect non-normality (low power)</li>
+          <li>Large samples: Detects even trivial deviations (overpowered)</li>
+        </ul>
+      </li>
+      <li><strong>Don't rely solely on p-value:</strong> Use in combination with visual inspection</li>
+      <li><strong>Remember:</strong> We're testing H₀ that data ARE normal (opposite of usual tests)</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Example 1: Normal Data</h4>
+    <p><strong>Data:</strong> N = 50, W = 0.98, p = .62</p>
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>W = 0.98 is close to 1 (good)</li>
+      <li>p = .62 > .05 (fail to reject H₀)</li>
+      <li>Conclusion: Data consistent with normality</li>
+      <li>Proceed with t-test ✓</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Example 2: Non-Normal Data (Small Sample)</h4>
+    <p><strong>Data:</strong> N = 15, W = 0.87, p = .04</p>
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>W = 0.87 shows departure from normality</li>
+      <li>p = .04 < .05 (reject H₀)</li>
+      <li>Conclusion: Data significantly non-normal</li>
+      <li>With small N, this is concerning</li>
+      <li>Consider nonparametric test (Wilcoxon) ✓</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Example 3: Large Sample with Minor Deviation</h4>
+    <p><strong>Data:</strong> N = 200, W = 0.98, p = .02</p>
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>W = 0.98 is very close to 1</li>
+      <li>p = .02 < .05 (technically significant)</li>
+      <li>But: Large sample makes test overly sensitive</li>
+      <li>Check QQ plot: If nearly straight, normality assumption okay</li>
+      <li>Conclusion: t-test likely robust with N = 200 ✓</li>
+    </ul>
+  </div>
+
+  <div class="software-box">
+    <h3>Checking Normality in jamovi</h3>
+
+    <h4>For One-Sample T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → One Sample T-Test</li>
+      <li>Under "Assumption Checks", check "Normality"</li>
+      <li>jamovi will show Shapiro-Wilk test for your variable</li>
+    </ol>
+
+    <h4>For Independent Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Independent Samples T-Test</li>
+      <li>Under "Assumption Checks", check "Normality"</li>
+      <li>jamovi will show Shapiro-Wilk for EACH group separately</li>
+      <li><strong>Important:</strong> Check normality for both groups!</li>
+    </ol>
+
+    <h4>For Paired Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Paired Samples T-Test</li>
+      <li>Under "Assumption Checks", check "Normality"</li>
+      <li>jamovi tests normality of the <strong>difference scores</strong></li>
+      <li><strong>Critical:</strong> Test DIFFERENCES, not original variables!</li>
+    </ol>
+
+    <h4>Creating QQ Plots in jamovi:</h4>
+    <p><strong>Note:</strong> QQ plots are not currently available directly in jamovi's t-test module. To create QQ plots:</p>
+    <ol>
+      <li>Analyses → Exploration → Descriptives</li>
+      <li>Move your variable(s) to Variables box</li>
+      <li>Under "Plots", check "Q-Q"</li>
+      <li>jamovi will display a Q-Q plot for each variable</li>
+    </ol>
+
+    <p><strong>For paired data:</strong> You must first create a difference variable, then make a QQ plot of that difference.</p>
+  </div>
+
+  <h3>What to Do When Normality is Violated</h3>
+  <div class="concept-box" role="note">
+    <h4>Option 1: Use Nonparametric Tests</h4>
+    <ul>
+      <li><strong>Instead of one-sample t-test:</strong> Wilcoxon signed-rank test</li>
+      <li><strong>Instead of independent t-test:</strong> Mann-Whitney U test</li>
+      <li><strong>Instead of paired t-test:</strong> Wilcoxon signed-rank test</li>
+    </ul>
+
+    <h4>Option 2: Transform the Data</h4>
+    <ul>
+      <li><strong>Log transformation:</strong> For positive skew</li>
+      <li><strong>Square root transformation:</strong> For moderate positive skew</li>
+      <li><strong>Reciprocal transformation:</strong> For extreme positive skew</li>
+      <li><strong>Note:</strong> Transform, then re-check normality</li>
+    </ul>
+
+    <h4>Option 3: Rely on Robustness (Large Samples)</h4>
+    <ul>
+      <li>With N > 30 per group, t-test is fairly robust</li>
+      <li>Central Limit Theorem ensures sampling distribution is approximately normal</li>
+      <li>Exception: Severe skew or extreme outliers still problematic</li>
+    </ul>
+
+    <h4>Option 4: Remove Outliers (Cautiously!)</h4>
+    <ul>
+      <li>Only if you have good reason (data entry error, equipment malfunction)</li>
+      <li>NEVER remove outliers just to get significance!</li>
+      <li>Always report removed data</li>
+    </ul>
+  </div>
+
+  <h3>Decision Guide</h3>
+  <div class="example-box">
+    <h4>Step-by-Step Decision Process:</h4>
+    <ol>
+      <li><strong>Check sample size:</strong>
+        <ul>
+          <li>N < 15: Normality very important</li>
+          <li>15 ≤ N < 30: Normality important</li>
+          <li>N ≥ 30: t-test more robust</li>
+          <li>N ≥ 100: t-test very robust</li>
+        </ul>
+      </li>
+      <li><strong>Run Shapiro-Wilk test</strong></li>
+      <li><strong>Examine QQ plot</strong></li>
+      <li><strong>Decide:</strong>
+        <ul>
+          <li>Shapiro-Wilk p > .05 AND QQ plot straight → Proceed with t-test ✓</li>
+          <li>Shapiro-Wilk p < .05 AND small N (< 30) → Use nonparametric test</li>
+          <li>Shapiro-Wilk p < .05 BUT large N (> 100) AND QQ plot nearly straight → t-test probably okay</li>
+          <li>Severe skew or outliers → Transform or use nonparametric test</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Relying solely on Shapiro-Wilk without visual inspection</li>
+    <li>Ignoring normality assumption in small samples</li>
+    <li>Testing normality of original variables in paired design (should test differences!)</li>
+    <li>Removing outliers without justification</li>
+    <li>Assuming all data must be perfectly normal</li>
+    <li>Not checking each group separately in independent samples</li>
+    <li>Forgetting that large samples make t-test robust</li>
+  </ul>
+
+  <h3>Reporting Normality Checks</h3>
+  <div class="example-box">
+    <h4>Example 1: Assumption Met</h4>
+    <p>"Shapiro-Wilk tests indicated that data were normally distributed in both groups (Group A: W = 0.97, p = .52; Group B: W = 0.96, p = .31). Visual inspection of Q-Q plots confirmed approximate normality."</p>
+
+    <h4>Example 2: Assumption Violated, Used Nonparametric</h4>
+    <p>"Shapiro-Wilk tests revealed significant departures from normality in both groups (Group A: W = 0.85, p = .01; Group B: W = 0.88, p = .03). Q-Q plots showed positive skew. Due to the violation of the normality assumption and small sample size (N = 20 per group), we conducted a Mann-Whitney U test instead of an independent samples t-test."</p>
+
+    <h4>Example 3: Assumption Violated, But Robust</h4>
+    <p>"Although Shapiro-Wilk tests indicated slight departures from normality (both p < .05), the large sample size (N = 150 per group) and visual inspection of Q-Q plots showing only minor deviations suggested the t-test would be robust to these violations."</p>
+  </div>
+
+  <h3>Understanding "Approximately Normal"</h3>
+  <div class="concept-box" role="note">
+    <h4>Key Points:</h4>
+    <ul>
+      <li>Real data are NEVER perfectly normal</li>
+      <li>"Approximately normal" is good enough</li>
+      <li>Minor bumps and wiggles in QQ plot are okay</li>
+      <li>Focus on major departures: severe skew, heavy tails, outliers</li>
+      <li>Use judgment: statistics + visual inspection + sample size</li>
+    </ul>
+
+    <h4>When in Doubt:</h4>
+    <p>If unsure whether normality assumption is met, consider running both parametric (t-test) and nonparametric (Wilcoxon/Mann-Whitney) tests. If conclusions are the same, normality violation likely not a major concern.</p>
+  </div>
+</section>

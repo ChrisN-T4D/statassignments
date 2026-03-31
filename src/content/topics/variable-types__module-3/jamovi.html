@@ -1,0 +1,194 @@
+<section class="module-content" aria-labelledby="variable-types-title">
+  <h2 id="variable-types-title">3.3.1 Variables</h2>
+
+  <p>
+    The most commonly used variables in jamovi are 'Data Variables', these variables simply contain
+    data either loaded from a data file, or 'typed in' by the user. Data variables can be one of three
+    measurement levels:
+  </p>
+
+  <p>
+    <em>[Figure showing variable editor with measurement level options: Continuous, Ordinal, Nominal, ID]</em>
+  </p>
+
+  <p>
+    These levels are designated by the symbol in the header of the variable's column.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Measurement Levels in jamovi</h4>
+    <p>
+      <strong>Measurement level</strong> (also called "level of measurement" or "scale of measurement") refers to
+      the mathematical properties of a variable and determines what statistical operations are meaningful.
+      jamovi uses four measurement levels: ID, Nominal, Ordinal, and Continuous. Correctly identifying a
+      variable's measurement level is crucial because it determines which statistical tests are appropriate.
+    </p>
+  </div>
+
+  <p>
+    The <strong>ID</strong> variable type is unique to jamovi. It's intended for variables that contain identifiers
+    that you would almost never want to analyse. For example, a persons name, or a participant
+    ID. Specifying an ID variable type can improve performance when interacting with very large
+    data sets.
+  </p>
+
+  <p>
+    <strong>Nominal</strong> variables are for categorical variables which are text labels, for example a column
+    called Gender with the values Male and Female would be nominal. So would a person's name.
+    Nominal variable values can also have a numeric value. These variables are used most often
+    when importing data which codes values with numbers rather than text. For example, a column
+    in a dataset may contain the values 1 for males, and 2 for females. It is possible to add nice
+    'human-readable' labels to these values with the variable editor (more on this later).
+  </p>
+
+  <p>
+    <strong>Ordinal</strong> variables are like Nominal variables, except the values have a specific order. An
+    example is a Likert scale with 3 being 'strongly agree' and -3 being 'strongly disagree'.
+  </p>
+
+  <p>
+    <strong>Continuous</strong> variables are variables which exist on a continuous scale. Examples might be
+    height or weight. This is also referred to as 'Interval' or 'Ratio scale'.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: Choosing the Right Measurement Level</h4>
+    <p>
+      Selecting the correct measurement level is essential because it determines which statistical analyses
+      you can perform:
+    </p>
+    <ul>
+      <li><strong>ID variables</strong> – Use for identifiers like names or participant IDs that you'll never analyze</li>
+      <li><strong>Nominal variables</strong> – Use for categories with no inherent order (gender, ethnicity, diagnosis type)</li>
+      <li><strong>Ordinal variables</strong> – Use for categories with a meaningful order (Likert scales, rankings, education level)</li>
+      <li><strong>Continuous variables</strong> – Use for numeric measurements on interval or ratio scales (age, height, test scores)</li>
+    </ul>
+    <p>
+      <strong>Common mistake:</strong> Numbers don't always mean continuous. For example, coding gender as 1=Male, 2=Female
+      uses numbers, but the variable is nominal, not continuous.
+    </p>
+  </div>
+
+  <p>
+    In addition, you can also specify different data types: variables have a data type of either
+    'Text', 'Integer' or 'Decimal'.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Data Types vs. Measurement Levels</h4>
+    <p>
+      <strong>Data type</strong> refers to how the data is stored (Text, Integer, Decimal), while <strong>measurement level</strong>
+      refers to the mathematical properties of the variable (ID, Nominal, Ordinal, Continuous). These are independent:
+    </p>
+    <ul>
+      <li><strong>Text</strong> – Stores letters and words (e.g., "Male", "Female")</li>
+      <li><strong>Integer</strong> – Stores whole numbers (e.g., 1, 2, 3)</li>
+      <li><strong>Decimal</strong> – Stores numbers with decimal points (e.g., 3.14, 98.6)</li>
+    </ul>
+    <p>
+      A nominal variable can use integer data type (1=Male, 2=Female), and an ordinal variable can use text
+      ("Low", "Medium", "High"). The data type and measurement level serve different purposes.
+    </p>
+  </div>
+
+  <p>
+    When starting with a blank spreadsheet and typing values in the variable type will change
+    automatically depending on the data you enter. This is a good way to get a feel for which
+    variable types go with which sorts of data. Similarly, when opening a data file jamovi will
+    try and guess the variable type from the data in each column. In both cases this automatic
+    approach may not be correct, and it may be necessary to manually specify the variable type
+    with the variable editor.
+  </p>
+
+  <p>
+    The variable editor can be opened by selecting 'Setup' from the data tab or by double-clicking
+    on the variable column header. The variable editor allows you to change the name of the variable
+    and, for data variables, the variable type, the order of the levels, and the label displayed for
+    each level. Changes can be applied by clicking the 'tick' to the top right. The variable editor
+    can be dismissed by clicking the 'Hide' arrow.
+  </p>
+
+  <p>
+    New variables can be inserted or appended to the data set using the 'add' button from the
+    data ribbon. The 'add' button also allows the addition of computed variables.
+  </p>
+
+  <h3>3.3.2 Computed variables</h3>
+
+  <p>
+    Computed Variables are those which take their value by performing a computation on other
+    variables. Computed Variables can be used for a range of purposes, including log transforms,
+    z-scores, sum-scores, negative scoring and means.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Computed Variables</h4>
+    <p>
+      <strong>Computed variables</strong> are new variables created by performing mathematical operations on existing
+      variables. Instead of entering data manually, the values are automatically calculated using a formula.
+      Computed variables update automatically if the underlying data changes, ensuring consistency throughout
+      your analysis.
+    </p>
+  </div>
+
+  <p>
+    Computed variables can be added to the data set with the 'add' button available on the data
+    tab. This will produce a formula box where you can specify the formula. The usual arithmetic
+    operators are available. Some examples of formulas are:
+  </p>
+
+  <ul style="list-style-type: none; font-family: monospace;">
+    <li>A + B</li>
+    <li>LOG10(len)</li>
+    <li>MEAN(A, B)</li>
+    <li>(dose - VMEAN(dose)) / VSTDEV(dose)</li>
+  </ul>
+
+  <p>
+    In order, these are the sum of A and B, a log (base 10) transform of len, the mean of A and
+    B, and the z-score of the variable dose. The figure below shows the jamovi screen for the new
+    variable computed as the z-score of dose (from the 'Tooth Growth' example data set).
+  </p>
+
+  <p>
+    <em>[Figure 3.2: A newly computed variable showing the formula for z-score of 'dose']</em>
+  </p>
+
+  <div class="callout">
+    <h4>V-functions</h4>
+    <p>
+      Several functions are already available in jamovi and available from the drop down box
+      labelled <em>fx</em>. A number of functions appear in pairs, one prefixed with a V and the other not. V
+      functions perform their calculation on a variable as a whole, where as non-V functions perform
+      their calculation row by row. For example, MEAN(A, B) will produce the mean of A and B for
+      each row. Where as VMEAN(A) gives the mean of all the values in A.
+    </p>
+  </div>
+
+  <h3>3.6 Changing data from one level to another</h3>
+
+  <p>
+    Sometimes you want to change the variable level. This can happen for all sorts of reasons.
+    Sometimes when you import data from files, it can come to you in the wrong format. Numbers
+    sometimes get imported as nominal, text values. Dates may get imported as text. ParticipantID
+    values can sometimes be read as continuous: nominal values can sometimes be read as ordinal
+    or even continuous. There's a good chance that sometimes you'll want to convert a variable
+    from one measurement level into another one. Or, to use the correct term, you want to <strong>coerce</strong>
+    the variable from one class into another.
+  </p>
+
+  <p>
+    In section 3.3.1 we saw how to specify different variable levels, and if you want to change a variable's
+    measurement level then you can do this in the jamovi data view for that variable. Just click the
+    check box for the measurement level you want - continuous, ordinal, or nominal.
+  </p>
+
+  <hr>
+
+  <div class="attribution">
+    <p>
+      Content adapted from <em>Learning Statistics with jamovi</em> by Danielle J. Navarro and David R. Foxcroft,
+      licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+</section>

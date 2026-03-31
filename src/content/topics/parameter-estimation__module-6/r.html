@@ -1,0 +1,195 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>8.4 Estimating population parameters</h2>
+
+  <p>
+    The central goal of statistical inference is to learn about population parameters from sample data. This section
+    discusses how we estimate parameters like the population mean and standard deviation, and why some estimation
+    methods are better than others.
+  </p>
+
+  <h3>8.4.1 Estimating the population mean</h3>
+
+  <p>
+    The most obvious way to estimate the population mean (μ) is to use the sample mean (M or X̄). This turns out to be
+    an excellent choice.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Sample Mean as an Estimator</h4>
+    <p>
+      The sample mean M = (X₁ + X₂ + ... + Xₙ) / n is the standard estimator for the population mean μ.
+    </p>
+    <p>
+      <strong>Key property:</strong> The sample mean is an <strong>unbiased estimator</strong> of μ. This means
+      that across many different samples, the average of all sample means equals the true population mean.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Suppose the true average IQ in a population is μ = 100. If you take one sample of 50
+    people, you might get M = 102. Another sample might give M = 98. A third might give M = 101. These individual
+    sample means vary, but if you average them across thousands of samples, that average will be very close to 100.
+    This is what it means for the sample mean to be unbiased.
+  </p>
+
+  <h3>8.4.2 Estimating the population standard deviation</h3>
+
+  <p>
+    Estimating the population standard deviation (σ) is trickier than estimating the mean. There's a subtle issue that
+    requires a correction.
+  </p>
+
+  <p>
+    You might think we should calculate the sample standard deviation using the formula:
+  </p>
+  <p style="margin-left: 20px;">
+    s = √[ Σ(Xᵢ - M)² / n ]
+  </p>
+
+  <p>
+    This formula calculates the average squared deviation from the sample mean. It seems reasonable, but it has a problem:
+    it tends to <strong>underestimate</strong> the population standard deviation σ.
+  </p>
+
+  <h3>8.4.3 The n-1 correction</h3>
+
+  <p>
+    To get an unbiased estimate of the population variance (σ²), we use a slightly different formula:
+  </p>
+
+  <div class="critical-box">
+    <h4>Sample Variance and Standard Deviation</h4>
+    <p>
+      <strong>Sample variance:</strong> s² = Σ(Xᵢ - M)² / (n - 1)
+    </p>
+    <p>
+      <strong>Sample standard deviation:</strong> s = √[ Σ(Xᵢ - M)² / (n - 1) ]
+    </p>
+    <p>
+      Notice we divide by <strong>n - 1</strong>, not n. This is called the <strong>degrees of freedom correction</strong>
+      or <strong>Bessel's correction</strong>.
+    </p>
+  </div>
+
+  <p>
+    <strong>Why n - 1?</strong><br>
+    When you calculate deviations from the sample mean (Xᵢ - M), these deviations are not entirely independent because
+    they must sum to zero. You've "used up" one degree of freedom in estimating M, leaving only n - 1 independent pieces
+    of information for estimating variability.
+  </p>
+
+  <p>
+    More intuitively: the sample mean M is the center point that minimizes squared deviations in your sample. By definition,
+    it makes the deviations smaller than they would be around the true population mean μ (which is probably different from M).
+    Dividing by n - 1 instead of n compensates for this, giving a slightly larger (and unbiased) estimate of σ².
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      The n - 1 correction is crucial for small samples. With n = 5, dividing by 4 instead of 5 makes a noticeable
+      difference. With n = 1000, dividing by 999 vs 1000 barely matters. Statistical software (including R)
+      automatically uses n - 1 when calculating sample standard deviations.
+    </p>
+  </div>
+
+  <h3>8.4.4 Unbiased estimators</h3>
+
+  <p>
+    An estimator is <strong>unbiased</strong> if its expected value (the average across infinitely many samples) equals
+    the true parameter value.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Unbiased Estimators</h4>
+    <ul>
+      <li><strong>Sample mean M</strong> is an unbiased estimator of population mean μ</li>
+      <li><strong>Sample variance s²</strong> (using n - 1) is an unbiased estimator of population variance σ²</li>
+      <li><strong>Sample proportion p̂</strong> is an unbiased estimator of population proportion p</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Note:</strong> While s² is an unbiased estimator of σ², the sample standard deviation s is technically
+    a slightly biased estimator of σ (because of the square root). However, the bias is very small and decreases rapidly
+    with sample size, so in practice we use s to estimate σ.
+  </p>
+
+  <h3>8.4.5 Standard error of the mean</h3>
+
+  <p>
+    The sample mean M varies from sample to sample. The <strong>standard error of the mean (SEM)</strong> quantifies
+    this variability—it's the standard deviation of the sampling distribution of M.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Standard Error of the Mean</h4>
+    <p>
+      <strong>If we know σ:</strong> SEM = σ / √n
+    </p>
+    <p>
+      <strong>If we estimate σ from the sample:</strong> SEM = s / √n
+    </p>
+    <p>
+      The SEM tells us how much the sample mean typically varies around the population mean due to sampling error.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Suppose you're measuring IQ (population σ = 15) with a sample of n = 25 people.
+  </p>
+  <p style="margin-left: 20px;">
+    SEM = 15 / √25 = 15 / 5 = 3
+  </p>
+  <p>
+    This means sample means will typically vary by about 3 IQ points around the true population mean. With n = 100:
+  </p>
+  <p style="margin-left: 20px;">
+    SEM = 15 / √100 = 15 / 10 = 1.5
+  </p>
+  <p>
+    Larger samples have smaller standard errors—they give more precise estimates.
+  </p>
+
+  <h3>8.4.6 Point estimates vs. interval estimates</h3>
+
+  <p>
+    A <strong>point estimate</strong> is a single number (e.g., M = 103.5 is our estimate of μ). Point estimates are
+    simple but provide no information about uncertainty.
+  </p>
+
+  <p>
+    An <strong>interval estimate</strong> (or confidence interval, discussed next) provides a range of plausible values
+    for the parameter (e.g., we estimate μ is between 98 and 109). Interval estimates communicate both the estimate and
+    the uncertainty.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      When reporting parameter estimates, always include a measure of uncertainty—either the standard error or
+      (better yet) a confidence interval. A point estimate alone can be misleading because it doesn't tell you how
+      precise or imprecise it is.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example comparison:</strong>
+  </p>
+  <ul>
+    <li><strong>Poor reporting:</strong> "The average reaction time was 450 ms."</li>
+    <li><strong>Better reporting:</strong> "The average reaction time was 450 ms (SEM = 25 ms)."</li>
+    <li><strong>Best reporting:</strong> "The average reaction time was 450 ms, 95% CI [400, 500]."</li>
+  </ul>
+
+  <p>
+    The last version communicates both the estimate and the precision, allowing readers to judge how confident they
+    should be in the result.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with R and RStudio" by Danielle J. Navarro and David R. Foxcroft, Chapter 8, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

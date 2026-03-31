@@ -1,0 +1,197 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>8.3 Sampling distributions and the central limit theorem</h2>
+
+  <p>
+    The <strong>central limit theorem</strong> is one of the most remarkable and important results in statistics.
+    It explains why the normal distribution appears so frequently in statistical inference, even when the data itself
+    is not normally distributed.
+  </p>
+
+  <h3>8.3.1 The sampling distribution</h3>
+
+  <p>
+    Before understanding the central limit theorem, we need to understand what a <strong>sampling distribution</strong> is.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Sampling Distribution</h4>
+    <p>
+      The <strong>sampling distribution</strong> of a statistic is the probability distribution you would get if you:
+    </p>
+    <ol>
+      <li>Drew many random samples of size n from the population</li>
+      <li>Calculated the statistic (e.g., the mean) for each sample</li>
+      <li>Made a histogram of all those statistics</li>
+    </ol>
+    <p>
+      The sampling distribution describes how the statistic varies across different random samples.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Suppose the population mean IQ is μ = 100 with σ = 15. If you take one sample of n = 25
+    people, you might get a sample mean of M = 103. If you take another sample of 25 people, you might get M = 97. A
+    third sample might give M = 101. If you repeated this thousands of times and made a histogram of all the sample means,
+    that histogram is the sampling distribution of the mean.
+  </p>
+
+  <p>
+    <strong>Key point:</strong> The sampling distribution is theoretical—it describes what would happen across all
+    possible samples, not just the one sample you actually have. But understanding it is crucial for statistical inference.
+  </p>
+
+  <h3>8.3.2 The central limit theorem</h3>
+
+  <p>
+    The <strong>central limit theorem (CLT)</strong> makes a remarkable claim about the shape of sampling distributions:
+  </p>
+
+  <div class="critical-box">
+    <h4>Central Limit Theorem</h4>
+    <p>
+      For a random sample of size n from <strong>any</strong> population with mean μ and finite standard deviation σ,
+      the sampling distribution of the sample mean approaches a normal distribution as n increases.
+    </p>
+    <p>
+      <strong>Specifically, the sampling distribution of M is approximately:</strong><br>
+      M ~ N(μ, σ²/n)
+    </p>
+    <p>
+      Or equivalently, the standard error of the mean is: SEM = σ / √n
+    </p>
+  </div>
+
+  <p>
+    The magic of the CLT is in the phrase "any population"—it doesn't matter if the population is normal, skewed,
+    uniform, bimodal, or anything else. As long as the sample size is large enough, the sampling distribution of the
+    mean will be approximately normal.
+  </p>
+
+  <h3>8.3.3 Demonstrating the CLT with dice</h3>
+
+  <p>
+    A classic demonstration uses dice rolls. Rolling a single six-sided die produces a uniform distribution—each value
+    from 1 to 6 has probability 1/6. The distribution is completely flat, not normal at all.
+  </p>
+
+  <p>
+    Now consider what happens when you roll multiple dice and take the average:
+  </p>
+
+  <ul>
+    <li><strong>Roll 1 die:</strong> The distribution is uniform (flat). Mean = 3.5, SD = 1.71</li>
+    <li><strong>Roll 2 dice and average them:</strong> The distribution of averages starts to look triangular, centered
+    at 3.5. More concentrated near the middle</li>
+    <li><strong>Roll 5 dice and average them:</strong> The distribution looks more bell-shaped and symmetric</li>
+    <li><strong>Roll 30 dice and average them:</strong> The distribution is approximately normal, even though we started
+    with a uniform distribution</li>
+  </ul>
+
+  <p>
+    This demonstrates the CLT: even though individual die rolls are uniformly distributed (not normal), the distribution
+    of sample means becomes normal as sample size increases.
+  </p>
+
+  <h3>8.3.4 Properties of the sampling distribution</h3>
+
+  <p>
+    The central limit theorem tells us three things about the sampling distribution of the mean:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Sampling Distribution of the Mean</h4>
+    <ol>
+      <li><strong>Shape:</strong> Approximately normal (for large n), regardless of the population's shape</li>
+      <li><strong>Center:</strong> The mean of the sampling distribution equals the population mean (E[M] = μ)</li>
+      <li><strong>Spread:</strong> The standard deviation of the sampling distribution (called the standard error) is
+      σ / √n</li>
+    </ol>
+  </div>
+
+  <p>
+    The <strong>standard error of the mean (SEM)</strong> is particularly important:
+  </p>
+  <p style="margin-left: 20px;">
+    SEM = σ / √n
+  </p>
+
+  <p>
+    This formula shows that:
+  </p>
+  <ul>
+    <li>Standard error decreases as sample size increases (√n is in the denominator)</li>
+    <li>To cut SEM in half, you need 4 times as many observations (because √4 = 2)</li>
+    <li>Larger samples produce more precise estimates—a direct result of the law of large numbers</li>
+  </ul>
+
+  <h3>8.3.5 How large does n need to be?</h3>
+
+  <p>
+    The CLT says the sampling distribution approaches normality as n increases, but how large is "large enough"?
+  </p>
+
+  <ul>
+    <li><strong>If the population is already normal:</strong> The sampling distribution is exactly normal for any n,
+    even n = 2</li>
+    <li><strong>If the population is moderately skewed:</strong> n ≥ 30 is usually sufficient</li>
+    <li><strong>If the population is heavily skewed or has extreme outliers:</strong> You may need n ≥ 100 or more</li>
+    <li><strong>If the population is symmetric but not normal:</strong> Even n = 10-20 may be enough</li>
+  </ul>
+
+  <p>
+    The "n ≥ 30 rule of thumb" is widely cited but is just a guideline. The more non-normal the population, the larger
+    the sample needed for good approximation.
+  </p>
+
+  <h3>8.3.6 Why the CLT matters for statistical inference</h3>
+
+  <p>
+    The central limit theorem is the foundation of most classical statistical methods:
+  </p>
+
+  <div class="critical-box">
+    <h4>Importance of the CLT</h4>
+    <ol>
+      <li><strong>Justifies using z and t distributions:</strong> Hypothesis tests about means (t-tests, ANOVA) rely
+      on the assumption that sampling distributions are approximately normal—the CLT guarantees this for large samples</li>
+      <li><strong>Enables confidence intervals:</strong> We can construct confidence intervals around sample means using
+      the normal distribution, even if individual data points aren't normal</li>
+      <li><strong>Explains ubiquity of the normal distribution:</strong> Many phenomena are sums or averages of many
+      small independent factors—the CLT says such quantities will be normally distributed</li>
+      <li><strong>Allows robust inference:</strong> We can make valid statistical inferences without needing to know
+      the exact shape of the population distribution</li>
+    </ol>
+  </div>
+
+  <p>
+    <strong>Practical example:</strong> Suppose you want to estimate average income in a city. Individual incomes are
+    heavily right-skewed (not normal). But thanks to the CLT, if you take a sample of n = 100 people, the sampling
+    distribution of the mean income will be approximately normal. This allows you to calculate confidence intervals and
+    conduct hypothesis tests using standard methods.
+  </p>
+
+  <h3>8.3.7 Limitations and misconceptions</h3>
+
+  <p>
+    <strong>What the CLT does NOT say:</strong>
+  </p>
+  <ul>
+    <li>It does NOT say your data will become normal if you collect more of it. If the population is skewed, large
+    samples will still show skewness in the raw data</li>
+    <li>It does NOT apply to all statistics—it specifically applies to sample means (and sums). Other statistics have
+    different sampling distributions</li>
+    <li>It does NOT fix bias or poor sampling methods. A biased sampling method produces a biased estimate regardless
+    of sample size</li>
+  </ul>
+
+  <p>
+    <strong>Remember:</strong> The CLT is about the distribution of sample means across many hypothetical samples, not
+    about the distribution of raw data in your one sample.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with IBM SPSS Statistics" by Danielle J. Navarro and David R. Foxcroft, Chapter 8, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

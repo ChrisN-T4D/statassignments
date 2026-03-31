@@ -2,9 +2,23 @@ import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
 import { allStatisticsQuestions, getQuestionsByModule } from '../data/conceptQuestions'
+import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
+import { preferredSoftware } from './usePreferredSoftware.js'
 import { updateBKT, predictPerformance } from './useBKT'
 import { getObjectivesForQuestion, getQuestionsForObjective } from '../data/questionObjectiveMap'
 import { useModule8Preferences } from './useModule8Preferences'
+
+const VALID_DIFFICULTIES = new Set(['easy', 'medium', 'hard'])
+
+function normalizeDifficulty(difficulty) {
+  const normalized = typeof difficulty === 'string' ? difficulty.toLowerCase() : 'medium'
+  return VALID_DIFFICULTIES.has(normalized) ? normalized : 'medium'
+}
+
+function toNonNegativeInt(value) {
+  const parsed = Number.parseInt(value, 10)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
+}
 
 export function usePractice() {
   const { user } = useAuth()
@@ -24,6 +38,13 @@ export function usePractice() {
   // Convert static question format to the format expected by Practice.vue
   function convertQuestion(q) {
     if (!q) return null
+
+    const sw = ['jamovi', 'spss', 'r', 'excel', 'stata'].includes(
+      preferredSoftware.value
+    )
+      ? preferredSoftware.value
+      : 'jamovi'
+    q = prepareConceptQuestionForSoftware(q, sw)
 
     // Map question types
     let question_type = q.type
@@ -456,14 +477,24 @@ export function usePractice() {
       // Use difficulty-adjusted parameters (IRT-based tuning) and time data
       const objectives = getObjectivesForQuestion(problemId)
       for (const objectiveId of objectives) {
-        const updatedState = await updateBKT(objectiveId, isCorrect, difficulty, timeData, confidenceData, sequenceData)
+        const updatedState = await updateBKT(
+          objectiveId,
+          isCorrect,
+          difficulty,
+          timeData,
+          confidenceData,
+          sequenceData,
+          problemId
+        )
 
         // Determine confidence level based on answer changes and deliberation time
         let confidenceLevel = 'unknown'
         if (confidenceData) {
-          const hasChanges = confidenceData.answer_changes > 0
-          const quickResponse = confidenceData.time_to_first_selection < 5
-          const slowResponse = confidenceData.time_to_first_selection > 30
+          const answerChanges = toNonNegativeInt(confidenceData.answer_changes)
+          const firstSelectionTime = toNonNegativeInt(confidenceData.time_to_first_selection)
+          const hasChanges = answerChanges !== null && answerChanges > 0
+          const quickResponse = firstSelectionTime !== null && firstSelectionTime < 5
+          const slowResponse = firstSelectionTime !== null && firstSelectionTime > 30
 
           if (hasChanges || slowResponse) {
             confidenceLevel = 'low'
@@ -496,7 +527,7 @@ export function usePractice() {
         problem: problemId,
         answer: answer,
         is_correct: isCorrect,
-        difficulty: (difficulty || 'medium').toLowerCase() // easy | medium | hard for PB select
+        difficulty: normalizeDifficulty(difficulty) // easy | medium | hard for PB select
       }
 
       // Add time data if available
@@ -518,6 +549,8 @@ export function usePractice() {
         attemptData.time_since_reading = sequenceData.time_since_reading
         attemptData.time_since_last_attempt = sequenceData.time_since_last_attempt
         attemptData.has_read_topic_before = sequenceData.has_read_topic_before
+        attemptData.last_topic_read_time = sequenceData.last_topic_read_time
+        attemptData.last_attempt_time = sequenceData.last_attempt_time
       }
 
       const data = await pb.collection('practice_attempts').create(attemptData)

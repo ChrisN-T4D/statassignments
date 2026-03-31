@@ -1,0 +1,178 @@
+<section class="topic-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Regression Inference and Hypothesis Testing</h2>
+
+  <div class="concept-box">
+    <h3>Two Types of Hypothesis Tests in Regression</h3>
+    <p>Regression analysis includes two main types of hypothesis tests:</p>
+    <ol>
+      <li><strong>Overall model test (F-test):</strong> Tests whether the model as a whole predicts the outcome better than chance</li>
+      <li><strong>Individual coefficient tests (t-tests):</strong> Tests whether each predictor has a significant effect</li>
+    </ol>
+  </div>
+
+  <div class="concept-box">
+    <h3>Testing the Overall Model: F-test</h3>
+
+    <h4>Hypotheses</h4>
+    <ul>
+      <li><strong>H₀:</strong> All regression coefficients equal zero (b₁ = b₂ = ... = b<sub>K</sub> = 0)</li>
+      <li><strong>H₁:</strong> At least one coefficient is non-zero (model predicts outcome)</li>
+    </ul>
+
+    <h4>F-Statistic</h4>
+    <div class="formula">
+      <p><strong>F = MS<sub>model</sub> / MS<sub>residual</sub></strong></p>
+      <p>Where:</p>
+      <p>MS<sub>model</sub> = SS<sub>model</sub> / df<sub>model</sub></p>
+      <p>MS<sub>residual</sub> = SS<sub>residual</sub> / df<sub>residual</sub></p>
+    </div>
+
+    <h4>Degrees of Freedom</h4>
+    <ul>
+      <li><strong>df<sub>model</sub> = K</strong> (number of predictors)</li>
+      <li><strong>df<sub>residual</sub> = N - K - 1</strong> (sample size minus predictors minus intercept)</li>
+    </ul>
+
+    <h4>Interpretation</h4>
+    <ul>
+      <li>Large F-values indicate the model fits significantly better than a model with no predictors</li>
+      <li>If p < α (typically .05), reject H₀ and conclude the model is significant</li>
+      <li>A significant F-test means <strong>at least one predictor</strong> is useful</li>
+      <li>For simple regression: F = t² (F-test and t-test are equivalent)</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Testing Individual Coefficients: t-tests</h3>
+
+    <h4>Hypotheses</h4>
+    <ul>
+      <li><strong>H₀:</strong> b<sub>k</sub> = 0 (predictor k has no effect)</li>
+      <li><strong>H₁:</strong> b<sub>k</sub> ≠ 0 (predictor k has a significant effect)</li>
+    </ul>
+
+    <h4>t-Statistic</h4>
+    <div class="formula">
+      <p><strong>t = b̂<sub>k</sub> / SE(b̂<sub>k</sub>)</strong></p>
+    </div>
+    <ul>
+      <li><strong>b̂<sub>k</sub></strong> = estimated coefficient</li>
+      <li><strong>SE(b̂<sub>k</sub>)</strong> = standard error of the coefficient</li>
+      <li><strong>df = N - K - 1</strong></li>
+    </ul>
+
+    <h4>Interpretation</h4>
+    <ul>
+      <li>Large |t| values indicate the coefficient is significantly different from zero</li>
+      <li>If p < α, reject H₀ and conclude the predictor has a significant effect</li>
+      <li>Each t-test examines one predictor <strong>controlling for all other predictors</strong></li>
+      <li>It's possible for the overall F-test to be significant while some individual t-tests are not</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Confidence Intervals for Coefficients</h3>
+    <div class="formula">
+      <p><strong>CI(b<sub>k</sub>) = b̂<sub>k</sub> ± t<sub>crit</sub> × SE(b̂<sub>k</sub>)</strong></p>
+    </div>
+    <p>Where t<sub>crit</sub> is the critical t-value (typically for 95% CI)</p>
+
+    <h4>Interpretation</h4>
+    <ul>
+      <li>We are 95% confident that the <strong>true population coefficient</strong> falls within this interval</li>
+      <li>If the CI <strong>does not include zero</strong>, the coefficient is significant at α = .05</li>
+      <li>Wider CIs indicate more uncertainty in the estimate</li>
+      <li>Example: CI = [1.5, 4.8] means we're 95% confident the true effect is between 1.5 and 4.8 units</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Relationship Between F, t, R², and r</h3>
+
+    <h4>For Simple Regression (one predictor):</h4>
+    <ul>
+      <li><strong>F = t²</strong> (F-test and t-test are equivalent)</li>
+      <li><strong>R² = r²</strong> (coefficient of determination equals squared correlation)</li>
+      <li>All tests provide the same information about significance</li>
+    </ul>
+
+    <h4>For Multiple Regression:</h4>
+    <ul>
+      <li>F-test examines the <strong>overall model</strong></li>
+      <li>Each t-test examines <strong>one predictor controlling for others</strong></li>
+      <li>R² represents <strong>all predictors together</strong></li>
+      <li>These provide different but complementary information</li>
+    </ul>
+  </div>
+
+  <div class="Stata-box">
+    <h3>Viewing Hypothesis Tests in Stata</h3>
+    <ol>
+      <li>Run your regression: <strong>Analyses → Regression → Linear Regression</strong></li>
+      <li><strong>F-test:</strong> Automatically displayed in the <strong>Model Fit Measures</strong> table
+        <ul>
+          <li>Look for F-statistic, df, and p-value</li>
+        </ul>
+      </li>
+      <li><strong>t-tests:</strong> Displayed in the <strong>Model Coefficients</strong> table
+        <ul>
+          <li>Each row shows: estimate (b), SE, t-statistic, and p-value</li>
+        </ul>
+      </li>
+      <li><strong>Confidence Intervals:</strong> Check "Confidence interval" under Model Coefficients
+        <ul>
+          <li>Default is 95%, but can be changed</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>The <strong>F-test</strong> tells you if the overall model is useful</li>
+      <li>The <strong>t-tests</strong> tell you which specific predictors are significant</li>
+      <li>In multiple regression, a predictor can be non-significant even if the model is significant</li>
+      <li>Confidence intervals provide <strong>range estimates</strong>, not just yes/no answers</li>
+      <li>Statistical significance ≠ practical significance—consider effect sizes</li>
+      <li>Always report both the <strong>coefficient estimate and its uncertainty</strong> (CI or SE)</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example Interpretation</h3>
+    <p><strong>Research Question:</strong> Predicting job performance from experience, training, and personality</p>
+    <p><strong>Results:</strong></p>
+
+    <p><strong>Overall Model:</strong> F(3, 96) = 12.8, p < .001, R² = .29</p>
+
+    <table>
+      <tr><th>Predictor</th><th>b</th><th>SE</th><th>95% CI</th><th>t</th><th>p</th></tr>
+      <tr><td>Intercept</td><td>35.2</td><td>5.8</td><td>[23.7, 46.7]</td><td>6.1</td><td><.001</td></tr>
+      <tr><td>Experience</td><td>2.4</td><td>0.5</td><td>[1.4, 3.4]</td><td>4.8</td><td><.001</td></tr>
+      <tr><td>Training</td><td>3.1</td><td>0.8</td><td>[1.5, 4.7]</td><td>3.9</td><td><.001</td></tr>
+      <tr><td>Personality</td><td>0.6</td><td>0.4</td><td>[-0.2, 1.4]</td><td>1.5</td><td>.14</td></tr>
+    </table>
+
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li><strong>Overall model:</strong> The model significantly predicts job performance, F(3, 96) = 12.8, p < .001, explaining 29% of the variance (R² = .29)</li>
+      <li><strong>Experience:</strong> Significantly predicts performance (b = 2.4, p < .001). Each additional year of experience predicts a 2.4-point increase in performance, 95% CI [1.4, 3.4]</li>
+      <li><strong>Training:</strong> Significantly predicts performance (b = 3.1, p < .001). Each additional hour of training predicts a 3.1-point increase, 95% CI [1.5, 4.7]</li>
+      <li><strong>Personality:</strong> Does not significantly predict performance after controlling for experience and training (b = 0.6, p = .14). The CI [-0.2, 1.4] includes zero, confirming non-significance</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Confusing F and t:</strong> F tests the overall model; t tests individual predictors</li>
+      <li><strong>Only reporting p-values:</strong> Always report effect sizes (b or β) and CIs</li>
+      <li><strong>Assuming non-significant = zero effect:</strong> Non-significance means insufficient evidence, not proof of no effect</li>
+      <li><strong>Multiple testing:</strong> Testing many predictors increases Type I error risk</li>
+      <li><strong>Ignoring practical significance:</strong> A tiny effect can be statistically significant with large N</li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,82 @@
+<section class="module-content" aria-labelledby="assumptions-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="assumptions-title">13.6 Assumptions of One-Way ANOVA</h2>
+
+  <div class="concept-box" role="note">
+    <h3>The Three Key Assumptions</h3>
+    <p>ANOVA assumes residuals (ε) are <strong>normally distributed</strong>, with <strong>equal variance</strong> across groups, and <strong>independent</strong> of each other.</p>
+  </div>
+
+  <h3>1. Homogeneity of Variance (Homoscedasticity)</h3>
+  <p><strong>Assumption:</strong> Population variance σ² is the same for all groups</p>
+  <div class="formula-box">
+    <p>Var(Group 1) = Var(Group 2) = ... = Var(Group k)</p>
+  </div>
+
+  <h4>Testing with Levene's Test</h4>
+  <ul>
+    <li><strong>H₀:</strong> Variances are equal</li>
+    <li><strong>H₁:</strong> At least one variance differs</li>
+    <li><strong>Decision:</strong> If p > .05, assume equal variances</li>
+  </ul>
+  <div class="R-box">
+    <h4>in R</h4>
+    <p>Under "Assumption Checks," select <strong>Homogeneity tests</strong></p>
+    <p><em>Example result:</em> F(2, 15) = 1.45, p = .27 → Assumption met</p>
+  </div>
+
+  <h4>If Violated → Use Welch's ANOVA</h4>
+  <p>Welch's test does NOT assume equal variances (like Welch's t-test)</p>
+  <div class="R-box">
+    <p><strong>Analyses → ANOVA → One-Way ANOVA → Welch's</strong></p>
+    <p>Reports adjusted F-statistic with modified df</p>
+  </div>
+
+  <h3>2. Normality of Residuals</h3>
+  <p><strong>Assumption:</strong> Residuals (not raw data!) are normally distributed</p>
+  <h4>Checking Normality</h4>
+  <ul>
+    <li><strong>Q-Q plot:</strong> Points should fall on diagonal line</li>
+    <li><strong>Shapiro-Wilk test:</strong> p > .05 indicates normality</li>
+  </ul>
+  <div class="R-box">
+    <p>Under "Assumption Checks," select <strong>Normality (Q-Q plot)</strong></p>
+  </div>
+
+  <h4>If Violated → Use Kruskal-Wallis Test</h4>
+  <p><strong>Non-parametric alternative</strong> to one-way ANOVA (works on ranks)</p>
+  <div class="R-box">
+    <p><strong>Analyses → ANOVA → Non-Parametric → One-Way ANOVA (Kruskal-Wallis)</strong></p>
+    <p>Reports χ² statistic instead of F</p>
+  </div>
+
+  <h3>3. Independence</h3>
+  <p><strong>Assumption:</strong> Observations are independent (knowing one tells you nothing about others)</p>
+  <h4>Violations</h4>
+  <ul>
+    <li><strong>Repeated measures:</strong> Same participants in multiple groups</li>
+    <li><strong>Matched pairs/clusters:</strong> Participants are related</li>
+  </ul>
+  <h4>Solution → Repeated Measures ANOVA</h4>
+  <p>Accounts for within-subject correlation</p>
+
+  <div class="key-points-box">
+    <h3>Summary of Assumption Checks</h3>
+    <table class="stats-table">
+      <tr><th>Assumption</th><th>Test</th><th>If Violated</th></tr>
+      <tr><td>Equal variance</td><td>Levene's test</td><td>Use Welch's ANOVA</td></tr>
+      <tr><td>Normality</td><td>Q-Q plot, Shapiro-Wilk</td><td>Use Kruskal-Wallis</td></tr>
+      <tr><td>Independence</td><td>Study design</td><td>Use Repeated Measures ANOVA</td></tr>
+    </table>
+  </div>
+
+  <div class="warning-box">
+    <h3>Important Notes</h3>
+    <ul>
+      <li>ANOVA is <strong>robust</strong> to mild violations with balanced designs and large N</li>
+      <li>Always check assumptions BEFORE interpreting results</li>
+      <li>Large N can make tests (Levene, Shapiro-Wilk) overly sensitive — also inspect plots</li>
+    </ul>
+  </div>
+</section>

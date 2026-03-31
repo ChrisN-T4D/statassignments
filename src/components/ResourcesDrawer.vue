@@ -49,6 +49,33 @@
 
         <!-- Content -->
         <div class="drawer-content">
+          <!-- Preferred software (class page, to-dos, install link below) -->
+          <div class="drawer-section">
+            <h3>⭐ Preferred software</h3>
+            <p class="section-desc">
+              Filters software lessons and to-dos on your class page. You can change this anytime from Tools.
+            </p>
+            <div class="software-preference-drawer">
+              <button
+                v-for="sw in softwareOptions"
+                :key="sw.id"
+                type="button"
+                class="software-option-drawer"
+                :class="{ active: preferredSoftware === sw.id }"
+                :style="{ '--sw-color': sw.color }"
+                @click="setPreferredSoftware(sw.id)"
+              >
+                <img
+                  v-if="getSoftwareIcon(sw.id)"
+                  :src="getSoftwareIcon(sw.id)"
+                  :alt="`${sw.name} icon`"
+                  class="software-option-drawer-icon"
+                />
+                {{ sw.name }}
+              </button>
+            </div>
+          </div>
+
           <!-- Assignment Tools Section -->
           <div v-if="showTools" class="drawer-section">
             <h3>🛠️ Assignment Tools</h3>
@@ -129,22 +156,22 @@
             </div>
           </div>
 
-          <!-- Software Links Section -->
+          <!-- Software install (matches preferred software) -->
           <div v-if="showSoftwareLinks" class="drawer-section">
-            <h3>💻 Software</h3>
-            <p class="section-desc">Install your statistical software</p>
+            <h3>💻 Install software</h3>
+            <p class="section-desc">Quick link for your current preferred software</p>
 
             <div class="software-links">
               <a
-                v-if="currentSoftware === 'jamovi'"
-                href="https://www.jamovi.org/download.html"
+                :href="currentInstall.href"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="software-link"
               >
-                <span class="software-icon">📊</span>
+                <span class="software-icon">{{ currentInstall.emoji }}</span>
                 <div class="software-info">
-                  <div class="software-title">Install Jamovi</div>
-                  <div class="software-desc">Download and install</div>
+                  <div class="software-title">{{ currentInstall.title }}</div>
+                  <div class="software-desc">{{ currentInstall.desc }}</div>
                 </div>
                 <span class="external-icon">↗</span>
               </a>
@@ -193,6 +220,45 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import {
+  preferredSoftware,
+  softwareOptions,
+  setPreferredSoftware,
+  getSoftwareIcon
+} from '../composables/usePreferredSoftware.js'
+
+const INSTALL_BY_SOFTWARE = {
+  jamovi: {
+    href: 'https://www.jamovi.org/download.html',
+    title: 'Install jamovi',
+    desc: 'Download and install',
+    emoji: '📊'
+  },
+  r: {
+    href: 'https://cran.r-project.org/',
+    title: 'Get R',
+    desc: 'Download from CRAN',
+    emoji: '📐'
+  },
+  spss: {
+    href: 'https://www.ibm.com/products/spss-statistics',
+    title: 'IBM SPSS Statistics',
+    desc: 'Product page and trials',
+    emoji: '📈'
+  },
+  excel: {
+    href: 'https://www.microsoft.com/microsoft-365/excel',
+    title: 'Microsoft Excel',
+    desc: 'Microsoft 365 / Excel',
+    emoji: '📗'
+  },
+  stata: {
+    href: 'https://www.stata.com/order/',
+    title: 'Stata',
+    desc: 'Purchase or student options',
+    emoji: '📉'
+  }
+}
 
 const STORAGE_KEY = 'resources-drawer-position'
 const DRAG_THRESHOLD = 6
@@ -424,6 +490,12 @@ function onDragEnd(e, kind) {
 // Computed properties
 const hasInstructions = computed(() => {
   return props.currentLesson?.phases?.iDo || props.currentExercise?.instructions
+})
+
+const currentInstall = computed(() => {
+  return (
+    INSTALL_BY_SOFTWARE[preferredSoftware.value] || INSTALL_BY_SOFTWARE.jamovi
+  )
 })
 
 const datasets = computed(() => {
@@ -662,6 +734,45 @@ document.addEventListener('keydown', (e) => {
   margin: 0 0 1rem 0;
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.software-preference-drawer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.software-option-drawer {
+  padding: 0.45rem 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 2rem;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: inherit;
+}
+
+.software-option-drawer:hover {
+  border-color: var(--sw-color, var(--primary));
+  color: var(--sw-color, var(--primary));
+}
+
+.software-option-drawer.active {
+  background: color-mix(in srgb, var(--sw-color, var(--primary)) 22%, transparent);
+  border-color: var(--sw-color, var(--primary));
+  color: var(--text-primary);
+}
+
+.software-option-drawer-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 /* Tools Grid */

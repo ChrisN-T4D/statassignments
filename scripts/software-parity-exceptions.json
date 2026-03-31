@@ -1,0 +1,29 @@
+{
+  "allowedMissingSoftwareByKey": {
+    "m3-open-data-file": ["r", "spss", "excel", "stata"],
+    "m3-variable-metadata": ["jamovi", "r", "excel", "stata"],
+    "m6-frequentist-vs-bayesian": ["jamovi", "r", "spss", "excel", "stata"],
+    "m6-sampling-methods": ["jamovi", "r", "spss", "excel", "stata"],
+    "m6-distribution-shapes": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-state-hypotheses": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-compare-alpha-levels": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-stat-vs-practical": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-type1-type2-errors": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-one-vs-two-sided": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-n-and-p-values": ["jamovi", "r", "spss", "excel", "stata"],
+    "m7-multiple-comparisons": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-chisq-mcnemar-vs-independence": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-chisq-df-written": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-chisq-decision-tree": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-chisq-dist-properties": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-paired-vs-independent-concept": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-cohens-d-interpret": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-when-nonparametric": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-t-sign-interpret": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-robustness-written": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-stat-practical": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-ttest-decision-tree": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-anova-f-interpret": ["jamovi", "r", "spss", "excel", "stata"],
+    "m8-anova-multiple-comp-written": ["jamovi", "r", "spss", "excel", "stata"]
+  }
+}

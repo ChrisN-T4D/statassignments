@@ -1,0 +1,151 @@
+<section class="module-content" aria-labelledby="filtering-data-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="filtering-data-title">6.5 Extracting a Subset of the Data</h2>
+
+  <p>
+    One very important kind of data handling is being able to extract a particular subset of the data. For instance,
+    you might be interested only in analysing data from one experimental condition, or you may want to look closely
+    at data from people over 50 years in age. Filters allow you to focus on specific observations without permanently
+    deleting or modifying your data.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Filters</h4>
+    <ul>
+      <li><strong>Filter</strong> – A logical expression that determines which rows to include in analysis</li>
+      <li><strong>Active filter</strong> – A filter that is currently applied (greyed-out rows are excluded)</li>
+      <li><strong>Filter column</strong> – The column showing checkmarks (✓) for included rows and grey for excluded rows</li>
+      <li><strong>Non-destructive</strong> – Filters hide rows temporarily; the original data remains intact</li>
+    </ul>
+  </div>
+
+  <h3>6.5.1 Creating a simple filter</h3>
+
+  <p>
+    To create a filter in R:
+  </p>
+
+  <ol>
+    <li>Click on <strong>Filters</strong> in the Data toolbar</li>
+    <li>In the Filter box, type a logical expression</li>
+    <li>Rows that don't meet the condition will be greyed out</li>
+  </ol>
+
+  <p>
+    <strong>Example: Filter for one category</strong>
+  </p>
+
+  <pre><code>speaker == 'makka-pakka'</code></pre>
+
+  <p>
+    This keeps only rows where the speaker variable equals "makka-pakka". All other rows are greyed out and
+    excluded from analyses.
+  </p>
+
+  <h3>6.5.2 Using multiple conditions</h3>
+
+  <p>
+    You can build complex filters using logical operators:
+  </p>
+
+  <p>
+    <strong>Example: Filter for multiple values (OR)</strong>
+  </p>
+
+  <pre><code>utterance == 'pip' or utterance == 'oo'</code></pre>
+
+  <p>
+    This keeps rows where utterance is either "pip" or "oo".
+  </p>
+
+  <p>
+    <strong>Example: Filter for a range (AND)</strong>
+  </p>
+
+  <pre><code>Age >= 18 and Age <= 65</code></pre>
+
+  <p>
+    This keeps only rows for people aged 18 to 65.
+  </p>
+
+  <p>
+    <strong>Example: Complex filter combining conditions</strong>
+  </p>
+
+  <pre><code>(Age >= 18 and Age <= 65) or Status == "Student"</code></pre>
+
+  <p>
+    This keeps adults aged 18-65 OR anyone with Status "Student" (regardless of age).
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: Working with Filters</h4>
+    <ul>
+      <li><strong>Non-destructive</strong> – Original data is never deleted; toggle filters on/off</li>
+      <li><strong>Visual feedback</strong> – Green checkmarks show included rows, grey shows excluded rows</li>
+      <li><strong>Affects all analyses</strong> – When a filter is active, all statistical analyses use only the filtered data</li>
+      <li><strong>Multiple filters</strong> – You can create multiple filters and activate/deactivate them as needed</li>
+      <li><strong>Check before reporting</strong> – Always verify which filters are active before finalizing results</li>
+    </ul>
+  </div>
+
+  <div class="critical-points">
+    <h4>Critical Point: When to Use Filters</h4>
+    <p>
+      Filters are appropriate when:
+    </p>
+    <ul>
+      <li><strong>Temporary exclusions</strong> – You want to quickly compare analyses with/without certain cases</li>
+      <li><strong>Subgroup analyses</strong> – Analyzing specific groups one at a time</li>
+      <li><strong>Sensitivity analyses</strong> – Testing whether results change when excluding outliers</li>
+      <li><strong>Meeting assumptions</strong> – Excluding cases that violate assumptions (document your reasoning!)</li>
+    </ul>
+    <p>
+      <strong>Important:</strong> Always document which filters were active when reporting results. Readers need to
+      know exactly which data were included in each analysis.
+    </p>
+  </div>
+
+  <h3>6.5.3 Filter management</h3>
+
+  <p>
+    Good practices for managing filters:
+  </p>
+
+  <ul>
+    <li><strong>Name your filters</strong> – Use descriptive names like "Adults only" or "Exclude outliers"</li>
+    <li><strong>Document the logic</strong> – Keep notes about why each filter was created</li>
+    <li><strong>Deactivate when done</strong> – Turn off filters when you're finished with subgroup analyses</li>
+    <li><strong>Check the N</strong> – Always note how many cases are included/excluded</li>
+    <li><strong>Be transparent</strong> – Report all filtering decisions in your methods section</li>
+  </ul>
+
+  <h3>6.5.4 Common filtering tasks</h3>
+
+  <p>
+    <strong>Exclude missing data for specific variables:</strong>
+  </p>
+
+  <pre><code>NOT(ISNA(variable_name))</code></pre>
+
+  <p>
+    <strong>Keep only complete cases (no missing data on any variable):</strong>
+  </p>
+
+  <pre><code>NOT(ISNA(var1)) and NOT(ISNA(var2)) and NOT(ISNA(var3))</code></pre>
+
+  <p>
+    <strong>Exclude outliers based on z-scores:</strong>
+  </p>
+
+  <pre><code>ABS(Z(Score)) < 3</code></pre>
+
+  <p>
+    This keeps cases within 3 standard deviations of the mean.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with R and RStudio" by Danielle J. Navarro and David R. Foxcroft, Chapter 6, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

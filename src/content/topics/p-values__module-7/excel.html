@@ -1,0 +1,200 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Understanding P-Values</h2>
+
+  <blockquote class="chapter-quote">
+    <p>Like other occult techniques of divination, the statistical method has a private jargon deliberately contrived to obscure its methods from non-practitioners.</p>
+    <footer>– Attributed to G. O. Ashley</footer>
+  </blockquote>
+
+  <h3>9.5 The p Value of a Test</h3>
+
+  <p>
+    In one sense, our hypothesis test is complete. We've constructed a test statistic, figured out its sampling distribution if the null hypothesis is true, and then constructed the critical region for the test. Nevertheless, I've actually omitted the most important number of all, the <strong>p value</strong>. It is to this topic that we now turn.
+  </p>
+
+  <p>
+    There are two somewhat different ways of interpreting a p value, one proposed by Sir Ronald Fisher and the other by Jerzy Neyman. Both versions are legitimate, though they reflect very different ways of thinking about hypothesis tests. Most introductory textbooks tend to give Fisher's version only, but I think that's a bit of a shame. To my mind, Neyman's version is cleaner and actually better reflects the logic of the null hypothesis test.
+  </p>
+
+  <h4>9.5.1 A Softer View of Decision Making (Neyman's Approach)</h4>
+
+  <p>
+    One problem with the hypothesis testing procedure that I've described is that it makes no distinction at all between a result that is "barely significant" and those that are "highly significant". For instance, in my ESP study the data I obtained only just fell inside the critical region, so I did get a significant effect but it was a pretty near thing. In contrast, suppose that I'd run a study in which <em>X</em> = 97 out of my <em>N</em> = 100 participants got the answer right. This would obviously be significant too but by a much larger margin, such that there's really no ambiguity about this at all. The procedure that I have already described makes no distinction between the two.
+  </p>
+
+  <p>
+    This is where the <strong>p value</strong> comes in handy. To understand how it works, let's suppose that we ran lots of hypothesis tests on the same data set, but with a different value of α in each case. When we test the ESP data (<em>X</em> = 62 successes out of <em>N</em> = 100 observations), using α levels of .03 and above, we'd always find ourselves rejecting the null hypothesis. For α levels of .02 and below we always end up retaining the null hypothesis.
+  </p>
+
+  <p>
+    Therefore, somewhere between .02 and .03 there must be a smallest value of α that would allow us to reject the null hypothesis for this data. This is the p value. As it turns out the ESP data has <em>p</em> = .021.
+  </p>
+
+  <div class="important-callout">
+    <h4>Definition of p-value (Neyman's Version)</h4>
+    <p>
+      <strong>p</strong> is defined to be the smallest Type I error rate (α) that you have to be willing to tolerate if you want to reject the null hypothesis.
+    </p>
+    <p>
+      If it turns out that <em>p</em> describes an error rate that you find intolerable, then you must retain the null. If you're comfortable with an error rate equal to <em>p</em>, then it's okay to reject the null hypothesis in favour of your preferred alternative.
+    </p>
+  </div>
+
+  <p>
+    In effect, <em>p</em> is a summary of all the possible hypothesis tests that you could have run, taken across all possible α values. And as a consequence it has the effect of "softening" our decision process. For those tests in which <em>p</em> ≤ α you would have rejected the null hypothesis, whereas for those tests in which <em>p</em> > α you would have retained the null.
+  </p>
+
+  <p>
+    In my ESP study I obtained <em>X</em> = 62 and as a consequence I've ended up with <em>p</em> = .021. So the error rate I have to tolerate is 2.1%. In contrast, suppose my experiment had yielded <em>X</em> = 97. What happens to my p value now? This time it's shrunk to <em>p</em> = 1.36×10⁻²⁵, which is a tiny, tiny Type I error rate. For this second case I would be able to reject the null hypothesis with a lot more confidence, because I only have to be "willing" to tolerate a type I error rate of about 1 in 10 trillion trillion in order to justify my decision to reject.
+  </p>
+
+  <h4>9.5.2 The Probability of Extreme Data (Fisher's Approach)</h4>
+
+  <p>
+    The second definition of the p-value comes from Sir Ronald Fisher, and it's actually this one that you tend to see in most introductory statistics textbooks. Notice how, when I constructed the critical region, it corresponded to the <strong>tails</strong> (i.e., extreme values) of the sampling distribution? That's not a coincidence, almost all "good" tests have this characteristic. The reason for that is that a good critical region almost always corresponds to those values of the test statistic that are least likely to be observed if the null hypothesis is true.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Fisher's Definition of p-value</h4>
+    <p>
+      If this rule is true, then we can define the p-value as the <strong>probability that we would have observed a test statistic that is at least as extreme as the one we actually did get</strong>.
+    </p>
+    <p>
+      In other words, if the data are extremely implausible according to the null hypothesis, then the null hypothesis is probably wrong.
+    </p>
+  </div>
+
+  <h4>9.5.3 A Common Mistake</h4>
+
+  <p>
+    Okay, so you can see that there are two rather different but legitimate ways to interpret the p value, one based on Neyman's approach to hypothesis testing and the other based on Fisher's. Unfortunately, there is a third explanation that people sometimes give, especially when they're first learning statistics, and it is <strong>absolutely and completely wrong</strong>.
+  </p>
+
+  <div class="warning-box">
+    <h4>⚠️ WRONG Interpretation</h4>
+    <p>
+      This mistaken approach is to refer to the p value as "the probability that the null hypothesis is true". It's an intuitively appealing way to think, but it's wrong in two key respects:
+    </p>
+    <ol>
+      <li><strong>Frequentist tool:</strong> Null hypothesis testing is a frequentist tool and the frequentist approach to probability does not allow you to assign probabilities to the null hypothesis. According to this view of probability, the null hypothesis is either true or it is not, it cannot have a "5% chance" of being true.</li>
+      <li><strong>Mathematical inconsistency:</strong> Even within the Bayesian approach, which does let you assign probabilities to hypotheses, the p value would not correspond to the probability that the null is true. This interpretation is entirely inconsistent with the mathematics of how the p value is calculated.</li>
+    </ol>
+    <p class="emphasis">
+      <strong>Put bluntly, despite the intuitive appeal of thinking this way, there is no justification for interpreting a p value this way. Never do it.</strong>
+    </p>
+  </div>
+
+  <h3>9.6 Reporting the Results of a Hypothesis Test</h3>
+
+  <p>
+    When writing up the results of a hypothesis test there's usually several pieces of information that you need to report, but it varies a fair bit from test to test. Throughout the rest of the book I'll spend a little time talking about how to report the results of different tests, so that you can get a feel for how it's usually done. However, regardless of what test you're doing, the one thing that you always have to do is <strong>say something about the p value and whether or not the outcome was significant</strong>.
+  </p>
+
+  <h4>9.6.1 The Issue</h4>
+
+  <p>
+    To see why this is an issue, the key thing to recognise is that <em>p</em> values are terribly convenient. In practice, the fact that we can compute a <em>p</em> value means that we don't actually have to specify any α level at all in order to run the test. Instead, what you can do is calculate your <em>p</em> value and interpret it directly. If you get <em>p</em> = .062, then it means that you'd have to be willing to tolerate a Type I error rate of 6.2% to justify rejecting the null.
+  </p>
+
+  <p>
+    This flexibility is both the advantage and the disadvantage to the <em>p</em> value. The reason why a lot of people don't like the idea of reporting an exact <em>p</em> value is that it gives the researcher a bit too much freedom. In particular, it lets you change your mind about what error tolerance you're willing to put up with <em>after</em> you look at the data.
+  </p>
+
+  <div class="analogy-box">
+    <h4>The Danger of Post-hoc α Selection</h4>
+    <p>
+      For instance, consider my ESP experiment. Suppose I ran my test and ended up with a p value of .09. Should I accept or reject? Now, to be honest, I haven't yet bothered to think about what level of Type I error I'm "really" willing to accept. I don't have an opinion on that topic. But I do have an opinion about whether or not ESP exists, and I definitely have an opinion about whether my research should be published in a reputable scientific journal.
+    </p>
+    <p>
+      And amazingly, now that I've looked at the data I'm starting to think that a 9% error rate isn't so bad, especially when compared to how annoying it would be to have to admit to the world that my experiment has failed. So, to avoid looking like I just made it up after the fact, I now say that my α is .1, with the argument that a 10% type I error rate isn't too bad and at that level my test is significant! I win.
+    </p>
+    <p>
+      In other words, the worry here is that I might have the best of intentions, and be the most honest of people, but the temptation to just "shade" things a little bit here and there is really, really strong.
+    </p>
+  </div>
+
+  <h4>9.6.2 Two Proposed Solutions</h4>
+
+  <p>
+    In practice, it's pretty rare for a researcher to specify a single α level ahead of time. Instead, the convention is that scientists rely on three standard significance levels: <strong>.05, .01 and .001</strong>. When reporting your results, you indicate which (if any) of these significance levels allow you to reject the null hypothesis.
+  </p>
+
+  <table class="statistics-table">
+    <caption>Commonly Adopted Convention for Reporting p Values</caption>
+    <thead>
+      <tr>
+        <th>Usual notation</th>
+        <th>Significance stars</th>
+        <th>English translation</th>
+        <th>The null is...</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>p</em> > .05</td>
+        <td></td>
+        <td>The test wasn't significant</td>
+        <td>Retained</td>
+      </tr>
+      <tr>
+        <td><em>p</em> < .05</td>
+        <td>*</td>
+        <td>The test was significant at α = .05 but not at α = .01 or α = .001</td>
+        <td>Rejected</td>
+      </tr>
+      <tr>
+        <td><em>p</em> < .01</td>
+        <td>**</td>
+        <td>The test was significant at α = .05 and α = .01 but not at α = .001</td>
+        <td>Rejected</td>
+      </tr>
+      <tr>
+        <td><em>p</em> < .001</td>
+        <td>***</td>
+        <td>The test was significant at all levels</td>
+        <td>Rejected</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    This allows us to soften the decision rule a little bit, since <em>p</em> < .01 implies that the data meet a stronger evidential standard than <em>p</em> < .05 would. Nevertheless, since these levels are fixed in advance by convention, it does prevent people choosing their α level after looking at the data.
+  </p>
+
+  <p>
+    Nevertheless, quite a lot of people still prefer to report <strong>exact p values</strong>. To many people, the advantage of allowing the reader to make up their own mind about how to interpret <em>p</em> = .06 outweighs any disadvantages. In practice, however, even among those researchers who prefer exact <em>p</em> values it is quite common to just write <em>p</em> < .001 instead of reporting an exact value for small <em>p</em>.
+  </p>
+
+  <p>
+    This is in part because a lot of software doesn't actually print out the <em>p</em> value when it's that small (e.g., SPSS just writes <em>p</em> = .000 whenever <em>p</em> < .001), and in part because a very small <em>p</em> value can be kind of misleading. The human mind sees a number like .0000000001 and it's hard to suppress the gut feeling that the evidence in favour of the alternative hypothesis is a near certainty. In practice however, this is usually wrong. Life is a big, messy, complicated thing, and every statistical test ever invented relies on simplifications, approximations and assumptions.
+  </p>
+
+  <div class="important-callout">
+    <h4>Interpretation of p < .001</h4>
+    <p>
+      As a consequence, it's probably not reasonable to walk away from any statistical analysis with a feeling of confidence stronger than <em>p</em> < .001 implies. In other words, <em>p</em> < .001 is really code for "as far as this test is concerned, the evidence is overwhelming."
+    </p>
+  </div>
+
+  <h3>Best Practices</h3>
+
+  <p>
+    In light of all this, you might be wondering exactly what you should do. There's a fair bit of contradictory advice on the topic, with some people arguing that you should report the exact <em>p</em> value, and other people arguing that you should use the tiered approach. As a result, the best advice I can give is to suggest that you look at papers/reports written in your field and see what the convention seems to be. If there doesn't seem to be any consistent pattern, then use whichever method you prefer.
+  </p>
+
+  <div class="practice-tip">
+    <h4>💡 Practical Tip</h4>
+    <p>
+      Regardless of how you choose to report your p values, remember that the p value is not the only important thing. You should also report:
+    </p>
+    <ul>
+      <li>The test statistic value</li>
+      <li>The degrees of freedom (if applicable)</li>
+      <li>The effect size</li>
+      <li>Descriptive statistics (means, standard deviations, etc.)</li>
+      <li>Sample size</li>
+    </ul>
+  </div>
+</section>

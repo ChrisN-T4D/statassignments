@@ -34,6 +34,7 @@ app.add_middleware(
 
 # Global model instance (loaded on startup)
 bkt_model: Optional[NeuralBKTModel] = None
+VALID_DIFFICULTIES = {"easy", "medium", "hard"}
 
 # ============================================================
 # Request/Response Models
@@ -57,6 +58,8 @@ class BKTUpdateRequest(BaseModel):
     time_since_reading: Optional[int] = None
     time_since_last_attempt: Optional[int] = None
     has_read_topic_before: Optional[bool] = None
+    last_topic_read_time: Optional[int] = None
+    last_attempt_time: Optional[int] = None
     last_reading_max_scroll_depth: Optional[int] = None
     last_reading_triggered_by_error: Optional[bool] = None
 
@@ -95,6 +98,20 @@ class PredictionResponse(BaseModel):
     predicted_correct_prob: float
     recommended_difficulty: str
     mastery_level: str
+
+
+def _sanitize_difficulty(value: Optional[str]) -> str:
+    if isinstance(value, str):
+        normalized = value.lower()
+        if normalized in VALID_DIFFICULTIES:
+            return normalized
+    return "medium"
+
+
+def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
+    if value is None:
+        return None
+    return value if value >= 0 else None
 
 # ============================================================
 # Startup/Shutdown Events
@@ -161,22 +178,26 @@ async def update_bkt(request: BKTUpdateRequest):
         raise HTTPException(status_code=503, detail="Model not loaded")
 
     try:
+        difficulty = _sanitize_difficulty(request.difficulty)
+
         # Update BKT state using neural model with time and engagement data
         updated_state = bkt_model.update(
             user_id=request.user_id,
             objective_id=request.objective_id,
             is_correct=request.is_correct,
-            difficulty=request.difficulty,
-            active_time_seconds=request.active_time_seconds,
-            total_time_seconds=request.total_time_seconds,
+            difficulty=difficulty,
+            active_time_seconds=_sanitize_non_negative_int(request.active_time_seconds),
+            total_time_seconds=_sanitize_non_negative_int(request.total_time_seconds),
             was_maxed_out=request.was_maxed_out,
             idle_detected=request.idle_detected,
-            time_to_first_selection=request.time_to_first_selection,
-            answer_changes=request.answer_changes,
-            time_since_reading=request.time_since_reading,
-            time_since_last_attempt=request.time_since_last_attempt,
+            time_to_first_selection=_sanitize_non_negative_int(request.time_to_first_selection),
+            answer_changes=_sanitize_non_negative_int(request.answer_changes),
+            time_since_reading=_sanitize_non_negative_int(request.time_since_reading),
+            time_since_last_attempt=_sanitize_non_negative_int(request.time_since_last_attempt),
             has_read_topic_before=request.has_read_topic_before,
-            last_reading_max_scroll_depth=request.last_reading_max_scroll_depth,
+            last_topic_read_time=_sanitize_non_negative_int(request.last_topic_read_time),
+            last_attempt_time=_sanitize_non_negative_int(request.last_attempt_time),
+            last_reading_max_scroll_depth=_sanitize_non_negative_int(request.last_reading_max_scroll_depth),
             last_reading_triggered_by_error=request.last_reading_triggered_by_error
         )
 
@@ -220,7 +241,18 @@ async def get_bkt_state(user_id: str, objective_id: str):
                 last_updated=datetime.utcnow().isoformat()
             )
 
-        return BKTStateResponse(**state)
+        return BKTStateResponse(
+            objective_id=objective_id,
+            pL=state['pL'],
+            pL0=state['pL0'],
+            pT=state['pT'],
+            pS=state['pS'],
+            pG=state['pG'],
+            attempts=state['attempts'],
+            correct=state['correct'],
+            incorrect=state['incorrect'],
+            last_updated=datetime.utcnow().isoformat()
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

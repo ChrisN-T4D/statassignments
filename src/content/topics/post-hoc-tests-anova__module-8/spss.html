@@ -1,0 +1,82 @@
+<section class="module-content" aria-labelledby="posthoc-title"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="posthoc-title">13.5 Multiple Comparisons and Post-Hoc Tests</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Why Post-Hoc Tests?</h3>
+    <p>ANOVA tells us <em>if</em> groups differ, but not <em>which</em> groups differ. Post-hoc tests compare all pairwise differences while controlling family-wise error rate.</p>
+  </div>
+
+  <h3>The Multiple Comparisons Problem</h3>
+  <p>Running multiple t-tests inflates Type I error:</p>
+  <div class="formula-box">
+    <p><strong>3 groups = 3 pairwise comparisons</strong></p>
+    <p>If α = .05 for each test:</p>
+    <p>Family-wise error rate ≈ 1 - (1-.05)³ = .14 (14% chance of false positive!)</p>
+    <p><strong>Solution:</strong> Adjust p-values to control total error rate</p>
+  </div>
+
+  <h3>Common Post-Hoc Corrections</h3>
+
+  <h4>1. Bonferroni Correction (Most Conservative)</h4>
+  <div class="formula-box">
+    <p><strong>p'_j = m × p_j</strong></p>
+    <p>Where m = number of comparisons</p>
+    <p><em>Example:</em> 3 comparisons, raw p = .02 → adjusted p = 3 × .02 = .06</p>
+  </div>
+  <ul>
+    <li><strong>Pros:</strong> Simple, guarantees family-wise error rate ≤ α</li>
+    <li><strong>Cons:</strong> Very conservative (high Type II error)</li>
+  </ul>
+
+  <h4>2. Holm Correction (Recommended)</h4>
+  <p><strong>Sequential Bonferroni</strong> — less conservative, same Type I error protection:</p>
+  <ol>
+    <li>Sort p-values from smallest to largest</li>
+    <li>Multiply smallest p by m</li>
+    <li>For j-th largest p: multiply by (m - j + 1) OR use previous adjusted p (whichever is larger)</li>
+  </ol>
+  <div class="example-box">
+    <h4>Example: Holm Correction</h4>
+    <table class="stats-table">
+      <tr><th>Comparison</th><th>Raw p</th><th>Rank</th><th>Holm p</th></tr>
+      <tr><td>Joyzepam vs Placebo</td><td>.00003</td><td>1 (smallest)</td><td>.00009</td></tr>
+      <tr><td>Joyzepam vs Anxifree</td><td>.0005</td><td>2</td><td>.001</td></tr>
+      <tr><td>Anxifree vs Placebo</td><td>.15</td><td>3 (largest)</td><td>.15</td></tr>
+    </table>
+    <p><strong>Conclusion:</strong> Joyzepam > Placebo (p < .001), Joyzepam > Anxifree (p = .001), Anxifree ≈ Placebo (p = .15)</p>
+  </div>
+
+  <div class="SPSS-box">
+    <h3>Post-Hoc Tests in SPSS</h3>
+    <ol>
+      <li>In ANOVA analysis, go to <strong>Post Hoc Tests</strong></li>
+      <li>Move <strong>drug</strong> to the right panel</li>
+      <li>Under "Correction," select <strong>Holm</strong> (recommended)</li>
+      <li>Results show all pairwise comparisons with adjusted p-values</li>
+    </ol>
+  </div>
+
+  <h3>Other Corrections</h3>
+  <ul>
+    <li><strong>Tukey HSD:</strong> Good for balanced designs (equal group sizes)</li>
+    <li><strong>Šidák:</strong> Slightly less conservative than Bonferroni</li>
+    <li><strong>No correction:</strong> Only use if comparisons were <em>planned a priori</em></li>
+  </ul>
+
+  <div class="key-points-box">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Always use correction</strong> for post-hoc (unplanned) comparisons</li>
+      <li><strong>Holm correction</strong> is the go-to method (more powerful than Bonferroni)</li>
+      <li>Report adjusted p-values in results</li>
+      <li>Don't run post-hoc if ANOVA is non-significant (protects against fishing)</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Writing Up Post-Hoc Results</h3>
+    <p><em>Post-hoc tests (using the Holm correction to adjust p) indicated that Joyzepam produced significantly larger mood change than both Anxifree (p = .001) and placebo (p < .001). We found no evidence that Anxifree performed better than placebo (p = .15).</em></p>
+  </div>
+</section>

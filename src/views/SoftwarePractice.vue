@@ -197,6 +197,7 @@ import { getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
+import { preferredSoftware, setPreferredSoftware } from '../composables/usePreferredSoftware.js'
 
 // Assignment Tools Component - Now in global ResourcesDrawer
 // import ScreenRecorder from '../components/ScreenRecorder.vue'
@@ -293,7 +294,7 @@ const availableModules = computed(() => {
   if (classId.value !== 'statistics') return []
   const modulesWithExercises = new Set(
     statisticsExercises
-      .filter(ex => ex.software_type === selectedSoftware.value)
+      .filter(ex => ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual')
       .map(ex => ex.module)
   )
   return statisticsModules
@@ -320,7 +321,7 @@ const staticExercises = computed(() => {
   // If we have a classId, show all exercises for that class (e.g., statistics)
   if (classId.value === 'statistics') {
     let filtered = statisticsExercises.filter(ex => {
-      const matchesSoftware = ex.software_type === selectedSoftware.value
+      const matchesSoftware = ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual'
       const matchesModule = selectedModule.value ? ex.module === selectedModule.value : true
       return matchesSoftware && matchesModule && ex.exercise_type !== "menu_navigation"
     })
@@ -335,11 +336,11 @@ const staticExercises = computed(() => {
   // If we have a topicId, filter by topic
   if (topicId.value) {
     return statisticsExercises.filter(ex =>
-      ex.topic === topicId.value && ex.software_type === selectedSoftware.value && ex.exercise_type !== "menu_navigation"
+      ex.topic === topicId.value && (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation"
     )
   }
   // Default: show all jamovi exercises
-  return statisticsExercises.filter(ex => ex.software_type === selectedSoftware.value && ex.exercise_type !== "menu_navigation")
+  return statisticsExercises.filter(ex => (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation")
 })
 
 // Methods
@@ -426,27 +427,9 @@ function getCompletedLessonIds() {
   }
 }
 
-function getPreferredSoftwareId() {
-  try {
-    const raw = localStorage.getItem('preferredSoftware')
-    if (!raw) return 'jamovi'
-    return software.find(sw => sw.id === raw)?.id || 'jamovi'
-  } catch (err) {
-    console.warn('Unable to read preferred software:', err)
-    return 'jamovi'
-  }
-}
-
-function savePreferredSoftwareId(swId) {
-  try {
-    localStorage.setItem('preferredSoftware', swId)
-  } catch (err) {
-    console.warn('Unable to save preferred software:', err)
-  }
-}
 async function selectSoftware(swId) {
   selectedSoftware.value = swId
-  savePreferredSoftwareId(swId)
+  setPreferredSoftware(swId)
   currentExercise.value = null
   showSummary.value = false
   if (!availableModules.value.find(mod => mod.id === selectedModule.value)) {
@@ -672,11 +655,11 @@ function attachCopyButtons() {
 // Lifecycle
 onMounted(async () => {
   await fetchClasses()
-  if (route.query.software) {
+  if (route.query.software && software.some(s => s.id === route.query.software)) {
     selectedSoftware.value = route.query.software
-    savePreferredSoftwareId(route.query.software)
+    setPreferredSoftware(route.query.software)
   } else {
-    selectedSoftware.value = getPreferredSoftwareId()
+    selectedSoftware.value = preferredSoftware.value
   }
   if (requestedModuleId.value) {
     selectedModule.value = requestedModuleId.value

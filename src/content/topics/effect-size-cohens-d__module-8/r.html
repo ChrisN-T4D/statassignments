@@ -1,0 +1,279 @@
+<section class="module-content" aria-labelledby="cohens-d-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="cohens-d-title">11.7 Effect Size: Cohen's d</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>Cohen's d is a standardized measure of effect size that expresses the difference between means in standard deviation units. Unlike p-values, effect sizes are independent of sample size and provide information about practical significance.</p>
+  </div>
+
+  <h3>Why Effect Sizes Matter</h3>
+  <p>P-values tell us if an effect exists, but not how big it is. Effect sizes answer the crucial question: <strong>"How big is the difference?"</strong></p>
+
+  <div class="warning-box">
+    <h4>The Problem with P-Values Alone:</h4>
+    <ul>
+      <li>Large sample → even tiny effects become "significant"</li>
+      <li>Small sample → even huge effects may not be "significant"</li>
+      <li>p-value depends on sample size, effect size does not</li>
+      <li>Statistical significance ≠ practical significance</li>
+    </ul>
+
+    <h4>Solution: Always Report Effect Sizes!</h4>
+    <p>Effect sizes tell you the magnitude of the difference, independent of sample size.</p>
+  </div>
+
+  <h3>What is Cohen's d?</h3>
+  <p>Cohen's d expresses the mean difference in standard deviation units. It answers: "How many standard deviations apart are the means?"</p>
+
+  <div class="formula-box">
+    <h4>General Formula:</h4>
+    <p>d = (Mean Difference) / (Standard Deviation)</p>
+
+    <h4>For One-Sample T-Test:</h4>
+    <p>d = (X̄ - μ₀) / σ̂</p>
+
+    <h4>For Independent Samples T-Test:</h4>
+    <p>d = (X̄₁ - X̄₂) / σ̂ₚ</p>
+    <p>where σ̂ₚ is the pooled standard deviation</p>
+
+    <h4>For Paired-Samples T-Test:</h4>
+    <p>d = D̄ / σ̂_D</p>
+    <p>where D̄ = mean difference and σ̂_D = SD of differences</p>
+  </div>
+
+  <h3>Interpreting Cohen's d</h3>
+  <div class="concept-box" role="note">
+    <h4>Cohen's Guidelines (Rough Guide Only!):</h4>
+    <ul>
+      <li><strong>d ≈ 0.2:</strong> Small effect</li>
+      <li><strong>d ≈ 0.5:</strong> Medium effect</li>
+      <li><strong>d ≈ 0.8:</strong> Large effect</li>
+    </ul>
+
+    <h4>Important Caveats:</h4>
+    <ul>
+      <li>These are rough guidelines, not rigid rules</li>
+      <li>What counts as "large" depends on context</li>
+      <li>In some fields, d = 0.2 is considered important</li>
+      <li>In others, even d = 0.8 might not be practically meaningful</li>
+      <li>Always interpret in context of your research area!</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Intuitive Understanding:</h4>
+    <p><strong>d = 0.5</strong> means the means are half a standard deviation apart.</p>
+
+    <p>Imagine two normal distributions:</p>
+    <ul>
+      <li>Group 1: M = 100, SD = 15</li>
+      <li>Group 2: M = 107.5, SD = 15</li>
+      <li>Difference = 7.5</li>
+      <li>d = 7.5 / 15 = 0.5</li>
+    </ul>
+
+    <p>This means if you picked a random person from Group 2, they'd score 0.5 SDs above the Group 1 mean.</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example 1: One-Sample</h4>
+    <p><strong>Question:</strong> Do psychology students' exam scores differ from the national mean of 75?</p>
+    <p><strong>Data:</strong> N = 30, X̄ = 78.5, σ̂ = 10</p>
+
+    <p><strong>Step 1: Calculate t-test</strong></p>
+    <p>t = (78.5 - 75) / (10/√30) = 3.5 / 1.83 = 1.91</p>
+    <p>Result: p = .066 (not significant at α = .05)</p>
+
+    <p><strong>Step 2: Calculate Cohen's d</strong></p>
+    <p>d = (78.5 - 75) / 10 = 3.5 / 10 = 0.35</p>
+
+    <p><strong>Interpretation:</strong></p>
+    <p>Although not statistically significant (p = .066), there's a small-to-medium effect (d = 0.35). Psychology students score about 1/3 of a standard deviation above the national mean.</p>
+
+    <p><strong>Lesson:</strong> With a larger sample, this effect might reach significance. The effect exists (d = 0.35), but we lack power to detect it reliably.</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example 2: Independent Samples</h4>
+    <p><strong>Question:</strong> Do males and females differ in reaction time?</p>
+    <p><strong>Data:</strong></p>
+    <ul>
+      <li>Males: N₁ = 200, X̄₁ = 252 ms, σ̂₁ = 45 ms</li>
+      <li>Females: N₂ = 200, X̄₂ = 248 ms, σ̂₂ = 42 ms</li>
+    </ul>
+
+    <p><strong>Step 1: Calculate pooled SD</strong></p>
+    <p>σ̂ₚ ≈ √[(45² + 42²)/2] ≈ 43.5 ms</p>
+
+    <p><strong>Step 2: Calculate t-test</strong></p>
+    <p>SE = 43.5 × √(1/200 + 1/200) = 4.35</p>
+    <p>t = (252 - 248) / 4.35 = 0.92</p>
+    <p>Result: p = .36 (not significant)</p>
+
+    <p><strong>Step 3: Calculate Cohen's d</strong></p>
+    <p>d = (252 - 248) / 43.5 = 4 / 43.5 = 0.09</p>
+
+    <p><strong>Interpretation:</strong></p>
+    <p>With a very large sample (N = 400), we had excellent power, yet found no significant difference (p = .36). The effect size is tiny (d = 0.09), indicating the difference is negligible—only 4 ms out of ~250 ms reaction time.</p>
+
+    <p><strong>Lesson:</strong> Large samples detect even tiny effects. Here, the tiny effect failed to reach significance because it's genuinely trivial. Even if it were significant, d = 0.09 suggests no practical importance.</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example 3: Paired Samples</h4>
+    <p><strong>Question:</strong> Does meditation reduce anxiety?</p>
+    <p><strong>Data:</strong> N = 15 participants, pre-post design</p>
+    <ul>
+      <li>Pre-meditation: M = 42.3, SD = 8.2</li>
+      <li>Post-meditation: M = 36.7, SD = 7.8</li>
+      <li>Difference scores: D̄ = 5.6, σ̂_D = 4.1</li>
+    </ul>
+
+    <p><strong>Step 1: Calculate t-test</strong></p>
+    <p>t = 5.6 / (4.1/√15) = 5.6 / 1.06 = 5.28</p>
+    <p>Result: p < .001 (highly significant)</p>
+
+    <p><strong>Step 2: Calculate Cohen's d</strong></p>
+    <p>d = 5.6 / 4.1 = 1.37</p>
+
+    <p><strong>Interpretation:</strong></p>
+    <p>The meditation program significantly reduced anxiety, t(14) = 5.28, p < .001, d = 1.37. The effect size is very large (d = 1.37), indicating participants' anxiety decreased by more than one standard deviation. This represents a substantial, clinically meaningful improvement.</p>
+
+    <p><strong>Lesson:</strong> Both statistical significance (p < .001) and practical significance (d = 1.37) converge, providing strong evidence for the intervention's effectiveness.</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Getting Cohen's d in R</h3>
+    <p>R automatically calculates effect sizes when you check the appropriate option:</p>
+
+    <h4>One-Sample T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → One Sample T-Test</li>
+      <li>Check "Effect size" under Additional Statistics</li>
+      <li>R reports Cohen's d</li>
+    </ol>
+
+    <h4>Independent Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Independent Samples T-Test</li>
+      <li>Check "Effect size" under Additional Statistics</li>
+      <li>R reports Cohen's d (based on pooled SD)</li>
+    </ol>
+
+    <h4>Paired Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Paired Samples T-Test</li>
+      <li>Check "Effect size" under Additional Statistics</li>
+      <li>R reports Cohen's d (based on SD of differences)</li>
+    </ol>
+
+    <p><strong>Note:</strong> R may also show "Hedges' g", which is a bias-corrected version of Cohen's d. For large samples, d and g are nearly identical.</p>
+  </div>
+
+  <h3>Cohen's d vs. Other Effect Sizes</h3>
+  <div class="concept-box" role="note">
+    <h4>Related Effect Size Measures:</h4>
+    <ul>
+      <li><strong>Hedges' g:</strong> Bias-corrected version of d (better for small samples)</li>
+      <li><strong>Glass's Δ:</strong> Uses control group SD instead of pooled SD</li>
+      <li><strong>r (correlation):</strong> Related to d; can convert between them</li>
+      <li><strong>η² (eta-squared):</strong> Proportion of variance explained</li>
+    </ul>
+
+    <h4>Relationship between d and r:</h4>
+    <p>r = d / √(d² + 4)</p>
+    <p>d = 2r / √(1 - r²)</p>
+
+    <h4>Example Conversions:</h4>
+    <ul>
+      <li>d = 0.2 ≈ r = .10 (1% variance explained)</li>
+      <li>d = 0.5 ≈ r = .24 (6% variance explained)</li>
+      <li>d = 0.8 ≈ r = .37 (14% variance explained)</li>
+      <li>d = 1.0 ≈ r = .45 (20% variance explained)</li>
+    </ul>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li><strong>Ignoring effect sizes:</strong> Always report them! P-values alone are insufficient</li>
+    <li><strong>Rigid interpretation:</strong> Don't treat Cohen's guidelines as absolute thresholds</li>
+    <li><strong>Wrong SD:</strong> Make sure you're using the right SD for your design</li>
+    <li><strong>Forgetting negative signs:</strong> d can be negative (indicates direction)</li>
+    <li><strong>Assuming d = 0.2 is "unimportant":</strong> Context matters!</li>
+    <li><strong>Confusing d with r:</strong> They're related but different</li>
+  </ul>
+
+  <h3>Contextual Interpretation</h3>
+  <div class="warning-box">
+    <h4>Cohen's Guidelines are ROUGH:</h4>
+    <p>What counts as "large" varies dramatically by field:</p>
+
+    <ul>
+      <li><strong>Personality psychology:</strong> d = 0.2 might be typical</li>
+      <li><strong>Clinical psychology:</strong> d = 0.5 might be good for therapy</li>
+      <li><strong>Educational interventions:</strong> d = 0.4 might be excellent</li>
+      <li><strong>Experimental psychology:</strong> d = 0.8+ might be common</li>
+    </ul>
+
+    <p><strong>Ask:</strong> How large are typical effects in my research area?</p>
+  </div>
+
+  <h3>Sample Size and Effect Size</h3>
+  <div class="concept-box" role="note">
+    <h4>Key Insight:</h4>
+    <p>Effect size (d) is independent of sample size (N), but detection of the effect depends on both:</p>
+
+    <ul>
+      <li><strong>Large effect, small N:</strong> Might not reach significance (low power)</li>
+      <li><strong>Small effect, large N:</strong> Will likely reach significance (high power)</li>
+      <li><strong>Large effect, large N:</strong> Definitely significant</li>
+      <li><strong>Small effect, small N:</strong> Definitely not significant</li>
+    </ul>
+
+    <h4>Power Analysis:</h4>
+    <p>To detect d = 0.5 with 80% power at α = .05 (independent samples):</p>
+    <ul>
+      <li>Need N ≈ 64 per group (128 total)</li>
+    </ul>
+
+    <p>To detect d = 0.2 with 80% power:</p>
+    <ul>
+      <li>Need N ≈ 394 per group (788 total)</li>
+    </ul>
+  </div>
+
+  <h3>Reporting Effect Sizes</h3>
+  <div class="example-box">
+    <h4>APA Style Examples:</h4>
+    <p><strong>Basic reporting:</strong></p>
+    <p>"The treatment group (M = 78.3, SD = 9.2) scored significantly higher than the control group (M = 72.1, SD = 8.7), t(58) = 2.78, p = .007, d = 0.72."</p>
+
+    <p><strong>With interpretation:</strong></p>
+    <p>"...t(58) = 2.78, p = .007, d = 0.72. This represents a medium-to-large effect, with the treatment group scoring nearly three-quarters of a standard deviation above the control group."</p>
+
+    <p><strong>With confidence interval:</strong></p>
+    <p>"...t(58) = 2.78, p = .007, d = 0.72, 95% CI [0.19, 1.24]."</p>
+  </div>
+
+  <h3>Effect Sizes and Practical Significance</h3>
+  <div class="concept-box" role="note">
+    <h4>Statistical Significance ≠ Practical Significance</h4>
+
+    <p><strong>Scenario 1: Significant but trivial</strong></p>
+    <p>N = 10,000, d = 0.05, p < .001</p>
+    <p>→ Statistically significant, but effect is tiny and likely meaningless</p>
+
+    <p><strong>Scenario 2: Not significant but important</strong></p>
+    <p>N = 15, d = 0.6, p = .08</p>
+    <p>→ Not significant, but medium effect suggests something real (need more data)</p>
+
+    <p><strong>Scenario 3: The ideal</strong></p>
+    <p>N = 80, d = 0.7, p = .001</p>
+    <p>→ Significant AND substantial effect size</p>
+
+    <h4>Always Report Both!</h4>
+    <p>P-values + Effect sizes give a complete picture.</p>
+  </div>
+</section>

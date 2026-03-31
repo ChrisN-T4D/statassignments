@@ -21,9 +21,12 @@ Your application now uses **Advanced Neural BKT** with:
        ↓                       ↓
 ┌─────────────────────────────────┐
 │        PocketBase               │
-│  (Stores BKT states)            │
+│  (Stores attempts + cache rows) │
 └─────────────────────────────────┘
 ```
+
+Note: FastAPI `NeuralBKTModel` keeps active model state in process memory.
+PocketBase stores attempt telemetry and optional `bkt_states` cache rows written by the frontend fallback/sync path.
 
 ## Quick Start
 

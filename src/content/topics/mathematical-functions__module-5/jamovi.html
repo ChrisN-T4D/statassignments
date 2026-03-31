@@ -1,0 +1,162 @@
+<section class="module-content" aria-labelledby="mathematical-functions-title">
+  <h2 id="mathematical-functions-title">6.4 Mathematical Functions and Operations</h2>
+
+  <p>
+    jamovi has a range of mathematical functions built into it that are useful for data transformations.
+    While most of the book focuses on functions strictly necessary for specific analyses, logarithms and
+    exponentials deserve special attention because they appear everywhere in statistics.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Common Mathematical Functions</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>jamovi Code</th>
+          <th>Example</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Square root</td>
+          <td>SQRT(x)</td>
+          <td>SQRT(25)</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td>Absolute value</td>
+          <td>ABS(x)</td>
+          <td>ABS(-23)</td>
+          <td>23</td>
+        </tr>
+        <tr>
+          <td>Logarithm (base 10)</td>
+          <td>LOG10(x)</td>
+          <td>LOG10(1000)</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>Natural logarithm (base e)</td>
+          <td>LN(x)</td>
+          <td>LN(1000)</td>
+          <td>6.908</td>
+        </tr>
+        <tr>
+          <td>Exponential (e^x)</td>
+          <td>EXP(x)</td>
+          <td>EXP(6.908)</td>
+          <td>1000.245</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.4.1 Understanding logarithms</h3>
+
+  <p>
+    A <strong>logarithm</strong> is essentially the "opposite" of taking a power. If:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    10³ = 1000
+  </p>
+
+  <p>
+    Then we can also say:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    log₁₀(1000) = 3
+  </p>
+
+  <p>
+    In words: "10 to the power of 3 equals 1000" is equivalent to "the logarithm base 10 of 1000 equals 3."
+  </p>
+
+  <p>
+    The <strong>LOG10()</strong> function in jamovi calculates logarithms in base 10.
+  </p>
+
+  <h3>6.4.2 Natural logarithms and Euler's number</h3>
+
+  <p>
+    While base 10 is convenient for humans (we use decimal numbers), mathematics has a special preference for
+    base <em>e</em>, known as <strong>Euler's number</strong>:
+  </p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    e ≈ 2.718282
+  </p>
+
+  <p>
+    Logarithms in base <em>e</em> are called <strong>natural logarithms</strong> and are extremely common in statistics.
+    In jamovi, use the <strong>LN()</strong> function for natural logarithms.
+  </p>
+
+  <h3>6.4.3 Exponentials</h3>
+
+  <p>
+    The <strong>exponential function</strong> raises <em>e</em> to a given power. It's written as e^x or exp(x).
+    In jamovi, use <strong>EXP()</strong>:
+  </p>
+
+  <pre><code>EXP(2)  # Calculates e^2 ≈ 7.389</code></pre>
+
+  <p>
+    Because e appears so frequently in statistical formulas, the exponential function (and its inverse, the natural
+    logarithm) are foundational to many statistical procedures.
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: When to Use Log Transformations</h4>
+    <ul>
+      <li><strong>Skewed distributions</strong> – Log transforms can make right-skewed data more symmetric</li>
+      <li><strong>Multiplicative relationships</strong> – Convert multiplicative patterns to additive ones</li>
+      <li><strong>Variance stabilization</strong> – Reduce the relationship between mean and variance</li>
+      <li><strong>Interpretation caution</strong> – Remember that results are on the log scale and may need back-transformation</li>
+    </ul>
+  </div>
+
+  <div class="critical-points">
+    <h4>Critical Point: Which Logarithm to Use?</h4>
+    <p>
+      Different bases serve different purposes:
+    </p>
+    <ul>
+      <li><strong>LOG10()</strong> – Easy to interpret (each unit = 10-fold change), good for presentation</li>
+      <li><strong>LN()</strong> – Natural logarithm, preferred in statistical theory and many formulas</li>
+      <li><strong>Base 2</strong> – Common in computer science and genetics (doubling/halving)</li>
+    </ul>
+    <p>
+      In practice, the choice often doesn't matter much for analysis, but <strong>LN()</strong> is most common in statistics.
+    </p>
+  </div>
+
+  <h3>6.4.4 Other useful functions</h3>
+
+  <p>
+    <strong>SQRT()</strong> – Square root is useful for:
+  </p>
+
+  <ul>
+    <li>Variance stabilization when variance increases with the mean</li>
+    <li>Converting variance to standard deviation</li>
+    <li>Distance calculations</li>
+  </ul>
+
+  <p>
+    <strong>ABS()</strong> – Absolute value is useful for:
+  </p>
+
+  <ul>
+    <li>Measuring magnitude regardless of direction</li>
+    <li>Calculating distances or differences</li>
+    <li>Strength of opinion (regardless of positive/negative)</li>
+  </ul>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, Chapter 6, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

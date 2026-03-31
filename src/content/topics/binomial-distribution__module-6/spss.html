@@ -1,0 +1,165 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>7.4 The binomial distribution</h2>
+
+  <p>
+    The <strong>binomial distribution</strong> is one of the most important and widely used probability distributions in
+    statistics. It describes the number of successes in a fixed number of independent trials, where each trial has only
+    two possible outcomes.
+  </p>
+
+  <h3>7.4.1 When to use the binomial distribution</h3>
+
+  <p>
+    The binomial distribution applies when your situation meets four specific conditions:
+  </p>
+
+  <div class="critical-box">
+    <h4>Four Requirements for a Binomial Distribution</h4>
+    <ol>
+      <li><strong>Fixed number of trials (n):</strong> You must conduct exactly n trials or observations</li>
+      <li><strong>Binary outcomes:</strong> Each trial has exactly two possible outcomes, conventionally called "success"
+      and "failure"</li>
+      <li><strong>Constant probability:</strong> The probability of success (p) is the same for every trial</li>
+      <li><strong>Independent trials:</strong> The outcome of one trial does not affect the outcomes of other trials</li>
+    </ol>
+  </div>
+
+  <p>
+    <strong>Examples of binomial situations:</strong>
+  </p>
+  <ul>
+    <li>Flipping a coin 20 times and counting heads (n = 20, p = 0.5 if fair)</li>
+    <li>Testing 100 manufactured items and counting defects (n = 100, p = defect rate)</li>
+    <li>Asking 50 randomly selected voters if they support a candidate (n = 50, p = population support rate)</li>
+    <li>Rolling a die 30 times and counting how many times you roll a 6 (n = 30, p = 1/6)</li>
+  </ul>
+
+  <div class="terminology-box">
+    <h4>Key Terminology</h4>
+    <ul>
+      <li><strong>n:</strong> The number of trials (a fixed integer)</li>
+      <li><strong>p:</strong> The probability of success on each trial (a number between 0 and 1)</li>
+      <li><strong>X:</strong> The random variable representing the total number of successes (can be 0, 1, 2, ..., n)</li>
+      <li><strong>P(X = k):</strong> The probability of getting exactly k successes in n trials</li>
+    </ul>
+  </div>
+
+  <h3>7.4.2 The binomial formula</h3>
+
+  <p>
+    The probability of getting exactly k successes in n trials is given by the binomial probability formula:
+  </p>
+
+  <div class="critical-box">
+    <h4>Binomial Probability Formula</h4>
+    <p>
+      P(X = k) = C(n, k) × p^k × (1−p)^(n−k)
+    </p>
+    <p>
+      where C(n, k) = n! / (k!(n−k)!) is the binomial coefficient, representing the number of ways to choose k successes
+      from n trials.
+    </p>
+  </div>
+
+  <p>
+    <strong>What this formula means:</strong>
+  </p>
+  <ul>
+    <li><strong>p^k:</strong> The probability that k specific trials are successes</li>
+    <li><strong>(1−p)^(n−k):</strong> The probability that the remaining (n−k) trials are failures</li>
+    <li><strong>C(n, k):</strong> The number of different ways to arrange k successes among n trials</li>
+  </ul>
+
+  <p>
+    <strong>Example: Coin flipping</strong><br>
+    Suppose you flip a fair coin 10 times. What is the probability of getting exactly 6 heads?
+  </p>
+  <ul style="margin-left: 20px;">
+    <li>n = 10 (number of flips)</li>
+    <li>k = 6 (desired number of heads)</li>
+    <li>p = 0.5 (probability of heads on each flip)</li>
+    <li>C(10, 6) = 10! / (6! × 4!) = 210</li>
+  </ul>
+  <p style="margin-left: 20px;">
+    P(X = 6) = 210 × (0.5)^6 × (0.5)^4<br>
+    = 210 × 0.015625 × 0.0625<br>
+    = 210 × 0.0009765625<br>
+    ≈ 0.205
+  </p>
+  <p>
+    So there's about a 20.5% chance of getting exactly 6 heads in 10 flips.
+  </p>
+
+  <h3>7.4.3 Mean and variance of the binomial distribution</h3>
+
+  <p>
+    Instead of calculating individual probabilities, we often want to know the typical or expected number of successes.
+    The binomial distribution has simple formulas for its mean and variance:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Binomial Mean and Standard Deviation</h4>
+    <ul>
+      <li><strong>Mean (expected value):</strong> μ = n × p</li>
+      <li><strong>Variance:</strong> σ² = n × p × (1−p)</li>
+      <li><strong>Standard deviation:</strong> σ = √(n × p × (1−p))</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example: Coin flipping</strong><br>
+    If you flip a fair coin 100 times:
+  </p>
+  <ul style="margin-left: 20px;">
+    <li>Expected number of heads: μ = 100 × 0.5 = 50</li>
+    <li>Standard deviation: σ = √(100 × 0.5 × 0.5) = √25 = 5 heads</li>
+  </ul>
+  <p>
+    This tells us that in 100 flips, we expect about 50 heads on average, with typical variation of about 5 heads in either
+    direction.
+  </p>
+
+  <p>
+    <strong>Example: Quality control</strong><br>
+    A factory produces light bulbs with a 2% defect rate. If you randomly select 500 bulbs, how many defects do you expect?
+  </p>
+  <ul style="margin-left: 20px;">
+    <li>n = 500, p = 0.02</li>
+    <li>Expected defects: μ = 500 × 0.02 = 10 defects</li>
+    <li>Standard deviation: σ = √(500 × 0.02 × 0.98) = √9.8 ≈ 3.13 defects</li>
+  </ul>
+
+  <h3>7.4.4 Using the binomial distribution in SPSS</h3>
+
+  <p>
+    While you can calculate binomial probabilities by hand using the formula, statistical software makes this much easier.
+    in SPSS, you can:
+  </p>
+  <ul>
+    <li>Calculate exact probabilities: P(X = k)</li>
+    <li>Calculate cumulative probabilities: P(X ≤ k) or P(X ≥ k)</li>
+    <li>Generate random samples from a binomial distribution</li>
+    <li>Visualize the binomial distribution with different parameters</li>
+  </ul>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      The binomial distribution is the foundation for many statistical tests, including tests for proportions and
+      categorical data analysis. Understanding when to apply it and how to interpret its parameters is essential for
+      analyzing count data and yes/no outcomes.
+    </p>
+  </div>
+
+  <p>
+    <strong>Connection to normal distribution:</strong> When n is large and p is not too close to 0 or 1, the binomial
+    distribution is approximately normal. This connection (via the Central Limit Theorem) is why the normal distribution
+    appears so frequently in statistics.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with IBM SPSS Statistics" by Danielle J. Navarro and David R. Foxcroft, Chapter 7, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

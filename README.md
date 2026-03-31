@@ -51,6 +51,13 @@ statassignments/
 - **[Setup Guide](docs/SETUP.md)** - Detailed configuration steps
 - **[Troubleshooting](docs/QUICK-FIX.md)** - Common issues and fixes
 - **[Database Schema](docs/pocketbase-schema.md)** - PocketBase schema reference
+- **[Software Parity Report](docs/PARITY_REPORT.md)** - Cross-software practice/concept parity status
+
+## Software parity note
+
+- Software practice parity is driven by frontend static data in `src/data/statisticsPractices.js` plus parallel data files.
+- `practiceObjectiveKey` is a frontend grouping key for equivalent objectives across Jamovi/R/SPSS/Excel/Stata.
+- PocketBase changes are **not required** for software-practice parity unless you intentionally move software todo content into DB collections.
 
 ## Tech Stack
 

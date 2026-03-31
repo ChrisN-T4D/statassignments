@@ -12,9 +12,10 @@ Key features:
 """
 
 import numpy as np
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 import math
+import time
 
 
 @dataclass
@@ -54,11 +55,13 @@ class NeuralBKTModel:
             num_prototypes: Number of student prototypes to use
             num_objectives: Number of learning objectives
         """
-        self.num_prototypes = num_prototypes
         self.num_objectives = num_objectives
 
         # Initialize student prototypes (5 common learning profiles)
-        self.prototypes = self._create_default_prototypes()
+        all_prototypes = self._create_default_prototypes()
+        requested = max(1, int(num_prototypes))
+        self.prototypes = all_prototypes[:min(requested, len(all_prototypes))]
+        self.num_prototypes = len(self.prototypes)
 
         # Student states: user_id -> {objective_id -> state}
         self.student_states: Dict[str, Dict[str, Dict]] = {}
@@ -261,6 +264,7 @@ class NeuralBKTModel:
     def _sequential_bayesian_update(
         self,
         user_id: str,
+        objective_id: str,
         is_correct: bool,
         difficulty: str
     ) -> np.ndarray:
@@ -281,13 +285,15 @@ class NeuralBKTModel:
         for prototype in self.prototypes:
             params = self._get_prototype_adjusted_params(prototype, difficulty)
 
-            # Assume average mastery for likelihood calculation
-            avg_pL = 0.5
+            # Use current mastery on this objective when available.
+            objective_state = self.student_states.get(user_id, {}).get(objective_id, {})
+            objective_pL = objective_state.get('pL', self.base_params['pL0'])
+            objective_pL = max(0.01, min(0.99, objective_pL))
 
             if is_correct:
-                likelihood = avg_pL * (1 - params['pS']) + (1 - avg_pL) * params['pG']
+                likelihood = objective_pL * (1 - params['pS']) + (1 - objective_pL) * params['pG']
             else:
-                likelihood = avg_pL * params['pS'] + (1 - avg_pL) * (1 - params['pG'])
+                likelihood = objective_pL * params['pS'] + (1 - objective_pL) * (1 - params['pG'])
 
             likelihoods.append(likelihood)
 
@@ -400,6 +406,8 @@ class NeuralBKTModel:
         time_since_reading: Optional[int],
         time_since_last_attempt: Optional[int],
         has_read_topic_before: Optional[bool],
+        last_topic_read_time: Optional[int],
+        last_attempt_time: Optional[int],
         last_reading_max_scroll_depth: Optional[int],
         last_reading_triggered_by_error: Optional[bool],
         difficulty: str,
@@ -442,6 +450,27 @@ class NeuralBKTModel:
         pS_adj = max(-0.04, min(0.08, pS_adj))
         return {'pG_adjustment': pG_adj, 'pS_adjustment': pS_adj}
 
+    def _derive_time_since_seconds(
+        self,
+        explicit_seconds: Optional[int],
+        timestamp_value: Optional[int]
+    ) -> Optional[int]:
+        """
+        Derive elapsed seconds from either an explicit value or a timestamp.
+
+        Timestamp may be in milliseconds or seconds epoch format.
+        """
+        if explicit_seconds is not None and explicit_seconds >= 0:
+            return explicit_seconds
+        if timestamp_value is None or timestamp_value < 0:
+            return None
+
+        now_seconds = int(time.time())
+        # Heuristic: values larger than year-3000 in seconds are likely milliseconds.
+        ts_seconds = timestamp_value // 1000 if timestamp_value > 32503680000 else timestamp_value
+        elapsed = now_seconds - ts_seconds
+        return elapsed if elapsed >= 0 else None
+
     def update(
         self,
         user_id: str,
@@ -457,6 +486,8 @@ class NeuralBKTModel:
         time_since_reading: Optional[int] = None,
         time_since_last_attempt: Optional[int] = None,
         has_read_topic_before: Optional[bool] = None,
+        last_topic_read_time: Optional[int] = None,
+        last_attempt_time: Optional[int] = None,
         last_reading_max_scroll_depth: Optional[int] = None,
         last_reading_triggered_by_error: Optional[bool] = None
     ) -> Dict:
@@ -469,15 +500,21 @@ class NeuralBKTModel:
         Full integration of time features into predictions requires training a model that
         uses time patterns to distinguish confident mastery from lucky guessing.
         """
+        difficulty = str(difficulty).lower() if difficulty else 'medium'
+        if difficulty not in ('easy', 'medium', 'hard'):
+            difficulty = 'medium'
+
         # Initialize user state if needed
         if user_id not in self.student_states:
             self.student_states[user_id] = {}
 
         # Initialize objective state if needed
         if objective_id not in self.student_states[user_id]:
+            prior_bonus = self._get_reading_time_bonus(user_id, objective_id)
+            pL0 = max(0.01, min(0.99, self.base_params['pL0'] + prior_bonus))
             self.student_states[user_id][objective_id] = {
-                'pL': self.base_params['pL0'],
-                'pL0': self.base_params['pL0'],
+                'pL': pL0,
+                'pL0': pL0,
                 'pT': self.base_params['pT_base'],
                 'pS': self.base_params['pS_base'],
                 'pG': self.base_params['pG_base'],
@@ -497,13 +534,24 @@ class NeuralBKTModel:
             difficulty,
             is_correct
         )
+        resolved_time_since_reading = self._derive_time_since_seconds(
+            time_since_reading,
+            last_topic_read_time
+        )
+        resolved_time_since_last_attempt = self._derive_time_since_seconds(
+            time_since_last_attempt,
+            last_attempt_time
+        )
+
         # Get engagement-based adjustments (confidence, sequence, reading)
         engagement_adjustments = self._get_engagement_adjustments(
             time_to_first_selection,
             answer_changes,
-            time_since_reading,
-            time_since_last_attempt,
+            resolved_time_since_reading,
+            resolved_time_since_last_attempt,
             has_read_topic_before,
+            last_topic_read_time,
+            last_attempt_time,
             last_reading_max_scroll_depth,
             last_reading_triggered_by_error,
             difficulty,
@@ -516,7 +564,7 @@ class NeuralBKTModel:
         total_pS = max(-0.08, min(0.18, total_pS))
 
         # Update prototype probabilities
-        prototype_probs = self._sequential_bayesian_update(user_id, is_correct, difficulty)
+        prototype_probs = self._sequential_bayesian_update(user_id, objective_id, is_correct, difficulty)
 
         # Get weighted average of BKT updates across prototypes with time + engagement adjustments
         pL_updates = []
@@ -565,8 +613,9 @@ class NeuralBKTModel:
         Returns the most likely prototype and its parameters
         """
         if user_id not in self.student_prototype_probs:
-            # Return default (average) prototype
-            default = self.prototypes[4]  # Average student
+            # Return a deterministic default profile when no history exists.
+            default = next((p for p in self.prototypes if p.name == "Average Student"), self.prototypes[-1])
+            base_confidence = 1.0 / max(1, len(self.prototypes))
             return {
                 'prototype_id': default.id,
                 'prototype_name': default.name,
@@ -574,7 +623,7 @@ class NeuralBKTModel:
                 'not_slipping': default.not_slipping_boost,
                 'learning': default.learning,
                 'retention': default.retention,
-                'confidence': 0.2  # Low confidence (uniform prior)
+                'confidence': base_confidence  # Uniform prior confidence
             }
 
         probs = self.student_prototype_probs[user_id]

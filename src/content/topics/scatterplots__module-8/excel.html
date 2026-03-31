@@ -1,0 +1,114 @@
+<section class="topic-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Scatterplots</h2>
+
+  <div class="concept-box">
+    <h3>What is a Scatterplot?</h3>
+    <p>A <strong>scatterplot</strong> is a graph that displays the relationship between two continuous variables. Each observation is represented as a single point, where:</p>
+    <ul>
+      <li>The <strong>horizontal position (x-axis)</strong> represents the value on one variable</li>
+      <li>The <strong>vertical position (y-axis)</strong> represents the value on the other variable</li>
+    </ul>
+    <p>Scatterplots are essential for visualizing patterns, trends, and potential outliers in bivariate data.</p>
+  </div>
+
+  <div class="concept-box">
+    <h3>Conventions and Best Practices</h3>
+    <ul>
+      <li><strong>Predictor (X) on horizontal axis:</strong> If one variable is thought to predict or cause the other, place the predictor on the x-axis</li>
+      <li><strong>Outcome (Y) on vertical axis:</strong> The response or outcome variable goes on the y-axis</li>
+      <li><strong>Label axes clearly:</strong> Include variable names and units of measurement</li>
+      <li><strong>Choose appropriate scales:</strong> Ensure the full range of data is visible</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>What to Look For in Scatterplots</h3>
+
+    <h4>1. Direction of Relationship</h4>
+    <ul>
+      <li><strong>Positive:</strong> Points slope upward from left to right (as X increases, Y increases)</li>
+      <li><strong>Negative:</strong> Points slope downward from left to right (as X increases, Y decreases)</li>
+      <li><strong>No relationship:</strong> Points show no clear pattern</li>
+    </ul>
+
+    <h4>2. Form of Relationship</h4>
+    <ul>
+      <li><strong>Linear:</strong> Points follow a straight-line pattern</li>
+      <li><strong>Curved:</strong> Points follow a curved pattern (quadratic, exponential, etc.)</li>
+      <li><strong>No pattern:</strong> Points are scattered randomly</li>
+    </ul>
+
+    <h4>3. Strength of Relationship</h4>
+    <ul>
+      <li><strong>Strong:</strong> Points cluster tightly around a line or curve</li>
+      <li><strong>Moderate:</strong> Points show a pattern but with more scatter</li>
+      <li><strong>Weak:</strong> Points show a vague pattern with lots of scatter</li>
+    </ul>
+
+    <h4>4. Outliers</h4>
+    <ul>
+      <li>Look for points that don't follow the general pattern</li>
+      <li>Outliers can strongly influence correlation and regression results</li>
+      <li>Investigate outliers to determine if they're errors or genuine observations</li>
+    </ul>
+  </div>
+
+  <div class="Excel-box">
+    <h3>Creating Scatterplots in Excel</h3>
+
+    <h4>Method 1: Using Descriptives</h4>
+    <ol>
+      <li>Go to <strong>Analyses → Exploration → Descriptives</strong></li>
+      <li>Move your variables to the <strong>Variables</strong> box</li>
+      <li>Expand <strong>Plots</strong></li>
+      <li>Check <strong>Correlation matrix</strong> (this creates scatterplots with correlation values)</li>
+    </ol>
+
+    <h4>Method 2: Using Scatterplot Tool</h4>
+    <ol>
+      <li>Go to <strong>Analyses → Exploration → Scatterplot</strong></li>
+      <li>Select the <strong>X-Axis</strong> variable (predictor)</li>
+      <li>Select the <strong>Y-Axis</strong> variable (outcome)</li>
+      <li>Optional: Add a <strong>Group</strong> variable to color points by category</li>
+      <li>Check <strong>Fit line</strong> to add a regression line</li>
+      <li>Check <strong>SE</strong> to show confidence bands around the line</li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Always plot your data first</strong> before computing correlations or running regressions</li>
+      <li>Scatterplots reveal patterns that summary statistics might miss</li>
+      <li>Look for non-linear relationships that correlation might not capture</li>
+      <li>Identify outliers that could influence your analysis</li>
+      <li>Check for heteroscedasticity (unequal variance across X values)</li>
+      <li>Consider adding a regression line to visualize the trend</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example Interpretation</h3>
+    <p><strong>Scenario:</strong> Examining the relationship between hours of sleep and reaction time</p>
+    <p><strong>Scatterplot shows:</strong></p>
+    <ul>
+      <li><strong>Direction:</strong> Negative (points slope downward)</li>
+      <li><strong>Form:</strong> Approximately linear</li>
+      <li><strong>Strength:</strong> Moderate (some scatter but clear trend)</li>
+      <li><strong>Outliers:</strong> One person with very low sleep but fast reaction time</li>
+    </ul>
+    <p><strong>Interpretation:</strong> The scatterplot suggests that people who get more sleep tend to have faster (lower) reaction times. The relationship appears roughly linear and moderately strong. However, there's one outlier who had very little sleep but still performed well, which might warrant investigation.</p>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Skipping the scatterplot:</strong> Never rely solely on correlation coefficients without visualizing the data</li>
+      <li><strong>Forcing linear interpretation:</strong> Don't assume relationships are linear—let the data show you the form</li>
+      <li><strong>Ignoring outliers:</strong> Outliers can dramatically affect statistical analyses</li>
+      <li><strong>Wrong axis placement:</strong> Mixing up predictor and outcome can cause confusion in interpretation</li>
+    </ul>
+  </div>
+</section>

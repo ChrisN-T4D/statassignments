@@ -1,3 +1,6 @@
+import { module4SoftwarePracticeParallels } from './statisticsPracticesModule4Parallels.js'
+import { modules5to8SoftwarePracticeParallels } from './statisticsPracticesModules5to8Parallels.js'
+
 // Statistics Class - Jamovi Practice Exercises
 // Practice problems for learning statistical concepts and Jamovi software skills
 // Organized by module to match the course structure
@@ -53,6 +56,7 @@ export const statisticsExercises = [
   {
     module: 'module-2',
     topic: 'levels-of-measurement',
+    practiceObjectiveKey: 'm2-measurement-levels',
     title: 'Identify Variable Types in Jamovi',
     description: 'Practice identifying and setting the correct measurement level for variables',
     instructions: 'In Jamovi, you need to correctly identify the measurement level (Nominal, Ordinal, or Continuous) for each variable. Open the variable editor and set the appropriate type.',
@@ -76,6 +80,7 @@ export const statisticsExercises = [
   {
     module: 'module-2',
     topic: 'reliability-validity',
+    practiceObjectiveKey: 'm2-cronbach-alpha',
     title: 'Calculate Cronbach\'s Alpha for Reliability',
     description: 'Navigate to the reliability analysis to assess internal consistency',
     instructions: 'You have a scale with multiple items measuring anxiety. Find the menu path in Jamovi to calculate Cronbach\'s alpha to assess the scale\'s reliability.',
@@ -96,11 +101,124 @@ export const statisticsExercises = [
     order: 2,
     is_active: true
   },
+  {
+    module: 'module-2',
+    topic: 'levels-of-measurement',
+    practiceObjectiveKey: 'm2-measurement-levels',
+    title: 'Set variable measurement levels in R',
+    description: 'Inspect variable classes and convert key variables to factor/ordered/numeric as appropriate.',
+    instructions: 'Using your dataset, run `str(data)`, then set at least 5 variables to appropriate types (factor for nominal, ordered factor for ordinal, numeric for continuous).',
+    software_type: 'r',
+    exercise_type: 'instructional',
+    hint: 'Use `as.factor()`, `factor(..., ordered=TRUE)`, and numeric columns for scale variables.',
+    submission: 'Submit a script snippet showing `str()` before and after conversion for at least 5 variables.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'levels-of-measurement',
+    practiceObjectiveKey: 'm2-measurement-levels',
+    title: 'Set variable measurement levels in SPSS',
+    description: 'Use Variable View to assign Measure as Nominal, Ordinal, or Scale.',
+    instructions: 'Using your dataset, open Variable View and set Measure for at least 5 variables to Nominal, Ordinal, or Scale as appropriate.',
+    software_type: 'spss',
+    exercise_type: 'instructional',
+    hint: 'The Measure column in Variable View controls Nominal, Ordinal, and Scale.',
+    submission: 'Submit a screenshot of Variable View showing Measure assignments for at least 5 variables.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'levels-of-measurement',
+    practiceObjectiveKey: 'm2-measurement-levels',
+    title: 'Organize measurement levels in Excel',
+    description: 'Represent nominal, ordinal, and continuous variables cleanly in a worksheet.',
+    instructions: 'Using your worksheet, identify at least 5 variables and document each as nominal, ordinal, or continuous in a metadata row or a separate data dictionary tab.',
+    software_type: 'excel',
+    exercise_type: 'instructional',
+    hint: 'Excel has no built-in “Measure” field, so use a data dictionary to track levels.',
+    submission: 'Submit a screenshot of your worksheet plus data dictionary showing levels for at least 5 variables.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'levels-of-measurement',
+    practiceObjectiveKey: 'm2-measurement-levels',
+    title: 'Define measurement levels in Stata',
+    description: 'Set labels and inspect variable storage/type for nominal, ordinal, and continuous fields.',
+    instructions: 'Using your dataset, run `describe` and `codebook`, then add value labels to at least one categorical variable and verify continuous variables remain numeric.',
+    software_type: 'stata',
+    exercise_type: 'instructional',
+    hint: 'Use `label define` and `label values` for categorical coding.',
+    submission: 'Submit a command log screenshot showing `describe`, `codebook`, and at least one value-label command.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'reliability-validity',
+    practiceObjectiveKey: 'm2-cronbach-alpha',
+    title: 'Compute Cronbach\'s alpha in R',
+    description: 'Run reliability analysis on a multi-item scale.',
+    instructions: 'Using your scale items, run `psych::alpha(data[, c(\"Anxiety1\",\"Anxiety2\",\"Anxiety3\",\"Anxiety4\",\"Anxiety5\")])` (or equivalent item names), then interpret alpha.',
+    software_type: 'r',
+    exercise_type: 'instructional',
+    hint: 'Install/load `psych` first: `install.packages(\"psych\"); library(psych)`.',
+    submission: 'Submit output showing Cronbach\'s alpha plus a 1-2 sentence interpretation of reliability.',
+    order: 2,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'reliability-validity',
+    practiceObjectiveKey: 'm2-cronbach-alpha',
+    title: 'Compute Cronbach\'s alpha in SPSS',
+    description: 'Run Reliability Analysis on a multi-item scale.',
+    instructions: 'Using your scale items, go to Analyze > Scale > Reliability Analysis. Add the 5 anxiety items and run with Model = Alpha.',
+    software_type: 'spss',
+    exercise_type: 'instructional',
+    hint: 'Use the Statistics button to include item-total statistics if requested.',
+    submission: 'Submit an SPSS output screenshot with Cronbach\'s alpha and a brief interpretation.',
+    order: 2,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'reliability-validity',
+    practiceObjectiveKey: 'm2-cronbach-alpha',
+    title: 'Estimate reliability in Excel',
+    description: 'Use formula-based approach or add-in workflow to compute alpha for item columns.',
+    instructions: 'Using 5 item columns, compute Cronbach\'s alpha via the variance formula (or an approved add-in) and report the resulting coefficient.',
+    software_type: 'excel',
+    exercise_type: 'instructional',
+    hint: 'Alpha can be computed from item variances and total-score variance.',
+    submission: 'Submit a spreadsheet screenshot showing alpha calculation steps and the final coefficient.',
+    order: 2,
+    is_active: true
+  },
+  {
+    module: 'module-2',
+    topic: 'reliability-validity',
+    practiceObjectiveKey: 'm2-cronbach-alpha',
+    title: 'Compute Cronbach\'s alpha in Stata',
+    description: 'Run `alpha` on multi-item scale data.',
+    instructions: 'Using your scale items, run `alpha anxiety1 anxiety2 anxiety3 anxiety4 anxiety5` (or your item names) and report the coefficient.',
+    software_type: 'stata',
+    exercise_type: 'instructional',
+    hint: 'Use `alpha, item` if you need item-rest details.',
+    submission: 'Submit a Stata output screenshot with alpha and a short interpretation.',
+    order: 2,
+    is_active: true
+  },
 
   // ============ MODULE 3: Jamovi and Data Handling ============
   {
     module: 'module-3',
     topic: 'jamovi-interface',
+    practiceObjectiveKey: 'm3-open-data-file',
     title: 'Open a Data File in Jamovi',
     description: 'Open a different CSV data file than the one you used in the Learn section',
     instructions: 'Open a different CSV data file than the one you used in the Learn section. Use File > Open (or the hamburger menu) to import it so you practice importing on your own.',
@@ -118,6 +236,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-add-computed-variable',
     title: 'Add a New Variable',
     description: 'Using the BMI dataset, find where to add a new computed variable',
     instructions: 'Using your BMI dataset, find where in Jamovi to add a new computed variable (e.g. for a transformation of BMI or exercise).',
@@ -141,6 +260,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'data-handling',
+    practiceObjectiveKey: 'm3-save-or-export',
     title: 'Export or Save Your Data',
     description: 'Save your Jamovi file or export data to CSV',
     instructions: 'Save your work: use the hamburger menu to Save (as .omv) or Export to export the data to CSV. Confirm where the file is saved.',
@@ -158,6 +278,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'add-ons',
+    practiceObjectiveKey: 'm3-extend-software',
     title: 'Install Add-On Modules (scatr and GAMLj)',
     phase: 'practice',
     description: 'Install the scatr and GAMLj modules from the jamovi Modules library',
@@ -165,13 +286,74 @@ export const statisticsExercises = [
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'Open the Modules library (look for the "+" or "Modules" button in jamovi). Search for each module and click Install. Verify both appear in your installed modules list.',
-    submission: 'Screenshot showing scatr and GAMLj listed as installed modules.',
+    submission: 'Submit a screenshot showing scatr and GAMLj listed as installed modules.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'add-ons',
+    practiceObjectiveKey: 'm3-extend-software',
+    title: 'Install key analysis packages in R',
+    phase: 'practice',
+    description: 'Install and load core packages used for descriptive and regression workflows.',
+    instructions: 'Install and load at least two core packages (e.g., `tidyverse`, `psych`, `ggplot2`), then confirm they load without errors.',
+    software_type: 'r',
+    exercise_type: 'instructional',
+    hint: 'Use `install.packages()` once, then `library()` each session.',
+    submission: 'Submit a console screenshot showing successful installation/loading for at least two packages.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'add-ons',
+    practiceObjectiveKey: 'm3-extend-software',
+    title: 'Enable SPSS extensions or syntax tools',
+    phase: 'practice',
+    description: 'Set up at least one extension or workflow aid used in later analyses.',
+    instructions: 'Open Extensions > Extension Hub (or equivalent) and install or enable at least one analysis-support extension, or create a reusable syntax file template.',
+    software_type: 'spss',
+    exercise_type: 'instructional',
+    hint: 'If extension installation is restricted, creating and saving a syntax template satisfies this objective.',
+    submission: 'Submit a screenshot of the installed extension list or your saved syntax template.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'add-ons',
+    practiceObjectiveKey: 'm3-extend-software',
+    title: 'Enable Analysis ToolPak in Excel',
+    phase: 'practice',
+    description: 'Enable the Analysis ToolPak add-in for statistical procedures.',
+    instructions: 'Enable Analysis ToolPak from Excel Add-ins, then verify that the Data Analysis button appears on the Data tab.',
+    software_type: 'excel',
+    exercise_type: 'instructional',
+    hint: 'File > Options > Add-ins > Manage Excel Add-ins > Go > check Analysis ToolPak.',
+    submission: 'Submit a screenshot of the Data tab with Data Analysis visible.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'add-ons',
+    practiceObjectiveKey: 'm3-extend-software',
+    title: 'Install a Stata package from SSC',
+    phase: 'practice',
+    description: 'Install at least one community package to extend Stata functionality.',
+    instructions: 'Run an SSC install command (e.g., `ssc install estout`), then verify installation by running `which estout` (or your package).',
+    software_type: 'stata',
+    exercise_type: 'instructional',
+    hint: 'Use `help ssc` for package installation guidance.',
+    submission: 'Submit a screenshot of the SSC install command and `which` confirmation output.',
     order: 1,
     is_active: true
   },
   {
     module: 'module-3',
     topic: 'data-handling',
+    practiceObjectiveKey: 'm3-import-csv',
     title: 'Import CSV and Set Measurement Levels',
     phase: 'practice',
     description: 'Import a CSV file and configure measurement levels (Nominal, Ordinal, or Continuous) for at least five variables',
@@ -186,6 +368,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-center-bmi-computed',
     title: 'Create a Computed Variable (Centered BMI)',
     phase: 'practice',
     description: 'Using the BMI dataset, create a computed variable (e.g. BMI minus mean)',
@@ -200,6 +383,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-recode-bmi-categories',
     title: 'Recode BMI into Weight Categories',
     phase: 'practice',
     description: 'Using the BMI dataset, recode BMI into three categories (e.g. Underweight/Normal/Overweight)',
@@ -214,6 +398,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-filter-compare-descriptives',
     title: 'Apply a Filter and Compare Descriptives',
     phase: 'apply',
     description: 'Using the BMI dataset, create a filter and compare Descriptives with filter ON and OFF',
@@ -228,6 +413,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'r-setup',
+    practiceObjectiveKey: 'm3-environment-ready',
     title: 'Install R and RStudio',
     description: 'Install R and RStudio, then open RStudio and create a new R script',
     instructions: 'Install R and RStudio. Open RStudio and create a new R script (File > New File > R Script).',
@@ -241,6 +427,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'r-import',
+    practiceObjectiveKey: 'm3-import-csv',
     title: 'Import a CSV in R',
     description: 'Set your working directory and import a CSV file into R using read.csv(), then verify with head()',
     instructions: 'Set your working directory and import a CSV with read.csv(). Then run head() to verify the data loaded.',
@@ -254,6 +441,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'r-computed',
+    practiceObjectiveKey: 'm3-computed-column',
     title: 'Create a Computed Variable in R',
     description: 'Create a new variable that sums multiple item variables to calculate a total score',
     instructions: 'Create a new variable Total by summing Item1, Item2, and Item3. Verify the new column with head().',
@@ -267,6 +455,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'spss-setup',
+    practiceObjectiveKey: 'm3-environment-ready',
     title: 'Open SPSS and Create a New Dataset',
     description: 'Create a new SPSS dataset and define a variable with appropriate type and measurement level',
     instructions: 'Open SPSS and create a new dataset (File > New > Data). In Variable View, add a variable named Score with Type Numeric and Measure Scale.',
@@ -280,6 +469,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'spss-import',
+    practiceObjectiveKey: 'm3-import-csv',
     title: 'Import a CSV in SPSS',
     description: 'Import a CSV file into SPSS and verify that numeric columns are correctly set to Type Numeric',
     instructions: 'Import a CSV file (File > Open > Data). Confirm the data appear in Data View and that numeric columns are set to Type Numeric.',
@@ -293,6 +483,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'spss-labels',
+    practiceObjectiveKey: 'm3-variable-metadata',
     title: 'Add Variable Labels and Value Labels',
     description: 'Add variable labels and value labels to improve dataset readability',
     instructions: 'Add a Variable Label for one variable and Value Labels for a categorical variable (e.g., 1=Control, 2=Treatment).',
@@ -306,6 +497,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'excel-setup',
+    practiceObjectiveKey: 'm3-environment-ready',
     title: 'Create a Clean Excel Dataset',
     description: 'Create a new Excel worksheet with proper headers and enter data in a rectangular format',
     instructions: 'Create a new Excel sheet with headers in row 1 (ID, Score, Group). Enter at least 5 rows of data below.',
@@ -319,6 +511,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'excel-import',
+    practiceObjectiveKey: 'm3-import-csv',
     title: 'Import a CSV in Excel',
     description: 'Open a CSV file in Excel and remove any blank rows or columns within the dataset',
     instructions: 'Open a CSV file in Excel and remove any blank rows or columns inside the dataset.',
@@ -332,19 +525,21 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'excel-formula',
-    title: 'Compute a Mean with AVERAGE()',
-    description: 'Use the AVERAGE() function to calculate the mean of a numeric column',
-    instructions: 'Use =AVERAGE() to compute the mean of the Score column.',
+    practiceObjectiveKey: 'm3-computed-column',
+    title: 'Create a Computed Variable in Excel',
+    description: 'Create a new Total column by summing multiple item columns.',
+    instructions: 'Create a Total column using a formula such as `=B2+C2+D2` (or your item columns), then fill down for all rows.',
     software_type: 'excel',
     exercise_type: 'instructional',
-    hint: 'If scores are in B2:B6, use =AVERAGE(B2:B6).',
-    submission: 'Screenshot showing the AVERAGE() formula and result.',
+    hint: 'Use relative references so the row updates automatically when you fill down.',
+    submission: 'Screenshot showing the Total formula and the filled column.',
     order: 3,
     is_active: true
   },
   {
     module: 'module-3',
     topic: 'stata-setup',
+    practiceObjectiveKey: 'm3-environment-ready',
     title: 'Load a Sample Dataset in Stata',
     description: 'Load a built-in Stata dataset using sysuse and inspect variables with describe',
     instructions: 'Run sysuse auto in Stata to load the sample dataset, then run describe to list variables.',
@@ -358,6 +553,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'stata-import',
+    practiceObjectiveKey: 'm3-import-csv',
     title: 'Import a CSV in Stata',
     description: 'Import a CSV file using import delimited and verify variables appear in the Variables pane',
     instructions: 'Import a CSV with import delimited using "data.csv", clear. Verify variables in the Variables pane.',
@@ -371,6 +567,7 @@ export const statisticsExercises = [
   {
     module: 'module-3',
     topic: 'stata-save',
+    practiceObjectiveKey: 'm3-save-or-export',
     title: 'Save a Stata Dataset',
     description: 'Save your imported dataset as a Stata .dta file using the save command',
     instructions: 'After importing, save the dataset using save "data_clean.dta", replace.',
@@ -381,12 +578,125 @@ export const statisticsExercises = [
     order: 3,
     is_active: true
   },
+  {
+    module: 'module-3',
+    topic: 'jamovi-setup',
+    practiceObjectiveKey: 'm3-environment-ready',
+    title: 'Launch Jamovi and verify workspace setup',
+    description: 'Open Jamovi and confirm you can start a new data sheet with visible Data and Analyses tabs.',
+    instructions: 'Launch Jamovi, create a new blank data sheet, and confirm the Data and Analyses tabs are available before starting module tasks.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'If tabs are hidden, maximize the window and reset layout from the menu.',
+    submission: 'Submit a screenshot of Jamovi open with a new blank sheet and visible Data/Analyses tabs.',
+    order: 1,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'jamovi-computed',
+    practiceObjectiveKey: 'm3-computed-column',
+    title: 'Create a computed column in Jamovi',
+    description: 'Use Compute to create a new total-score variable from multiple items.',
+    instructions: 'Use Data > Add > Computed Variable and create `Total = Item1 + Item2 + Item3` (or your equivalent variables). Verify the new column appears in the data grid.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'You can click variable names to insert them into the formula editor.',
+    submission: 'Submit a screenshot of the compute formula and resulting Total column.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'jamovi-save',
+    practiceObjectiveKey: 'm3-save-or-export',
+    title: 'Save and export in Jamovi',
+    description: 'Save a native Jamovi file and export a CSV copy.',
+    instructions: 'Save your working file as `.omv`, then export the data as `.csv` to a known folder. Confirm both files are created.',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Use the main menu: Save for `.omv`, Export for `.csv`.',
+    submission: 'Submit a screenshot showing file names/locations for both `.omv` and `.csv`.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'r-save',
+    practiceObjectiveKey: 'm3-save-or-export',
+    title: 'Save and export data in R',
+    description: 'Save an R-native object and export a CSV copy.',
+    instructions: 'After importing your data, save an R-native copy with `saveRDS(data, \"data_clean.rds\")` and export CSV with `write.csv(data, \"data_clean.csv\", row.names = FALSE)`.',
+    software_type: 'r',
+    exercise_type: 'instructional',
+    hint: 'Use `readRDS()` later to reopen `.rds` without changing object names manually.',
+    submission: 'Script snippet or screenshot showing both saveRDS and write.csv commands.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'spss-compute',
+    practiceObjectiveKey: 'm3-computed-column',
+    title: 'Create a computed variable in SPSS',
+    description: 'Use Compute Variable to create a total-score column.',
+    instructions: 'Transform > Compute Variable. Set Target Variable to `Total` and expression to `Item1 + Item2 + Item3` (or equivalent variables). Run and verify in Data View.',
+    software_type: 'spss',
+    exercise_type: 'instructional',
+    hint: 'You can insert variables from the list into the Numeric Expression box.',
+    submission: 'Screenshot of Compute Variable setup and resulting Total column.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'spss-save',
+    practiceObjectiveKey: 'm3-save-or-export',
+    title: 'Save and export data in SPSS',
+    description: 'Save as `.sav` and export a CSV version.',
+    instructions: 'Save your dataset as `.sav` (File > Save As). Then export to `.csv` (File > Save As and choose CSV) and confirm both files were written.',
+    software_type: 'spss',
+    exercise_type: 'instructional',
+    hint: 'Use clear file names like `data_clean.sav` and `data_clean.csv`.',
+    submission: 'Screenshot or file list showing `.sav` and `.csv` outputs.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'excel-save',
+    practiceObjectiveKey: 'm3-save-or-export',
+    title: 'Save workbook and export CSV in Excel',
+    description: 'Save an `.xlsx` workbook and a `.csv` export of your data sheet.',
+    instructions: 'Save the workbook as `.xlsx`. Then Save As a `.csv` copy for the active data sheet. Confirm both files are present in your chosen folder.',
+    software_type: 'excel',
+    exercise_type: 'instructional',
+    hint: 'CSV only stores one sheet and raw values; keep `.xlsx` as the editable source.',
+    submission: 'Screenshot showing both `.xlsx` and `.csv` files.',
+    order: 3,
+    is_active: true
+  },
+  {
+    module: 'module-3',
+    topic: 'stata-compute',
+    practiceObjectiveKey: 'm3-computed-column',
+    title: 'Create a computed variable in Stata',
+    description: 'Generate a new total-score variable from item columns.',
+    instructions: 'Run `gen total = item1 + item2 + item3` (or equivalent variable names). Use `list item1 item2 item3 total in 1/5` to verify values.',
+    software_type: 'stata',
+    exercise_type: 'instructional',
+    hint: 'Use lowercase variable names exactly as shown in `describe`.',
+    submission: 'Screenshot of command history/results showing the new total variable.',
+    order: 3,
+    is_active: true
+  },
 
   // ============ MODULE 4: Descriptive Statistics ============
   // Apply uses the personality dataset (Learn used BMI).
   {
     module: 'module-4',
     topic: 'descriptive-stats',
+    practiceObjectiveKey: 'm4-deviation-scores',
     title: 'Calculate Deviation Scores',
     description: 'Using the personality dataset, create deviation scores for Extraversion (X - Mean)',
     instructions: 'Open your personality dataset (Extraversion, Agreeableness, etc.). Create a computed variable that calculates how far each person\'s Extraversion score deviates from the mean: Extraversion - VMEAN(Extraversion).',
@@ -411,6 +721,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'z-scores',
+    practiceObjectiveKey: 'm4-z-scores',
     title: 'Calculate Z-Scores in Jamovi',
     description: 'Using the personality dataset, standardize Extraversion to z-scores',
     instructions: 'Using your personality dataset, convert Extraversion (or another scale variable) to z-scores. Find how to create z-scores in Jamovi (Exploration > Descriptives).',
@@ -435,6 +746,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'normality',
+    practiceObjectiveKey: 'm4-normality',
     title: 'Test for Normality',
     description: 'Using the personality dataset, check if Extraversion is normally distributed (Shapiro-Wilk)',
     instructions: 'Using your personality dataset, check whether Extraversion (or Neuroticism) is normally distributed. Find the Shapiro-Wilk normality test in Jamovi (Exploration > Descriptives > Statistics).',
@@ -459,6 +771,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'descriptive-stats',
+    practiceObjectiveKey: 'm4-report-descriptives',
     title: 'Report Descriptives for One Variable',
     phase: 'practice',
     description: 'Using the personality dataset, summarize mean, median, SD, and min/max for Extraversion',
@@ -473,6 +786,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'descriptive-stats',
+    practiceObjectiveKey: 'm4-split-by-group',
     title: 'Descriptives Split by Group',
     phase: 'practice',
     description: 'Using the personality dataset, compare Extraversion (or another variable) by a grouping variable',
@@ -487,6 +801,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'z-scores',
+    practiceObjectiveKey: 'm4-z-inspect',
     title: 'Create and Inspect Z-Scores',
     phase: 'practice',
     description: 'Using the personality dataset, create z-scores for Extraversion and identify extreme values',
@@ -501,6 +816,7 @@ export const statisticsExercises = [
   {
     module: 'module-4',
     topic: 'descriptive-stats',
+    practiceObjectiveKey: 'm4-skew-justify',
     title: 'Evaluate Skew and Outliers',
     phase: 'apply',
     description: 'Using the personality dataset, use Descriptives to justify reporting median/IQR when appropriate',
@@ -518,6 +834,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'visualizations',
+    practiceObjectiveKey: 'm5-histogram-menu',
     title: 'Create a Histogram',
     description: 'Using the BMI dataset, visualize the distribution of BMI',
     instructions: 'Using your BMI and exercise dataset, create a histogram for BMI. Find where to create plots in Jamovi (Exploration > Descriptives > Plots).',
@@ -542,6 +859,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'visualizations',
+    practiceObjectiveKey: 'm5-bar-chart-menu',
     title: 'Create a Bar Chart for Frequencies',
     description: 'Using the BMI dataset, create a bar chart for a categorical variable',
     instructions: 'Using your BMI dataset, create a bar chart for a categorical variable (e.g. gender if you have it, or a BMI category you create). Find the appropriate menu.',
@@ -566,6 +884,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'visualizations',
+    practiceObjectiveKey: 'm5-boxplot-menu',
     title: 'Create a Boxplot',
     description: 'Using the BMI dataset, compare BMI across groups with a boxplot',
     instructions: 'Using your BMI dataset, create a boxplot for BMI. If you have a grouping variable (e.g. gender), add it to Split by; otherwise create a boxplot for BMI only.',
@@ -589,6 +908,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'visualizations',
+    practiceObjectiveKey: 'm5-histogram-interpret',
     title: 'Create a Histogram and Interpret Shape',
     phase: 'practice',
     description: 'Using the BMI dataset, create a histogram for BMI and describe its shape',
@@ -603,6 +923,7 @@ export const statisticsExercises = [
   {
     module: 'module-8',
     topic: 'correlation',
+    practiceObjectiveKey: 'm8-scatterplot-matrix',
     title: 'Scatterplot Matrix (Correlation Matrix Plot)',
     phase: 'practice',
     description: 'Create a scatterplot matrix for 3+ continuous variables',
@@ -617,6 +938,7 @@ export const statisticsExercises = [
   {
     module: 'module-8',
     topic: 'regression',
+    practiceObjectiveKey: 'm8-scatterplot-regression-line',
     title: 'scatr Scatterplot with Regression Line',
     phase: 'apply',
     description: 'Use scatr to create a scatterplot with a fitted line',
@@ -631,6 +953,7 @@ export const statisticsExercises = [
   {
     module: 'module-8',
     topic: 'regression',
+    practiceObjectiveKey: 'm8-scatterplot-grouped',
     title: 'scatr Grouped Scatterplots',
     phase: 'apply',
     description: 'Compare relationships by group using color or facets',
@@ -647,6 +970,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-frequency-table-menu',
     title: 'Create a Frequency Table',
     description: 'Using the BMI dataset, create a frequency table for a categorical variable',
     instructions: 'Using your BMI dataset, create a frequency table for a categorical variable (e.g. gender if present, or the BMI category variable you created). Use Descriptives and check "Frequency tables".',
@@ -671,6 +995,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-contingency-table-menu',
     title: 'Create a Contingency Table',
     description: 'Using the BMI dataset, cross-tabulate two categorical variables',
     instructions: 'Using your BMI dataset, create a contingency table (e.g. gender by BMI category, or two other categorical variables). Use Frequencies > Contingency Tables.',
@@ -694,6 +1019,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-logical-category-menu',
     title: 'Transform Data with Logical Expressions',
     description: 'Using the BMI dataset, create a category with logical expressions',
     instructions: 'Using your BMI dataset, create a computed variable or use Transform with a logical expression to categorize BMI (e.g. BMI >= 25 → "Overweight", else "Not overweight").',
@@ -718,6 +1044,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-center-bmi-instructional',
     title: 'Center BMI (or Exercise) Around the Mean',
     description: 'Using the BMI dataset, create a centered variable',
     instructions: 'Using your BMI dataset, create a computed variable that centers BMI around its mean: BMI - VMEAN(BMI). Optionally do the same for exercise hours.',
@@ -731,6 +1058,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-abs-deviation-bmi',
     title: 'Absolute Deviation from Mean BMI',
     description: 'Using the BMI dataset, use ABS() for distance from mean',
     instructions: 'Using your BMI dataset, create a variable for absolute deviation from mean BMI: ABS(BMI - VMEAN(BMI)). This measures how far each person is from the average, regardless of direction.',
@@ -744,6 +1072,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-recode-exercise-categories',
     title: 'Recode Exercise (or BMI) into Categories',
     description: 'Using the BMI dataset, recode a continuous variable into categories',
     instructions: 'Using your BMI dataset, recode exercise hours (or BMI if you prefer) into 3 categories (e.g. Low/Medium/High) using Data > Transform with Add recode condition or nested IF.',
@@ -757,6 +1086,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-reusable-transform',
     title: 'Create a Reusable Transform',
     description: 'Using the BMI dataset, create a Transform that can be applied to multiple variables',
     instructions: 'Using your BMI dataset, create a transformation in Data > Transform (e.g. center with $source - VMEAN($source)) that can be applied to both BMI and exercise. Apply it to at least two variables.',
@@ -770,6 +1100,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-transform-bmi-categories',
     title: 'Use Transform with Conditional Rules (BMI)',
     description: 'Using the BMI dataset, create BMI categories with Transform Add Condition',
     instructions: 'Using your BMI dataset, use Data > Transform with Add recode condition to create BMI categories (e.g. if $source < 18.5 use "Underweight", if $source < 25 use "Normal", else use "Overweight").',
@@ -783,6 +1114,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-filter-subset-descriptives',
     title: 'Filter Data to Extract Subsets',
     description: 'Using the BMI dataset, filter cases and run Descriptives',
     instructions: 'Using your BMI dataset, create a filter (e.g. BMI >= 25, or exercise > 0) and run Descriptives for BMI with the filter on. Compare to when the filter is off.',
@@ -796,6 +1128,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-math-transform-bmi',
     title: 'Use Mathematical Functions on BMI',
     description: 'Using the BMI dataset, apply a mathematical function (e.g. LOG, SQRT)',
     instructions: 'Using your BMI dataset, create a computed variable using a mathematical function (e.g. LOG(BMI), SQRT(BMI), or LN(BMI)) and write 2-3 sentences on when such a transformation is useful (e.g. for skewed distributions).',
@@ -809,6 +1142,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-contingency-row-column-pct',
     title: 'Contingency Table with Row and Column Percentages',
     phase: 'practice',
     description: 'Using the BMI dataset, create a contingency table with row and column percentages',
@@ -823,6 +1157,7 @@ export const statisticsExercises = [
   {
     module: 'module-5',
     topic: 'data-manipulation',
+    practiceObjectiveKey: 'm5-filter-complex-and-or',
     title: 'Complex Logical Expression with AND/OR',
     phase: 'apply',
     description: 'Using the BMI dataset, create a filter with AND/OR',
@@ -839,6 +1174,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'normal-distribution',
+    practiceObjectiveKey: 'm6-normal-probabilities',
     title: 'Find Probabilities Using the Normal Distribution',
     description: 'Use Jamovi to find areas under the normal curve',
     instructions: 'You need to find the probability of scoring above a certain z-score. Use Jamovi\'s distribution functions.',
@@ -856,6 +1192,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'sampling',
+    practiceObjectiveKey: 'm6-ci-mean-menu',
     title: 'Calculate Confidence Intervals',
     description: 'Find confidence intervals for the mean in Descriptives',
     instructions: 'Calculate a 95% confidence interval for the mean test score. Find where to request confidence intervals.',
@@ -880,6 +1217,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'random-sampling',
+    practiceObjectiveKey: 'm6-random-variable-histogram',
     title: 'Generate a Random Variable and Plot It',
     phase: 'practice',
     description: 'Use compute formulas to generate random values and graph them',
@@ -894,6 +1232,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'random-sampling',
+    practiceObjectiveKey: 'm6-compare-random-samples',
     title: 'Compare Two Random Samples',
     phase: 'practice',
     description: 'Demonstrate sampling variability with two random columns',
@@ -908,6 +1247,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'random-sampling',
+    practiceObjectiveKey: 'm6-sampling-distribution-mean',
     title: 'Mini Sampling Distribution',
     phase: 'apply',
     description: 'Approximate a sampling distribution of the mean',
@@ -922,6 +1262,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'binomial-distribution',
+    practiceObjectiveKey: 'm6-binomial-probabilities',
     title: 'Calculate Binomial Probabilities',
     description: 'Compute probabilities for binary outcomes',
     instructions: 'Calculate the probability of getting exactly 7 heads in 10 coin flips using the binomial distribution.',
@@ -935,6 +1276,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'probability-concepts',
+    practiceObjectiveKey: 'm6-frequentist-vs-bayesian',
     title: 'Frequentist vs Bayesian Interpretation',
     description: 'Understand different interpretations of probability',
     instructions: 'Explain the difference between frequentist and Bayesian probability interpretations using a real-world example (e.g., weather forecasting).',
@@ -948,6 +1290,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'normal-distribution',
+    practiceObjectiveKey: 'm6-empirical-rule',
     title: 'Apply the Empirical Rule',
     description: 'Use the 68-95-99.7 rule for normal distributions',
     instructions: 'Given IQ scores are normally distributed with mean=100 and SD=15, calculate what percentage of people have IQs between 85 and 115.',
@@ -961,6 +1304,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'sampling-theory',
+    practiceObjectiveKey: 'm6-sampling-methods',
     title: 'Identify Sampling Methods',
     description: 'Distinguish between different sampling techniques',
     instructions: 'Describe three scenarios using different sampling methods: simple random sampling, stratified sampling, and convenience sampling. Explain which is best for generalizing to a population.',
@@ -974,6 +1318,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'law-of-large-numbers',
+    practiceObjectiveKey: 'm6-law-large-numbers',
     title: 'Demonstrate Law of Large Numbers',
     description: 'Show how sample size affects estimate accuracy',
     instructions: 'Generate random samples of increasing sizes (N=10, 50, 200) from a normal distribution with mean=100. Compare how close the sample means are to 100.',
@@ -987,6 +1332,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'central-limit-theorem',
+    practiceObjectiveKey: 'm6-central-limit-theorem',
     title: 'Observe the Central Limit Theorem',
     description: 'See how sampling distribution becomes normal',
     instructions: 'Generate a non-normal distribution (e.g., uniform). Take multiple samples and calculate means. Plot the distribution of these means and describe its shape.',
@@ -1000,6 +1346,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'parameter-estimation',
+    practiceObjectiveKey: 'm6-sample-vs-population-sd',
     title: 'Estimate Population Parameters',
     description: 'Calculate unbiased estimates of population parameters',
     instructions: 'Given a sample of test scores, calculate both the sample standard deviation (s) and the estimated population standard deviation (σ̂). Explain why they differ.',
@@ -1013,6 +1360,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'confidence-intervals',
+    practiceObjectiveKey: 'm6-interpret-ci',
     title: 'Interpret Confidence Intervals',
     description: 'Understand what confidence intervals mean',
     instructions: 'Calculate a 95% CI for a sample mean and explain what this interval tells us. Include both the correct frequentist interpretation and common misinterpretations.',
@@ -1026,6 +1374,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'other-distributions',
+    practiceObjectiveKey: 'm6-distribution-shapes',
     title: 'Compare Distribution Shapes',
     description: 'Understand when to use t, χ², and F distributions',
     instructions: 'Describe when you would use the t-distribution vs normal distribution, and briefly explain what χ² and F distributions are used for.',
@@ -1039,6 +1388,7 @@ export const statisticsExercises = [
   {
     module: 'module-6',
     topic: 'confidence-intervals',
+    practiceObjectiveKey: 'm6-ci-width-sample-size',
     title: 'Effect of Sample Size on CI Width',
     phase: 'apply',
     description: 'Examine how sample size affects confidence interval width',
@@ -1055,6 +1405,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-one-sample-t-menu',
     title: 'Run a One-Sample T-Test',
     description: 'Test if a sample mean differs from a known population value',
     instructions: 'Test whether your sample\'s mean IQ differs from the population mean of 100. Find the one-sample t-test.',
@@ -1079,6 +1430,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-t-test-read-output',
     title: 'Identify Test Statistic and P-Value',
     phase: 'practice',
     description: 'Locate and interpret the key outputs from a one-sample t-test',
@@ -1093,6 +1445,7 @@ export const statisticsExercises = [
   {
     module: 'module-8',
     topic: 't-tests-practice',
+    practiceObjectiveKey: 'm8-independent-t-report',
     title: 'Independent Samples T-Test Report',
     phase: 'practice',
     description: 'Report group means, mean difference, p-value, and effect size',
@@ -1107,6 +1460,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-t-test-outlier-robustness',
     title: 'Robustness to an Outlier Filter',
     phase: 'apply',
     description: 'Compare results before and after filtering an outlier',
@@ -1121,6 +1475,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-binomial-proportion-test',
     title: 'Run a Binomial Test (Proportion Test)',
     phase: 'learn',
     description: 'Test if an observed proportion differs from a hypothesized value',
@@ -1146,6 +1501,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-state-hypotheses',
     title: 'State Null and Alternative Hypotheses',
     phase: 'learn',
     description: 'Write proper statistical hypotheses for a research question',
@@ -1162,6 +1518,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'p-values',
+    practiceObjectiveKey: 'm7-interpret-p-value-output',
     title: 'Interpret a P-Value Correctly',
     phase: 'practice',
     description: 'Write a correct interpretation of a p-value from your output',
@@ -1193,6 +1550,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'p-values',
+    practiceObjectiveKey: 'm7-compare-alpha-levels',
     title: 'Compare Results with Different Significance Levels',
     phase: 'apply',
     description: 'Understand how changing alpha affects decisions',
@@ -1208,6 +1566,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'effect-size',
+    practiceObjectiveKey: 'm7-cohens-d-onesample',
     title: 'Calculate and Report Cohen\'s d',
     phase: 'practice',
     description: 'Find effect size in Jamovi output and interpret its magnitude',
@@ -1223,6 +1582,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'effect-size',
+    practiceObjectiveKey: 'm7-stat-vs-practical',
     title: 'Distinguish Statistical vs Practical Significance',
     phase: 'apply',
     description: 'Understand that significant ≠ important',
@@ -1238,6 +1598,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-type1-type2-errors',
     title: 'Identify Type I and Type II Errors',
     phase: 'learn',
     description: 'Understand the two types of errors in hypothesis testing',
@@ -1253,6 +1614,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-one-vs-two-sided',
     title: 'Choose Between One-Sided and Two-Sided Test',
     phase: 'apply',
     description: 'Decide when to use directional vs non-directional hypotheses',
@@ -1268,6 +1630,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'effect-size',
+    practiceObjectiveKey: 'm7-n-and-p-values',
     title: 'Relationship Between Sample Size and P-Values',
     phase: 'apply',
     description: 'Understand how sample size affects hypothesis testing',
@@ -1283,6 +1646,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'hypothesis-testing',
+    practiceObjectiveKey: 'm7-apa-results-onesample',
     title: 'Write an APA-Style Results Statement',
     phase: 'apply',
     description: 'Report hypothesis test results in proper APA format',
@@ -1298,6 +1662,7 @@ export const statisticsExercises = [
   {
     module: 'module-7',
     topic: 'p-values',
+    practiceObjectiveKey: 'm7-multiple-comparisons',
     title: 'The Multiple Comparisons Problem',
     phase: 'apply',
     description: 'Understand why running many tests increases Type I error',
@@ -1317,6 +1682,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-gof',
     title: 'Chi-Square Goodness-of-Fit Test',
     description: 'Test if observed frequencies match expected probabilities',
     instructions: 'You surveyed 200 people asking them to pick a card suit at random. Test if all four suits (clubs, diamonds, hearts, spades) are equally likely to be chosen using a chi-square goodness-of-fit test.',
@@ -1344,6 +1710,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-independence',
     title: 'Chi-Square Test of Independence',
     description: 'Test if two categorical variables are associated',
     instructions: 'Test whether species (robot vs. human) is associated with preference (puppy, flower, or data file) using a chi-square test of independence.',
@@ -1370,6 +1737,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-expected-freq',
     title: 'Interpreting Expected Frequencies',
     description: 'Understand how expected frequencies are calculated',
     instructions: 'Run a chi-square test of independence and display the expected counts. Verify that the expected frequency for one cell equals (Row Total × Column Total) / Grand Total.',
@@ -1391,6 +1759,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-continuity',
     title: 'Apply Continuity Correction',
     description: 'Use Yates correction for 2×2 tables',
     instructions: 'For a 2×2 contingency table (df=1), apply the continuity correction and compare results with and without the correction.',
@@ -1415,6 +1784,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-cramers-v',
     title: 'Calculate Cramér\'s V Effect Size',
     description: 'Measure the strength of association in a contingency table',
     instructions: 'After running a chi-square test of independence, report Cramér\'s V to indicate the effect size. Interpret whether the association is small (V≈0.1), medium (V≈0.3), or large (V≥0.5).',
@@ -1436,6 +1806,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-fisher',
     title: 'Fisher Exact Test for Small Samples',
     description: 'Use Fisher exact test when expected frequencies are too small',
     instructions: 'You have a 2×2 table with small expected counts (<5). Instead of the standard chi-square test, use Fisher\'s exact test.',
@@ -1463,6 +1834,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-mcnemar',
     title: 'McNemar Test for Paired Data',
     description: 'Test categorical data from the same participants measured twice',
     instructions: 'You asked 100 people if they\'d vote for a party BEFORE and AFTER showing an ad. Test if the proportion changed using McNemar\'s test (NOT a standard chi-square, since data are paired).',
@@ -1489,6 +1861,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-mcnemar-vs-independence',
     title: 'McNemar vs. Independence: Know the Difference',
     description: 'Understand when to use McNemar vs. chi-square independence test',
     instructions: 'Decide: If you measure the SAME participants twice, do you use (A) chi-square test of independence, or (B) McNemar test?',
@@ -1504,6 +1877,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-assumptions',
     title: 'Check Chi-Square Assumptions',
     description: 'Verify that expected frequencies are large enough',
     instructions: 'Before accepting chi-square results, check the expected frequencies. The rule of thumb: all expected frequencies should be ≥ 5. If not, consider Fisher exact test.',
@@ -1519,6 +1893,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-custom-proportions',
     title: 'Specify Custom Expected Proportions',
     description: 'Test against unequal expected probabilities in goodness-of-fit',
     instructions: 'Someone predicts people will choose red cards 60% of the time (30% hearts, 30% diamonds) and black cards 40% (20% clubs, 20% spades). Test this using custom expected proportions.',
@@ -1543,6 +1918,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-apa-writeup',
     title: 'Write Up Chi-Square Results',
     phase: 'practice',
     description: 'Practice reporting categorical data analysis in APA format',
@@ -1558,6 +1934,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-df-written',
     title: 'Calculate Degrees of Freedom Manually',
     phase: 'practice',
     description: 'Understand how degrees of freedom are determined for chi-square tests',
@@ -1574,6 +1951,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-by-hand',
     title: 'Calculate Chi-Square Statistic by Hand',
     phase: 'practice',
     description: 'Understand the chi-square formula by computing it manually',
@@ -1590,6 +1968,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-standardized-residuals',
     title: 'Interpret Standardized Residuals',
     phase: 'apply',
     description: 'Identify which cells contribute most to significant chi-square',
@@ -1614,6 +1993,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-decision-tree',
     title: 'Decision Tree: Choose the Right Categorical Test',
     phase: 'apply',
     description: 'Master when to use each type of chi-square test',
@@ -1630,6 +2010,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-dist-properties',
     title: 'Understand Chi-Square Distribution Properties',
     phase: 'apply',
     description: 'Connect chi-square statistic to its sampling distribution',
@@ -1646,6 +2027,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'categorical-data-analysis',
     chapter: 'chapter-10',
+    practiceObjectiveKey: 'm8-chisq-survey-analysis',
     title: 'Real-World Application: Analyze Survey Data',
     phase: 'apply',
     description: 'Apply chi-square tests to authentic research scenario',
@@ -1663,6 +2045,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-independent-nav',
     title: 'Run an Independent Samples T-Test',
     description: 'Compare means between two independent groups',
     instructions: 'Compare test scores between the treatment and control groups using an independent samples t-test.',
@@ -1687,6 +2070,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-paired-nav',
     title: 'Run a Paired Samples T-Test',
     description: 'Compare means from the same participants at two time points',
     instructions: 'Compare pre-test and post-test scores for the same participants using a paired samples t-test.',
@@ -1713,6 +2097,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'correlation',
     chapter: 'chapter-12',
+    practiceObjectiveKey: 'm8-correlation-pearson-nav',
     title: 'Calculate Pearson Correlation',
     description: 'Measure the linear relationship between two continuous variables',
     instructions: 'Calculate the correlation between study hours and exam scores.',
@@ -1737,6 +2122,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'regression',
     chapter: 'chapter-12',
+    practiceObjectiveKey: 'm8-regression-simple-nav',
     title: 'Run Simple Linear Regression',
     description: 'Predict one variable from another using regression',
     instructions: 'Use study hours to predict exam scores with simple linear regression.',
@@ -1761,6 +2147,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-anova-oneway-nav',
     title: 'Run One-Way ANOVA',
     description: 'Compare means across three or more groups',
     instructions: 'Compare test scores across three teaching methods (Traditional, Online, Hybrid) using ANOVA.',
@@ -1786,6 +2173,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'correlation',
     chapter: 'chapter-12',
+    practiceObjectiveKey: 'm8-correlation-interpret',
     title: 'Pearson Correlation with Interpretation',
     phase: 'practice',
     description: 'Run a correlation and interpret numeric and visual evidence',
@@ -1801,6 +2189,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'regression',
     chapter: 'chapter-12',
+    practiceObjectiveKey: 'm8-regression-simple-interpret',
     title: 'Simple Linear Regression Interpretation',
     phase: 'practice',
     description: 'Interpret slope and R-squared from output',
@@ -1816,6 +2205,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-anova-gamlj-oneway',
     title: 'One-Way ANOVA in GAMLj',
     phase: 'apply',
     description: 'Run an ANOVA with post-hoc comparisons using GAMLj',
@@ -1831,6 +2221,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-anova-factorial-gamlj',
     title: 'Factorial ANOVA with Interaction Plot',
     phase: 'apply',
     description: 'Run a factorial ANOVA and interpret an interaction plot',
@@ -1848,6 +2239,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-detailed',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-student-welch',
     title: 'Student\'s vs Welch\'s T-Test',
     description: 'Understand when to use Student vs Welch t-test',
     instructions: 'Run BOTH Student\'s t-test and Welch\'s t-test on the same data. Compare the results and explain when you should use each one.',
@@ -1872,6 +2264,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-detailed',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-levene',
     title: 'Check Homogeneity of Variance Assumption',
     description: 'Test if two groups have equal variances using Levene\'s test',
     instructions: 'Before running an independent samples t-test, check if the groups have equal variances. Find the option for Levene\'s test of homogeneity of variance.',
@@ -1896,6 +2289,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-assumptions',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-shapiro',
     title: 'Test Normality with Shapiro-Wilk',
     description: 'Check if your data meets the normality assumption',
     instructions: 'Before running a t-test, check if each group\'s data is normally distributed using the Shapiro-Wilk test.',
@@ -1920,6 +2314,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-assumptions',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-qq-plot',
     title: 'Create Q-Q Plot for Normality Check',
     description: 'Visually assess normality using a Q-Q plot',
     instructions: 'Create a Q-Q plot to visually check if your data follow a normal distribution. Points should fall along the diagonal line if data are normal.',
@@ -1944,6 +2339,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-detailed',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-paired-vs-independent-concept',
     title: 'Paired vs Independent Samples: Choose Correctly',
     description: 'Understand when to use paired vs independent samples t-test',
     instructions: 'Scenario: You measure the same 20 students\' test scores BEFORE and AFTER tutoring. Which test do you use: (A) Independent Samples or (B) Paired Samples? Explain why.',
@@ -1959,6 +2355,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-detailed',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-one-sided',
     title: 'Run One-Sided T-Test',
     description: 'Conduct a directional hypothesis test',
     instructions: 'You hypothesize that the treatment group will score HIGHER than the control group (not just "different"). Run a one-sided (directional) independent samples t-test.',
@@ -1983,6 +2380,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'effect-size-ttests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-cohens-d-nav',
     title: 'Calculate Cohen\'s d for T-Tests',
     description: 'Report standardized effect size for mean differences',
     instructions: 'Run an independent samples t-test and enable Cohen\'s d. Interpret whether the effect is small (d≈0.2), medium (d≈0.5), or large (d≈0.8).',
@@ -2007,6 +2405,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'effect-size-ttests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-cohens-d-interpret',
     title: 'Interpret Cohen\'s d in Context',
     description: 'Understand what effect size means practically',
     instructions: 'You find d = 0.3 for the difference between two teaching methods. Write 2-3 sentences explaining what this means in practical terms (not just "small/medium/large").',
@@ -2022,6 +2421,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-detailed',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-ci-mean-diff',
     title: 'Report Confidence Interval for Mean Difference',
     description: 'Understand and report confidence intervals in t-tests',
     instructions: 'Run an independent samples t-test and enable "Mean difference" confidence interval. Explain what the 95% CI tells you about the true population difference.',
@@ -2043,6 +2443,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'nonparametric-tests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-mann-whitney',
     title: 'Run Mann-Whitney U Test',
     description: 'Use non-parametric alternative when normality is violated',
     instructions: 'Your data fail the normality test. Instead of an independent samples t-test, run a Mann-Whitney U test (the non-parametric equivalent).',
@@ -2067,6 +2468,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'nonparametric-tests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-wilcoxon',
     title: 'Run Wilcoxon Signed-Rank Test',
     description: 'Non-parametric alternative to paired samples t-test',
     instructions: 'Your paired data violate normality. Run a Wilcoxon signed-rank test instead of a paired samples t-test.',
@@ -2091,6 +2493,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'nonparametric-tests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-when-nonparametric',
     title: 'When to Use Non-Parametric Tests',
     description: 'Decide between parametric and non-parametric tests',
     instructions: 'List three conditions under which you should consider using Mann-Whitney U or Wilcoxon instead of a t-test.',
@@ -2106,6 +2509,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-practice',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-full-writeup',
     title: 'Complete T-Test Analysis with Write-Up',
     phase: 'practice',
     description: 'Conduct full analysis from assumption checks to reporting',
@@ -2121,6 +2525,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-practice',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-difference-scores',
     title: 'Compare Paired Data: Compute Difference Scores',
     phase: 'practice',
     description: 'Understand that paired t-test = one-sample t-test on differences',
@@ -2136,6 +2541,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-interpretation',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-t-sign-interpret',
     title: 'Interpret Positive vs Negative T-Statistics',
     phase: 'practice',
     description: 'Understand what the sign of t tells you',
@@ -2152,6 +2558,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-assumptions',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-robustness-written',
     title: 'Robustness of T-Test to Assumption Violations',
     phase: 'apply',
     description: 'Understand when t-tests are robust vs fragile',
@@ -2168,6 +2575,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-practice',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-pooled-vs-welch',
     title: 'Pooled vs Separate Variance Estimates',
     phase: 'apply',
     description: 'Understand how Student and Welch t-tests differ',
@@ -2183,6 +2591,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'effect-size-ttests',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-stat-practical',
     title: 'Statistical vs Practical Significance in T-Tests',
     phase: 'apply',
     description: 'Distinguish between significant p-values and meaningful effects',
@@ -2199,6 +2608,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-comprehensive',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-decision-tree',
     title: 'Decision Tree: Choose the Right T-Test',
     phase: 'apply',
     description: 'Create a decision flowchart for selecting the appropriate test',
@@ -2214,6 +2624,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 't-tests-comprehensive',
     chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-ttest-manuscript-results',
     title: 'Full T-Test Manuscript Results Section',
     phase: 'apply',
     description: 'Write publication-ready results for a t-test analysis',
@@ -2231,6 +2642,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'one-way-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-oneway-ch13',
     title: 'Run One-Way ANOVA in jamovi',
     description: 'Compare means across three or more independent groups',
     instructions: 'Run a one-way ANOVA comparing mood improvement across three drugs (Placebo, Anxifree, Joyzepam). Include effect size (eta-squared).',
@@ -2256,6 +2668,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'one-way-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-f-interpret',
     title: 'Interpret ANOVA F-Statistic',
     phase: 'practice',
     description: 'Understand what the F-ratio represents',
@@ -2272,6 +2685,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'post-hoc-tests',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-posthoc-holm',
     title: 'Run Post-Hoc Tests with Holm Correction',
     description: 'Identify which specific groups differ after significant ANOVA',
     instructions: 'After running ANOVA, conduct post-hoc pairwise comparisons using the Holm correction to control for multiple testing.',
@@ -2289,6 +2703,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'post-hoc-tests',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-multiple-comp-written',
     title: 'Understanding Multiple Comparisons Problem',
     phase: 'practice',
     description: 'Why corrections are needed for post-hoc tests',
@@ -2305,6 +2720,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova-assumptions',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-levene',
     title: 'Check Homogeneity of Variance (Levene Test)',
     description: 'Test if groups have equal variances',
     instructions: 'Run Levene\'s test to check the homogeneity of variance assumption. Interpret the result (p-value).',
@@ -2319,6 +2735,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova-assumptions',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-qq-residuals',
     title: 'Check Normality with Q-Q Plot',
     description: 'Assess normality of residuals visually',
     instructions: 'Generate a Q-Q plot for ANOVA residuals and assess whether normality assumption is met.',
@@ -2333,6 +2750,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova-alternatives',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-welch',
     title: 'Run Welch\'s ANOVA (Unequal Variances)',
     description: 'Use Welch test when homogeneity of variance is violated',
     instructions: 'Run Welch\'s one-way ANOVA, which does not assume equal variances. Compare to standard ANOVA F-value.',
@@ -2350,6 +2768,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'anova-alternatives',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-kruskal',
     title: 'Run Kruskal-Wallis Test (Non-Parametric)',
     description: 'Use non-parametric alternative when normality is violated',
     instructions: 'Run a Kruskal-Wallis test as a non-parametric alternative to one-way ANOVA. This test works on ranks instead of raw scores.',
@@ -2367,6 +2786,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'repeated-measures-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-repeated-measures',
     title: 'Run Repeated Measures ANOVA',
     description: 'Compare means when same participants are in all conditions',
     instructions: 'Run a repeated measures ANOVA comparing three task scores (Speech, Conceptual, Syntax) from the same 6 participants.',
@@ -2384,6 +2804,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'repeated-measures-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-mauchly',
     title: 'Check Sphericity Assumption (Mauchly Test)',
     description: 'Test sphericity assumption for repeated measures ANOVA',
     instructions: 'Run Mauchly\'s test of sphericity. If violated (p < .05), apply Greenhouse-Geisser or Huynh-Feldt correction.',
@@ -2398,6 +2819,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'repeated-measures-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-friedman',
     title: 'Friedman Test (Non-Parametric Repeated Measures)',
     description: 'Non-parametric alternative to repeated measures ANOVA',
     instructions: 'Run a Friedman test when repeated measures data violate normality assumption.',
@@ -2415,6 +2837,7 @@ export const statisticsExercises = [
     module: 'module-8',
     topic: 'one-way-anova',
     chapter: 'chapter-13',
+    practiceObjectiveKey: 'm8-anova-full-writeup',
     title: 'Complete ANOVA Write-Up',
     phase: 'apply',
     description: 'Report complete ANOVA analysis in APA format',
@@ -2426,7 +2849,10 @@ export const statisticsExercises = [
     submission: 'Complete analysis including: (1) Assumption checks, (2) jamovi output screenshot, (3) APA-formatted results paragraph (4-6 sentences)',
     order: 58,
     is_active: true
-  }
+  },
+
+  ...module4SoftwarePracticeParallels,
+  ...modules5to8SoftwarePracticeParallels
 ]
 
 // Helper to get exercises by module
@@ -2439,11 +2865,16 @@ export function getExercisesByTopic(topic) {
   return statisticsExercises.filter(ex => ex.topic === topic)
 }
 
-// Export for seeding PocketBase
+/**
+ * Maps local software-practice rows to plain objects (e.g. for a one-off seed script).
+ * The running app does not call this: software todos are read from bundled JS only.
+ * PocketBase holds `practice_problems` / `practice_attempts` for concept practice, not this shape.
+ */
 export function getExercisesForPocketBase(classId) {
   return statisticsExercises.map((ex, index) => ({
     class: classId,
     topic: ex.topic,
+    practiceObjectiveKey: ex.practiceObjectiveKey,
     title: ex.title,
     description: ex.description,
     instructions: ex.instructions,

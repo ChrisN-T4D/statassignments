@@ -1,0 +1,151 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Introduction to Probability</h2>
+
+  <h3>7.1 How are probability and statistics different?</h3>
+
+  <p>
+    One of the most important distinctions in quantitative research is between probability theory and statistical inference.
+    These two fields are closely related but work in opposite directions.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Key Terminology</h4>
+    <ul>
+      <li><strong>Probability theory:</strong> Starting with known properties of a system, we make predictions about what
+      kind of data we should expect to observe</li>
+      <li><strong>Statistical inference:</strong> Starting with observed data, we try to infer what the underlying system
+      properties might be</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Probability:</strong> If I know that a coin is fair (50% heads, 50% tails), probability theory tells me
+    that if I flip it 100 times, I should expect to see about 50 heads. Probability moves from the general to the specific—from
+    what we know about the system to predictions about data.
+  </p>
+
+  <p>
+    <strong>Statistics:</strong> If I flip a coin 100 times and observe 52 heads and 48 tails, statistical inference
+    helps me work backward to determine if the coin is fair or biased. Statistics moves from the specific to the general—from
+    observed data to conclusions about the system.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      Probability and statistics are mathematical inverses of each other. Probability takes known parameters and predicts
+      data patterns. Statistics takes observed data patterns and estimates unknown parameters. Both are essential tools
+      for scientific reasoning.
+    </p>
+  </div>
+
+  <h3>7.2 What does probability mean?</h3>
+
+  <p>
+    The word "probability" can mean different things depending on your philosophical perspective. The two main interpretations
+    have important implications for how we do statistics.
+  </p>
+
+  <h4>7.2.1 The frequentist view</h4>
+
+  <p>
+    The <strong>frequentist interpretation</strong> defines probability as the <strong>long-run relative frequency</strong>
+    of an event. If I flip a fair coin over and over, the proportion of heads will approach 0.5 as the number of flips increases.
+    This limiting proportion is the probability.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Frequentist Probability</h4>
+    <p>
+      The probability of an event is the proportion of times it occurs in an infinitely long sequence of independent repetitions.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Consider a political poll predicting an election outcome. A frequentist might say: "If we could
+    run this election over and over under identical conditions, the candidate would win 60% of the time, so the probability
+    of winning is 0.6."
+  </p>
+
+  <p>
+    <strong>Limitations of the frequentist view:</strong>
+  </p>
+  <ul>
+    <li><strong>Requires repeatability:</strong> Events must be capable of being repeated many times under identical conditions</li>
+    <li><strong>Cannot handle unique events:</strong> What is the probability it will rain tomorrow? Tomorrow only happens once—there's
+    no infinite sequence of identical tomorrows to observe</li>
+    <li><strong>Cannot assign probabilities to hypotheses:</strong> We cannot say "the probability that this scientific theory
+    is true is 0.8" because the theory is either true or false—it doesn't have a long-run frequency</li>
+  </ul>
+
+  <h4>7.2.2 The Bayesian view</h4>
+
+  <p>
+    The <strong>Bayesian interpretation</strong> treats probability as a <strong>degree of belief</strong> or
+    <strong>degree of confidence</strong>. Probability quantifies uncertainty about whether something is true,
+    whether an event will occur, or what the value of a parameter might be.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Bayesian Probability</h4>
+    <p>
+      Probability measures the degree of belief or confidence we have that a statement is true, an event will occur,
+      or a parameter has a certain value. These probabilities can be updated as new evidence becomes available.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Returning to the election poll, a Bayesian might say: "Based on all the evidence I have—polls,
+    historical data, current events—my degree of confidence that the candidate will win is 0.6, or 60%."
+  </p>
+
+  <p>
+    <strong>Strengths of the Bayesian view:</strong>
+  </p>
+  <ul>
+    <li><strong>Handles unique events:</strong> We can assign a probability to one-time events like "it will rain tomorrow"
+    or "this theory is correct"</li>
+    <li><strong>Incorporates prior knowledge:</strong> Bayesian methods explicitly combine prior beliefs with new data using
+    Bayes' theorem</li>
+    <li><strong>Philosophically intuitive:</strong> Matches how we naturally think about uncertainty in everyday life</li>
+    <li><strong>Can quantify uncertainty about parameters:</strong> We can make probabilistic statements about population means,
+    effect sizes, and other parameters</li>
+  </ul>
+
+  <h4>7.2.3 What's the difference? Does it matter?</h4>
+
+  <p>
+    The distinction between frequentist and Bayesian probability has real consequences for statistical practice:
+  </p>
+
+  <ul>
+    <li><strong>Interpretation of results:</strong> Frequentist confidence intervals and p-values are defined in terms of
+    repeated sampling, which can be counterintuitive. Bayesian credible intervals directly quantify uncertainty about parameters</li>
+    <li><strong>Use of prior information:</strong> Bayesian methods explicitly incorporate prior knowledge, while frequentist
+    methods typically do not</li>
+    <li><strong>Computational complexity:</strong> Historically, Bayesian methods were computationally intensive, but modern
+    computing has made them increasingly practical</li>
+  </ul>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      Most traditional statistical methods taught in introductory courses (t-tests, ANOVA, regression) are frequentist.
+      However, Bayesian methods are becoming increasingly popular, especially in fields dealing with complex models and
+      small sample sizes. Both approaches are valuable, and understanding the difference helps you interpret statistical
+      results correctly.
+    </p>
+  </div>
+
+  <p>
+    <strong>Practical note:</strong> For most basic analyses with reasonable sample sizes, frequentist and Bayesian methods
+    often yield similar numerical results. The main differences emerge in how we interpret those results and how we handle
+    prior information and uncertainty.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Microsoft Excel" by Danielle J. Navarro and David R. Foxcroft, Chapter 7, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

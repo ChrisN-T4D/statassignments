@@ -1,0 +1,77 @@
+<section class="module-content" aria-labelledby="z-scores-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="z-scores-title">4.5 Standard scores</h2>
+
+  <p>One of the most useful concepts in statistics is the idea of a <strong>standard score</strong> (also called a <strong>z-score</strong>). The basic idea is quite simple: a standard score is a way of describing where a particular observation sits within a distribution. Specifically, it tells you how many standard deviations above (or below) the mean a particular data point is. This turns out to be useful in all sorts of ways, so it's worth talking about in some detail.</p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Standard Scores (Z-Scores)</h4>
+    <p>
+      A <strong>standard score</strong> (or <strong>z-score</strong>) tells you how many standard deviations a data point is away from the mean. The formula is:
+    </p>
+    <p style="text-align: center; font-size: 1.1em;">
+      <strong>z = (X - X̄) / s</strong>
+    </p>
+    <p>
+      <strong>Interpretation:</strong>
+    </p>
+    <ul>
+      <li><strong>z = 0</strong> – The value equals the mean</li>
+      <li><strong>z = +1</strong> – One standard deviation above the mean</li>
+      <li><strong>z = -2</strong> – Two standard deviations below the mean</li>
+      <li><strong>|z| > 3</strong> – Very unusual/extreme value (beyond 99.7% of data)</li>
+    </ul>
+    <p>
+      <strong>Why useful:</strong> Z-scores allow you to compare values from different scales or distributions on a common, standardized scale.
+    </p>
+  </div>
+
+  <h3>4.5.1 Calculating standard scores</h3>
+
+  <p>Let's start with the formula. If we have a set of observations <em>X</em>, with mean <em>X̄</em> and standard deviation <em>s</em>, then the standard score for a particular observation <em>X<sub>i</sub></em> is:</p>
+
+  <div class="formula-box">
+    <p><strong>z<sub>i</sub> = (<em>X<sub>i</sub></em> - <em>X̄</em>) / <em>s</em></strong></p>
+  </div>
+
+  <p>Let's look at an example. Suppose I'm interested in people's attitudes to statistics. I give everyone a questionnaire asking them to rate how much they like statistics on a scale from -100 (hate it) to +100 (love it). The mean score in my sample turns out to be 17, and the standard deviation is 5. What can we say about someone who scores 35 on this questionnaire? Well, first we can calculate their standard score:</p>
+
+  <p class="code-block">z = (35 - 17) / 5 = 18 / 5 = 3.6</p>
+
+  <p>This tells us that this person's score is 3.6 standard deviations above the mean. That's a pretty extreme score. Using the 68-95-99.7 rule from earlier, we know that 99.7% of scores fall within 3 standard deviations of the mean, so a score that is 3.6 standard deviations above the mean is pretty unusual.</p>
+
+  <h3>4.5.2 Comparing scores on different scales</h3>
+
+  <p>One of the really nice things about standard scores is that they provide a way to compare observations that come from different distributions. For instance, suppose that I'm interested in comparing my attitudes questionnaire results to an IQ test. The questionnaire is scored from -100 to 100, but IQ tests are scored with a mean of 100 and a standard deviation of 15. How can we compare them?</p>
+
+  <p>Well, suppose someone has a questionnaire score of 35 (which, as we saw above, has a z-score of 3.6) and an IQ of 130. To work out which one is more extreme, we can calculate the z-score for the IQ:</p>
+
+  <p class="code-block">z = (130 - 100) / 15 = 30 / 15 = 2.0</p>
+
+  <p>So the IQ score is 2.0 standard deviations above the mean. In other words, even though the questionnaire score of 35 is numerically smaller than the IQ score of 130, it's actually more extreme, because it's further from the mean in terms of standard deviations.</p>
+
+  <h3>4.5.3 Using standard scores in Excel</h3>
+
+  <p>Excel doesn't have a built-in function to calculate z-scores in the Descriptives screen, but you can calculate them using the 'Compute' function. To create a new variable containing the z-scores for an existing variable:</p>
+
+  <ol>
+    <li>Go to 'Data' - 'Compute' in the menu bar</li>
+    <li>In the 'Compute' window, give your new variable a name (e.g., <code>z_score</code>)</li>
+    <li>In the formula box, enter the formula: <code>(variable_name - VMEAN(variable_name)) / VSTDEV(variable_name)</code>. Use VMEAN/VSTDEV for one column; MEAN(A,B) is mean of several variables per row.</li>
+    <li>Replace <code>variable_name</code> with the actual name of your variable</li>
+    <li>Click the green arrow to compute the new variable</li>
+  </ol>
+
+  <p>Alternatively, many statistical packages (including Excel) will automatically provide standardized values when you run certain analyses. For instance, when you run a regression analysis, Excel will often provide both the raw regression coefficients and the standardized coefficients (which are calculated using z-scores).</p>
+
+  <h3>4.5.4 Standard scores and the normal distribution</h3>
+
+  <p>Standard scores are particularly useful when your data are normally distributed (we'll talk more about the normal distribution in Chapter 9). When data are normally distributed, the standard score tells you exactly what percentage of observations fall above or below a particular value. For instance, if you have a z-score of 1.0, then (using the 68-95-99.7 rule) we know that approximately 16% of observations are further above the mean than you are. This becomes even more precise when you use the full normal distribution tables (z-tables), which tell you the exact percentage for any z-score.</p>
+
+  <p>However, even when your data aren't perfectly normally distributed, standard scores are still very useful for comparing different observations, or observations from different distributions. They provide a common "language" that allows you to make meaningful comparisons between things that were originally measured on completely different scales.</p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Microsoft Excel" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

@@ -1,0 +1,182 @@
+<section class="module-content">
+  <h2>7.3 Basic probability theory</h2>
+
+  <p>
+    To work with probability systematically, we need some fundamental concepts and rules. These form the foundation
+    of all probability calculations, from simple coin flips to complex statistical models.
+  </p>
+
+  <h3>7.3.1 Elementary events and sample spaces</h3>
+
+  <div class="terminology-box">
+    <h4>Key Terminology</h4>
+    <ul>
+      <li><strong>Elementary event:</strong> A single possible outcome of a random process (e.g., "rolling a 4" on a die)</li>
+      <li><strong>Sample space:</strong> The set of all possible elementary events (e.g., {1, 2, 3, 4, 5, 6} for a die roll)</li>
+      <li><strong>Probability distribution:</strong> A specification of the probability of each elementary event in the sample space</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example: Rolling a die</strong><br>
+    When you roll a standard six-sided die, the sample space is {1, 2, 3, 4, 5, 6}. Each elementary event
+    (rolling a specific number) has probability 1/6 if the die is fair. This collection of probabilities—assigning
+    1/6 to each outcome—is the probability distribution for a fair die.
+  </p>
+
+  <p>
+    <strong>Example: Flipping a coin</strong><br>
+    The sample space is {heads, tails}. For a fair coin, P(heads) = 0.5 and P(tails) = 0.5. These probabilities
+    constitute the probability distribution.
+  </p>
+
+  <h3>7.3.2 The basic rules of probability</h3>
+
+  <p>
+    All probabilities must follow three fundamental rules:
+  </p>
+
+  <div class="critical-box">
+    <h4>The Three Basic Rules</h4>
+    <ol>
+      <li><strong>Non-negativity:</strong> Probabilities cannot be negative. P(A) ≥ 0 for any event A</li>
+      <li><strong>Normalization:</strong> The probabilities of all elementary events in the sample space must sum to 1.
+      This reflects the certainty that <em>something</em> in the sample space will occur</li>
+      <li><strong>Additivity:</strong> If two events A and B are <strong>mutually exclusive</strong> (cannot both occur),
+      then P(A or B) = P(A) + P(B)</li>
+    </ol>
+  </div>
+
+  <p>
+    <strong>Example of additivity:</strong> The probability of rolling either a 2 or a 5 on a single die roll is:
+  </p>
+  <p style="margin-left: 20px;">
+    P(2 or 5) = P(2) + P(5) = 1/6 + 1/6 = 2/6 = 1/3
+  </p>
+  <p>
+    This works because rolling a 2 and rolling a 5 are mutually exclusive—you cannot roll both on one throw.
+  </p>
+
+  <h3>7.3.3 The complement rule</h3>
+
+  <p>
+    The <strong>complement</strong> of an event A, denoted as "not A," consists of all outcomes in the sample space that
+    are not in A. Because A and "not A" together cover all possibilities and are mutually exclusive:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Complement Rule</h4>
+    <p>
+      P(not A) = 1 − P(A)
+    </p>
+    <p>
+      Equivalently: P(A) + P(not A) = 1
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> If the probability of rain tomorrow is 0.3, then the probability of no rain is 1 − 0.3 = 0.7.
+  </p>
+
+  <h3>7.3.4 The multiplication rule for independent events</h3>
+
+  <p>
+    Two events are <strong>independent</strong> if the occurrence of one does not affect the probability of the other.
+    For example, flipping a coin twice: the result of the first flip doesn't influence the second flip.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Independence and Multiplication</h4>
+    <p>
+      If events A and B are independent:<br>
+      <strong>P(A and B) = P(A) × P(B)</strong>
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> What is the probability of flipping two heads in a row with a fair coin?
+  </p>
+  <p style="margin-left: 20px;">
+    P(heads on flip 1 and heads on flip 2) = P(heads on flip 1) × P(heads on flip 2)<br>
+    = 0.5 × 0.5 = 0.25
+  </p>
+
+  <p>
+    <strong>Example:</strong> What is the probability of rolling two sixes in a row with a fair die?
+  </p>
+  <p style="margin-left: 20px;">
+    P(six on roll 1 and six on roll 2) = 1/6 × 1/6 = 1/36 ≈ 0.028
+  </p>
+
+  <h3>7.3.5 The general addition rule</h3>
+
+  <p>
+    When events are <strong>not</strong> mutually exclusive—they can occur together—we need a more general rule:
+  </p>
+
+  <div class="critical-box">
+    <h4>General Addition Rule</h4>
+    <p>
+      P(A or B) = P(A) + P(B) − P(A and B)
+    </p>
+    <p>
+      We subtract P(A and B) to avoid counting the overlap twice.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Imagine drawing a card from a standard 52-card deck. What is the probability of drawing
+    a heart or a face card (Jack, Queen, King)?
+  </p>
+  <ul>
+    <li>P(heart) = 13/52 = 1/4</li>
+    <li>P(face card) = 12/52 = 3/13</li>
+    <li>P(heart and face card) = 3/52 (the Jack, Queen, and King of hearts)</li>
+  </ul>
+  <p style="margin-left: 20px;">
+    P(heart or face card) = 13/52 + 12/52 − 3/52 = 22/52 = 11/26 ≈ 0.423
+  </p>
+
+  <h3>7.3.6 Conditional probability</h3>
+
+  <p>
+    <strong>Conditional probability</strong> is the probability of event A occurring given that event B has already occurred.
+    We write this as P(A|B), read as "the probability of A given B."
+  </p>
+
+  <div class="terminology-box">
+    <h4>Conditional Probability Formula</h4>
+    <p>
+      P(A|B) = P(A and B) / P(B)
+    </p>
+    <p>
+      (provided P(B) > 0)
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> In a class of 30 students, 18 are female and 12 are male. Among the females, 10 have brown eyes.
+    Among the males, 4 have brown eyes. If you randomly select a female student, what is the probability she has brown eyes?
+  </p>
+  <p style="margin-left: 20px;">
+    P(brown eyes | female) = (number of brown-eyed females) / (number of females) = 10/18 ≈ 0.556
+  </p>
+
+  <p>
+    <strong>Note on independence:</strong> If A and B are independent, then P(A|B) = P(A). That is, learning that B occurred
+    doesn't change the probability of A. This is the defining feature of independence.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      These basic rules—complement, multiplication for independent events, addition, and conditional probability—form
+      the foundation of all probability calculations. Mastering these rules allows you to solve complex probability
+      problems by breaking them into simpler pieces.
+    </p>
+  </div>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, Chapter 7, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

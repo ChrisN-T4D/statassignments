@@ -230,6 +230,8 @@ import { useBKT } from '../composables/useBKT'
 import { useTimeTracking } from '../composables/useTimeTracking'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { getObjectiveById } from '../data/objectives'
+import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
+import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { pb } from '../lib/pocketbase'
 
 const route = useRoute()
@@ -339,9 +341,14 @@ async function loadObjectivesForCurrentProblem() {
   const objectiveIds = getObjectivesForQuestion(currentProblem.value.id)
   console.log('Found objective IDs:', objectiveIds)
 
+  const sw = preferredSoftware.value || 'jamovi'
   const objectives = objectiveIds
     .map(id => getObjectiveById(id))
     .filter(Boolean)
+    .map(obj => ({
+      ...obj,
+      objective: applySoftwareLabelsToText(obj.objective, sw)
+    }))
 
   console.log('Loaded objectives:', objectives)
   currentObjectives.value = objectives
@@ -557,8 +564,7 @@ async function checkAnswer(answer) {
   // Collect confidence indicators
   const confidenceData = {
     time_to_first_selection: firstSelectionTime.value,
-    answer_changes: answerChanges.value,
-    total_deliberation_time: timeData.activeTimeSeconds
+    answer_changes: answerChanges.value
   }
 
   // Collect sequence/spacing context (and last reading engagement for BKT)
@@ -613,6 +619,10 @@ onMounted(async () => {
 watch(() => [route.query.module, route.params.topicId], async () => {
   selectedTopic.value = getSelectedTopicId()
   await startMastery(selectedTopic.value)
+})
+
+watch(preferredSoftware, () => {
+  loadObjectivesForCurrentProblem()
 })
 
 watch(currentProblem, async (problem) => {

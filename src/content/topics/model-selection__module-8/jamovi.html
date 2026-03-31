@@ -1,0 +1,228 @@
+<section class="topic-content">
+  <h2>Model Selection and Comparison</h2>
+
+  <div class="concept-box">
+    <h3>What is Model Selection?</h3>
+    <p><strong>Model selection</strong> is the process of choosing which predictors to include in your regression model. The goal is to find a model that:</p>
+    <ul>
+      <li>Fits the data well</li>
+      <li>Is parsimonious (simple)</li>
+      <li>Generalizes to new data</li>
+      <li>Answers your research questions</li>
+    </ul>
+    <p>This involves balancing <strong>model complexity</strong> (more predictors) with <strong>model fit</strong> (explained variance).</p>
+  </div>
+
+  <div class="concept-box">
+    <h3>Guiding Principles</h3>
+
+    <h4>1. Theory First</h4>
+    <ul>
+      <li>Use <strong>substantive theory</strong> to guide predictor selection when possible</li>
+      <li>Include variables based on theoretical importance, not just statistical significance</li>
+      <li>Data-driven selection should supplement, not replace, theoretical reasoning</li>
+    </ul>
+
+    <h4>2. Ockham's Razor</h4>
+    <ul>
+      <li><strong>Simpler models are preferable</strong> if they fit nearly as well as complex models</li>
+      <li>Every predictor added increases risk of overfitting</li>
+      <li>Parsimony improves interpretability and generalizability</li>
+    </ul>
+
+    <h4>3. Avoid Overfitting</h4>
+    <ul>
+      <li><strong>Overfitting:</strong> Model fits sample data well but generalizes poorly to new data</li>
+      <li>More common with many predictors and small samples</li>
+      <li>Use cross-validation or hold-out samples to assess generalization</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Akaike Information Criterion (AIC)</h3>
+    <div class="formula">
+      <p><strong>AIC = (SS<sub>residual</sub> / σ̂²) + 2K</strong></p>
+    </div>
+    <p>Where K is the number of predictors (not counting intercept)</p>
+
+    <h4>How AIC Works</h4>
+    <ul>
+      <li>Balances <strong>goodness of fit</strong> (first term) with <strong>model complexity</strong> (second term)</li>
+      <li><strong>Lower AIC = better model</strong></li>
+      <li>Penalizes adding predictors that don't improve fit enough</li>
+      <li>Can compare non-nested models</li>
+    </ul>
+
+    <h4>Using AIC</h4>
+    <ul>
+      <li>Compare AIC values across different models</li>
+      <li>Difference of <strong>4-7 points</strong> suggests meaningful improvement</li>
+      <li>Difference of <strong>10+ points</strong> indicates strong evidence for better model</li>
+      <li>AIC doesn't tell you if models are "good," only which is better</li>
+    </ul>
+
+    <h4>Alternative: BIC (Bayesian Information Criterion)</h4>
+    <div class="formula">
+      <p><strong>BIC = (SS<sub>residual</sub> / σ̂²) + K × log(N)</strong></p>
+    </div>
+    <ul>
+      <li>Penalizes complexity more heavily than AIC</li>
+      <li>Tends to select simpler models</li>
+      <li>Better for confirming a "true" model exists</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Model Selection Strategies</h3>
+
+    <h4>1. Forward Selection</h4>
+    <ul>
+      <li><strong>Start:</strong> No predictors (intercept-only model)</li>
+      <li><strong>Step:</strong> Add predictor that improves fit most</li>
+      <li><strong>Repeat:</strong> Continue adding until no predictor improves fit significantly</li>
+      <li><strong>Pro:</strong> Builds model systematically from ground up</li>
+      <li><strong>Con:</strong> Can miss important predictor combinations</li>
+    </ul>
+
+    <h4>2. Backward Elimination</h4>
+    <ul>
+      <li><strong>Start:</strong> All predictors included</li>
+      <li><strong>Step:</strong> Remove predictor that hurts fit least</li>
+      <li><strong>Repeat:</strong> Continue removing until all remaining predictors are significant</li>
+      <li><strong>Pro:</strong> Considers all predictors initially</li>
+      <li><strong>Con:</strong> Can be unstable with multicollinearity</li>
+    </ul>
+
+    <h4>3. Stepwise Regression</h4>
+    <ul>
+      <li>Combines forward and backward steps</li>
+      <li>Can add and remove predictors at each step</li>
+      <li><strong>Pro:</strong> More flexible than forward/backward alone</li>
+      <li><strong>Con:</strong> Can produce unstable results, inflates Type I error</li>
+    </ul>
+
+    <h4>4. Hierarchical Regression</h4>
+    <ul>
+      <li><strong>Theory-driven approach:</strong> Enter predictors in meaningful blocks</li>
+      <li>Block 1: Control variables or baseline predictors</li>
+      <li>Block 2: Variables of primary interest</li>
+      <li>Compare models to see how much variance each block adds</li>
+      <li><strong>Best approach</strong> when you have clear theoretical predictions</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Comparing Nested Models</h3>
+    <p><strong>Nested models:</strong> One model is a subset of another (e.g., Model 1 has X₁; Model 2 has X₁ and X₂)</p>
+
+    <h4>F-test for Model Comparison</h4>
+    <div class="formula">
+      <p><strong>F = [(SS¹<sub>res</sub> - SS²<sub>res</sub>) / k] / [SS²<sub>res</sub> / (N - p - 1)]</strong></p>
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li>SS¹<sub>res</sub> = residual SS from simpler model</li>
+      <li>SS²<sub>res</sub> = residual SS from complex model</li>
+      <li>k = number of additional predictors in complex model</li>
+      <li>p = total predictors in complex model</li>
+    </ul>
+
+    <h4>Comparing ΔR²</h4>
+    <ul>
+      <li><strong>ΔR² = R²<sub>full</sub> - R²<sub>reduced</sub></strong></li>
+      <li>Represents additional variance explained by new predictors</li>
+      <li>F-test determines if ΔR² is statistically significant</li>
+      <li>Report both the magnitude (ΔR²) and significance (F-test)</li>
+    </ul>
+  </div>
+
+  <div class="jamovi-box">
+    <h3>Model Selection in jamovi</h3>
+
+    <h4>Method 1: Manual Comparison (AIC)</h4>
+    <ol>
+      <li>Run <strong>Linear Regression</strong> for each model</li>
+      <li>Under <strong>Model Fit</strong>, check <strong>AIC</strong></li>
+      <li>Compare AIC values across models</li>
+      <li>Choose model with lowest AIC (considering theory)</li>
+    </ol>
+
+    <h4>Method 2: Hierarchical Regression (Model Builder)</h4>
+    <ol>
+      <li>Go to <strong>Analyses → Regression → Linear Regression</strong></li>
+      <li>Click <strong>Model Builder</strong></li>
+      <li><strong>Block 1:</strong> Add first set of predictors</li>
+      <li><strong>Block 2:</strong> Add second set of predictors</li>
+      <li>View <strong>Model Comparisons</strong> table for:
+        <ul>
+          <li>ΔR² between models</li>
+          <li>F-test comparing models</li>
+          <li>AIC for each model</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Method 3: Stepwise (Advanced)</h4>
+    <ol>
+      <li>Some statistical software offers automated stepwise selection</li>
+      <li><strong>Warning:</strong> Automated selection should be used cautiously</li>
+      <li>Theory-driven selection is generally preferred</li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Theory should guide model selection</strong> whenever possible</li>
+      <li>Use <strong>AIC</strong> to compare models—lower is better</li>
+      <li><strong>Simpler models are preferable</strong> if they fit nearly as well (Ockham's razor)</li>
+      <li>For nested models, use <strong>F-test and ΔR²</strong> to compare</li>
+      <li><strong>Hierarchical regression</strong> is best for testing theoretical predictions</li>
+      <li>Avoid purely automated stepwise selection—it inflates Type I error</li>
+      <li>Always validate your final model on new data if possible</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example: Hierarchical Regression</h3>
+    <p><strong>Research Question:</strong> Does personality predict job performance above and beyond experience?</p>
+
+    <p><strong>Model 1 (Control):</strong> Experience only</p>
+    <ul>
+      <li>R² = .18, AIC = 542.3</li>
+    </ul>
+
+    <p><strong>Model 2 (Full):</strong> Experience + Personality</p>
+    <ul>
+      <li>R² = .34, AIC = 528.7</li>
+    </ul>
+
+    <p><strong>Model Comparison:</strong></p>
+    <ul>
+      <li>ΔR² = .34 - .18 = <strong>.16</strong></li>
+      <li>F(1, 97) = 23.5, p < .001</li>
+      <li>ΔAIC = 542.3 - 528.7 = <strong>13.6</strong> (strongly favors Model 2)</li>
+    </ul>
+
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>Adding personality to the model significantly improves prediction, ΔR² = .16, F(1, 97) = 23.5, p < .001</li>
+      <li>Personality explains an <strong>additional 16% of variance</strong> in job performance beyond experience alone</li>
+      <li>Both the F-test and AIC difference strongly support including personality in the model</li>
+      <li>The full model (Model 2) is clearly superior and should be retained</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Purely data-driven selection:</strong> Can capitalize on chance—use theory</li>
+      <li><strong>P-value hunting:</strong> Adding/removing predictors just to get p < .05</li>
+      <li><strong>Ignoring multicollinearity:</strong> Check VIF even in selected model</li>
+      <li><strong>Not validating:</strong> Final model should be tested on new data</li>
+      <li><strong>Overfitting with stepwise:</strong> Automated methods increase Type I error</li>
+      <li><strong>Comparing non-nested models with F-test:</strong> Use AIC instead</li>
+      <li><strong>Choosing based on R² alone:</strong> Consider AIC, theory, and parsimony</li>
+    </ul>
+  </div>
+</section>

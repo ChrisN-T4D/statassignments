@@ -16,6 +16,22 @@ import { pb } from '../lib/pocketbase'
 const USE_NEURAL_BKT = true  // Set to false to use local BKT only
 const FASTAPI_URL = import.meta.env.VITE_FASTAPI_URL || 'http://localhost:8000'
 
+const VALID_DIFFICULTIES = new Set(['easy', 'medium', 'hard'])
+
+function normalizeDifficulty(difficulty) {
+  const normalized = typeof difficulty === 'string' ? difficulty.toLowerCase() : 'medium'
+  return VALID_DIFFICULTIES.has(normalized) ? normalized : 'medium'
+}
+
+function toNonNegativeInt(value) {
+  const parsed = Number.parseInt(value, 10)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
+}
+
+function toOptionalBoolean(value) {
+  return typeof value === 'boolean' ? value : null
+}
+
 // Default BKT parameters (for local fallback)
 const DEFAULT_PARAMS = {
   pL0: 0.1,    // Low prior knowledge (10%)
@@ -110,62 +126,94 @@ export async function initializeBKT(objectiveId, customParams = {}) {
 /**
  * Call FastAPI Neural BKT backend
  */
-async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null, confidenceData = null, sequenceData = null) {
+async function callNeuralBKT(
+  objectiveId,
+  isCorrect,
+  difficulty,
+  timeData = null,
+  confidenceData = null,
+  sequenceData = null,
+  problemId = null
+) {
   let userId = pb.authStore.record?.id
 
   // If token exists but no record, try refreshing auth to get the record
   if (pb.authStore.isValid && !userId) {
-    console.log('[Neural BKT] Token exists but no record, refreshing auth...')
     try {
       const authData = await pb.collection('users').authRefresh()
       userId = authData.record?.id
-      console.log('[Neural BKT] Auth refresh successful, got userId:', userId)
     } catch (err) {
       console.warn('[Neural BKT] Auth refresh failed:', err.message)
     }
   }
 
-  console.log('[Neural BKT] Auth check:', {
-    isValid: pb.authStore.isValid,
-    hasRecord: !!pb.authStore.record,
-    userId,
-    record: pb.authStore.record
-  })
   if (!userId) {
-    console.warn('[Neural BKT] No user ID found, falling back to local BKT')
     return null
   }
 
   try {
+    const normalizedDifficulty = normalizeDifficulty(difficulty)
+
     // Prepare request body with time and engagement data
     const requestBody = {
       user_id: userId,
       objective_id: objectiveId,
       is_correct: isCorrect,
-      difficulty: difficulty
+      difficulty: normalizedDifficulty
+    }
+    if (typeof problemId === 'string' && problemId.length > 0) {
+      requestBody.problem_id = problemId
     }
 
     // Add time data if available
     if (timeData) {
-      requestBody.active_time_seconds = timeData.activeTimeSeconds
-      requestBody.total_time_seconds = timeData.totalTimeSeconds
-      requestBody.was_maxed_out = timeData.wasMaxedOut
-      requestBody.idle_detected = timeData.idleDetected
+      const activeTime = toNonNegativeInt(timeData.activeTimeSeconds ?? timeData.active_time_seconds)
+      const totalTime = toNonNegativeInt(timeData.totalTimeSeconds ?? timeData.total_time_seconds)
+      const wasMaxedOut = toOptionalBoolean(timeData.wasMaxedOut ?? timeData.was_maxed_out)
+      const idleDetected = toOptionalBoolean(timeData.idleDetected ?? timeData.idle_detected)
+
+      if (activeTime !== null) requestBody.active_time_seconds = activeTime
+      if (totalTime !== null) requestBody.total_time_seconds = totalTime
+      if (wasMaxedOut !== null) requestBody.was_maxed_out = wasMaxedOut
+      if (idleDetected !== null) requestBody.idle_detected = idleDetected
     }
 
     // Add confidence indicators if available
     if (confidenceData) {
-      if (confidenceData.time_to_first_selection != null) requestBody.time_to_first_selection = confidenceData.time_to_first_selection
-      if (confidenceData.answer_changes != null) requestBody.answer_changes = confidenceData.answer_changes
+      const timeToFirstSelection = toNonNegativeInt(
+        confidenceData.time_to_first_selection ?? confidenceData.timeToFirstSelection
+      )
+      const answerChanges = toNonNegativeInt(confidenceData.answer_changes ?? confidenceData.answerChanges)
+
+      if (timeToFirstSelection !== null) requestBody.time_to_first_selection = timeToFirstSelection
+      if (answerChanges !== null) requestBody.answer_changes = answerChanges
     }
 
     // Add sequence/spacing and reading engagement if available
     if (sequenceData) {
-      if (sequenceData.time_since_reading != null) requestBody.time_since_reading = sequenceData.time_since_reading
-      if (sequenceData.time_since_last_attempt != null) requestBody.time_since_last_attempt = sequenceData.time_since_last_attempt
-      if (sequenceData.has_read_topic_before != null) requestBody.has_read_topic_before = sequenceData.has_read_topic_before
-      if (sequenceData.last_reading_max_scroll_depth != null) requestBody.last_reading_max_scroll_depth = sequenceData.last_reading_max_scroll_depth
-      if (sequenceData.last_reading_triggered_by_error != null) requestBody.last_reading_triggered_by_error = sequenceData.last_reading_triggered_by_error
+      const timeSinceReading = toNonNegativeInt(sequenceData.time_since_reading ?? sequenceData.timeSinceReading)
+      const timeSinceLastAttempt = toNonNegativeInt(sequenceData.time_since_last_attempt ?? sequenceData.timeSinceLastAttempt)
+      const hasReadTopicBefore = toOptionalBoolean(sequenceData.has_read_topic_before ?? sequenceData.hasReadTopicBefore)
+      const lastTopicReadTime = toNonNegativeInt(
+        sequenceData.last_topic_read_time ?? sequenceData.lastTopicReadTime
+      )
+      const lastAttemptTime = toNonNegativeInt(
+        sequenceData.last_attempt_time ?? sequenceData.lastAttemptTime
+      )
+      const lastReadingMaxScrollDepth = toNonNegativeInt(
+        sequenceData.last_reading_max_scroll_depth ?? sequenceData.lastReadingMaxScrollDepth
+      )
+      const lastReadingTriggeredByError = toOptionalBoolean(
+        sequenceData.last_reading_triggered_by_error ?? sequenceData.lastReadingTriggeredByError
+      )
+
+      if (timeSinceReading !== null) requestBody.time_since_reading = timeSinceReading
+      if (timeSinceLastAttempt !== null) requestBody.time_since_last_attempt = timeSinceLastAttempt
+      if (hasReadTopicBefore !== null) requestBody.has_read_topic_before = hasReadTopicBefore
+      if (lastTopicReadTime !== null) requestBody.last_topic_read_time = lastTopicReadTime
+      if (lastAttemptTime !== null) requestBody.last_attempt_time = lastAttemptTime
+      if (lastReadingMaxScrollDepth !== null) requestBody.last_reading_max_scroll_depth = lastReadingMaxScrollDepth
+      if (lastReadingTriggeredByError !== null) requestBody.last_reading_triggered_by_error = lastReadingTriggeredByError
     }
 
     const response = await fetch(`${FASTAPI_URL}/bkt/update`, {
@@ -212,26 +260,37 @@ async function callNeuralBKT(objectiveId, isCorrect, difficulty, timeData = null
  * @param {string} difficulty - Question difficulty ('easy', 'medium', 'hard')
  * @param {object} timeData - Time tracking data from useTimeTracking (optional)
  * @param {object} confidenceData - Confidence indicators (optional): time_to_first_selection, answer_changes
- * @param {object} sequenceData - Sequence/spacing and reading (optional): time_since_reading, time_since_last_attempt, has_read_topic_before, last_reading_max_scroll_depth, last_reading_triggered_by_error
+ * @param {object} sequenceData - Sequence/spacing and reading (optional): time_since_reading, time_since_last_attempt, has_read_topic_before, last_topic_read_time, last_attempt_time, last_reading_max_scroll_depth, last_reading_triggered_by_error
+ * @param {string|null} problemId - Optional problem identifier for traceability
  * @returns {object} Updated BKT state with new mastery probability
  */
-export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium', timeData = null, confidenceData = null, sequenceData = null) {
+export async function updateBKT(
+  objectiveId,
+  isCorrect,
+  difficulty = 'medium',
+  timeData = null,
+  confidenceData = null,
+  sequenceData = null,
+  problemId = null
+) {
   // Try Neural BKT first if enabled
   if (USE_NEURAL_BKT) {
-    const neuralState = await callNeuralBKT(objectiveId, isCorrect, difficulty, timeData, confidenceData, sequenceData)
+    const neuralState = await callNeuralBKT(
+      objectiveId,
+      isCorrect,
+      difficulty,
+      timeData,
+      confidenceData,
+      sequenceData,
+      problemId
+    )
     if (neuralState) {
-      // Save to localStorage for caching (Neural BKT already saved to its database)
+      // Cache client-side; backend model state is currently process-memory, not persisted here.
       try {
         localStorage.setItem(`bkt-${objectiveId}`, JSON.stringify(neuralState))
       } catch (err) {
         console.warn('Failed to cache Neural BKT state to localStorage:', err)
       }
-      console.log(`[Neural BKT] Updated ${objectiveId}:`, {
-        mastery: Math.round(neuralState.pL * 100) + '%',
-        prototype: 'multidimensional',
-        activeTime: timeData?.activeTimeSeconds,
-        totalTime: timeData?.totalTimeSeconds
-      })
       return neuralState
     }
   }

@@ -1,0 +1,156 @@
+<section class="module-content" aria-labelledby="transforming-variables-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="transforming-variables-title">6.3 Transforming and Recoding Variables</h2>
+
+  <p>
+    It's common in data analysis to find that one of your variables isn't quite in the format you need. You might
+    want to convert a continuous variable into categories, or you might need to apply a mathematical transformation.
+    This section covers how to handle these pragmatic data manipulation tasks.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Variable Transformation</h4>
+    <ul>
+      <li><strong>Transformation</strong> – Applying a mathematical function to create a new variable from an old one</li>
+      <li><strong>Recoding</strong> – Changing the values of a variable according to specific rules</li>
+      <li><strong>Centering</strong> – Subtracting a constant (usually the mean) to shift the scale</li>
+      <li><strong>Collapsing</strong> – Combining multiple categories or ranges into fewer categories</li>
+    </ul>
+  </div>
+
+  <h3>6.3.1 Creating a transformed variable</h3>
+
+  <p>
+    To create a computed variable in Stata:
+  </p>
+
+  <ol>
+    <li>Go to <strong>Data → Compute</strong></li>
+    <li>Name your new variable</li>
+    <li>Enter a formula in the formula box</li>
+  </ol>
+
+  <p>
+    <strong>Example: Centering a Likert scale</strong><br>
+    If you have a 1-7 Likert scale and want to center it so the midpoint is 0:
+  </p>
+
+  <pre><code>likert.raw - 4</code></pre>
+
+  <p>
+    This transforms the scale from 1-7 to -3 to +3, making the neutral point 0.
+  </p>
+
+  <h3>6.3.2 Using the ABS() function for opinion strength</h3>
+
+  <p>
+    Sometimes you want to separate the <em>strength</em> of an opinion from its <em>direction</em>.
+    The <strong>ABS()</strong> function (absolute value) is perfect for this:
+  </p>
+
+  <pre><code>ABS(likert.centred)</code></pre>
+
+  <p>
+    This creates a variable showing how far from neutral each response is, regardless of positive or negative direction.
+  </p>
+
+  <h3>6.3.3 Using IF() statements for conditional transformations</h3>
+
+  <p>
+    The <strong>IF()</strong> function has three parts:
+  </p>
+
+  <pre><code>IF(condition, value_if_true, value_if_false)</code></pre>
+
+  <p>
+    <strong>Example: Creating a pass/fail variable</strong>
+  </p>
+
+  <pre><code>IF(Score >= 60, "Pass", "Fail")</code></pre>
+
+  <div class="key-points">
+    <h4>Key Points: Nested IF Statements</h4>
+    <p>
+      You can nest IF statements to create multiple categories:
+    </p>
+    <pre><code>IF(Age >= 0 and Age <= 20, "Young",
+IF(Age >= 21 and Age <= 40, "Adult",
+IF(Age >= 41 and Age <= 60, "Older")))</code></pre>
+    <p>
+      <strong>Important:</strong> Count your parentheses! Each IF needs to close with a matching ).
+    </p>
+  </div>
+
+  <h3>6.3.4 Collapsing a variable into categories</h3>
+
+  <p>
+    Often you'll want to group continuous data into a smaller number of discrete categories. For example,
+    collapsing age into young/adult/older categories can make analysis and interpretation easier.
+  </p>
+
+  <p>
+    However, be cautious: collapsing continuous data into categories loses information. Only do this when
+    the resulting categories are meaningful for your research question.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: When to Collapse Variables</h4>
+    <p>
+      Consider these factors before collapsing continuous variables:
+    </p>
+    <ul>
+      <li><strong>Loss of information</strong> – Categorizing throws away detail and can reduce statistical power</li>
+      <li><strong>Meaningful categories</strong> – Ensure your categories make theoretical sense, not just computational convenience</li>
+      <li><strong>Alternative analyses</strong> – Often you can analyze continuous data directly (e.g., regression instead of ANOVA)</li>
+      <li><strong>Assumption violations</strong> – Categorized data may violate assumptions (e.g., normality) that the original data satisfied</li>
+    </ul>
+  </div>
+
+  <h3>6.3.5 Creating reusable transformations</h3>
+
+  <p>
+    When you need to apply the same transformation to multiple variables (e.g., multiple questionnaire items),
+    use <strong>Data → Transform</strong>:
+  </p>
+
+  <ol>
+    <li>Click the variable you want to transform</li>
+    <li>Click <strong>Data → Transform</strong></li>
+    <li>Name your new variable and transformation</li>
+    <li>Use <strong>$source</strong> in your formula to refer to the original variable</li>
+  </ol>
+
+  <p>
+    Example formula:
+  </p>
+
+  <pre><code>ABS($source - 4)</code></pre>
+
+  <p>
+    This transformation can then be applied to other variables by selecting them and choosing your saved transformation
+    from the "using transform" dropdown.
+  </p>
+
+  <h3>6.3.6 Using Transform with conditional rules</h3>
+
+  <p>
+    The Transform interface also has an <strong>"Add condition" button (+)</strong> that lets you create multiple
+    conditional rules visually:
+  </p>
+
+  <ol>
+    <li>Click the <strong>+</strong> button next to the formula box</li>
+    <li>Add conditions like: <code>if $source <= 20 use "young"</code></li>
+    <li>Add another: <code>if $source <= 40 use "adult"</code></li>
+    <li>In the "else" box: <code>use "older"</code></li>
+  </ol>
+
+  <p>
+    This approach is often easier to read and maintain than nested IF statements.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Stata" by Danielle J. Navarro and David R. Foxcroft, Chapter 6, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

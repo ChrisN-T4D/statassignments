@@ -1,0 +1,243 @@
+<section class="module-content">
+  <h2>8.5 Estimating a confidence interval</h2>
+
+  <p>
+    Point estimates (like the sample mean) provide our best guess for a parameter, but they don't convey any information
+    about uncertainty. A <strong>confidence interval</strong> solves this problem by providing a range of plausible
+    values for the parameter, along with a specified level of confidence.
+  </p>
+
+  <h3>8.5.1 What is a confidence interval?</h3>
+
+  <div class="terminology-box">
+    <h4>Confidence Interval</h4>
+    <p>
+      A <strong>confidence interval (CI)</strong> is a range of values that is likely to contain the true population
+      parameter. It is constructed from sample data and has an associated <strong>confidence level</strong> (usually 95%).
+    </p>
+    <p>
+      A 95% confidence interval means: if we repeated this study many times and calculated a 95% CI each time, about
+      95% of those intervals would contain the true population parameter.
+    </p>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Suppose you measure IQ in a sample of 100 people and calculate M = 103.2, with s = 14.5.
+    A 95% confidence interval might be [100.3, 106.1]. This means you're 95% confident the true population mean IQ lies
+    somewhere between 100.3 and 106.1.
+  </p>
+
+  <h3>8.5.2 Constructing a confidence interval for the mean</h3>
+
+  <p>
+    The general formula for a confidence interval is:
+  </p>
+
+  <div class="critical-box">
+    <h4>Confidence Interval Formula</h4>
+    <p>
+      CI = Estimate ± (Critical value × Standard error)
+    </p>
+    <p>
+      For the mean:<br>
+      <strong>CI = M ± (t* × SEM)</strong>
+    </p>
+    <p>
+      where:
+    </p>
+    <ul>
+      <li><strong>M</strong> is the sample mean</li>
+      <li><strong>SEM</strong> is the standard error of the mean = s / √n</li>
+      <li><strong>t*</strong> is the critical value from the t-distribution with df = n - 1</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Why t-distribution?</strong> We use the t-distribution (not the normal distribution) because we're estimating
+    σ from the sample. For large samples (n > 30), t and z are nearly identical, but for small samples, the t-distribution's
+    heavier tails provide appropriate coverage.
+  </p>
+
+  <p>
+    <strong>Critical values:</strong> The critical value t* depends on both the desired confidence level and the degrees
+    of freedom (df = n - 1). For a 95% CI:
+  </p>
+  <ul>
+    <li>n = 10 (df = 9): t* ≈ 2.26</li>
+    <li>n = 30 (df = 29): t* ≈ 2.05</li>
+    <li>n = 100 (df = 99): t* ≈ 1.98</li>
+    <li>n = ∞: t* = 1.96 (approaches the z critical value)</li>
+  </ul>
+
+  <h3>8.5.3 A worked example</h3>
+
+  <p>
+    Suppose you measure reaction times for 25 participants. You find:
+  </p>
+  <ul>
+    <li>Sample mean: M = 420 ms</li>
+    <li>Sample standard deviation: s = 80 ms</li>
+    <li>Sample size: n = 25</li>
+  </ul>
+
+  <p>
+    <strong>Step 1: Calculate the standard error</strong>
+  </p>
+  <p style="margin-left: 20px;">
+    SEM = s / √n = 80 / √25 = 80 / 5 = 16 ms
+  </p>
+
+  <p>
+    <strong>Step 2: Find the critical value</strong><br>
+    For 95% CI with df = 25 - 1 = 24, the critical value is t* ≈ 2.064 (look up in t-table or use software)
+  </p>
+
+  <p>
+    <strong>Step 3: Calculate the margin of error</strong>
+  </p>
+  <p style="margin-left: 20px;">
+    Margin of error = t* × SEM = 2.064 × 16 = 33.0 ms
+  </p>
+
+  <p>
+    <strong>Step 4: Construct the confidence interval</strong>
+  </p>
+  <p style="margin-left: 20px;">
+    Lower bound = M - margin of error = 420 - 33 = 387 ms<br>
+    Upper bound = M + margin of error = 420 + 33 = 453 ms
+  </p>
+
+  <p>
+    <strong>Result:</strong> 95% CI [387, 453] ms
+  </p>
+
+  <p>
+    <strong>Interpretation:</strong> We are 95% confident that the true average reaction time in the population lies
+    between 387 and 453 milliseconds.
+  </p>
+
+  <h3>8.5.4 Interpreting confidence intervals</h3>
+
+  <p>
+    Confidence intervals are frequently misinterpreted. Here's the correct interpretation and common mistakes:
+  </p>
+
+  <div class="critical-box">
+    <h4>Correct Interpretation</h4>
+    <p>
+      <strong>Correct:</strong> "We are 95% confident that the true population mean lies within this interval."
+    </p>
+    <p>
+      Or more technically: "If we repeated this study many times and calculated a 95% CI each time, approximately 95%
+      of those intervals would contain the true population mean."
+    </p>
+  </div>
+
+  <p>
+    <strong>Common misinterpretations to avoid:</strong>
+  </p>
+  <ul>
+    <li><strong>WRONG:</strong> "There is a 95% probability that the true mean is in this interval."<br>
+    <em>Why wrong:</em> From a frequentist perspective, the true mean is a fixed value (not random), and the interval
+    is random (varies from sample to sample). The true mean either is or isn't in this specific interval—probability
+    doesn't apply to fixed values</li>
+
+    <li><strong>WRONG:</strong> "95% of the data falls within this interval."<br>
+    <em>Why wrong:</em> The CI is about the population parameter (mean), not about individual data points. Most data
+    points typically fall far outside the CI for the mean</li>
+
+    <li><strong>WRONG:</strong> "If we collect more data, there's a 95% chance the new mean will fall in this interval."<br>
+    <em>Why wrong:</em> The CI is specific to this sample. A new sample would produce a different CI</li>
+  </ul>
+
+  <h3>8.5.5 Factors affecting confidence interval width</h3>
+
+  <p>
+    Three factors determine how wide or narrow a confidence interval is:
+  </p>
+
+  <p>
+    <strong>1. Sample size (n)</strong><br>
+    Larger samples → narrower CIs. Doubling the sample size reduces CI width by a factor of √2 ≈ 1.41. To halve the
+    width, you need 4 times as many participants.
+  </p>
+
+  <p>
+    <strong>Example:</strong> With n = 25, SEM = 16 ms. With n = 100, SEM = 8 ms. The CI for n = 100 will be roughly
+    half as wide.
+  </p>
+
+  <p>
+    <strong>2. Sample variability (s)</strong><br>
+    More variable data → wider CIs. If individual measurements are spread out, there's more uncertainty about the mean.
+  </p>
+
+  <p>
+    <strong>Example:</strong> Reaction times with s = 40 ms produce narrower CIs than reaction times with s = 120 ms
+    (assuming same n).
+  </p>
+
+  <p>
+    <strong>3. Confidence level</strong><br>
+    Higher confidence → wider CIs. If you want to be more confident (e.g., 99% instead of 95%), you must accept a
+    wider interval.
+  </p>
+
+  <ul>
+    <li>90% CI: narrowest, less confident</li>
+    <li>95% CI: standard choice, balances precision and confidence</li>
+    <li>99% CI: widest, more confident</li>
+  </ul>
+
+  <h3>8.5.6 Confidence intervals in jamovi</h3>
+
+  <p>
+    jamovi automatically calculates confidence intervals for many statistics. When you run descriptive statistics or
+    statistical tests, you can request CIs:
+  </p>
+
+  <ul>
+    <li><strong>Descriptives:</strong> Check "Confidence interval" under "Statistics" to get CIs for means</li>
+    <li><strong>t-tests:</strong> jamovi reports CIs for mean differences</li>
+    <li><strong>Regression:</strong> CIs are provided for regression coefficients</li>
+  </ul>
+
+  <p>
+    You can typically choose the confidence level (90%, 95%, or 99%). The default is usually 95%.
+  </p>
+
+  <h3>8.5.7 Using confidence intervals for inference</h3>
+
+  <p>
+    Confidence intervals serve multiple purposes:
+  </p>
+
+  <p>
+    <strong>1. Communicate uncertainty</strong><br>
+    Reporting "M = 420 ms, 95% CI [387, 453]" is far more informative than just "M = 420 ms" because it shows precision.
+  </p>
+
+  <p>
+    <strong>2. Assess practical significance</strong><br>
+    Even if a difference is statistically significant, the CI shows whether it's large enough to matter. A CI of [0.1, 0.2]
+    might be statistically significant but practically trivial.
+  </p>
+
+  <p>
+    <strong>3. Informal hypothesis testing</strong><br>
+    If a 95% CI for a mean doesn't include a hypothesized value (e.g., μ = 400), you can reject the hypothesis at the
+    α = 0.05 level. This corresponds to a two-tailed hypothesis test.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      Confidence intervals are generally more informative than p-values because they show both the estimated effect size
+      and the precision of that estimate. Modern statistical reporting increasingly emphasizes CIs over p-values.
+    </p>
+  </div>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, Chapter 8, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

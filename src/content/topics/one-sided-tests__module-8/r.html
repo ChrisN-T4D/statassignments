@@ -1,0 +1,267 @@
+<section class="module-content" aria-labelledby="one-sided-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="one-sided-title">11.6 One-Sided Tests</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>One-sided tests (also called one-tailed tests) are used when you have a directional prediction about the relationship you're testing. They test whether an effect exists in a specific direction, rather than just whether an effect exists at all.</p>
+  </div>
+
+  <h3>Two-Sided vs. One-Sided Tests</h3>
+
+  <div class="formula-box">
+    <h4>Two-Sided Test (Non-Directional):</h4>
+    <p>H₀: μ = μ₀</p>
+    <p>H₁: μ ≠ μ₀</p>
+    <p>Question: "Is there a difference in either direction?"</p>
+    <p>Critical region: Both tails (α/2 in each tail)</p>
+
+    <h4>One-Sided Test (Directional):</h4>
+    <p><strong>Greater than:</strong></p>
+    <p>H₀: μ ≤ μ₀</p>
+    <p>H₁: μ > μ₀</p>
+    <p>Question: "Is the value greater?"</p>
+    <p>Critical region: Upper tail only (α in upper tail)</p>
+
+    <p><strong>Less than:</strong></p>
+    <p>H₀: μ ≥ μ₀</p>
+    <p>H₁: μ < μ₀</p>
+    <p>Question: "Is the value less?"</p>
+    <p>Critical region: Lower tail only (α in lower tail)</p>
+  </div>
+
+  <h3>When to Use One-Sided Tests</h3>
+  <div class="warning-box">
+    <h4>CRITICAL RULE: Pre-Specify Direction!</h4>
+    <p>You must decide whether to use a one-sided test <strong>BEFORE</strong> collecting or looking at your data. You cannot switch to a one-sided test after seeing results!</p>
+
+    <h4>Valid Reasons for One-Sided Tests:</h4>
+    <ul>
+      <li>Strong theoretical prediction about direction</li>
+      <li>Only one direction is meaningful or interesting</li>
+      <li>Previous research consistently shows one direction</li>
+      <li>Effect in the other direction is impossible (e.g., can't have negative age)</li>
+    </ul>
+
+    <h4>NEVER Use One-Sided Tests:</h4>
+    <ul>
+      <li>Just to get p < .05 when two-sided test is p = .06</li>
+      <li>After seeing which direction the data went</li>
+      <li>When effect in either direction would be interesting</li>
+      <li>As a default choice</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Good Example (One-Sided Justified):</h4>
+    <p><strong>Research Question:</strong> Does a new drug reduce blood pressure?</p>
+    <ul>
+      <li>We specifically designed the drug to <em>lower</em> BP</li>
+      <li>An increase in BP would be a safety concern, not a research finding</li>
+      <li>We only care about testing if it reduces BP</li>
+      <li><strong>H₁:</strong> μ_drug < μ_placebo (one-sided test justified)</li>
+    </ul>
+
+    <h4>Bad Example (One-Sided NOT Justified):</h4>
+    <p><strong>Research Question:</strong> Do men and women differ in math scores?</p>
+    <ul>
+      <li>Either direction would be an interesting finding</li>
+      <li>No strong theory predicting a specific direction</li>
+      <li>Using one-sided test here is just p-hacking!</li>
+      <li><strong>H₁:</strong> μ_men ≠ μ_women (two-sided test required)</li>
+    </ul>
+  </div>
+
+  <h3>P-Values: One-Sided vs. Two-Sided</h3>
+  <div class="formula-box">
+    <h4>Relationship:</h4>
+    <p>p_one-sided = p_two-sided / 2</p>
+    <p>(If effect is in predicted direction)</p>
+
+    <h4>Examples:</h4>
+    <ul>
+      <li>Two-sided p = .10 → One-sided p = .05</li>
+      <li>Two-sided p = .06 → One-sided p = .03</li>
+      <li>Two-sided p = .04 → One-sided p = .02</li>
+    </ul>
+
+    <h4>Important:</h4>
+    <p>If effect is in the <em>wrong</em> direction (opposite to prediction), the one-sided p-value is > .50, and you fail to reject H₀.</p>
+  </div>
+
+  <h3>Critical Values and Regions</h3>
+  <div class="concept-box" role="note">
+    <h4>For α = .05:</h4>
+    <p><strong>Two-sided test:</strong></p>
+    <ul>
+      <li>Critical values: ±1.96 (for z) or ±2.0 (approximately, for t)</li>
+      <li>Reject H₀ if |t| > 2.0</li>
+      <li>Critical region: 2.5% in each tail</li>
+    </ul>
+
+    <p><strong>One-sided test (upper tail):</strong></p>
+    <ul>
+      <li>Critical value: +1.64 (for z) or ≈1.7 (for t)</li>
+      <li>Reject H₀ if t > 1.7</li>
+      <li>Critical region: 5% in upper tail only</li>
+    </ul>
+
+    <p><strong>One-sided test (lower tail):</strong></p>
+    <ul>
+      <li>Critical value: -1.64 (for z) or ≈-1.7 (for t)</li>
+      <li>Reject H₀ if t < -1.7</li>
+      <li>Critical region: 5% in lower tail only</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example: Two-Sided Test</h4>
+    <p><strong>Question:</strong> Do students score differently from the national average of 75?</p>
+    <p><strong>Data:</strong> N = 25, X̄ = 78, σ̂ = 10</p>
+    <p><strong>Test:</strong> Two-sided</p>
+
+    <p>t = (78 - 75) / (10/√25) = 3 / 2 = 1.5</p>
+    <p>df = 24, critical value = ±2.064</p>
+    <p>Since |1.5| < 2.064, fail to reject H₀</p>
+    <p>Two-sided p ≈ .15</p>
+    <p><strong>Conclusion:</strong> No significant difference, p = .15</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example: One-Sided Test</h4>
+    <p><strong>Question:</strong> Do students score <em>higher</em> than the national average of 75?</p>
+    <p>(Same data: N = 25, X̄ = 78, σ̂ = 10)</p>
+    <p><strong>Test:</strong> One-sided (upper tail)</p>
+    <p><strong>H₁:</strong> μ > 75</p>
+
+    <p>t = 1.5 (same calculation)</p>
+    <p>df = 24, critical value = +1.711 (one-sided)</p>
+    <p>Since 1.5 < 1.711, fail to reject H₀</p>
+    <p>One-sided p ≈ .075</p>
+    <p><strong>Conclusion:</strong> Not significantly higher, p = .075</p>
+
+    <p><strong>Note:</strong> Even with the "advantage" of a one-sided test, still not significant!</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Running One-Sided Tests in R</h3>
+    <p>All t-tests in R have a "Hypothesis" option:</p>
+
+    <h4>One-Sample T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → One Sample T-Test</li>
+      <li>Under "Hypothesis" dropdown:
+        <ul>
+          <li>≠ Test value (two-sided, default)</li>
+          <li>> Test value (one-sided: μ > μ₀)</li>
+          <li>< Test value (one-sided: μ < μ₀)</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Independent Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Independent Samples T-Test</li>
+      <li>Under "Hypothesis" dropdown:
+        <ul>
+          <li>Group 1 ≠ Group 2 (two-sided, default)</li>
+          <li>Group 1 > Group 2 (one-sided)</li>
+          <li>Group 1 < Group 2 (one-sided)</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Paired Samples T-Test:</h4>
+    <ol>
+      <li>Analyses → T-Tests → Paired Samples T-Test</li>
+      <li>Under "Hypothesis" dropdown:
+        <ul>
+          <li>Measure 1 ≠ Measure 2 (two-sided, default)</li>
+          <li>Measure 1 > Measure 2 (one-sided)</li>
+          <li>Measure 1 < Measure 2 (one-sided)</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Advantages and Disadvantages</h3>
+  <div class="concept-box" role="note">
+    <h4>Advantages of One-Sided Tests:</h4>
+    <ul>
+      <li>More power to detect effect in predicted direction</li>
+      <li>Smaller p-value if effect is in right direction</li>
+      <li>More focused research question</li>
+      <li>Can be justified with strong theory</li>
+    </ul>
+
+    <h4>Disadvantages of One-Sided Tests:</h4>
+    <ul>
+      <li>Cannot detect effects in opposite direction</li>
+      <li>Easy to misuse (p-hacking)</li>
+      <li>Often viewed skeptically by reviewers</li>
+      <li>Requires pre-registration to be credible</li>
+      <li>Less informative than two-sided tests</li>
+    </ul>
+  </div>
+
+  <h3>Common Misconceptions</h3>
+  <div class="warning-box">
+    <h4>WRONG: "I can use one-sided because I predicted a direction"</h4>
+    <p>Having a prediction is necessary but not sufficient. The direction must be the <em>only</em> interesting outcome.</p>
+
+    <h4>WRONG: "My two-sided p = .08, so I'll report one-sided p = .04"</h4>
+    <p>This is p-hacking and scientific misconduct! The choice must be made before analyzing data.</p>
+
+    <h4>WRONG: "One-sided tests are always more powerful"</h4>
+    <p>They're only more powerful for effects in the predicted direction. If the effect goes the opposite way, one-sided tests have zero power!</p>
+
+    <h4>WRONG: "One-sided p-values are half of two-sided p-values"</h4>
+    <p>Only true if the effect is in the predicted direction! If it's in the opposite direction, the one-sided p-value is > .50.</p>
+  </div>
+
+  <h3>Best Practices</h3>
+  <div class="concept-box" role="note">
+    <ol>
+      <li><strong>Default to two-sided tests</strong> unless you have strong justification</li>
+      <li><strong>Pre-register your analysis plan</strong> if using one-sided tests</li>
+      <li><strong>Justify your choice</strong> in the methods section</li>
+      <li><strong>Never switch</strong> after seeing the data</li>
+      <li><strong>Be conservative:</strong> When in doubt, use two-sided</li>
+      <li><strong>Consider reviewers:</strong> Two-sided tests are less controversial</li>
+    </ol>
+  </div>
+
+  <h3>Reporting Results</h3>
+  <div class="example-box">
+    <h4>Two-Sided Test (Standard):</h4>
+    <p>"An independent samples t-test revealed that Group A (M = 72.5, SD = 8.3) scored significantly higher than Group B (M = 68.2, SD = 7.9), t(38) = 2.15, p = .038, d = 0.68, 95% CI [0.21, 8.42]."</p>
+
+    <h4>One-Sided Test (Must Justify):</h4>
+    <p>"Based on prior research showing consistent benefits of the intervention, we conducted a one-sided test. Results confirmed that the treatment group (M = 72.5, SD = 8.3) scored significantly higher than the control group (M = 68.2, SD = 7.9), t(38) = 2.15, p = .019 (one-tailed), d = 0.68."</p>
+
+    <p><strong>Note:</strong> Always state that p-value is one-tailed!</p>
+  </div>
+
+  <h3>Decision Guide</h3>
+  <div class="concept-box" role="note">
+    <h4>Use Two-Sided Test (default) if:</h4>
+    <ul>
+      <li>Effect in either direction would be interesting</li>
+      <li>Exploratory research</li>
+      <li>Replication study</li>
+      <li>Unsure about direction</li>
+      <li>Want to be conservative</li>
+    </ul>
+
+    <h4>Use One-Sided Test only if:</h4>
+    <ul>
+      <li>Strong theoretical prediction of direction</li>
+      <li>Effect in opposite direction is impossible or meaningless</li>
+      <li>Confirmed in pre-registered analysis plan</li>
+      <li>Can defend choice to skeptical reviewers</li>
+    </ul>
+
+    <p><strong>When in doubt, use two-sided!</strong></p>
+  </div>
+</section>

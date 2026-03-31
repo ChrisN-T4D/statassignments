@@ -1,0 +1,91 @@
+<section class="module-content" aria-labelledby="rm-anova-title">
+  <h2 id="rm-anova-title">13.8 Repeated Measures One-Way ANOVA</h2>
+
+  <div class="concept-box" role="note">
+    <h3>What is Repeated Measures ANOVA?</h3>
+    <p><strong>Within-subjects design:</strong> Same participants measured in all conditions (or closely matched participants).</p>
+    <p><strong>Advantage:</strong> Controls for individual differences → more statistical power</p>
+  </div>
+
+  <h3>When to Use Repeated Measures ANOVA</h3>
+  <ul>
+    <li><strong>Same participants:</strong> Everyone completes all conditions</li>
+    <li><strong>3+ conditions:</strong> Comparing means across multiple time points or treatments</li>
+    <li><strong>Equal N:</strong> Same number of observations per condition (by design)</li>
+  </ul>
+
+  <div class="example-box">
+    <h4>Example: Broca's Aphasia</h4>
+    <p><strong>Research Question:</strong> Do language task types differ in difficulty for Broca's aphasics?</p>
+    <ul>
+      <li><strong>N = 6 patients</strong>, each completes 3 tasks</li>
+      <li><strong>Tasks:</strong> Speech production, Conceptual comprehension, Syntax</li>
+      <li><strong>Outcome:</strong> Number correct (out of 10)</li>
+    </ul>
+    <table class="stats-table">
+      <tr><th>Task</th><th>Mean</th><th>Median</th></tr>
+      <tr><td>Speech</td><td>7.17</td><td>7.50</td></tr>
+      <tr><td>Conceptual</td><td>6.17</td><td>6.50</td></tr>
+      <tr><td>Syntax</td><td>4.33</td><td>4.50</td></tr>
+    </table>
+  </div>
+
+  <h3>How Repeated Measures ANOVA Works</h3>
+  <p>Partitions within-group variance into two parts:</p>
+  <div class="formula-box">
+    <p><strong>Independent ANOVA:</strong> SS_error = SS_within</p>
+    <p><strong>Repeated Measures ANOVA:</strong> SS_error = SS_within - SS_subjects</p>
+    <p>By removing <strong>individual differences (SS_subjects)</strong>, error term is smaller → more power</p>
+  </div>
+
+  <h3>Sphericity Assumption</h3>
+  <p><strong>Sphericity:</strong> Variances of differences between all pairs of conditions are equal</p>
+  <h4>Mauchly's Test of Sphericity</h4>
+  <ul>
+    <li><strong>H₀:</strong> Sphericity holds</li>
+    <li><strong>Decision:</strong> If p > .05, assume sphericity</li>
+    <li><strong>If violated (p < .05):</strong> Apply correction</li>
+  </ul>
+
+  <h4>Corrections for Violated Sphericity</h4>
+  <ul>
+    <li><strong>Greenhouse-Geisser ε < .75:</strong> Use GG correction</li>
+    <li><strong>Greenhouse-Geisser ε > .75:</strong> Use Huynh-Feldt correction</li>
+  </ul>
+
+  <div class="jamovi-box">
+    <h3>Running Repeated Measures ANOVA in jamovi</h3>
+    <ol>
+      <li><strong>Analyses → ANOVA → Repeated Measures ANOVA</strong></li>
+      <li>Create a <strong>Repeated Measures Factor</strong> (e.g., "Task") with 3 levels: Speech, Conceptual, Syntax</li>
+      <li>Move each variable to <strong>Repeated Measures Cells</strong></li>
+      <li>Under "Assumption Checks," check <strong>Sphericity tests</strong></li>
+      <li>Check <strong>Sphericity Corrections</strong>: Greenhouse-Geisser, Huynh-Feldt</li>
+      <li>Add post-hoc tests as needed</li>
+    </ol>
+  </div>
+
+  <div class="example-box">
+    <h4>Results</h4>
+    <p><strong>Mauchly's W = 0.85, p = .72</strong> → Sphericity met</p>
+    <p><strong>F(2, 10) = 6.93, p = .013, η² = 0.58</strong></p>
+    <p><em>Interpretation:</em> Task type significantly affects performance. 58% of variance explained by task.</p>
+    <p><strong>Post-hoc (Holm):</strong> Speech > Syntax (p = .01), other comparisons ns</p>
+  </div>
+
+  <div class="key-points-box">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Repeated measures ANOVA has <strong>more power</strong> than independent ANOVA</li>
+      <li>Requires <strong>sphericity</strong> assumption (use Mauchly's test)</li>
+      <li>If sphericity violated, apply <strong>GG or HF correction</strong></li>
+      <li>Each participant appears in all conditions (within-subjects)</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Friedman Test (Non-Parametric Alternative)</h3>
+    <p>If normality violated, use <strong>Friedman test</strong> (like Kruskal-Wallis for repeated measures)</p>
+    <p><strong>Analyses → ANOVA → Non-Parametric → Repeated Measures ANOVA</strong></p>
+  </div>
+</section>

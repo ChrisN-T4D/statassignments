@@ -1,0 +1,189 @@
+<section class="module-content" aria-labelledby="independent-t-title"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="independent-t-title">11.3 The Independent Samples T-Test: Student Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The independent samples t-test (Student's version) compares the means of two separate groups when the groups have equal population variances. This is one of the most commonly used tests in experimental research.</p>
+  </div>
+
+  <h3>When to Use</h3>
+  <p>Use this test when:</p>
+  <ul>
+    <li>You have two separate groups (different participants in each)</li>
+    <li>You want to compare their means</li>
+    <li>Both groups have equal population variances (homogeneity assumption)</li>
+    <li>Both groups are normally distributed</li>
+  </ul>
+
+  <div class="example-box">
+    <h4>Example Research Question</h4>
+    <p>Do students who study with background music (Group 1) score differently on an exam than students who study in silence (Group 2)?</p>
+  </div>
+
+  <h3>The Logic</h3>
+  <p>We want to test if the difference between two sample means (X̄₁ - X̄₂) is significantly different from zero. If the population means are equal, we'd expect the sample means to be similar (though not identical due to sampling variability).</p>
+
+  <div class="formula-box">
+    <h4>Hypotheses:</h4>
+    <p><strong>H₀:</strong> μ₁ = μ₂ (population means are equal)</p>
+    <p><strong>H₁:</strong> μ₁ ≠ μ₂ (population means differ) [two-tailed]</p>
+
+    <h4>Test Statistic:</h4>
+    <p>t = (X̄₁ - X̄₂) / SE(X̄₁ - X̄₂)</p>
+
+    <h4>Standard Error of the Difference:</h4>
+    <p>SE(X̄₁ - X̄₂) = σ̂ₚ × √(1/N₁ + 1/N₂)</p>
+
+    <h4>Pooled Standard Deviation:</h4>
+    <p>σ̂ₚ = √[(w₁σ̂₁² + w₂σ̂₂²) / (w₁ + w₂)]</p>
+    <p>where w₁ = N₁ - 1 and w₂ = N₂ - 1</p>
+
+    <h4>Degrees of Freedom:</h4>
+    <p>df = N₁ + N₂ - 2</p>
+  </div>
+
+  <h3>Understanding Pooled Standard Deviation</h3>
+  <p>Since we assume both groups have the same population variance, we combine (pool) information from both samples to get a better estimate of the shared variance. The pooled SD is a weighted average that gives more weight to the larger sample.</p>
+
+  <div class="example-box">
+    <h4>Worked Example</h4>
+    <p><strong>Research Question:</strong> Do psychology students and biology students differ in their average exam scores?</p>
+
+    <p><strong>Data:</strong></p>
+    <ul>
+      <li>Psychology students: N₁ = 15, X̄₁ = 72.3, σ̂₁ = 9.5</li>
+      <li>Biology students: N₂ = 15, X̄₂ = 65.8, σ̂₂ = 7.8</li>
+    </ul>
+
+    <p><strong>Step 1: Calculate weights</strong></p>
+    <p>w₁ = 15 - 1 = 14</p>
+    <p>w₂ = 15 - 1 = 14</p>
+
+    <p><strong>Step 2: Calculate pooled SD</strong></p>
+    <p>σ̂ₚ = √[(14 × 9.5² + 14 × 7.8²) / (14 + 14)]</p>
+    <p>σ̂ₚ = √[(14 × 90.25 + 14 × 60.84) / 28]</p>
+    <p>σ̂ₚ = √[2115.26 / 28] = √75.55 = 8.69</p>
+
+    <p><strong>Step 3: Calculate SE</strong></p>
+    <p>SE(X̄₁ - X̄₂) = 8.69 × √(1/15 + 1/15)</p>
+    <p>SE(X̄₁ - X̄₂) = 8.69 × √(0.1333) = 8.69 × 0.365 = 3.17</p>
+
+    <p><strong>Step 4: Calculate t</strong></p>
+    <p>t = (72.3 - 65.8) / 3.17 = 6.5 / 3.17 = 2.05</p>
+
+    <p><strong>Step 5: Compare to critical value</strong></p>
+    <p>df = 15 + 15 - 2 = 28</p>
+    <p>Critical value (α = .05, two-tailed): t_crit = ±2.048</p>
+    <p>Since |2.05| > 2.048, we reject H₀</p>
+
+    <p><strong>Conclusion:</strong> Psychology students scored significantly higher than biology students, t(28) = 2.05, p < .05.</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Running Student's T-Test in SPSS</h3>
+    <ol>
+      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
+      <li><strong>Dependent Variables:</strong> Select your outcome variable (e.g., exam score)</li>
+      <li><strong>Grouping Variable:</strong> Select your group variable (e.g., major)</li>
+      <li><strong>Tests:</strong> Check "Student's" (default)</li>
+      <li><strong>Additional Statistics:</strong>
+        <ul>
+          <li>Check "Mean difference" for effect</li>
+          <li>Check "Effect size" for Cohen's d</li>
+          <li>Check "Confidence interval" for 95% CI</li>
+          <li>Check "Descriptives" for group statistics</li>
+        </ul>
+      </li>
+      <li><strong>Assumption Checks:</strong>
+        <ul>
+          <li>Check "Normality" for Shapiro-Wilk test</li>
+          <li>Check "Equality of variances" for Levene's test</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Interpreting Output:</h4>
+    <p><strong>Independent Samples T-Test Table:</strong></p>
+    <ul>
+      <li><strong>statistic:</strong> The t-value</li>
+      <li><strong>df:</strong> Degrees of freedom</li>
+      <li><strong>p:</strong> The p-value (significance)</li>
+    </ul>
+
+    <p><strong>Descriptives Table:</strong></p>
+    <ul>
+      <li>Shows means, SDs, and Ns for each group</li>
+    </ul>
+
+    <p><strong>Assumption Check - Levene's Test:</strong></p>
+    <ul>
+      <li>Tests H₀: variances are equal</li>
+      <li>If p > .05: variances are equal (assumption met)</li>
+      <li>If p < .05: variances differ (use Welch's test instead)</li>
+    </ul>
+  </div>
+
+  <h3>Assumptions</h3>
+  <div class="warning-box">
+    <ol>
+      <li><strong>Normality:</strong> Both populations are normally distributed
+        <ul>
+          <li>Check with Shapiro-Wilk test for each group</li>
+          <li>Visual inspection with histograms/QQ plots</li>
+          <li>Robust to violations with N > 30 per group (CLT)</li>
+        </ul>
+      </li>
+      <li><strong>Independence:</strong>
+        <ul>
+          <li>Observations within each group are independent</li>
+          <li>Groups are independent of each other</li>
+          <li>No participant in both groups</li>
+          <li>Random assignment/sampling</li>
+        </ul>
+      </li>
+      <li><strong>Homogeneity of Variance:</strong> σ₁ = σ₂
+        <ul>
+          <li>Check with Levene's test</li>
+          <li>If violated, use Welch's t-test instead</li>
+          <li>Rule of thumb: larger SD < 2× smaller SD</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Using with paired/repeated measures data (use paired t-test instead)</li>
+    <li>Ignoring Levene's test results (if significant, use Welch's)</li>
+    <li>Not checking normality assumption</li>
+    <li>Assuming equal variances without testing</li>
+    <li>Forgetting to report effect size</li>
+    <li>Not reporting descriptive statistics</li>
+    <li>Using with more than 2 groups (use ANOVA instead)</li>
+  </ul>
+
+  <h3>Student's vs. Welch's: Which to Use?</h3>
+  <div class="concept-box" role="note">
+    <p><strong>Use Student's t-test when:</strong></p>
+    <ul>
+      <li>Levene's test is non-significant (p > .05)</li>
+      <li>Sample sizes are equal</li>
+      <li>SDs are similar</li>
+    </ul>
+    <p><strong>Use Welch's t-test when:</strong></p>
+    <ul>
+      <li>Levene's test is significant (p < .05)</li>
+      <li>Sample sizes differ substantially</li>
+      <li>SDs differ substantially</li>
+      <li>When in doubt (Welch's is safer!)</li>
+    </ul>
+  </div>
+
+  <h3>Reporting Results</h3>
+  <div class="example-box">
+    <p><strong>APA Style Example:</strong></p>
+    <p>"An independent samples t-test revealed that psychology students (M = 72.3, SD = 9.5) scored significantly higher than biology students (M = 65.8, SD = 7.8), t(28) = 2.05, p = .049, d = 0.75, 95% CI [0.02, 12.98]. This represents a medium-to-large effect size."</p>
+  </div>
+</section>

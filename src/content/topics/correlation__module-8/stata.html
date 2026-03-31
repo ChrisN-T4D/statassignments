@@ -1,0 +1,108 @@
+<section class="topic-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Correlation</h2>
+
+  <div class="concept-box">
+    <h3>What is Correlation?</h3>
+    <p>Correlation measures the <strong>strength and direction</strong> of the relationship between two continuous variables. It tells us whether variables tend to increase together (positive correlation), decrease together (negative correlation), or show no systematic pattern (no correlation).</p>
+  </div>
+
+  <div class="concept-box">
+    <h3>Pearson Correlation Coefficient (r)</h3>
+    <p>The most common measure of correlation is the <strong>Pearson correlation coefficient (r)</strong>, which ranges from -1 to +1:</p>
+    <ul>
+      <li><strong>r = +1:</strong> Perfect positive relationship (as X increases, Y increases proportionally)</li>
+      <li><strong>r = -1:</strong> Perfect negative relationship (as X increases, Y decreases proportionally)</li>
+      <li><strong>r = 0:</strong> No linear relationship</li>
+    </ul>
+
+    <h4>Formula</h4>
+    <div class="formula">
+      <p><strong>Covariance:</strong> Cov(X,Y) = (1/(N-1)) Σ(X<sub>i</sub> - X̄)(Y<sub>i</sub> - Ȳ)</p>
+      <p><strong>Pearson correlation:</strong> r<sub>XY</sub> = Cov(X,Y) / (σ̂<sub>X</sub> × σ̂<sub>Y</sub>)</p>
+    </div>
+
+    <h4>Interpretation Guidelines</h4>
+    <table>
+      <tr><th>Correlation Value</th><th>Interpretation</th></tr>
+      <tr><td>±0.9 to ±1.0</td><td>Very strong</td></tr>
+      <tr><td>±0.7 to ±0.9</td><td>Strong</td></tr>
+      <tr><td>±0.4 to ±0.7</td><td>Moderate</td></tr>
+      <tr><td>±0.2 to ±0.4</td><td>Weak</td></tr>
+      <tr><td>0 to ±0.2</td><td>Negligible</td></tr>
+    </table>
+  </div>
+
+  <div class="concept-box">
+    <h3>Spearman's Rank Correlation (ρ)</h3>
+    <p><strong>Spearman's rho (ρ)</strong> is used when:</p>
+    <ul>
+      <li>The relationship is <strong>monotonic but not linear</strong></li>
+      <li>Data are <strong>ordinal</strong> (ranked)</li>
+      <li>There are <strong>outliers</strong> affecting Pearson's r</li>
+    </ul>
+    <p>Instead of using raw values, Spearman's correlation uses the <strong>ranks</strong> of the data. It's less sensitive to extreme values and works well for non-linear monotonic relationships.</p>
+  </div>
+
+  <div class="Stata-box">
+    <h3>Computing Correlations in Stata</h3>
+    <ol>
+      <li>Go to <strong>Analyses → Regression → Correlation Matrix</strong></li>
+      <li>Select the variables you want to correlate</li>
+      <li>Under correlation type:
+        <ul>
+          <li>Check <strong>Pearson</strong> for linear relationships</li>
+          <li>Check <strong>Spearman</strong> for monotonic relationships or ordinal data</li>
+        </ul>
+      </li>
+      <li>Check <strong>Report significance</strong> to get p-values</li>
+      <li>Check <strong>Flag significant correlations</strong> to highlight significant results</li>
+    </ol>
+  </div>
+
+  <div class="video-box">
+    <div class="video-title">📺 Video Tutorial: Running Correlation in Stata</div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+        title="How to Run Correlation in Stata"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted);">
+      Note: This is a placeholder YouTube video. Replace with your actual tutorial video ID.
+    </p>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Correlation measures <strong>association, not causation</strong></li>
+      <li>Always create a <strong>scatterplot</strong> before computing correlation</li>
+      <li>Pearson's r assumes a <strong>linear relationship</strong></li>
+      <li>Outliers can strongly influence Pearson's r</li>
+      <li>Use Spearman's ρ for non-linear monotonic relationships</li>
+      <li>Statistical significance doesn't imply practical importance</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example Interpretation</h3>
+    <p><strong>Research Question:</strong> Is there a relationship between study hours and exam scores?</p>
+    <p><strong>Result:</strong> r = 0.68, p < .001</p>
+    <p><strong>Interpretation:</strong> There is a <strong>moderate to strong positive correlation</strong> between study hours and exam scores (r = .68). This correlation is statistically significant (p < .001), suggesting that students who study more hours tend to score higher on exams. However, correlation does not imply that studying more <em>causes</em> higher scores—other factors may be involved.</p>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Confusing correlation with causation:</strong> Just because two variables are correlated doesn't mean one causes the other</li>
+      <li><strong>Ignoring non-linear relationships:</strong> Pearson's r can be near zero even when there's a strong curved relationship</li>
+      <li><strong>Not checking for outliers:</strong> One extreme value can dramatically change the correlation</li>
+      <li><strong>Restricted range:</strong> Correlations can be weaker when the range of values is limited</li>
+    </ul>
+  </div>
+</section>

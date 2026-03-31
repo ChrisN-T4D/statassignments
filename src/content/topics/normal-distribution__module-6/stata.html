@@ -1,0 +1,199 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>7.5 The normal distribution</h2>
+
+  <p>
+    The <strong>normal distribution</strong> (also called the Gaussian distribution or bell curve) is arguably the most
+    important probability distribution in statistics. It appears everywhere—from natural phenomena to statistical theory—and
+    forms the basis for many statistical methods.
+  </p>
+
+  <h3>7.5.1 Probability density</h3>
+
+  <p>
+    Unlike the binomial distribution (which deals with discrete counts), the normal distribution is <strong>continuous</strong>—it
+    can take any real number value. For continuous distributions, we cannot meaningfully ask "what is the probability of
+    exactly X = 100.0000...?" because there are infinitely many possible values.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Probability Density</h4>
+    <p>
+      For continuous distributions, we work with <strong>probability density</strong> rather than probability. The area
+      under the curve between two points gives the probability that the variable falls in that range.
+    </p>
+    <p>
+      For example, P(98 ≤ X ≤ 102) is the area under the normal curve between 98 and 102.
+    </p>
+  </div>
+
+  <p>
+    The normal distribution has a characteristic bell shape: it's symmetric, with most values clustering around the center
+    and fewer values in the tails. The curve never actually touches zero—it extends infinitely in both directions—but
+    the probability becomes vanishingly small in the extreme tails.
+  </p>
+
+  <h3>7.5.2 Properties of the normal distribution</h3>
+
+  <p>
+    The normal distribution is completely specified by two parameters:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Normal Distribution Parameters</h4>
+    <ul>
+      <li><strong>Mean (μ):</strong> The center of the distribution—the peak of the bell curve</li>
+      <li><strong>Standard deviation (σ):</strong> The spread or width of the distribution</li>
+    </ul>
+    <p>
+      We write: X ~ N(μ, σ²), which reads "X is normally distributed with mean μ and variance σ²"
+    </p>
+  </div>
+
+  <p>
+    <strong>Key properties:</strong>
+  </p>
+  <ul>
+    <li><strong>Symmetric:</strong> The left and right sides of the distribution are mirror images</li>
+    <li><strong>Unimodal:</strong> Has a single peak at the mean</li>
+    <li><strong>Mean = median = mode:</strong> All three measures of central tendency are equal</li>
+    <li><strong>Asymptotic:</strong> The tails approach but never reach zero</li>
+  </ul>
+
+  <h3>7.5.3 The empirical rule (68-95-99.7 rule)</h3>
+
+  <p>
+    One of the most useful features of the normal distribution is that a fixed percentage of values always falls within
+    a certain number of standard deviations from the mean:
+  </p>
+
+  <div class="critical-box">
+    <h4>The Empirical Rule</h4>
+    <ul>
+      <li>Approximately <strong>68%</strong> of values fall within <strong>μ ± 1σ</strong> (within 1 SD of the mean)</li>
+      <li>Approximately <strong>95%</strong> of values fall within <strong>μ ± 2σ</strong> (within 2 SD of the mean)</li>
+      <li>Approximately <strong>99.7%</strong> of values fall within <strong>μ ± 3σ</strong> (within 3 SD of the mean)</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example: IQ scores</strong><br>
+    IQ scores are designed to be normally distributed with μ = 100 and σ = 15. Using the empirical rule:
+  </p>
+  <ul style="margin-left: 20px;">
+    <li>68% of people have IQs between 85 and 115 (100 ± 15)</li>
+    <li>95% of people have IQs between 70 and 130 (100 ± 30)</li>
+    <li>99.7% of people have IQs between 55 and 145 (100 ± 45)</li>
+  </ul>
+  <p>
+    This means that an IQ above 130 (2 standard deviations above the mean) is quite rare, occurring in only about 2.5% of
+    the population.
+  </p>
+
+  <h3>7.5.4 Standard scores (z-scores)</h3>
+
+  <p>
+    Often we want to know how unusual or extreme a particular value is. <strong>Z-scores</strong> (also called standard scores)
+    express values in units of standard deviations from the mean.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Z-Score Formula</h4>
+    <p>
+      z = (X − μ) / σ
+    </p>
+    <p>
+      where X is the observed value, μ is the mean, and σ is the standard deviation.
+    </p>
+  </div>
+
+  <p>
+    <strong>Interpreting z-scores:</strong>
+  </p>
+  <ul>
+    <li>z = 0 means the value equals the mean</li>
+    <li>z = 1 means the value is 1 standard deviation above the mean</li>
+    <li>z = −2 means the value is 2 standard deviations below the mean</li>
+    <li>Values with |z| > 3 are extremely rare (less than 0.3% of cases)</li>
+  </ul>
+
+  <p>
+    <strong>Example: IQ scores</strong><br>
+    Suppose someone has an IQ of 125. How unusual is this?
+  </p>
+  <p style="margin-left: 20px;">
+    z = (125 − 100) / 15 = 25 / 15 = 1.67
+  </p>
+  <p>
+    A z-score of 1.67 means this IQ is 1.67 standard deviations above average—higher than about 95% of the population.
+  </p>
+
+  <h3>7.5.5 The standard normal distribution</h3>
+
+  <p>
+    The <strong>standard normal distribution</strong> is a special case with μ = 0 and σ = 1. It's denoted as Z ~ N(0, 1).
+    Any normal distribution can be converted to the standard normal by calculating z-scores.
+  </p>
+
+  <p>
+    <strong>Why is this useful?</strong>
+  </p>
+  <ul>
+    <li>Tables and calculators for the standard normal distribution can be used for any normal distribution via z-scores</li>
+    <li>Z-scores allow comparison across different scales (e.g., comparing SAT scores to IQ scores)</li>
+    <li>Many statistical tests use the standard normal distribution as a reference</li>
+  </ul>
+
+  <h3>7.5.6 Why the normal distribution is important</h3>
+
+  <p>
+    The normal distribution is central to statistics for several reasons:
+  </p>
+
+  <div class="critical-box">
+    <h4>Importance of the Normal Distribution</h4>
+    <ol>
+      <li><strong>Natural phenomena:</strong> Many variables in nature are approximately normal—heights, weights, measurement
+      errors, blood pressure, test scores</li>
+      <li><strong>Central Limit Theorem:</strong> Even if a population is not normal, the distribution of sample means
+      becomes approximately normal for large samples (discussed in Chapter 8)</li>
+      <li><strong>Statistical methods:</strong> Many classical statistical tests (t-tests, ANOVA, regression) assume or
+      rely on normality</li>
+      <li><strong>Mathematical tractability:</strong> The normal distribution has convenient mathematical properties that
+      make calculations easier</li>
+    </ol>
+  </div>
+
+  <p>
+    <strong>Example: Heights</strong><br>
+    Adult male heights in many populations follow an approximately normal distribution with μ ≈ 175 cm and σ ≈ 7 cm.
+    This means:
+  </p>
+  <ul style="margin-left: 20px;">
+    <li>68% of men are between 168 and 182 cm tall</li>
+    <li>95% of men are between 161 and 189 cm tall</li>
+    <li>A man who is 190 cm (about 6'3") is unusually tall—taller than about 98% of men</li>
+  </ul>
+
+  <h3>7.5.7 Working with the normal distribution in Stata</h3>
+
+  <p>
+    Statistical software like Stata can:
+  </p>
+  <ul>
+    <li>Calculate probabilities for any normal distribution (e.g., P(X < 110) when X ~ N(100, 15))</li>
+    <li>Find z-scores and percentiles</li>
+    <li>Test whether sample data appears to come from a normal distribution</li>
+    <li>Create visual plots of normal distributions with different parameters</li>
+  </ul>
+
+  <p>
+    Rather than memorizing normal distribution tables, modern practice relies on software to compute exact probabilities
+    and critical values.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Stata" by Danielle J. Navarro and David R. Foxcroft, Chapter 7, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

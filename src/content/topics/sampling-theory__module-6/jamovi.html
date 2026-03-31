@@ -1,0 +1,183 @@
+<section class="module-content">
+  <h2>8.1 Samples, populations and sampling</h2>
+
+  <p>
+    Statistical inference is fundamentally about learning something about a large group (the population) by studying
+    a smaller group (a sample). Understanding the relationship between samples and populations is the foundation of
+    inferential statistics.
+  </p>
+
+  <h3>8.1.1 Defining a population</h3>
+
+  <div class="terminology-box">
+    <h4>Key Terminology</h4>
+    <ul>
+      <li><strong>Population:</strong> The complete set of individuals, objects, or measurements that we're interested
+      in studying</li>
+      <li><strong>Sample:</strong> A subset of the population that we actually observe and measure</li>
+      <li><strong>Parameter:</strong> A numerical characteristic of a population (e.g., population mean μ, population
+      standard deviation σ)</li>
+      <li><strong>Statistic:</strong> A numerical characteristic calculated from a sample (e.g., sample mean M or X̄,
+      sample standard deviation s)</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example:</strong> If you want to know the average height of all adults in the UK (population), you cannot
+    realistically measure all 50+ million people. Instead, you measure the heights of, say, 1,000 randomly selected
+    adults (sample) and use the sample mean (statistic) to estimate the population mean (parameter).
+  </p>
+
+  <p>
+    The population is defined by your research question. If you're studying "anxiety levels in university students,"
+    the population might be all university students worldwide, all university students in your country, or all students
+    at your university—it depends on what you want to generalize to.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      We almost never know the true values of population parameters. The entire purpose of inferential statistics is to
+      use sample statistics to make educated guesses about unknown population parameters.
+    </p>
+  </div>
+
+  <h3>8.1.2 Simple random samples</h3>
+
+  <p>
+    The <strong>simple random sample</strong> is the foundational sampling method in statistics. In a simple random sample,
+    every member of the population has an equal probability of being selected, and all selections are independent.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Simple Random Sampling</h4>
+    <p>
+      A sampling method where:
+    </p>
+    <ul>
+      <li>Every member of the population has an equal chance of being selected</li>
+      <li>Each selection is independent of all others</li>
+      <li>The probability of any particular sample of size n is the same as for any other sample of size n</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example:</strong> To select a simple random sample of 100 students from a university with 10,000 students,
+    you could:
+  </p>
+  <ol>
+    <li>Obtain a complete list of all 10,000 student ID numbers</li>
+    <li>Use a random number generator to select 100 ID numbers</li>
+    <li>Contact and measure those 100 students</li>
+  </ol>
+
+  <p>
+    <strong>Why simple random samples matter:</strong> Most statistical theory assumes simple random sampling. When we
+    calculate confidence intervals or conduct hypothesis tests, the formulas and p-values are valid only if the sample
+    is (approximately) a simple random sample from the population.
+  </p>
+
+  <h3>8.1.3 Sampling with and without replacement</h3>
+
+  <p>
+    When selecting a sample, there are two approaches:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Sampling Methods</h4>
+    <ul>
+      <li><strong>Sampling with replacement:</strong> After selecting an individual, you "put them back" into the
+      population, so they could potentially be selected again. Each draw is independent, with identical probabilities</li>
+      <li><strong>Sampling without replacement:</strong> Once an individual is selected, they cannot be selected again.
+      This is the more common approach in practice</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Example:</strong> Drawing cards from a deck—with replacement means you shuffle the card back into the deck
+    after each draw. Without replacement means you set the card aside and don't return it.
+  </p>
+
+  <p>
+    <strong>Practical note:</strong> For large populations, the distinction barely matters. If you're sampling 100 people
+    from a population of 10,000, whether you sample with or without replacement makes negligible difference to the
+    probabilities. However, for small populations, sampling without replacement affects the calculations.
+  </p>
+
+  <h3>8.1.4 Most samples are not simple random samples</h3>
+
+  <p>
+    While simple random sampling is the theoretical ideal, real research rarely achieves it. Most studies use
+    <strong>convenience samples</strong>—participants who are easily accessible—rather than true random samples.
+  </p>
+
+  <p>
+    <strong>Example:</strong> A psychology study recruiting undergraduate students from an introductory psychology course
+    is not a simple random sample of all humans, or even all adults, or even all university students. It's a convenience
+    sample of students who happened to be available and willing to participate.
+  </p>
+
+  <p>
+    <strong>Why does this matter?</strong>
+  </p>
+  <ul>
+    <li><strong>Generalizability:</strong> Convenience samples may not represent the broader population. Results from
+    university students may not apply to working adults or older populations</li>
+    <li><strong>Bias:</strong> Systematic differences between the sample and population can lead to incorrect conclusions</li>
+    <li><strong>Technical assumptions:</strong> Statistical tests assume random sampling, so violations can affect the
+    validity of p-values and confidence intervals (though often the effects are small)</li>
+  </ul>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      The gap between theoretical simple random samples and actual convenience samples is one of the major limitations
+      of statistical inference. Always ask: "To what population can I realistically generalize these results?" The answer
+      depends on how representative your sample is, not on p-values or statistical significance.
+    </p>
+  </div>
+
+  <h3>8.1.5 Parameters and statistics</h3>
+
+  <p>
+    Understanding the notation helps clarify the distinction between what we know (sample statistics) and what we're trying
+    to learn (population parameters):
+  </p>
+
+  <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+    <tr style="background-color: #f0f0f0;">
+      <th style="border: 1px solid #ddd; padding: 8px;">Measure</th>
+      <th style="border: 1px solid #ddd; padding: 8px;">Population Parameter</th>
+      <th style="border: 1px solid #ddd; padding: 8px;">Sample Statistic</th>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;">Mean</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">μ (mu)</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">M or X̄ (x-bar)</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;">Standard deviation</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">σ (sigma)</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">s or SD</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;">Variance</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">σ²</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">s²</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px;">Proportion</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">p</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">p̂ (p-hat)</td>
+    </tr>
+  </table>
+
+  <p>
+    <strong>Remember:</strong> Greek letters (μ, σ) typically denote population parameters—values we don't know and want
+    to estimate. Roman letters (M, s, p̂) denote sample statistics—values we calculate from our data and use as estimates.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, Chapter 8, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+<section class="module-content" aria-labelledby="grouped-desc-title">
+  <h2 id="grouped-desc-title">4.4 Descriptive statistics separately for each group</h2>
+
+  <p>In many situations, you want to calculate descriptive statistics separately for different groups. For instance, you might want to know the mean salary for men and the mean salary for women, or the median age of people in different occupations. When you have a variable that splits the data into groups, you can use that variable to calculate statistics separately for each group. In jamovi, this is quite straightforward.</p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Grouped Descriptive Statistics</h4>
+    <p>
+      <strong>Grouped (or stratified) descriptive statistics</strong> are calculated separately for different subgroups within your dataset.
+    </p>
+    <ul>
+      <li><strong>Grouping variable</strong> – A categorical variable that defines subgroups (e.g., gender, treatment condition, occupation)</li>
+      <li><strong>Split by</strong> – The jamovi feature that calculates statistics separately for each level of a grouping variable</li>
+      <li><strong>Cross-tabulation (contingency table)</strong> – A table showing frequencies for combinations of two or more categorical variables</li>
+    </ul>
+  </div>
+
+  <div class="key-points">
+    <h4>Key Concept: Comparing Groups</h4>
+    <p>
+      When you have a dataset with different subgroups, calculating statistics for the entire dataset might hide important differences between groups. By splitting your analysis by a grouping variable, you can:
+    </p>
+    <ul>
+      <li>Compare means, medians, or other statistics across groups</li>
+      <li>Identify patterns that only exist within certain subgroups</li>
+      <li>Check whether relationships differ by group membership</li>
+    </ul>
+    <p>
+      In jamovi, simply drag your grouping variable into the <strong>'Split by'</strong> box to automatically calculate all statistics separately for each group.
+    </p>
+  </div>
+
+  <h3>4.4.1 Using the 'Split by' box</h3>
+
+  <p>In the 'Descriptives' screen in jamovi, there's a box called 'Split by'. If you move a grouping variable into this box, jamovi will calculate all the statistics separately for each level of that grouping variable. For example, suppose you wanted to calculate the mean AFL winning margin separately for games that the home team won vs. games that the away team won. First, you'd need to create a variable that indicates whether the home team won or not. Let's assume you've already done this, and the variable is called <code>home.win</code>. If you move the <code>home.win</code> variable into the 'Split by' box, jamovi will calculate all the statistics separately for games where the home team won, and for games where the away team won.</p>
+
+  <p>In the output, you'll see a table that looks something like this:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>home.win</th>
+        <th>N</th>
+        <th>Mean</th>
+        <th>Median</th>
+        <th>Std. deviation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0</td>
+        <td>94</td>
+        <td>35.8</td>
+        <td>32.5</td>
+        <td>26.1</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>82</td>
+        <td>35.0</td>
+        <td>31.0</td>
+        <td>26.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The table shows that there were 94 games where the home team lost (home.win = 0), and 82 games where the home team won (home.win = 1). The mean winning margin was 35.8 points when the home team lost, and 35.0 points when the home team won. So, on average, the margins are pretty similar regardless of which team won.</p>
+
+  <h3>4.4.2 Multiple grouping variables</h3>
+
+  <p>You can also split the data by multiple variables at the same time. For instance, if you had variables indicating both the home team's success and the weather conditions, you could split by both variables. jamovi would then calculate statistics for each combination of home team success and weather. For example, you might have statistics for "home team won on rainy days", "home team won on sunny days", "home team lost on rainy days", and "home team lost on sunny days".</p>
+
+  <p>The basic principle is simple: whenever you want to look at statistics separately for different groups, just move the grouping variable(s) into the 'Split by' box. jamovi will do the rest automatically.</p>
+
+  <h3>4.4.3 Descriptives for categorical variables</h3>
+
+  <p>When working with categorical (nominal or ordinal) variables, the statistics we've been discussing (mean, median, standard deviation) don't always make sense. For categorical data, frequency tables are often more useful. In jamovi, you can get frequency tables by going to 'Exploration' - 'Frequencies' in the Analyses menu. This will show you how many observations fall into each category of your variable.</p>
+
+  <p>If you want to see frequency tables separately for different groups, you can use the 'Rows' and 'Columns' boxes in the 'Frequencies' screen. For instance, if you wanted to see the frequency of different weather conditions separately for home wins and home losses, you'd put the weather variable in one box and the home.win variable in the other. jamovi will then create a cross-tabulation (also called a contingency table) showing the counts for each combination of categories.</p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

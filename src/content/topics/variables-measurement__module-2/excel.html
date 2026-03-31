@@ -1,0 +1,280 @@
+<section class="module-content" aria-labelledby="vars-measurement-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="vars-measurement-title">2.1 Introduction to psychological measurement</h2>
+
+  <blockquote class="chapter-quote">
+    <p>To consult the statistician after an experiment is finished is often merely to ask him
+    to conduct a post mortem examination. He can perhaps say what the experiment died of.</p>
+    <footer>– Sir Ronald Fisher</footer>
+  </blockquote>
+
+  <p>
+    The first thing to understand is data collection can be thought of as a kind of <strong>measurement</strong>.
+    That is, what we're trying to do here is measure something about human behaviour or the
+    human mind. What do I mean by "measurement"?
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Psychological Measurement</h4>
+    <p>
+      <strong>Measurement</strong> is the process of assigning numbers, labels, or other well-defined descriptions
+      to observations. In psychology, we measure aspects of human behavior, cognition, and experience by
+      systematically assigning values that represent what we observe.
+    </p>
+    <p>
+      <strong>Examples:</strong> Age (33 years), preference (likes/dislikes anchovies), gender identity (male/female/other),
+      reaction time (milliseconds), anxiety level (scale of 1-7).
+    </p>
+  </div>
+
+  <h3>2.1.1 Some thoughts about psychological measurement</h3>
+
+  <p>
+    Measurement itself is a subtle concept, but basically it comes down to finding some way of
+    assigning numbers, or labels, or some other kind of well-defined descriptions, to "stuff". So, any
+    of the following would count as a psychological measurement:
+  </p>
+
+  <ul>
+    <li>My <strong>age</strong> is <em>33 years</em>.</li>
+    <li>I do <strong>not like anchovies</strong>.</li>
+    <li>My <strong>chromosomal gender</strong> is <em>male</em>.</li>
+    <li>My <strong>self-identified gender</strong> is <em>male</em>.</li>
+  </ul>
+
+  <p>
+    In the short list above, the <strong>bolded part</strong> is "the thing to be measured", and the <em>italicised
+    part</em> is "the measurement itself". In fact, we can expand on this a little bit, by thinking about
+    the set of possible measurements that could have arisen in each case:
+  </p>
+
+  <ul>
+    <li>My <strong>age</strong> (in years) could have been 0, 1, 2, 3..., etc. The upper bound on what my age
+    could possibly be is a bit fuzzy, but in practice you'd be safe in saying that the largest
+    possible age is 150, since no human has ever lived that long.</li>
+
+    <li>When asked if I <strong>like anchovies</strong>, I might have said that I <em>do</em>, or I <em>do not</em>, or I <em>have no
+    opinion</em>, or I <em>sometimes do</em>.</li>
+
+    <li>My <strong>chromosomal gender</strong> is almost certainly going to be male (XY) or female (XX), but
+    there are a few other possibilities. I could also have Klinefelter's syndrome (XXY), which
+    is more similar to male than to female. And I imagine there are other possibilities too.</li>
+
+    <li>My <strong>self-identified gender</strong> is also very likely to be male or female, but it doesn't have
+    to agree with my chromosomal gender. I may also choose to identify with neither, or to
+    explicitly call myself transgender.</li>
+  </ul>
+
+  <div class="callout">
+    <h4>The Complexity of "Simple" Measurements</h4>
+    <p>
+      Even something as simple as "age" is more subtle than it appears. For instance, in the
+      example above I assumed that it was okay to measure age in years. But if you're a developmental
+      psychologist, that's way too crude, and so you often measure age in years and months (if a child
+      is 2 years and 11 months this is usually written as "2;11"). If you're interested in newborns you
+      might want to measure age in days since birth, maybe even hours since birth. In other words,
+      the way in which you specify the allowable measurement values is important.
+    </p>
+  </div>
+
+  <p>
+    Looking at this a bit more closely, you might also realise that the concept of "age" isn't
+    actually all that precise. In general, when we say "age" we implicitly mean "the length of time
+    since birth". But that's not always the right way to do it. Suppose you're interested in how
+    newborn babies control their eye movements. If you're interested in kids that young, you might
+    also start to worry that "birth" is not the only meaningful point in time to care about. If Baby
+    Alice is born 3 weeks premature and Baby Bianca is born 1 week late, would it really make sense
+    to say that they are the "same age" if we encountered them "2 hours after birth"? In one sense,
+    yes. By social convention we use birth as our reference point for talking about age in everyday
+    life, since it defines the amount of time the person has been operating as an independent entity
+    in the world. But from a scientific perspective that's not the only thing we care about.
+  </p>
+
+  <h3>2.1.2 Operationalisation: defining your measurement</h3>
+
+  <p>
+    All of the ideas discussed in the previous section relate to the concept of <strong>operationalisation</strong>.
+    To be a bit more precise about the idea, operationalisation is the process by which we take a
+    meaningful but somewhat vague concept and turn it into a precise measurement. The process
+    of operationalisation can involve several different things:
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Operationalisation</h4>
+    <p>
+      <strong>Operationalisation</strong> is the process of transforming an abstract theoretical construct into
+      a concrete, measurable variable. It involves three key steps:
+    </p>
+    <ol>
+      <li><strong>Define precisely</strong> what you're measuring (e.g., does "age" mean time since birth or conception?)</li>
+      <li><strong>Choose a method</strong> for measurement (e.g., self-report, official records, behavioral observation)</li>
+      <li><strong>Specify allowable values</strong> (e.g., age in years, months, or days; gender as binary, multiple choice, or open-ended)</li>
+    </ol>
+    <p>
+      <strong>Example:</strong> To operationalise "anxiety," you might define it as self-reported worry, measure it
+      using a 20-item questionnaire, and score responses on a 1-7 scale.
+    </p>
+  </div>
+
+  <ul>
+    <li><strong>Being precise about what you are trying to measure.</strong> For instance, does "age" mean "time
+    since birth" or "time since conception" in the context of your research?</li>
+
+    <li><strong>Determining what method you will use to measure it.</strong> Will you use self-report to measure
+    age, ask a parent, or look up an official record? If you're using self-report, how will you
+    phrase the question?</li>
+
+    <li><strong>Defining the set of allowable values that the measurement can take.</strong> Note that these values
+    don't always have to be numerical, though they often are. When measuring age the values
+    are numerical, but we still need to think carefully about what numbers are allowed. Do
+    we want age in years, years and months, days, or hours? For other types of measurements
+    (e.g., gender) the values aren't numerical. But, just as before, we need to think about
+    what values are allowed. If we're asking people to self-report their gender, what options
+    to we allow them to choose between? Is it enough to allow only "male" or "female"? Do
+    you need an "other" option? Or should we not give people specific options and instead let
+    them answer in their own words? And if you open up the set of possible values to include
+    all verbal response, how will you interpret their answers?</li>
+  </ul>
+
+  <div class="callout warning">
+    <h4>Critical Point: Four Related Concepts</h4>
+    <p>Before moving on I want to take a moment to clear up our terminology, and in the process
+    introduce one more term. Here are four different things that are closely related to each other:</p>
+
+    <ul>
+      <li><strong>A theoretical construct.</strong> This is the thing that you're trying to take a measurement of,
+      like "age", "gender" or an "opinion". A theoretical construct can't be directly observed,
+      and often they're actually a bit vague.</li>
+
+      <li><strong>A measure.</strong> The measure refers to the method or the tool that you use to make your
+      observations. A question in a survey, a behavioural observation or a brain scan could all
+      count as a measure.</li>
+
+      <li><strong>An operationalisation.</strong> The term "operationalisation" refers to the logical connection
+      between the measure and the theoretical construct, or to the process by which we try to
+      derive a measure from a theoretical construct.</li>
+
+      <li><strong>A variable.</strong> Finally, a new term. A variable is what we end up with when we apply our
+      measure to something in the world. That is, variables are the actual "data" that we end
+      up with in our data sets.</li>
+    </ul>
+
+    <p>In practice, even scientists tend to blur the distinction between these things, but it's very helpful
+    to try to understand the differences.</p>
+  </div>
+
+  <div class="key-points">
+    <h4>Key Points: From Abstract Concepts to Data</h4>
+    <p>Understanding the path from theory to data:</p>
+    <ul>
+      <li><strong>Theoretical Construct</strong> → Abstract idea you want to study (e.g., "intelligence", "anxiety", "happiness")</li>
+      <li><strong>Operationalisation</strong> → Process of defining how to measure the construct</li>
+      <li><strong>Measure</strong> → The tool or method used (e.g., IQ test, questionnaire, behavioral observation)</li>
+      <li><strong>Variable</strong> → The actual data collected (e.g., scores: 95, 110, 87...)</li>
+    </ul>
+    <p>
+      <strong>Remember:</strong> The quality of your research depends on how well your measure captures your
+      theoretical construct. Poor operationalisation means you might be measuring the wrong thing entirely!
+    </p>
+  </div>
+
+  <h3>2.4 The "role" of variables: predictors and outcomes</h3>
+
+  <p>
+    I've got one last piece of terminology that I need to explain to you before moving away from
+    variables. Normally, when we do some research we end up with lots of different variables. Then,
+    when we analyse our data, we usually try to explain some of the variables in terms of some of
+    the other variables. It's important to keep the two roles "thing doing the explaining" and "thing
+    being explained" distinct. So let's be clear about this now. First, we might as well get used to
+    the idea of using mathematical symbols to describe variables, since it's going to happen over
+    and over again. Let's denote the "to be explained" variable <em>Y</em>, and denote the variables "doing
+    the explaining" as <em>X₁</em>, <em>X₂</em>, etc.
+  </p>
+
+  <p>
+    When we are doing an analysis we have different names for <em>X</em> and <em>Y</em>, since they play different
+    roles in the analysis. The classical names for these roles are <strong>independent variable (IV)</strong> and
+    <strong>dependent variable (DV)</strong>. The IV is the variable that you use to do the explaining (i.e., <em>X</em>)
+    and the DV is the variable being explained (i.e., <em>Y</em>). The logic behind these names goes like this:
+    if there really is a relationship between <em>X</em> and <em>Y</em> then we can say that <em>Y</em> depends on <em>X</em>, and
+    if we have designed our study "properly" then <em>X</em> isn't dependent on anything else.
+  </p>
+
+  <div class="callout">
+    <h4>Modern Terminology: Predictors and Outcomes</h4>
+    <p>
+      However, I personally find those names horrible. They're hard to remember and they're highly misleading
+      because (a) the IV is never actually "independent of everything else", and (b) if there's no
+      relationship then the DV doesn't actually depend on the IV. And in fact, because I'm not the
+      only person who thinks that IV and DV are just awful names, there are a number of alternatives
+      that I find more appealing. The terms that I'll use in this book are <strong>predictors</strong> and <strong>outcomes</strong>.
+      The idea here is that what you're trying to do is use <em>X</em> (the predictors) to make guesses about
+      <em>Y</em> (the outcomes).
+    </p>
+  </div>
+
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>Role of the variable</th>
+        <th>Classical name</th>
+        <th>Modern name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"to be explained"</td>
+        <td>dependent variable (DV)</td>
+        <td>outcome</td>
+      </tr>
+      <tr>
+        <td>"to do the explaining"</td>
+        <td>independent variable (IV)</td>
+        <td>predictor</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="terminology-box">
+    <h4>Terminology: Variable Roles in Research</h4>
+    <p>
+      In research, variables play different roles depending on whether they're used to explain or to be explained:
+    </p>
+    <ul>
+      <li>
+        <strong>Independent Variable (IV) / Predictor (X):</strong> The variable you manipulate or use to
+        make predictions. It's the "cause" in a cause-effect relationship or the variable doing the explaining.
+      </li>
+      <li>
+        <strong>Dependent Variable (DV) / Outcome (Y):</strong> The variable you measure or observe. It's the
+        "effect" in a cause-effect relationship or the variable being explained.
+      </li>
+    </ul>
+    <p>
+      <strong>Example:</strong> If you're studying whether exercise affects mood, <em>exercise</em> is the IV/predictor
+      and <em>mood</em> is the DV/outcome.
+    </p>
+    <p>
+      <strong>Note:</strong> The terms "predictor" and "outcome" are preferred in modern usage because "independent"
+      and "dependent" can be misleading—IVs are rarely truly independent of everything, and DVs only depend
+      on IVs when there's an actual relationship.
+    </p>
+  </div>
+
+  <div class="attribution">
+    <h4>Attribution</h4>
+    <p>
+      This content is adapted from <em>Learning Statistics with Microsoft Excel</em> by Danielle J. Navarro and David R. Foxcroft,
+      licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+    </p>
+    <p>
+      <strong>Source:</strong> <a href="https://davidfoxcroft.github.io/lsj-book/02-A-brief-introduction-to-research-design.html"
+      target="_blank" rel="noopener">Chapter 2: A Brief Introduction to Research Design (Sections 2.1 and 2.4)</a>
+    </p>
+    <p>
+      <strong>Modifications:</strong> Content has been reformatted for web display with preserved structure,
+      complete chapter content including all examples and discussions. Original concepts and explanations retained.
+    </p>
+  </div>
+</section>

@@ -1,0 +1,128 @@
+<section class="module-content" aria-labelledby="gof-title">
+  <h2 id="gof-title">10.1 The χ² Goodness-of-Fit Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The χ² goodness-of-fit test determines whether an observed frequency distribution matches an expected frequency distribution. It answers: "Do my observed counts fit the pattern I expected?"</p>
+  </div>
+
+  <h3>When to Use</h3>
+  <ul>
+    <li>You have <strong>ONE categorical variable</strong></li>
+    <li>You want to test if observed frequencies match specific expected probabilities</li>
+    <li>Example: Testing if card suit choices are truly random (equal probabilities)</li>
+    <li>Example: Testing if observed genetics ratios match Mendelian predictions</li>
+  </ul>
+
+  <h3>The Cards Example</h3>
+  <p>You ask 200 people to mentally select a card suit "at random." Here are the results:</p>
+
+  <div class="example-box">
+    <table class="stats-table">
+      <tr>
+        <th>Suit</th>
+        <th>Observed (O)</th>
+        <th>Expected (E)</th>
+      </tr>
+      <tr><td>♣ Clubs</td><td>35</td><td>50</td></tr>
+      <tr><td>♦ Diamonds</td><td>51</td><td>50</td></tr>
+      <tr><td>♥ Hearts</td><td>64</td><td>50</td></tr>
+      <tr><td>♠ Spades</td><td>50</td><td>50</td></tr>
+      <tr><th>Total</th><th>200</th><th>200</th></tr>
+    </table>
+    <p><strong>Question:</strong> Are people truly choosing randomly, or do they favor certain suits?</p>
+  </div>
+
+  <h3>Hypotheses</h3>
+  <div class="formula-box">
+    <p><strong>H₀:</strong> All four suits are chosen with equal probability (P = (.25, .25, .25, .25))</p>
+    <p><strong>H₁:</strong> At least one suit probability ≠ 0.25</p>
+  </div>
+
+  <h3>The Test Statistic</h3>
+  <div class="formula-box">
+    <h4>Chi-Square Statistic:</h4>
+    <p><strong>χ² = Σ [(O<sub>i</sub> - E<sub>i</sub>)² / E<sub>i</sub>]</strong></p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>O<sub>i</sub> = observed frequency in category i</li>
+      <li>E<sub>i</sub> = expected frequency in category i</li>
+      <li>E<sub>i</sub> = N × P<sub>i</sub> (sample size × probability)</li>
+      <li>Sum across all categories</li>
+    </ul>
+  </div>
+
+  <h3>Step-by-Step Calculation</h3>
+  <div class="example-box">
+    <h4>Cards Example</h4>
+    <p><strong>Step 1: Calculate expected frequencies</strong></p>
+    <p>E<sub>i</sub> = N × P<sub>i</sub> = 200 × 0.25 = 50 for each suit</p>
+
+    <p><strong>Step 2: Calculate (O - E)² / E for each category</strong></p>
+    <ul>
+      <li>Clubs: (35-50)²/50 = 225/50 = 4.50</li>
+      <li>Diamonds: (51-50)²/50 = 1/50 = 0.02</li>
+      <li>Hearts: (64-50)²/50 = 196/50 = 3.92</li>
+      <li>Spades: (50-50)²/50 = 0/50 = 0.00</li>
+    </ul>
+
+    <p><strong>Step 3: Sum to get χ²</strong></p>
+    <p>χ² = 4.50 + 0.02 + 3.92 + 0.00 = <strong>8.44</strong></p>
+
+    <p><strong>Step 4: Degrees of freedom</strong></p>
+    <p>df = k - 1 = 4 - 1 = <strong>3</strong></p>
+    <p>(Where k = number of categories)</p>
+
+    <p><strong>Step 5: Compare to critical value</strong></p>
+    <p>Critical value (α = .05, df = 3) = 7.815</p>
+    <p>Since χ² = 8.44 > 7.815, we <strong>reject H₀</strong></p>
+    <p>Or: p-value = .038 < .05</p>
+
+    <p><strong>Conclusion:</strong> People do not choose card suits randomly (χ²(3) = 8.44, p = .038). They show a preference for hearts and avoid clubs.</p>
+  </div>
+
+  <h3>Degrees of Freedom</h3>
+  <div class="concept-box">
+    <h4>Why df = k - 1?</h4>
+    <p>With k categories, once you know k-1 of the frequencies (and the total N), the last frequency is determined—it's not "free to vary."</p>
+    <p><strong>Example:</strong> If you know 3 suits have frequencies 35, 51, and 64, and N=200, then the 4th must be 200 - (35+51+64) = 50. Only 3 frequencies are independent.</p>
+  </div>
+
+  <h3>Custom Expected Proportions</h3>
+  <p>You don't have to test equal probabilities. For example, testing if people prefer red cards (60%) over black (40%):</p>
+  <div class="formula-box">
+    <p><strong>H₀:</strong> P(♥) = .30, P(♦) = .30, P(♣) = .20, P(♠) = .20</p>
+  </div>
+
+  <div class="jamovi-box">
+    <h3>In jamovi</h3>
+    <ol>
+      <li><strong>Analyses → Frequencies → One Sample Proportion Tests → N Outcomes</strong></li>
+      <li>Add your categorical variable</li>
+      <li>Check <strong>"Expected counts"</strong> to see E<sub>i</sub> values</li>
+      <li>To specify custom proportions: Expand <strong>"Expected Proportions"</strong> and enter ratios</li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Tests if <strong>observed frequencies</strong> match <strong>expected probabilities</strong></li>
+      <li>Use for <strong>one categorical variable</strong></li>
+      <li>df = k - 1 (number of categories minus 1)</li>
+      <li>Large χ² → observed differs from expected → reject H₀</li>
+      <li>Small χ² → observed close to expected → retain H₀</li>
+      <li>Always a <strong>one-sided test</strong> (right tail only)</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Assumptions</h3>
+    <ul>
+      <li><strong>Expected frequencies ≥ 5</strong> for all categories (or at least ≥ 1 with most ≥ 5)</li>
+      <li><strong>Independent observations</strong> (each person counted once)</li>
+      <li>Data are actual counts, not percentages or proportions</li>
+    </ul>
+  </div>
+</section>

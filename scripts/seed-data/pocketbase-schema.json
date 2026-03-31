@@ -298,6 +298,26 @@
         "required": false
       },
       {
+        "name": "active_time_seconds",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "total_time_seconds",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "time_maxed_out",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "name": "idle_detected",
+        "type": "bool",
+        "required": false
+      },
+      {
         "name": "attempt_no",
         "type": "number",
         "required": false

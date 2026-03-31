@@ -1,0 +1,201 @@
+<section class="module-content" aria-labelledby="welch-t-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="welch-t-title">11.4 The Independent Samples T-Test: Welch Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>Welch's t-test is a more robust version of the independent samples t-test that does NOT assume equal population variances. It's generally the safer choice for comparing two independent groups.</p>
+  </div>
+
+  <h3>Why Welch's Test?</h3>
+  <p>The Student's t-test assumes equal variances (homogeneity). But what if this assumption is violated? Welch's test adjusts for unequal variances, making it more versatile and robust.</p>
+
+  <div class="warning-box">
+    <h4>Key Advantage</h4>
+    <p>Welch's test gives accurate results whether variances are equal or unequal. Student's test only works well when variances are equal. For this reason, many statisticians recommend using Welch's test by default.</p>
+  </div>
+
+  <h3>The Difference from Student's Test</h3>
+  <p>The test statistic looks similar:</p>
+
+  <div class="formula-box">
+    <h4>Test Statistic:</h4>
+    <p>t = (X̄₁ - X̄₂) / SE(X̄₁ - X̄₂)</p>
+
+    <h4>But the SE is calculated differently:</h4>
+    <p><strong>Student's SE:</strong> Uses pooled SD (assumes equal variances)</p>
+    <p>SE = σ̂ₚ × √(1/N₁ + 1/N₂)</p>
+
+    <p><strong>Welch's SE:</strong> Uses separate variances</p>
+    <p>SE(X̄₁ - X̄₂) = √(σ̂₁²/N₁ + σ̂₂²/N₂)</p>
+
+    <h4>Degrees of Freedom:</h4>
+    <p>Student's: df = N₁ + N₂ - 2 (simple)</p>
+    <p>Welch's: df calculated using complex formula (typically non-integer and smaller)</p>
+
+    <p>Welch's df formula:</p>
+    <p>df = (σ̂₁²/N₁ + σ̂₂²/N₂)² / [(σ̂₁²/N₁)²/(N₁-1) + (σ̂₂²/N₂)²/(N₂-1)]</p>
+  </div>
+
+  <h3>Understanding the Adjustments</h3>
+  <p>Welch's test makes two key adjustments:</p>
+  <ol>
+    <li><strong>Standard Error:</strong> Uses separate variance estimates instead of pooling them</li>
+    <li><strong>Degrees of Freedom:</strong> Adjusts df downward to account for uncertainty from unequal variances</li>
+  </ol>
+
+  <div class="example-box">
+    <h4>Worked Example</h4>
+    <p><strong>Research Question:</strong> Do anxiety scores differ between therapy group and control group?</p>
+
+    <p><strong>Data:</strong></p>
+    <ul>
+      <li>Therapy group: N₁ = 20, X̄₁ = 32.5, σ̂₁ = 12.8</li>
+      <li>Control group: N₂ = 15, X̄₂ = 45.2, σ̂₂ = 6.3</li>
+    </ul>
+
+    <p>Note: SDs are very different (12.8 vs 6.3), suggesting unequal variances!</p>
+
+    <p><strong>Step 1: Calculate SE (Welch's method)</strong></p>
+    <p>SE = √(12.8²/20 + 6.3²/15)</p>
+    <p>SE = √(163.84/20 + 39.69/15)</p>
+    <p>SE = √(8.192 + 2.646) = √10.838 = 3.29</p>
+
+    <p><strong>Step 2: Calculate t</strong></p>
+    <p>t = (32.5 - 45.2) / 3.29 = -12.7 / 3.29 = -3.86</p>
+
+    <p><strong>Step 3: Calculate df (Welch's method)</strong></p>
+    <p>df = (8.192 + 2.646)² / [(8.192²/19) + (2.646²/14)]</p>
+    <p>df = 117.46 / (3.533 + 0.500) = 117.46 / 4.033 = 29.1</p>
+
+    <p><strong>Step 4: Compare to critical value</strong></p>
+    <p>With df ≈ 29 and α = .05 (two-tailed): t_crit ≈ ±2.045</p>
+    <p>Since |-3.86| > 2.045, we reject H₀</p>
+
+    <p><strong>Conclusion:</strong> The therapy group had significantly lower anxiety scores than the control group, t(29.1) = -3.86, p < .001.</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Running Welch's T-Test in Excel</h3>
+    <ol>
+      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
+      <li><strong>Dependent Variables:</strong> Select your outcome variable</li>
+      <li><strong>Grouping Variable:</strong> Select your group variable</li>
+      <li><strong>Tests:</strong> Check "Welch's" (in addition to or instead of Student's)</li>
+      <li><strong>Additional Statistics:</strong>
+        <ul>
+          <li>Check "Mean difference"</li>
+          <li>Check "Effect size"</li>
+          <li>Check "Confidence interval"</li>
+          <li>Check "Descriptives"</li>
+        </ul>
+      </li>
+      <li><strong>Assumption Checks:</strong>
+        <ul>
+          <li>Check "Normality"</li>
+          <li>Check "Equality of variances" (to see if Welch's is needed)</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Interpreting Levene's Test:</h4>
+    <ul>
+      <li>If p > .05: Equal variances (Student's okay, but Welch's still safe)</li>
+      <li>If p < .05: Unequal variances (definitely use Welch's!)</li>
+    </ul>
+  </div>
+
+  <h3>Comparing Student's and Welch's Results</h3>
+  <div class="concept-box" role="note">
+    <h4>When Variances ARE Equal:</h4>
+    <p>Student's and Welch's give very similar results. Student's has slightly more power (higher df), but the difference is minimal.</p>
+
+    <h4>When Variances are NOT Equal:</h4>
+    <p>Student's test can give incorrect results (wrong p-values, poor CI coverage). Welch's test remains accurate. This is why Welch's is preferred!</p>
+
+    <h4>Which df is Larger?</h4>
+    <p>Student's always uses: N₁ + N₂ - 2</p>
+    <p>Welch's uses smaller df when variances differ substantially, making it more conservative (harder to reject H₀).</p>
+  </div>
+
+  <h3>Assumptions</h3>
+  <div class="warning-box">
+    <ol>
+      <li><strong>Normality:</strong> Both populations normally distributed
+        <ul>
+          <li>Check with Shapiro-Wilk for each group</li>
+          <li>Welch's is robust to violations with larger samples</li>
+        </ul>
+      </li>
+      <li><strong>Independence:</strong>
+        <ul>
+          <li>Observations independent within groups</li>
+          <li>Groups independent of each other</li>
+        </ul>
+      </li>
+      <li><strong>Homogeneity of Variance:</strong> NOT REQUIRED!
+        <ul>
+          <li>This is the advantage of Welch's test</li>
+          <li>Works whether variances are equal or not</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>When to Use Student's vs. Welch's</h3>
+  <div class="example-box">
+    <h4>Decision Guide:</h4>
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Situation</th>
+        <th>Recommendation</th>
+      </tr>
+      <tr>
+        <td>Levene's p > .05 (equal variances)</td>
+        <td>Either test works; Student's slightly more powerful</td>
+      </tr>
+      <tr>
+        <td>Levene's p < .05 (unequal variances)</td>
+        <td>Use Welch's (Student's may be inaccurate)</td>
+      </tr>
+      <tr>
+        <td>Very different sample sizes</td>
+        <td>Use Welch's (safer with unbalanced designs)</td>
+      </tr>
+      <tr>
+        <td>Unsure/default choice</td>
+        <td>Use Welch's (works in all situations)</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Using Student's when Levene's is significant</li>
+    <li>Thinking Welch's is only for unequal variances (it's always safe!)</li>
+    <li>Rounding Welch's df to nearest integer (report as decimal)</li>
+    <li>Not checking assumptions before choosing test</li>
+    <li>Forgetting that Welch's doesn't fix non-normality</li>
+  </ul>
+
+  <h3>Power Comparison</h3>
+  <div class="concept-box" role="note">
+    <h4>When Variances Equal:</h4>
+    <p>Student's test has slightly more power (higher df means narrower critical region). But the difference is typically negligible.</p>
+
+    <h4>When Variances Unequal:</h4>
+    <p>Welch's test maintains proper Type I error rate. Student's test may have inflated Type I error (false positives) or reduced power, depending on which group has larger variance and sample size.</p>
+
+    <h4>Modern Recommendation:</h4>
+    <p>Many statisticians now recommend <strong>always using Welch's test</strong> as the default, since it's robust in all situations and the power loss (when variances are equal) is minimal.</p>
+  </div>
+
+  <h3>Reporting Results</h3>
+  <div class="example-box">
+    <p><strong>APA Style Example:</strong></p>
+    <p>"A Welch's t-test was conducted to account for unequal variances (Levene's test: p = .03). Results showed that the therapy group (M = 32.5, SD = 12.8) had significantly lower anxiety scores than the control group (M = 45.2, SD = 6.3), t(29.12) = -3.86, p < .001, d = -1.24, 95% CI [-19.42, -6.03]. This represents a large effect."</p>
+
+    <p><strong>Note:</strong> Report Welch's df with decimals (don't round to integer).</p>
+  </div>
+</section>

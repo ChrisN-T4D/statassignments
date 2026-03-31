@@ -1,0 +1,24 @@
+<section class="module-content topic-content software-guide-vue">
+<div class="software-content">
+    <h2>Entering and Importing Data in R</h2>
+    <section class="content-section">
+      <h3>Importing Data</h3>
+      <p>Use <code>read.csv()</code> or <code>read.xlsx()</code> to import data files.</p>
+      <pre><code># Import CSV
+data <- read.csv("mydata.csv")
+
+# Import Excel
+library(readxl)
+data <- read_excel("mydata.xlsx")</code></pre>
+      <h3>Manual Data Entry</h3>
+      <p>Create data frames directly in R:</p>
+      <pre><code>data <- data.frame(
+  age = c(25, 30, 35),
+  score = c(85, 90, 88)
+)</code></pre>
+    </section>
+  </div>
+  <div class="attribution">
+    <p><em>Interface guide for <strong>R</strong>. The full conceptual chapter in the jamovi edition of <a href="https://davidfoxcroft.github.io/lsj-book/" target="_blank" rel="noopener">Learning Statistics with jamovi</a> (CC BY-SA 4.0) covers the same learning goals with jamovi-specific steps.</em></p>
+  </div>
+</section>

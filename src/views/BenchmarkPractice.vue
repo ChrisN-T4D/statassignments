@@ -8,7 +8,7 @@
         <!-- Intro (before start) -->
         <div v-if="!started && !finished" class="intro">
           <h1>{{ config.title }}</h1>
-          <p>{{ config.subtitle }}</p>
+          <p>{{ displaySubtitle }}</p>
           <p>You’ll get {{ QUESTIONS_COUNT }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
           <button type="button" class="btn-primary" :disabled="loading" @click="start">
             {{ loading ? 'Loading…' : 'Start practice test' }}
@@ -160,12 +160,18 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getBenchmarkPracticeConfig } from '../data/conceptQuestions'
+import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
+import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
+import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { useBKT } from '../composables/useBKT'
 
 const route = useRoute()
 const classId = computed(() => route.params.classId)
 const benchmarkSlug = computed(() => route.params.benchmarkSlug)
 const config = computed(() => getBenchmarkPracticeConfig(benchmarkSlug.value))
+const displaySubtitle = computed(() =>
+  applySoftwareLabelsToText(config.value?.subtitle || '', preferredSoftware.value || 'jamovi')
+)
 const backUrl = computed(() => config.value ? `/class/${classId.value}/assignment-help/${benchmarkSlug.value}` : `/class/${classId.value}/assignment-help`)
 
 const QUESTIONS_COUNT = 15
@@ -197,14 +203,21 @@ const conceptsToReview = computed(() => {
     }
   })
   const list = {}
+  const sw = preferredSoftware.value || 'jamovi'
   Object.keys(missedByModule).forEach(mid => {
-    list[mid] = config.value.getConceptLabel(mid)
+    const raw = config.value.getConceptLabel(mid)
+    list[mid] = {
+      ...raw,
+      label: applySoftwareLabelsToText(raw.label, sw)
+    }
   })
   return list
 })
 
 function convertQuestion(q) {
   if (!q) return null
+  const sw = preferredSoftware.value || 'jamovi'
+  q = prepareConceptQuestionForSoftware(q, sw)
   let options = []
   let correct_answer = ''
   if (q.type === 'multiple_choice') {
@@ -257,7 +270,9 @@ async function start() {
     if (rawQuestions.value.length === 0) {
       rawQuestions.value = config.value.getQuestions(QUESTIONS_COUNT)
     }
-    questions.value = rawQuestions.value.map(convertQuestion).filter(Boolean)
+    questions.value = rawQuestions.value
+      .map(q => convertQuestion(q))
+      .filter(Boolean)
     started.value = true
     showResult.value = false
     selectedAnswer.value = null

@@ -1,0 +1,377 @@
+<section class="module-content" aria-labelledby="wilcoxon-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="wilcoxon-title">11.9 Wilcoxon Tests</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>Wilcoxon tests are nonparametric alternatives to t-tests that don't require the normality assumption. They work by analyzing ranks instead of raw scores, making them robust to outliers and non-normal distributions.</p>
+  </div>
+
+  <h3>When to Use Nonparametric Tests</h3>
+  <p>Consider nonparametric tests when:</p>
+  <ul>
+    <li>Data are severely non-normal (failed Shapiro-Wilk test)</li>
+    <li>Small sample size (N < 30) with clear skew or outliers</li>
+    <li>Data are ordinal rather than interval/ratio</li>
+    <li>Presence of extreme outliers</li>
+    <li>You want a robust method that makes fewer assumptions</li>
+  </ul>
+
+  <div class="warning-box">
+    <h4>Trade-off: Robustness vs. Power</h4>
+    <p><strong>Advantages of nonparametric tests:</strong></p>
+    <ul>
+      <li>Don't assume normality</li>
+      <li>Robust to outliers</li>
+      <li>Work with ordinal data</li>
+      <li>Fewer assumptions</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>Typically less powerful than t-tests (if normality holds)</li>
+      <li>Test distributions, not means specifically</li>
+      <li>Effect sizes less intuitive</li>
+      <li>Confidence intervals more complex</li>
+    </ul>
+  </div>
+
+  <h3>Two Main Wilcoxon Tests</h3>
+  <ol>
+    <li><strong>Mann-Whitney U test:</strong> Alternative to independent samples t-test</li>
+    <li><strong>Wilcoxon signed-rank test:</strong> Alternative to one-sample or paired t-test</li>
+  </ol>
+
+  <h3>Test 1: Mann-Whitney U Test</h3>
+  <div class="concept-box" role="note">
+    <h4>Purpose:</h4>
+    <p>Compares the distributions of two independent groups without assuming normality.</p>
+
+    <h4>Alternative to:</h4>
+    <p>Independent samples t-test</p>
+
+    <h4>What it tests:</h4>
+    <p>H₀: The two groups have the same distribution</p>
+    <p>H₁: The two groups have different distributions</p>
+
+    <h4>How it works:</h4>
+    <ol>
+      <li>Combine all observations from both groups</li>
+      <li>Rank all observations from smallest to largest</li>
+      <li>Sum ranks for each group separately</li>
+      <li>Compare rank sums to what's expected if groups are equal</li>
+    </ol>
+  </div>
+
+  <div class="formula-box">
+    <h4>Test Statistic: U (or W)</h4>
+    <p>U represents the number of times observations from Group 1 precede observations from Group 2 in rankings.</p>
+
+    <p><strong>For Group 1:</strong></p>
+    <p>U₁ = N₁N₂ + [N₁(N₁+1)/2] - R₁</p>
+
+    <p><strong>For Group 2:</strong></p>
+    <p>U₂ = N₁N₂ + [N₂(N₂+1)/2] - R₂</p>
+
+    <p>Where:</p>
+    <ul>
+      <li>N₁, N₂ = sample sizes</li>
+      <li>R₁, R₂ = sum of ranks for each group</li>
+    </ul>
+
+    <p><strong>U = min(U₁, U₂)</strong></p>
+    <p>(Some software reports W = rank sum directly)</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example: Mann-Whitney U</h4>
+    <p><strong>Research Question:</strong> Do anxiety scores differ between therapy and control groups?</p>
+
+    <p><strong>Data:</strong></p>
+    <ul>
+      <li>Therapy: 12, 15, 18, 20, 22 (N₁ = 5)</li>
+      <li>Control: 25, 28, 30, 35, 40 (N₂ = 5)</li>
+    </ul>
+
+    <p><strong>Step 1: Combine and rank all scores</strong></p>
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Score</th>
+        <th>Rank</th>
+        <th>Group</th>
+      </tr>
+      <tr><td>12</td><td>1</td><td>Therapy</td></tr>
+      <tr><td>15</td><td>2</td><td>Therapy</td></tr>
+      <tr><td>18</td><td>3</td><td>Therapy</td></tr>
+      <tr><td>20</td><td>4</td><td>Therapy</td></tr>
+      <tr><td>22</td><td>5</td><td>Therapy</td></tr>
+      <tr><td>25</td><td>6</td><td>Control</td></tr>
+      <tr><td>28</td><td>7</td><td>Control</td></tr>
+      <tr><td>30</td><td>8</td><td>Control</td></tr>
+      <tr><td>35</td><td>9</td><td>Control</td></tr>
+      <tr><td>40</td><td>10</td><td>Control</td></tr>
+    </table>
+
+    <p><strong>Step 2: Sum ranks</strong></p>
+    <p>R₁ (Therapy) = 1+2+3+4+5 = 15</p>
+    <p>R₂ (Control) = 6+7+8+9+10 = 40</p>
+
+    <p><strong>Step 3: Calculate U</strong></p>
+    <p>U₁ = (5×5) + [5×6/2] - 15 = 25 + 15 - 15 = 25</p>
+    <p>U₂ = (5×5) + [5×6/2] - 40 = 25 + 15 - 40 = 0</p>
+    <p>U = min(25, 0) = 0</p>
+
+    <p><strong>Step 4: Interpret</strong></p>
+    <p>U = 0 is the most extreme value possible (no overlap in rankings)</p>
+    <p>p < .01 (exact p-value from tables or software)</p>
+
+    <p><strong>Conclusion:</strong> The therapy group had significantly lower anxiety scores than the control group, U = 0, p < .01.</p>
+  </div>
+
+  <h3>Test 2: Wilcoxon Signed-Rank Test</h3>
+  <div class="concept-box" role="note">
+    <h4>Purpose:</h4>
+    <p>Compares paired observations or tests if a single sample differs from a hypothesized value, without assuming normality.</p>
+
+    <h4>Alternative to:</h4>
+    <ul>
+      <li>One-sample t-test</li>
+      <li>Paired samples t-test</li>
+    </ul>
+
+    <h4>What it tests:</h4>
+    <p>H₀: Median difference = 0</p>
+    <p>H₁: Median difference ≠ 0</p>
+
+    <h4>How it works:</h4>
+    <ol>
+      <li>Calculate difference score for each pair</li>
+      <li>Rank the absolute values of differences (ignore sign)</li>
+      <li>Assign back the original signs to the ranks</li>
+      <li>Sum positive ranks and negative ranks separately</li>
+      <li>Compare to expected distribution under H₀</li>
+    </ol>
+  </div>
+
+  <div class="formula-box">
+    <h4>Test Statistic: W</h4>
+    <p>W = smaller of (sum of positive ranks, sum of negative ranks)</p>
+
+    <p><strong>Alternative formulation:</strong></p>
+    <p>Some software reports W as sum of positive ranks only</p>
+
+    <p><strong>Note:</strong> Ties (difference = 0) are excluded from analysis</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example: Wilcoxon Signed-Rank</h4>
+    <p><strong>Research Question:</strong> Does meditation reduce stress? (Pre-post design)</p>
+
+    <p><strong>Data:</strong></p>
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Participant</th>
+        <th>Pre</th>
+        <th>Post</th>
+        <th>Diff (Pre-Post)</th>
+        <th>|Diff|</th>
+        <th>Rank</th>
+        <th>Signed Rank</th>
+      </tr>
+      <tr><td>1</td><td>25</td><td>20</td><td>5</td><td>5</td><td>4</td><td>+4</td></tr>
+      <tr><td>2</td><td>30</td><td>28</td><td>2</td><td>2</td><td>1.5</td><td>+1.5</td></tr>
+      <tr><td>3</td><td>22</td><td>18</td><td>4</td><td>4</td><td>3</td><td>+3</td></tr>
+      <tr><td>4</td><td>28</td><td>26</td><td>2</td><td>2</td><td>1.5</td><td>+1.5</td></tr>
+      <tr><td>5</td><td>35</td><td>28</td><td>7</td><td>7</td><td>5</td><td>+5</td></tr>
+      <tr><td>6</td><td>20</td><td>23</td><td>-3</td><td>3</td><td>2</td><td>-2</td></tr>
+    </table>
+
+    <p><strong>Step 1: Rank absolute differences</strong></p>
+    <p>Ranks: 1.5, 1.5, 2, 3, 4, 5 (tied values get average rank)</p>
+
+    <p><strong>Step 2: Sum positive and negative ranks</strong></p>
+    <p>Sum of positive ranks: 4 + 1.5 + 3 + 1.5 + 5 = 15</p>
+    <p>Sum of negative ranks: 2</p>
+
+    <p><strong>Step 3: Test statistic</strong></p>
+    <p>W = min(15, 2) = 2</p>
+
+    <p><strong>Step 4: Interpret</strong></p>
+    <p>With N = 6, critical value ≈ 2 (α = .05)</p>
+    <p>Since W = 2 ≤ critical value, reject H₀</p>
+    <p>p = .046</p>
+
+    <p><strong>Conclusion:</strong> Stress scores significantly decreased from pre (M = 26.7) to post (M = 23.8), Wilcoxon W = 2, p = .046.</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Running Wilcoxon Tests in R</h3>
+
+    <h4>Mann-Whitney U Test:</h4>
+    <ol>
+      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
+      <li>Set up dependent and grouping variables as usual</li>
+      <li>Under "Tests", check <strong>"Mann-Whitney U"</strong></li>
+      <li>R will run both Student's t-test and Mann-Whitney side-by-side</li>
+      <li>Output shows:
+        <ul>
+          <li><strong>U:</strong> Mann-Whitney U statistic</li>
+          <li><strong>W:</strong> Wilcoxon rank-sum (equivalent to U)</li>
+          <li><strong>p:</strong> Significance level</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Wilcoxon Signed-Rank Test:</h4>
+    <ol>
+      <li><strong>Analyses → T-Tests → Paired Samples T-Test</strong></li>
+      <li>Set up paired variables as usual</li>
+      <li>Under "Tests", check <strong>"Wilcoxon rank"</strong></li>
+      <li>R will run both paired t-test and Wilcoxon side-by-side</li>
+      <li>Output shows:
+        <ul>
+          <li><strong>W:</strong> Wilcoxon signed-rank statistic</li>
+          <li><strong>p:</strong> Significance level</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p><strong>Note:</strong> R doesn't have a built-in one-sample Wilcoxon signed-rank test, but you can create a difference variable (score - hypothesized value) and test if its median = 0 using the paired test.</p>
+  </div>
+
+  <h3>Interpreting Results: Parametric vs. Nonparametric</h3>
+  <div class="concept-box" role="note">
+    <h4>When Results Agree:</h4>
+    <p>If both t-test and Wilcoxon test reach the same conclusion (both significant or both non-significant), the normality violation likely doesn't matter much. Report whichever is more appropriate.</p>
+
+    <h4>When Results Disagree:</h4>
+    <ul>
+      <li><strong>t-test significant, Wilcoxon not:</strong> May indicate outliers driving t-test result. Trust Wilcoxon.</li>
+      <li><strong>Wilcoxon significant, t-test not:</strong> Less common. May indicate skewed distribution where medians differ but means don't. Trust Wilcoxon.</li>
+    </ul>
+
+    <h4>General Guidance:</h4>
+    <p>If normality is violated (especially with small N), trust the nonparametric test.</p>
+  </div>
+
+  <h3>Effect Sizes for Wilcoxon Tests</h3>
+  <div class="formula-box">
+    <h4>Rank-Biserial Correlation (r_rb):</h4>
+    <p>For Mann-Whitney:</p>
+    <p>r_rb = 1 - (2U) / (N₁N₂)</p>
+    <p>Ranges from -1 to +1 (similar to correlation)</p>
+
+    <h4>r (Point-Biserial):</h4>
+    <p>Can also calculate from z-score:</p>
+    <p>r = z / √N</p>
+
+    <h4>Interpretation:</h4>
+    <ul>
+      <li>r ≈ .10: Small effect</li>
+      <li>r ≈ .30: Medium effect</li>
+      <li>r ≈ .50: Large effect</li>
+    </ul>
+
+    <p><strong>Note:</strong> R may not automatically report these; you may need to calculate manually or use additional packages.</p>
+  </div>
+
+  <h3>Assumptions of Wilcoxon Tests</h3>
+  <div class="warning-box">
+    <h4>Mann-Whitney U:</h4>
+    <ol>
+      <li><strong>Independence:</strong> Observations within and between groups are independent</li>
+      <li><strong>Ordinal or continuous data:</strong> Can rank the observations</li>
+      <li><strong>Similar shapes:</strong> For testing medians, distributions should have similar shapes (only location differs)</li>
+    </ol>
+
+    <h4>Wilcoxon Signed-Rank:</h4>
+    <ol>
+      <li><strong>Independence:</strong> Pairs are independent of each other</li>
+      <li><strong>Ordinal or continuous data:</strong> Differences can be ranked</li>
+      <li><strong>Symmetric differences:</strong> Distribution of differences should be approximately symmetric</li>
+    </ol>
+
+    <p><strong>Note:</strong> These tests do NOT assume normality—that's their advantage!</p>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Using Wilcoxon when normality holds (loses power unnecessarily)</li>
+    <li>Assuming Wilcoxon tests means (they test distributions/medians)</li>
+    <li>Not reporting descriptive statistics (medians, ranges)</li>
+    <li>Forgetting to exclude tied values (difference = 0) in signed-rank test</li>
+    <li>Using Mann-Whitney for paired data (use signed-rank instead)</li>
+    <li>Not checking independence assumption</li>
+    <li>Reporting means instead of medians for nonparametric results</li>
+  </ul>
+
+  <h3>Reporting Wilcoxon Tests</h3>
+  <div class="example-box">
+    <h4>Mann-Whitney U Example:</h4>
+    <p>"Due to violations of normality (Shapiro-Wilk p < .05), a Mann-Whitney U test was conducted. Results showed that the therapy group (Mdn = 20) had significantly lower anxiety scores than the control group (Mdn = 28), U = 45, p = .03, r = .38."</p>
+
+    <p><strong>Note:</strong> Report medians (Mdn), not means, for nonparametric tests!</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Wilcoxon Signed-Rank Example:</h4>
+    <p>"A Wilcoxon signed-rank test revealed that stress scores decreased significantly from pre-test (Mdn = 26.5) to post-test (Mdn = 23.0), W = 2, p = .046."</p>
+  </div>
+
+  <h3>Decision Guide: Parametric vs. Nonparametric</h3>
+  <div class="concept-box" role="note">
+    <h4>Use T-Test (Parametric) when:</h4>
+    <ul>
+      <li>Data approximately normal (Shapiro-Wilk p > .05)</li>
+      <li>Large sample (N > 30) and only minor non-normality</li>
+      <li>Data are interval/ratio scale</li>
+      <li>You want to maximize power</li>
+    </ul>
+
+    <h4>Use Wilcoxon Test (Nonparametric) when:</h4>
+    <ul>
+      <li>Data significantly non-normal (Shapiro-Wilk p < .05)</li>
+      <li>Small sample (N < 30) with clear skew</li>
+      <li>Data are ordinal</li>
+      <li>Presence of extreme outliers</li>
+      <li>You want a robust test with fewer assumptions</li>
+    </ul>
+  </div>
+
+  <h3>Comparing Test Types</h3>
+  <div class="example-box">
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Design</th>
+        <th>Parametric Test</th>
+        <th>Nonparametric Alternative</th>
+      </tr>
+      <tr>
+        <td>One sample</td>
+        <td>One-sample t-test</td>
+        <td>Wilcoxon signed-rank</td>
+      </tr>
+      <tr>
+        <td>Two independent groups</td>
+        <td>Independent t-test</td>
+        <td>Mann-Whitney U</td>
+      </tr>
+      <tr>
+        <td>Two paired groups</td>
+        <td>Paired t-test</td>
+        <td>Wilcoxon signed-rank</td>
+      </tr>
+      <tr>
+        <td>>2 independent groups</td>
+        <td>One-way ANOVA</td>
+        <td>Kruskal-Wallis</td>
+      </tr>
+      <tr>
+        <td>>2 paired groups</td>
+        <td>Repeated measures ANOVA</td>
+        <td>Friedman test</td>
+      </tr>
+    </table>
+  </div>
+</section>

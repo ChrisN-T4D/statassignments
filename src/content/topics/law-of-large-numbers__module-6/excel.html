@@ -1,0 +1,143 @@
+<section class="module-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>8.2 The law of large numbers</h2>
+
+  <p>
+    One of the most fundamental principles in statistics is the <strong>law of large numbers</strong>. It provides
+    the mathematical justification for why larger samples give us more accurate estimates of population parameters.
+  </p>
+
+  <h3>8.2.1 What the law of large numbers says</h3>
+
+  <div class="terminology-box">
+    <h4>Law of Large Numbers (LLN)</h4>
+    <p>
+      As the sample size (n) increases, the sample mean (M or X̄) converges to the population mean (μ). More formally,
+      the probability that the sample mean differs from the population mean by more than any specified amount approaches
+      zero as n approaches infinity.
+    </p>
+    <p>
+      In simple terms: <strong>Bigger samples give more accurate estimates.</strong>
+    </p>
+  </div>
+
+  <p>
+    The law of large numbers applies to any statistic—means, proportions, standard deviations—but it's most commonly
+    discussed in terms of the sample mean.
+  </p>
+
+  <h3>8.2.2 An intuitive example: coin flipping</h3>
+
+  <p>
+    Suppose you flip a fair coin. The true probability of heads is p = 0.5 (the population parameter). Now consider
+    what happens when you flip the coin different numbers of times and calculate the proportion of heads:
+  </p>
+
+  <ul>
+    <li><strong>10 flips:</strong> You might get 7 heads (70%) or 3 heads (30%). These proportions can vary quite a
+    bit from the true value of 50%</li>
+    <li><strong>100 flips:</strong> You're likely to get somewhere between 40 and 60 heads (40%-60%). Still some
+    variability, but closer to 50%</li>
+    <li><strong>1,000 flips:</strong> You'll probably get between 470 and 530 heads (47%-53%). Much closer to the true 50%</li>
+    <li><strong>10,000 flips:</strong> You'll almost certainly get very close to 5,000 heads (very close to 50%)</li>
+  </ul>
+
+  <p>
+    As the number of flips increases, the sample proportion gets closer and closer to the true probability. This is
+    the law of large numbers in action.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      The law of large numbers is about convergence to the true value, not about "evening out" on small scales. If you
+      flip 10 heads in a row, the next flip is still 50-50—the coin has no memory. The LLN operates over many trials,
+      not by compensating for recent outcomes.
+    </p>
+  </div>
+
+  <h3>8.2.3 Why the law of large numbers works</h3>
+
+  <p>
+    The mathematical reason the law of large numbers works is that sampling errors tend to cancel out over many observations:
+  </p>
+
+  <ul>
+    <li>Some samples will produce estimates that are too high (overestimate the population parameter)</li>
+    <li>Other samples will produce estimates that are too low (underestimate the population parameter)</li>
+    <li>With random sampling, these errors are random and symmetric—they don't systematically favor one direction</li>
+    <li>As sample size increases, the positive and negative errors increasingly cancel each other out</li>
+    <li>The result is that larger samples produce estimates closer to the true value</li>
+  </ul>
+
+  <p>
+    Think of it like hitting a target: each individual shot (small sample) might be off-target, but if you aim correctly
+    (unbiased sampling) and take many shots (large sample), the average position of all your shots will be very close
+    to the bullseye.
+  </p>
+
+  <h3>8.2.4 Implications for research</h3>
+
+  <p>
+    The law of large numbers has several important practical implications:
+  </p>
+
+  <p>
+    <strong>1. Larger samples produce more precise estimates</strong><br>
+    Standard error decreases as sample size increases, specifically by a factor of √n. Doubling your sample size reduces
+    standard error by a factor of √2 ≈ 1.41. To cut standard error in half, you need four times as many participants.
+  </p>
+
+  <p>
+    <strong>2. The LLN provides confidence in statistical inference</strong><br>
+    We can be increasingly confident that our sample statistics approximate the true population parameters as sample
+    size grows. This is why large surveys (e.g., n = 1,000) can accurately estimate population proportions within a
+    few percentage points.
+  </p>
+
+  <p>
+    <strong>3. The LLN does NOT fix bias</strong><br>
+    This is crucial: the law of large numbers only works for <strong>unbiased</strong> estimates. If your sampling
+    method is biased (e.g., only sampling college students to study all adults), increasing sample size just gives you
+    a more precisely wrong answer. Larger samples reduce random error but cannot eliminate systematic bias.
+  </p>
+
+  <div class="critical-box">
+    <h4>Important Distinction</h4>
+    <p>
+      <strong>Bias vs. Random error:</strong>
+    </p>
+    <ul>
+      <li><strong>Random error:</strong> Natural variability in sample statistics due to random sampling—the LLN reduces this</li>
+      <li><strong>Bias:</strong> Systematic error that pushes estimates consistently in one direction—the LLN does NOT reduce this</li>
+    </ul>
+    <p>
+      A very large convenience sample of university students can give you a very precise estimate of the average IQ
+      among university students, but it won't tell you the average IQ of the general population (which is likely lower).
+    </p>
+  </div>
+
+  <h3>8.2.5 Law of large numbers vs. Central Limit Theorem</h3>
+
+  <p>
+    Students often confuse the law of large numbers with the Central Limit Theorem (discussed next). They're related
+    but different:
+  </p>
+
+  <ul>
+    <li><strong>Law of Large Numbers:</strong> Says that sample means converge to the population mean as n increases
+    (a statement about accuracy)</li>
+    <li><strong>Central Limit Theorem:</strong> Says that the sampling distribution of sample means approaches a normal
+    distribution as n increases (a statement about shape)</li>
+  </ul>
+
+  <p>
+    Both describe what happens with large samples, but they address different aspects: the LLN is about where the estimates
+    center (convergence to μ), while the CLT is about the distribution's shape (approaches normal).
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Microsoft Excel" by Danielle J. Navarro and David R. Foxcroft, Chapter 8, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

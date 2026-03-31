@@ -467,199 +467,197 @@ export const researchMethodsModules = [
     id: 'rm-module-1',
     classId: 'research-methods',
     number: 1,
-    title: 'Module 1: Research Thinking: Biases, Theories, and Hypotheses',
-    shortTitle: 'Research Thinking',
-    description: 'Research Thinking: Biases, Theories, and Hypotheses',
+    title: 'Chapter 1: The Science of Psychology',
+    shortTitle: 'Science of Psychology',
+    description: 'Methods of knowing, scientific goals, and why science outperforms common sense.',
     icon: 'M1',
     color: researchMethodsModuleColors[0],
-    topics: [
-      'rm-1-research-matters',
-      'rm-1-limited-information-processing',
-      'rm-1-heuristics-and-bias',
-      'rm-1-thinking-goes-wrong',
-      'rm-1-laws-theories-hypotheses'
-    ]
+    topics: ['rm-chapter-1']
   },
   {
     id: 'rm-module-2',
     classId: 'research-methods',
     number: 2,
-    title: 'Module 2: From Ideas to Articles: Literature Search and Question Refinement',
-    shortTitle: 'Ideas to Articles',
-    description: 'From Ideas to Articles: Literature Search and Question Refinement',
+    title: 'Chapter 2: Overview of the Scientific Method',
+    shortTitle: 'Scientific Method',
+    description: 'From research topic to hypothesis, design, analysis, and reporting.',
     icon: 'M2',
     color: researchMethodsModuleColors[1],
-    topics: [
-      'rm-2-generating-ideas',
-      'rm-2-literature-searching',
-      'rm-2-evaluating-evidence',
-      'rm-2-question-to-plan'
-    ]
+    topics: ['rm-chapter-2']
   },
   {
     id: 'rm-module-3',
     classId: 'research-methods',
     number: 3,
-    title: 'Module 3: Research Design Logic: Correlation, Causation, and Validity',
-    shortTitle: 'Design Logic',
-    description: 'Research Design Logic: Correlation, Causation, and Validity',
+    title: 'Chapter 3: Research Ethics',
+    shortTitle: 'Research Ethics',
+    description: 'Ethical principles, codes, and practical decisions in human subjects research.',
     icon: 'M3',
     color: researchMethodsModuleColors[2],
-    topics: [
-      'rm-3-certainty-and-causation',
-      'rm-3-core-design-concepts',
-      'rm-3-internal-validity-threats',
-      'rm-3-external-ecological-validity',
-      'rm-3-statistical-decision-risks'
-    ]
+    topics: ['rm-chapter-3']
   },
   {
     id: 'rm-module-4',
     classId: 'research-methods',
     number: 4,
-    title: 'Module 4: Ethics and Human Subjects: Consent, Risk, and IRB Basics',
-    shortTitle: 'Ethics & Subjects',
-    description: 'Ethics and Human Subjects: Consent, Risk, and IRB Basics',
+    title: 'Chapter 4: Psychological Measurement',
+    shortTitle: 'Measurement',
+    description: 'Operationalization, scales of measurement, reliability, and validity.',
     icon: 'M4',
     color: researchMethodsModuleColors[3],
-    topics: [
-      'rm-4-ethics-history',
-      'rm-4-irb-purpose-structure',
-      'rm-4-ethics-tools',
-      'rm-4-special-ethical-issues',
-      'rm-4-researcher-preparation'
-    ]
+    topics: ['rm-chapter-4']
   },
   {
     id: 'rm-module-5',
     classId: 'research-methods',
     number: 5,
-    title: 'Module 5: Measurement Foundations: Reliability, Validity, and Scale Quality',
-    shortTitle: 'Measurement',
-    description: 'Measurement Foundations: Reliability, Validity, and Scale Quality',
+    title: 'Chapter 5: Experimental Research',
+    shortTitle: 'Experimental',
+    description: 'Experimental design, controls, validity, and practical implementation.',
     icon: 'M5',
     color: researchMethodsModuleColors[4],
-    topics: [
-      'rm-5-measurement-ideal-real',
-      'rm-5-scale-types-sensitivity',
-      'rm-5-finding-measures',
-      'rm-5-reliability-forms',
-      'rm-5-validity-selection-issues'
-    ]
+    topics: ['rm-chapter-5']
   },
   {
     id: 'rm-module-6',
     classId: 'research-methods',
     number: 6,
-    title: 'Module 6: Survey Research: Item Writing, Formats, and Online Tools',
-    shortTitle: 'Survey Research',
-    description: 'Survey Research: Item Writing, Formats, and Online Tools',
+    title: 'Chapter 6: Non-Experimental Research',
+    shortTitle: 'Non-Experimental',
+    description: 'Correlational, qualitative, and observational approaches.',
     icon: 'M6',
     color: researchMethodsModuleColors[5],
-    topics: [
-      'rm-6-develop-your-own-measure',
-      'rm-6-item-writing-formats',
-      'rm-6-demographics-sensitivity',
-      'rm-6-survey-structure',
-      'rm-6-online-survey-administration'
-    ]
+    topics: ['rm-chapter-6']
   },
   {
     id: 'rm-module-7',
     classId: 'research-methods',
     number: 7,
-    title: 'Module 7: Correlational and Group-Comparison Designs (Core Analytic Approaches)',
-    shortTitle: 'Correlation & Group',
-    description: 'Correlational and Group-Comparison Designs (Core Analytic Approaches)',
+    title: 'Chapter 7: Survey Research',
+    shortTitle: 'Survey Research',
+    description: 'Designing, constructing, and administering high-quality surveys.',
     icon: 'M7',
     color: researchMethodsModuleColors[6],
-    topics: [
-      'rm-7-correlational-logic',
-      'rm-7-quasi-experimental-logic',
-      'rm-7-choosing-analyses',
-      'rm-7-validity-interpretation'
-    ]
+    topics: ['rm-chapter-7']
   },
   {
     id: 'rm-module-8',
     classId: 'research-methods',
     number: 8,
-    title: 'Module 8: Qualitative Research: Interviews, Coding, and Trustworthiness',
-    shortTitle: 'Qualitative',
-    description: 'Qualitative Research: Interviews, Coding, and Trustworthiness',
+    title: 'Chapter 8: Quasi-Experimental Research',
+    shortTitle: 'Quasi-Experimental',
+    description: 'One-group and non-equivalent group design strategies.',
     icon: 'M8',
     color: researchMethodsModuleColors[7],
-    topics: [
-      'rm-8-qualitative-purpose',
-      'rm-8-qualitative-collection',
-      'rm-8-qualitative-meaning-making',
-      'rm-8-qualitative-quality-ethics'
-    ]
+    topics: ['rm-chapter-8']
   },
   {
     id: 'rm-module-9',
     classId: 'research-methods',
     number: 9,
-    title: 'Module 9: Between-Subjects Experiments: Manipulation, Control, and Inference',
-    shortTitle: 'Between-Subjects',
-    description: 'Between-Subjects Experiments: Manipulation, Control, and Inference',
+    title: 'Chapter 9: Factorial Designs',
+    shortTitle: 'Factorial Designs',
+    description: 'Setting up and interpreting factorial experiments.',
     icon: 'M9',
     color: researchMethodsModuleColors[8],
-    topics: [
-      'rm-9-between-subjects-structure',
-      'rm-9-control-internal-validity',
-      'rm-9-manipulation-checks',
-      'rm-9-interpreting-outcomes'
-    ]
+    topics: ['rm-chapter-9']
   },
   {
     id: 'rm-module-10',
     classId: 'research-methods',
     number: 10,
-    title: 'Module 10: Within-Subjects Designs: Counterbalancing and Repeated Measures',
-    shortTitle: 'Within-Subjects',
-    description: 'Within-Subjects Designs: Counterbalancing and Repeated Measures',
+    title: 'Chapter 10: Single-Subject Research',
+    shortTitle: 'Single-Subject',
+    description: 'Single-subject logic, designs, and interpretation.',
     icon: 'M10',
     color: researchMethodsModuleColors[9],
-    topics: [
-      'rm-10-within-subjects-logic',
-      'rm-10-order-carryover-effects',
-      'rm-10-practical-implementation',
-      'rm-10-interpreting-within-subjects'
-    ]
+    topics: ['rm-chapter-10']
   },
   {
     id: 'rm-module-11',
     classId: 'research-methods',
     number: 11,
-    title: 'Module 11: Sampling and Recruiting Participants: Field and Online Strategies',
-    shortTitle: 'Sampling & Recruiting',
-    description: 'Sampling and Recruiting Participants: Field and Online Strategies',
+    title: 'Chapter 11: Presenting Your Research',
+    shortTitle: 'Presenting Research',
+    description: 'APA style and communicating findings in multiple formats.',
     icon: 'M11',
     color: researchMethodsModuleColors[10],
-    topics: [
-      'rm-11-participants-representativeness',
-      'rm-11-recruitment-channels',
-      'rm-11-ethics-of-recruitment',
-      'rm-11-data-quality-control'
-    ]
+    topics: ['rm-chapter-11']
   },
   {
     id: 'rm-module-12',
     classId: 'research-methods',
     number: 12,
-    title: 'Module 12: Bringing It Together: Applied Decisions and Research Integration',
-    shortTitle: 'Integration',
-    description: 'Bringing It Together: Applied Decisions and Research Integration',
+    title: 'Chapter 12: Descriptive Statistics',
+    shortTitle: 'Descriptive Stats',
+    description: 'Describing variables, relationships, and presenting statistical results.',
     icon: 'M12',
     color: researchMethodsModuleColors[11],
-    topics: [
-      'rm-12-integrating-process',
-      'rm-12-interpreting-results',
-      'rm-12-research-products'
-    ]
+    topics: ['rm-chapter-12']
+  },
+  {
+    id: 'rm-module-13',
+    classId: 'research-methods',
+    number: 13,
+    title: 'Chapter 13: Inferential Statistics',
+    shortTitle: 'Inferential Stats',
+    description: 'Null hypothesis testing, common tests, and replicability.',
+    icon: 'M13',
+    color: researchMethodsModuleColors[0],
+    topics: ['rm-chapter-13']
   }
 ]
+
+const researchMethodsChapterTopics = {
+  'rm-module-1': [
+    { id: 'rm-chapter-1', title: 'Chapter 1: The Science of Psychology', description: 'Methods of knowing, science, and common sense.', icon: 'T' }
+  ],
+  'rm-module-2': [
+    { id: 'rm-chapter-2', title: 'Chapter 2: Overview of the Scientific Method', description: 'From topic selection through reporting findings.', icon: 'T' }
+  ],
+  'rm-module-3': [
+    { id: 'rm-chapter-3', title: 'Chapter 3: Research Ethics', description: 'Ethical principles, review, and responsible conduct.', icon: 'T' }
+  ],
+  'rm-module-4': [
+    { id: 'rm-chapter-4', title: 'Chapter 4: Psychological Measurement', description: 'Constructs, scales, reliability, and validity.', icon: 'T' }
+  ],
+  'rm-module-5': [
+    { id: 'rm-chapter-5', title: 'Chapter 5: Experimental Research', description: 'Design structures, control, and validity in experiments.', icon: 'T' }
+  ],
+  'rm-module-6': [
+    { id: 'rm-chapter-6', title: 'Chapter 6: Non-Experimental Research', description: 'Correlational, qualitative, and observational methods.', icon: 'T' }
+  ],
+  'rm-module-7': [
+    { id: 'rm-chapter-7', title: 'Chapter 7: Survey Research', description: 'Survey construction and administration strategies.', icon: 'T' }
+  ],
+  'rm-module-8': [
+    { id: 'rm-chapter-8', title: 'Chapter 8: Quasi-Experimental Research', description: 'Alternatives to randomized experiments.', icon: 'T' }
+  ],
+  'rm-module-9': [
+    { id: 'rm-chapter-9', title: 'Chapter 9: Factorial Designs', description: 'Multi-factor experiments and interpretation.', icon: 'T' }
+  ],
+  'rm-module-10': [
+    { id: 'rm-chapter-10', title: 'Chapter 10: Single-Subject Research', description: 'Single-case design logic and applications.', icon: 'T' }
+  ],
+  'rm-module-11': [
+    { id: 'rm-chapter-11', title: 'Chapter 11: Presenting Your Research', description: 'APA style and scientific communication.', icon: 'T' }
+  ],
+  'rm-module-12': [
+    { id: 'rm-chapter-12', title: 'Chapter 12: Descriptive Statistics', description: 'Describing distributions and statistical relationships.', icon: 'T' }
+  ],
+  'rm-module-13': [
+    { id: 'rm-chapter-13', title: 'Chapter 13: Inferential Statistics', description: 'Hypothesis testing and statistical inference.', icon: 'T' }
+  ]
+}
+
+export const researchMethodsTopicsByModule = researchMethodsChapterTopics
+
+function getModuleItemsForId(moduleId) {
+  if (researchMethodsTopicsByModule[moduleId]) {
+    return researchMethodsTopicsByModule[moduleId]
+  }
+  return topicsByModule[moduleId] || []
+}
 
 // ============================================================
 // STATISTICS FOR ASSESSMENT CLASS MODULES
@@ -1700,11 +1698,11 @@ export const topicsByModule = {
 
 // Get module items with chapter structure preserved (for UI rendering)
 export function getModuleItemsWithChapters(moduleId) {
-  return topicsByModule[moduleId] || []
+  return getModuleItemsForId(moduleId)
 }
 
 export function getTopicsForModule(moduleId) {
-  const items = topicsByModule[moduleId] || []
+  const items = getModuleItemsForId(moduleId)
   // Flatten chapter structure to return actual topics
   const topics = []
   for (const item of items) {
@@ -1721,7 +1719,8 @@ export function getTopicsForModule(moduleId) {
 
 export function getAllTopics() {
   const allTopics = []
-  for (const items of Object.values(topicsByModule)) {
+  for (const moduleId of Object.keys(topicsByModule)) {
+    const items = getModuleItemsForId(moduleId)
     for (const item of items) {
       if (item.type === 'chapter' && item.topics) {
         allTopics.push(...item.topics)
@@ -1730,11 +1729,19 @@ export function getAllTopics() {
       }
     }
   }
+  for (const moduleId of Object.keys(researchMethodsTopicsByModule)) {
+    if (topicsByModule[moduleId]) continue
+    allTopics.push(...researchMethodsTopicsByModule[moduleId])
+  }
   return allTopics
 }
 
 export function getTopicById(topicId) {
-  for (const items of Object.values(topicsByModule)) {
+  const moduleIds = Array.from(
+    new Set([...Object.keys(topicsByModule), ...Object.keys(researchMethodsTopicsByModule)])
+  )
+  for (const moduleId of moduleIds) {
+    const items = getModuleItemsForId(moduleId)
     for (const item of items) {
       if (item.type === 'chapter' && item.topics) {
         // Search within chapter topics
@@ -1750,7 +1757,11 @@ export function getTopicById(topicId) {
 }
 
 export function getModuleForTopic(topicId) {
-  for (const [moduleId, items] of Object.entries(topicsByModule)) {
+  const moduleIds = Array.from(
+    new Set([...Object.keys(topicsByModule), ...Object.keys(researchMethodsTopicsByModule)])
+  )
+  for (const moduleId of moduleIds) {
+    const items = getModuleItemsForId(moduleId)
     for (const item of items) {
       if (item.type === 'chapter' && item.topics) {
         // Check if topic is in this chapter

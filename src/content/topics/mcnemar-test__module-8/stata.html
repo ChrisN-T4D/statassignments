@@ -1,0 +1,205 @@
+<section class="module-content" aria-labelledby="mcnemar-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="mcnemar-title">10.7 The McNemar Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The McNemar test is for categorical data when the <strong>same participants are measured twice</strong> (or participants are matched in pairs). It tests for "marginal homogeneity"—whether the proportions changed from Time 1 to Time 2.</p>
+  </div>
+
+  <h3>When to Use McNemar Test</h3>
+  <ul>
+    <li><strong>Same participants measured twice</strong> (before/after, pre/post)</li>
+    <li><strong>Matched pairs</strong> of participants</li>
+    <li><strong>2×2 table</strong> where rows and columns represent same categories</li>
+    <li>Example: Did political ad change voting intentions?</li>
+    <li>Example: Do couples agree on yes/no question?</li>
+  </ul>
+
+  <div class="warning-box">
+    <h3>Why Not Chi-Square Independence?</h3>
+    <p><strong>Problem:</strong> Same people measured twice violates independence assumption</p>
+    <p><strong>Consequence:</strong> Standard χ² test gives wrong p-values</p>
+    <p><strong>Solution:</strong> McNemar test accounts for the pairing</p>
+  </div>
+
+  <h3>The Political Ad Example</h3>
+  <div class="example-box">
+    <p>You show 100 people a political ad. Before and after, you ask: "Will you vote for AGPP?"</p>
+
+    <h4>Standard contingency table (WRONG for this data):</h4>
+    <table class="stats-table">
+      <tr><th></th><th>Before: Yes</th><th>Before: No</th></tr>
+      <tr><td>After: Yes</td><td>30</td><td>70</td></tr>
+      <tr><td>After: No</td><td>10</td><td>90</td></tr>
+    </table>
+    <p><em>This looks like 200 observations, but it's really 100 people measured twice!</em></p>
+
+    <h4>Correct format for McNemar (same data):</h4>
+    <table class="stats-table">
+      <tr><th></th><th>Before: Yes</th><th>Before: No</th><th>Total</th></tr>
+      <tr><td>After: Yes</td><td>5</td><td>5</td><td>10</td></tr>
+      <tr><td>After: No</td><td>25</td><td>65</td><td>90</td></tr>
+      <tr><th>Total</th><th>30</th><th>70</th><th>100</th></tr>
+    </table>
+    <p><em>Now each of the 100 people appears in exactly one cell</em></p>
+  </div>
+
+  <h3>Understanding the Table</h3>
+  <div class="formula-box">
+    <h4>The four cells represent:</h4>
+    <table class="stats-table">
+      <tr><th></th><th>Before: Yes</th><th>Before: No</th></tr>
+      <tr><td>After: Yes</td><td><strong>a</strong> = stayed Yes (5)</td><td><strong>b</strong> = changed No→Yes (5)</td></tr>
+      <tr><td>After: No</td><td><strong>c</strong> = changed Yes→No (25)</td><td><strong>d</strong> = stayed No (65)</td></tr>
+    </table>
+
+    <h4>The key insight:</h4>
+    <ul>
+      <li>Cells <strong>a</strong> and <strong>d</strong>: People who didn't change—not informative for "did opinions change?"</li>
+      <li>Cells <strong>b</strong> and <strong>c</strong>: People who DID change—this is what we test!</li>
+    </ul>
+  </div>
+
+  <h3>The McNemar Test Statistic</h3>
+  <div class="formula-box">
+    <h4>Basic formula:</h4>
+    <p><strong>χ² = (b - c)² / (b + c)</strong></p>
+
+    <h4>With continuity correction (recommended for df=1):</h4>
+    <p><strong>χ² = (|b - c| - 0.5)² / (b + c)</strong></p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>b = number who changed from No to Yes</li>
+      <li>c = number who changed from Yes to No</li>
+      <li>df = 1 (always, for 2×2 McNemar)</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>The Null Hypothesis</h3>
+    <p><strong>H₀:</strong> P(change from Yes to No) = P(change from No to Yes)</p>
+    <p><em>Or equivalently: Marginal proportions are the same at both time points</em></p>
+
+    <p><strong>H₁:</strong> P(Yes→No) ≠ P(No→Yes)</p>
+    <p><em>Proportions differ across time points</em></p>
+  </div>
+
+  <div class="example-box">
+    <h4>Calculating the Test Statistic:</h4>
+    <p>From our political ad example:</p>
+    <ul>
+      <li>b = 5 (changed No → Yes)</li>
+      <li>c = 25 (changed Yes → No)</li>
+    </ul>
+
+    <p><strong>Without correction:</strong></p>
+    <p>χ² = (5 - 25)² / (5 + 25) = 400 / 30 = 13.33</p>
+
+    <p><strong>With continuity correction:</strong></p>
+    <p>χ² = (|5 - 25| - 0.5)² / 30 = (19.5)² / 30 = 380.25 / 30 = 12.68</p>
+
+    <p><strong>Critical value:</strong> χ²(1, α=.05) = 3.84</p>
+    <p>Since 12.68 > 3.84, <strong>reject H₀</strong></p>
+
+    <p><strong>Result:</strong> χ²(1) = 12.03, p < .001 (from Stata)</p>
+
+    <p><strong>Conclusion:</strong> The ad significantly changed voting intentions (χ²(1) = 12.03, p < .001). More people switched from Yes to No (25) than from No to Yes (5), suggesting the ad had a negative effect.</p>
+  </div>
+
+  <div class="Stata-box">
+    <h3>in Stata</h3>
+    <ol>
+      <li><strong>Analyses → Frequencies → Contingency Tables → Paired Samples</strong></li>
+      <li>Move <strong>Before</strong> variable to Rows</li>
+      <li>Move <strong>After</strong> variable to Columns</li>
+      <li>Under <strong>Statistics</strong>, check <strong>"McNemar"</strong> (usually checked by default)</li>
+      <li>Examine the table to see the pattern of change</li>
+    </ol>
+
+    <p><strong>Note:</strong> Your data should have each person in one row, with separate columns for Before and After responses.</p>
+  </div>
+
+  <h3>McNemar vs. Chi-Square Independence</h3>
+  <div class="formula-box">
+    <table class="stats-table">
+      <tr>
+        <th></th>
+        <th>McNemar</th>
+        <th>Chi-Square Independence</th>
+      </tr>
+      <tr>
+        <td><strong>Design</strong></td>
+        <td>Same people twice / Matched pairs</td>
+        <td>Different people in each group</td>
+      </tr>
+      <tr>
+        <td><strong>Independence</strong></td>
+        <td>Observations NOT independent</td>
+        <td>Observations ARE independent</td>
+      </tr>
+      <tr>
+        <td><strong>Question</strong></td>
+        <td>"Did proportions CHANGE?"</td>
+        <td>"Are variables ASSOCIATED?"</td>
+      </tr>
+      <tr>
+        <td><strong>Focus</strong></td>
+        <td>Off-diagonal cells (b, c)</td>
+        <td>All cells</td>
+      </tr>
+      <tr>
+        <td><strong>Example</strong></td>
+        <td>Before/after treatment</td>
+        <td>Treatment vs. control (different people)</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Decision Rule</h3>
+  <div class="concept-box">
+    <h4>Use McNemar when:</h4>
+    <ul>
+      <li>✓ Same participants measured at two time points</li>
+      <li>✓ Matched pairs (twins, couples, etc.)</li>
+      <li>✓ 2×2 table with same categories for rows and columns</li>
+      <li>✓ Interested in <strong>change over time</strong></li>
+    </ul>
+
+    <h4>Use Chi-Square Independence when:</h4>
+    <ul>
+      <li>✓ Different participants in each cell</li>
+      <li>✓ Cross-sectional data (one time point)</li>
+      <li>✓ Testing <strong>association between two variables</strong></li>
+    </ul>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>McNemar tests for <strong>change in proportions</strong> for paired data</li>
+      <li>Only uses <strong>off-diagonal cells</strong> (b and c)</li>
+      <li>Always <strong>df = 1</strong> for 2×2 tables</li>
+      <li>Tests if P(Yes→No) = P(No→Yes) under H₀</li>
+      <li><strong>Never use standard χ² for paired data!</strong></li>
+      <li>Continuity correction recommended (since df = 1)</li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Mistakes</h3>
+    <ul>
+      <li><strong>Using χ² independence instead of McNemar:</strong> Violates independence assumption</li>
+      <li><strong>Wrong data format:</strong> Need each person in one row with Before/After columns</li>
+      <li><strong>Interpreting like correlation:</strong> McNemar tests change, not association strength</li>
+      <li><strong>Not describing direction of change:</strong> Always report which direction dominated</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Write-Up Template:</h4>
+    <p><em>"A McNemar test was conducted to determine if [proportion/preference] changed from [Time 1] to [Time 2]. The test was significant, χ²(1) = X.XX, p = .XXX. More participants changed from [A to B] (n=XX) than from [B to A] (n=XX), suggesting [interpretation of direction]."</em></p>
+  </div>
+</section>

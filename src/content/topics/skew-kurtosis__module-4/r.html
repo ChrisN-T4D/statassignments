@@ -1,0 +1,59 @@
+<section class="module-content" aria-labelledby="skew-kurtosis-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="skew-kurtosis-title">4.3 Skew and kurtosis</h2>
+
+  <p>There are two more descriptive statistics that you will sometimes see reported in the psychological literature, known as <strong>skewness</strong> and <strong>kurtosis</strong>. In practice, neither one is used anywhere near as frequently as the measures of central tendency and variability that we've been talking about. Skewness is pretty important, so you do see it mentioned a fair bit; but kurtosis is a less common measure, and I've only seen it mentioned in a handful of papers. Because they're not used very often, I'm only going to give a very brief introduction to them.</p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Skewness and Kurtosis</h4>
+    <p>
+      <strong>Skewness</strong> measures the asymmetry of a distribution:
+    </p>
+    <ul>
+      <li><strong>Zero skewness</strong> – Symmetric distribution</li>
+      <li><strong>Positive (right) skewness</strong> – Long right tail; mode < median < mean</li>
+      <li><strong>Negative (left) skewness</strong> – Long left tail; mean < median < mode</li>
+    </ul>
+    <p>
+      <strong>Kurtosis</strong> measures the "tailedness" of a distribution—how much probability is in the tails versus the center.
+      High kurtosis indicates heavy tails with more extreme values; low kurtosis indicates light tails.
+    </p>
+  </div>
+
+  <h3>4.3.1 Skewness</h3>
+
+  <p><strong>Skewness</strong> is basically a measure of asymmetry, and the easiest way to explain it is by drawing some pictures. In Figure 4.5 I've plotted a reasonably symmetric distribution (panel a), one that is highly right-skewed (panel b), and one that is highly left-skewed (panel c). Notice that, in panel b, the right hand tail (i.e., the right side of the distribution) is very long, so the mass of the distribution is shifted to the left. When a distribution is right skewed, the mode is less than the median, which is less than the mean. For the left-skewed distribution in panel c, you can see that the opposite is true. The mode is greater than the median, which is greater than the mean.</p>
+
+  <p>The skewness value is 0 for a symmetric distribution, positive for a right-skewed distribution, and negative for a left-skewed distribution. In practice, skewness is usually calculated using the following formula:</p>
+
+  <div class="formula-box">
+    <p><strong>skewness = (1/<em>n</em>) Σ[(<em>X<sub>i</sub></em> - <em>X̄</em>) / <em>s</em>]³</strong></p>
+  </div>
+
+  <p>where <em>s</em> is the sample standard deviation. Notice the cubed term in the formula. This ensures that positive deviations from the mean contribute positively to the skewness value, and negative deviations contribute negatively. The division by the standard deviation is there to ensure that the skewness value doesn't depend on the units of measurement. If you calculate the skewness of the AFL margins data, you'll get a skewness value of 0.74. This indicates that the data are right-skewed, which is consistent with what we saw in the histogram earlier.</p>
+
+  <p>Skewness is quite useful in practice. For instance, if you're reporting the mean as a measure of central tendency, but your data are heavily skewed, then the mean is probably not a very good measure to use, and you should consider using the median instead.</p>
+
+  <h3>4.3.2 Kurtosis</h3>
+
+  <p><strong>Kurtosis</strong> is a measure of the "tailedness" of a distribution. Basically, the kurtosis value tells you how heavy the tails of the distribution are. More precisely, it measures the proportion of the distribution that is located in the tails of the distribution. The formula for kurtosis is as follows:</p>
+
+  <div class="formula-box">
+    <p><strong>kurtosis = (1/<em>n</em>) Σ[(<em>X<sub>i</sub></em> - <em>X̄</em>) / <em>s</em>]⁴ - 3</strong></p>
+  </div>
+
+  <p>The "- 3" term at the end is there to make the kurtosis value 0 for a normal distribution (we'll talk more about normal distributions in Chapter 9). A distribution with high kurtosis is said to be <strong>leptokurtic</strong>, and has heavy tails. A distribution with low (negative) kurtosis is said to be <strong>platykurtic</strong>, and has light tails. A distribution with zero kurtosis is said to be <strong>mesokurtic</strong>.</p>
+
+  <p>In Figure 4.6, I've plotted three distributions that all have the same mean and standard deviation, but have different kurtosis values. The distributions in panels a and c are quite normal looking, but panel a has a kurtosis of 0 (mesokurtic), while panel c has a kurtosis of 2 (leptokurtic). The distribution in panel b has a kurtosis of -1 (platykurtic). The leptokurtic distribution has more values in the tails and fewer in the middle, while the platykurtic distribution has fewer values in the tails and more in the middle.</p>
+
+  <p>In practice, kurtosis is rarely reported in the psychological literature. This is partly because kurtosis is not very intuitive, and partly because the measure is very sensitive to the tails of the distribution, which makes it difficult to interpret. For the AFL margins data, the kurtosis value is 0.02, which indicates that the distribution is very close to normal in terms of its tailedness.</p>
+
+  <h3>4.3.3 Getting the skewness and kurtosis in R</h3>
+
+  <p>The 'Descriptives' screen in R has check boxes for both skewness and kurtosis in the 'Statistics' options. They are included in a 'Distribution' sub-option underneath the 'Dispersion' options that we used earlier. The skewness value for the AFL margins data is 0.737, and the kurtosis value is 0.0244.</p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with R and RStudio" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

@@ -1,0 +1,206 @@
+<section class="topic-content"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2>Regression Assumptions and Diagnostics</h2>
+
+  <div class="concept-box">
+    <h3>Why Check Assumptions?</h3>
+    <p>Regression results can be <strong>misleading or invalid</strong> if key assumptions are violated. Checking assumptions helps you:</p>
+    <ul>
+      <li>Ensure your statistical tests are valid</li>
+      <li>Identify potential problems with your model</li>
+      <li>Determine if transformations or alternative methods are needed</li>
+      <li>Detect influential observations that might be driving results</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Key Assumptions of Linear Regression</h3>
+
+    <h4>1. Normality</h4>
+    <ul>
+      <li><strong>Assumption:</strong> Residuals (errors) are normally distributed</li>
+      <li><strong>Check with:</strong> Q-Q plot, histogram of residuals</li>
+      <li><strong>Impact if violated:</strong> Hypothesis tests and CIs may be inaccurate (especially in small samples)</li>
+      <li><strong>What to do:</strong> Consider transformations, bootstrapping, or robust methods</li>
+    </ul>
+
+    <h4>2. Linearity</h4>
+    <ul>
+      <li><strong>Assumption:</strong> Relationship between X and Y is linear</li>
+      <li><strong>Check with:</strong> Scatterplot, residuals vs. fitted values plot</li>
+      <li><strong>Impact if violated:</strong> Model predictions will be systematically wrong</li>
+      <li><strong>What to do:</strong> Add polynomial terms, use non-linear models, or transform variables</li>
+    </ul>
+
+    <h4>3. Homogeneity of Variance (Homoscedasticity)</h4>
+    <ul>
+      <li><strong>Assumption:</strong> Variance of residuals is constant across all levels of predictors</li>
+      <li><strong>Check with:</strong> Residuals vs. fitted values plot (should show random scatter)</li>
+      <li><strong>Impact if violated:</strong> Standard errors and hypothesis tests are incorrect</li>
+      <li><strong>What to do:</strong> Transform Y, use weighted least squares, or robust standard errors</li>
+    </ul>
+
+    <h4>4. Independence</h4>
+    <ul>
+      <li><strong>Assumption:</strong> Residuals are independent (no patterns or correlations)</li>
+      <li><strong>Check with:</strong> Consider study design, plot residuals over time/space</li>
+      <li><strong>Impact if violated:</strong> Standard errors are wrong, leading to incorrect inferences</li>
+      <li><strong>What to do:</strong> Use time series methods, multilevel models, or adjust for clustering</li>
+    </ul>
+
+    <h4>5. No Multicollinearity (Multiple Regression)</h4>
+    <ul>
+      <li><strong>Assumption:</strong> Predictors are not highly correlated with each other</li>
+      <li><strong>Check with:</strong> VIF (Variance Inflation Factor)</li>
+      <li><strong>Impact if violated:</strong> Coefficients become unstable and hard to interpret</li>
+      <li><strong>What to do:</strong> Remove redundant predictors or combine them</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Types of Residuals</h3>
+
+    <h4>Ordinary Residuals</h4>
+    <div class="formula">
+      <p><strong>ε<sub>i</sub> = Y<sub>i</sub> - Ŷ<sub>i</sub></strong></p>
+    </div>
+    <p>The raw difference between observed and predicted values</p>
+
+    <h4>Standardized Residuals</h4>
+    <div class="formula">
+      <p><strong>ε'<sub>i</sub> = ε<sub>i</sub> / (σ̂√(1-h<sub>i</sub>))</strong></p>
+    </div>
+    <p>Scaled to have SD ≈ 1; easier to identify unusual values</p>
+
+    <h4>Studentized Residuals</h4>
+    <div class="formula">
+      <p><strong>ε*<sub>i</sub> = ε<sub>i</sub> / (σ̂<sub>(-i)</sub>√(1-h<sub>i</sub>))</strong></p>
+    </div>
+    <p>Uses σ̂ estimated without observation i; best for detecting outliers</p>
+    <ul>
+      <li>Follow a t-distribution</li>
+      <li>|ε*| > 3 suggests a potential outlier</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Identifying Problematic Observations</h3>
+
+    <h4>Outliers</h4>
+    <ul>
+      <li><strong>Definition:</strong> Observations with unusual Y values (large residuals)</li>
+      <li><strong>Detection:</strong> Large Studentized residuals (|ε*| > 3)</li>
+      <li><strong>Impact:</strong> Can affect model fit and coefficient estimates</li>
+    </ul>
+
+    <h4>High Leverage Points</h4>
+    <ul>
+      <li><strong>Definition:</strong> Observations with unusual X values</li>
+      <li><strong>Detection:</strong> Hat values (h<sub>i</sub>); rule of thumb: h<sub>i</sub> > 2(K+1)/N</li>
+      <li><strong>Impact:</strong> <em>Potential</em> to influence the regression line</li>
+    </ul>
+
+    <h4>Influential Observations</h4>
+    <ul>
+      <li><strong>Definition:</strong> Observations that are <strong>both outliers AND high leverage</strong></li>
+      <li><strong>Detection:</strong> Cook's Distance</li>
+      <li><strong>Impact:</strong> Strongly affect regression coefficients</li>
+    </ul>
+
+    <h4>Cook's Distance</h4>
+    <div class="formula">
+      <p><strong>D<sub>i</sub> = (ε*<sub>i</sub>² / (K+1)) × (h<sub>i</sub> / (1-h<sub>i</sub>))</strong></p>
+    </div>
+    <p>Measures how much coefficients change when observation i is removed</p>
+    <ul>
+      <li><strong>D<sub>i</sub> > 1:</strong> Highly influential (definitely investigate)</li>
+      <li><strong>D<sub>i</sub> > 4/N:</strong> Potentially influential (consider investigating)</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>What to Do About Problematic Points</h3>
+    <ol>
+      <li><strong>Investigate:</strong> Check if the value is a data entry error or measurement mistake</li>
+      <li><strong>Understand:</strong> Is this a genuine but unusual case, or does it represent a different population?</li>
+      <li><strong>Report:</strong> Always report influential observations and how you handled them</li>
+      <li><strong>Analyze with and without:</strong> Run regression both ways and compare results</li>
+      <li><strong>Don't automatically delete:</strong> Outliers can contain important information</li>
+    </ol>
+  </div>
+
+  <div class="Excel-box">
+    <h3>Checking Assumptions in Excel</h3>
+    <ol>
+      <li>Run your regression: <strong>Analyses → Regression → Linear Regression</strong></li>
+      <li>Under <strong>Assumption Checks</strong>:
+        <ul>
+          <li>Check <strong>Q-Q plot of residuals</strong> (normality check)</li>
+          <li>Check <strong>Residual plots</strong> (linearity and homoscedasticity)</li>
+          <li>Check <strong>Cook's distance</strong> (influential observations)</li>
+          <li>Check <strong>Collinearity statistics</strong> (VIF for multicollinearity)</li>
+        </ul>
+      </li>
+      <li><strong>Interpreting plots:</strong>
+        <ul>
+          <li><strong>Q-Q plot:</strong> Points should fall along the diagonal line</li>
+          <li><strong>Residuals vs. Fitted:</strong> Should show random scatter (no patterns)</li>
+          <li><strong>Scale-Location:</strong> Should show horizontal line (equal variance)</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Always check assumptions</strong> before interpreting regression results</li>
+      <li>Q-Q plot is the best tool for checking <strong>normality of residuals</strong></li>
+      <li>Residuals vs. fitted plot checks <strong>linearity and homoscedasticity</strong></li>
+      <li>Cook's distance identifies <strong>influential observations</strong></li>
+      <li>VIF checks for <strong>multicollinearity</strong> in multiple regression</li>
+      <li>Violations don't always invalidate results—understand the impact</li>
+      <li>Report how you handled assumption violations and influential points</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example: Interpreting Diagnostic Plots</h3>
+
+    <h4>Scenario 1: Good Model</h4>
+    <ul>
+      <li><strong>Q-Q plot:</strong> Points fall along diagonal → normality assumption met</li>
+      <li><strong>Residuals vs. fitted:</strong> Random scatter, no pattern → linearity and homoscedasticity met</li>
+      <li><strong>Cook's D:</strong> All values < 1 → no influential observations</li>
+      <li><strong>VIF:</strong> All < 5 → no multicollinearity</li>
+      <li><strong>Conclusion:</strong> Assumptions are satisfied; results are trustworthy</li>
+    </ul>
+
+    <h4>Scenario 2: Problems Detected</h4>
+    <ul>
+      <li><strong>Q-Q plot:</strong> Points deviate at tails → residuals not quite normal</li>
+      <li><strong>Residuals vs. fitted:</strong> Funnel shape (wider on right) → heteroscedasticity</li>
+      <li><strong>Cook's D:</strong> One observation with D = 1.8 → highly influential</li>
+      <li><strong>Action needed:</strong>
+        <ul>
+          <li>Investigate the influential observation (is it an error?)</li>
+          <li>Consider log transformation of Y to address heteroscedasticity</li>
+          <li>Run analysis with and without the influential point</li>
+          <li>Consider robust regression methods</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Not checking assumptions:</strong> Results can be completely wrong if assumptions are badly violated</li>
+      <li><strong>Checking normality of Y instead of residuals:</strong> It's the residuals that need to be normal, not Y</li>
+      <li><strong>Automatically deleting outliers:</strong> Investigate first—they might be your most interesting cases</li>
+      <li><strong>Ignoring patterns in residual plots:</strong> Systematic patterns indicate model problems</li>
+      <li><strong>Only looking at R²:</strong> High R² doesn't mean assumptions are met</li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,119 @@
+<section class="module-content" aria-labelledby="bar-charts-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="bar-charts-title">5.3 Bar Graphs</h2>
+
+  <p>
+    Another form of graph that you often want to plot is the <strong>bar graph</strong>. Bar graphs are ideal for displaying
+    categorical data, showing the frequency or count of observations in each category.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Bar Graphs</h4>
+    <p>
+      A <strong>bar graph</strong> (or bar chart) displays categorical data with rectangular bars, where the height
+      of each bar represents the frequency, count, or proportion of observations in that category.
+    </p>
+    <ul>
+      <li><strong>Categories</strong> – Distinct groups or levels of a nominal or ordinal variable (e.g., team names, product types)</li>
+      <li><strong>Bar height</strong> – Represents the count or frequency of observations in each category</li>
+      <li><strong>Spacing</strong> – Bars are typically separated by gaps, unlike histograms where bars touch</li>
+    </ul>
+  </div>
+
+  <h3>5.3.1 Creating bar graphs in Excel</h3>
+
+  <p>
+    To create a bar graph in Excel, first make sure your categorical variable is in the 'Variables' box under
+    'Exploration' → 'Descriptives'. If you want to display only specific categories, you can use the 'Filters'
+    function to include only those values you're interested in.
+  </p>
+
+  <p>
+    For example, if you want to create a bar graph showing data for only four specific teams, you would:
+  </p>
+
+  <ol>
+    <li>Open the 'Filters' screen</li>
+    <li>Create a filter using the "==" operator to match specific values (e.g., <code>variable == 'Category1' or variable == 'Category2'</code>)</li>
+    <li>Click on the 'Bar plot' checkbox in the Plots options</li>
+  </ol>
+
+  <div class="critical-points">
+    <h4>Critical Point: Bar Graphs vs. Histograms</h4>
+    <p>
+      Understanding when to use each type of chart:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>Bar Graph</th>
+          <th>Histogram</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data type</td>
+          <td>Categorical (nominal/ordinal)</td>
+          <td>Continuous (interval/ratio)</td>
+        </tr>
+        <tr>
+          <td>Bar spacing</td>
+          <td>Gaps between bars</td>
+          <td>No gaps (bars touch)</td>
+        </tr>
+        <tr>
+          <td>X-axis</td>
+          <td>Category labels</td>
+          <td>Continuous scale with bins</td>
+        </tr>
+        <tr>
+          <td>Purpose</td>
+          <td>Compare categories</td>
+          <td>Show distribution shape</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.3.2 Saving graphs</h3>
+
+  <p>
+    Once you've created a bar graph (or any plot) in Excel, you can save it by right-clicking on the plot image
+    and saving it to a file. Excel allows you to save in formats such as 'eps', 'svg', or 'pdf'. These formats
+    all produce high-quality images that you can include in reports, presentations, or papers.
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: When to Use Bar Graphs</h4>
+    <ul>
+      <li><strong>Best for categorical data</strong> – Use when comparing frequencies across discrete categories</li>
+      <li><strong>Easy to read</strong> – Viewers can quickly compare the height of bars to see which categories are more or less frequent</li>
+      <li><strong>Flexible</strong> – Can display counts, percentages, or other summary statistics</li>
+      <li><strong>Not for continuous data</strong> – Use histograms for continuous variables instead</li>
+    </ul>
+  </div>
+
+  <h3>5.3.3 The power of visualization</h3>
+
+  <p>
+    Visualizing data is one of the most important tasks facing the data analyst. It's important
+    for two distinct but closely related reasons. First, there's the matter of drawing "presentation
+    graphics": displaying your data in a clean, visually appealing fashion makes it easier for your
+    reader to understand what you're trying to tell them. Equally important, perhaps even more
+    important, is the fact that drawing graphs helps you to understand the data. To that end, it's
+    important to draw "exploratory graphics" that help you learn about the data as you go about
+    analyzing it.
+  </p>
+
+  <p>
+    As Edward Tufte wisely noted: <em>"Above all else show the data."</em> The human visual system
+    is a very powerful data analysis tool. Give it the right kind of information and it will supply
+    a human reader with a massive amount of knowledge very quickly.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Microsoft Excel" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

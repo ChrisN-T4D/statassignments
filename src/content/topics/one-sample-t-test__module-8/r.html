@@ -1,0 +1,193 @@
+<section class="module-content" aria-labelledby="one-sample-t-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="one-sample-t-title">11.2 The One-Sample T-Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The one-sample t-test compares a sample mean against a hypothesized value when the population standard deviation is unknown. It's one of the most commonly used statistical tests.</p>
+  </div>
+
+  <h3>The Problem with the Z-Test</h3>
+  <p>The z-test requires knowing the population standard deviation σ, which is unrealistic. What if we don't know σ? We estimate it from our sample data using σ̂.</p>
+
+  <h3>Introducing the T-Test</h3>
+
+  <div class="formula-box">
+    <h4>T-Statistic Formula:</h4>
+    <p>t = (X̄ - μ) / SE(X̄)</p>
+    <p>t = (X̄ - μ) / (σ̂/√N)</p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>X̄ = sample mean</li>
+      <li>μ = hypothesized population mean</li>
+      <li>σ̂ = sample standard deviation (estimated)</li>
+      <li>N = sample size</li>
+      <li>SE(X̄) = σ̂/√N = estimated standard error</li>
+    </ul>
+  </div>
+
+  <h3>The T-Distribution</h3>
+  <p>When using an estimated standard deviation, the sampling distribution is no longer normal. It follows a <strong>t-distribution</strong> with N-1 degrees of freedom.</p>
+
+  <div class="concept-box" role="note">
+    <h4>Key Properties of the T-Distribution:</h4>
+    <ul>
+      <li>Bell-shaped and symmetric (like normal)</li>
+      <li>Heavier tails than normal (more spread out)</li>
+      <li>Gets closer to normal as df increases</li>
+      <li>Different distribution for each df value</li>
+      <li>Accounts for uncertainty in estimating σ</li>
+    </ul>
+  </div>
+
+  <h3>Degrees of Freedom (df)</h3>
+
+  <div class="formula-box">
+    <p><strong>For one-sample t-test:</strong> df = N - 1</p>
+    <p>We lose 1 df because we estimate the mean from the data</p>
+  </div>
+
+  <h3>Hypothesis Testing Steps</h3>
+
+  <div class="example-box">
+    <h4>Step-by-Step Procedure:</h4>
+    <ol>
+      <li><strong>State hypotheses:</strong>
+        <ul>
+          <li>H₀: μ = μ₀</li>
+          <li>H₁: μ ≠ μ₀ (two-tailed)</li>
+        </ul>
+      </li>
+      <li><strong>Calculate sample statistics:</strong> X̄ and σ̂</li>
+      <li><strong>Calculate standard error:</strong> SE = σ̂/√N</li>
+      <li><strong>Calculate t-statistic:</strong> t = (X̄ - μ₀)/SE</li>
+      <li><strong>Find critical value:</strong> Look up t-critical for df=N-1 and α level</li>
+      <li><strong>Make decision:</strong> Reject H₀ if |t| > t-critical</li>
+      <li><strong>Report results:</strong> Include t, df, p-value, and conclusion</li>
+    </ol>
+  </div>
+
+  <h3>Doing the Test in R</h3>
+
+  <div class="software-box">
+    <h4>R Procedure:</h4>
+    <ol>
+      <li>Go to <strong>Analyses → T-Tests → One Sample T-Test</strong></li>
+      <li>Move your variable to the <strong>Variables</strong> box</li>
+      <li>Enter the hypothesized mean in <strong>Test value</strong></li>
+      <li>Under <strong>Hypothesis</strong>, select:
+        <ul>
+          <li>≠ Test value (two-tailed, default)</li>
+          <li>> Test value (one-tailed, upper)</li>
+          <li>< Test value (one-tailed, lower)</li>
+        </ul>
+      </li>
+      <li>Under <strong>Additional Statistics</strong>, check:
+        <ul>
+          <li>Mean difference</li>
+          <li>Effect size (Cohen's d)</li>
+          <li>Confidence interval</li>
+          <li>Descriptives</li>
+        </ul>
+      </li>
+      <li>Under <strong>Assumption Checks</strong>, check:
+        <ul>
+          <li>Normality (Shapiro-Wilk test)</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Worked Example</h3>
+
+  <div class="example-box">
+    <h4>Psychology Students' Grades (Realistic Version)</h4>
+    <p><strong>Research Question:</strong> Do psychology students score differently from 67.5%?</p>
+
+    <p><strong>Data:</strong></p>
+    <ul>
+      <li>Sample mean: X̄ = 72.3</li>
+      <li>Sample SD: σ̂ = 9.52</li>
+      <li>Hypothesized mean: μ₀ = 67.5</li>
+      <li>Sample size: N = 20</li>
+    </ul>
+
+    <p><strong>Calculations:</strong></p>
+    <p>1. Standard error: SE = 9.52/√20 = 2.13</p>
+    <p>2. t-statistic: t = (72.3 - 67.5)/2.13 = 2.25</p>
+    <p>3. Degrees of freedom: df = 20 - 1 = 19</p>
+    <p>4. Critical value (α=.05, two-tailed): t-crit = 2.09</p>
+    <p>5. Since |t| = 2.25 > 2.09, reject H₀</p>
+    <p>6. p-value = .036</p>
+
+    <p><strong>R Output:</strong></p>
+    <ul>
+      <li>t(19) = 2.25, p = .036</li>
+      <li>Mean difference = 4.80</li>
+      <li>95% CI: [0.34, 9.26]</li>
+      <li>Cohen's d = 0.50</li>
+    </ul>
+
+    <p><strong>Conclusion:</strong> Psychology students scored significantly higher than the hypothesized value of 67.5% (t(19) = 2.25, p = .036, d = 0.50). The mean difference was 4.80 percentage points with a 95% confidence interval from 0.34 to 9.26.</p>
+  </div>
+
+  <h3>Interpreting the Results</h3>
+
+  <div class="formula-box">
+    <h4>Reporting Format:</h4>
+    <p>"With a mean grade of 72.3%, psychology students scored significantly higher than the expected 67.5% (t(19) = 2.25, p = .036, CI₉₅ = [0.34, 9.26], d = 0.50)."</p>
+  </div>
+
+  <h3>Assumptions of the One-Sample T-Test</h3>
+
+  <div class="warning-box">
+    <h4>Two Key Assumptions:</h4>
+    <ol>
+      <li><strong>Normality:</strong> Population distribution is normal
+        <ul>
+          <li>Check with Shapiro-Wilk test</li>
+          <li>Robust to violations with N > 30</li>
+          <li>Use Wilcoxon test if violated</li>
+        </ul>
+      </li>
+      <li><strong>Independence:</strong> Observations are independent
+        <ul>
+          <li>Random sampling</li>
+          <li>No repeated measures</li>
+          <li>Cannot test statistically</li>
+          <li>Requires good study design</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Not checking normality assumption</li>
+    <li>Using with severely skewed data</li>
+    <li>Confusing one-sample with independent samples test</li>
+    <li>Forgetting to report effect size and CI</li>
+    <li>Using wrong hypothesized value</li>
+    <li>Interpreting p-value as probability H₀ is true</li>
+  </ul>
+
+  <h3>When to Use One-Sample T-Test</h3>
+  <div class="concept-box" role="note">
+    <p><strong>Use when:</strong></p>
+    <ul>
+      <li>One sample, one measurement per person</li>
+      <li>Comparing to a known/hypothesized value</li>
+      <li>Population SD unknown</li>
+      <li>Data approximately normal</li>
+    </ul>
+    <p><strong>Don't use when:</strong></p>
+    <ul>
+      <li>Comparing two groups → independent samples t-test</li>
+      <li>Same people measured twice → paired t-test</li>
+      <li>Data severely non-normal → Wilcoxon test</li>
+      <li>Population SD known → z-test (rare!)</li>
+    </ul>
+  </div>
+</section>

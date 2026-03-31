@@ -1,0 +1,193 @@
+<section class="module-content">
+  <h2>7.6 Other useful distributions</h2>
+
+  <p>
+    While the normal distribution is fundamental, many statistical situations call for other distributions. Three
+    particularly important ones are the t-distribution, the chi-square (χ²) distribution, and the F-distribution.
+    Each serves specific purposes in statistical inference.
+  </p>
+
+  <h3>7.6.1 The t-distribution</h3>
+
+  <p>
+    The <strong>t-distribution</strong> (also called Student's t-distribution) looks similar to the normal distribution—it's
+    symmetric and bell-shaped—but has heavier tails. This means it assigns more probability to extreme values.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Student's t-Distribution</h4>
+    <p>
+      A continuous probability distribution that is symmetric and bell-shaped like the normal distribution, but with
+      heavier tails. The exact shape depends on the <strong>degrees of freedom (df)</strong>.
+    </p>
+    <p>
+      As df increases, the t-distribution approaches the normal distribution. For df > 30, they are nearly identical.
+    </p>
+  </div>
+
+  <p>
+    <strong>When to use the t-distribution:</strong>
+  </p>
+  <ul>
+    <li><strong>Small sample sizes:</strong> Typically when n &lt; 30</li>
+    <li><strong>Unknown population standard deviation:</strong> When we must estimate σ from the sample</li>
+    <li><strong>Inference about means:</strong> Constructing confidence intervals or conducting hypothesis tests about means</li>
+  </ul>
+
+  <p>
+    <strong>Why use t instead of normal?</strong><br>
+    When we estimate the population standard deviation from a sample, we introduce additional uncertainty. The t-distribution
+    accounts for this extra uncertainty with its heavier tails, making our inferences more conservative (wider confidence
+    intervals, harder to reject null hypotheses) when sample sizes are small.
+  </p>
+
+  <p>
+    <strong>Degrees of freedom:</strong><br>
+    For a single sample, df = n − 1. The degrees of freedom represent the amount of independent information available
+    to estimate variability. With only 5 observations, df = 4, and the t-distribution has very heavy tails. With 100
+    observations, df = 99, and t is nearly identical to the normal distribution.
+  </p>
+
+  <div class="critical-box">
+    <h4>Critical Point</h4>
+    <p>
+      In practice, when testing means with real data, you almost always use the t-distribution rather than the normal
+      distribution, because you rarely know the true population standard deviation. Software like jamovi automatically
+      uses t-tests for comparing means.
+    </p>
+  </div>
+
+  <h3>7.6.2 The chi-square (χ²) distribution</h3>
+
+  <p>
+    The <strong>chi-square distribution</strong> (pronounced "kai-square") is quite different from the normal and t
+    distributions. It is right-skewed and only takes positive values.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Chi-Square Distribution</h4>
+    <p>
+      A continuous probability distribution that is right-skewed and ranges from 0 to infinity. It has one parameter:
+      <strong>degrees of freedom (df)</strong>.
+    </p>
+    <p>
+      As df increases, the distribution becomes less skewed and more symmetric.
+    </p>
+  </div>
+
+  <p>
+    <strong>When to use the chi-square distribution:</strong>
+  </p>
+  <ul>
+    <li><strong>Tests of independence:</strong> Testing whether two categorical variables are related (e.g., is gender
+    associated with voting preference?)</li>
+    <li><strong>Goodness-of-fit tests:</strong> Testing whether observed frequencies match expected frequencies
+    (e.g., does this die produce all six numbers equally often?)</li>
+    <li><strong>Variance tests:</strong> Testing hypotheses about population variance (e.g., is the variability in
+    this process greater than a target value?)</li>
+  </ul>
+
+  <p>
+    <strong>Example: Testing independence</strong><br>
+    Suppose you survey 200 people, recording both their gender (male/female) and whether they support a policy (yes/no).
+    A chi-square test of independence can determine whether support rates differ significantly between genders. The test
+    compares observed frequencies in each category combination to the frequencies you'd expect if gender and support were
+    unrelated.
+  </p>
+
+  <p>
+    <strong>Shape and properties:</strong><br>
+    With df = 1 or 2, the chi-square distribution is highly right-skewed. As df increases, it becomes more symmetric and
+    approaches a normal distribution. For large df, you can approximate chi-square probabilities using a normal distribution.
+  </p>
+
+  <h3>7.6.3 The F-distribution</h3>
+
+  <p>
+    The <strong>F-distribution</strong> is also right-skewed and positive-valued. It is used primarily for comparing
+    variances and for analysis of variance (ANOVA).
+  </p>
+
+  <div class="terminology-box">
+    <h4>F-Distribution</h4>
+    <p>
+      A continuous probability distribution that is right-skewed and ranges from 0 to infinity. It has two parameters:
+      <strong>numerator degrees of freedom (df₁)</strong> and <strong>denominator degrees of freedom (df₂)</strong>.
+    </p>
+    <p>
+      The shape depends on both df₁ and df₂.
+    </p>
+  </div>
+
+  <p>
+    <strong>When to use the F-distribution:</strong>
+  </p>
+  <ul>
+    <li><strong>Comparing two variances:</strong> Testing whether two populations have equal variance (e.g., do males
+    and females have the same variability in test scores?)</li>
+    <li><strong>ANOVA (Analysis of Variance):</strong> Testing whether three or more groups have different means
+    (e.g., do four teaching methods produce different average test scores?)</li>
+    <li><strong>Regression analysis:</strong> Testing the overall significance of a regression model</li>
+  </ul>
+
+  <p>
+    <strong>Example: ANOVA</strong><br>
+    Suppose you want to compare average exam scores across four different teaching methods. An ANOVA uses the F-distribution
+    to test whether at least one method produces a different mean score than the others. The F-statistic is the ratio of
+    between-group variability to within-group variability.
+  </p>
+
+  <p>
+    <strong>Why two degrees of freedom?</strong><br>
+    The F-distribution arises from the ratio of two chi-square distributions, each divided by its degrees of freedom.
+    In ANOVA, df₁ relates to the number of groups being compared, and df₂ relates to the total sample size and number of groups.
+  </p>
+
+  <h3>7.6.4 Choosing the right distribution</h3>
+
+  <p>
+    Understanding which distribution to use depends on your research question and data type:
+  </p>
+
+  <div class="critical-box">
+    <h4>Distribution Decision Guide</h4>
+    <ul>
+      <li><strong>Normal (z-distribution):</strong> Use when the population standard deviation is known and sample size
+      is large, or when working with z-scores</li>
+      <li><strong>t-distribution:</strong> Use for inference about means when the population standard deviation is
+      unknown (most common situation in practice)</li>
+      <li><strong>χ² distribution:</strong> Use for categorical data analysis (tests of independence, goodness-of-fit)
+      or for testing hypotheses about variance</li>
+      <li><strong>F-distribution:</strong> Use for comparing variances between two groups or for comparing means across
+      three or more groups (ANOVA)</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>Practical note:</strong> Statistical software handles the details of these distributions automatically. When
+    you run a t-test in jamovi, it uses the t-distribution with the appropriate degrees of freedom. When you run a chi-square
+    test of independence, it uses the χ² distribution. Understanding what these distributions represent helps you interpret
+    the output correctly, even if you don't calculate probabilities by hand.
+  </p>
+
+  <h3>7.6.5 Relationships among distributions</h3>
+
+  <p>
+    These distributions are mathematically related:
+  </p>
+  <ul>
+    <li>The <strong>t-distribution with infinite df</strong> is identical to the normal distribution</li>
+    <li>The <strong>chi-square distribution</strong> is the distribution of squared standard normal variables</li>
+    <li>The <strong>F-distribution</strong> is the ratio of two chi-square distributions (each divided by its df)</li>
+    <li>A <strong>t-statistic squared</strong> follows an F-distribution with df₁ = 1</li>
+  </ul>
+
+  <p>
+    These connections reveal the elegant mathematical structure underlying statistical inference, though you don't need
+    to memorize these relationships to use the distributions effectively.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with jamovi" by Danielle J. Navarro and David R. Foxcroft, Chapter 7, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

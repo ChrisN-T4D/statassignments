@@ -1,0 +1,125 @@
+<section class="module-content" aria-labelledby="histograms-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="histograms-title">5.1 Histograms</h2>
+
+  <blockquote class="chapter-quote">
+    <p>Above all else show the data.</p>
+    <footer>–Edward Tufte</footer>
+  </blockquote>
+
+  <p>
+    Let's begin with the humble <strong>histogram</strong>. Histograms are one of the simplest and most useful
+    ways of visualizing data. They make most sense when you have an interval or ratio scale
+    variable and what you want to do is get an overall impression of the variable.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Histograms</h4>
+    <p>
+      A <strong>histogram</strong> is a graphical display that shows the distribution of a continuous variable
+      by dividing the data into intervals (called bins) and displaying the frequency of observations in each bin
+      as vertical bars.
+    </p>
+    <ul>
+      <li><strong>Bins</strong> – Intervals that divide up the possible values of your variable</li>
+      <li><strong>Frequency</strong> – The count of observations that fall within each bin</li>
+      <li><strong>Density</strong> – An alternative to frequency that shows the proportion of data in each bin</li>
+    </ul>
+  </div>
+
+  <p>
+    Most of you probably know how histograms work, since they're so widely used, but for the sake of completeness I'll describe them. All you do is divide up the
+    possible values into bins and then count the number of observations that fall within each bin.
+    This count is referred to as the frequency or density of the bin and is displayed as a vertical
+    bar.
+  </p>
+
+  <div class="key-points">
+    <h4>Key Points: When to Use Histograms</h4>
+    <ul>
+      <li><strong>Best for continuous data</strong> – Use histograms for interval or ratio scale variables</li>
+      <li><strong>Shows distribution shape</strong> – Quickly assess normality, skewness, and kurtosis</li>
+      <li><strong>Reveals patterns</strong> – Identify the center, spread, and unusual values in your data</li>
+      <li><strong>Not good for nominal data</strong> – If your data are categorical, use bar charts instead</li>
+    </ul>
+  </div>
+
+  <h3>5.1.1 Creating histograms in Stata</h3>
+
+  <p>
+    Drawing a histogram in Stata is straightforward. Open up the 'Plots' options
+    under 'Exploration' → 'Descriptives' and click the 'Histogram' checkbox. Stata
+    defaults to labeling the y-axis as 'density' and the x-axis with the variable name. The bins
+    are selected automatically.
+  </p>
+
+  <p>
+    What we are really interested in is our impression of the shape of the distribution: is it normally distributed or is
+    there a skew or kurtosis? Our first impressions of these characteristics come from drawing a
+    histogram.
+  </p>
+
+  <h3>5.1.2 Density plots</h3>
+
+  <p>
+    One additional feature that Stata provides is the ability to plot a 'Density' curve. You
+    can do this by clicking the 'Density' checkbox under the 'Plots' options. A density plot visualizes the distribution
+    of data over a continuous interval or time period. This chart is a variation of a histogram that
+    uses <strong>kernel smoothing</strong> to plot values, allowing for smoother distributions by smoothing out
+    the noise.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: Histograms vs. Density Plots</h4>
+    <p>
+      Understanding when to use each type of plot:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>Histogram</th>
+          <th>Density Plot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Display style</td>
+          <td>Discrete bars</td>
+          <td>Smooth curve</td>
+        </tr>
+        <tr>
+          <td>Bin sensitivity</td>
+          <td>Affected by number of bins</td>
+          <td>Not affected by bins</td>
+        </tr>
+        <tr>
+          <td>Best for</td>
+          <td>Exact counts, discrete sense of distribution</td>
+          <td>Overall distribution shape, comparing distributions</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    The peaks of a density plot help display where values are concentrated over the interval. An advantage density plots have over histograms is that they are better at determining the
+    distribution shape because they're not affected by the number of bins used (each bar used in a
+    typical histogram). A histogram comprising of only 4 bins wouldn't produce a distinguishable
+    enough shape of distribution as a 20-bin histogram would. However, with density plots, this
+    isn't an issue.
+  </p>
+
+  <p>
+    In fact, the big strength of a histogram or density plot is that (properly used) it does
+    show the entire spread of the data, so you can get a pretty good sense about what it looks like.
+    The downside to histograms is that they aren't very compact. Unlike some of the other plots,
+    it's hard to cram 20-30 histograms into a single image without overwhelming the
+    viewer. And of course, if your data are nominal scale then histograms are useless.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Stata" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

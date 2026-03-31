@@ -1,0 +1,162 @@
+<section class="module-content" aria-labelledby="logical-expressions-title"><div class="software-adaptation-note" role="note"><p><strong>Note (R track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>R and RStudio</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="logical-expressions-title">6.2 Logical Expressions in R</h2>
+
+  <p>
+    A key concept in data transformations is the idea of a <strong>logical value</strong>. A logical value is an
+    assertion about whether something is true or false. in R, there are two logical values: TRUE and FALSE.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Logical Operators</h4>
+    <p>
+      <strong>Logical operators</strong> allow you to make comparisons and combine conditions:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Operator</th>
+          <th>Meaning</th>
+          <th>Example</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>==</td>
+          <td>Equal to</td>
+          <td>2 + 2 == 4</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>!=</td>
+          <td>Not equal to</td>
+          <td>2 + 2 != 5</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>&lt;</td>
+          <td>Less than</td>
+          <td>2 &lt; 3</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>&lt;=</td>
+          <td>Less than or equal</td>
+          <td>2 &lt;= 2</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>&gt;</td>
+          <td>Greater than</td>
+          <td>3 &gt; 2</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>&gt;=</td>
+          <td>Greater than or equal</td>
+          <td>3 &gt;= 3</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>and</td>
+          <td>Both conditions true</td>
+          <td>(2==2) and (3==3)</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>or</td>
+          <td>At least one condition true</td>
+          <td>(2==2) or (2==3)</td>
+          <td>TRUE</td>
+        </tr>
+        <tr>
+          <td>NOT()</td>
+          <td>Negates the condition</td>
+          <td>NOT(2==3)</td>
+          <td>TRUE</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2.1 Assessing mathematical truths</h3>
+
+  <p>
+    You can use the equality operator <strong>==</strong> to force R to make a "true or false" judgment.
+    For example, you can create a computed variable with the formula:
+  </p>
+
+  <pre><code>2 + 2 == 4</code></pre>
+
+  <p>
+    This will create a column of TRUE values because 2 + 2 does indeed equal 4. If you try:
+  </p>
+
+  <pre><code>2 + 2 == 5</code></pre>
+
+  <p>
+    You'll get a column of FALSE values because this statement is not true.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: = vs. ==</h4>
+    <p>
+      A common error when writing logical commands is confusing <strong>=</strong> with <strong>==</strong>:
+    </p>
+    <ul>
+      <li><strong>=</strong> (single equals) – Assignment operator (not typically used in R formulas)</li>
+      <li><strong>==</strong> (double equals) – Equality test operator (checks if two things are equal)</li>
+    </ul>
+    <p>
+      Always use <strong>==</strong> when you want to test if two values are equal!
+    </p>
+  </div>
+
+  <h3>6.2.2 Combining logical operations</h3>
+
+  <p>
+    You can combine logical operators to create complex conditions:
+  </p>
+
+  <ul>
+    <li><strong>and</strong> – Both conditions must be true</li>
+    <li><strong>or</strong> – At least one condition must be true</li>
+    <li><strong>NOT()</strong> – Reverses the truth value</li>
+  </ul>
+
+  <p>
+    Examples:
+  </p>
+
+  <pre><code>(Age >= 18) and (Age <= 65)  # TRUE for adults 18-65
+(Status == "Student") or (Status == "Faculty")  # TRUE for students or faculty
+NOT(Score < 50)  # TRUE for scores 50 or above</code></pre>
+
+  <h3>6.2.3 Applying logical operations to text</h3>
+
+  <p>
+    Logical operators work with text (strings) as well as numbers. However, R is strict about exact matches:
+  </p>
+
+  <ul>
+    <li><code>"cat" == "cat"</code> is TRUE</li>
+    <li><code>"cat" == "CAT"</code> is FALSE (case-sensitive!)</li>
+    <li><code>" cat" == "cat"</code> is FALSE (extra space matters!)</li>
+  </ul>
+
+  <div class="key-points">
+    <h4>Key Points: Working with Text</h4>
+    <ul>
+      <li><strong>Case matters</strong> – "Cat", "cat", and "CAT" are all different</li>
+      <li><strong>Spacing matters</strong> – Extra spaces make strings different</li>
+      <li><strong>Alphabetical order</strong> – You can use &lt; and &gt; with text ("cat" &lt; "dog" is TRUE)</li>
+      <li><strong>Uppercase before lowercase</strong> – All uppercase letters come before all lowercase in alphabetical ordering</li>
+    </ul>
+  </div>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with R and RStudio" by Danielle J. Navarro and David R. Foxcroft, Chapter 6, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

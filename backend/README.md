@@ -105,6 +105,11 @@ Key innovations:
 - Student prototype generalization
 - Sequential Bayesian model averaging
 - IRT-integrated BKT
+- Runtime heuristic adjustments from timing/engagement telemetry
+
+Persistence note:
+- `NeuralBKTModel` state is currently held in FastAPI process memory.
+- Long-term persistence for model state is not yet implemented in backend storage.
 
 ## Integration with Vue.js
 
@@ -124,7 +129,8 @@ export async function updateBKT(objectiveId, isCorrect, difficulty = 'medium') {
       user_id: userId,
       objective_id: objectiveId,
       is_correct: isCorrect,
-      difficulty: difficulty
+      difficulty: difficulty,
+      problem_id: 'stats-m3-q12' // optional traceability field
     })
   })
 

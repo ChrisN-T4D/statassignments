@@ -1,0 +1,120 @@
+<section class="module-content" aria-labelledby="z-test-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="z-test-title">11.1 The One-Sample Z-Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The z-test is rarely used in practice because it requires knowing the true population standard deviation. It's primarily taught as a stepping stone to understanding the t-test.</p>
+  </div>
+
+  <h3>The Inference Problem</h3>
+  <p>Suppose we want to know if a sample mean X̄ is significantly different from a hypothesized population mean μ₀. If we know the true population standard deviation σ, we can use the z-test.</p>
+
+  <h4>Example</h4>
+  <p>Dr. Zeppo grades on a curve with μ = 67.5 and σ = 9.5. Do psychology students (n=20, X̄=72.3) score differently?</p>
+
+  <h3>Constructing the Hypothesis Test</h3>
+
+  <div class="formula-box">
+    <h4>Hypotheses:</h4>
+    <p>H₀: μ = 67.5 (psychology students same as others)</p>
+    <p>H₁: μ ≠ 67.5 (psychology students different)</p>
+  </div>
+
+  <h3>The Test Statistic</h3>
+
+  <p>The z-statistic standardizes the difference between the sample mean and hypothesized mean:</p>
+
+  <div class="formula-box">
+    <h4>Z-Statistic Formula:</h4>
+    <p>z = (X̄ - μ₀) / SE(X̄)</p>
+    <p>z = (X̄ - μ₀) / (σ/√N)</p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>X̄ = sample mean</li>
+      <li>μ₀ = hypothesized population mean</li>
+      <li>σ = known population standard deviation</li>
+      <li>N = sample size</li>
+      <li>SE(X̄) = σ/√N = standard error of the mean</li>
+    </ul>
+  </div>
+
+  <h3>Sampling Distribution</h3>
+  <p>Under the null hypothesis, z follows a standard normal distribution: z ~ Normal(0,1)</p>
+
+  <div class="example-box">
+    <h4>Critical Values (Two-Tailed Test)</h4>
+    <table class="stats-table">
+      <tr><th>α level</th><th>Critical z</th></tr>
+      <tr><td>0.10</td><td>±1.64</td></tr>
+      <tr><td>0.05</td><td>±1.96</td></tr>
+      <tr><td>0.01</td><td>±2.58</td></tr>
+      <tr><td>0.001</td><td>±3.29</td></tr>
+    </table>
+  </div>
+
+  <h3>Worked Example</h3>
+
+  <div class="example-box">
+    <h4>Psychology Students' Grades</h4>
+    <p><strong>Given:</strong></p>
+    <ul>
+      <li>Sample mean: X̄ = 72.3</li>
+      <li>Hypothesized mean: μ₀ = 67.5</li>
+      <li>Population SD: σ = 9.5</li>
+      <li>Sample size: N = 20</li>
+    </ul>
+
+    <p><strong>Step 1: Calculate standard error</strong></p>
+    <p>SE = σ/√N = 9.5/√20 = 9.5/4.47 = 2.12</p>
+
+    <p><strong>Step 2: Calculate z-statistic</strong></p>
+    <p>z = (72.3 - 67.5)/2.12 = 4.8/2.12 = 2.26</p>
+
+    <p><strong>Step 3: Compare to critical value</strong></p>
+    <p>z = 2.26 > 1.96 (critical value for α=.05)</p>
+    <p>Therefore, <strong>reject H₀</strong></p>
+
+    <p><strong>Conclusion:</strong> Psychology students score significantly different from the class average (z = 2.26, N = 20, p < .05).</p>
+  </div>
+
+  <h3>Assumptions of the Z-Test</h3>
+
+  <div class="warning-box">
+    <h4>Three Key Assumptions:</h4>
+    <ol>
+      <li><strong>Normality:</strong> Population is normally distributed</li>
+      <li><strong>Independence:</strong> Observations are independent</li>
+      <li><strong>Known σ:</strong> Population SD is known (unrealistic!)</li>
+    </ol>
+  </div>
+
+  <h3>Why the Z-Test is "Useless"</h3>
+
+  <div class="concept-box" role="note">
+    <p>The assumption that we know σ but not μ is absurd. In real research, if we don't know the population mean, we almost certainly don't know the population standard deviation either!</p>
+    <p>Solution: Use the <strong>t-test</strong> instead, which estimates σ from the sample.</p>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li>Using z-test when σ is unknown (use t-test)</li>
+    <li>Assuming normality without checking</li>
+    <li>Ignoring non-independence</li>
+    <li>Confusing standard deviation and standard error</li>
+    <li>Using σ̂ (sample SD) instead of σ (population SD)</li>
+  </ul>
+
+  <h3>Key Takeaway</h3>
+  <div class="concept-box" role="note">
+    <p>The z-test is a teaching tool that helps us understand:</p>
+    <ul>
+      <li>How standardization works</li>
+      <li>The logic of hypothesis testing</li>
+      <li>Sampling distributions</li>
+      <li>Why we need the t-test for real data</li>
+    </ul>
+  </div>
+</section>

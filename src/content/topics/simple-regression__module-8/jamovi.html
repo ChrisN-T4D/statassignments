@@ -1,0 +1,151 @@
+<section class="topic-content">
+  <h2>Simple Linear Regression</h2>
+
+  <div class="concept-box">
+    <h3>What is Simple Linear Regression?</h3>
+    <p><strong>Simple linear regression</strong> models the relationship between one predictor variable (X) and one outcome variable (Y) using a straight line. Unlike correlation, which only measures association, regression allows us to:</p>
+    <ul>
+      <li><strong>Predict</strong> values of Y from X</li>
+      <li><strong>Quantify</strong> how much Y changes when X changes by one unit</li>
+      <li><strong>Test hypotheses</strong> about the relationship</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>The Regression Model</h3>
+
+    <h4>Basic Equation</h4>
+    <div class="formula">
+      <p><strong>Ŷ<sub>i</sub> = b<sub>0</sub> + b<sub>1</sub>X<sub>i</sub></strong></p>
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li><strong>Ŷ<sub>i</sub></strong> = predicted value of Y for observation i</li>
+      <li><strong>b<sub>0</sub></strong> = intercept (predicted Y when X = 0)</li>
+      <li><strong>b<sub>1</sub></strong> = slope (change in Y for a 1-unit increase in X)</li>
+      <li><strong>X<sub>i</sub></strong> = value of X for observation i</li>
+    </ul>
+
+    <h4>Complete Model with Error</h4>
+    <div class="formula">
+      <p><strong>Y<sub>i</sub> = b<sub>0</sub> + b<sub>1</sub>X<sub>i</sub> + ε<sub>i</sub></strong></p>
+    </div>
+    <p>Where:</p>
+    <ul>
+      <li><strong>Y<sub>i</sub></strong> = actual observed value</li>
+      <li><strong>ε<sub>i</sub></strong> = residual (error) = Y<sub>i</sub> - Ŷ<sub>i</sub></li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>Ordinary Least Squares (OLS)</h3>
+    <p>The regression line is estimated using <strong>Ordinary Least Squares (OLS)</strong>, which finds the values of b<sub>0</sub> and b<sub>1</sub> that <strong>minimize the sum of squared residuals</strong>:</p>
+    <div class="formula">
+      <p>Minimize: Σε<sub>i</sub>² = Σ(Y<sub>i</sub> - Ŷ<sub>i</sub>)²</p>
+    </div>
+    <p>This gives us the "best-fitting" line in the sense that it minimizes the total squared distance between observed and predicted values.</p>
+  </div>
+
+  <div class="concept-box">
+    <h3>Interpreting Coefficients</h3>
+
+    <h4>The Intercept (b<sub>0</sub>)</h4>
+    <ul>
+      <li>The <strong>predicted value of Y when X = 0</strong></li>
+      <li>May not be meaningful if X = 0 is outside the range of the data</li>
+      <li>Example: "When study hours = 0, the predicted exam score is 45"</li>
+    </ul>
+
+    <h4>The Slope (b<sub>1</sub>)</h4>
+    <ul>
+      <li>The <strong>change in Y for a 1-unit increase in X</strong></li>
+      <li>The most important coefficient for interpretation</li>
+      <li>Positive slope: Y increases as X increases</li>
+      <li>Negative slope: Y decreases as X increases</li>
+      <li>Example: "For each additional hour of study, exam scores increase by 3.2 points"</li>
+    </ul>
+  </div>
+
+  <div class="concept-box">
+    <h3>R² (Coefficient of Determination)</h3>
+    <div class="formula">
+      <p><strong>R² = 1 - (SS<sub>residual</sub> / SS<sub>total</sub>)</strong></p>
+    </div>
+    <ul>
+      <li>Represents the <strong>proportion of variance in Y explained by X</strong></li>
+      <li>Ranges from 0 to 1 (often reported as percentage)</li>
+      <li>R² = 0.64 means "64% of the variance in Y is explained by X"</li>
+      <li>For simple regression: <strong>r² = R²</strong> (squared correlation)</li>
+      <li>Higher R² indicates better model fit, but doesn't guarantee causation</li>
+    </ul>
+  </div>
+
+  <div class="jamovi-box">
+    <h3>Running Simple Regression in jamovi</h3>
+    <ol>
+      <li>Go to <strong>Analyses → Regression → Linear Regression</strong></li>
+      <li>Move your outcome variable to <strong>Dependent Variable</strong></li>
+      <li>Move your predictor to <strong>Covariates</strong></li>
+      <li>Under <strong>Model Fit</strong>, check:
+        <ul>
+          <li><strong>R</strong> (correlation)</li>
+          <li><strong>R²</strong> (proportion of variance explained)</li>
+          <li><strong>Adjusted R²</strong></li>
+        </ul>
+      </li>
+      <li>Under <strong>Model Coefficients</strong>, check:
+        <ul>
+          <li><strong>Estimate</strong> (the b values)</li>
+          <li><strong>Confidence interval</strong> (usually 95%)</li>
+        </ul>
+      </li>
+      <li>Under <strong>Assumption Checks</strong>, check:
+        <ul>
+          <li><strong>Q-Q plot of residuals</strong></li>
+          <li><strong>Residual plots</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li>Always create a <strong>scatterplot first</strong> to check if a linear model is appropriate</li>
+      <li>The slope tells you the <strong>rate of change</strong> in Y per unit change in X</li>
+      <li>R² tells you how much variance is explained, not whether the relationship is causal</li>
+      <li>Check assumptions (normality, linearity, homoscedasticity) before trusting results</li>
+      <li>Be cautious about <strong>extrapolation</strong> beyond the range of your data</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h3>Example Interpretation</h3>
+    <p><strong>Research Question:</strong> Can we predict exam scores from study hours?</p>
+    <p><strong>Results:</strong></p>
+    <ul>
+      <li>Ŷ = 42.5 + 3.2X</li>
+      <li>R² = 0.46</li>
+      <li>b<sub>1</sub> = 3.2, SE = 0.8, t = 4.0, p < .001</li>
+    </ul>
+    <p><strong>Interpretation:</strong></p>
+    <ul>
+      <li>The regression equation is: <strong>Predicted Exam Score = 42.5 + 3.2(Study Hours)</strong></li>
+      <li>For each additional hour of study, exam scores increase by an average of <strong>3.2 points</strong></li>
+      <li>Study hours explain <strong>46% of the variance</strong> in exam scores (R² = .46)</li>
+      <li>The relationship is statistically significant (p < .001)</li>
+      <li>A student who studies 10 hours is predicted to score: 42.5 + 3.2(10) = <strong>74.5 points</strong></li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Pitfalls</h3>
+    <ul>
+      <li><strong>Assuming causation:</strong> Regression shows prediction, not necessarily causation</li>
+      <li><strong>Extrapolating:</strong> Don't predict Y for X values outside your data range</li>
+      <li><strong>Ignoring assumptions:</strong> Results can be misleading if assumptions are violated</li>
+      <li><strong>Over-interpreting R²:</strong> Low R² doesn't mean the relationship isn't important</li>
+      <li><strong>Confusing b and β:</strong> b is unstandardized, β is standardized (see Multiple Regression)</li>
+    </ul>
+  </div>
+</section>

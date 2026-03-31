@@ -1,0 +1,257 @@
+<section class="module-content" aria-labelledby="paired-t-title"><div class="software-adaptation-note" role="note"><p><strong>Note (SPSS track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>IBM SPSS Statistics</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="paired-t-title">11.5 The Paired-Samples T-Test</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Quick Summary</h3>
+    <p>The paired-samples t-test (also called dependent samples t-test or repeated measures t-test) compares two measurements from the same participants or from matched pairs. It's more powerful than independent samples tests because it controls for individual differences.</p>
+  </div>
+
+  <h3>When to Use Paired-Samples T-Test</h3>
+  <p>Use this test when:</p>
+  <ul>
+    <li><strong>Repeated measures:</strong> Same people measured twice (pre-test/post-test)</li>
+    <li><strong>Matched pairs:</strong> Different people matched on key variables (twins, siblings)</li>
+    <li><strong>Natural pairs:</strong> Naturally occurring pairs (left/right hand, husband/wife)</li>
+  </ul>
+
+  <div class="example-box">
+    <h4>Example Research Questions:</h4>
+    <ul>
+      <li>Do students' scores improve from pre-test to post-test?</li>
+      <li>Is reaction time faster in the left hand or right hand?</li>
+      <li>Do people rate chocolate cake higher than vanilla cake?</li>
+      <li>Does a drug reduce blood pressure compared to baseline?</li>
+    </ul>
+  </div>
+
+  <h3>The Key Insight: Analyze Difference Scores</h3>
+  <p>The paired-samples t-test is essentially a <strong>one-sample t-test on the difference scores</strong>.</p>
+
+  <div class="formula-box">
+    <h4>Step 1: Calculate Difference Scores</h4>
+    <p>For each participant i:</p>
+    <p>Dᵢ = X₁ᵢ - X₂ᵢ</p>
+    <p>(measurement 1 minus measurement 2)</p>
+
+    <h4>Step 2: Test if Mean Difference = 0</h4>
+    <p>H₀: μ_D = 0 (no average change)</p>
+    <p>H₁: μ_D ≠ 0 (there is average change)</p>
+
+    <h4>Test Statistic:</h4>
+    <p>t = D̄ / SE(D̄)</p>
+    <p>t = D̄ / (σ̂_D / √N)</p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>D̄ = mean of difference scores</li>
+      <li>σ̂_D = standard deviation of difference scores</li>
+      <li>N = number of pairs</li>
+      <li>df = N - 1</li>
+    </ul>
+  </div>
+
+  <h3>Why Paired Tests are More Powerful</h3>
+  <p>The paired-samples t-test removes between-subject variability. People differ from each other in baseline levels, but we're interested in <em>change within individuals</em>.</p>
+
+  <div class="concept-box" role="note">
+    <h4>Advantage of Pairing:</h4>
+    <p>By analyzing each person's change score, we control for individual differences. This reduces error variance and increases statistical power.</p>
+
+    <p><strong>Example:</strong> Some people are naturally faster at reaction time tasks. When comparing pre-post, we don't care about these baseline differences—we care whether <em>each person</em> got faster.</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example</h4>
+    <p><strong>Research Question:</strong> Does a memory training program improve recall?</p>
+
+    <p><strong>Design:</strong> 10 participants tested before and after training.</p>
+
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Participant</th>
+        <th>Pre-test (X₁)</th>
+        <th>Post-test (X₂)</th>
+        <th>Difference (D)</th>
+      </tr>
+      <tr><td>1</td><td>12</td><td>15</td><td>3</td></tr>
+      <tr><td>2</td><td>8</td><td>12</td><td>4</td></tr>
+      <tr><td>3</td><td>15</td><td>16</td><td>1</td></tr>
+      <tr><td>4</td><td>10</td><td>14</td><td>4</td></tr>
+      <tr><td>5</td><td>13</td><td>15</td><td>2</td></tr>
+      <tr><td>6</td><td>9</td><td>11</td><td>2</td></tr>
+      <tr><td>7</td><td>11</td><td>17</td><td>6</td></tr>
+      <tr><td>8</td><td>14</td><td>16</td><td>2</td></tr>
+      <tr><td>9</td><td>7</td><td>10</td><td>3</td></tr>
+      <tr><td>10</td><td>12</td><td>15</td><td>3</td></tr>
+    </table>
+
+    <p><strong>Step 1: Calculate mean difference</strong></p>
+    <p>D̄ = (3+4+1+4+2+2+6+2+3+3) / 10 = 30 / 10 = 3.0</p>
+
+    <p><strong>Step 2: Calculate SD of differences</strong></p>
+    <p>σ̂_D = 1.49 (calculated from the 10 difference scores)</p>
+
+    <p><strong>Step 3: Calculate SE</strong></p>
+    <p>SE(D̄) = 1.49 / √10 = 1.49 / 3.16 = 0.47</p>
+
+    <p><strong>Step 4: Calculate t</strong></p>
+    <p>t = 3.0 / 0.47 = 6.38</p>
+
+    <p><strong>Step 5: Compare to critical value</strong></p>
+    <p>df = 10 - 1 = 9</p>
+    <p>Critical value (α = .05, two-tailed): t_crit = ±2.262</p>
+    <p>Since 6.38 > 2.262, we reject H₀</p>
+
+    <p><strong>Conclusion:</strong> Memory scores improved significantly from pre-test (M = 11.1) to post-test (M = 14.1), t(9) = 6.38, p < .001, with an average improvement of 3.0 items.</p>
+  </div>
+
+  <div class="software-box">
+    <h3>Running Paired-Samples T-Test in SPSS</h3>
+    <ol>
+      <li><strong>Analyses → T-Tests → Paired Samples T-Test</strong></li>
+      <li><strong>Paired Variables:</strong>
+        <ul>
+          <li>Move both variables into the "Paired Variables" box</li>
+          <li>They should appear as a pair (e.g., "Pre-test - Post-test")</li>
+        </ul>
+      </li>
+      <li><strong>Tests:</strong>
+        <ul>
+          <li>"Student's t" is checked by default</li>
+          <li>Can also check "Wilcoxon rank" for nonparametric alternative</li>
+        </ul>
+      </li>
+      <li><strong>Hypothesis:</strong>
+        <ul>
+          <li>Measure 1 ≠ Measure 2 (two-tailed, default)</li>
+          <li>Measure 1 > Measure 2 (one-tailed)</li>
+          <li>Measure 1 < Measure 2 (one-tailed)</li>
+        </ul>
+      </li>
+      <li><strong>Additional Statistics:</strong>
+        <ul>
+          <li>Check "Mean difference" (shows D̄)</li>
+          <li>Check "SE difference" (shows SE of difference)</li>
+          <li>Check "Effect size" (Cohen's d for differences)</li>
+          <li>Check "Confidence interval"</li>
+          <li>Check "Descriptives" (means for both measurements)</li>
+        </ul>
+      </li>
+      <li><strong>Assumption Checks:</strong>
+        <ul>
+          <li>Check "Normality" to test if <em>difference scores</em> are normal</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h4>Interpreting Output:</h4>
+    <ul>
+      <li><strong>statistic:</strong> The t-value</li>
+      <li><strong>df:</strong> N - 1 (number of pairs minus 1)</li>
+      <li><strong>p:</strong> Significance level</li>
+      <li><strong>Mean difference:</strong> D̄ (average change)</li>
+      <li><strong>Effect size:</strong> Cohen's d calculated on difference scores</li>
+    </ul>
+  </div>
+
+  <h3>Assumptions</h3>
+  <div class="warning-box">
+    <ol>
+      <li><strong>Normality of DIFFERENCE Scores:</strong>
+        <ul>
+          <li>The <em>difference scores</em> should be normally distributed</li>
+          <li>NOT the original measurements themselves</li>
+          <li>Check with Shapiro-Wilk test on differences</li>
+          <li>If violated, use Wilcoxon signed-rank test</li>
+        </ul>
+      </li>
+      <li><strong>Independence of Pairs:</strong>
+        <ul>
+          <li>Each pair must be independent of other pairs</li>
+          <li>One person's scores don't affect another person's</li>
+          <li>Random sampling or assignment</li>
+        </ul>
+      </li>
+      <li><strong>Note:</strong> We do NOT assume independence within pairs!
+        <ul>
+          <li>The two measurements ARE related (that's the point!)</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h3>Common Pitfalls</h3>
+  <ul>
+    <li><strong>Using independent samples test:</strong> Wastes power! Paired data should use paired test</li>
+    <li><strong>Wrong direction:</strong> Pay attention to which measurement is subtracted from which</li>
+    <li><strong>Checking normality of original scores:</strong> Must check difference scores!</li>
+    <li><strong>Missing data:</strong> If one measurement is missing, entire pair must be excluded</li>
+    <li><strong>Unequal sample sizes:</strong> Must have same N for both measurements</li>
+    <li><strong>Not reporting effect size:</strong> Always report Cohen's d</li>
+  </ul>
+
+  <h3>Effect Size for Paired Tests</h3>
+  <div class="formula-box">
+    <h4>Cohen's d for Paired Data:</h4>
+    <p>d = D̄ / σ̂_D</p>
+    <p>(mean difference divided by SD of differences)</p>
+
+    <h4>Interpretation:</h4>
+    <ul>
+      <li>d ≈ 0.2: Small effect</li>
+      <li>d ≈ 0.5: Medium effect</li>
+      <li>d ≈ 0.8: Large effect</li>
+    </ul>
+
+    <p><strong>Note:</strong> Some programs report d relative to the original scale rather than difference scores. Check your software documentation!</p>
+  </div>
+
+  <h3>Paired vs. Independent: Choosing the Right Test</h3>
+  <div class="concept-box" role="note">
+    <h4>Use Paired-Samples T-Test when:</h4>
+    <ul>
+      <li>Same participants measured twice</li>
+      <li>Matched pairs of different participants</li>
+      <li>Natural pairs (twins, couples, left/right)</li>
+      <li>You want to control for individual differences</li>
+    </ul>
+
+    <h4>Use Independent Samples T-Test when:</h4>
+    <ul>
+      <li>Two completely separate groups</li>
+      <li>Different participants in each group</li>
+      <li>Random assignment to conditions</li>
+      <li>No matching or pairing</li>
+    </ul>
+
+    <h4>Key Question:</h4>
+    <p><strong>Is there a meaningful connection between observation 1 in group 1 and observation 1 in group 2?</strong></p>
+    <p>If YES → Paired test</p>
+    <p>If NO → Independent test</p>
+  </div>
+
+  <h3>Reporting Results</h3>
+  <div class="example-box">
+    <p><strong>APA Style Example:</strong></p>
+    <p>"A paired-samples t-test revealed that memory scores improved significantly from pre-test (M = 11.1, SD = 2.6) to post-test (M = 14.1, SD = 2.4), t(9) = 6.38, p < .001, d = 2.02, 95% CI [1.94, 4.06]. This represents a very large effect."</p>
+
+    <p><strong>Alternative phrasing:</strong></p>
+    <p>"Participants recalled significantly more items after training (M = 14.1, SD = 2.4) than before training (M = 11.1, SD = 2.6), with an average improvement of 3.0 items (SD = 1.49), t(9) = 6.38, p < .001, d = 2.02."</p>
+  </div>
+
+  <h3>Power Advantage of Paired Designs</h3>
+  <div class="concept-box" role="note">
+    <p><strong>Why is the paired test more powerful?</strong></p>
+    <p>It removes between-subject variability from the error term. We're comparing each person to themselves, so individual differences don't contribute to noise.</p>
+
+    <p><strong>Example:</strong> Imagine testing if a drug lowers blood pressure.</p>
+    <ul>
+      <li><strong>Independent design:</strong> Some people naturally have high BP, others low. This variability makes it harder to detect drug effects.</li>
+      <li><strong>Paired design:</strong> Measure each person before and after drug. We only care if <em>their</em> BP changed, not how they compare to others.</li>
+    </ul>
+
+    <p>The paired design can have <strong>much greater power</strong> with the same sample size!</p>
+  </div>
+</section>

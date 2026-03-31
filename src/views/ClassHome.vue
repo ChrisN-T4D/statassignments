@@ -360,6 +360,7 @@ import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
+import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
 
 const route = useRoute()
@@ -372,7 +373,6 @@ const module8Prefs = useModule8Preferences()
 const classId = computed(() => route.params.classId)
 const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
-const preferredSoftware = ref('jamovi')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 const showModule8Selector = ref(false)
 
@@ -494,11 +494,21 @@ function toPracticeModuleId(value) {
 const todoExercises = computed(() => {
   if (!selectedModuleId.value) return []
   const practiceModuleId = toPracticeModuleId(selectedModuleId.value)
-  return statisticsExercises.filter(ex =>
-    ex.software_type === preferredSoftware.value &&
-    ex.module === practiceModuleId &&
-    ex.exercise_type !== 'menu_navigation'
+  const list = statisticsExercises.filter(
+    ex =>
+      (ex.software_type === preferredSoftware.value || ex.software_type === 'conceptual') &&
+      ex.module === practiceModuleId &&
+      ex.exercise_type !== 'menu_navigation'
   )
+  // Group parallel tasks (same practiceObjectiveKey) for each software track
+  return [...list].sort((a, b) => {
+    const ka = a.practiceObjectiveKey || ''
+    const kb = b.practiceObjectiveKey || ''
+    if (ka && kb && ka !== kb) return ka.localeCompare(kb)
+    if (ka && !kb) return -1
+    if (!ka && kb) return 1
+    return (a.order || 0) - (b.order || 0)
+  })
 })
 
 const todoExercisesByChapter = computed(() => {
@@ -553,17 +563,6 @@ const todoCompleted = computed(() => {
     return completedSet.has(id)
   })
 })
-
-function getPreferredSoftwareId() {
-  try {
-    const raw = localStorage.getItem('preferredSoftware')
-    if (!raw) return 'jamovi'
-    return software.find(sw => sw.id === raw)?.id || 'jamovi'
-  } catch (err) {
-    console.warn('Unable to read preferred software:', err)
-    return 'jamovi'
-  }
-}
 
 const readTopicIds = ref(new Set())
 
@@ -806,7 +805,6 @@ onMounted(async () => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
   }
-  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
@@ -817,7 +815,6 @@ watch(classId, (newId) => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
   }
-  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
@@ -825,18 +822,15 @@ watch(classId, (newId) => {
 watch(contentModules, () => {
   setDefaultModule()
   syncSelectedModuleFromQuery()
-  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
 watch(() => route.query.module, () => {
   syncSelectedModuleFromQuery()
-  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 
 watch(() => route.fullPath, () => {
-  preferredSoftware.value = getPreferredSoftwareId()
   refreshReadTopics()
 })
 </script>

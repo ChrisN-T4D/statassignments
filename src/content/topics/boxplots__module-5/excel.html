@@ -1,0 +1,116 @@
+<section class="module-content" aria-labelledby="boxplots-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="boxplots-title">5.2 Boxplots</h2>
+
+  <p>
+    Another alternative to histograms is a <strong>boxplot</strong>, sometimes called a "box and whiskers" plot.
+    Like histograms they're most suited to interval or ratio scale data. The idea behind a boxplot
+    is to provide a simple visual depiction of the median, the interquartile range, and the range of
+    the data. And because they do so in a fairly compact way, boxplots have become a very popular
+    statistical graphic, especially during the exploratory stage of data analysis when you're trying to
+    understand the data yourself.
+  </p>
+
+  <div class="terminology-box">
+    <h4>Terminology: Boxplot Components</h4>
+    <p>
+      A <strong>boxplot</strong> displays the five-number summary of a dataset in a compact visual format:
+    </p>
+    <ul>
+      <li><strong>Median</strong> – The thick line in the middle of the box</li>
+      <li><strong>Box</strong> – Spans from the 25th percentile (Q1) to the 75th percentile (Q3), representing the interquartile range (IQR)</li>
+      <li><strong>Whiskers</strong> – Extend to the most extreme data points within 1.5 × IQR from the box edges</li>
+      <li><strong>Outliers</strong> – Individual points plotted beyond the whiskers (values more than 1.5 × IQR from Q1 or Q3)</li>
+    </ul>
+  </div>
+
+  <h3>5.2.1 Creating boxplots in Excel</h3>
+
+  <p>
+    The easiest way to describe what a boxplot looks like is just to draw one. Click on the
+    'Box plot' checkbox in the Plots options and Excel will draw the most basic boxplot possible. When you look at this plot, interpret it as follows:
+  </p>
+
+  <ul>
+    <li>The <strong>thick line in the middle</strong> of the box is the median</li>
+    <li>The <strong>box itself</strong> spans the range from the 25th percentile to the 75th percentile</li>
+    <li>The <strong>whiskers</strong> go out to the most extreme data point that doesn't exceed 1.5 times the interquartile range (IQR)</li>
+    <li>Any observation beyond this range is plotted as a <strong>circle or dot</strong> and is commonly referred to as an outlier</li>
+  </ul>
+
+  <div class="key-points">
+    <h4>Key Points: Why Use Boxplots?</h4>
+    <ul>
+      <li><strong>Compact display</strong> – Show distribution summaries in a small space</li>
+      <li><strong>Easy comparisons</strong> – Display multiple groups side-by-side without overwhelming the viewer</li>
+      <li><strong>Outlier detection</strong> – Automatically identify potentially suspicious values</li>
+      <li><strong>Quick assessment</strong> – See center, spread, and skewness at a glance</li>
+    </ul>
+  </div>
+
+  <h3>5.2.2 Violin plots</h3>
+
+  <p>
+    A variation on the traditional boxplot is the <strong>violin plot</strong>. Violin plots are similar to boxplots
+    except that they also show the kernel probability density of the data at different values.
+    Typically, violin plots will include a marker for the median of the data and a box indicating the
+    interquartile range, as in standard boxplots. in Excel you can achieve this by checking both the 'Violin' and the 'Box plot' checkboxes.
+  </p>
+
+  <p>
+    You can also turn on the 'Data' checkbox to show the actual data points on the plot. However, this can make
+    the graph a bit too busy. Clarity is simplicity, so in practice it might be
+    better to just use a simple boxplot.
+  </p>
+
+  <h3>5.2.3 Drawing multiple boxplots</h3>
+
+  <p>
+    One powerful feature of boxplots is the ability to draw multiple boxplots at once for different groups. This allows you to compare distributions across categories. To do this, move a grouping variable into the 'Split by' box in Excel's Descriptives window.
+  </p>
+
+  <p>
+    This version of the boxplot, split by groups, gives a sense
+    of why it's sometimes useful to choose boxplots instead of histograms. It's possible to get a
+    good sense of what the data look like from group to group without getting overwhelmed with too
+    much detail. Now imagine what would have happened if you tried to cram 20+ histograms into
+    the same space: no chance at all that the reader is going to learn anything useful.
+  </p>
+
+  <h3>5.2.4 Using boxplots to detect outliers</h3>
+
+  <p>
+    Because the boxplot automatically separates out those observations that lie outside a certain
+    range, depicting them with a dot in Excel, people often use them as an informal method
+    for detecting <strong>outliers</strong>: observations that are "suspiciously" distant from the rest of the data.
+  </p>
+
+  <div class="critical-points">
+    <h4>Critical Point: Investigating Outliers</h4>
+    <p>
+      When boxplots reveal potential outliers, follow these steps:
+    </p>
+    <ul>
+      <li><strong>Don't automatically delete outliers</strong> – They might represent real, important observations</li>
+      <li><strong>Investigate the source</strong> – Check if it's a data entry error or a genuine extreme value</li>
+      <li><strong>Use filters to identify</strong> – in Excel, create a filter to find observations beyond a threshold</li>
+      <li><strong>Document your decision</strong> – Whether you keep or remove outliers, explain your reasoning</li>
+    </ul>
+    <p>
+      This phase of data analysis is called <strong>data cleaning</strong> and can take up a huge chunk of time: searching
+      for typing mistakes ("typos"), missing data, and all sorts of other errors in raw data files.
+    </p>
+  </div>
+
+  <p>
+    For less extreme values, even if they are flagged in a boxplot as outliers, the decision about
+    whether to include or exclude them in any analysis depends heavily on why you think
+    the data look the way they do and what you want to use the data for. You really need to
+    exercise good judgment here. If the outlier looks legitimate to you, then keep it.
+  </p>
+
+  <div class="attribution">
+    <p><em>Content adapted from "Learning Statistics with Microsoft Excel" by Danielle J. Navarro and David R. Foxcroft, licensed under CC BY-SA 4.0.</em></p>
+  </div>
+</section>

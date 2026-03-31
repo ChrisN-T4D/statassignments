@@ -1,0 +1,135 @@
+<section class="module-content" aria-labelledby="corrections-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Excel track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Microsoft Excel</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="corrections-title">10.3-10.4 Continuity Correction and Effect Size</h2>
+
+  <div class="concept-box" role="note">
+    <h3>Part 1: The Continuity Correction (Yates Correction)</h3>
+    <p>When df = 1 (e.g., 2×2 tables or 2-category goodness-of-fit), the χ² approximation can be too liberal. The Yates correction makes the test more conservative.</p>
+  </div>
+
+  <h3>When to Use Continuity Correction</h3>
+  <ul>
+    <li><strong>Only when df = 1</strong> (2×2 contingency tables, or 2-category GOF)</li>
+    <li>Small to moderate sample sizes (N < 100)</li>
+    <li>When expected frequencies are close to 5 (but not below 5)</li>
+  </ul>
+
+  <h3>The Formula</h3>
+  <div class="formula-box">
+    <h4>Without Correction:</h4>
+    <p>χ² = Σ [(O - E)² / E]</p>
+
+    <h4>With Yates Correction:</h4>
+    <p>χ² = Σ [(|O - E| - 0.5)² / E]</p>
+    <p><em>Subtract 0.5 from the absolute difference before squaring</em></p>
+  </div>
+
+  <div class="example-box">
+    <h4>Example: 2×2 Table</h4>
+    <table class="stats-table">
+      <tr><th></th><th>Yes</th><th>No</th></tr>
+      <tr><td>Treatment</td><td>O=30</td><td>O=20</td></tr>
+      <tr><td>Control</td><td>O=15</td><td>O=35</td></tr>
+    </table>
+
+    <p><strong>Expected frequencies:</strong> All ≈ 22.5 or 27.5</p>
+
+    <p><strong>Without correction:</strong> χ² = 9.10, p = .003</p>
+    <p><strong>With correction:</strong> χ² = 7.98, p = .005</p>
+    <p><em>Correction reduces χ² slightly, making test more conservative</em></p>
+  </div>
+
+  <div class="Excel-box">
+    <h3>in Excel</h3>
+    <p>In Contingency Tables → Statistics → Check <strong>"χ² continuity correction"</strong></p>
+    <p>Excel will show both the standard χ² and the corrected value.</p>
+  </div>
+
+  <div class="concept-box" style="margin-top: 2em;">
+    <h3>Part 2: Effect Size (Cramér's V)</h3>
+    <p>A significant χ² tells you there IS an association, but not how STRONG it is. Effect size quantifies the strength of association.</p>
+  </div>
+
+  <h3>Why Effect Size Matters</h3>
+  <ul>
+    <li>p-values depend on sample size</li>
+    <li>With N=10,000, even tiny associations are "significant"</li>
+    <li>Effect size is independent of sample size</li>
+    <li>Tells you practical importance, not just statistical significance</li>
+  </ul>
+
+  <h3>Cramér's V Formula</h3>
+  <div class="formula-box">
+    <h4>For any size contingency table:</h4>
+    <p><strong>V = √[χ² / (N × (k - 1))]</strong></p>
+
+    <h4>Where:</h4>
+    <ul>
+      <li>χ² = chi-square statistic</li>
+      <li>N = total sample size</li>
+      <li>k = min(rows, columns)</li>
+    </ul>
+
+    <h4>Simpler formula (phi) for 2×2 tables:</h4>
+    <p><strong>φ = √(χ² / N)</strong></p>
+    <p><em>For 2×2, Cramér's V = φ</em></p>
+  </div>
+
+  <h3>Interpreting Cramér's V</h3>
+  <div class="formula-box">
+    <h4>Cohen's Benchmarks (for df = 1, i.e., 2×2 tables):</h4>
+    <ul>
+      <li><strong>Small:</strong> V ≈ 0.10</li>
+      <li><strong>Medium:</strong> V ≈ 0.30</li>
+      <li><strong>Large:</strong> V ≈ 0.50</li>
+    </ul>
+
+    <p><em>For larger tables (df > 1), these benchmarks should be adjusted upward slightly</em></p>
+  </div>
+
+  <div class="example-box">
+    <h4>Chapek 9 Example:</h4>
+    <p>χ²(2) = 10.72, N = 180</p>
+    <p>k = min(3, 2) = 2</p>
+    <p>V = √[10.72 / (180 × (2-1))] = √[10.72 / 180] = √0.0596 = <strong>0.24</strong></p>
+
+    <p><strong>Interpretation:</strong> The association between species and choice is small-to-medium in strength. About 24% of the maximum possible association.</p>
+  </div>
+
+  <div class="Excel-box">
+    <h3>in Excel</h3>
+    <p>In Contingency Tables → Statistics → Check <strong>"Cramér's V"</strong></p>
+  </div>
+
+  <h3>Other Effect Size Measures</h3>
+  <div class="concept-box">
+    <h4>Alternatives to Cramér's V:</h4>
+    <ul>
+      <li><strong>Phi (φ):</strong> For 2×2 tables only (same as Cramér's V when 2×2)</li>
+      <li><strong>Odds Ratio:</strong> For 2×2 tables, compares odds of outcome in two groups</li>
+      <li><strong>Risk Ratio:</strong> For 2×2 tables, compares risk of outcome</li>
+    </ul>
+    <p>Cramér's V is most general—works for any size table.</p>
+  </div>
+
+  <div class="key-points">
+    <h3>Key Points</h3>
+    <ul>
+      <li><strong>Continuity correction:</strong> Use for df = 1, makes test more conservative</li>
+      <li><strong>Cramér's V:</strong> Standard effect size for chi-square tests</li>
+      <li>V ranges from <strong>0 (no association) to 1 (perfect association)</strong></li>
+      <li>Always report effect size along with χ² and p-value</li>
+      <li>Effect size tells you <strong>practical importance</strong></li>
+      <li>Small p-value doesn't mean large effect—especially with big N</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <h4>Complete Write-Up Template:</h4>
+    <p><em>"A chi-square test of independence revealed a significant association between [Variable A] and [Variable B], χ²(df) = X.XX, p = .XXX, Cramér's V = 0.XX. [Describe pattern of association]."</em></p>
+
+    <p><strong>Example:</strong></p>
+    <p><em>"A chi-square test of independence revealed a significant association between species and preference, χ²(2) = 10.72, p = .005, Cramér's V = 0.24. Robots showed a stronger preference for flowers (34%) compared to humans (14%), while humans were more likely to choose data files (70% vs 51%)."</em></p>
+  </div>
+</section>

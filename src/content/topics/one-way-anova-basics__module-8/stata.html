@@ -1,0 +1,188 @@
+<section class="module-content" aria-labelledby="anova-basics-title"><div class="software-adaptation-note" role="note"><p><strong>Note (Stata track):</strong> This chapter follows the structure and wording of <em>Learning Statistics with jamovi</em> (CC BY-SA 4.0). Software-specific menus, file formats, and clicks refer to <strong>Stata</strong> where the original refers to jamovi. Verify dialog names against your software version.</p></div>
+
+
+  <h2 id="anova-basics-title">13.1-13.3 Introduction to One-Way ANOVA</h2>
+
+  <div class="concept-box" role="note">
+    <h3>What is ANOVA?</h3>
+    <p><strong>Analysis of Variance (ANOVA)</strong> tests whether group means differ significantly. Despite its name, ANOVA analyzes <em>means</em> by partitioning <em>variance</em>.</p>
+    <p><strong>One-way ANOVA:</strong> One categorical predictor (factor) with 3+ levels, one continuous outcome.</p>
+  </div>
+
+  <h3>When to Use One-Way ANOVA</h3>
+  <ul>
+    <li><strong>3+ groups:</strong> Comparing means across multiple conditions</li>
+    <li><strong>Independent groups:</strong> Different participants in each group (between-subjects)</li>
+    <li><strong>Continuous outcome:</strong> Interval or ratio scale dependent variable</li>
+    <li><strong>Single factor:</strong> One grouping variable</li>
+  </ul>
+
+  <div class="example-box">
+    <h4>Example: Clinical Trial</h4>
+    <p><strong>Research Question:</strong> Do three drugs (Placebo, Anxifree, Joyzepam) differ in mood improvement?</p>
+    <ul>
+      <li><strong>Groups (k=3):</strong> Placebo, Anxifree, Joyzepam</li>
+      <li><strong>Outcome:</strong> Mood gain (-5 to +5)</li>
+      <li><strong>N = 18:</strong> 6 participants per group</li>
+    </ul>
+    <table class="stats-table">
+      <tr><th>Group</th><th>Mean</th><th>SD</th></tr>
+      <tr><td>Placebo</td><td>0.45</td><td>0.28</td></tr>
+      <tr><td>Anxifree</td><td>0.72</td><td>0.27</td></tr>
+      <tr><td>Joyzepam</td><td>1.48</td><td>0.21</td></tr>
+    </table>
+  </div>
+
+  <h3>Hypotheses</h3>
+  <div class="formula-box">
+    <p><strong>H₀:</strong> μ_placebo = μ_Anxifree = μ_Joyzepam (all means equal)</p>
+    <p><strong>H₁:</strong> At least one mean differs</p>
+    <p><em>Note:</em> ANOVA is <strong>omnibus</strong> — it tests overall difference, not specific pairs</p>
+  </div>
+
+  <h3>The Logic Behind ANOVA</h3>
+  <p>ANOVA partitions total variance into two sources:</p>
+  <ul>
+    <li><strong>Between-groups variance (SS_b):</strong> Differences among group means</li>
+    <li><strong>Within-groups variance (SS_w):</strong> Variability within each group (error)</li>
+  </ul>
+  <div class="formula-box">
+    <p>SS_total = SS_between + SS_within</p>
+    <p><strong>F-ratio = MS_between / MS_within</strong></p>
+    <p>If groups differ, SS_between is large relative to SS_within → Large F → Reject H₀</p>
+  </div>
+
+  <h3>The Mathematics Behind ANOVA</h3>
+
+  <h4>Step 1: Understanding the Notation</h4>
+  <p>First, let's define our notation clearly:</p>
+  <div class="formula-box">
+    <ul>
+      <li><strong>G</strong> = number of groups (in our example, G = 3 drugs)</li>
+      <li><strong>N</strong> = total sample size (N = 18 people)</li>
+      <li><strong>N<sub>k</sub></strong> = number of people in group k (N<sub>k</sub> = 6 per group)</li>
+      <li><strong>Y<sub>ik</sub></strong> = score for person i in group k</li>
+      <li><strong>Ȳ<sub>k</sub></strong> = mean of group k</li>
+      <li><strong>Ȳ</strong> = grand mean (overall average)</li>
+    </ul>
+  </div>
+
+  <h4>Step 2: Total Sum of Squares (SS<sub>tot</sub>)</h4>
+  <p>This measures <em>total variability</em> in the data:</p>
+  <div class="formula-box">
+    <p><strong>SS<sub>tot</sub> = Σ Σ (Y<sub>ik</sub> - Ȳ)²</strong></p>
+    <p>Translation: For every person, calculate how far their score is from the grand mean, square it, and add them all up.</p>
+  </div>
+
+  <h4>Step 3: Within-Groups Sum of Squares (SS<sub>w</sub>)</h4>
+  <p>This measures variability <em>within each group</em> (individual differences):</p>
+  <div class="formula-box">
+    <p><strong>SS<sub>w</sub> = Σ Σ (Y<sub>ik</sub> - Ȳ<sub>k</sub>)²</strong></p>
+    <p>Translation: For every person, calculate how far their score is from their <em>group mean</em>, square it, and add them all up.</p>
+    <p><em>Note:</em> This ignores differences between groups—it only looks at variation within each group.</p>
+  </div>
+
+  <h4>Step 4: Between-Groups Sum of Squares (SS<sub>b</sub>)</h4>
+  <p>This measures how much the <em>group means differ</em> from each other:</p>
+  <div class="formula-box">
+    <p><strong>SS<sub>b</sub> = Σ N<sub>k</sub> (Ȳ<sub>k</sub> - Ȳ)²</strong></p>
+    <p>Translation: For each group, see how far the group mean is from the grand mean, square it, multiply by group size, and add them up.</p>
+    <p><strong>Key insight:</strong> SS<sub>w</sub> + SS<sub>b</sub> = SS<sub>tot</sub></p>
+  </div>
+
+  <div class="example-box">
+    <h4>Worked Example: Calculating Sums of Squares</h4>
+    <p>Let's calculate SS<sub>w</sub> for just the first few observations:</p>
+    <table class="stats-table">
+      <tr><th>Person</th><th>Group</th><th>Score (Y<sub>ik</sub>)</th><th>Group Mean (Ȳ<sub>k</sub>)</th><th>Y<sub>ik</sub> - Ȳ<sub>k</sub></th><th>(Y<sub>ik</sub> - Ȳ<sub>k</sub>)²</th></tr>
+      <tr><td>1</td><td>Placebo</td><td>0.5</td><td>0.45</td><td>0.05</td><td>0.0025</td></tr>
+      <tr><td>2</td><td>Placebo</td><td>0.3</td><td>0.45</td><td>-0.15</td><td>0.0225</td></tr>
+      <tr><td>3</td><td>Placebo</td><td>0.1</td><td>0.45</td><td>-0.35</td><td>0.1225</td></tr>
+      <tr><td>4</td><td>Anxifree</td><td>0.6</td><td>0.72</td><td>-0.12</td><td>0.0144</td></tr>
+      <tr><td>5</td><td>Anxifree</td><td>0.4</td><td>0.72</td><td>-0.32</td><td>0.1024</td></tr>
+    </table>
+    <p>Sum of squared deviations (for these 5 people) = 0.0025 + 0.0225 + 0.1225 + 0.0144 + 0.1024 = 0.2643</p>
+    <p><em>For the full dataset:</em> SS<sub>w</sub> = 1.39</p>
+  </div>
+
+  <div class="example-box">
+    <h4>Calculating SS<sub>b</sub> (Between-Groups)</h4>
+    <table class="stats-table">
+      <tr><th>Group</th><th>N<sub>k</sub></th><th>Ȳ<sub>k</sub></th><th>Ȳ</th><th>Ȳ<sub>k</sub> - Ȳ</th><th>(Ȳ<sub>k</sub> - Ȳ)²</th><th>N<sub>k</sub>(Ȳ<sub>k</sub> - Ȳ)²</th></tr>
+      <tr><td>Placebo</td><td>6</td><td>0.45</td><td>0.88</td><td>-0.43</td><td>0.1849</td><td>1.11</td></tr>
+      <tr><td>Anxifree</td><td>6</td><td>0.72</td><td>0.88</td><td>-0.16</td><td>0.0256</td><td>0.15</td></tr>
+      <tr><td>Joyzepam</td><td>6</td><td>1.48</td><td>0.88</td><td>0.60</td><td>0.3600</td><td>2.16</td></tr>
+    </table>
+    <p>SS<sub>b</sub> = 1.11 + 0.15 + 2.16 = <strong>3.42</strong></p>
+  </div>
+
+  <h4>Step 5: From Sums of Squares to Mean Squares</h4>
+  <p>We divide each SS by its <strong>degrees of freedom</strong> to get Mean Squares:</p>
+  <div class="formula-box">
+    <p><strong>df<sub>between</sub> = G - 1</strong> (number of groups minus 1)</p>
+    <p>In our example: df<sub>b</sub> = 3 - 1 = 2</p>
+    <br>
+    <p><strong>df<sub>within</sub> = N - G</strong> (total sample size minus number of groups)</p>
+    <p>In our example: df<sub>w</sub> = 18 - 3 = 15</p>
+    <br>
+    <p><strong>MS<sub>b</sub> = SS<sub>b</sub> / df<sub>b</sub></strong> = 3.42 / 2 = <strong>1.71</strong></p>
+    <p><strong>MS<sub>w</sub> = SS<sub>w</sub> / df<sub>w</sub></strong> = 1.39 / 15 = <strong>0.09</strong></p>
+  </div>
+
+  <h4>Step 6: Calculate the F-Ratio</h4>
+  <div class="formula-box">
+    <p><strong>F = MS<sub>b</sub> / MS<sub>w</sub></strong> = 1.71 / 0.09 = <strong>19.0</strong></p>
+    <p><strong>F(2, 15) = 19.0</strong></p>
+    <p>Compare to critical value: F<sub>crit</sub>(α = .05, df<sub>1</sub>=2, df<sub>2</sub>=15) = 3.68</p>
+    <p>Since 19.0 > 3.68, we <strong>reject H₀</strong></p>
+    <p>Or use p-value: p < .001</p>
+  </div>
+
+  <div class="concept-box">
+    <h4>What Does the F-Ratio Mean?</h4>
+    <p><strong>F = Between-group variation / Within-group variation</strong></p>
+    <ul>
+      <li><strong>F ≈ 1:</strong> Group means don't differ much (variation between groups is about the same as variation within groups)</li>
+      <li><strong>F >> 1:</strong> Group means differ substantially (variation between groups is much larger than variation within groups)</li>
+      <li>In our example, F = 19 means the differences <em>between</em> drugs are 19 times larger than random individual differences <em>within</em> each drug group!</li>
+    </ul>
+  </div>
+
+  <div class="Stata-box">
+    <h3>Running One-Way ANOVA in Stata</h3>
+    <ol>
+      <li><strong>Analyses → ANOVA → ANOVA</strong></li>
+      <li>Move <strong>mood.gain</strong> to "Dependent Variable"</li>
+      <li>Move <strong>drug</strong> to "Fixed Factors"</li>
+      <li>Under "Effect Size," check <strong>η² (eta-squared)</strong></li>
+      <li>Under "Assumption Checks," check <strong>Homogeneity tests</strong> and <strong>Normality (Q-Q plot)</strong></li>
+    </ol>
+  </div>
+
+  <div class="example-box">
+    <h4>Results</h4>
+    <p><strong>F(2, 15) = 18.61, p < .001, η² = 0.71</strong></p>
+    <p><em>Interpretation:</em> At least one drug differs significantly in mood improvement. 71% of variance in mood gain is explained by drug type.</p>
+  </div>
+
+  <div class="key-points-box">
+    <h3>Key Points</h3>
+    <ul>
+      <li>ANOVA tests <strong>omnibus hypothesis</strong> (overall difference)</li>
+      <li>F-ratio compares <strong>between-group</strong> to <strong>within-group</strong> variance</li>
+      <li>Significant F → at least one mean differs (but not which ones)</li>
+      <li>Use <strong>post-hoc tests</strong> to identify specific group differences</li>
+      <li>Effect size (η²) measures <strong>proportion of variance explained</strong></li>
+    </ul>
+  </div>
+
+  <div class="warning-box">
+    <h3>Common Mistakes</h3>
+    <ul>
+      <li><strong>Multiple t-tests instead of ANOVA:</strong> Inflates Type I error</li>
+      <li><strong>Ignoring assumptions:</strong> Check normality and homogeneity of variance</li>
+      <li><strong>Stopping at F-test:</strong> Need post-hoc tests to identify which groups differ</li>
+      <li><strong>Confusing significance with importance:</strong> Always report effect size</li>
+    </ul>
+  </div>
+</section>
