@@ -189,6 +189,10 @@
             <div class="stat-value">{{ questionStats.module3 }}</div>
             <div class="stat-label">Module 3</div>
           </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ questionStats.researchMethods }}</div>
+            <div class="stat-label">Research Methods (all RM modules)</div>
+          </div>
         </div>
 
         <div class="question-objectives-map">
@@ -444,7 +448,7 @@ import { pb } from '../lib/pocketbase'
 import { useBKT } from '../composables/useBKT'
 import { objectives } from '../data/objectives'
 import { questionObjectiveMap, getObjectivesForQuestion } from '../data/questionObjectiveMap'
-import { allStatisticsQuestions } from '../data/conceptQuestions'
+import { allStatisticsQuestions, allConceptReviewQuestions } from '../data/conceptQuestions'
 import { getContentModulesByClass, getAllTopics } from '../data/modules'
 
 const { getAllBKTStates, resetBKT } = useBKT()
@@ -500,16 +504,18 @@ const questionStats = computed(() => {
   const m2 = allStatisticsQuestions.filter(q => q.moduleId === 'stats-module-2').length
   const m3 = allStatisticsQuestions.filter(q => q.moduleId === 'stats-module-3').length
 
+  const rm = allConceptReviewQuestions.filter(q => q.moduleId?.startsWith('rm-module-')).length
   return {
-    totalQuestions: allStatisticsQuestions.length,
+    totalQuestions: allConceptReviewQuestions.length,
     module1: m1,
     module2: m2,
-    module3: m3
+    module3: m3,
+    researchMethods: rm
   }
 })
 
 const questionsWithMappings = computed(() => {
-  return allStatisticsQuestions.map(q => ({
+  return allConceptReviewQuestions.map(q => ({
     id: q.id,
     module: q.moduleId,
     objectives: getObjectivesForQuestion(q.id),
@@ -561,7 +567,7 @@ const systemInfo = computed(() => {
   return {
     totalModules: modules.length,
     totalTopics: topics.length,
-    totalQuestions: allStatisticsQuestions.length,
+    totalQuestions: allConceptReviewQuestions.length,
     totalObjectives: objectives.length,
     bktStatesCount,
     readTopicsCount,
@@ -908,7 +914,7 @@ function exportAllData() {
     bkt: getAllBKTStates(),
     objectives: objectives,
     questionMappings: questionObjectiveMap,
-    questions: allStatisticsQuestions,
+    questions: allConceptReviewQuestions,
     localStorage: {
       preferredSoftware: localStorage.getItem('preferredSoftware'),
       readTopics: localStorage.getItem('readTopics')

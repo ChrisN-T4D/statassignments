@@ -14,8 +14,8 @@ export const statisticsModules = [
   },
   {
     id: 'module-3',
-    title: 'Module 3 - Jamovi and Data Handling',
-    description: 'Learning the Jamovi interface, importing data, and basic operations',
+    title: 'Module 3 - Software and Data Handling',
+    description: 'Importing data, variable types, and basic operations in your chosen package',
     order: 2
   },
   {

@@ -28,7 +28,7 @@
             >
               <div class="class-icon">{{ cls.icon }}</div>
               <div class="class-content">
-                <h3>{{ cls.name }}</h3>
+                <h3>{{ getClassDisplayName(cls) }}</h3>
                 <p>{{ cls.description }}</p>
               </div>
               <span class="class-arrow">→</span>
@@ -55,6 +55,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useClasses } from '../composables/useClasses'
+import { getClassDisplayName } from '../utils/classDisplayName'
 
 const { classes, loading, fetchClasses, selectClass } = useClasses()
 

@@ -5,7 +5,7 @@
       @click="isOpen = !isOpen"
       :aria-expanded="isOpen"
       aria-haspopup="listbox"
-      :aria-label="`Select class. Currently: ${selectedClass?.name || 'None selected'}`"
+      :aria-label="`Select class. Currently: ${selectedClass ? getClassDisplayName(selectedClass) : 'None selected'}`"
     >
       <span v-if="selectedClass" class="selected-class">
         <span class="class-icon" :style="{ background: selectedClass.color + '20', color: selectedClass.color }">
@@ -34,7 +34,7 @@
             {{ cls.icon }}
           </span>
           <div class="class-info">
-            <span class="class-name">{{ cls.name }}</span>
+            <span class="class-name">{{ getClassDisplayName(cls) }}</span>
             <span class="class-description">{{ cls.description }}</span>
           </div>
           <svg v-if="selectedClassId === cls.id" class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -52,6 +52,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useClasses } from '../composables/useClasses'
+import { getClassDisplayName } from '../utils/classDisplayName'
 
 const { classes, selectedClassId, selectedClass, selectClass, navigateToClass, fetchClasses } = useClasses()
 

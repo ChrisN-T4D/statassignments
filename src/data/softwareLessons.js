@@ -25,8 +25,13 @@ Assessment Types:
 */
 
 import { module3UnifiedLessons } from './softwareLessons_module3_unified.js'
+import { module4DescriptiveLessonsOther } from './softwareLessons_module4_descriptives_other.js'
 import { module5UnifiedLessons } from './softwareLessons_module5_unified.js'
+import { module5UnifiedLessonsOther } from './softwareLessons_module5_unified_other.js'
+import { module6LessonsOther } from './softwareLessons_module6_other.js'
+import { module7LessonsOther } from './softwareLessons_module7_other.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
+import { module8UnifiedLessonsOther } from './softwareLessons_module8_unified_other.js'
 import { excelGuidesLessons } from './softwareLessons_excel_guides.js'
 
 export const softwareLessons = [
@@ -349,8 +354,11 @@ export const softwareLessons = [
     }
   },
 
+  ...module4DescriptiveLessonsOther,
+
   // ============ STATISTICS MODULE 5: Graphing and Data Manipulation (Unified - one lesson, multiple learn sections) ============
   ...module5UnifiedLessons,
+  ...module5UnifiedLessonsOther,
 
   // ============ STATISTICS MODULE 6: Probability and Sampling ============
   {
@@ -660,6 +668,8 @@ export const softwareLessons = [
       }
     }
   },
+
+  ...module6LessonsOther,
 
   // ============ STATISTICS MODULE 7: Hypothesis Testing ============
   {
@@ -1168,7 +1178,10 @@ export const softwareLessons = [
     }
   },
 
+  ...module7LessonsOther,
+
   ...module8UnifiedLessons,
+  ...module8UnifiedLessonsOther,
 ]
 
 // Helper to get lessons by module
@@ -1188,7 +1201,7 @@ export function getLessonById(lessonId) {
 
 // Export modules metadata (Statistics class)
 export const softwareModules = [
-  { id: 'stats-module-3', title: 'Jamovi Basics', description: 'Getting started with the Jamovi interface' },
+  { id: 'stats-module-3', title: 'Software basics', description: 'Import data, variable types, and interface for your chosen package' },
   { id: 'stats-module-4', title: 'Descriptive Statistics', description: 'Summarizing your data' },
   { id: 'stats-module-5', title: 'Data Visualization', description: 'Creating charts and graphs' },
   { id: 'stats-module-6', title: 'Probability & Distributions', description: 'Working with the normal distribution' },

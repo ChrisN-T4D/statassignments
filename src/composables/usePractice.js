@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
-import { allStatisticsQuestions, getQuestionsByModule } from '../data/conceptQuestions'
+import { allConceptReviewQuestions, getQuestionsByModule } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { preferredSoftware } from './usePreferredSoftware.js'
 import { updateBKT, predictPerformance } from './useBKT'
@@ -241,7 +241,7 @@ export function usePractice() {
         // Fallback to static questions
         let staticQuestions = topicId
           ? getQuestionsByModule(topicId)
-          : allStatisticsQuestions
+          : allConceptReviewQuestions
         problems.value = staticQuestions.map(convertQuestion).filter(Boolean)
       }
     } catch (err) {
@@ -249,7 +249,7 @@ export function usePractice() {
       // Fallback to static questions
       let staticQuestions = topicId
         ? getQuestionsByModule(topicId)
-        : allStatisticsQuestions
+        : allConceptReviewQuestions
       problems.value = staticQuestions.map(convertQuestion).filter(Boolean)
     } finally {
       loading.value = false
@@ -316,7 +316,7 @@ export function usePractice() {
         // Fallback to static questions
         let staticQuestions = topicId
           ? getQuestionsByModule(topicId)
-          : allStatisticsQuestions
+          : allConceptReviewQuestions
 
         if (staticQuestions.length > 0) {
           const randomIndex = Math.floor(Math.random() * staticQuestions.length)
@@ -330,7 +330,7 @@ export function usePractice() {
       // Fallback to static questions
       let staticQuestions = topicId
         ? getQuestionsByModule(topicId)
-        : allStatisticsQuestions
+        : allConceptReviewQuestions
 
       if (staticQuestions.length > 0) {
         const randomIndex = Math.floor(Math.random() * staticQuestions.length)

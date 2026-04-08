@@ -7,6 +7,7 @@ import { useAuth } from './useAuth'
 const FALLBACK_CLASSES = [
   {
     id: 'research-methods',
+    slug: 'research-methods',
     name: 'Research Methods',
     short_name: 'RM',
     description: 'Introduction to research methodology in psychology, including experimental design, measurement, and ethics.',

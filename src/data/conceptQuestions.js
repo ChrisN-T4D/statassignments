@@ -1,6 +1,24 @@
 // Concept Review Questions - Organized by Module
 // These are practice questions for testing understanding of statistical concepts
 
+import {
+  allResearchMethodsQuestions,
+  rmModule1Questions,
+  rmModule2Questions,
+  rmModule3Questions,
+  rmModule4Questions,
+  rmModule5Questions,
+  rmModule6Questions,
+  rmModuleLabQuestions,
+  rmModule7Questions,
+  rmModule8Questions,
+  rmModule9Questions,
+  rmModule10Questions,
+  rmModule11Questions,
+  rmModule12Questions,
+  rmModule13Questions
+} from './conceptQuestionsRm/index.js'
+
 /*
 Question Types:
 - multiple_choice: Single correct answer
@@ -2802,7 +2820,7 @@ export const statsModule8Questions = [
 // COMBINED EXPORTS
 // ============================================================
 
-// All statistics questions combined
+// Statistics (PSYC 4213) concept questions only — used where stats-specific tooling applies
 export const allStatisticsQuestions = [
   ...statsModule1Questions,
   ...statsModule2Questions,
@@ -2814,6 +2832,9 @@ export const allStatisticsQuestions = [
   ...statsModule8Questions
 ]
 
+// Stats + Research Methods — canonical list for Practice fallback and PocketBase sync
+export const allConceptReviewQuestions = [...allStatisticsQuestions, ...allResearchMethodsQuestions]
+
 // Questions organized by module
 export const questionsByModule = {
   'stats-module-1': statsModule1Questions,
@@ -2823,7 +2844,21 @@ export const questionsByModule = {
   'stats-module-5': statsModule5Questions,
   'stats-module-6': statsModule6Questions,
   'stats-module-7': statsModule7Questions,
-  'stats-module-8': statsModule8Questions
+  'stats-module-8': statsModule8Questions,
+  'rm-module-1': rmModule1Questions,
+  'rm-module-2': rmModule2Questions,
+  'rm-module-3': rmModule3Questions,
+  'rm-module-4': rmModule4Questions,
+  'rm-module-5': rmModule5Questions,
+  'rm-module-6': rmModule6Questions,
+  'rm-module-lab': rmModuleLabQuestions,
+  'rm-module-7': rmModule7Questions,
+  'rm-module-8': rmModule8Questions,
+  'rm-module-9': rmModule9Questions,
+  'rm-module-10': rmModule10Questions,
+  'rm-module-11': rmModule11Questions,
+  'rm-module-12': rmModule12Questions,
+  'rm-module-13': rmModule13Questions
 }
 
 // Helper functions
@@ -2832,15 +2867,15 @@ export function getQuestionsByModule(moduleId) {
 }
 
 export function getQuestionById(questionId) {
-  return allStatisticsQuestions.find(q => q.id === questionId)
+  return allConceptReviewQuestions.find(q => q.id === questionId)
 }
 
 export function getQuestionsByDifficulty(difficulty) {
-  return allStatisticsQuestions.filter(q => q.difficulty === difficulty)
+  return allConceptReviewQuestions.filter(q => q.difficulty === difficulty)
 }
 
 export function getQuestionsByType(type) {
-  return allStatisticsQuestions.filter(q => q.type === type)
+  return allConceptReviewQuestions.filter(q => q.type === type)
 }
 
 export function getRandomQuestions(moduleId, count = 10) {

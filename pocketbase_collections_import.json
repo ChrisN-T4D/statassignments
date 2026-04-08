@@ -353,6 +353,11 @@
     "type": "base",
     "schema": [
       {
+        "name": "question_id",
+        "type": "text",
+        "required": false
+      },
+      {
         "name": "topic_id",
         "type": "text",
         "required": true
@@ -393,7 +398,9 @@
         "required": false
       }
     ],
-    "indexes": [],
+    "indexes": [
+      "CREATE UNIQUE INDEX IF NOT EXISTS idx_practice_problems_question_id ON practice_problems (question_id) WHERE length(question_id) > 0"
+    ],
     "listRule": "",
     "viewRule": "",
     "createRule": null,

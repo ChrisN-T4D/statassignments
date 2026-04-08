@@ -139,7 +139,22 @@ Create collections in this order (due to relations):
    - Values: `student`, `instructor`
    - Default: `student`
 
-### 5. Import Seed Data
+### 5. Sync concept review questions (`practice_problems`)
+
+Canonical items live in `src/data/conceptQuestions.js` (statistics + Research Methods). After changing questions, push them to PocketBase:
+
+1. Apply migrations (includes `pb_migrations/6_practice_problems_question_id.js` for `question_id` + index).
+2. In Admin, ensure `practice_problems` has a **question_id** (text) field and that **question_type** allows `multiple_select` (and other types you use), if your PocketBase version enforces select values.
+3. Run (admin credentials):
+
+```bash
+set POCKETBASE_URL=https://your-pocketbase-host
+npm run sync:practice-problems -- you@example.com yourpassword
+```
+
+On Windows PowerShell use `$env:POCKETBASE_URL="https://..."` before `npm run`. Default URL if unset is `http://127.0.0.1:8090`. The script **upserts** by `question_id` (creates or updates).
+
+### 6. Import Seed Data
 
 Use the PocketBase Admin UI to import data from `seed-data.json`:
 
@@ -147,7 +162,7 @@ Use the PocketBase Admin UI to import data from `seed-data.json`:
 2. **Modules**: Import the module definitions
 3. **Items**: Import practice questions (link to module IDs)
 
-### 6. Generate Roster with Student Keys
+### 7. Generate Roster with Student Keys
 
 For each semester, generate roster entries with pseudonymous keys:
 
@@ -167,7 +182,7 @@ function generateStudentKey(semesterCode) {
 
 Import roster via CSV or create manually in admin UI.
 
-### 7. Configure the Frontend
+### 8. Configure the Frontend
 
 The `.env` file is already configured:
 
@@ -182,7 +197,7 @@ npm install
 npm run dev
 ```
 
-### 8. Build for Production
+### 9. Build for Production
 
 ```bash
 npm run build

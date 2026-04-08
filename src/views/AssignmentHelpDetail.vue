@@ -33,7 +33,7 @@
 
           <div v-if="assignment.formulas?.length" class="section formulas-section">
             <h2 class="section-title">Formula reference</h2>
-            <p class="section-desc">Use these when you type or compute by hand. In Jamovi Compute, replace column names (e.g. Height) with your variable name.</p>
+            <p class="section-desc">{{ formulaIntro }}</p>
             <div class="formula-list">
               <div v-for="(f, fi) in assignment.formulas" :key="fi" class="formula-block">
                 <div v-if="f.name" class="formula-name">{{ f.name }}</div>
@@ -75,7 +75,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import { getAssignmentById } from '../data/assignmentHelp'
+import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
+import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 
 const props = defineProps({
   classId: { type: String, required: true },
@@ -83,8 +84,24 @@ const props = defineProps({
 })
 
 const resolved = computed(() => getAssignmentById(props.classId, props.assignmentId))
-const assignment = computed(() => resolved.value?.assignment ?? null)
+const assignment = computed(() => {
+  const r = resolved.value
+  if (!r?.assignment) return null
+  return resolveAssignmentForSoftware(r.assignment, preferredSoftware.value)
+})
 const block = computed(() => resolved.value?.block ?? null)
+
+const formulaIntro = computed(() => {
+  const sw = preferredSoftware.value || 'jamovi'
+  const bySw = {
+    jamovi: 'In Jamovi Compute, replace column names (e.g. Height) with your variable name.',
+    spss: 'In SPSS Transform → Compute Variable, use your variable name instead of Height.',
+    r: 'In R, replace Height with your vector/column name; use na.rm = TRUE if there are missing values.',
+    excel: 'In Excel, point formulas at your Height column and lock ranges with $ where needed.',
+    stata: 'In Stata, replace Height with your variable name after summarize or in generate/egen.'
+  }
+  return `Use these when you type or compute by hand. ${bySw[sw] || bySw.jamovi}`
+})
 const practiceTestCount = 15
 
 const practiceTestSlugs = ['benchmark-1', 'benchmark-2', 'final-benchmark']

@@ -501,7 +501,7 @@ export const topicsMeta = [
     "id": "rm-chapter-5",
     "moduleId": "rm-module-5",
     "title": "Chapter 5: Experimental Research",
-    "description": "Experimental design basics, validity, and practical considerations.",
+    "description": "Experimental design, validity, and practical considerations; the interactive assignment & sampling lab is in the Lab module (after Chapter 6).",
     "icon": "T"
   },
   {
@@ -509,6 +509,13 @@ export const topicsMeta = [
     "moduleId": "rm-module-6",
     "title": "Chapter 6: Non-Experimental Research",
     "description": "Correlational, qualitative, and observational research approaches.",
+    "icon": "T"
+  },
+  {
+    "id": "rm-lab-sampling",
+    "moduleId": "rm-module-lab",
+    "title": "Lab: Random assignment & sampling",
+    "description": "Interactive mini-lab on the Concept Review tab: assignment vs sampling and probability sampling plans.",
     "icon": "T"
   },
   {

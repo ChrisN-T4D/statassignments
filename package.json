@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "import-questions": "node scripts/import-questions.js",
+    "import-questions": "node scripts/sync-practice-problems.mjs",
+    "sync:practice-problems": "node scripts/sync-practice-problems.mjs",
     "build:topics": "node scripts/build-topic-html.mjs",
     "generate:topics-meta": "node scripts/generate-topics-meta.mjs",
     "parity:practice": "node scripts/verify-practice-parity.mjs",
@@ -16,6 +17,7 @@
     "parity:smoke": "node scripts/check-concept-patches-smoke.mjs",
     "parity:all": "npm run parity:map && npm run parity:concept && npm run parity:practice && npm run parity:smoke",
     "contracts:dataflow": "node scripts/check-data-flow-contracts.mjs",
+    "audit:software": "node scripts/audit-software-coverage.mjs",
     "open:mobile": "start chrome --window-size=375,812 http://localhost:5173"
   },
   "dependencies": {

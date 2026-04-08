@@ -224,6 +224,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { topics } from '../data/topics.js'
+import { getModuleById } from '../data/modules.js'
 import { usePractice } from '../composables/usePractice'
 import { useAuth } from '../composables/useAuth'
 import { useBKT } from '../composables/useBKT'
@@ -303,7 +304,11 @@ function normalizeAnswerList(values) {
 }
 
 function getTopicName(topicId) {
-  return topics.find(t => t.id === topicId)?.title || topicId
+  return (
+    topics.find(t => t.id === topicId)?.title ||
+    getModuleById(topicId)?.shortTitle ||
+    topicId
+  )
 }
 
 function normalizeRouteValue(value) {

@@ -198,6 +198,7 @@ import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { preferredSoftware, setPreferredSoftware } from '../composables/usePreferredSoftware.js'
+import { getClassDisplayName } from '../utils/classDisplayName'
 
 // Assignment Tools Component - Now in global ResourcesDrawer
 // import ScreenRecorder from '../components/ScreenRecorder.vue'
@@ -234,7 +235,7 @@ const topicId = computed(() => route.params.topicId || route.params.id)
 
 const pageTitle = computed(() => {
   if (classId.value && selectedClass.value) {
-    return `${selectedClass.value.name} - Software Practice`
+    return `${getClassDisplayName(selectedClass.value)} - Software Practice`
   }
   const topic = topics.find(t => t.id === topicId.value)
   return topic?.title ? `${topic.title} Practice` : 'Software Practice'

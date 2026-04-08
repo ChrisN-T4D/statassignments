@@ -5,7 +5,7 @@
       <div class="class-header" :style="{ '--class-color': currentClass.color }">
         <div class="class-icon-large">{{ currentClass.icon }}</div>
         <div class="class-info">
-          <h1>{{ currentClass.name }}</h1>
+          <h1>{{ getClassDisplayName(currentClass) }}</h1>
           <p>{{ currentClass.description }}</p>
           <div class="header-links">
             <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
@@ -89,7 +89,7 @@
         <!-- Content Tabs -->
         <div class="content-tabs">
           <button
-            v-for="tab in contentTabs"
+            v-for="tab in effectiveContentTabs"
             :key="tab.id"
             class="content-tab"
             :class="{ active: activeContentTab === tab.id, disabled: tab.id === 'software' && !hasSoftwareLessons }"
@@ -105,8 +105,16 @@
 
         <!-- Tab Content -->
         <div class="tab-content">
+          <!-- Lab module: Sampling / Assignment as main tabs -->
+          <div
+            v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
+            class="tab-panel"
+          >
+            <ExperimentalSamplingSimulation :embed-tab="labMiniLabEmbedTab" />
+          </div>
+
           <!-- Topics Tab -->
-          <div v-if="activeContentTab === 'topics'" class="tab-panel">
+          <div v-else-if="activeContentTab === 'topics'" class="tab-panel">
             <div v-if="moduleItems.length === 0" class="empty-state">
               <p>No topics available for this module yet.</p>
             </div>
@@ -161,12 +169,15 @@
           </div>
 
           <!-- Concept Review Tab -->
-          <div v-if="activeContentTab === 'concepts'" class="tab-panel">
-            <div v-if="moduleTopics.length === 0" class="empty-state">
+          <div v-else-if="activeContentTab === 'concepts'" class="tab-panel">
+            <div
+              v-if="conceptReviewQuestionCount === 0 && selectedModuleId !== RM_MODULE_LAB_ID"
+              class="empty-state"
+            >
               <p>No concept review questions available for this module yet.</p>
             </div>
             <router-link
-              v-else
+              v-else-if="conceptReviewQuestionCount > 0"
               :to="`/class/${classId}/practice?module=${selectedModuleId}`"
               class="practice-link-card"
             >
@@ -182,7 +193,7 @@
           </div>
 
           <!-- Software Practice Tab (one lesson per module, like Module 8; lesson may have multiple learn sections) -->
-          <div v-if="activeContentTab === 'software'" class="tab-panel">
+          <div v-else-if="activeContentTab === 'software'" class="tab-panel">
             <div v-if="moduleLesson" class="software-phases-container">
               <!-- Lesson Header -->
               <div class="lesson-header-card">
@@ -362,6 +373,9 @@ import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
+import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
+import { getClassDisplayName } from '../utils/classDisplayName'
+import { getQuestionsByModule } from '../data/conceptQuestions'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
@@ -376,11 +390,26 @@ const activeContentTab = ref('topics')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 const showModule8Selector = ref(false)
 
-const contentTabs = [
+const RM_MODULE_LAB_ID = 'rm-module-lab'
+
+const standardContentTabs = [
   { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
   { id: 'concepts', label: 'Concept Review', iconSrc: '/content-review-icon.png' },
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
+
+const labModuleContentTabs = [
+  { id: 'lab-sampling', label: 'Sampling', iconSrc: '/topic-icon.png' },
+  { id: 'lab-assignment', label: 'Assignment', iconSrc: '/content-review-icon.png' }
+]
+
+const effectiveContentTabs = computed(() =>
+  selectedModuleId.value === RM_MODULE_LAB_ID ? labModuleContentTabs : standardContentTabs
+)
+
+const labMiniLabEmbedTab = computed(() =>
+  activeContentTab.value === 'lab-assignment' ? 'assignment' : 'sampling'
+)
 
 const currentClass = computed(() => {
   const param = classId.value
@@ -408,6 +437,10 @@ const selectedModule = computed(() => {
 const moduleTopics = computed(() => {
   return getTopicsForModule(selectedModuleId.value)
 })
+
+const conceptReviewQuestionCount = computed(() =>
+  selectedModuleId.value ? getQuestionsByModule(selectedModuleId.value).length : 0
+)
 
 // Get module items with chapters preserved (for UI rendering)
 const moduleItemsRaw = computed(() => {
@@ -608,6 +641,21 @@ function getCompletedSoftwareLessonIds() {
 }
 
 const moduleProgress = computed(() => {
+  if (selectedModuleId.value === RM_MODULE_LAB_ID) {
+    return {
+      total: 0,
+      completed: 0,
+      percent: 0,
+      totalTopics: 0,
+      openedTopics: 0,
+      contentReviewComplete: false,
+      totalLessons: 0,
+      completedLessons: 0,
+      totalTodo: 0,
+      completedTodo: 0
+    }
+  }
+
   // For Module 8, use selected topics if customization is active
   let topicsToCount = moduleTopics.value
   if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
@@ -631,7 +679,8 @@ const moduleProgress = computed(() => {
     const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
     return completedSet.has(id)
   }).length
-  const total = totalTopics + (totalTopics > 0 ? 1 : 0) + totalLessons + totalTodo
+  const hasConceptReviewContent = conceptReviewQuestionCount.value > 0
+  const total = totalTopics + (hasConceptReviewContent ? 1 : 0) + totalLessons + totalTodo
   const completed = openedTopics + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
   const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
 
@@ -663,7 +712,7 @@ function getTabCount(tabId) {
     case 'topics':
       return topicsCount
     case 'concepts':
-      return topicsCount > 0 ? 1 : 0 // 1 if there are topics to review
+      return conceptReviewQuestionCount.value > 0 ? 1 : 0
     case 'software':
       return filteredModuleLessons.value.length + todoExercises.value.length
     default:
@@ -673,7 +722,7 @@ function getTabCount(tabId) {
 
 function selectModule(moduleId) {
   selectedModuleId.value = moduleId
-  activeContentTab.value = 'topics'
+  activeContentTab.value = moduleId === RM_MODULE_LAB_ID ? 'lab-sampling' : 'topics'
 
   // Show Module 8 selector if customization not completed
   if (moduleId === 'stats-module-8' && !module8Prefs.hasCompletedSelection.value) {
@@ -786,7 +835,9 @@ function getSectionCount(lesson, phase) {
 // Set default module when class modules load
 function setDefaultModule() {
   if (contentModules.value.length > 0 && !selectedModuleId.value) {
-    selectedModuleId.value = contentModules.value[0].id
+    const firstId = contentModules.value[0].id
+    selectedModuleId.value = firstId
+    activeContentTab.value = firstId === RM_MODULE_LAB_ID ? 'lab-sampling' : 'topics'
   }
 }
 
@@ -832,6 +883,17 @@ watch(() => route.query.module, () => {
 
 watch(() => route.fullPath, () => {
   refreshReadTopics()
+})
+
+watch(selectedModuleId, id => {
+  if (!id) return
+  if (id === RM_MODULE_LAB_ID) {
+    if (activeContentTab.value !== 'lab-sampling' && activeContentTab.value !== 'lab-assignment') {
+      activeContentTab.value = 'lab-sampling'
+    }
+  } else if (activeContentTab.value === 'lab-sampling' || activeContentTab.value === 'lab-assignment') {
+    activeContentTab.value = 'topics'
+  }
 })
 </script>
 

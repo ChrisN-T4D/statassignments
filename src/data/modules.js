@@ -513,7 +513,8 @@ export const researchMethodsModules = [
     number: 5,
     title: 'Chapter 5: Experimental Research',
     shortTitle: 'Experimental',
-    description: 'Experimental design, controls, validity, and practical implementation.',
+    description:
+      'Experimental design, controls, validity, and practical implementation. (Interactive assignment & sampling mini-lab lives in the Lab module after Chapter 6.)',
     icon: 'M5',
     color: researchMethodsModuleColors[4],
     topics: ['rm-chapter-5']
@@ -528,6 +529,18 @@ export const researchMethodsModules = [
     icon: 'M6',
     color: researchMethodsModuleColors[5],
     topics: ['rm-chapter-6']
+  },
+  {
+    id: 'rm-module-lab',
+    classId: 'research-methods',
+    number: 'Lab',
+    title: 'Lab: Random assignment & sampling',
+    shortTitle: 'Lab (Simulation)',
+    description:
+      'Hands-on mini-lab (no textbook chapter): random vs non-random assignment to conditions, and SRS vs stratified vs cluster vs convenience sampling. Open Concept Review to run the simulations.',
+    icon: 'LB',
+    color: '#0ea5e9',
+    topics: []
   },
   {
     id: 'rm-module-7',
@@ -627,6 +640,7 @@ const researchMethodsChapterTopics = {
   'rm-module-6': [
     { id: 'rm-chapter-6', title: 'Chapter 6: Non-Experimental Research', description: 'Correlational, qualitative, and observational methods.', icon: 'T' }
   ],
+  'rm-module-lab': [],
   'rm-module-7': [
     { id: 'rm-chapter-7', title: 'Chapter 7: Survey Research', description: 'Survey construction and administration strategies.', icon: 'T' }
   ],

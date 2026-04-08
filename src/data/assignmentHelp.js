@@ -4,6 +4,30 @@
  * Used by the Assignment Help page so students have one place to go when stuck.
  */
 
+import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
+
+const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
+
+/**
+ * Merge optional per-software tips/formulas/getHelp for assignment detail (preferredSoftware).
+ * @param {object|null} assignment
+ * @param {string} softwareId
+ */
+export function resolveAssignmentForSoftware (assignment, softwareId) {
+  if (!assignment) return null
+  const sw = VALID_ASSIGNMENT_SOFTWARE.has(softwareId) ? softwareId : 'jamovi'
+  const byId = ASSIGNMENT_HELP_BY_SOFTWARE[assignment.id]
+  if (!byId) return assignment
+  const patch = byId[sw]
+  if (patch == null) return assignment
+  return {
+    ...assignment,
+    tips: patch.tips ?? assignment.tips,
+    formulas: patch.formulas ?? assignment.formulas,
+    getHelp: patch.getHelp ?? assignment.getHelp
+  }
+}
+
 export const assignmentHelpByModule = [
   {
     moduleNumber: 1,
@@ -74,7 +98,7 @@ export const assignmentHelpByModule = [
   },
   {
     moduleNumber: 3,
-    moduleTitle: 'Jamovi and Data Handling',
+    moduleTitle: 'Software and Data Handling',
     assignments: [
       {
         id: 'm3-jamovi-exploration',
