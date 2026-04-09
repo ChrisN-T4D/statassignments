@@ -21,6 +21,8 @@ import AssignmentHelp from '../views/AssignmentHelp.vue'
 import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
+import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
+import { classHasDataAnalysisTool } from '../data/modules'
 
 const routes = [
   { path: '/', component: Home },
@@ -66,6 +68,12 @@ const routes = [
     name: 'excel-guides',
     component: SoftwareGuidesIndex,
     props: (route) => ({ classId: route.params.classId, software: 'excel' })
+  },
+  {
+    path: '/class/:classId/data-analysis',
+    name: 'data-analysis-helper',
+    component: DataAnalysisHelper,
+    props: true
   },
   {
     path: '/class/:classId/topics',
@@ -140,6 +148,14 @@ const { user: authUser } = useAuth()
 router.beforeEach((to, from, next) => {
   const isAuthenticated = pb.authStore.isValid
   const userRole = authUser.value?.role
+
+  if (to.name === 'data-analysis-helper') {
+    const cid = to.params.classId
+    if (!classHasDataAnalysisTool(cid)) {
+      next(cid ? `/class/${cid}` : '/')
+      return
+    }
+  }
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !isAuthenticated) {

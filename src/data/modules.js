@@ -440,6 +440,23 @@ export const introResearchModules = [
       'Align analysis with research questions',
       'Prepare for data collection'
     ]
+  },
+  {
+    id: 'intro-module-analyze-data',
+    classId: 'intro-research',
+    number: null,
+    title: 'Analyze your data',
+    shortTitle: 'Analyze data',
+    description: 'Choose an analysis and follow step-by-step instructions in jamovi, SPSS, or Excel.',
+    icon: '📊',
+    color: '#6366f1',
+    topics: [],
+    isDataAnalysisTool: true,
+    learningObjectives: [
+      'Match your research question to an appropriate analysis',
+      'Run the analysis in your chosen software with clear menu paths',
+      'Know what to report in your write-up'
+    ]
   }
 ]
 
@@ -618,6 +635,23 @@ export const researchMethodsModules = [
     icon: 'M13',
     color: researchMethodsModuleColors[0],
     topics: ['rm-chapter-13']
+  },
+  {
+    id: 'rm-module-analyze-data',
+    classId: 'research-methods',
+    number: null,
+    title: 'Analyze your data',
+    shortTitle: 'Analyze data',
+    description: 'Choose an analysis and follow step-by-step instructions in jamovi, SPSS, or Excel.',
+    icon: '📊',
+    color: '#6366f1',
+    topics: [],
+    isDataAnalysisTool: true,
+    learningObjectives: [
+      'Match your research question to an appropriate analysis',
+      'Run the analysis in your chosen software with clear menu paths',
+      'Know what to report in your write-up'
+    ]
   }
 ]
 
@@ -736,6 +770,12 @@ export function getModuleById(moduleId) {
 export function getContentModulesByClass(classId) {
   const modules = modulesByClass[classId] || []
   return modules.filter(m => !m.isBenchmark && !m.isMidterm)
+}
+
+/** True when this class includes the Analyze your data tool (Intro + Research Methods only). */
+export function classHasDataAnalysisTool(classId) {
+  const modules = modulesByClass[classId] || []
+  return modules.some(m => m.isDataAnalysisTool)
 }
 
 export function getBenchmarksByClass(classId) {

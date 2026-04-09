@@ -6,12 +6,12 @@ Serves predictions from interpretable student models
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
 import os
 from datetime import datetime
 
-# Import BKT models (we'll create these next)
-from models.neural_bkt import NeuralBKTModel, StudentPrototype
+from models.neural_bkt import NeuralBKTModel
+from models.bkt_tabular import TabularBKTModel
 
 app = FastAPI(
     title="Neural BKT API",
@@ -33,8 +33,10 @@ app.add_middleware(
 )
 
 # Global model instance (loaded on startup)
-bkt_model: Optional[NeuralBKTModel] = None
+bkt_model: Optional[Union[NeuralBKTModel, TabularBKTModel]] = None
 VALID_DIFFICULTIES = {"easy", "medium", "hard"}
+# "neural" = prototype-averaging model; "tabular" = bkt_core TimeAugmentedBKT
+BKT_ENGINE = os.environ.get("BKT_ENGINE", "neural").strip().lower()
 
 # ============================================================
 # Request/Response Models
@@ -121,15 +123,15 @@ def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
 async def startup_event():
     """Load BKT model on startup"""
     global bkt_model
-
-    # For now, initialize with default parameters
-    # Later, we'll load trained model weights
-    bkt_model = NeuralBKTModel(
-        num_prototypes=5,
-        num_objectives=50  # Adjust based on your objectives
-    )
-
-    print("✅ Neural BKT model loaded successfully")
+    if BKT_ENGINE == "tabular":
+        bkt_model = TabularBKTModel(num_prototypes=5, num_objectives=50)
+        print("✅ Tabular Time-Augmented BKT loaded (BKT_ENGINE=tabular)")
+    else:
+        bkt_model = NeuralBKTModel(
+            num_prototypes=5,
+            num_objectives=50,
+        )
+        print("✅ Neural BKT model loaded successfully (BKT_ENGINE=neural)")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -156,6 +158,7 @@ async def health_check():
     return {
         "status": "healthy",
         "model_loaded": bkt_model is not None,
+        "bkt_engine": BKT_ENGINE,
         "num_prototypes": bkt_model.num_prototypes if bkt_model else 0,
         "timestamp": datetime.utcnow().isoformat()
     }
@@ -198,7 +201,8 @@ async def update_bkt(request: BKTUpdateRequest):
             last_topic_read_time=_sanitize_non_negative_int(request.last_topic_read_time),
             last_attempt_time=_sanitize_non_negative_int(request.last_attempt_time),
             last_reading_max_scroll_depth=_sanitize_non_negative_int(request.last_reading_max_scroll_depth),
-            last_reading_triggered_by_error=request.last_reading_triggered_by_error
+            last_reading_triggered_by_error=request.last_reading_triggered_by_error,
+            problem_id=request.problem_id,
         )
 
         return BKTStateResponse(

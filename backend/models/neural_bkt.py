@@ -489,7 +489,8 @@ class NeuralBKTModel:
         last_topic_read_time: Optional[int] = None,
         last_attempt_time: Optional[int] = None,
         last_reading_max_scroll_depth: Optional[int] = None,
-        last_reading_triggered_by_error: Optional[bool] = None
+        last_reading_triggered_by_error: Optional[bool] = None,
+        problem_id: Optional[str] = None,
     ) -> Dict:
         """
         Update BKT state after student response

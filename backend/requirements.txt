@@ -12,6 +12,5 @@ httpx==0.26.0
 # Environment variables
 python-dotenv==1.0.0
 
-# Optional: PyTorch (for future neural network training)
-# torch==2.1.2
-# Uncomment above line if you want to add full PyTorch support later
+# Optional: PyTorch — required only if you import ``models.bkt_neural`` (Supercharging BKT training).
+# torch>=2.1.0

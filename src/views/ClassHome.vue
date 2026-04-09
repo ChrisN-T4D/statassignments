@@ -15,6 +15,10 @@
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
             <span class="header-links-sep">·</span>
             <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
+            <template v-if="showDataAnalysisNav">
+              <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/data-analysis`" class="assignment-help-link">Analyze your data</router-link>
+            </template>
           </div>
         </div>
       </div>
@@ -70,8 +74,13 @@
           </ul>
         </div>
 
+        <!-- Analyze your data (dedicated module tab; jamovi / SPSS / Excel) -->
+        <div v-if="isDataAnalysisModule" class="data-analysis-module-panel">
+          <DataAnalysisHelper :class-id="classId" embedded />
+        </div>
+
         <!-- Module Progress -->
-        <div v-if="moduleProgress.total > 0" class="module-progress">
+        <div v-if="!isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
             <span>Module progress</span>
             <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
@@ -87,7 +96,7 @@
         </div>
 
         <!-- Content Tabs -->
-        <div class="content-tabs">
+        <div v-if="!isDataAnalysisModule" class="content-tabs">
           <button
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
@@ -104,7 +113,7 @@
         </div>
 
         <!-- Tab Content -->
-        <div class="tab-content">
+        <div v-if="!isDataAnalysisModule" class="tab-content">
           <!-- Lab module: Sampling / Assignment as main tabs -->
           <div
             v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
@@ -365,7 +374,13 @@ import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
-import { getModulesByClassId, getContentModulesByClass, getTopicsForModule, getModuleItemsWithChapters } from '../data/modules'
+import {
+  getModulesByClassId,
+  getContentModulesByClass,
+  getTopicsForModule,
+  getModuleItemsWithChapters,
+  classHasDataAnalysisTool
+} from '../data/modules'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -374,6 +389,7 @@ import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
 import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
+import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
 
@@ -417,6 +433,10 @@ const currentClass = computed(() => {
   return classes.value.find(c => c.slug === param || c.id === param) || null
 })
 
+const showDataAnalysisNav = computed(() =>
+  classHasDataAnalysisTool(currentClass.value?.slug || classId.value)
+)
+
 // Get modules for the current class
 const classModules = computed(() => {
   const slug = currentClass.value?.slug || classId.value
@@ -431,6 +451,11 @@ const contentModules = computed(() => {
 
 const selectedModule = computed(() => {
   return classModules.value.find(m => m.id === selectedModuleId.value)
+})
+
+const isDataAnalysisModule = computed(() => {
+  const mod = selectedModule.value
+  return !!(mod && mod.isDataAnalysisTool)
 })
 
 // Get topics for the selected module
@@ -1029,6 +1054,20 @@ watch(selectedModuleId, id => {
   border-radius: 1rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
+}
+
+.data-analysis-module-panel {
+  margin-top: 0.25rem;
+}
+
+.data-analysis-module-panel :deep(.data-analysis-helper) {
+  padding-top: 0;
+}
+
+.data-analysis-module-panel :deep(.data-analysis-helper .container) {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .module-header {
