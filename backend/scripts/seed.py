@@ -13,6 +13,12 @@ SEED_FILE = BACKEND_ROOT / "seed-data" / "seed-data.json"
 if not SEED_FILE.exists():
     SEED_FILE = REPO_ROOT / "scripts" / "seed-data" / "seed-data.json"
 
+sys.path.insert(0, str(BACKEND_ROOT))
+
+from db.auth import hash_password
+from db.database import SessionLocal
+from db.models import Class, Item, Module, Semester, User, _new_id
+
 DEFAULT_CLASSES = [
     {
         "slug": "research-methods",
