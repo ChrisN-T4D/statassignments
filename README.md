@@ -62,9 +62,9 @@ statassignments/
 ## Tech Stack
 
 - **Frontend:** Vue 3 + Vite + Vue Router
-- **Backend:** PocketBase (SQLite)
+- **Backend:** PocketBase (SQLite) + FastAPI (Neural BKT)
 - **Auth:** PocketBase email/password
-- **Deployment:** Docker + Static hosting
+- **Deployment:** Docker; [Railway guide](docs/RAILWAY.md) for production
 
 ## For Instructors
 

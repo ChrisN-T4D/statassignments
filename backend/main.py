@@ -20,13 +20,15 @@ app = FastAPI(
 )
 
 # CORS middleware - allow requests from Vue.js frontend
+_default_cors_origins = "http://localhost:5173,http://localhost:3000,http://localhost:8090"
+_cors_origins = [
+    origin.strip()
+    for origin in os.environ.get("CORS_ORIGINS", _default_cors_origins).split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite dev server
-        "http://localhost:3000",  # Alternative port
-        "http://localhost:8090",  # PocketBase
-    ],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
