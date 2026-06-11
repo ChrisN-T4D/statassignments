@@ -19,7 +19,9 @@ services:
       - stats-network
 
   fastapi:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: stats-fastapi
     restart: unless-stopped
     ports:
