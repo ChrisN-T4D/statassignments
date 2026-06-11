@@ -8,8 +8,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Optional, Union
 import os
+import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
+from api.collections import router as collections_router
 from models.neural_bkt import NeuralBKTModel
 from models.bkt_tabular import TabularBKTModel
 
@@ -20,7 +24,7 @@ app = FastAPI(
 )
 
 # CORS middleware - allow requests from Vue.js frontend
-_default_cors_origins = "http://localhost:5173,http://localhost:3000,http://localhost:8090"
+_default_cors_origins = "http://localhost:5173,http://localhost:3000,http://localhost:4173"
 _cors_origins = [
     origin.strip()
     for origin in os.environ.get("CORS_ORIGINS", _default_cors_origins).split(",")
@@ -121,9 +125,35 @@ def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
 # Startup/Shutdown Events
 # ============================================================
 
+def _run_migrations():
+    backend_dir = Path(__file__).resolve().parent
+    if os.environ.get("SKIP_DB_MIGRATE") == "1":
+        return
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "alembic", "upgrade", "head"],
+            cwd=backend_dir,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        if os.environ.get("RUN_PB_MIGRATE") == "1":
+            from scripts.migrate_from_pocketbase import main as migrate_from_pb
+            migrate_from_pb()
+        elif os.environ.get("RUN_DB_SEED", "1") == "1":
+            from scripts.seed import seed
+            seed()
+    except Exception as exc:
+        print(f"⚠️  Database migrate/seed skipped or failed: {exc}")
+
+
+app.include_router(collections_router)
+
+
 @app.on_event("startup")
 async def startup_event():
-    """Load BKT model on startup"""
+    """Run migrations and load BKT model on startup"""
+    _run_migrations()
     global bkt_model
     if BKT_ENGINE == "tabular":
         bkt_model = TabularBKTModel(num_prototypes=5, num_objectives=50)
@@ -157,8 +187,19 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Detailed health check"""
+    db_ok = False
+    try:
+        from db.database import engine
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+            db_ok = True
+    except Exception:
+        db_ok = False
+
     return {
         "status": "healthy",
+        "database": "connected" if db_ok else "unavailable",
         "model_loaded": bkt_model is not None,
         "bkt_engine": BKT_ENGINE,
         "num_prototypes": bkt_model.num_prototypes if bkt_model else 0,

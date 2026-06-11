@@ -1,49 +1,56 @@
 version: '3.8'
 
 services:
-  pocketbase:
-    image: ghcr.io/muchobien/pocketbase:latest
-    container_name: stats-pocketbase
+  postgres:
+    image: postgres:16-alpine
+    container_name: methods-market-db
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: methods_market
     ports:
-      - "8090:8090"
+      - "5432:5432"
     volumes:
-      - pocketbase_data:/pb_data
-      - ./pb_migrations:/pb_migrations
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
-      interval: 30s
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
     networks:
-      - stats-network
+      - app-network
 
-  fastapi:
+  backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    container_name: stats-fastapi
+    container_name: methods-market-api
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
-      - POCKETBASE_URL=http://pocketbase:8090
-      - ENVIRONMENT=production
-    volumes:
-      - ./backend:/app
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/methods_market
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000,http://localhost:4173
+      BKT_ENGINE: neural
+      JWT_SECRET: dev-local-secret-change-in-production
+      ADMIN_EMAIL: admin@methodsmarket.local
+      ADMIN_PASSWORD: changeme123
+      RUN_DB_SEED: "1"
     depends_on:
-      - pocketbase
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 5s
       retries: 3
     networks:
-      - stats-network
+      - app-network
 
 networks:
-  stats-network:
+  app-network:
     driver: bridge
 
 volumes:
-  pocketbase_data:
+  postgres_data:

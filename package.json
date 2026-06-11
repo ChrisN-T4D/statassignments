@@ -21,7 +21,6 @@
     "open:mobile": "start chrome --window-size=375,812 http://localhost:5173"
   },
   "dependencies": {
-    "pocketbase": "^0.21.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.0",
     "vuedraggable": "^4.1.0"

@@ -412,7 +412,7 @@
           <div class="info-card">
             <h3>Database Connection</h3>
             <dl>
-              <dt>PocketBase URL:</dt>
+              <dt>API URL:</dt>
               <dd><code>{{ pb.baseUrl }}</code></dd>
               <dt>Auth Status:</dt>
               <dd>{{ pb.authStore.isValid ? 'Authenticated ✓' : 'Not authenticated ✗' }}</dd>

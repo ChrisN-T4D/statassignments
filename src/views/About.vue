@@ -502,7 +502,7 @@
           </div>
           <div class="tech-item">
             <strong>Backend</strong>
-            <p>PocketBase + FastAPI</p>
+            <p>FastAPI + PostgreSQL</p>
           </div>
           <div class="tech-item">
             <strong>BKT Engine</strong>

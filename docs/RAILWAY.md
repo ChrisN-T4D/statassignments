@@ -1,117 +1,125 @@
 # Deploying Methods Market on Railway
 
-This app runs as **three Railway services** from the same repository:
+Stack: **Vue frontend** + **FastAPI backend** + **Railway Postgres** (no PocketBase).
 
 | Service | Purpose | Config file |
 |---------|---------|-------------|
-| **pocketbase** | Database + auth API | `/pocketbase/railway.toml` |
-| **backend** | Neural BKT FastAPI API | `/backend/railway.toml` |
+| **Postgres** | Database (Railway plugin) | — add from Railway dashboard |
+| **backend** | API, auth, BKT, all data | `/backend/railway.toml` |
 | **frontend** | Vue static site | `/frontend/railway.toml` |
 
 ## 1. Create the Railway project
 
-1. [Create a new Railway project](https://railway.com/new) and connect this GitHub repo.
-2. Add **three empty services** (or duplicate the repo link three times).
-3. For each service, open **Settings → Config-as-code** and set the config file path:
-   - PocketBase: `/pocketbase/railway.toml`
+1. [Create a new Railway project](https://railway.com/new) and connect `ChrisN-T4D/statassignments`.
+2. Add **Postgres** from the Railway template/plugin.
+3. Add **backend** and **frontend** services (or repurpose existing services).
+4. Set config-as-code paths:
    - Backend: `/backend/railway.toml`
    - Frontend: `/frontend/railway.toml`
-4. Leave **Root Directory** as `/` (repo root) for all three services so Docker can access shared files (`pb_migrations`, `src`, etc.).
+5. Leave **Root Directory** as `/` for backend and frontend.
 
-## 2. PocketBase service
+## 2. Postgres
 
-### Volume (required)
+1. Add the **Postgres** plugin to the project.
+2. On the **backend** service, add a variable reference:
+   ```
+   DATABASE_URL=${{Postgres.DATABASE_URL}}
+   ```
+3. Postgres persists data in its volume automatically.
 
-PocketBase stores data in `/pb_data`. Without a volume, data is lost on every deploy.
+## 3. Backend service
 
-1. Open the PocketBase service → **Volumes**.
-2. Add a volume mounted at `/pb_data`.
-
-### Networking
-
-1. Generate a **public domain** (e.g. `pocketbase-production-xxxx.up.railway.app`).
-2. On first deploy, visit `https://<your-pocketbase-domain>/_/` and create the admin account.
-3. Migrations in `pb_migrations/` run automatically on startup.
-
-### PocketBase CORS
-
-In the PocketBase admin UI (**Settings → Application**), add your frontend URL to allowed origins once the frontend is deployed.
-
-## 3. Backend (FastAPI) service
-
-### Environment variables
+### Required environment variables
 
 | Variable | Example | Notes |
 |----------|---------|-------|
-| `CORS_ORIGINS` | `https://frontend-xxxx.up.railway.app,http://localhost:5173` | Comma-separated browser origins |
-| `BKT_ENGINE` | `neural` | Optional; `neural` or `tabular` |
-| `POCKETBASE_URL` | `https://pocketbase-xxxx.up.railway.app` | If backend needs PocketBase later |
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Reference from Postgres plugin |
+| `JWT_SECRET` | *(random 32+ char string)* | Required in production |
+| `CORS_ORIGINS` | `https://frontend-xxxx.up.railway.app,http://localhost:5173` | Frontend URL(s) |
+| `BKT_ENGINE` | `neural` | Optional |
+| `ADMIN_EMAIL` | `admin@yourdomain.com` | First admin (seeded once) |
+| `ADMIN_PASSWORD` | *(strong password)* | First admin (seeded once) |
+| `RUN_DB_SEED` | `1` | Set `0` after first deploy to skip re-seed |
 
-### Networking
+Migrations run automatically on backend startup (`alembic upgrade head`).
 
-Generate a **public domain** for the API (e.g. `backend-production-xxxx.up.railway.app`).
+Generate a **public domain** for the API.
 
-Health check: `GET /health`
+Health check: `GET /health` (includes `database: connected`).
 
 ## 4. Frontend service
 
-### Environment variables (build-time)
-
-Vite bakes these into the bundle at **build** time. Set them on the frontend service **before** the first deploy (or redeploy after changing them):
-
 | Variable | Example |
 |----------|---------|
-| `VITE_POCKETBASE_URL` | `https://pocketbase-xxxx.up.railway.app` |
-| `VITE_FASTAPI_URL` | `https://backend-xxxx.up.railway.app` |
-| `VITE_METRICS_API_URL` | *(optional)* |
+| `VITE_API_URL` | `https://backend-xxxx.up.railway.app` |
+| `VITE_FASTAPI_URL` | same as `VITE_API_URL` (BKT uses this) |
 
-### Networking
+Generate a **public domain** for the frontend.
 
-Generate a **public domain** for the frontend. This is the URL students and instructors use.
+Redeploy frontend after changing `VITE_*` vars (build-time).
 
-After deploy, add this URL to:
+## 5. Deploy order
 
-- Backend `CORS_ORIGINS`
-- PocketBase allowed origins (admin UI)
+1. **Postgres** — provision plugin
+2. **Backend** — set `DATABASE_URL`, `JWT_SECRET`, `ADMIN_*`, deploy
+3. **Frontend** — set `VITE_API_URL`, deploy
+4. Update backend `CORS_ORIGINS` with frontend URL if needed
 
-## 5. Import seed data
+## 6. Migrate from PocketBase (existing data)
 
-After PocketBase is running and the admin account exists:
+If you have live data on PocketBase (`https://pb.c.robpneu.com` or similar):
 
-```bash
-export PB_ADMIN_EMAIL="your-admin@email.com"
-export PB_ADMIN_PASSWORD="your-password"
-export VITE_POCKETBASE_URL="https://pocketbase-xxxx.up.railway.app"
-
-node scripts/import/import-seed-data.js
-```
-
-Or import manually via the PocketBase admin UI (see [README-FULL.md](README-FULL.md)).
-
-## 6. Deploy order
-
-1. **PocketBase** — attach volume, deploy, create admin
-2. **Backend** — set `CORS_ORIGINS` (can include localhost for local dev)
-3. **Frontend** — set `VITE_*` URLs pointing at PocketBase and backend, deploy
-4. Update **CORS** on backend and PocketBase with the final frontend URL
-5. Import seed data
-
-## Local Docker (optional)
-
-For local full-stack testing before Railway:
+1. Add Postgres and deploy backend with `RUN_DB_SEED=0` (skip empty seed).
+2. Run migration locally or via Railway one-off shell:
 
 ```bash
-docker compose up -d
+DATABASE_URL=<railway-postgres-url> \
+POCKETBASE_URL=https://pb.c.robpneu.com \
+PB_ADMIN_EMAIL=<admin-email> \
+PB_ADMIN_PASSWORD=<admin-password> \
+python backend/scripts/migrate_from_pocketbase.py
 ```
 
-This starts PocketBase on `:8090` and FastAPI on `:8000`. Run `npm run dev` separately for the Vue frontend.
+3. Set `JWT_SECRET` on backend (users get new JWTs; password hashes are preserved).
+4. Redeploy frontend with `VITE_API_URL` pointing at backend only.
+5. Remove the old PocketBase Railway service when verified.
+
+See [POSTGRES.md](POSTGRES.md) for `DRY_RUN` and JSON export options.
+
+## 7. Default admin (fresh install only)
+
+On first boot with `RUN_DB_SEED=1`, the backend seeds:
+
+- Default classes, semesters, modules, items (from `scripts/seed-data/seed-data.json`)
+- Admin user from `ADMIN_EMAIL` / `ADMIN_PASSWORD`
+
+Sign in at `/auth` with those credentials, or register a new student account.
+
+## Local development
+
+```bash
+docker compose up -d          # Postgres + backend
+npm install && npm run dev    # frontend at :5173
+```
+
+API: http://localhost:8000  
+Admin login: `admin@methodsmarket.local` / `changeme123` (from docker-compose)
+
+## Retiring PocketBase
+
+If migrating from an existing PocketBase deployment:
+
+1. Export data from PocketBase admin (JSON per collection)
+2. Import via API or extend `backend/scripts/seed.py`
+3. Remove the `pocketbase` Railway service
+4. Point frontend `VITE_API_URL` at the backend only
 
 ## Troubleshooting
 
 | Symptom | Fix |
 |---------|-----|
-| Frontend can't reach PocketBase | Check `VITE_POCKETBASE_URL` and redeploy frontend; verify PocketBase CORS |
-| BKT API CORS errors | Add frontend URL to backend `CORS_ORIGINS` and redeploy backend |
-| PocketBase data lost | Attach a volume at `/pb_data` |
-| Health check failing | Confirm public domain is generated; check service logs |
-| Stale frontend API URLs | `VITE_*` vars require a **rebuild** — trigger a new frontend deploy after changing them |
+| `database: unavailable` in `/health` | Check `DATABASE_URL` reference to Postgres |
+| Auth fails | Verify `JWT_SECRET` is set and consistent across deploys |
+| CORS errors | Add frontend URL to `CORS_ORIGINS`, redeploy backend |
+| Empty classes list | Set `RUN_DB_SEED=1` and redeploy, or run seed manually |
+| Stale API URL in frontend | Rebuild frontend after changing `VITE_API_URL` |

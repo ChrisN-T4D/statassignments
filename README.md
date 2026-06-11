@@ -18,13 +18,12 @@ npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your PocketBase credentials
 
-# Import seed data
-node scripts/import/import-seed-data.js
+# Start Postgres + API (migrations + seed run automatically)
+docker compose up -d
 
 # Run development server
-npm run dev
+npm install && npm run dev
 ```
 
 Visit `http://localhost:5173`
@@ -62,14 +61,14 @@ statassignments/
 ## Tech Stack
 
 - **Frontend:** Vue 3 + Vite + Vue Router
-- **Backend:** PocketBase (SQLite) + FastAPI (Neural BKT)
-- **Auth:** PocketBase email/password
+- **Backend:** FastAPI + PostgreSQL (auth, data, Neural BKT)
+- **Auth:** JWT via FastAPI (`/api/collections/users/...`)
 - **Deployment:** Docker; [Railway guide](docs/RAILWAY.md) for production
 
 ## For Instructors
 
 1. Create account at `/auth`
-2. Set role to `instructor` in PocketBase admin panel
+2. Set role to `instructor` in Admin panel or database
 3. Import roster at `/instructor`
 4. Distribute student claim keys
 
