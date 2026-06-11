@@ -144,7 +144,9 @@ def _run_migrations():
             from scripts.seed import seed
             seed()
     except Exception as exc:
-        print(f"⚠️  Database migrate/seed skipped or failed: {exc}")
+        print(f"⚠️  Database migrate/seed skipped or failed: {exc}", flush=True)
+        import traceback
+        traceback.print_exc()
 
 
 app.include_router(collections_router)
