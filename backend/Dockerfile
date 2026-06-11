@@ -11,6 +11,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
+COPY scripts/seed-data ./seed-data
 
 ENV PORT=8000
 
