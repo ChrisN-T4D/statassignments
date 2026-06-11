@@ -13,4 +13,6 @@ backend/__pycache__
 backend/**/__pycache__
 backend/**/*.pyc
 scripts
+!scripts/seed-data
+!scripts/seed-data/**
 docs
