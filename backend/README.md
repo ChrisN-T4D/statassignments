@@ -108,8 +108,8 @@ Key innovations:
 - Runtime heuristic adjustments from timing/engagement telemetry
 
 Persistence note:
-- `NeuralBKTModel` state is currently held in FastAPI process memory.
-- Long-term persistence for model state is not yet implemented in backend storage.
+- Scalar BKT state (pL, attempts, etc.) is saved to the `bkt_states` Postgres table on each `/bkt/update` and reloaded on startup.
+- Prototype posteriors remain in process memory and warm up again from new attempts.
 
 ## Integration with Vue.js
 

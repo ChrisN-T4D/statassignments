@@ -285,7 +285,7 @@ export async function updateBKT(
       problemId
     )
     if (neuralState) {
-      // Cache client-side; backend model state is currently process-memory, not persisted here.
+      // Backend persists to Postgres; mirror to local cache for offline reads.
       try {
         localStorage.setItem(`bkt-${objectiveId}`, JSON.stringify(neuralState))
       } catch (err) {

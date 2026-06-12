@@ -14,6 +14,8 @@ from datetime import datetime
 from pathlib import Path
 
 from api.collections import router as collections_router
+from db.bkt_store import hydrate_bkt_model, load_bkt_state, persist_bkt_state
+from db.database import SessionLocal
 from models.neural_bkt import NeuralBKTModel
 from models.bkt_tabular import TabularBKTModel
 
@@ -116,6 +118,36 @@ def _sanitize_difficulty(value: Optional[str]) -> str:
     return "medium"
 
 
+def _hydrate_bkt_from_db(model: Union[NeuralBKTModel, TabularBKTModel]) -> None:
+    db = SessionLocal()
+    try:
+        count = hydrate_bkt_model(model, db)
+        if count:
+            print(f"✅ Loaded {count} BKT state(s) from database", flush=True)
+    except Exception as exc:
+        print(f"⚠️  BKT state hydration skipped: {exc}", flush=True)
+    finally:
+        db.close()
+
+
+def _save_bkt_to_db(user_id: str, objective_id: str, state: dict, last_updated: datetime) -> None:
+    db = SessionLocal()
+    try:
+        persist_bkt_state(db, user_id, objective_id, state, last_updated)
+    except Exception as exc:
+        print(f"⚠️  Failed to persist BKT state for {user_id}/{objective_id}: {exc}", flush=True)
+    finally:
+        db.close()
+
+
+def _load_bkt_from_db(user_id: str, objective_id: str) -> Optional[dict]:
+    db = SessionLocal()
+    try:
+        return load_bkt_state(db, user_id, objective_id)
+    finally:
+        db.close()
+
+
 def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
     if value is None:
         return None
@@ -165,6 +197,7 @@ async def startup_event():
             num_objectives=50,
         )
         print("✅ Neural BKT model loaded successfully (BKT_ENGINE=neural)")
+    _hydrate_bkt_from_db(bkt_model)
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -249,6 +282,9 @@ async def update_bkt(request: BKTUpdateRequest):
             problem_id=request.problem_id,
         )
 
+        last_updated = datetime.utcnow()
+        _save_bkt_to_db(request.user_id, request.objective_id, updated_state, last_updated)
+
         return BKTStateResponse(
             objective_id=request.objective_id,
             pL=updated_state['pL'],
@@ -259,7 +295,7 @@ async def update_bkt(request: BKTUpdateRequest):
             attempts=updated_state['attempts'],
             correct=updated_state['correct'],
             incorrect=updated_state['incorrect'],
-            last_updated=datetime.utcnow().isoformat()
+            last_updated=last_updated.isoformat()
         )
 
     except Exception as e:
@@ -273,6 +309,13 @@ async def get_bkt_state(user_id: str, objective_id: str):
 
     try:
         state = bkt_model.get_state(user_id, objective_id)
+
+        if not state:
+            state = _load_bkt_from_db(user_id, objective_id)
+            if state:
+                if user_id not in bkt_model.student_states:
+                    bkt_model.student_states[user_id] = {}
+                bkt_model.student_states[user_id][objective_id] = state
 
         if not state:
             # Return initial state
