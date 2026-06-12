@@ -218,13 +218,35 @@ def import_users(db: Session, records: list[dict], client: httpx.Client | None, 
         )
         db.merge(user)
 
+    # Flush all users first so the FK constraint is satisfied before inserting
+    # user_classes rows.
+    db.flush()
+
+    valid_user_ids: set[str] = {rec["id"] for rec in records}
+    skipped_relationships = 0
+
+    for rec in records:
         class_ids = rec.get("classes") or []
-        if class_ids:
-            db.execute(user_classes.delete().where(user_classes.c.user_id == rec["id"]))
-            for cid in class_ids:
-                db.execute(
-                    user_classes.insert().values(user_id=rec["id"], class_id=str(cid))
+        if not class_ids:
+            continue
+
+        db.execute(user_classes.delete().where(user_classes.c.user_id == rec["id"]))
+        for cid in class_ids:
+            user_id = rec["id"]
+            if user_id not in valid_user_ids:
+                print(
+                    f"  WARNING: skipping user_classes row — user_id={user_id!r} "
+                    f"not found in users table (orphaned reference)"
                 )
+                skipped_relationships += 1
+                continue
+            db.execute(
+                user_classes.insert().values(user_id=user_id, class_id=str(cid))
+            )
+
+    if skipped_relationships:
+        print(f"  WARNING: skipped {skipped_relationships} orphaned user_classes relationship(s)")
+
     db.flush()
     print(f"  imported users: {len(records)}")
 
