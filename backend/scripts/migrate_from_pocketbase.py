@@ -5,7 +5,7 @@ Migrate all PocketBase collections into PostgreSQL.
 Preserves PocketBase record IDs so relations stay intact.
 
 Usage:
-  POCKETBASE_URL=https://pb.c.robpneu.com \\
+  POCKETBASE_URL=https://pb.lab.clneu.com \\
   PB_ADMIN_EMAIL=admin@example.com \\
   PB_ADMIN_PASSWORD=secret \\
   DATABASE_URL=postgresql://... \\
@@ -51,7 +51,7 @@ from db.models import (  # noqa: E402
     user_classes,
 )
 
-PB_URL = os.environ.get("POCKETBASE_URL", "https://pb.c.robpneu.com").rstrip("/")
+PB_URL = os.environ.get("POCKETBASE_URL", "https://pb.lab.clneu.com").rstrip("/")
 PB_EMAIL = os.environ.get("PB_ADMIN_EMAIL", os.environ.get("ADMIN_EMAIL", ""))
 PB_PASSWORD = os.environ.get("PB_ADMIN_PASSWORD", os.environ.get("ADMIN_PASSWORD", ""))
 EXPORT_JSON = os.environ.get("PB_EXPORT_JSON", "")
