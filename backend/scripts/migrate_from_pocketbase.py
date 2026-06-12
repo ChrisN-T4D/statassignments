@@ -199,6 +199,22 @@ def clear_tables(db: Session):
     db.commit()
 
 
+def _rel_ids(value: Any) -> list[str]:
+    if not value:
+        return []
+    if isinstance(value, list):
+        out: list[str] = []
+        for item in value:
+            if isinstance(item, dict):
+                rid = item.get("id")
+                if rid:
+                    out.append(str(rid))
+            elif item:
+                out.append(str(item))
+        return out
+    return [str(value)]
+
+
 def import_users(db: Session, records: list[dict], client: httpx.Client | None, token: str | None):
     for rec in records:
         pw = rec.get("password")
@@ -206,9 +222,10 @@ def import_users(db: Session, records: list[dict], client: httpx.Client | None, 
             pw = fetch_user_password(client, token, rec["id"])
         password_hash = pw if pw and str(pw).startswith("$2") else hash_password(pw or "migration-reset-required")
 
+        email = rec.get("email") or f"{rec['id']}@imported.local"
         user = User(
             id=rec["id"],
-            email=rec["email"],
+            email=email,
             password_hash=password_hash,
             name=rec.get("name"),
             role=rec.get("role") or "student",
@@ -217,16 +234,23 @@ def import_users(db: Session, records: list[dict], client: httpx.Client | None, 
             updated=parse_dt(rec.get("updated")) or datetime.utcnow(),
         )
         db.merge(user)
-
-        class_ids = rec.get("classes") or []
-        if class_ids:
-            db.execute(user_classes.delete().where(user_classes.c.user_id == rec["id"]))
-            for cid in class_ids:
-                db.execute(
-                    user_classes.insert().values(user_id=rec["id"], class_id=str(cid))
-                )
     db.flush()
     print(f"  imported users: {len(records)}")
+
+
+def import_user_class_links(db: Session, user_records: list[dict], class_ids: set[str]):
+    linked = 0
+    for rec in user_records:
+        for cid in _rel_ids(rec.get("classes")):
+            if cid not in class_ids:
+                print(f"  skip user_classes: unknown class {cid} for user {rec['id']}")
+                continue
+            db.execute(
+                user_classes.insert().values(user_id=rec["id"], class_id=cid)
+            )
+            linked += 1
+    db.flush()
+    print(f"  imported user_classes: {linked}")
 
 
 def import_classes(db: Session, records: list[dict]):
@@ -508,8 +532,8 @@ def import_software_lesson_metrics(db: Session, records: list[dict]):
 
 
 IMPORTERS = [
-    ("users", import_users),
     ("classes", import_classes),
+    ("users", import_users),
     ("semesters", import_semesters),
     ("roster", import_roster),
     ("modules", import_modules),
@@ -527,14 +551,19 @@ IMPORTERS = [
 def run_import(db: Session, data: dict[str, list[dict]], client: httpx.Client | None, token: str | None):
     print("\nImporting into PostgreSQL...")
     clear_tables(db)
+    user_records: list[dict] = []
     for name, importer in IMPORTERS:
         records = data.get(name, [])
         if not records:
             continue
         if name == "users":
+            user_records = records
             import_users(db, records, client, token)
         else:
             importer(db, records)
+    if user_records:
+        class_ids = {rec["id"] for rec in data.get("classes", [])}
+        import_user_class_links(db, user_records, class_ids)
     db.commit()
 
 
