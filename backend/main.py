@@ -137,12 +137,7 @@ def _run_migrations():
             capture_output=True,
             text=True,
         )
-        if os.environ.get("RUN_PB_MIGRATE") == "1":
-            print("Running PocketBase → Postgres migration...", flush=True)
-            from scripts.migrate_from_pocketbase import main as migrate_from_pb
-            migrate_from_pb()
-            print("PocketBase migration finished.", flush=True)
-        elif os.environ.get("RUN_DB_SEED", "1") == "1":
+        if os.environ.get("RUN_DB_SEED", "1") == "1":
             print("Seeding database...", flush=True)
             from scripts.seed import seed
             seed()
