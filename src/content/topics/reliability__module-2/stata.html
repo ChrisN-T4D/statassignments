@@ -188,6 +188,25 @@
     </p>
   </div>
 
+  <h3>Supplement: Measuring internal consistency (Cronbach's alpha)</h3>
+
+  <p>
+    Chapter 2 explains <em>what</em> internal consistency is, but it doesn't show how to put a number on it. The most
+    common index is <strong>Cronbach's alpha (&alpha;)</strong>, which summarises how closely the items of a scale move
+    together. As a rough guide, &alpha; &ge; .70 is acceptable, &ge; .80 good, and &ge; .90 excellent (though very high
+    values can also signal redundant items).
+  </p>
+  <p>
+    <strong>Where the textbook covers this:</strong> the full treatment of Cronbach's alpha is in
+    <strong>Chapter 15 (&sect;15.5, "Internal consistency reliability analysis")</strong>, not Chapter 2. You'll need
+    it for the Module 2 reliability assignment, so read &sect;15.5 alongside this page.
+  </p>
+  <p>
+    <strong>In Stata:</strong> run <code>alpha item1 item2 item3, item</code>; the <code>item</code> option reports the
+    alpha if each item is removed. Use the <code>reverse()</code> option to handle reverse-scored items, which would
+    otherwise drag alpha down.
+  </p>
+
   <hr>
 
   <div class="attribution">
