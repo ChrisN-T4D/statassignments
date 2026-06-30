@@ -5,6 +5,7 @@
  */
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
+import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -366,12 +367,22 @@ export const assignmentHelpByModule = [
 ]
 
 /**
- * Get assignment help for a class (e.g. statistics).
- * @param {string} classId - e.g. 'statistics'
- * @returns {Array} assignmentHelpByModule (or filtered by class if we add multiple classes later)
+ * Get assignment help for a class.
+ * @param {string} classId - e.g. 'statistics' | 'research-methods'
  */
 export function getAssignmentHelp (classId) {
+  if (classId === 'research-methods') {
+    return assignmentHelpResearchMethods
+  }
   return assignmentHelpByModule
+}
+
+/** Intro copy for the assignment-help index page. */
+export function getAssignmentHelpIntro (classId) {
+  if (classId === 'research-methods') {
+    return 'Stuck on a Canvas assignment? Each item below links to matching chapters from Research Methods in Psychology (Jhangiani et al., 4th ed.) inside Methods Market — the same open textbook as your chapter modules.'
+  }
+  return 'Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.'
 }
 
 /**

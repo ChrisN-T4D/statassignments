@@ -5,9 +5,7 @@
       <div class="help-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="help-title">Assignment Help</h1>
-        <p class="help-intro">
-          Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.
-        </p>
+        <p class="help-intro">{{ helpIntro }}</p>
       </div>
 
       <!-- List of modules with links to each assignment -->
@@ -18,9 +16,11 @@
           class="help-module"
         >
           <h2 class="module-heading">
-            <span v-if="block.moduleNumber" class="module-num">Module {{ block.moduleNumber }}</span>
+            <span v-if="block.canvasPart" class="module-num">{{ block.canvasPart }}</span>
+            <span v-else-if="block.moduleNumber" class="module-num">Module {{ block.moduleNumber }}</span>
             <span v-else class="module-num">Milestone</span>
             — {{ block.moduleTitle }}
+            <span v-if="block.phaseLabel" class="phase-label">({{ block.phaseLabel }})</span>
           </h2>
 
           <ul class="assignment-links">
@@ -46,13 +46,14 @@
 
 <script setup>
 import { computed } from 'vue'
-import { getAssignmentHelp } from '../data/assignmentHelp'
+import { getAssignmentHelp, getAssignmentHelpIntro } from '../data/assignmentHelp'
 
 const props = defineProps({
   classId: { type: String, required: true }
 })
 
 const helpData = computed(() => getAssignmentHelp(props.classId))
+const helpIntro = computed(() => getAssignmentHelpIntro(props.classId))
 
 function typeLabel (type) {
   const labels = {
@@ -126,6 +127,12 @@ function typeLabel (type) {
 
 .module-num {
   color: var(--primary);
+}
+
+.phase-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
 }
 
 .assignment-links {

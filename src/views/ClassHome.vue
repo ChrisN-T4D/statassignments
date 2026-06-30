@@ -9,7 +9,9 @@
           <p>{{ currentClass.description }}</p>
           <div class="header-links">
             <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-              Stuck on an assignment? Get help →
+              {{ isResearchMethodsClass
+                ? 'Canvas assignments → Pressbooks chapter help'
+                : 'Stuck on an assignment? Get help →' }}
             </router-link>
             <span class="header-links-sep">·</span>
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
@@ -25,8 +27,36 @@
 
       <!-- Module Navigation -->
       <div class="module-nav">
-        <h2 class="section-title">Course Modules</h2>
-        <div class="module-list">
+        <h2 class="section-title">
+          {{ isResearchMethodsClass ? 'Course content (Canvas parts → Pressbooks chapters)' : 'Course Modules' }}
+        </h2>
+
+        <template v-if="isResearchMethodsClass">
+          <div
+            v-for="part in researchMethodsModuleGroups"
+            :key="part.id"
+            class="module-part-group"
+          >
+            <h3 class="module-part-heading">{{ part.label }} — {{ part.title }}</h3>
+            <p v-if="part.description" class="module-part-desc">{{ part.description }}</p>
+            <div class="module-list">
+              <button
+                v-for="mod in part.modules"
+                :key="mod.id"
+                class="module-btn"
+                :class="{ active: selectedModuleId === mod.id }"
+                :style="{ '--module-color': mod.color }"
+                @click="selectModule(mod.id)"
+              >
+                <span class="module-icon">{{ mod.icon }}</span>
+                <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
+                <span class="module-title">{{ getModuleDisplayShortTitle(mod) }}</span>
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <div v-else class="module-list">
           <button
             v-for="mod in contentModules"
             :key="mod.id"
@@ -48,10 +78,25 @@
           <div class="module-header-icon">{{ selectedModule.icon }}</div>
           <div class="module-header-info">
             <h2>
+              <span v-if="selectedModule.canvasPart" class="module-canvas-part-label">
+                {{ selectedModule.canvasPart }} —
+              </span>
               <span v-if="selectedModule.number">Module {{ selectedModule.number }}: </span>
               {{ getModuleDisplayTitle(selectedModule) }}
             </h2>
             <p>{{ getModuleDisplayDescription(selectedModule) }}</p>
+            <p
+              v-if="selectedModule.pressbooksUrl"
+              class="module-textbook-link"
+            >
+              <a
+                :href="selectedModule.pressbooksUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read Pressbooks Ch. {{ selectedModule.textbookChapter }} (open textbook) ↗
+              </a>
+            </p>
           </div>
           <!-- Module 8 Customization Button -->
           <button
@@ -381,6 +426,7 @@ import {
   getModuleItemsWithChapters,
   classHasDataAnalysisTool
 } from '../data/modules'
+import { groupModulesByCanvasPart } from '../data/researchMethodsTextbook'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -401,6 +447,11 @@ const { hasProfile } = useProfile()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
+
+const isResearchMethodsClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'research-methods'
+})
 const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
@@ -447,6 +498,11 @@ const classModules = computed(() => {
 const contentModules = computed(() => {
   const slug = currentClass.value?.slug || classId.value
   return getContentModulesByClass(slug)
+})
+
+const researchMethodsModuleGroups = computed(() => {
+  if (!isResearchMethodsClass.value) return []
+  return groupModulesByCanvasPart(contentModules.value)
 })
 
 const selectedModule = computed(() => {
@@ -1005,6 +1061,30 @@ watch(selectedModuleId, id => {
   margin-bottom: 2rem;
 }
 
+.module-part-group {
+  margin-bottom: 1.5rem;
+}
+
+.module-part-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem 0;
+  color: var(--text-primary);
+}
+
+.module-part-desc {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 42rem;
+  line-height: 1.5;
+}
+
+.module-canvas-part-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .module-list {
   display: flex;
   gap: 0.5rem;
@@ -1101,6 +1181,20 @@ watch(selectedModuleId, id => {
   margin: 0;
   color: var(--text-secondary);
   font-size: 0.9375rem;
+}
+
+.module-textbook-link {
+  margin-top: 0.5rem !important;
+}
+
+.module-textbook-link a {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.module-textbook-link a:hover {
+  text-decoration: underline;
 }
 
 /* Learning Objectives */

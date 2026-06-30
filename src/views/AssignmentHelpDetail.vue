@@ -6,9 +6,11 @@
         <div class="help-header">
           <router-link :to="`/class/${classId}/assignment-help`" class="back-link">← Assignment Help</router-link>
           <p class="breadcrumb">
-            <span v-if="block.moduleNumber">Module {{ block.moduleNumber }}</span>
+            <span v-if="block.canvasPart">{{ block.canvasPart }}</span>
+            <span v-else-if="block.moduleNumber">Module {{ block.moduleNumber }}</span>
             <span v-else>Milestone</span>
             — {{ block.moduleTitle }}
+            <span v-if="block.phaseLabel"> · {{ block.phaseLabel }}</span>
           </p>
           <h1 class="help-title">{{ assignment.name }}</h1>
           <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
@@ -44,8 +46,12 @@
           </div>
 
           <div v-if="assignment.practiceLinks?.length" class="section">
-            <h2 class="section-title">Review in this site</h2>
-            <p class="section-desc">Topics and lessons that match this assignment:</p>
+            <h2 class="section-title">Review in Methods Market</h2>
+            <p class="section-desc">
+              {{ classId === 'research-methods'
+                ? 'Pressbooks chapters (open textbook) in this site:'
+                : 'Topics and lessons that match this assignment:' }}
+            </p>
             <div class="practice-links">
               <router-link
                 v-for="topicId in assignment.practiceLinks"
@@ -76,6 +82,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
+import { formatResearchMethodsTopicLabel } from '../data/researchMethodsTextbook'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 
 const props = defineProps({
@@ -126,6 +133,10 @@ function typeLabel (type) {
 }
 
 function formatTopicId (id) {
+  if (props.classId === 'research-methods') {
+    const rm = formatResearchMethodsTopicLabel(id)
+    if (rm) return rm
+  }
   return id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 </script>
