@@ -41,16 +41,6 @@ DEFAULT_CLASSES = [
         "order": 2,
     },
     {
-        "slug": "stats-assessment",
-        "name": "Statistics for Assessment",
-        "short_name": "S4A",
-        "description": "Statistical methods for psychological assessment",
-        "color": "#10b981",
-        "icon": "📋",
-        "topics": ["descriptive-stats", "normal-distribution", "z-scores", "correlation"],
-        "order": 3,
-    },
-    {
         "slug": "intro-research",
         "name": "Intro to Research",
         "short_name": "Intro",
@@ -58,7 +48,7 @@ DEFAULT_CLASSES = [
         "color": "#f59e0b",
         "icon": "📚",
         "topics": ["descriptive-stats", "visualizations", "probability"],
-        "order": 4,
+        "order": 3,
     },
 ]
 

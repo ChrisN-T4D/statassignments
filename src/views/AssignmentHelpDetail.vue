@@ -13,7 +13,12 @@
             <span v-if="block.phaseLabel"> · {{ block.phaseLabel }}</span>
           </p>
           <h1 class="help-title">{{ assignment.name }}</h1>
-          <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
+          <div class="assignment-meta">
+            <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
+            <span v-if="assignment.dueDateLabel" class="assignment-due">Due {{ assignment.dueDateLabel }}</span>
+            <span v-if="assignment.points" class="assignment-points">{{ assignment.points }} points</span>
+          </div>
+          <p v-if="assignment.scheduleNote" class="schedule-note">{{ assignment.scheduleNote }}</p>
         </div>
 
         <!-- Benchmark / Final: Practice test link -->
@@ -174,6 +179,31 @@ function formatTopicId (id) {
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
+}
+
+.assignment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.schedule-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.assignment-due,
+.assignment-points {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.assignment-points {
+  font-weight: 600;
 }
 
 .assignment-type {

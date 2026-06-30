@@ -751,44 +751,13 @@ function getModuleItemsForId(moduleId) {
 }
 
 // ============================================================
-// STATISTICS FOR ASSESSMENT CLASS MODULES
-// ============================================================
-
-const statsAssessmentModuleColors = [
-  '#0ea5e9',
-  '#10b981',
-  '#f59e0b',
-  '#8b5cf6',
-  '#14b8a6',
-  '#dc2626',
-  '#3b82f6',
-  '#22c55e'
-]
-
-export const statsAssessmentModules = Array.from({ length: 8 }, (_, index) => {
-  const number = index + 1
-  return {
-    id: `s4a-module-${number}`,
-    classId: 'stats-assessment',
-    number,
-    title: `Module ${number}`,
-    shortTitle: `M${number}`,
-    description: `Module ${number}`,
-    icon: `M${number}`,
-    color: statsAssessmentModuleColors[index % statsAssessmentModuleColors.length],
-    topics: []
-  }
-})
-
-// ============================================================
 // ALL MODULES BY CLASS
 // ============================================================
 
 export const modulesByClass = {
   'statistics': statisticsModules,
   'intro-research': introResearchModules,
-  'research-methods': researchMethodsModules,
-  'stats-assessment': statsAssessmentModules
+  'research-methods': researchMethodsModules
 }
 
 // Legacy export for backwards compatibility

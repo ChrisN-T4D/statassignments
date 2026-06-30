@@ -6,6 +6,12 @@
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
+import {
+  getDeadlineForAssignment,
+  formatDueDate,
+  FALL_2026_TERM,
+  SCHEDULE_WEEKS
+} from './fall2026ResearchMethodsSchedule.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -370,17 +376,41 @@ export const assignmentHelpByModule = [
  * Get assignment help for a class.
  * @param {string} classId - e.g. 'statistics' | 'research-methods'
  */
+function enrichResearchMethodsAssignments (blocks) {
+  return blocks.map((block) => ({
+    ...block,
+    assignments: block.assignments.map((a) => {
+      const deadline = getDeadlineForAssignment(a.id)
+      if (!deadline) return a
+      return {
+        ...a,
+        dueDate: deadline.dueDate,
+        dueDateLabel: formatDueDate(deadline.dueDate),
+        points: deadline.points ?? a.points,
+        scheduleNote: deadline.note
+      }
+    })
+  }))
+}
+
 export function getAssignmentHelp (classId) {
   if (classId === 'research-methods') {
-    return assignmentHelpResearchMethods
+    return enrichResearchMethodsAssignments(assignmentHelpResearchMethods)
   }
   return assignmentHelpByModule
+}
+
+export function getResearchMethodsSchedule () {
+  return {
+    term: FALL_2026_TERM,
+    weeks: SCHEDULE_WEEKS
+  }
 }
 
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Stuck on a Canvas assignment? Each item below links to matching chapters from Research Methods in Psychology (Jhangiani et al., 4th ed.) inside Methods Market — the same open textbook as your chapter modules.'
+    return 'Fall 2026 PSYC 4223 — one Pressbooks chapter per week (complete the full chapter + Concept Review). IRB final Nov 13.'
   }
   return 'Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.'
 }

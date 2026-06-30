@@ -29,17 +29,6 @@ const FALLBACK_CLASSES = [
     is_active: true
   },
   {
-    id: 'stats-assessment',
-    name: 'Statistics for Assessment',
-    short_name: 'S4A',
-    description: 'Statistical methods for psychological assessment and testing, including reliability and validity.',
-    color: '#10b981',
-    icon: '📋',
-    topics: ['descriptive-stats', 'normal-distribution', 'z-scores', 'correlation'],
-    order: 3,
-    is_active: true
-  },
-  {
     id: 'intro-research',
     name: 'Intro to Research',
     short_name: 'Intro',
@@ -47,7 +36,7 @@ const FALLBACK_CLASSES = [
     color: '#f59e0b',
     icon: '📚',
     topics: ['descriptive-stats', 'visualizations', 'probability'],
-    order: 4,
+    order: 3,
     is_active: true
   }
 ]
