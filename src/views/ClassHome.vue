@@ -282,33 +282,25 @@
             v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
             class="tab-panel"
           >
+            <router-link
+              v-if="conceptReviewQuestionCount > 0"
+              :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}`"
+              class="practice-link-card lab-concept-review-card"
+            >
+              <div class="link-card-icon">
+                <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Lab Concept Review</h3>
+                <p>Quiz on random assignment, sampling methods, and validity — after the simulations below.</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </router-link>
             <ExperimentalSamplingSimulation :embed-tab="labMiniLabEmbedTab" />
           </div>
 
           <!-- Topics Tab -->
           <div v-else-if="activeContentTab === 'topics'" class="tab-panel">
-            <div
-              v-if="isPsychMethodsClass && moduleTopics[0]"
-              class="rm-reading-cta"
-            >
-              <h3 class="rm-reading-cta-title">Read Chapter {{ selectedModule.textbookChapter }}</h3>
-              <p class="rm-reading-cta-desc">{{ selectedModule.shortTitle || selectedModule.title }}</p>
-              <div class="rm-reading-cta-actions">
-                <router-link
-                  :to="`/topic/${moduleTopics[0].id}`"
-                  class="rm-reading-cta-primary"
-                >
-                  Read chapter →
-                </router-link>
-                <router-link
-                  v-if="conceptReviewQuestionCount > 0"
-                  :to="`/class/${classId}/practice?module=${selectedModuleId}`"
-                  class="rm-reading-cta-secondary"
-                >
-                  Concept Review
-                </router-link>
-              </div>
-            </div>
             <div v-if="moduleItems.length === 0" class="empty-state">
               <p>No topics available for this module yet.</p>
             </div>
@@ -1598,6 +1590,10 @@ watch(selectedModuleId, id => {
   font-size: 0.9375rem;
 }
 
+.lab-concept-review-card {
+  margin-bottom: 1.25rem;
+}
+
 .rm-getting-started {
   background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
   border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
@@ -1643,61 +1639,6 @@ watch(selectedModuleId, id => {
 
 .rm-quick-link:hover {
   text-decoration: underline;
-}
-
-.rm-reading-cta {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
-}
-
-.rm-reading-cta-title {
-  margin: 0 0 0.25rem 0;
-  font-size: 1.0625rem;
-}
-
-.rm-reading-cta-desc {
-  margin: 0 0 1rem 0;
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-}
-
-.rm-reading-cta-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.rm-reading-cta-primary,
-.rm-reading-cta-secondary {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.rm-reading-cta-primary {
-  background: var(--primary);
-  color: var(--bg, #fff);
-}
-
-.rm-reading-cta-primary:hover {
-  filter: brightness(1.05);
-}
-
-.rm-reading-cta-secondary {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-}
-
-.rm-reading-cta-secondary:hover {
-  border-color: var(--primary);
-  color: var(--primary);
 }
 
 /* Learning Objectives */

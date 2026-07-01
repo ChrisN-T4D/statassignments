@@ -62,12 +62,22 @@ export const LAB_CONCEPT_REVIEW = {
   type: 'concept-review',
   methodsMarketPath: conceptReviewPath('rm-module-lab'),
   tips: [
-    'Run the interactive simulations in Concept Review — no separate Pressbooks chapter.',
+    'Run the Sampling and Assignment simulations in the Lab module, then complete Concept Review.',
     'Compare random vs non-random assignment and SRS vs convenience sampling.',
     'Use this lab before or while working on experimental design worksheets.'
   ],
   getHelp:
-    'Open Methods Market → Lab module → Concept Review. Bring one question to office hours if the sampling vocabulary is unclear.'
+    'Open Methods Market → Lab module → run simulations, then Concept Review. Bring one question to office hours if the vocabulary is unclear.'
+}
+
+/** Canvas-aligned Concept Review rows for every RM chapter + lab. */
+export function allResearchMethodsConceptReviewAssignments () {
+  return [
+    ...PRESSBOOKS_CHAPTERS.map((ch) =>
+      conceptReviewAssignment(ch.number, ch.moduleId, ch.shortTitle)
+    ),
+    LAB_CONCEPT_REVIEW
+  ]
 }
 
 /** All Pressbooks chapters + lab with Concept Review URLs (instructor Canvas setup). */

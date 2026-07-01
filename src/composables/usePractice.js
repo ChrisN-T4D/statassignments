@@ -183,6 +183,14 @@ export function usePractice() {
       // If no selection, fall through to default behavior
     }
 
+    // Research Methods banks are canonical in static files (always use them).
+    if (topicId?.startsWith('rm-module-')) {
+      const staticQuestions = getQuestionsByModule(topicId)
+      problems.value = staticQuestions.map(convertQuestion).filter(Boolean)
+      loading.value = false
+      return problems.value
+    }
+
     try {
       let filter = ''
       if (topicId) {

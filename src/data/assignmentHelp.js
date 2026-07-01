@@ -6,7 +6,7 @@
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
-import { enrichResearchMethodsAssignment } from './researchMethodsCanvasLinks.js'
+import { enrichResearchMethodsAssignment, allResearchMethodsConceptReviewAssignments } from './researchMethodsCanvasLinks.js'
 import { methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
@@ -382,10 +382,19 @@ export const assignmentHelpByModule = [
  */
 export function getAssignmentHelp (classId) {
   if (classId === 'research-methods') {
-    return assignmentHelpResearchMethods.map((block) => ({
-      ...block,
-      assignments: block.assignments.map(enrichResearchMethodsAssignment)
-    }))
+    const conceptReviewBlock = {
+      canvasPart: 'Course-wide',
+      moduleTitle: 'Chapter Concept Review',
+      phaseLabel: 'Methods Market practice (one per chapter)',
+      assignments: allResearchMethodsConceptReviewAssignments()
+    }
+    return [
+      conceptReviewBlock,
+      ...assignmentHelpResearchMethods.map((block) => ({
+        ...block,
+        assignments: block.assignments.map(enrichResearchMethodsAssignment)
+      }))
+    ]
   }
   return assignmentHelpByModule
 }
