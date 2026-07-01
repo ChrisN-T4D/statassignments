@@ -168,7 +168,7 @@ export const assignmentHelpResearchMethods = [
     assignments: [
       {
         id: 'rm-methods-section',
-        name: 'Methods Section (includes appendices & literature review)',
+        name: 'Methods Section (Includes all appendices and literature review)',
         type: 'assignment',
         tips: [
           'Follow the METHODS Template in Canvas; include participants, materials/measures, procedure, and analysis plan.',
@@ -236,12 +236,12 @@ export const assignmentHelpResearchMethods = [
     noDiscussion: true
   },
   {
-    canvasPart: 'Training',
+    canvasPart: 'Part 3',
     moduleTitle: 'Human Research Training',
     assignments: [
       {
         id: 'rm-hrt-lesson-1',
-        name: 'Human Research Training — Lesson 1',
+        name: 'Human Research Training - Lesson 1',
         type: 'assignment',
         tips: ['Connect CITI-style training content to Pressbooks Ch. 3 (Belmont principles, respect for persons, beneficence, justice).'],
         practiceLinks: CH.ethics,
@@ -249,7 +249,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-hrt-lesson-2',
-        name: 'Human Research Training — Lesson 2',
+        name: 'Human Research Training - Lesson 2',
         type: 'assignment',
         tips: ['Focus on informed consent elements: purpose, risks, benefits, confidentiality, voluntary participation, contact info.'],
         practiceLinks: CH.ethics,
@@ -257,7 +257,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-hrt-lesson-3',
-        name: 'Human Research Training — Lesson 3',
+        name: 'Human Research Training - Lesson 3',
         type: 'assignment',
         tips: ['Note requirements for vulnerable populations and when additional safeguards apply.'],
         practiceLinks: CH.ethics,
@@ -265,7 +265,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-hrt-lesson-4',
-        name: 'Human Research Training — Lesson 4',
+        name: 'Human Research Training - Lesson 4',
         type: 'assignment',
         tips: ['Review deception, debriefing, and when debriefing must restore informed consent.'],
         practiceLinks: CH.ethics,
@@ -273,7 +273,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-hrt-lesson-5',
-        name: 'Human Research Training — Lesson 5',
+        name: 'Human Research Training - Lesson 5',
         type: 'assignment',
         tips: ['Tie training completion to your IRB application: you are certifying you understand researcher responsibilities.'],
         practiceLinks: CH.ethics,

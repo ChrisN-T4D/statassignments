@@ -10,7 +10,10 @@ import {
   getDeadlineForAssignment,
   formatDueDate,
   FALL_2026_TERM,
-  SCHEDULE_WEEKS
+  SCHEDULE_WEEKS,
+  ASSIGNMENT_POINTS_FLOOR,
+  getGradedPointsTotal,
+  getGradedCanvasAssignmentsByGroup
 } from './fall2026ResearchMethodsSchedule.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
@@ -403,14 +406,17 @@ export function getAssignmentHelp (classId) {
 export function getResearchMethodsSchedule () {
   return {
     term: FALL_2026_TERM,
-    weeks: SCHEDULE_WEEKS
+    weeks: SCHEDULE_WEEKS,
+    pointsFloor: ASSIGNMENT_POINTS_FLOOR,
+    pointsTotal: getGradedPointsTotal(),
+    assignmentGroups: getGradedCanvasAssignmentsByGroup()
   }
 }
 
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Fall 2026 PSYC 4223 — one Pressbooks chapter per week (complete the full chapter + Concept Review). IRB final Nov 13.'
+    return 'Fall 2026 PSYC 4223 — one Pressbooks chapter per week (complete the full chapter + Concept Review). Each Canvas assignment is scored out of 100+ points. IRB final Nov 13.'
   }
   return 'Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.'
 }

@@ -35,6 +35,8 @@
         </div>
         <p class="weekly-chapter-intro">
           Each week, complete <strong>one</strong> Pressbooks chapter in Methods Market (full chapter + Concept Review).
+          Canvas assignments are scored out of <strong>{{ fallSchedule.pointsFloor }}+ points</strong> each
+          ({{ fallSchedule.pointsTotal }} pts total).
           IRB final due {{ formatScheduleDate(fallSchedule.term.irbSubmissionTarget) }}.
         </p>
         <div class="weekly-chapter-table-wrap">
@@ -45,6 +47,7 @@
                 <th>Dates</th>
                 <th>Chapter (complete this week)</th>
                 <th>Canvas focus</th>
+                <th>Due in Canvas</th>
               </tr>
             </thead>
             <tbody>
@@ -59,7 +62,14 @@
                   </template>
                   <span v-else class="weekly-chapter-none">{{ row.chapterGoal }}</span>
                 </td>
-                <td>{{ row.focus }}</td>
+                <td>
+                  {{ row.focus }}
+                  <span v-if="row.note" class="weekly-chapter-note">{{ row.note }}</span>
+                </td>
+                <td>
+                  <span v-if="row.due.length">{{ row.due.join('; ') }}</span>
+                  <span v-else class="weekly-chapter-none">—</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -1174,6 +1184,14 @@ watch(selectedModuleId, id => {
 }
 
 .weekly-chapter-none {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.weekly-chapter-note {
+  display: block;
+  margin-top: 0.25rem;
   font-size: 0.8125rem;
   color: var(--text-muted);
   font-style: italic;

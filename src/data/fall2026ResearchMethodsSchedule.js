@@ -200,26 +200,33 @@ export const SCHEDULE_WEEKS = WEEKLY_SCHEDULE_RAW.map(enrichWeek)
 
 export const WEEKLY_CHAPTER_FOCUS = SCHEDULE_WEEKS
 
+/** Each graded Canvas assignment is worth at least this many points. */
+export const ASSIGNMENT_POINTS_FLOOR = 100
+
+/**
+ * Fall 2026 point values — every graded assignment is ≥ 100 pts; major milestones weighted higher.
+ * Course total is the sum (~2,300 pts); Canvas shows percent correct per assignment.
+ */
 /** @type {Array<{ assignmentId: string, dueDate: string, points?: number, week: number, note?: string }>} */
 export const ASSIGNMENT_DEADLINES = [
   { assignmentId: 'rm-ch1-intro', dueDate: '2026-08-21', week: 1, note: 'Complete with syllabus acknowledgement' },
-  { assignmentId: 'rm-syllabus-ack', dueDate: '2026-08-21', points: 5, week: 1 },
+  { assignmentId: 'rm-syllabus-ack', dueDate: '2026-08-21', points: 100, week: 1 },
   { assignmentId: 'rm-choose-groups', dueDate: '2026-08-28', week: 2, note: 'Form groups before workshop' },
-  { assignmentId: 'rm-phase-1-workshop', dueDate: '2026-08-28', points: 10, week: 2 },
-  { assignmentId: 'rm-article-review', dueDate: '2026-09-11', points: 50, week: 4 },
-  { assignmentId: 'rm-lit-review-draft-1', dueDate: '2026-09-25', points: 8, week: 6, note: 'Outline + partial draft for instructor feedback' },
-  { assignmentId: 'rm-lit-review-final', dueDate: '2026-10-23', points: 12, week: 10, note: 'Revised literature review after Draft 1 feedback' },
-  { assignmentId: 'rm-phase-3-worksheet', dueDate: '2026-10-30', points: 10, week: 11, note: 'Same due date as Phase 4 — submit both together' },
-  { assignmentId: 'rm-phase-4-worksheet', dueDate: '2026-10-30', points: 50, week: 11, note: 'Same due date as Phase 3 — unlocks method path guides' },
-  { assignmentId: 'rm-methods-section', dueDate: '2026-11-06', points: 20, week: 12 },
-  { assignmentId: 'rm-hrt-lesson-1', dueDate: '2026-10-26', points: 10, week: 11 },
-  { assignmentId: 'rm-hrt-lesson-2', dueDate: '2026-10-28', points: 10, week: 11 },
-  { assignmentId: 'rm-hrt-lesson-3', dueDate: '2026-10-30', points: 10, week: 11 },
-  { assignmentId: 'rm-hrt-lesson-4', dueDate: '2026-11-02', points: 10, week: 12 },
-  { assignmentId: 'rm-hrt-lesson-5', dueDate: '2026-11-04', points: 10, week: 12, note: 'Complete before IRB first draft' },
-  { assignmentId: 'rm-irb-first-draft', dueDate: '2026-11-06', points: 5, week: 12, note: 'Instructor feedback before final IRB packet' },
-  { assignmentId: 'rm-irb-final-draft', dueDate: '2026-11-13', points: 5, week: 13, note: 'Submit to NWOSU IRB' },
-  { assignmentId: 'rm-irb-status-update', dueDate: '2026-12-04', points: 150, week: 16, note: 'Status + data-collection plan before finals' }
+  { assignmentId: 'rm-phase-1-workshop', dueDate: '2026-08-28', points: 100, week: 2 },
+  { assignmentId: 'rm-article-review', dueDate: '2026-09-11', points: 200, week: 4 },
+  { assignmentId: 'rm-lit-review-draft-1', dueDate: '2026-09-25', points: 100, week: 6, note: 'Outline + partial draft for instructor feedback' },
+  { assignmentId: 'rm-lit-review-final', dueDate: '2026-10-23', points: 150, week: 10, note: 'Revised literature review after Draft 1 feedback' },
+  { assignmentId: 'rm-phase-3-worksheet', dueDate: '2026-10-30', points: 100, week: 11, note: 'Same due date as Phase 4 — submit both together' },
+  { assignmentId: 'rm-phase-4-worksheet', dueDate: '2026-10-30', points: 200, week: 11, note: 'Same due date as Phase 3 — unlocks method path guides' },
+  { assignmentId: 'rm-methods-section', dueDate: '2026-11-06', points: 250, week: 12 },
+  { assignmentId: 'rm-hrt-lesson-1', dueDate: '2026-10-26', points: 100, week: 11 },
+  { assignmentId: 'rm-hrt-lesson-2', dueDate: '2026-10-28', points: 100, week: 11 },
+  { assignmentId: 'rm-hrt-lesson-3', dueDate: '2026-10-30', points: 100, week: 11 },
+  { assignmentId: 'rm-hrt-lesson-4', dueDate: '2026-11-02', points: 100, week: 12 },
+  { assignmentId: 'rm-hrt-lesson-5', dueDate: '2026-11-04', points: 100, week: 12, note: 'Complete before IRB first draft' },
+  { assignmentId: 'rm-irb-first-draft', dueDate: '2026-11-06', points: 100, week: 12, note: 'Instructor feedback before final IRB packet' },
+  { assignmentId: 'rm-irb-final-draft', dueDate: '2026-11-13', points: 100, week: 13, note: 'Submit to NWOSU IRB' },
+  { assignmentId: 'rm-irb-status-update', dueDate: '2026-12-04', points: 400, week: 16, note: 'Status + data-collection plan before finals' }
 ]
 
 const deadlineByAssignmentId = Object.fromEntries(
@@ -237,4 +244,107 @@ export function getWeeklyFocusByWeek (weekNumber) {
 export function formatDueDate (isoDate) {
   const d = new Date(`${isoDate}T12:00:00`)
   return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+/**
+ * Canvas assignment groups (PSYC 4223 course 2406) — mirror Methods Market canvasPart blocks.
+ * Use these names when creating groups under Assignments → Add Assignment Group.
+ */
+export const CANVAS_ASSIGNMENT_GROUPS = [
+  {
+    id: 'part-1',
+    groupName: 'Part 1 — Introduction & literature review',
+    assignmentIds: [
+      'rm-syllabus-ack',
+      'rm-phase-1-workshop',
+      'rm-article-review',
+      'rm-lit-review-draft-1',
+      'rm-lit-review-final'
+    ]
+  },
+  {
+    id: 'part-2',
+    groupName: 'Part 2 — Question, design & methods',
+    assignmentIds: [
+      'rm-phase-3-worksheet',
+      'rm-phase-4-worksheet',
+      'rm-methods-section'
+    ]
+  },
+  {
+    id: 'part-3',
+    groupName: 'Part 3 — Ethics, training & IRB',
+    assignmentIds: [
+      'rm-hrt-lesson-1',
+      'rm-hrt-lesson-2',
+      'rm-hrt-lesson-3',
+      'rm-hrt-lesson-4',
+      'rm-hrt-lesson-5',
+      'rm-irb-first-draft',
+      'rm-irb-final-draft',
+      'rm-irb-status-update'
+    ]
+  }
+]
+
+/** Canvas assignment title by Methods Market assignment id (course 2406). */
+export const CANVAS_ASSIGNMENT_TITLES = {
+  'rm-syllabus-ack': 'Syllabus Acknowledgement',
+  'rm-phase-1-workshop': 'Phase 1 Workshop',
+  'rm-article-review': 'Article Review and Problem Statement',
+  'rm-lit-review-draft-1': 'Literature Review Draft 1',
+  'rm-lit-review-final': 'Literature Review Final / References Section',
+  'rm-phase-3-worksheet': 'Phase 3 Worksheet',
+  'rm-phase-4-worksheet': 'Phase 4 Worksheet',
+  'rm-methods-section': 'Methods Section (Includes all appendices and literature review)',
+  'rm-hrt-lesson-1': 'Human Research Training - Lesson 1',
+  'rm-hrt-lesson-2': 'Human Research Training - Lesson 2',
+  'rm-hrt-lesson-3': 'Human Research Training - Lesson 3',
+  'rm-hrt-lesson-4': 'Human Research Training - Lesson 4',
+  'rm-hrt-lesson-5': 'Human Research Training - Lesson 5',
+  'rm-irb-first-draft': 'IRB First Draft for Feedback',
+  'rm-irb-final-draft': 'IRB Final Draft for IRB',
+  'rm-irb-status-update': 'IRB Status Update and Detailed Plan'
+}
+
+export function getCanvasGroupForAssignment (assignmentId) {
+  return CANVAS_ASSIGNMENT_GROUPS.find((g) => g.assignmentIds.includes(assignmentId)) ?? null
+}
+
+export function getGradedPointsTotal () {
+  return ASSIGNMENT_DEADLINES.reduce((sum, d) => sum + (d.points ?? 0), 0)
+}
+
+/** Points subtotal per Canvas assignment group (part-1, part-2, part-3). */
+export function getPointsByCanvasGroup () {
+  return CANVAS_ASSIGNMENT_GROUPS.map((group) => {
+    const points = group.assignmentIds.reduce((sum, id) => {
+      const row = deadlineByAssignmentId[id]
+      return sum + (row?.points ?? 0)
+    }, 0)
+    return { ...group, points }
+  })
+}
+
+/** Graded Canvas assignments grouped for Methods Market UI (matches Canvas assignment groups). */
+export function getGradedCanvasAssignmentsByGroup () {
+  return getPointsByCanvasGroup().map((group) => ({
+    id: group.id,
+    groupName: group.groupName,
+    points: group.points,
+    assignments: group.assignmentIds
+      .map((id) => {
+        const row = deadlineByAssignmentId[id]
+        if (!row?.points) return null
+        return {
+          id,
+          name: CANVAS_ASSIGNMENT_TITLES[id] ?? id,
+          dueDate: row.dueDate,
+          dueDateLabel: formatDueDate(row.dueDate),
+          points: row.points,
+          note: row.note
+        }
+      })
+      .filter(Boolean)
+  }))
 }

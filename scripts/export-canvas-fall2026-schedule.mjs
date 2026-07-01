@@ -6,28 +6,12 @@ import {
   SCHEDULE_WEEKS,
   ASSIGNMENT_DEADLINES,
   FALL_2026_TERM,
-  formatDueDate
+  CANVAS_ASSIGNMENT_TITLES,
+  ASSIGNMENT_POINTS_FLOOR,
+  formatDueDate,
+  getGradedPointsTotal,
+  getPointsByCanvasGroup
 } from '../src/data/fall2026ResearchMethodsSchedule.js'
-
-/** Canvas assignment titles as they appear in PSYC 4223 (course 2406). */
-export const CANVAS_ASSIGNMENT_TITLES = {
-  'rm-syllabus-ack': 'Syllabus Acknowledgement',
-  'rm-phase-1-workshop': 'Phase 1 Workshop',
-  'rm-article-review': 'Article Review and Problem Statement',
-  'rm-lit-review-draft-1': 'Literature Review Draft 1',
-  'rm-lit-review-final': 'Literature Review/References Section',
-  'rm-phase-3-worksheet': 'Phase 3 Worksheet',
-  'rm-phase-4-worksheet': 'Phase 4 Worksheet',
-  'rm-methods-section': 'Methods Section (Includes all appendices and literature review)',
-  'rm-hrt-lesson-1': 'Human Research Training - Lesson 1',
-  'rm-hrt-lesson-2': 'Human Research Training - Lesson 2',
-  'rm-hrt-lesson-3': 'Human Research Training - Lesson 3',
-  'rm-hrt-lesson-4': 'Human Research Training - Lesson 4',
-  'rm-hrt-lesson-5': 'Human Research Training - Lesson 5',
-  'rm-irb-first-draft': 'IRB First Draft for Feedback',
-  'rm-irb-final-draft': 'IRB Final Draft for IRB',
-  'rm-irb-status-update': 'IRB Status Update and Detailed Plan'
-}
 
 function esc (s) {
   return String(s)
@@ -40,8 +24,8 @@ console.log('<h2>Fall 2026 Weekly Schedule — PSYC 4223</h2>')
 console.log(`<p>Classes begin ${formatDueDate(FALL_2026_TERM.classesBegin)}. ` +
   `<strong>IRB Final Draft to IRB: ${formatDueDate(FALL_2026_TERM.irbSubmissionTarget)}.</strong> ` +
   'Complete <strong>one full Pressbooks chapter per week</strong> in Methods Market (reading + Concept Review). ' +
-  '<a href="https://methods-market-production.up.railway.app/class/research-methods">Methods Market course home</a> · ' +
-  '<a href="https://methods-market-production.up.railway.app/class/research-methods/assignment-help">Assignment help</a></p>')
+  '<a href="https://methods-market.clneu.com/class/research-methods">Methods Market course home</a> · ' +
+  '<a href="https://methods-market.clneu.com/class/research-methods/assignment-help">Assignment help</a></p>')
 
 console.log('<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:900px;">')
 console.log('<thead><tr><th>Week</th><th>Dates</th><th>Methods Market chapter (complete this week)</th><th>Course focus</th><th>Due in Canvas</th></tr></thead><tbody>')
@@ -56,6 +40,21 @@ for (const row of SCHEDULE_WEEKS) {
 
 console.log('</tbody></table>')
 
+console.log('<h3>Grading (each assignment ≥ ' + ASSIGNMENT_POINTS_FLOOR + ' pts; course total ' +
+  getGradedPointsTotal() + ' pts)</h3>')
+console.log('<p>Every graded assignment is worth <strong>at least ' + ASSIGNMENT_POINTS_FLOOR +
+  ' points</strong> in Canvas; larger milestones use higher caps. Set each value under <strong>Edit assignment → Points</strong>.</p>')
+for (const group of getPointsByCanvasGroup()) {
+  console.log(`<h4>${esc(group.groupName)} — ${group.points} pts</h4><ul>`)
+  for (const id of group.assignmentIds) {
+    const title = CANVAS_ASSIGNMENT_TITLES[id]
+    const row = ASSIGNMENT_DEADLINES.find((d) => d.assignmentId === id)
+    if (!title || !row?.points) continue
+    console.log(`<li>${esc(title)} — <strong>${row.points} pts</strong></li>`)
+  }
+  console.log('</ul>')
+}
+
 console.log('<h3>Assignment due dates (Canvas)</h3><ul>')
 for (const d of ASSIGNMENT_DEADLINES) {
   if (!d.points && !CANVAS_ASSIGNMENT_TITLES[d.assignmentId]) continue
@@ -66,10 +65,23 @@ for (const d of ASSIGNMENT_DEADLINES) {
 }
 console.log('</ul>')
 
+console.log('<h3>Assignment groups (Canvas)</h3>')
+console.log('<p>Organize graded work under <strong>Assignments → Add Assignment Group</strong> using these three groups (matches Methods Market Parts 1–3). Point subtotals sum to ' +
+  getGradedPointsTotal() + '.</p>')
+for (const group of getPointsByCanvasGroup()) {
+  console.log(`<h4>${esc(group.groupName)} (${group.points} pts)</h4><ul>`)
+  for (const id of group.assignmentIds) {
+    const title = CANVAS_ASSIGNMENT_TITLES[id]
+    if (!title) continue
+    console.log(`<li>${esc(title)}</li>`)
+  }
+  console.log('</ul>')
+}
+
 console.log('\n<!-- Canvas assignment due-date checklist (instructor) -->')
-console.log('<!-- Split Literature Review into Draft 1 and Final if not already done. -->')
 for (const d of ASSIGNMENT_DEADLINES) {
   const title = CANVAS_ASSIGNMENT_TITLES[d.assignmentId]
   if (!title) continue
-  console.log(`<!-- ${title}: ${d.dueDate} -->`)
+  const pts = d.points ? ` (${d.points} pts)` : ''
+  console.log(`<!-- ${title}: ${d.dueDate}${pts} -->`)
 }

@@ -57,6 +57,49 @@
         </div>
       </section>
 
+      <section v-if="schedule?.assignmentGroups?.length" class="canvas-grading-overview">
+        <h2 class="schedule-title">Canvas assignments — dates &amp; points</h2>
+        <p class="schedule-anchor">
+          Matches your Canvas gradebook ({{ schedule.pointsTotal }} points total).
+          Each assignment is worth at least {{ schedule.pointsFloor }} points.
+        </p>
+        <div
+          v-for="group in schedule.assignmentGroups"
+          :key="group.id"
+          class="canvas-grading-group"
+        >
+          <h3 class="canvas-grading-group-title">
+            {{ group.groupName }}
+            <span class="canvas-grading-subtotal">{{ group.points }} pts</span>
+          </h3>
+          <div class="schedule-table-wrap">
+            <table class="schedule-table canvas-grading-table">
+              <thead>
+                <tr>
+                  <th>Assignment</th>
+                  <th>Due</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="a in group.assignments" :key="a.id">
+                  <td>
+                    <router-link
+                      :to="`/class/${classId}/assignment-help/${a.id}`"
+                      class="canvas-grading-link"
+                    >
+                      {{ a.name }}
+                    </router-link>
+                  </td>
+                  <td>{{ a.dueDateLabel }}</td>
+                  <td>{{ a.points }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <div class="help-modules">
         <section
           v-for="(block, idx) in helpData"
@@ -237,6 +280,54 @@ function typeLabel (type) {
   font-size: 0.8125rem;
   color: var(--text-secondary);
   line-height: 1.4;
+}
+
+.canvas-grading-overview {
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg-card);
+  padding: 1.25rem 1.5rem;
+}
+
+.canvas-grading-group {
+  margin-bottom: 1.25rem;
+}
+
+.canvas-grading-group:last-child {
+  margin-bottom: 0;
+}
+
+.canvas-grading-group-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.canvas-grading-subtotal {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.canvas-grading-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.canvas-grading-link:hover {
+  text-decoration: underline;
+}
+
+.canvas-grading-table td:last-child,
+.canvas-grading-table th:last-child {
+  white-space: nowrap;
+  text-align: right;
 }
 
 .help-modules {
