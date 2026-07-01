@@ -6,6 +6,8 @@
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
+import { enrichResearchMethodsAssignment } from './researchMethodsCanvasLinks.js'
+import { methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -34,6 +36,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 1,
     moduleTitle: 'Introductions and Why Learn Stats',
     assignments: [
+      ...methodsMarketPracticeAssignments(1),
       {
         id: 'm1-intro-videos',
         name: 'Introduction Videos',
@@ -62,6 +65,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 2,
     moduleTitle: 'Research Design & Measurement',
     assignments: [
+      ...methodsMarketPracticeAssignments(2),
       {
         id: 'm2-levels-quiz',
         name: 'Levels of Measurement (Quiz)',
@@ -101,6 +105,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 3,
     moduleTitle: 'Software and Data Handling',
     assignments: [
+      ...methodsMarketPracticeAssignments(3),
       {
         id: 'm3-jamovi-exploration',
         name: 'Jamovi Exploration & Data Familiarization (Week 4)',
@@ -150,6 +155,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 4,
     moduleTitle: 'Descriptive Statistics',
     assignments: [
+      ...methodsMarketPracticeAssignments(4),
       {
         id: 'm4-descriptives',
         name: 'Descriptive Statistics (Week 6)',
@@ -194,6 +200,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 5,
     moduleTitle: 'Graphing and Visualization',
     assignments: [
+      ...methodsMarketPracticeAssignments(5),
       {
         id: 'm5-week8-9',
         name: 'Week 8 & 9 Assignment (Screen Record)',
@@ -235,6 +242,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 6,
     moduleTitle: 'Probability and Sampling',
     assignments: [
+      ...methodsMarketPracticeAssignments(6),
       {
         id: 'm6-week11a',
         name: 'Week 11 Part A: Dice (Probability & Sampling)',
@@ -285,6 +293,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 7,
     moduleTitle: 'Hypothesis Testing',
     assignments: [
+      ...methodsMarketPracticeAssignments(7),
       {
         id: 'm7-hypothesis-scenarios',
         name: 'Writing Hypotheses, Choosing t-test vs ANOVA',
@@ -311,6 +320,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 8,
     moduleTitle: 'Comparing Groups / Relationships (ANOVA, t-tests, regression)',
     assignments: [
+      ...methodsMarketPracticeAssignments(8),
       {
         id: 'm8-week15',
         name: 'Week 15 Assignment (Chi-square, t-tests, regression, ANOVA)',
@@ -372,7 +382,10 @@ export const assignmentHelpByModule = [
  */
 export function getAssignmentHelp (classId) {
   if (classId === 'research-methods') {
-    return assignmentHelpResearchMethods
+    return assignmentHelpResearchMethods.map((block) => ({
+      ...block,
+      assignments: block.assignments.map(enrichResearchMethodsAssignment)
+    }))
   }
   return assignmentHelpByModule
 }
@@ -380,9 +393,9 @@ export function getAssignmentHelp (classId) {
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Match your Canvas assignment below for Pressbooks chapter links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
+    return 'Match your Canvas assignment below for Pressbooks chapters, Concept Review links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
   }
-  return 'Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.'
+  return 'Match your Canvas assignment below for Methods Market Concept Review and Software Practice links, plus tips for other weekly work. Due dates and points are always in Canvas — not here.'
 }
 
 /**

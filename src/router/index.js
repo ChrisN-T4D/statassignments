@@ -146,6 +146,18 @@ const router = createRouter({
 const { user: authUser } = useAuth()
 
 router.beforeEach((to, from, next) => {
+  // Legacy Canvas links: /practice?module=module-N → class statistics concept review
+  if (to.path === '/practice' && to.query.module && !to.params.classId) {
+    const raw = String(to.query.module)
+    const statsModule = raw.startsWith('stats-module-')
+      ? raw
+      : raw.startsWith('module-')
+        ? raw.replace('module-', 'stats-module-')
+        : `stats-module-${raw}`
+    next({ path: '/class/statistics/practice', query: { ...to.query, module: statsModule } })
+    return
+  }
+
   const isAuthenticated = pb.authStore.isValid
   const userRole = authUser.value?.role
 

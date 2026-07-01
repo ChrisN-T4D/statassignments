@@ -60,7 +60,9 @@ function typeLabel (type) {
     discussion: 'Discussion',
     practice: 'Practice / Quiz',
     benchmark: 'Benchmark',
-    final: 'Final'
+    final: 'Final',
+    'concept-review': 'Concept Review',
+    'software-practice': 'Software Practice'
   }
   return labels[type] || type
 }
@@ -178,6 +180,21 @@ function typeLabel (type) {
 .assignment-link-type.assignment {
   background: rgba(59, 130, 246, 0.1);
   color: #2563eb;
+}
+
+.assignment-link-type.final {
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+}
+
+.assignment-link-type.concept-review {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.assignment-link-type.software-practice {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
 }
 
 .no-discussion-note {

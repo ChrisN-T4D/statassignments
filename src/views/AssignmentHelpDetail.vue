@@ -26,6 +26,14 @@
           <p class="practice-test-desc">Get {{ practiceTestCount }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
         </div>
 
+        <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
+        <div v-else-if="assignment.methodsMarketPath" class="practice-test-cta">
+          <router-link :to="assignment.methodsMarketPath" class="practice-test-link">
+            {{ methodsMarketLinkText }} →
+          </router-link>
+          <p class="practice-test-desc">{{ methodsMarketLinkDesc }}</p>
+        </div>
+
         <!-- Single assignment card content -->
         <article class="assignment-card">
           <div v-if="assignment.tips?.length" class="section">
@@ -123,13 +131,31 @@ const practiceTestLinkText = computed(() => {
   return 'Take a practice test'
 })
 
+const methodsMarketLinkText = computed(() => {
+  if (assignment.value?.type === 'software-practice') return 'Open Software Practice'
+  if (assignment.value?.type === 'concept-review') return 'Open Concept Review'
+  return 'Open in Methods Market'
+})
+
+const methodsMarketLinkDesc = computed(() => {
+  if (assignment.value?.type === 'software-practice') {
+    return 'Complete the Learn, Practice, and Apply steps for this module, then mark the Canvas assignment complete.'
+  }
+  if (assignment.value?.type === 'concept-review') {
+    return 'Work through all concept review questions for this module, then mark the Canvas assignment complete.'
+  }
+  return 'Complete this activity in Methods Market, then return to Canvas.'
+})
+
 function typeLabel (type) {
   const labels = {
     assignment: 'Assignment',
     discussion: 'Discussion',
     practice: 'Practice / Quiz',
     benchmark: 'Benchmark',
-    final: 'Final'
+    final: 'Final',
+    'concept-review': 'Concept Review',
+    'software-practice': 'Software Practice'
   }
   return labels[type] || type
 }
