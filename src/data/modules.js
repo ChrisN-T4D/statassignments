@@ -646,6 +646,24 @@ export const researchMethodsModulesBase = [
     topics: ['rm-chapter-13']
   },
   {
+    id: 'rm-module-data-by-path',
+    classId: 'research-methods',
+    number: null,
+    title: 'Statistics & data analysis by path',
+    shortTitle: 'Data by path',
+    description:
+      'Choose Path 1–4 (Survey, Qualitative, Experimental, or Archival) for Ch. 12–13 reading and path-matched analysis steps.',
+    icon: '📊',
+    color: '#6366f1',
+    topics: [],
+    isPathDataSection: true,
+    learningObjectives: [
+      'Read Ch. 12–13 with your methodology path in mind',
+      'Pick analyses appropriate to your research design',
+      'Run step-by-step instructions in jamovi, SPSS, or Excel'
+    ]
+  },
+  {
     id: 'rm-module-analyze-data',
     classId: 'research-methods',
     number: null,
@@ -666,6 +684,19 @@ export const researchMethodsModulesBase = [
 
 function enrichResearchMethodsModule (mod) {
   if (mod.isDataAnalysisTool) return mod
+  if (mod.isPathDataSection) {
+    const part = getCanvasPartForModule(mod.id)
+    return {
+      ...mod,
+      ...(part
+        ? {
+            canvasPart: part.label,
+            canvasPartTitle: part.title,
+            canvasPartId: part.id
+          }
+        : {})
+    }
+  }
   const chapter = getPressbooksChapterByModuleId(mod.id)
   const part = getCanvasPartForModule(mod.id)
   const objectives = getLearningObjectivesForModule(mod.id)

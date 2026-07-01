@@ -194,7 +194,7 @@ export const assignmentHelpResearchMethods = [
           'Pilot your survey before data collection; report how you will handle missing data.'
         ],
         practiceLinks: CH.survey,
-        getHelp: 'Survey path students: focus Concept Review on Modules 4 and 7 in Methods Market.'
+        getHelp: 'Survey path students: focus Concept Review on Modules 4 and 7, then open Analysis → Survey for Ch. 12–13 and software steps.'
       },
       {
         id: 'rm-path-2-qualitative',
@@ -218,7 +218,7 @@ export const assignmentHelpResearchMethods = [
           'Use the Lab module in Methods Market (random assignment & sampling) to clarify assignment vs sampling.'
         ],
         practiceLinks: [...CH.experimental, 'rm-chapter-8'],
-        getHelp: 'Experimental path: run the Lab simulations, then review Ch. 5 Concept Review before finalizing procedure.'
+        getHelp: 'Experimental path: run the Lab simulations, review Ch. 5 Concept Review, then open Analysis → Experimental for inferential tests.'
       },
       {
         id: 'rm-path-4-archival',

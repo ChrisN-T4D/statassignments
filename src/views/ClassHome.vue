@@ -19,7 +19,12 @@
             <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
             <template v-if="showDataAnalysisNav">
               <span class="header-links-sep">·</span>
-              <router-link :to="`/class/${classId}/data-analysis`" class="assignment-help-link">Analyze your data</router-link>
+              <router-link
+                :to="{ path: `/class/${classId}`, query: { module: RM_MODULE_DATA_BY_PATH_ID } }"
+                class="assignment-help-link"
+              >
+                Statistics &amp; analyze data by path
+              </router-link>
             </template>
           </div>
         </div>
@@ -170,13 +175,8 @@
           </ul>
         </div>
 
-        <!-- Analyze your data (dedicated module tab; jamovi / SPSS / Excel) -->
-        <div v-if="isDataAnalysisModule" class="data-analysis-module-panel">
-          <DataAnalysisHelper :class-id="classId" embedded />
-        </div>
-
-        <!-- Module Progress -->
-        <div v-if="!isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
+        <!-- Path data section: Ch. 12–13 + analyze tool by methodology path -->
+        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
             <span>Module progress</span>
             <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
@@ -210,6 +210,65 @@
 
         <!-- Tab Content -->
         <div v-if="!isDataAnalysisModule" class="tab-content">
+          <!-- Statistics & analysis by methodology path (Ch. 12, 13, analyze tool) -->
+          <template v-if="isPathDataSectionModule">
+            <div
+              v-for="path in methodPathList"
+              v-show="activeContentTab === path.id"
+              :key="path.id"
+              class="tab-panel path-data-panel"
+            >
+              <p class="path-data-intro">{{ path.statsIntro }}</p>
+
+              <section class="path-chapters-section">
+                <h3 class="path-section-title">Pressbooks chapters</h3>
+                <div class="path-chapter-cards">
+                  <article class="path-chapter-card">
+                    <h4>Ch. 12 — Descriptive Statistics</h4>
+                    <p>{{ path.chapterFocus[12] }}</p>
+                    <div class="path-chapter-actions">
+                      <router-link :to="`/topic/rm-chapter-12`" class="path-chapter-link">
+                        Read chapter →
+                      </router-link>
+                      <router-link
+                        :to="`/class/${classId}/practice?module=rm-module-12`"
+                        class="path-chapter-link path-chapter-link-secondary"
+                      >
+                        Concept review →
+                      </router-link>
+                    </div>
+                  </article>
+                  <article class="path-chapter-card">
+                    <h4>Ch. 13 — Inferential Statistics</h4>
+                    <p>{{ path.chapterFocus[13] }}</p>
+                    <div class="path-chapter-actions">
+                      <router-link :to="`/topic/rm-chapter-13`" class="path-chapter-link">
+                        Read chapter →
+                      </router-link>
+                      <router-link
+                        :to="`/class/${classId}/practice?module=rm-module-13`"
+                        class="path-chapter-link path-chapter-link-secondary"
+                      >
+                        Concept review →
+                      </router-link>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="path-analyze-section">
+                <h3 class="path-section-title">Analyze your data</h3>
+                <DataAnalysisHelper
+                  :key="path.id"
+                  :class-id="classId"
+                  :method-path-id="path.id"
+                  embedded
+                />
+              </section>
+            </div>
+          </template>
+
+          <template v-else>
           <!-- Lab module: Sampling / Assignment as main tabs -->
           <div
             v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
@@ -406,6 +465,7 @@
               <p>No software lessons available for this module yet.</p>
             </div>
           </div>
+          </template>
         </div>
       </div>
 
@@ -477,7 +537,7 @@ import {
   getModuleItemsWithChapters,
   classHasDataAnalysisTool
 } from '../data/modules'
-import { groupModulesByCanvasPart } from '../data/researchMethodsTextbook'
+import { groupModulesByCanvasPart, METHOD_PATHS_LIST } from '../data/researchMethodsTextbook'
 import { getResearchMethodsSchedule } from '../data/assignmentHelp'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
@@ -519,6 +579,10 @@ const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.v
 const showModule8Selector = ref(false)
 
 const RM_MODULE_LAB_ID = 'rm-module-lab'
+const RM_MODULE_DATA_BY_PATH_ID = 'rm-module-data-by-path'
+const RM_LEGACY_DATA_MODULE_IDS = ['rm-module-12', 'rm-module-13', 'rm-module-analyze-data']
+
+const methodPathList = METHOD_PATHS_LIST
 
 const standardContentTabs = [
   { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
@@ -531,9 +595,17 @@ const labModuleContentTabs = [
   { id: 'lab-assignment', label: 'Assignment', iconSrc: '/content-review-icon.png' }
 ]
 
-const effectiveContentTabs = computed(() =>
-  selectedModuleId.value === RM_MODULE_LAB_ID ? labModuleContentTabs : standardContentTabs
-)
+const methodPathContentTabs = methodPathList.map((path) => ({
+  id: path.id,
+  label: path.shortLabel,
+  iconSrc: '/content-review-icon.png'
+}))
+
+const effectiveContentTabs = computed(() => {
+  if (selectedModuleId.value === RM_MODULE_LAB_ID) return labModuleContentTabs
+  if (selectedModuleId.value === RM_MODULE_DATA_BY_PATH_ID) return methodPathContentTabs
+  return standardContentTabs
+})
 
 const labMiniLabEmbedTab = computed(() =>
   activeContentTab.value === 'lab-assignment' ? 'assignment' : 'sampling'
@@ -573,6 +645,11 @@ const selectedModule = computed(() => {
 const isDataAnalysisModule = computed(() => {
   const mod = selectedModule.value
   return !!(mod && mod.isDataAnalysisTool)
+})
+
+const isPathDataSectionModule = computed(() => {
+  const mod = selectedModule.value
+  return !!(mod && mod.isPathDataSection)
 })
 
 // Get topics for the selected module
@@ -863,8 +940,17 @@ function getTabCount(tabId) {
 }
 
 function selectModule(moduleId) {
+  if (RM_LEGACY_DATA_MODULE_IDS.includes(moduleId)) {
+    moduleId = RM_MODULE_DATA_BY_PATH_ID
+  }
   selectedModuleId.value = moduleId
-  activeContentTab.value = moduleId === RM_MODULE_LAB_ID ? 'lab-sampling' : 'topics'
+  if (moduleId === RM_MODULE_LAB_ID) {
+    activeContentTab.value = 'lab-sampling'
+  } else if (moduleId === RM_MODULE_DATA_BY_PATH_ID) {
+    activeContentTab.value = methodPathList[0]?.id || 'path-1-survey'
+  } else {
+    activeContentTab.value = 'topics'
+  }
 
   // Show Module 8 selector if customization not completed
   if (moduleId === 'stats-module-8' && !module8Prefs.hasCompletedSelection.value) {
@@ -895,7 +981,10 @@ function toStatsModuleId(value) {
 function syncSelectedModuleFromQuery() {
   const queryModule = normalizeRouteValue(route.query.module)
   if (!queryModule) return
-  const moduleId = toStatsModuleId(queryModule)
+  let moduleId = toStatsModuleId(queryModule)
+  if (RM_LEGACY_DATA_MODULE_IDS.includes(moduleId)) {
+    moduleId = RM_MODULE_DATA_BY_PATH_ID
+  }
   if (contentModules.value.find(mod => mod.id === moduleId)) {
     selectedModuleId.value = moduleId
   }
@@ -1033,7 +1122,16 @@ watch(selectedModuleId, id => {
     if (activeContentTab.value !== 'lab-sampling' && activeContentTab.value !== 'lab-assignment') {
       activeContentTab.value = 'lab-sampling'
     }
-  } else if (activeContentTab.value === 'lab-sampling' || activeContentTab.value === 'lab-assignment') {
+  } else if (id === RM_MODULE_DATA_BY_PATH_ID) {
+    const pathTabIds = methodPathList.map((p) => p.id)
+    if (!pathTabIds.includes(activeContentTab.value)) {
+      activeContentTab.value = pathTabIds[0] || 'path-1-survey'
+    }
+  } else if (
+    activeContentTab.value === 'lab-sampling' ||
+    activeContentTab.value === 'lab-assignment' ||
+    methodPathList.some((p) => p.id === activeContentTab.value)
+  ) {
     activeContentTab.value = 'topics'
   }
 })
@@ -1195,6 +1293,77 @@ watch(selectedModuleId, id => {
   font-size: 0.8125rem;
   color: var(--text-muted);
   font-style: italic;
+}
+
+/* Path-based statistics & analysis section */
+.path-data-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.path-data-intro {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  max-width: 46rem;
+}
+
+.path-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.path-chapter-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.path-chapter-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.125rem;
+  background: var(--bg-card);
+}
+
+.path-chapter-card h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9375rem;
+}
+
+.path-chapter-card p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.path-chapter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.path-chapter-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.path-chapter-link:hover {
+  text-decoration: underline;
+}
+
+.path-chapter-link-secondary {
+  color: var(--text-secondary);
+}
+
+.path-analyze-section {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
 }
 
 /* Section Title */

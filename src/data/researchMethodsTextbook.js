@@ -234,29 +234,67 @@ export const LEARNING_OBJECTIVES_BY_MODULE = {
   ]
 }
 
-/** Canvas methodology paths → primary chapter modules */
+/** Canvas methodology paths → primary chapter modules + stats/analysis guidance */
 export const CANVAS_METHOD_PATHS = {
   'path-1-survey': {
     label: 'Path 1 — Survey Methodology',
+    shortLabel: 'Survey',
     moduleIds: ['rm-module-4', 'rm-module-7'],
-    topicIds: ['rm-chapter-4', 'rm-chapter-7']
+    topicIds: ['rm-chapter-4', 'rm-chapter-7'],
+    analysisIds: ['descriptives', 'correlation', 'simple_regression', 'chi_square_independence', 'independent_t'],
+    statsIntro:
+      'Survey designs emphasize describing scale scores, correlations between constructs, and regression when predicting outcomes. Read Ch. 12–13 with survey data in mind, then use the analysis tool below.',
+    chapterFocus: {
+      12: 'Describe scale distributions, sample characteristics, and reliability summaries.',
+      13: 'Correlation, regression, and group comparisons on survey responses.'
+    }
   },
   'path-2-qualitative': {
     label: 'Path 2 — Qualitative Interview',
+    shortLabel: 'Qualitative',
     moduleIds: ['rm-module-6'],
-    topicIds: ['rm-chapter-6']
+    topicIds: ['rm-chapter-6'],
+    analysisIds: ['descriptives'],
+    statsIntro:
+      'Qualitative paths center on themes, coding, and quotes. Use Ch. 12 if you report demographic counts or simple summaries; inferential tests are usually secondary.',
+    chapterFocus: {
+      12: 'Summarize participant counts, demographics, or simple descriptive tables if your report includes them.',
+      13: 'Skim inferential logic for context — most qualitative write-ups do not rely on NHST.'
+    }
   },
   'path-3-experimental': {
     label: 'Path 3 — Experimental Design',
+    shortLabel: 'Experimental',
     moduleIds: ['rm-module-4', 'rm-module-5', 'rm-module-9'],
-    topicIds: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-9']
+    topicIds: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-9'],
+    analysisIds: ['descriptives', 'independent_t', 'paired_t', 'one_way_anova', 'one_sample_t'],
+    statsIntro:
+      'Experimental paths rely on comparing conditions. Ch. 12 for descriptives by group; Ch. 13 for t-tests, ANOVA, and related inferential tests.',
+    chapterFocus: {
+      12: 'Descriptive statistics by condition (means, SDs, Ns) before inferential tests.',
+      13: 'Independent-samples t, paired t, and one-way ANOVA — match the test to your design.'
+    }
   },
   'path-4-archival': {
     label: 'Path 4 — Archival Data',
+    shortLabel: 'Archival',
     moduleIds: ['rm-module-6'],
-    topicIds: ['rm-chapter-6']
+    topicIds: ['rm-chapter-6'],
+    analysisIds: ['descriptives', 'correlation', 'chi_square_independence', 'simple_regression', 'independent_t'],
+    statsIntro:
+      'Archival work uses existing datasets. Ch. 12–13 support describing variables, testing associations, and comparing groups in secondary data.',
+    chapterFocus: {
+      12: 'Describe variables available in the dataset and missing-data patterns.',
+      13: 'Correlation, chi-square, and group comparisons appropriate to non-experimental archival designs.'
+    }
   }
 }
+
+/** Ordered list for UI tabs (Survey → Qualitative → Experimental → Archival). */
+export const METHOD_PATHS_LIST = Object.entries(CANVAS_METHOD_PATHS).map(([id, path]) => ({
+  id,
+  ...path
+}))
 
 /**
  * Canvas course structure (PSYC 4223) — groups Pressbooks chapter modules.
@@ -297,18 +335,12 @@ export const CANVAS_COURSE_PARTS = [
     moduleIds: ['rm-module-3']
   },
   {
-    id: 'reference',
-    label: 'Reference',
-    title: 'Statistics for research reports',
-    description: 'Background for describing and analyzing data in your write-up.',
-    moduleIds: ['rm-module-12', 'rm-module-13']
-  },
-  {
-    id: 'tools',
-    label: 'Tools',
-    title: 'Course tools',
-    description: '',
-    moduleIds: ['rm-module-analyze-data']
+    id: 'data-by-path',
+    label: 'Analysis',
+    title: 'Statistics & data analysis by path',
+    description:
+      'Choose your methodology path (Survey, Qualitative, Experimental, or Archival) — then read Ch. 12–13 and use the analysis tool matched to your design.',
+    moduleIds: ['rm-module-data-by-path']
   }
 ]
 
@@ -351,6 +383,10 @@ export function getChaptersForCanvasPhase (phaseLabel) {
   return PRESSBOOKS_CHAPTERS.filter(ch =>
     ch.canvasPhases?.some(p => p.toLowerCase().includes(phaseLabel.toLowerCase()))
   )
+}
+
+export function getMethodPathById (pathId) {
+  return CANVAS_METHOD_PATHS[pathId] ?? null
 }
 
 /** Human-readable label for assignment-help topic links (rm-chapter-N). */
