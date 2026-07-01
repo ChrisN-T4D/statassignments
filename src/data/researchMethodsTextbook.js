@@ -344,20 +344,56 @@ export const CANVAS_COURSE_PARTS = [
   }
 ]
 
+/** Experimental Design course — design chapters + experimental-focused analysis (no capstone paths). */
+export const EXPERIMENTAL_COURSE_PARTS = [
+  {
+    id: 'design',
+    label: 'Design',
+    title: 'Experimental & quasi-experimental methods',
+    description:
+      'Measurement, true experiments, quasi-experiments, factorial designs, and the random-assignment lab.',
+    moduleIds: ['rm-module-4', 'rm-module-5', 'rm-module-8', 'rm-module-9', 'rm-module-lab']
+  },
+  {
+    id: 'analysis',
+    label: 'Analysis',
+    title: 'Statistics & analyze your data',
+    description:
+      'Ch. 12–13 and software steps for experimental designs (descriptives, t-tests, ANOVA). Due dates are in Canvas.',
+    moduleIds: ['rm-module-data-by-path']
+  }
+]
+
 const moduleToCanvasPart = Object.fromEntries(
   CANVAS_COURSE_PARTS.flatMap(part =>
     part.moduleIds.map(moduleId => [moduleId, part])
   )
 )
 
-export function getCanvasPartForModule (moduleId) {
+const moduleToExperimentalPart = Object.fromEntries(
+  EXPERIMENTAL_COURSE_PARTS.flatMap(part =>
+    part.moduleIds.map(moduleId => [moduleId, part])
+  )
+)
+
+export function getCoursePartsForClass (classIdOrSlug) {
+  if (classIdOrSlug === 'experimental') return EXPERIMENTAL_COURSE_PARTS
+  if (classIdOrSlug === 'research-methods') return CANVAS_COURSE_PARTS
+  return []
+}
+
+export function getCanvasPartForModule (moduleId, classIdOrSlug = 'research-methods') {
+  if (classIdOrSlug === 'experimental') {
+    return moduleToExperimentalPart[moduleId] ?? null
+  }
   return moduleToCanvasPart[moduleId] ?? null
 }
 
-/** Module list grouped for ClassHome navigation (research-methods only). */
-export function groupModulesByCanvasPart (modules) {
+/** Module list grouped for ClassHome navigation (research-methods or experimental). */
+export function groupModulesByCanvasPart (modules, classIdOrSlug = 'research-methods') {
+  const parts = getCoursePartsForClass(classIdOrSlug)
   const byId = Object.fromEntries(modules.map(m => [m.id, m]))
-  return CANVAS_COURSE_PARTS.map(part => ({
+  return parts.map(part => ({
     ...part,
     modules: part.moduleIds.map(id => byId[id]).filter(Boolean)
   })).filter(part => part.modules.length > 0)

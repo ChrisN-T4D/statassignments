@@ -7,17 +7,23 @@
         <div class="class-info">
           <h1>{{ getClassDisplayName(currentClass) }}</h1>
           <p>{{ currentClass.description }}</p>
-          <p v-if="isResearchMethodsClass" class="class-canvas-note">
+          <p v-if="isPsychMethodsClass" class="class-canvas-note">
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
             Methods Market is for Pressbooks chapters, concept review, and assignment help only.
           </p>
           <div class="header-links">
-            <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-              {{ isResearchMethodsClass
-                ? 'Canvas assignments → Pressbooks chapter help'
-                : 'Stuck on an assignment? Get help →' }}
-            </router-link>
-            <span class="header-links-sep">·</span>
+            <template v-if="isResearchMethodsClass">
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Canvas assignments → Pressbooks chapter help
+              </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
+            <template v-else-if="!isPsychMethodsClass">
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Stuck on an assignment? Get help →
+              </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
             <span class="header-links-sep">·</span>
             <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
@@ -27,7 +33,7 @@
                 :to="{ path: `/class/${classId}`, query: { module: RM_MODULE_DATA_BY_PATH_ID } }"
                 class="assignment-help-link"
               >
-                Statistics &amp; analyze data by path
+                {{ isExperimentalClass ? 'Statistics &amp; analyze data' : 'Statistics &amp; analyze data by path' }}
               </router-link>
             </template>
           </div>
@@ -37,12 +43,12 @@
       <!-- Module Navigation -->
       <div class="module-nav">
         <h2 class="section-title">
-          {{ isResearchMethodsClass ? 'Course content (Canvas parts → Pressbooks chapters)' : 'Course Modules' }}
+          {{ isPsychMethodsClass ? 'Course content (Canvas parts → Pressbooks chapters)' : 'Course Modules' }}
         </h2>
 
-        <template v-if="isResearchMethodsClass">
+        <template v-if="isPsychMethodsClass">
           <div
-            v-for="part in researchMethodsModuleGroups"
+            v-for="part in psychMethodsModuleGroups"
             :key="part.id"
             class="module-part-group"
           >
@@ -145,7 +151,7 @@
         </div>
 
         <!-- Content Tabs -->
-        <div v-if="!isDataAnalysisModule" class="content-tabs">
+        <div v-if="!isDataAnalysisModule && showContentTabs" class="content-tabs">
           <button
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
@@ -166,8 +172,8 @@
           <!-- Statistics & analysis by methodology path (Ch. 12, 13, analyze tool) -->
           <template v-if="isPathDataSectionModule">
             <div
-              v-for="path in methodPathList"
-              v-show="activeContentTab === path.id"
+              v-for="path in activeMethodPaths"
+              v-show="showMethodPathTabs ? activeContentTab === path.id : true"
               :key="path.id"
               class="tab-panel path-data-panel"
             >
@@ -490,7 +496,8 @@ import {
   getModuleItemsWithChapters,
   classHasDataAnalysisTool
 } from '../data/modules'
-import { groupModulesByCanvasPart, METHOD_PATHS_LIST } from '../data/researchMethodsTextbook'
+import { groupModulesByCanvasPart, METHOD_PATHS_LIST, getMethodPathById } from '../data/researchMethodsTextbook'
+import { isPsychMethodsCourse } from '../data/psychMethodsCourses'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -515,6 +522,16 @@ const classId = computed(() => route.params.classId)
 const isResearchMethodsClass = computed(() => {
   const slug = currentClass.value?.slug || classId.value
   return slug === 'research-methods'
+})
+
+const isExperimentalClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'experimental'
+})
+
+const isPsychMethodsClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return isPsychMethodsCourse(slug)
 })
 
 const selectedModuleId = ref(null)
@@ -547,8 +564,27 @@ const methodPathContentTabs = methodPathList.map((path) => ({
 
 const effectiveContentTabs = computed(() => {
   if (selectedModuleId.value === RM_MODULE_LAB_ID) return labModuleContentTabs
-  if (selectedModuleId.value === RM_MODULE_DATA_BY_PATH_ID) return methodPathContentTabs
+  if (selectedModuleId.value === RM_MODULE_DATA_BY_PATH_ID && showMethodPathTabs.value) {
+    return methodPathContentTabs
+  }
   return standardContentTabs
+})
+
+const showMethodPathTabs = computed(() => !selectedModule.value?.fixedMethodPathId)
+
+const activeMethodPaths = computed(() => {
+  const fixedId = selectedModule.value?.fixedMethodPathId
+  if (fixedId) {
+    const path = getMethodPathById(fixedId)
+    return path ? [{ ...path, id: fixedId }] : []
+  }
+  return methodPathList
+})
+
+const showContentTabs = computed(() => {
+  if (isDataAnalysisModule.value) return false
+  if (isPathDataSectionModule.value && !showMethodPathTabs.value) return false
+  return true
 })
 
 const labMiniLabEmbedTab = computed(() =>
@@ -577,9 +613,10 @@ const contentModules = computed(() => {
   return getContentModulesByClass(slug)
 })
 
-const researchMethodsModuleGroups = computed(() => {
-  if (!isResearchMethodsClass.value) return []
-  return groupModulesByCanvasPart(contentModules.value)
+const psychMethodsModuleGroups = computed(() => {
+  if (!isPsychMethodsClass.value) return []
+  const slug = currentClass.value?.slug || classId.value
+  return groupModulesByCanvasPart(contentModules.value, slug)
 })
 
 const selectedModule = computed(() => {
@@ -891,7 +928,9 @@ function selectModule(moduleId) {
   if (moduleId === RM_MODULE_LAB_ID) {
     activeContentTab.value = 'lab-sampling'
   } else if (moduleId === RM_MODULE_DATA_BY_PATH_ID) {
-    activeContentTab.value = methodPathList[0]?.id || 'path-1-survey'
+    const mod = contentModules.value.find(m => m.id === moduleId)
+    activeContentTab.value =
+      mod?.fixedMethodPathId || methodPathList[0]?.id || 'path-1-survey'
   } else {
     activeContentTab.value = 'topics'
   }
@@ -1067,9 +1106,15 @@ watch(selectedModuleId, id => {
       activeContentTab.value = 'lab-sampling'
     }
   } else if (id === RM_MODULE_DATA_BY_PATH_ID) {
-    const pathTabIds = methodPathList.map((p) => p.id)
-    if (!pathTabIds.includes(activeContentTab.value)) {
-      activeContentTab.value = pathTabIds[0] || 'path-1-survey'
+    const mod = contentModules.value.find(m => m.id === id)
+    const defaultPath = mod?.fixedMethodPathId || methodPathList[0]?.id || 'path-1-survey'
+    if (activeContentTab.value !== defaultPath && showMethodPathTabs.value) {
+      const pathTabIds = methodPathList.map((p) => p.id)
+      if (!pathTabIds.includes(activeContentTab.value)) {
+        activeContentTab.value = defaultPath
+      }
+    } else if (!showMethodPathTabs.value) {
+      activeContentTab.value = defaultPath
     }
   } else if (
     activeContentTab.value === 'lab-sampling' ||

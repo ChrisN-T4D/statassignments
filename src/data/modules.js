@@ -685,7 +685,7 @@ export const researchMethodsModulesBase = [
 function enrichResearchMethodsModule (mod) {
   if (mod.isDataAnalysisTool) return mod
   if (mod.isPathDataSection) {
-    const part = getCanvasPartForModule(mod.id)
+    const part = getCanvasPartForModule(mod.id, mod.classId)
     return {
       ...mod,
       ...(part
@@ -698,7 +698,7 @@ function enrichResearchMethodsModule (mod) {
     }
   }
   const chapter = getPressbooksChapterByModuleId(mod.id)
-  const part = getCanvasPartForModule(mod.id)
+  const part = getCanvasPartForModule(mod.id, mod.classId)
   const objectives = getLearningObjectivesForModule(mod.id)
   return {
     ...mod,
@@ -721,6 +721,41 @@ function enrichResearchMethodsModule (mod) {
 }
 
 export const researchMethodsModules = researchMethodsModulesBase.map(enrichResearchMethodsModule)
+
+const EXPERIMENTAL_MODULE_IDS = [
+  'rm-module-4',
+  'rm-module-5',
+  'rm-module-8',
+  'rm-module-9',
+  'rm-module-lab',
+  'rm-module-data-by-path'
+]
+
+function buildExperimentalModules () {
+  return researchMethodsModulesBase
+    .filter((mod) => EXPERIMENTAL_MODULE_IDS.includes(mod.id))
+    .map((mod) => {
+      const withClass = { ...mod, classId: 'experimental' }
+      if (withClass.id === 'rm-module-data-by-path') {
+        return enrichResearchMethodsModule({
+          ...withClass,
+          title: 'Statistics & analyze your data',
+          shortTitle: 'Analyze data',
+          description:
+            'Ch. 12–13 and software steps for experimental and quasi-experimental designs (descriptives, t-tests, ANOVA).',
+          fixedMethodPathId: 'path-3-experimental',
+          learningObjectives: [
+            'Read Ch. 12–13 with experimental designs in mind',
+            'Choose analyses for group comparisons (t-tests, ANOVA)',
+            'Run step-by-step instructions in jamovi, SPSS, or Excel'
+          ]
+        })
+      }
+      return enrichResearchMethodsModule(withClass)
+    })
+}
+
+export const experimentalModules = buildExperimentalModules()
 
 const researchMethodsChapterTopics = {
   'rm-module-1': [
@@ -788,7 +823,8 @@ function getModuleItemsForId(moduleId) {
 export const modulesByClass = {
   'statistics': statisticsModules,
   'intro-research': introResearchModules,
-  'research-methods': researchMethodsModules
+  'research-methods': researchMethodsModules,
+  'experimental': experimentalModules
 }
 
 // Legacy export for backwards compatibility
@@ -815,10 +851,10 @@ export function getContentModulesByClass(classId) {
   return modules.filter(m => !m.isBenchmark && !m.isMidterm)
 }
 
-/** True when this class includes the Analyze your data tool (Intro + Research Methods only). */
+/** True when this class includes data analysis (path section or legacy analyze tool). */
 export function classHasDataAnalysisTool(classId) {
   const modules = modulesByClass[classId] || []
-  return modules.some(m => m.isDataAnalysisTool)
+  return modules.some(m => m.isDataAnalysisTool || m.isPathDataSection)
 }
 
 export function getBenchmarksByClass(classId) {

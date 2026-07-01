@@ -19,6 +19,18 @@ const INITIAL_CLASSES = [
     is_active: true
   },
   {
+    id: 'experimental',
+    name: 'Experimental Design',
+    short_name: 'Exp',
+    slug: 'experimental',
+    description: 'Experimental and quasi-experimental design, factorials, and analyzing group-comparison data.',
+    color: '#0ea5e9',
+    icon: '🧪',
+    topics: ['hypothesis-testing'],
+    order: 2,
+    is_active: true
+  },
+  {
     id: 'statistics',
     name: 'Statistics',
     short_name: 'Stats',
@@ -27,7 +39,7 @@ const INITIAL_CLASSES = [
     color: '#8b5cf6',
     icon: '📊',
     topics: ['descriptive-stats', 'visualizations', 'normal-distribution', 'z-scores', 't-tests', 'correlation', 'regression'],
-    order: 2,
+    order: 3,
     is_active: true
   },
   {
@@ -39,7 +51,7 @@ const INITIAL_CLASSES = [
     color: '#f59e0b',
     icon: '📚',
     topics: ['descriptive-stats', 'visualizations', 'probability'],
-    order: 3,
+    order: 4,
     is_active: true
   }
 ]

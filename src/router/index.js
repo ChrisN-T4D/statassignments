@@ -155,7 +155,7 @@ router.beforeEach((to, from, next) => {
       next(cid ? `/class/${cid}` : '/')
       return
     }
-    if (cid === 'research-methods') {
+    if (cid === 'research-methods' || cid === 'experimental') {
       next({ path: `/class/${cid}`, query: { module: 'rm-module-data-by-path' } })
       return
     }

@@ -14,6 +14,8 @@
       </div>
     </header>
 
+    <CourseSwitcher />
+
     <main>
       <router-view />
     </main>
@@ -30,6 +32,7 @@
 <script setup>
 import ThemeToggle from './components/ThemeToggle.vue'
 import NavMenu from './components/NavMenu.vue'
+import CourseSwitcher from './components/CourseSwitcher.vue'
 import ResourcesDrawer from './components/ResourcesDrawer.vue'
 </script>
 
