@@ -10,7 +10,7 @@ const FALLBACK_CLASSES = [
     slug: 'research-methods',
     name: 'Research Methods',
     short_name: 'RM',
-    description: 'Pressbooks chapters (Jhangiani et al., 4th ed.) plus capstone support for PSYC 4223 — topic selection, methods, IRB, and analysis.',
+    description: 'Textbook chapters (Jhangiani et al., 4th ed.) plus capstone support for PSYC 4223 — topic selection, methods, IRB, and analysis.',
     color: '#3b82f6',
     icon: '🔬',
     topics: ['sampling', 'hypothesis-testing', 'correlation'],

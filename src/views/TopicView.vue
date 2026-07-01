@@ -14,15 +14,6 @@
         </h1>
       </div>
 
-      <div v-if="pressbooksChapterUrl" class="pressbooks-read-banner">
-        <p>
-          Prefer the official web layout?
-          <a :href="pressbooksChapterUrl" target="_blank" rel="noopener noreferrer">
-            Open this chapter on Pressbooks ↗
-          </a>
-        </p>
-      </div>
-
       <!-- Topic Content (per preferred software; see resolveTopicHtml) -->
       <div v-if="resolvedContentHtml" class="topic-content" v-html="resolvedContentHtml"></div>
 
@@ -66,7 +57,6 @@ import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { pb } from '../lib/pocketbase'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { resolveTopicHtml } from '../content/topics/resolveTopicHtml.js'
-import { getPressbooksChapterByTopicId } from '../data/researchMethodsTextbook.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -83,11 +73,6 @@ const errorProblemId = ref(null)
 
 const topicId = computed(() => route.params.id)
 const topic = computed(() => topics.find(t => t.id === topicId.value))
-
-const pressbooksChapterUrl = computed(() => {
-  const ch = getPressbooksChapterByTopicId(topicId.value)
-  return ch?.pressbooksUrl ?? null
-})
 
 const resolvedContentHtml = computed(() =>
   resolveTopicHtml(topic.value, preferredSoftware.value)
@@ -399,24 +384,6 @@ watch(topicId, async (newTopicId, oldTopicId) => {
 </script>
 
 <style scoped>
-.pressbooks-read-banner {
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  font-size: 0.9375rem;
-}
-
-.pressbooks-read-banner p {
-  margin: 0;
-}
-
-.pressbooks-read-banner a {
-  color: var(--primary);
-  font-weight: 500;
-}
-
 .topic-title-icon {
   width: 28px;
   height: 28px;

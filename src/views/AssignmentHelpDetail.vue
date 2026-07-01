@@ -59,7 +59,7 @@
             <h2 class="section-title">Review in Methods Market</h2>
             <p class="section-desc">
               {{ classId === 'research-methods'
-                ? 'Pressbooks chapters (open textbook) in this site:'
+                ? 'Chapters to read in Methods Market:'
                 : 'Topics and lessons that match this assignment:' }}
             </p>
             <div class="practice-links">

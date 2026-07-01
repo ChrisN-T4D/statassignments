@@ -47,7 +47,7 @@ export function conceptReviewAssignment (chapterNumber, moduleId, shortTitle) {
     type: 'concept-review',
     methodsMarketPath: conceptReviewPath(moduleId),
     tips: [
-      'Read the Pressbooks chapter first, then complete Concept Review while ideas are fresh.',
+      'Read the chapter in Methods Market first, then complete Concept Review while ideas are fresh.',
       `Sign in and link your student key so practice for ${label} is tracked.`,
       'Use wrong-answer feedback to fix gaps before capstone drafts and worksheets.'
     ],

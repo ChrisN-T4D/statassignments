@@ -9,7 +9,7 @@
           <p>{{ currentClass.description }}</p>
           <p v-if="isPsychMethodsClass" class="class-canvas-note">
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
-            Methods Market is for Pressbooks chapters, concept review, and assignment help only.
+            Methods Market is for chapter reading, concept review, and assignment help only.
           </p>
           <div class="header-links">
             <template v-if="isResearchMethodsClass">
@@ -79,9 +79,6 @@
           </li>
         </ol>
         <div class="rm-getting-started-links">
-          <a :href="PRESSBOOKS_TEXTBOOK_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
-            Pressbooks textbook (full book) ↗
-          </a>
           <a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
             Canvas setup guide ↗
           </a>
@@ -164,18 +161,6 @@
               {{ getModuleDisplayTitle(selectedModule) }}
             </h2>
             <p>{{ getModuleDisplayDescription(selectedModule) }}</p>
-            <p
-              v-if="selectedModule.pressbooksUrl"
-              class="module-textbook-link"
-            >
-              <a
-                :href="selectedModule.pressbooksUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Read Pressbooks Ch. {{ selectedModule.textbookChapter }} (open textbook) ↗
-              </a>
-            </p>
           </div>
           <!-- Module 8 Customization Button -->
           <button
@@ -244,7 +229,7 @@
               <p class="path-data-intro">{{ path.statsIntro }}</p>
 
               <section class="path-chapters-section">
-                <h3 class="path-section-title">Pressbooks chapters</h3>
+                <h3 class="path-section-title">Chapters</h3>
                 <div class="path-chapter-cards">
                   <article class="path-chapter-card">
                     <h4>Ch. 12 — Descriptive Statistics</h4>
@@ -303,26 +288,17 @@
           <!-- Topics Tab -->
           <div v-else-if="activeContentTab === 'topics'" class="tab-panel">
             <div
-              v-if="isPsychMethodsClass && selectedModule?.pressbooksUrl"
+              v-if="isPsychMethodsClass && moduleTopics[0]"
               class="rm-reading-cta"
             >
               <h3 class="rm-reading-cta-title">Read Chapter {{ selectedModule.textbookChapter }}</h3>
               <p class="rm-reading-cta-desc">{{ selectedModule.shortTitle || selectedModule.title }}</p>
               <div class="rm-reading-cta-actions">
-                <a
-                  :href="selectedModule.pressbooksUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <router-link
+                  :to="`/topic/${moduleTopics[0].id}`"
                   class="rm-reading-cta-primary"
                 >
-                  Open in Pressbooks ↗
-                </a>
-                <router-link
-                  v-if="moduleTopics[0]"
-                  :to="`/topic/${moduleTopics[0].id}`"
-                  class="rm-reading-cta-secondary"
-                >
-                  Read in Methods Market
+                  Read chapter →
                 </router-link>
                 <router-link
                   v-if="conceptReviewQuestionCount > 0"
@@ -604,10 +580,7 @@ import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSi
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
-import {
-  CANVAS_RM_GETTING_STARTED_URL,
-  PRESSBOOKS_TEXTBOOK_URL
-} from '../data/researchMethodsCanvasLinks.js'
+import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
@@ -1623,20 +1596,6 @@ watch(selectedModuleId, id => {
   margin: 0;
   color: var(--text-secondary);
   font-size: 0.9375rem;
-}
-
-.module-textbook-link {
-  margin-top: 0.5rem !important;
-}
-
-.module-textbook-link a {
-  color: var(--primary);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.module-textbook-link a:hover {
-  text-decoration: underline;
 }
 
 .rm-getting-started {
