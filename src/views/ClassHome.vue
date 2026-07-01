@@ -7,6 +7,10 @@
         <div class="class-info">
           <h1>{{ getClassDisplayName(currentClass) }}</h1>
           <p>{{ currentClass.description }}</p>
+          <p v-if="isResearchMethodsClass" class="class-canvas-note">
+            Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
+            Methods Market is for Pressbooks chapters, concept review, and assignment help only.
+          </p>
           <div class="header-links">
             <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
               {{ isResearchMethodsClass
@@ -29,57 +33,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Fall 2026 weekly chapter focus (one chapter per week) -->
-      <section v-if="isResearchMethodsClass && fallSchedule" class="weekly-chapter-schedule">
-        <div class="weekly-chapter-header">
-          <h2 class="section-title">Fall 2026 weekly reading</h2>
-          <router-link :to="`/class/${classId}/assignment-help`" class="weekly-chapter-full-link">
-            Full schedule & assignment help →
-          </router-link>
-        </div>
-        <p class="weekly-chapter-intro">
-          Each week, complete <strong>one</strong> Pressbooks chapter in Methods Market (full chapter + Concept Review).
-          Canvas assignments are scored out of <strong>{{ fallSchedule.pointsFloor }}+ points</strong> each
-          ({{ fallSchedule.pointsTotal }} pts total).
-          IRB final due {{ formatScheduleDate(fallSchedule.term.irbSubmissionTarget) }}.
-        </p>
-        <div class="weekly-chapter-table-wrap">
-          <table class="weekly-chapter-table">
-            <thead>
-              <tr>
-                <th>Wk</th>
-                <th>Dates</th>
-                <th>Chapter (complete this week)</th>
-                <th>Canvas focus</th>
-                <th>Due in Canvas</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="row in fallSchedule.weeks" :key="row.week">
-                <td>{{ row.week }}</td>
-                <td>{{ row.dates }}</td>
-                <td>
-                  <template v-if="row.chapter">
-                    <router-link :to="`/topic/${row.chapter.topicId}`" class="weekly-chapter-name">
-                      {{ row.chapter.label }}
-                    </router-link>
-                  </template>
-                  <span v-else class="weekly-chapter-none">{{ row.chapterGoal }}</span>
-                </td>
-                <td>
-                  {{ row.focus }}
-                  <span v-if="row.note" class="weekly-chapter-note">{{ row.note }}</span>
-                </td>
-                <td>
-                  <span v-if="row.due.length">{{ row.due.join('; ') }}</span>
-                  <span v-else class="weekly-chapter-none">—</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
 
       <!-- Module Navigation -->
       <div class="module-nav">
@@ -538,7 +491,6 @@ import {
   classHasDataAnalysisTool
 } from '../data/modules'
 import { groupModulesByCanvasPart, METHOD_PATHS_LIST } from '../data/researchMethodsTextbook'
-import { getResearchMethodsSchedule } from '../data/assignmentHelp'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -565,14 +517,6 @@ const isResearchMethodsClass = computed(() => {
   return slug === 'research-methods'
 })
 
-const fallSchedule = computed(() =>
-  isResearchMethodsClass.value ? getResearchMethodsSchedule() : null
-)
-
-function formatScheduleDate (isoDate) {
-  const d = new Date(`${isoDate}T12:00:00`)
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
 const selectedModuleId = ref(null)
 const activeContentTab = ref('topics')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
@@ -1207,92 +1151,12 @@ watch(selectedModuleId, id => {
   margin: 0 0.15rem;
 }
 
-/* Fall 2026 weekly chapter schedule */
-.weekly-chapter-schedule {
-  margin-bottom: 2rem;
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  background: var(--bg-card);
-}
-
-.weekly-chapter-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.weekly-chapter-header .section-title {
-  margin: 0;
-}
-
-.weekly-chapter-full-link {
+.class-canvas-note {
+  margin: 0.35rem 0 0.75rem 0;
   font-size: 0.875rem;
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.weekly-chapter-full-link:hover {
-  text-decoration: underline;
-}
-
-.weekly-chapter-intro {
-  margin: 0 0 1rem 0;
-  font-size: 0.9375rem;
   color: var(--text-secondary);
   max-width: 42rem;
   line-height: 1.5;
-}
-
-.weekly-chapter-table-wrap {
-  overflow-x: auto;
-}
-
-.weekly-chapter-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-
-.weekly-chapter-table th,
-.weekly-chapter-table td {
-  padding: 0.45rem 0.65rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-
-.weekly-chapter-table th {
-  font-weight: 600;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
-.weekly-chapter-name {
-  font-weight: 600;
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.weekly-chapter-name:hover {
-  text-decoration: underline;
-}
-
-.weekly-chapter-none {
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-.weekly-chapter-note {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-  font-style: italic;
 }
 
 /* Path-based statistics & analysis section */

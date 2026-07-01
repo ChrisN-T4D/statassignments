@@ -1,7 +1,7 @@
 /**
- * Assignment Help — Fall 2026 PSYC 4223 Research Methodology (Canvas / NWOSU)
- * Each Canvas assignment maps to Pressbooks chapters in Methods Market
- * (Jhangiani et al., Research Methods in Psychology 4e).
+ * Assignment Help — PSYC 4223 Research Methodology (Canvas / NWOSU)
+ * Maps Canvas assignments to Pressbooks chapters in Methods Market.
+ * Due dates and points live in Canvas only — not in this file.
  */
 
 /** Shared chapter bundles for Canvas methodology paths */
@@ -31,7 +31,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Read this chapter first — it is the foundation for Part 1 and the rest of the capstone.',
-          'Week 1 chapter: complete all of Ch. 1 this week (reading + Concept Review) — see the weekly schedule on the course home page.',
+          'Complete all of Ch. 1 (reading + Concept Review) when Canvas directs you to it.',
           'Focus on methods of knowing, what makes psychology a science, and goals of science (describe, predict, explain).'
         ],
         practiceLinks: ['rm-chapter-1'],
@@ -42,7 +42,7 @@ export const assignmentHelpResearchMethods = [
         name: 'Syllabus Acknowledgement',
         type: 'assignment',
         tips: [
-          'Due in week 1 — read the full syllabus and Fall 2026 schedule in Assignment Help before you acknowledge.',
+          'Read the full syllabus in Canvas before you acknowledge.',
           'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in Phase 4 — it determines which Pressbooks chapters matter most later.'
         ],
         practiceLinks: ['rm-chapter-1'],
@@ -82,7 +82,7 @@ export const assignmentHelpResearchMethods = [
         name: 'Article Review and Problem Statement',
         type: 'assignment',
         tips: [
-          'For each article, note the design type and how variables were measured — use this week’s chapter (see weekly schedule).',
+          'For each article, note the design type and how variables were measured — use the Pressbooks chapter Canvas links for that assignment.',
           'Complete 6–8 peer-reviewed, original-research article reviews using the template — treat each like an annotated-bibliography note card.',
           'For each article: participants, design, measures, key findings, and how it supports your emerging problem statement.',
           'Attach a PDF for every article you review; keep APA-style reference info consistent for the later References section.'
@@ -103,28 +103,28 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit an outline plus a partial draft (not bullet points) — aim for roughly half of your final length with clear section headings.',
-          'Follow the weekly chapter schedule: weeks 5–6 while you draft, complete Ch. 6 then Ch. 7 (one full chapter per week).',
-          'Include a working References list in APA 7 format; Ch. 11 is your dedicated APA week (week 7).',
-          'When summarizing each study, name the design using vocabulary from that week’s chapter only.',
+          'While you draft, work through Ch. 6 and Ch. 7 in Methods Market when Canvas assigns them (one full chapter at a time).',
+          'Include a working References list in APA 7 format; use Ch. 11 when Canvas assigns APA/style reading.',
+          'When summarizing each study, name the design using vocabulary from the chapters you have completed.',
           'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
-        getHelp: 'Due Sep 25. Bring an outline to office hours in week 5 before you submit. Draft 1 is for feedback, not a polished final.'
+        getHelp: 'Check Canvas for the due date. Bring an outline to office hours before you submit. Draft 1 is for feedback, not a polished final.'
       },
       {
         id: 'rm-lit-review-final',
         name: 'Literature Review Final / References Section',
         type: 'assignment',
         tips: [
-          'You have four weeks (Sep 28 – Oct 23) after Draft 1 — revise using instructor comments.',
-          'Follow the weekly schedule: one chapter per week (Ch. 11 → 8 → 3 → 9) while you revise — complete each chapter fully that week.',
+          'Revise using instructor comments from Draft 1 — see Canvas for the final due date.',
+          'Complete the Pressbooks chapters Canvas assigns during revision (often Ch. 11, 8, 3, 9) — one full chapter at a time.',
           'In the lit review body, describe prior methods precisely (design, sample, measures) — not just findings.',
           'Synthesize themes across studies — do not write one paragraph per article in isolation.',
           'End with a clear gap your study will address; that gap feeds directly into the combined Phase 3 & 4 worksheets.',
           'Use the Literature Review Checklist in Canvas.'
         ],
         practiceLinks: [...CH.litReview, 'rm-chapter-8', 'rm-chapter-3', 'rm-chapter-9'],
-        getHelp: 'Due Oct 23. Check the weekly reading table on the course home page — one chapter per week, no splitting across weeks.'
+        getHelp: 'Due date is in Canvas. Follow the chapter links Canvas provides each week — complete each chapter fully before moving on.'
       }
     ]
   },
@@ -138,14 +138,14 @@ export const assignmentHelpResearchMethods = [
         name: 'Phase 3 Worksheet',
         type: 'assignment',
         tips: [
-          'Submit together with Phase 4 on the same due date — your research question and methodology path must align.',
-          'Week 11 chapter: complete Ch. 10 this week, then apply Ch. 4–9 from earlier weeks to your own study.',
+          'Submit together with Phase 4 on the same due date (see Canvas) — your research question and methodology path must align.',
+          'Complete Ch. 10 when Canvas assigns it, then apply Ch. 4–9 from earlier weeks to your own study.',
           'State variables clearly: what you measure (DV) and what you compare or manipulate (IV or predictor).',
           'Write hypotheses that match your design — causal language only for experiments; association language for correlational/survey work.',
           'Check feasibility: can you recruit these participants and run this procedure this semester?'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-4'],
-        getHelp: 'Ch. 2 covers moving from topic to testable question; Ch. 4 covers operationalizing constructs. Complete with Phase 4 on Oct 30.'
+        getHelp: 'Ch. 2 covers moving from topic to testable question; Ch. 4 covers operationalizing constructs. Submit with Phase 4 on the date shown in Canvas.'
       },
       {
         id: 'rm-phase-4-worksheet',
@@ -158,7 +158,7 @@ export const assignmentHelpResearchMethods = [
           'Use the Helpful Table page in Canvas alongside Ch. 4 (measurement, reliability, validity).'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
-        getHelp: 'Due Oct 30 with Phase 3. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
+        getHelp: 'Same due date as Phase 3 in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
       }
     ]
   },

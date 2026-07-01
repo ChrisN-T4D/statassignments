@@ -15,10 +15,7 @@
           <h1 class="help-title">{{ assignment.name }}</h1>
           <div class="assignment-meta">
             <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
-            <span v-if="assignment.dueDateLabel" class="assignment-due">Due {{ assignment.dueDateLabel }}</span>
-            <span v-if="assignment.points" class="assignment-points">{{ assignment.points }} points</span>
           </div>
-          <p v-if="assignment.scheduleNote" class="schedule-note">{{ assignment.scheduleNote }}</p>
         </div>
 
         <!-- Benchmark / Final: Practice test link -->

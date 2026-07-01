@@ -6,15 +6,6 @@
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
-import {
-  getDeadlineForAssignment,
-  formatDueDate,
-  FALL_2026_TERM,
-  SCHEDULE_WEEKS,
-  ASSIGNMENT_POINTS_FLOOR,
-  getGradedPointsTotal,
-  getGradedCanvasAssignmentsByGroup
-} from './fall2026ResearchMethodsSchedule.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -379,44 +370,17 @@ export const assignmentHelpByModule = [
  * Get assignment help for a class.
  * @param {string} classId - e.g. 'statistics' | 'research-methods'
  */
-function enrichResearchMethodsAssignments (blocks) {
-  return blocks.map((block) => ({
-    ...block,
-    assignments: block.assignments.map((a) => {
-      const deadline = getDeadlineForAssignment(a.id)
-      if (!deadline) return a
-      return {
-        ...a,
-        dueDate: deadline.dueDate,
-        dueDateLabel: formatDueDate(deadline.dueDate),
-        points: deadline.points ?? a.points,
-        scheduleNote: deadline.note
-      }
-    })
-  }))
-}
-
 export function getAssignmentHelp (classId) {
   if (classId === 'research-methods') {
-    return enrichResearchMethodsAssignments(assignmentHelpResearchMethods)
+    return assignmentHelpResearchMethods
   }
   return assignmentHelpByModule
-}
-
-export function getResearchMethodsSchedule () {
-  return {
-    term: FALL_2026_TERM,
-    weeks: SCHEDULE_WEEKS,
-    pointsFloor: ASSIGNMENT_POINTS_FLOOR,
-    pointsTotal: getGradedPointsTotal(),
-    assignmentGroups: getGradedCanvasAssignmentsByGroup()
-  }
 }
 
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Fall 2026 PSYC 4223 — one Pressbooks chapter per week (complete the full chapter + Concept Review). Each Canvas assignment is scored out of 100+ points. IRB final Nov 13.'
+    return 'Match your Canvas assignment below for Pressbooks chapter links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
   }
   return 'Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.'
 }

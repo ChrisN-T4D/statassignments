@@ -1,8 +1,12 @@
-# Canvas PSYC 4223 (course 2406) — Fall 2026 due dates & points
+# Canvas PSYC 4223 (course 2406) — instructor checklist
 
-**Each graded assignment is worth at least 100 points** (major milestones higher). Update each assignment in **Assignments → Edit** (due date + points). Times default **11:59 PM** unless noted.
+**Students see due dates and points in Canvas only.** Methods Market has chapter content and assignment help — link to it from Canvas assignments and the syllabus. Do not expect Methods Market to show term dates.
 
-**Course point total (Canvas sum): 2,300 pts** — students see percentage per assignment; Canvas computes the weighted course grade from these values.
+**Methods Market links for Canvas:**
+- Course home: https://methods-market.clneu.com/class/research-methods
+- Assignment help: https://methods-market.clneu.com/class/research-methods/assignment-help
+
+Update each assignment in **Assignments → Edit** (due date + points). Times default **11:59 PM** unless noted.
 
 ## Assignment groups (by course Part)
 
@@ -41,9 +45,4 @@ Source of truth: `ASSIGNMENT_DEADLINES` in `src/data/fall2026ResearchMethodsSche
 node scripts/export-canvas-fall2026-schedule.mjs > scripts/canvas-fall2026-schedule.html
 ```
 
-Paste into **Syllabus → Edit** (HTML view) or a **Pages** item linked from Home.
-
-## Methods Market
-
-- Course home: https://methods-market.clneu.com/class/research-methods
-- Assignment help: https://methods-market.clneu.com/class/research-methods/assignment-help
+Paste into **Syllabus → Edit** (HTML view) or a **Pages** item linked from Home. Include links to Methods Market chapters in each week's Canvas content.

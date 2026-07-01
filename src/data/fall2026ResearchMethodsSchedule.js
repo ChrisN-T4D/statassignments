@@ -1,7 +1,6 @@
 /**
- * Fall 2026 PSYC 4223 — NWOSU Research Methodology capstone schedule.
- * One Pressbooks chapter per week — complete the full chapter (read + Concept Review).
- * Anchor: IRB Final Draft submitted to the IRB Nov 13.
+ * Instructor / Canvas tooling — term-specific due dates, points, and syllabus HTML.
+ * NOT shown in Methods Market UI. Students see dates in Canvas; Canvas links here for reading.
  */
 
 import { PRESSBOOKS_CHAPTERS } from './researchMethodsTextbook.js'

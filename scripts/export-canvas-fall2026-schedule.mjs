@@ -1,5 +1,6 @@
 /**
- * Print Fall 2026 PSYC 4223 schedule for pasting into Canvas (syllabus / schedule page).
+ * Print term schedule HTML for pasting into Canvas (syllabus / schedule page).
+ * Instructor-only — Methods Market does not display this to students.
  * Run: node scripts/export-canvas-fall2026-schedule.mjs
  */
 import {
