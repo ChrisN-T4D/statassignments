@@ -1,15 +1,11 @@
 # Canvas PSYC 4213 Statistics — Methods Market practice assignments
 
-Use these URLs when creating **Assignments** in Canvas (submission type: **Website URL** or external link). Students complete the activity in Methods Market, then mark the Canvas assignment done.
+Generated 2026-07-01 from `statisticsCanvasLinks.js`.
 
-**Assignment help (student tips):** https://methods-market.clneu.com/class/statistics/assignment-help
+**Assignment help:** https://methods-market.clneu.com/class/statistics/assignment-help
 
-Replace the old external links (`/practice?module=module-N`) — those redirect automatically, but use the URLs below for new assignments.
-
-## Per module
-
-| Module | Concept Review (Canvas assignment URL) | Software Practice (modules 3–8 only) |
-|--------|----------------------------------------|--------------------------------------|
+| Module | Concept Review | Software Practice |
+|--------|----------------|-------------------|
 | 1 | https://methods-market.clneu.com/class/statistics/practice?module=stats-module-1 | — |
 | 2 | https://methods-market.clneu.com/class/statistics/practice?module=stats-module-2 | — |
 | 3 | https://methods-market.clneu.com/class/statistics/practice?module=stats-module-3 | https://methods-market.clneu.com/class/statistics/software?module=stats-module-3 |
@@ -19,26 +15,15 @@ Replace the old external links (`/practice?module=module-N`) — those redirect 
 | 7 | https://methods-market.clneu.com/class/statistics/practice?module=stats-module-7 | https://methods-market.clneu.com/class/statistics/software?module=stats-module-7 |
 | 8 | https://methods-market.clneu.com/class/statistics/practice?module=stats-module-8 | https://methods-market.clneu.com/class/statistics/software?module=stats-module-8 |
 
-## Suggested Canvas assignment titles
+## Benchmarks (Modules 1–3, 4–5, 6–8)
 
-| Methods Market id | Suggested Canvas title |
-|-------------------|------------------------|
-| m1-concept-review | Module 1: Concept Review (Methods Market) |
-| m3-concept-review | Module 3: Concept Review (Methods Market) |
-| m3-software-practice | Module 3: Software Practice (Methods Market) |
-| … | Same pattern for modules 4–8 |
+| Benchmark | Covers | Practice URL | Assignment help |
+|-----------|--------|--------------|-----------------|
+| Benchmark 1 (Modules 1–3) | Chapters 1–3 (15 Q) | https://methods-market.clneu.com/class/statistics/assignment-help/benchmark-1/practice | https://methods-market.clneu.com/class/statistics/assignment-help/benchmark-1 |
+| Benchmark 2 (Modules 4–5) | Chapters 4–5 (30 Q) | https://methods-market.clneu.com/class/statistics/assignment-help/benchmark-2/practice | https://methods-market.clneu.com/class/statistics/assignment-help/benchmark-2 |
+| Final Benchmark (Modules 6–8) | Chapters 6–8 (36 Q) | https://methods-market.clneu.com/class/statistics/assignment-help/final-benchmark/practice | https://methods-market.clneu.com/class/statistics/assignment-help/final-benchmark |
 
-## Module overview links (optional)
-
-Open a module with a specific tab selected:
-
-- Concept Review tab: `https://methods-market.clneu.com/class/statistics?module=stats-module-N&tab=concepts`
-- Software Practice tab: `https://methods-market.clneu.com/class/statistics?module=stats-module-N&tab=software`
-
-## Regenerate this table
-
-```bash
-node scripts/export-canvas-statistics-practice-links.mjs
-```
-
-Source of truth: `src/data/statisticsCanvasLinks.js`
+**Canvas setup:**
+- Benchmark 1: `scripts/canvas-statistics-benchmark-1-quiz.md` · `npm run export:canvas-benchmark-1`
+- Benchmark 2: `scripts/canvas-statistics-benchmark-2-quiz.md` · `npm run export:canvas-benchmark-2`
+- Final Benchmark: `scripts/canvas-statistics-final-benchmark-quiz.md` · `npm run export:canvas-final-benchmark`

@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import {
   STATISTICS_MODULE_PRACTICE_LINKS,
+  STATISTICS_BENCHMARK_LINKS,
   METHODS_MARKET_BASE
 } from '../src/data/statisticsCanvasLinks.js'
 
@@ -30,6 +31,19 @@ for (const row of STATISTICS_MODULE_PRACTICE_LINKS) {
     `| ${row.moduleNumber} | ${row.conceptReview} | ${row.softwarePractice ?? '—'} |`
   )
 }
+
+lines.push('')
+lines.push('## Benchmarks (Modules 1–3, 4–5, 6–8)')
+lines.push('')
+lines.push('| Benchmark | Covers | Practice URL | Assignment help |')
+lines.push('|-----------|--------|--------------|-----------------|')
+for (const b of STATISTICS_BENCHMARK_LINKS) {
+  lines.push(
+    `| ${b.title} | ${b.modulesLabel} (${b.questionCount} Q) | ${b.practiceUrl} | ${b.helpUrl} |`
+  )
+}
+lines.push('')
+lines.push('**Canvas setup:** see `scripts/canvas-statistics-benchmark-1.md` for Benchmark 1 step-by-step.')
 
 const md = lines.join('\n') + '\n'
 writeFileSync(outPath, md, 'utf8')
