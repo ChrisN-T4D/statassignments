@@ -144,109 +144,32 @@ BENCHMARKS = (
     "your final grade, weighted as follows within that category: Benchmark 1 = 15%, Benchmark 2 = "
     "15%, Benchmark 3 (final exam) = 20%.\n\n"
     "Benchmark 1 comes after Module 3 (Chapters 1–3), Benchmark 2 after Module 5 (Methods Market "
-    "Modules 4–5; LSJ Chapters 4–6), and Benchmark 3 during NWOSU final exam week Dec 7–11 "
-    "(Modules 6–8; LSJ Chapters 7–13). Benchmarks may include multiple-choice, essay, and numerical "
-    "questions. All three are proctored per university policy using Respondus LockDown Browser with "
-    "webcam in Canvas.\n\n"
-    "Before each graded benchmark, complete Concept Review for the covered modules in Methods Market. "
-    "Optional formative practice tests (Assignment Help → Benchmark practice links) help identify "
-    "weak areas.\n\n"
-    "There are no make-up benchmarks for illness, approved school projects, religious holidays, "
-    "family emergencies, or anything else (arrangements will be made for approved student-athlete "
-    "activities). A missed benchmark counts as zero. Benchmark responses are checked for plagiarism.\n\n"
-    "If you believe a benchmark question was ambiguous, you have one week from the date taken to "
-    "raise the issue with the instructor. No exceptions to this deadline."
-)
-
-ASSIGNMENTS = (
-    "Your assignments average accounts for 35% of your final grade, weighted as follows within that "
-    "category: Methods Market Concept Review (Modules 1–8) = 10%; Methods Market Software Practice "
-    "(Modules 3–8) = 5%; Jamovi screen-recording and data-analysis assignments = 15%; Canvas quizzes "
-    "(e.g., Levels of Measurement, Normality) = 5%.\n\n"
-    "Details and due dates are in each Canvas module. Tips and Methods Market links: "
-    "https://methods-market.clneu.com/class/statistics/assignment-help\n\n"
-    "Due dates still matter for pacing and feedback. If you need more time, contact me. Late coursework "
-    "is accepted without an automatic grade penalty unless a specific item (for example a locked, "
-    "proctored benchmark window) says otherwise. Assignments are checked for plagiarism."
-)
-
-DISCUSSIONS = (
-    "Your discussion average accounts for 15% of your final grade, weighted as follows within that "
-    "category: Module Questions & Discussion (ongoing Q&A each module) = 5%; graded discussion "
-    "prompts (Modules 1, 2, 4, 7, and 8) = 10%.\n\n"
-    "Each module includes a Module Questions & Discussion board for course questions (reading, "
-    "Concept Review, software, assignments). Post here before emailing when possible. Graded prompts "
-    "include AI-comparison exercises and applied examples; follow Canvas instructions for initial "
-    "posts and replies.\n\n"
-    "Due dates still matter for pacing and feedback. If you need more time, contact me. Late discussions "
-    "or responses are accepted without an automatic grade penalty unless a specific item says otherwise. "
-    "Discussion posts are checked for plagiarism."
+    "Modules 4–5; LSJ Chapters 4–6), and Benchmark 3 during NWOSU final exam week Dec 7â€“11 "
+    "(Modules 6â€“8 only; LSJ Chapters 7â€“13; not a comprehensive final). Benchmarks may include multiple-choice, essay, and numerical "
 )
 
 EVALUATION_AND_GRADING = (
-    "EVALUATION AND GRADING\n\n"
-    "Final course grade components (total 100%):\n\n"
-    "Benchmarks — 50% of final grade\n"
-    "  • Benchmark 1 (Modules 1–3, Ch. 1–3) — 15%\n"
-    "  • Benchmark 2 (Modules 4–5, Ch. 4–6) — 15%\n"
-    "  • Benchmark 3 / Final Exam (Modules 6–8, Ch. 7–13) — 20%\n\n"
-    "Assignments — 35% of final grade\n"
-    "  • Methods Market Concept Review (Modules 1–8) — 10%\n"
-    "  • Methods Market Software Practice (Modules 3–8) — 5%\n"
-    "  • Jamovi / data-analysis assignments & screen recordings — 15%\n"
-    "  • Canvas quizzes — 5%\n\n"
-    "Discussions — 15% of final grade\n"
-    "  • Module Questions & Discussion (Q&A) — 5%\n"
-    "  • Graded discussion prompts (Modules 1, 2, 4, 7, 8) — 10%\n\n"
-    "Final Course Grade:\n"
-    "A = 90–100\n"
-    "B = 80–89\n"
-    "C = 70–79\n"
-    "D = 60–69\n"
-    "F = 0–59\n\n"
-    "Extra Credit: There are no extra credit opportunities. Make each assignment count.\n\n"
-    "Canvas assignment groups mirror these categories. Point values for individual assignments are "
-    "listed in Canvas; category weights above determine your final grade."
+    "EVALUATION AND GRADING\n"
+    "Your grade will be based on the following components:\n"
+    "  â€¢ Benchmark 1 (Modules 1â€“3, Ch. 1â€“3) â€” 15%\n"
+    "  â€¢ Benchmark 2 (Modules 4â€“5, Ch. 4â€“6) â€” 15%\n"
+    "  â€¢ Benchmark 3 / Final Exam (Modules 6â€“8 only, Ch. 7â€“13; not a comprehensive final) â€” 20%\n\n"
 )
 
-TESTING = (
-    "Benchmarks 1, 2, and 3 are completed in Canvas. Benchmark 3 is the final exam during NWOSU "
-    "final exam week (Dec 7–11, 2026). Proctored testing is required.\n\n"
-    "OPTION 1 — On-campus proctoring (Alva, Woodward, Enid, Ponca City): Make prior arrangements. "
-    "No walk-in testing. There may be an additional fee depending on location — check early.\n\n"
-    "OPTION 2 — Respondus LockDown Browser with webcam on your personal computer. Install from the "
-    "link in your Canvas course. See https://www.nwosu.instructure.com for online testing tips.\n\n"
-    "Benchmark 1: proctored, due end of Week 6 (Sep 27, 2026).\n"
-    "Benchmark 2: proctored, due end of Week 11 (Nov 1, 2026).\n"
-    "Benchmark 3 / Final: proctored, Dec 7–11, 2026 (semester ends Dec 11)."
+ASSIGNMENTS = (
+    "Assignments will include weekly readings, Concept Review quizzes, Software Practice exercises, "
+    "and Jamovi assignments. Each assignment is designed to reinforce the concepts covered in class "
+    "and provide hands-on experience with statistical software.\n\n"
+    "Late assignments will be accepted with a 10% penalty per day late, up to three days. After "
+    "three days, no late assignments will be accepted."
 )
 
-# NWOSU Fall 2026 academic calendar: classes begin Aug 17; Labor Day Sep 7; fall break Oct 15–16;
-# Thanksgiving Nov 25–27; finals Dec 7–11.
-SCHEDULE_ROWS = [
-    ("1", "Aug 17 – Aug 23", "Module 1", "Course Introduction & Why Learn Statistics — read Ch. 1; Concept Review; Methods Market setup", "Ch. 1"),
-    ("2", "Aug 24 – Aug 30", "Module 2", "Research Design & Measurement — read Ch. 2; Concept Review", "Ch. 2"),
-    ("3", "Aug 31 – Sep 06", "Module 2", "Research Design & Measurement (cont.) — PSS assignment; discussion", "Ch. 2"),
-    ("4", "Sep 07 – Sep 13", "Module 3", "Introduction to jamovi & Data Handling — read Ch. 3; install jamovi (Labor Day Mon Sep 7)", "Ch. 3"),
-    ("5", "Sep 14 – Sep 20", "Module 3", "jamovi & Data Handling (cont.) — Software Practice; Jamovi assignments", "Ch. 3"),
-    ("6", "Sep 21 – Sep 27", "—", "Benchmark 1 (Proctored, LockDown Browser) — Review Ch. 1–3", "Ch. 1–3"),
-    ("7", "Sep 28 – Oct 04", "Module 4", "Descriptive Statistics — read Ch. 4; Concept Review & Software Practice", "Ch. 4"),
-    ("8", "Oct 05 – Oct 11", "Module 4", "Descriptive Statistics (cont.) — Jamovi assignment; discussion", "Ch. 4"),
-    ("9", "Oct 12 – Oct 18", "Module 5", "Graphing & Visualization — read Ch. 5–6; Concept Review & Software Practice (Fall Break Oct 15–16)", "Ch. 5, 6"),
-    ("10", "Oct 19 – Oct 25", "Module 5", "Graphing & Visualization (cont.) — screen-record assignment", "Ch. 5, 6"),
-    ("11", "Oct 26 – Nov 01", "—", "Benchmark 2 (Proctored, LockDown Browser) — Review Modules 4–5 (Ch. 4–6)", "Ch. 4–6"),
-    ("12", "Nov 02 – Nov 08", "Module 6", "Probability & Sampling — read Ch. 7–8; Concept Review & Software Practice", "Ch. 7, 8"),
-    ("13", "Nov 09 – Nov 15", "Module 6", "Probability & Sampling (cont.) — dice/normal/CLT assignments", "Ch. 7, 8"),
-    ("14", "Nov 16 – Nov 22", "Module 7", "Hypothesis Testing — read Ch. 9; Concept Review & Software Practice", "Ch. 9"),
-    ("15", "Nov 23 – Nov 29", "Module 7", "Hypothesis Testing (cont.) — hypotheses assignment; discussion (Thanksgiving Nov 25–27)", "Ch. 9"),
-    ("16", "Nov 30 – Dec 06", "Module 8", "Comparing Groups & Relationships — Ch. 10–13; Week 16 assignment", "Ch. 10–13"),
-    ("Finals", "Dec 07 – Dec 11", "—", "Benchmark 3 / Final Exam (Proctored; Modules 6–8, Ch. 7–13)", "Ch. 7–13"),
-]
-
-SCHEDULE_FOOTNOTE = (
-    "Calendar notes (NWOSU Fall 2026): Regular classes begin August 17. Labor Day: September 7. "
-    "Fall Break: October 15–16. Thanksgiving Break: November 25–27 (no classes). Final examinations: "
-    "December 7–11."
+DISCUSSIONS = (
+    "Discussion boards are an essential part of this course. You are required to participate in at "
+    "least two discussions per week. Your participation will be graded based on the quality and "
+    "relevance of your posts.\n\n"
+    "You should aim to post at least one original response and one reply to a classmate's post each "
+    "week."
 )
 
 ATTENDANCE_ONLINE = (
@@ -261,10 +184,10 @@ ATTENDANCE_INPERSON = (
     "prompts — post there before emailing when possible."
 )
 
-MEETING_ONLINE = "Online — asynchronous (no scheduled meeting time)"
+MEETING_ONLINE = "Online â€“ asynchronous (no scheduled meeting time)"
 
 MEETING_INPERSON = (
-    "On campus — see your section listing in RangerNet / the official course schedule for meeting "
+    "On campus â€“ see your section listing in RangerNet / the official course schedule for meeting "
     "days, times, and room (sections A025, E926, W094, X098, X150)."
 )
 
@@ -273,7 +196,7 @@ def main():
     in_person = "--in-person" in sys.argv
     doc = Document(SRC)
 
-    replace_paragraph_text(doc.paragraphs[1], "Psych 4213 – Statistics")
+    replace_paragraph_text(doc.paragraphs[1], "Psych 4213 â€“ Statistics")
     replace_paragraph_text(doc.paragraphs[2], "Fall 2026")
     replace_paragraph_text(doc.paragraphs[16], "In Person" if in_person else "Online")
 
@@ -294,7 +217,7 @@ def main():
             break
 
     for i, p in enumerate(doc.paragraphs):
-        if p.text.strip().startswith("We use free") or p.text.strip().startswith("We will use free"):
+        if p.text.startswith("We use free") or p.text.startswith("We will use free"):
             replace_paragraph_text(p, COURSE_MATERIALS)
             break
 
@@ -359,7 +282,7 @@ def main():
         if p.text.strip().startswith("Final Exam Date and Time") and i + 1 < len(doc.paragraphs):
             replace_paragraph_text(
                 doc.paragraphs[i + 1],
-                "Benchmark 3 (Final Exam): Dec 7–11, 2026 (Proctored, LockDown Browser + Webcam). Semester ends Dec 11."
+                "Benchmark 3 (Final Exam): Dec 7â€“11, 2026 (Proctored, LockDown Browser + Webcam). Semester ends Dec 11."
             )
             break
 
