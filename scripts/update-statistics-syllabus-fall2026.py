@@ -164,21 +164,21 @@ EVALUATION_AND_GRADING = (
     "D = 60–69\n"
     "F = 0–59\n\n"
     "Extra Credit: There are no extra credit opportunities. Make each assignment count.\n\n"
-    "Canvas assignment groups mirror these categories. Point values for individual assignments are "
-    "listed in Canvas; category weights above determine your final grade."
+    "Canvas does not use weighted assignment groups. Graded items use total points in Canvas; "
+    "the composition above is how your final grade is calculated from those points."
 )
 
 TESTING = (
-    "Benchmarks 1, 2, and 3 are completed in Canvas. Benchmark 3 is the final exam during NWOSU "
-    "final exam week (Dec 7–11, 2026). It covers Modules 6–8 only (not a comprehensive final). "
-    "Proctored testing is required.\n\n"
-    "OPTION 1 — On-campus proctoring (Alva, Woodward, Enid, Ponca City): Make prior arrangements. "
-    "No walk-in testing. There may be an additional fee depending on location — check early.\n\n"
-    "OPTION 2 — Respondus LockDown Browser with webcam on your personal computer. Install from the "
-    "link in your Canvas course. See https://www.nwosu.instructure.com for online testing tips.\n\n"
-    "Benchmark 1: proctored, due end of Week 6 (Sep 27, 2026).\n"
-    "Benchmark 2: proctored, due end of Week 11 (Nov 1, 2026).\n"
-    "Benchmark 3 / Final: proctored, Dec 7–11, 2026 (semester ends Dec 11)."
+    "Benchmarks 1, 2, and 3 are completed in Canvas with Respondus LockDown Browser + Webcam "
+    "(required for online and in-person sections). Benchmark 3 is the final exam during NWOSU "
+    "final exam week (Dec 7–11, 2026). It covers Modules 6–8 only (not a comprehensive final).\n\n"
+    "Install LockDown Browser from the link in your Canvas course. Take each benchmark on a "
+    "computer with a working webcam. See https://nwosu.instructure.com for Canvas and testing tips.\n\n"
+    "If you need an on-campus computer lab with LockDown Browser (Alva, Woodward, Enid, Ponca City), "
+    "make prior arrangements. No walk-in testing. There may be an additional fee depending on location.\n\n"
+    "Benchmark 1: LockDown Browser + Webcam, due end of Week 6 (Sep 27, 2026).\n"
+    "Benchmark 2: LockDown Browser + Webcam, due end of Week 11 (Nov 1, 2026).\n"
+    "Benchmark 3 / Final: LockDown Browser + Webcam, Dec 7–11, 2026 (semester ends Dec 11)."
 )
 
 # NWOSU Fall 2026 academic calendar: classes begin Aug 17; Labor Day Sep 7; fall break Oct 15–16;
