@@ -233,8 +233,9 @@ export function useInstructorAnalytics() {
 
   // ========== ROSTER MANAGEMENT FUNCTIONS ==========
 
-  // Parse Blackboard CSV export format
-  // Expected columns: Last Name, First Name, Username, Student ID, etc.
+  // Parse Canvas (or legacy Blackboard) roster CSV export.
+  // Canvas common headers: Login ID, SIS Login ID, SIS User ID, Student, sortable_name
+  // Legacy: Username, Student ID, Last Name, First Name
   function parseBlackboardCSV(csvText) {
     const lines = csvText.trim().split('\n')
     if (lines.length < 2) {
@@ -244,14 +245,27 @@ export function useInstructorAnalytics() {
     // Parse header row
     const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim())
 
-    // Find column indices
-    const usernameIdx = headers.findIndex(h => h.includes('username'))
-    const studentIdIdx = headers.findIndex(h => h.includes('student id') || h === 'id')
+    // Find column indices (Canvas + legacy LMS names)
+    const usernameIdx = headers.findIndex(h =>
+      h.includes('username') ||
+      h === 'login id' ||
+      h === 'login_id' ||
+      h === 'sis login id' ||
+      h === 'sis_login_id'
+    )
+    const studentIdIdx = headers.findIndex(h =>
+      h.includes('student id') ||
+      h === 'id' ||
+      h === 'sis user id' ||
+      h === 'sis_user_id' ||
+      h === 'integration_id' ||
+      h === 'integration id'
+    )
     const lastNameIdx = headers.findIndex(h => h.includes('last name') || h === 'lastname')
     const firstNameIdx = headers.findIndex(h => h.includes('first name') || h === 'firstname')
 
     if (usernameIdx === -1 && studentIdIdx === -1) {
-      throw new Error('CSV must contain either a Username or Student ID column')
+      throw new Error('CSV must contain a Login ID / Username or SIS User ID / Student ID column')
     }
 
     const rows = []
@@ -269,6 +283,12 @@ export function useInstructorAnalytics() {
 
       // Skip rows without identifier
       if (!row.bb_username && !row.bb_id) continue
+
+      // Skip Canvas points/totals footer rows sometimes present in gradebook exports
+      const loginLower = row.bb_username.toLowerCase()
+      if (loginLower === 'student' || loginLower.startsWith('points possible') || loginLower === 'notes') {
+        continue
+      }
 
       rows.push(row)
     }

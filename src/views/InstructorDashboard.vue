@@ -71,10 +71,10 @@
 
           <!-- CSV Upload -->
           <div v-if="rosterSemesterId" class="content-section">
-            <h2>Import Roster from Blackboard</h2>
+            <h2>Import Roster from Canvas</h2>
             <p class="section-description">
-              Upload a CSV file exported from Blackboard. The file should contain columns for
-              Username and/or Student ID.
+              Upload a CSV exported from Canvas (People or Gradebook). The file should include
+              Login ID and/or SIS User ID (Student ID) columns.
             </p>
 
             <div class="upload-area">
@@ -103,7 +103,7 @@
                 <table class="preview-table">
                   <thead>
                     <tr>
-                      <th>Username</th>
+                      <th>Login ID</th>
                       <th>Student ID</th>
                       <th>Generated Key</th>
                       <th>Status</th>
