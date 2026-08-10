@@ -176,6 +176,16 @@ def _run_migrations():
         import traceback
         traceback.print_exc()
 
+    if os.environ.get("FORCE_WIPE_STUDENT_DATA", "").strip() == "1":
+        try:
+            print("FORCE_WIPE_STUDENT_DATA=1 — wiping non-admin users, roster, attempts...", flush=True)
+            from scripts.wipe_student_data import wipe_student_data
+            wipe_student_data()
+        except Exception as exc:
+            print(f"⚠️  Student data wipe failed: {exc}", flush=True)
+            import traceback
+            traceback.print_exc()
+
     # Seed when enabled, or whenever a one-shot admin password reset is requested.
     run_seed = os.environ.get("RUN_DB_SEED", "1").strip().lower() in {"1", "true", "yes"}
     force_admin_reset = os.environ.get("FORCE_ADMIN_PASSWORD_RESET", "").strip() == "1"

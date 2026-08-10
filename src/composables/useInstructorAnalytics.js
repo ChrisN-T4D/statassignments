@@ -8,7 +8,8 @@ export function useInstructorAnalytics() {
 
   // Check if current user is an instructor
   function isInstructor() {
-    return user.value?.role === 'instructor'
+    const role = user.value?.role
+    return role === 'instructor' || role === 'admin'
   }
 
   async function fetchSemesters() {

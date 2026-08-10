@@ -76,7 +76,10 @@ onMounted(() => {
 })
 
 const isOpen = ref(false)
-const isInstructor = computed(() => user.value?.role === 'instructor')
+const isInstructor = computed(() => {
+  const role = user.value?.role
+  return role === 'instructor' || role === 'admin'
+})
 const isAdmin = computed(() => user.value?.role === 'admin')
 
 function close() {
