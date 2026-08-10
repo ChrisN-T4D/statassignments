@@ -153,8 +153,36 @@ def seed():
             print(f"  + {item_count} items")
 
         admin_email = os.environ.get("ADMIN_EMAIL", "admin@methodsmarket.local")
-        if not db.query(User).filter(User.email == admin_email).first():
-            admin_password = os.environ.get("ADMIN_PASSWORD", "changeme123")
+        admin_password = os.environ.get("ADMIN_PASSWORD", "changeme123")
+        force_reset = os.environ.get("FORCE_ADMIN_PASSWORD_RESET") == "1"
+        existing_admin = db.query(User).filter(User.email == admin_email).first()
+
+        if force_reset:
+            targets = (
+                [existing_admin]
+                if existing_admin
+                else db.query(User).filter(User.role == "admin").all()
+            )
+            if targets:
+                for user in targets:
+                    user.password_hash = hash_password(admin_password)
+                    user.updated = now
+                    print(f"  ~ reset admin password for {user.email}")
+            else:
+                db.add(
+                    User(
+                        id=_new_id(),
+                        email=admin_email,
+                        password_hash=hash_password(admin_password),
+                        name="Admin",
+                        role="admin",
+                        verified=True,
+                        created=now,
+                        updated=now,
+                    )
+                )
+                print(f"  + admin user {admin_email}")
+        elif not existing_admin:
             db.add(
                 User(
                     id=_new_id(),
