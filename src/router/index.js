@@ -185,8 +185,8 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // Check if route requires instructor role
-  if (to.meta.requiresInstructor && userRole !== 'instructor') {
+  // Check if route requires instructor role (admins manage rosters too)
+  if (to.meta.requiresInstructor && userRole !== 'instructor' && userRole !== 'admin') {
     next('/')
     return
   }
