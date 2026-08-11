@@ -38,7 +38,10 @@ def can_view(collection: str, user: User | None, record, db: Session) -> bool:
     if collection == "roster":
         if _is_instructor(user):
             return True
-        return uid and str(getattr(record, "user_id", "")) == uid
+        # Students can see their own claimed row, or unclaimed rows (needed to claim by key)
+        if not getattr(record, "user_id", None):
+            return uid is not None
+        return uid and str(record.user_id) == uid
 
     if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states"):
         if _is_instructor(user):
@@ -108,7 +111,13 @@ def can_update(collection: str, user: User | None, record) -> bool:
     if collection == "roster":
         if _is_instructor(user):
             return True
-        return uid and str(getattr(record, "user_id", "")) == uid
+        # Claimed row: only the linked student
+        if uid and getattr(record, "user_id", None) and str(record.user_id) == uid:
+            return True
+        # Unclaimed row: any logged-in user may claim (enforced further in update_record)
+        if uid and not getattr(record, "user_id", None):
+            return True
+        return False
 
     if collection in ("user_progress", "topic_readings", "bkt_states"):
         return uid and str(getattr(record, "user_id", "")) == uid

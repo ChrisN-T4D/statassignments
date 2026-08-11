@@ -112,11 +112,18 @@ export function useProfile() {
         throw new Error('This student key has already been claimed. If this is your key, please contact your instructor.')
       }
 
-      // Update roster entry to link to current user
+      // Update roster entry to link to current user (backend also assigns roster.class → user.classes)
       const updated = await pb.collection('roster').update(rosterEntry.id, {
         user: user.value.id,
         claimed_at: new Date().toISOString()
       })
+
+      // Refresh auth so assigned classes appear in the UI
+      try {
+        await pb.collection('users').authRefresh()
+      } catch (err) {
+        console.warn('Auth refresh after claim failed:', err)
+      }
 
       profile.value = updated
       return updated
