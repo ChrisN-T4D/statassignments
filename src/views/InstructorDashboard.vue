@@ -433,7 +433,6 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
-import { pb } from '../lib/pocketbase'
 
 const {
   loading,
