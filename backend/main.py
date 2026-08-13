@@ -160,6 +160,7 @@ def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
 def _run_migrations():
     backend_dir = Path(__file__).resolve().parent
     if os.environ.get("SKIP_DB_MIGRATE") == "1":
+        print("SKIP_DB_MIGRATE=1 — skipping migrate/seed", flush=True)
         return
     try:
         subprocess.run(
@@ -169,15 +170,40 @@ def _run_migrations():
             capture_output=True,
             text=True,
         )
-        if os.environ.get("RUN_DB_SEED", "1") == "1":
-            print("Seeding database...", flush=True)
+        print("Alembic upgrade complete.", flush=True)
+    except Exception as exc:
+        print(f"⚠️  Database migrate skipped or failed: {exc}", flush=True)
+        import traceback
+        traceback.print_exc()
+
+    if os.environ.get("FORCE_WIPE_STUDENT_DATA", "").strip() == "1":
+        try:
+            print("FORCE_WIPE_STUDENT_DATA=1 — wiping non-admin users, roster, attempts...", flush=True)
+            from scripts.wipe_student_data import wipe_student_data
+            wipe_student_data()
+        except Exception as exc:
+            print(f"⚠️  Student data wipe failed: {exc}", flush=True)
+            import traceback
+            traceback.print_exc()
+
+    # Seed when enabled, or whenever a one-shot admin password reset is requested.
+    run_seed = os.environ.get("RUN_DB_SEED", "1").strip().lower() in {"1", "true", "yes"}
+    force_admin_reset = os.environ.get("FORCE_ADMIN_PASSWORD_RESET", "").strip() == "1"
+    if run_seed or force_admin_reset:
+        try:
+            print(
+                f"Seeding database... (RUN_DB_SEED={run_seed}, FORCE_ADMIN_PASSWORD_RESET={force_admin_reset})",
+                flush=True,
+            )
             from scripts.seed import seed
             seed()
             print("Database seed finished.", flush=True)
-    except Exception as exc:
-        print(f"⚠️  Database migrate/seed skipped or failed: {exc}", flush=True)
-        import traceback
-        traceback.print_exc()
+        except Exception as exc:
+            print(f"⚠️  Database seed failed: {exc}", flush=True)
+            import traceback
+            traceback.print_exc()
+    else:
+        print("Database seed skipped (RUN_DB_SEED off, no FORCE_ADMIN_PASSWORD_RESET).", flush=True)
 
 
 app.include_router(collections_router)

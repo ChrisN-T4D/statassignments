@@ -219,6 +219,21 @@ def update_record(
     columns = payload_to_columns(collection, payload)
     class_ids = columns.pop("_class_ids", None)
 
+    # Roster claim: non-instructors may only link themselves to an unclaimed row
+    claiming = False
+    if collection == "roster" and user and user.role not in ("admin", "instructor"):
+        new_user_id = columns.get("user_id")
+        if row.user_id:
+            raise HTTPException(status_code=400, detail="This student key has already been claimed")
+        if not new_user_id or str(new_user_id) != str(user.id):
+            raise HTTPException(status_code=403, detail="Can only claim a roster key for yourself")
+        # Students cannot change class or semester during claim
+        columns.pop("class_id", None)
+        columns.pop("semester_id", None)
+        columns.pop("student_key", None)
+        columns["user_id"] = str(user.id)
+        claiming = True
+
     if collection == "users" and "password" in columns:
         columns["password_hash"] = hash_password(columns.pop("password"))
 
@@ -228,6 +243,13 @@ def update_record(
 
     if collection == "users" and class_ids is not None:
         row.classes = db.query(Class).filter(Class.id.in_(class_ids)).all()
+
+    if claiming and getattr(row, "class_id", None):
+        claim_user = db.query(User).options(joinedload(User.classes)).filter(User.id == user.id).first()
+        if claim_user:
+            class_row = db.get(Class, row.class_id)
+            if class_row and class_row not in claim_user.classes:
+                claim_user.classes.append(class_row)
 
     db.commit()
     db.refresh(row)
