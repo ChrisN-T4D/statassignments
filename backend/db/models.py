@@ -97,6 +97,7 @@ class Roster(Base, TimestampMixin):
     claimed_at: Mapped[datetime | None] = mapped_column(DateTime)
     bb_username: Mapped[str | None] = mapped_column(String(255))
     bb_id: Mapped[str | None] = mapped_column(String(128))
+    access_mode: Mapped[str] = mapped_column(String(32), default="online_primary", server_default="online_primary")
 
     semester: Mapped[Semester] = relationship()
     class_: Mapped["Class | None"] = relationship(foreign_keys=[class_id])

@@ -77,8 +77,8 @@ COURSE_MATERIALS = (
     "Step 3 — Bookmark https://methods-market.clneu.com/class/statistics and Assignment Help "
     "(…/class/statistics/assignment-help)\n"
     "Step 4 — Install jamovi before Module 3: https://www.jamovi.org/download.html\n"
-    "Each week: read the LSJ chapter → Concept Review → Software Practice (Modules 3–8) → complete "
-    "Canvas assignments. See also the Canvas page Getting Started on Methods Market.\n\n"
+    "Each week: read the LSJ chapter → Concept Review (upload the Methods Market slip to Canvas) → "
+    "Software Practice (Modules 3–8: record You do and upload the video to Canvas). See also the Canvas page Getting Started on Methods Market.\n\n"
     "Supplementary materials may include instructor videos, open-access articles, and other web "
     "resources linked from Canvas modules."
 )
@@ -87,7 +87,8 @@ PERFORMANCE_ASSESSMENT = (
     "The readings, instructor videos, and Methods Market activities present the major topics in "
     "statistics along with recent developments in the field. To build a thorough understanding, "
     "complete the assigned LSJ chapter reading, finish Concept Review for that module, and complete "
-    "Software Practice (Modules 3–8) before graded Jamovi assignments and benchmarks. Readings and "
+    "Software Practice (Modules 3–8). Record You do with Methods Market Tools (or your phone) and upload "
+    "the video to Canvas. Complete Concept Review and print the slip for Canvas. Readings and "
     "videos often contain unique material (presented in one medium but not the other).\n\n"
     "Recommended preparation for benchmarks: read the assigned chapters, complete Concept Review "
     "(and Software Practice where assigned), work through Methods Market topics, then use the "
@@ -120,7 +121,7 @@ BENCHMARKS = (
 ASSIGNMENTS = (
     "Your assignments average accounts for 35% of your final grade, weighted as follows within that "
     "category: Methods Market Concept Review (Modules 1–8) = 10%; Methods Market Software Practice "
-    "(Modules 3–8) = 5%; Jamovi screen-recording and data-analysis assignments = 15%; Canvas quizzes "
+    "(Modules 3–8, including the You do recording) = 20%; Canvas quizzes "
     "(e.g., Levels of Measurement, Normality) = 5%.\n\n"
     "Details and due dates are in each Canvas module. Tips and Methods Market links: "
     "https://methods-market.clneu.com/class/statistics/assignment-help\n\n"
@@ -151,8 +152,7 @@ EVALUATION_AND_GRADING = (
     "  • Benchmark 3 / Final Exam (Modules 6–8 only, Ch. 7–13; not a comprehensive final) — 20%\n\n"
     "Assignments — 35% of final grade\n"
     "  • Methods Market Concept Review (Modules 1–8) — 10%\n"
-    "  • Methods Market Software Practice (Modules 3–8) — 5%\n"
-    "  • Jamovi / data-analysis assignments & screen recordings — 15%\n"
+    "  • Methods Market Software Practice (Modules 3–8; You do recording in Canvas) — 20%\n"
     "  • Canvas quizzes — 5%\n\n"
     "Discussions — 15% of final grade\n"
     "  • Module Questions & Discussion (Q&A) — 5%\n"
@@ -188,7 +188,7 @@ SCHEDULE_ROWS = [
     ("2", "Aug 24 – Aug 30", "Module 2", "Research Design & Measurement — read Ch. 2; Concept Review", "Ch. 2"),
     ("3", "Aug 31 – Sep 06", "Module 2", "Research Design & Measurement (cont.) — PSS assignment; discussion", "Ch. 2"),
     ("4", "Sep 07 – Sep 13", "Module 3", "Introduction to jamovi & Data Handling — read Ch. 3; install jamovi (Labor Day Mon Sep 7)", "Ch. 3"),
-    ("5", "Sep 14 – Sep 20", "Module 3", "jamovi & Data Handling (cont.) — Software Practice; Jamovi assignments", "Ch. 3"),
+    ("5", "Sep 14 – Sep 20", "Module 3", "jamovi & Data Handling (cont.) — Software Practice You do recording", "Ch. 3"),
     ("6", "Sep 21 – Sep 27", "—", "Benchmark 1 (Proctored, LockDown Browser) — Review Ch. 1–3", "Ch. 1–3"),
     ("7", "Sep 28 – Oct 04", "Module 4", "Descriptive Statistics — read Ch. 4; Concept Review & Software Practice", "Ch. 4"),
     ("8", "Oct 05 – Oct 11", "Module 4", "Descriptive Statistics (cont.) — Jamovi assignment; discussion", "Ch. 4"),
@@ -223,10 +223,7 @@ ATTENDANCE_INPERSON = (
 
 MEETING_ONLINE = "Online — asynchronous (no scheduled meeting time)"
 
-MEETING_INPERSON = (
-    "On campus — see your section listing in RangerNet / the official course schedule for meeting "
-    "days, times, and room (sections A025, E926, W094, X098, X150)."
-)
+MEETING_INPERSON = "In person, Monday, Wednesday, and Friday at 8:00 a.m."
 
 
 def main():
@@ -332,6 +329,9 @@ def main():
                 idx = doc.paragraphs.index(attendance_p)
                 if idx + 1 < len(doc.paragraphs):
                     replace_paragraph_text(doc.paragraphs[idx + 1], body)
+                    leftover = ATTENDANCE_ONLINE if in_person else ATTENDANCE_INPERSON
+                    if idx + 2 < len(doc.paragraphs) and leftover[:40] in doc.paragraphs[idx + 2].text:
+                        replace_paragraph_text(doc.paragraphs[idx + 2], "")
                 else:
                     replace_paragraph_text(attendance_p, "Class Attendance:\n" + body)
             else:

@@ -376,6 +376,14 @@
               </div>
               <span class="card-arrow">-></span>
             </router-link>
+            <p v-if="!isResearchMethodsClass" class="print-hide" style="margin-top: 0.75rem;">
+              <router-link
+                class="btn-secondary"
+                :to="`/class/${classId}/practice?module=${selectedModuleId}&print=1`"
+              >
+                Print Concept Review packet
+              </router-link>
+            </p>
           </div>
 
           <!-- Software Practice Tab (one lesson per module, like Module 8; lesson may have multiple learn sections) -->
@@ -482,6 +490,14 @@
                   <span class="card-arrow">→</span>
                 </span>
               </div>
+              <p class="print-hide" style="margin-top: 0.75rem;">
+                <router-link
+                  class="btn-secondary"
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?print=1`"
+                >
+                  Print Software Practice packet
+                </router-link>
+              </p>
             </div>
             <div v-else class="empty-state">
               <p>No software lessons available for this module yet.</p>
@@ -578,7 +594,7 @@ const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated, user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
-const { hasProfile } = useProfile()
+const { hasProfile, fetchProfile } = useProfile()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
@@ -1188,6 +1204,9 @@ onMounted(async () => {
     syncContentTabFromQuery()
   }
   refreshReadTopics()
+  if (isAuthenticated.value) {
+    await fetchProfile()
+  }
 })
 
 watch(classId, (newId) => {

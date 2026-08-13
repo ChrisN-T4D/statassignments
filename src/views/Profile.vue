@@ -37,6 +37,36 @@
           <button class="btn-secondary" @click="handleSignOut">Sign Out</button>
         </div>
 
+        <div class="access-mode-card">
+          <h2>How you work in Methods Market</h2>
+          <p>
+            Online primary is the usual interactive path. Offline primary gives you print packets for Concept Review and Software Practice so you can work without home internet.
+          </p>
+          <p v-if="studentKey"><strong>Student key:</strong> {{ studentKey }}</p>
+          <p v-else>Link your student key on the claim page before this setting will save.</p>
+          <div class="access-mode-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              :class="{ active: !isOfflinePrimary }"
+              :disabled="accessSaving || !hasProfile"
+              @click="chooseAccess('online_primary')"
+            >
+              Online primary
+            </button>
+            <button
+              type="button"
+              class="btn-secondary"
+              :class="{ active: isOfflinePrimary }"
+              :disabled="accessSaving || !hasProfile"
+              @click="chooseAccess('offline_primary')"
+            >
+              Offline primary
+            </button>
+          </div>
+          <p v-if="accessError" class="access-error">{{ accessError }}</p>
+        </div>
+
         <!-- Overall Stats -->
         <div class="stats-grid">
           <div class="stat-card">
@@ -257,9 +287,19 @@ import { usePractice } from '../composables/usePractice'
 import { useBKT } from '../composables/useBKT'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
+import { useAccessMode } from '../composables/useAccessMode.js'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
+const {
+  isOfflinePrimary,
+  hasProfile,
+  studentKey,
+  ensureLoaded,
+  setAccessMode
+} = useAccessMode()
+const accessSaving = ref(false)
+const accessError = ref('')
 const { fetchUserStats } = usePractice()
 const { getMasteryPercent, getAllBKTStates } = useBKT()
 
@@ -473,8 +513,21 @@ async function handleSignOut() {
   window.location.href = '/'
 }
 
+async function chooseAccess(mode) {
+  accessError.value = ''
+  accessSaving.value = true
+  try {
+    await setAccessMode(mode)
+  } catch (err) {
+    accessError.value = err.message || 'Could not save access mode'
+  } finally {
+    accessSaving.value = false
+  }
+}
+
 async function loadData() {
   if (isAuthenticated.value) {
+    await ensureLoaded()
     practiceStats.value = await fetchUserStats()
     refreshReadTopics()
     await loadMasteryData()
@@ -543,6 +596,29 @@ watch(isAuthenticated, (newVal) => {
 .user-details p {
   color: var(--text-secondary);
   font-size: 0.875rem;
+}
+
+.access-mode-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.access-mode-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+.access-mode-actions .btn-secondary.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+.access-error {
+  color: #dc2626;
+  margin-top: 0.5rem;
 }
 
 .stats-grid {

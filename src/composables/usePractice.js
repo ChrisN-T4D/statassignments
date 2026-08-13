@@ -598,6 +598,13 @@ export function usePractice() {
     }
   }
 
+  function loadNextUnanswered(moduleId, answeredIds) {
+    const qs = getQuestionsByModule(moduleId) || []
+    const next = qs.find((q) => !answeredIds.includes(q.id))
+    currentProblem.value = next ? convertQuestion(next) : null
+    return currentProblem.value
+  }
+
   return {
     problems,
     loading,
@@ -606,6 +613,7 @@ export function usePractice() {
     fetchRandomProblem,
     startMastery,
     nextMasteryProblem,
+    loadNextUnanswered,
     masteryIndex,
     masteryTotal,
     submitAnswer,

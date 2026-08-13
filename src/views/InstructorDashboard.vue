@@ -67,6 +67,35 @@
                 Download Student Keys CSV
               </button>
             </div>
+
+            <div v-if="rosterRows.length" class="preview-table-wrapper" style="margin-top: 1.5rem;">
+              <h3>Access mode</h3>
+              <p class="section-description">Offline primary students get print packets. You can override their choice here.</p>
+              <table class="preview-table">
+                <thead>
+                  <tr>
+                    <th>Student key</th>
+                    <th>Claimed</th>
+                    <th>Access mode</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in rosterRows" :key="row.id">
+                    <td><code>{{ row.student_key }}</code></td>
+                    <td>{{ row.user ? 'Yes' : 'No' }}</td>
+                    <td>
+                      <select
+                        :value="row.access_mode || 'online_primary'"
+                        @change="changeAccessMode(row, $event.target.value)"
+                      >
+                        <option value="online_primary">Online primary</option>
+                        <option value="offline_primary">Offline primary</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <!-- CSV Upload -->
@@ -404,6 +433,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
+import { pb } from '../lib/pocketbase'
 
 const {
   loading,
@@ -444,6 +474,7 @@ const filters = reactive({
 // Roster tab state
 const rosterSemesterId = ref('')
 const rosterStats = ref(null)
+const rosterRows = ref([])
 const csvFile = ref(null)
 const parsedRows = ref([])
 const parseError = ref('')
@@ -492,6 +523,7 @@ async function loadRosterStats() {
 
   const roster = await fetchRoster(rosterSemesterId.value)
   const claimed = roster.filter(r => r.user).length
+  rosterRows.value = roster
 
   rosterStats.value = {
     total: roster.length,
@@ -501,6 +533,16 @@ async function loadRosterStats() {
 
   // Clear any previous upload state
   clearUpload()
+}
+
+async function changeAccessMode(row, mode) {
+  try {
+    await pb.collection('roster').update(row.id, { access_mode: mode })
+    row.access_mode = mode
+  } catch (err) {
+    console.error('Unable to update access mode:', err)
+    alert(err.message || 'Could not update access mode')
+  }
 }
 
 async function handleFileSelect(event) {

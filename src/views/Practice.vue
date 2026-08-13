@@ -1,14 +1,89 @@
 <template>
-  <div class="practice-page">
+  <div class="practice-page" :class="{ 'printing-packet': printFocus === 'packet', 'printing-slip': printFocus === 'slip' }">
     <div class="container">
       <div class="page-header">
         <h1>Practice Problems</h1>
         <p>Test your understanding with interactive practice questions.</p>
-        <div v-if="masteryTotal" class="mastery-progress">
+        <div v-if="masteryTotal && !isOfflinePrimary" class="mastery-progress">
           <span class="mastery-label">Mastery progress</span>
           <span class="mastery-value">{{ masteryIndex + (currentProblem ? 1 : 0) }} / {{ masteryTotal }}</span>
         </div>
       </div>
+
+      <div v-if="isStatisticsPractice" class="cr-mode-bar print-hide">
+        <p v-if="isOfflinePrimary">
+          Offline primary: print the packet, work without internet, then enter all answers at once for a Canvas slip.
+        </p>
+        <p v-else>
+          Online primary: answer questions here. When you have answered every question in this module, print the slip and upload it to Canvas.
+        </p>
+        <div class="cr-mode-actions">
+          <button type="button" class="btn-secondary" @click="showPrintPacket = true">Print packet</button>
+          <button
+            v-if="isOfflinePrimary"
+            type="button"
+            class="btn-primary"
+            @click="startBatchEntry"
+          >
+            Enter answers
+          </button>
+        </div>
+      </div>
+
+      <div v-if="showPrintPacket && isStatisticsPractice" class="print-packet-wrap">
+        <div class="print-hide packet-toolbar">
+          <button type="button" class="btn-primary" @click="printPacket">Print / Save PDF</button>
+          <button type="button" class="btn-secondary" @click="showPrintPacket = false">Close packet</button>
+        </div>
+        <ConceptReviewPrintPacket
+          :questions="moduleQuestions"
+          :module-label="moduleLabel"
+        />
+      </div>
+
+      <div v-if="isOfflinePrimary && batchMode" class="batch-entry print-hide">
+        <h2>Enter answers</h2>
+        <p>Submit once. You will see feedback for every question, then your completion slip.</p>
+        <form @submit.prevent="submitBatch">
+          <fieldset v-for="(q, index) in moduleQuestions" :key="q.id" class="batch-q">
+            <legend>{{ index + 1 }}. {{ q.question }}</legend>
+            <template v-if="q.type === 'multiple_choice' || q.type === 'true_false'">
+              <label v-for="opt in batchOptions(q)" :key="opt.id">
+                <input type="radio" :name="q.id" :value="opt.id" v-model="batchAnswers[q.id]" />
+                {{ opt.text }}
+              </label>
+            </template>
+            <template v-else-if="q.type === 'multiple_select'">
+              <label v-for="opt in q.options" :key="opt.id">
+                <input type="checkbox" :value="opt.id" v-model="batchMulti[q.id]" />
+                {{ opt.text }}
+              </label>
+            </template>
+            <template v-else>
+              <input type="text" v-model="batchAnswers[q.id]" class="batch-text" />
+            </template>
+          </fieldset>
+          <button type="submit" class="btn-primary">Submit all answers</button>
+        </form>
+      </div>
+
+      <div v-if="batchResults.length" class="batch-results">
+        <h2>Feedback</h2>
+        <div v-for="row in batchResults" :key="row.id" class="batch-result" :class="{ ok: row.correct, bad: !row.correct }">
+          <p><strong>{{ row.correct ? 'Correct' : 'Incorrect' }}.</strong> {{ row.question }}</p>
+          <p v-if="row.explanation">{{ row.explanation }}</p>
+        </div>
+      </div>
+
+      <CompletionSlip
+        :visible="slipVisible"
+        :student-key="studentKey || ''"
+        :module-label="moduleLabel"
+        :correct="slipCorrect"
+        :total="slipTotal"
+        :completed-at="slipCompletedAt"
+        @print="printSlip"
+      />
 
       <!-- Login prompt -->
       <div v-if="!isAuthenticated" class="login-prompt">
@@ -18,7 +93,7 @@
       </div>
 
       <!-- Learning Objectives (BKT Mastery Tracking) -->
-      <div v-if="isAuthenticated && currentObjectives.length > 0" class="objectives-tracker">
+      <div v-if="isAuthenticated && currentObjectives.length > 0 && !showPrintPacket && !batchMode" class="objectives-tracker">
         <h3 class="objectives-title">Learning Objectives Being Assessed</h3>
         <div class="objectives-list">
           <div
@@ -47,7 +122,7 @@
       </div>
 
       <!-- Problem Card -->
-      <div v-if="currentProblem" class="problem-card">
+      <div v-if="currentProblem && !showPrintPacket && !batchMode && !hideOnlineForBatch" class="problem-card">
         <div class="problem-header">
           <span class="difficulty-badge" :class="currentProblem.difficulty">
             {{ currentProblem.difficulty }}
@@ -208,11 +283,11 @@
       </div>
 
       <!-- Loading / Empty State -->
-      <div v-else-if="loading" class="loading">
+      <div v-else-if="loading && !showPrintPacket && !batchMode" class="loading">
         Loading problems...
       </div>
 
-      <div v-else class="empty-state">
+      <div v-else-if="!showPrintPacket && !batchMode && !slipVisible" class="empty-state">
         <p v-if="masteryTotal">You completed this mastery set.</p>
         <p v-else>No practice problems available for this topic yet.</p>
       </div>
@@ -221,7 +296,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { getModuleById } from '../data/modules.js'
@@ -232,16 +307,32 @@ import { useTimeTracking } from '../composables/useTimeTracking'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { getObjectiveById } from '../data/objectives'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
+import { getQuestionsByModule } from '../data/conceptQuestions'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { pb } from '../lib/pocketbase'
+import { useAccessMode } from '../composables/useAccessMode.js'
+import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
+import {
+  loadConceptReviewCompletion,
+  saveConceptReviewCompletion,
+  markQuestionAnswered
+} from '../lib/conceptReviewSlipStore.js'
+import CompletionSlip from '../components/CompletionSlip.vue'
+import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const route = useRoute()
 const { isAuthenticated, user } = useAuth()
+const {
+  isOfflinePrimary,
+  studentKey,
+  ensureLoaded
+} = useAccessMode()
 const {
   currentProblem,
   loading,
   startMastery,
   nextMasteryProblem,
+  loadNextUnanswered,
   masteryIndex,
   masteryTotal,
   submitAnswer
@@ -333,6 +424,120 @@ function toStatsModuleId(value) {
   if (value.startsWith('stats-module-')) return value
   if (value.startsWith('module-')) return value.replace('module-', 'stats-module-')
   return value
+}
+
+const isStatisticsPractice = computed(() => {
+  const moduleId = toStatsModuleId(getActiveModuleId() || getActiveTopicId())
+  return route.params.classId === 'statistics' || String(moduleId || '').startsWith('stats-module-')
+})
+
+const statsModuleId = computed(() => toStatsModuleId(getSelectedTopicId()))
+
+const moduleQuestions = computed(() => {
+  if (!statsModuleId.value) return []
+  return getQuestionsByModule(statsModuleId.value) || []
+})
+
+const moduleLabel = computed(() => {
+  const mod = getModuleById(statsModuleId.value)
+  return mod?.shortTitle || mod?.title || statsModuleId.value || 'Concept Review'
+})
+
+const showPrintPacket = ref(false)
+const batchMode = ref(false)
+const batchAnswers = ref({})
+const batchMulti = ref({})
+const batchResults = ref([])
+const slipVisible = ref(false)
+const slipCorrect = ref(null)
+const slipTotal = ref(null)
+const slipCompletedAt = ref('')
+
+const hideOnlineForBatch = computed(() => isOfflinePrimary.value && (batchMode.value || batchResults.value.length > 0))
+
+function batchOptions(q) {
+  if (q.type === 'true_false') {
+    return [
+      { id: 'true', text: 'True' },
+      { id: 'false', text: 'False' }
+    ]
+  }
+  return q.options || []
+}
+
+const printFocus = ref(null)
+
+function afterPrint() {
+  printFocus.value = null
+}
+
+function printPacket() {
+  printFocus.value = 'packet'
+  nextTick(() => window.print())
+}
+
+function printSlip() {
+  printFocus.value = 'slip'
+  nextTick(() => window.print())
+}
+
+function startBatchEntry() {
+  showPrintPacket.value = false
+  batchMode.value = true
+  batchResults.value = []
+  slipVisible.value = false
+  const multi = {}
+  for (const q of moduleQuestions.value) {
+    if (q.type === 'multiple_select') multi[q.id] = []
+  }
+  batchMulti.value = multi
+}
+
+function restoreSlipIfComplete() {
+  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  const allIds = moduleQuestions.value.map((q) => q.id)
+  if (!saved || !allIds.length) return
+  const done = allIds.every((id) => (saved.answeredIds || []).includes(id)) && saved.completedAt
+  if (!done) return
+  slipCorrect.value = saved.correct
+  slipTotal.value = saved.total
+  slipCompletedAt.value = saved.completedAt
+  slipVisible.value = true
+}
+
+function submitBatch() {
+  const results = []
+  let correctCount = 0
+  const answeredIds = []
+  for (const q of moduleQuestions.value) {
+    const answer = q.type === 'multiple_select' ? (batchMulti.value[q.id] || []) : batchAnswers.value[q.id]
+    const scored = scoreConceptAnswer(
+      q,
+      q.type === 'true_false' ? (answer === 'true' || answer === true) : answer
+    )
+    if (scored.correct) correctCount += 1
+    answeredIds.push(q.id)
+    results.push({
+      id: q.id,
+      question: q.question,
+      correct: scored.correct,
+      explanation: scored.explanation
+    })
+  }
+  batchResults.value = results
+  batchMode.value = false
+  const completedAt = new Date().toISOString()
+  saveConceptReviewCompletion(studentKey.value, statsModuleId.value, {
+    answeredIds,
+    correct: correctCount,
+    total: results.length,
+    completedAt
+  })
+  recordConceptReviewComplete(statsModuleId.value)
+  slipCorrect.value = correctCount
+  slipTotal.value = results.length
+  slipCompletedAt.value = completedAt
+  slipVisible.value = Boolean(studentKey.value)
 }
 
 async function loadObjectivesForCurrentProblem() {
@@ -461,18 +666,18 @@ async function loadNextProblem() {
   feedbackMessage.value = ''
   await nextMasteryProblem()
 
+  if (!currentProblem.value && isStatisticsPractice.value && statsModuleId.value) {
+    const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+    const answered = saved?.answeredIds || []
+    loadNextUnanswered(statsModuleId.value, answered)
+  }
+
   // Reload objectives and mastery for the new problem
   await loadObjectivesForCurrentProblem()
 
-  if (masteryTotal.value > 0 && masteryIndex.value >= masteryTotal.value) {
-    const moduleFromQuery = getActiveModuleId()
-    if (moduleFromQuery) {
-      recordConceptReviewComplete(toStatsModuleId(moduleFromQuery))
-      return
-    }
-    const topic = topics.find(t => t.id === selectedTopic.value)
-    const moduleId = toStatsModuleId(topic?.moduleId || null)
-    recordConceptReviewComplete(moduleId)
+  if (!currentProblem.value && isStatisticsPractice.value) {
+    recordConceptReviewComplete(statsModuleId.value)
+    maybeUnlockOnlineSlip()
   }
 }
 
@@ -602,6 +807,17 @@ async function checkAnswer(answer) {
 
   isSubmitting.value = false
 
+  if (isStatisticsPractice.value && currentProblem.value?.id) {
+    const saved = markQuestionAnswered(
+      studentKey.value,
+      statsModuleId.value,
+      currentProblem.value.id,
+      moduleQuestions.value.map((q) => q.id),
+      correct
+    )
+    maybeUnlockOnlineSlip(saved)
+  }
+
   // Submit to backend in background (don't await)
   if (isAuthenticated.value) {
     const difficulty = currentProblem.value.difficulty || 'medium'
@@ -616,14 +832,48 @@ async function checkAnswer(answer) {
   }
 }
 
+function maybeUnlockOnlineSlip(saved) {
+  const record = saved || loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  const allIds = moduleQuestions.value.map((q) => q.id)
+  if (!record || !allIds.length) return
+  const done = allIds.every((id) => (record.answeredIds || []).includes(id))
+  if (!done) return
+  if (!record.completedAt) {
+    record.completedAt = new Date().toISOString()
+    saveConceptReviewCompletion(studentKey.value, statsModuleId.value, record)
+  }
+  slipCorrect.value = record.correct
+  slipTotal.value = record.total || allIds.length
+  slipCompletedAt.value = record.completedAt
+  slipVisible.value = Boolean(studentKey.value)
+}
+
 onMounted(async () => {
   selectedTopic.value = getSelectedTopicId()
-  await startMastery(selectedTopic.value)
+  await ensureLoaded()
+  restoreSlipIfComplete()
+  window.addEventListener('afterprint', afterPrint)
+  if (route.query.print === '1' && isStatisticsPractice.value) {
+    showPrintPacket.value = true
+  }
+  if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
+    await startMastery(selectedTopic.value)
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('afterprint', afterPrint)
 })
 
 watch(() => [route.query.module, route.params.topicId], async () => {
   selectedTopic.value = getSelectedTopicId()
-  await startMastery(selectedTopic.value)
+  batchMode.value = false
+  batchResults.value = []
+  showPrintPacket.value = route.query.print === '1' && isStatisticsPractice.value
+  restoreSlipIfComplete()
+  if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
+    await startMastery(selectedTopic.value)
+  }
 })
 
 watch(preferredSoftware, () => {
@@ -1104,5 +1354,63 @@ watch(currentProblem, async (problem) => {
 
 .incorrect-icon {
   color: #ef4444;
+}
+
+.cr-mode-bar {
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+.cr-mode-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+.batch-q {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+}
+.batch-q label {
+  display: block;
+  margin: 0.25rem 0;
+}
+.batch-text {
+  width: 100%;
+  padding: 0.5rem;
+}
+.batch-result.ok {
+  border-left: 4px solid #059669;
+  padding-left: 0.75rem;
+}
+.batch-result.bad {
+  border-left: 4px solid #dc2626;
+  padding-left: 0.75rem;
+}
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+@media print {
+  .print-hide,
+  .login-prompt,
+  .objectives-tracker,
+  .problem-card,
+  .page-header,
+  .header,
+  .cr-mode-bar {
+    display: none !important;
+  }
+  .printing-packet .container > :not(.print-packet-wrap) {
+    display: none !important;
+  }
+  .printing-slip .container > :not(.completion-slip) {
+    display: none !important;
+  }
 }
 </style>

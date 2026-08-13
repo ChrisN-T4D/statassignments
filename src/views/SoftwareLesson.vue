@@ -1,5 +1,5 @@
 <template>
-  <div class="lesson-page" v-if="lesson">
+  <div class="lesson-page" :class="{ 'print-packet-open': showPrintPacket }" v-if="lesson">
     <div class="container">
       <!-- Lesson Header -->
       <div class="lesson-header">
@@ -10,6 +10,9 @@
         </div>
         <h1>{{ lesson.title }}</h1>
         <p v-if="lesson.overview" class="lesson-overview">{{ lesson.overview }}</p>
+        <div class="print-hide" style="margin: 0.75rem 0;">
+          <button type="button" class="btn-secondary" @click="openPrintPacket">Print packet</button>
+        </div>
         <div class="objectives">
           <h3>Learning Objectives</h3>
           <ul>
@@ -655,10 +658,10 @@
               <h3>Before You Begin</h3>
             </div>
             <ol class="instruction-steps">
-              <li><strong>Start Recording:</strong> Click "Start Recording" below to capture your work. This helps document your process and is useful for getting feedback.</li>
-              <li><strong>Open Dataset:</strong> If the exercise requires data, download and open one of the provided dataset files in {{ lesson.software }}.</li>
-              <li><strong>Complete Exercises:</strong> Work through each objective while your screen is being recorded.</li>
-              <li><strong>Stop When Done:</strong> Stop the recording after completing all exercises and download your video.</li>
+              <li><strong>Start Recording:</strong> Open Tools (right side) and click Start Recording. Use your phone if this device cannot record.</li>
+              <li><strong>Complete You do:</strong> Work through each independent task below while you talk through what you are doing.</li>
+              <li><strong>Stop and download:</strong> Stop the recording and download the video file.</li>
+              <li><strong>Turn it in:</strong> Upload that video to Canvas as <strong>Module {{ lessonModuleNumber }}: Software Practice</strong>. The recording is the deliverable. There is no slip for You do.</li>
             </ol>
           </div>
 
@@ -753,6 +756,21 @@
         </div>
       </div>
     </div>
+    <div v-if="showPrintPacket && lesson" class="print-packet-overlay">
+      <div class="print-hide packet-toolbar">
+        <button type="button" class="btn-primary" @click="printPacketNow">Print / Save PDF</button>
+        <button type="button" class="btn-secondary" @click="showPrintPacket = false">Close packet</button>
+      </div>
+      <SoftwarePrintPacket
+        :lesson-title="lesson.title"
+        :software-label="lesson.software"
+        :module-label="getModuleTitle(lesson.module)"
+        :canvas-assignment-name="canvasSoftwareAssignmentName(lesson)"
+        :learn-sections="buildLearnSections(lesson)"
+        :we-do-steps="buildWeDoSteps(lesson)"
+        :you-do-tasks="lessonExercises"
+      />
+    </div>
   </div>
   <!-- Lesson Not Found -->
   <div v-else class="not-found">
@@ -770,6 +788,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 import { getLessonById } from '../data/softwareLessons'
 import { getModuleById } from '../data/modules'
+import SoftwarePrintPacket from '../components/SoftwarePrintPacket.vue'
+import {
+  buildLearnSections,
+  buildWeDoSteps,
+  canvasSoftwareAssignmentName,
+  moduleNumberFromLesson
+} from '../lib/softwarePrintContent.js'
 import { getGuidesFlat } from '../data/softwareGuides'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { useSoftwareLessonMetrics } from '../composables/useSoftwareLessonMetrics'
@@ -801,6 +826,17 @@ const answers = ref({})
 const submitted = ref(false)
 const score = ref(0)
 const showSummary = ref(false)
+const showPrintPacket = ref(false)
+
+const lessonModuleNumber = computed(() => moduleNumberFromLesson(lesson.value))
+
+function openPrintPacket() {
+  showPrintPacket.value = true
+}
+
+function printPacketNow() {
+  window.print()
+}
 const completedExercises = ref(new Set())
 const showHints = ref({})
 const completionSummary = ref({
@@ -1530,6 +1566,9 @@ onMounted(() => {
   const phaseParam = route.query.phase
   if (phaseParam && ['iDo', 'weDo', 'selfCheck', 'youDo'].includes(phaseParam)) {
     currentPhase.value = phaseParam
+  }
+  if (route.query.print === '1') {
+    showPrintPacket.value = true
   }
 })
 
@@ -2717,31 +2756,27 @@ watch(currentPhase, () => {
 }
 
 @media print {
-  .lesson-page .container > :not(.summary-overlay) {
+  .print-hide {
     display: none !important;
   }
-
+  .lesson-page.print-packet-open .container,
+  .lesson-page.print-packet-open .summary-overlay {
+    display: none !important;
+  }
+  .print-packet-overlay {
+    position: static;
+    background: #fff;
+  }
+  .lesson-page:not(.print-packet-open) .container {
+    display: none !important;
+  }
   .summary-overlay {
     position: static;
     background: transparent;
     padding: 0;
   }
-
-  .summary-card {
-  background: var(--bg-card);
-  padding: 2rem;
-  border-radius: 1rem;
-  width: 100%;
-  max-width: 520px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  color: var(--text-primary);
 }
-
-  .print-hide {
-    display: none !important;
-  }
-}
-\/\* Not Found \*\/
+/* Not Found */
 .not-found {
   min-height: 50vh;
   display: flex;

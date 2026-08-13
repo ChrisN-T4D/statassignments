@@ -477,7 +477,8 @@ export function useInstructorAnalytics() {
           bb_username: row.bb_username,
           bb_id: row.bb_id,
           user: '', // Not claimed yet
-          claimed_at: null
+          claimed_at: null,
+          access_mode: 'online_primary'
         }
 
         if (isDryRun) {

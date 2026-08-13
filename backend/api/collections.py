@@ -219,20 +219,38 @@ def update_record(
     columns = payload_to_columns(collection, payload)
     class_ids = columns.pop("_class_ids", None)
 
-    # Roster claim: non-instructors may only link themselves to an unclaimed row
+    # Students may claim an unclaimed key or change only access_mode on their own row.
+    # They cannot change student_key, usernames, class, or semester.
     claiming = False
     if collection == "roster" and user and user.role not in ("admin", "instructor"):
+        access_mode = columns.get("access_mode")
+        if access_mode is not None and access_mode not in (
+            "online_primary",
+            "offline_primary",
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail="access_mode must be online_primary or offline_primary",
+            )
         new_user_id = columns.get("user_id")
-        if row.user_id:
+        owns = bool(row.user_id) and str(row.user_id) == str(user.id)
+        is_claim = (not row.user_id) and new_user_id and str(new_user_id) == str(user.id)
+        if is_claim:
+            columns.pop("class_id", None)
+            columns.pop("semester_id", None)
+            columns.pop("student_key", None)
+            columns.pop("bb_username", None)
+            columns.pop("bb_id", None)
+            columns["user_id"] = str(user.id)
+            claiming = True
+        elif owns:
+            columns = {}
+            if access_mode is not None:
+                columns["access_mode"] = access_mode
+        elif row.user_id:
             raise HTTPException(status_code=400, detail="This student key has already been claimed")
-        if not new_user_id or str(new_user_id) != str(user.id):
+        else:
             raise HTTPException(status_code=403, detail="Can only claim a roster key for yourself")
-        # Students cannot change class or semester during claim
-        columns.pop("class_id", None)
-        columns.pop("semester_id", None)
-        columns.pop("student_key", None)
-        columns["user_id"] = str(user.id)
-        claiming = True
 
     if collection == "users" and "password" in columns:
         columns["password_hash"] = hash_password(columns.pop("password"))

@@ -4,6 +4,80 @@
  */
 
 export const METHODS_MARKET_BASE = 'https://methods-market.clneu.com'
+export const STATISTICS_CLASS = 'statistics'
+/** Graded online section — source shell for copy. */
+export const CANVAS_STATISTICS_ONLINE_COURSE_ID = 3177
+/** In-person section shell — set after you create/find the course; used by copy script. */
+export const CANVAS_STATISTICS_INPERSON_COURSE_ID = 2405
+/** @deprecated use CANVAS_STATISTICS_ONLINE_COURSE_ID */
+export const CANVAS_STATISTICS_COURSE_ID = CANVAS_STATISTICS_ONLINE_COURSE_ID
+export const CANVAS_STATISTICS_ASSIGNMENT_HELP_URL =
+  `${METHODS_MARKET_BASE}/class/statistics/assignment-help`
+
+export function benchmarkPracticePath (slug) {
+  return `/class/${STATISTICS_CLASS}/assignment-help/${slug}/practice`
+}
+
+export function benchmarkAssignmentHelpPath (slug) {
+  return `/class/${STATISTICS_CLASS}/assignment-help/${slug}`
+}
+
+export function fullUrl (path) {
+  return `${METHODS_MARKET_BASE}${path}`
+}
+
+/** Benchmark practice tests (formative; modules 1–3, 4–6, 7–8). */
+export const STATISTICS_BENCHMARK_LINKS = [
+  {
+    slug: 'benchmark-1',
+    title: 'Benchmark 1 (Modules 1–3)',
+    modulesLabel: 'Chapters 1–3',
+    moduleIds: ['stats-module-1', 'stats-module-2', 'stats-module-3'],
+    questionCount: 15,
+    practiceUrl: fullUrl(benchmarkPracticePath('benchmark-1')),
+    helpUrl: fullUrl(benchmarkAssignmentHelpPath('benchmark-1'))
+  },
+  {
+    slug: 'benchmark-2',
+    title: 'Benchmark 2 (Modules 4–5)',
+    modulesLabel: 'Chapters 4–5',
+    moduleIds: ['stats-module-4', 'stats-module-5'],
+    questionCount: 30,
+    practiceUrl: fullUrl(benchmarkPracticePath('benchmark-2')),
+    helpUrl: fullUrl(benchmarkAssignmentHelpPath('benchmark-2'))
+  },
+  {
+    slug: 'final-benchmark',
+    title: 'Final Benchmark (Modules 6–8)',
+    modulesLabel: 'Chapters 6–8',
+    moduleIds: ['stats-module-6', 'stats-module-7', 'stats-module-8'],
+    questionCount: 36,
+    practiceUrl: fullUrl(benchmarkPracticePath('final-benchmark')),
+    helpUrl: fullUrl(benchmarkAssignmentHelpPath('final-benchmark'))
+  }
+]
+
+export function getStatisticsBenchmarkLink (slug) {
+  return STATISTICS_BENCHMARK_LINKS.find((b) => b.slug === slug) ?? null
+}
+
+export function benchmarkPracticeAssignment (slug) {
+  const bench = getStatisticsBenchmarkLink(slug)
+  if (!bench) return null
+  return {
+    id: slug,
+    name: `${bench.title} (Methods Market)`,
+    type: 'benchmark',
+    methodsMarketPath: benchmarkPracticePath(slug),
+    tips: [
+      `Covers ${bench.modulesLabel}: complete Concept Review for those modules before the benchmark.`,
+      `You will get ${bench.questionCount} questions; harder topics appear more often if practice data shows you are still learning them.`,
+      'At the end you get a score and links to review topics you missed.'
+    ],
+    getHelp:
+      'Open the benchmark below after finishing Concept Review for the listed modules. Sign in and link your student key so practice is tracked. Canvas records completion; your score is shown in Methods Market when you finish.'
+  }
+}
 
 export function conceptReviewPath (moduleNum) {
   return `/class/statistics/practice?module=stats-module-${moduleNum}`
@@ -15,10 +89,6 @@ export function softwarePracticePath (moduleNum) {
 
 export function classHomeTabPath (moduleNum, tab) {
   return `/class/statistics?module=stats-module-${moduleNum}&tab=${tab}`
-}
-
-export function fullUrl (path) {
-  return `${METHODS_MARKET_BASE}${path}`
 }
 
 /** Modules 3–8 include software practice lessons; 1–2 are concept review only. */
@@ -35,10 +105,10 @@ export function conceptReviewAssignment (moduleNum) {
     tips: [
       'Sign in to Methods Market with your course profile so practice attempts are tracked.',
       'Answer every concept review question for this module — work until you understand each learning objective.',
-      'Read the module Topics first if a question references vocabulary you have not seen yet.'
+      'When you finish, print or save the completion slip and upload it to this Canvas assignment for credit.'
     ],
     getHelp:
-      'Open the link below, complete Concept Review for this module, then mark the Canvas assignment complete. Use Assignment Help for other weekly work, or post in the module discussion / office hours if you are stuck on specific items.'
+      'Open the link below, complete Concept Review for this module, then print or save the completion slip and upload it to Canvas. Use Assignment Help for other weekly work, or post in the module discussion / office hours if you are stuck on specific items.'
   }
 }
 
@@ -50,11 +120,11 @@ export function softwarePracticeAssignment (moduleNum) {
     methodsMarketPath: softwarePracticePath(moduleNum),
     tips: [
       'Set your preferred statistical software in Methods Market (Jamovi, SPSS, R, Excel, or Stata) before you start.',
-      'For each lesson: complete Learn, then Practice, then Apply (finish all steps in the module).',
-      'Your Canvas Jamovi assignments use the same datasets and skills — use Software Practice to prepare.'
+      'Complete Learn (I do) and Practice (We do). For Apply (You do), record with Tools and upload the video to Canvas.',
+      'The You do recording is the Canvas deliverable. There is no slip for Software Practice.'
     ],
     getHelp:
-      'Open the link below and finish the Software Practice lessons for this module. If a step does not match your software, switch software in your profile or ask in office hours.'
+      'Open Software Practice for this module. Finish I do and We do, record You do (Tools or phone), then upload the video to the Canvas Software Practice assignment.'
   }
 }
 

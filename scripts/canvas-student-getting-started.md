@@ -48,16 +48,11 @@
 <h2>Each week — how assignments work</h2>
 <ol>
   <li>Open the <strong>module</strong> for the current week in Canvas.</li>
-  <li>Click the Methods Market link(s), for example:
-    <ul>
-      <li><strong>Module N: Concept Review (Methods Market)</strong> — multiple-choice practice on ideas from lecture and readings.</li>
-      <li><strong>Module N: Software Practice (Methods Market)</strong> — hands-on steps in jamovi, R, SPSS, Excel, or Stata (modules 3–8).</li>
-    </ul>
-  </li>
-  <li>Complete the activity in Methods Market (sign in if prompted).</li>
-  <li>Return to Canvas and mark the assignment <strong>Done</strong> or submit per your instructor’s instructions.</li>
+  <li>On your Methods Market <strong>Profile</strong>, choose <strong>Online primary</strong> (interactive) or <strong>Offline primary</strong> (print packets). Change this if your internet situation changes.</li>
+  <li><strong>Concept Review:</strong> complete it in Methods Market (or print the packet, then use Enter answers). Print or save the <strong>completion slip</strong> and upload it to the Canvas assignment <em>Module N: Concept Review (Methods Market)</em>.</li>
+  <li><strong>Software Practice</strong> (Modules 3–8): finish I do and We do in Methods Market (or the print packet). Record <strong>You do</strong> with Tools (or your phone). Upload that <strong>video</strong> to Canvas <em>Module N: Software Practice (Methods Market)</em>. You do does not use a slip.</li>
 </ol>
-<p><strong>Note:</strong> Canvas does not automatically know when you finish in Methods Market. You are responsible for completing both places.</p>
+<p><strong>Note:</strong> Canvas does not automatically know when you finish in Methods Market. Credit comes from the slip (Concept Review) or the You do recording (Software Practice).</p>
 
 <h2>Concept Review vs Software Practice</h2>
 <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="8">
@@ -71,12 +66,12 @@
   <tbody>
     <tr>
       <td><strong>Concept Review</strong></td>
-      <td>Answer quiz questions; read feedback after each item.</td>
+      <td>Answer quiz questions (online) or print the packet and enter all answers later. Upload the completion slip to Canvas.</td>
       <td>Modules 1–8</td>
     </tr>
     <tr>
       <td><strong>Software Practice</strong></td>
-      <td>Follow guided steps in statistical software (choose jamovi, R, etc.).</td>
+      <td>I do / We do in Methods Market (or print packet). Record You do and upload the video to Canvas.</td>
       <td>Modules 3–8 only</td>
     </tr>
   </tbody>
@@ -133,8 +128,9 @@ Distribute in class or attach to a Canvas announcement.
 #### Every week
 
 1. Open this week’s **Canvas module**  
-2. Click **Concept Review** and/or **Software Practice** (Methods Market)  
-3. Finish the activity, then mark **Done** in Canvas  
+2. On Profile, pick **Online primary** or **Offline primary**  
+3. **Concept Review:** finish in Methods Market, upload the **completion slip** to Canvas  
+4. **Software Practice** (Modules 3–8): I do / We do, then record **You do** and upload the **video** to Canvas  
 
 #### Help
 

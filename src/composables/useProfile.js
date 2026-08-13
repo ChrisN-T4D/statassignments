@@ -12,6 +12,25 @@ export function useProfile() {
   const studentKey = computed(() => profile.value?.student_key || null)
   const semesterId = computed(() => profile.value?.semester || null)
 
+  async function setAccessMode(mode) {
+    if (!profile.value?.id) {
+      throw new Error('Link your student key before changing access mode')
+    }
+    if (mode !== 'online_primary' && mode !== 'offline_primary') {
+      throw new Error('Invalid access mode')
+    }
+    loading.value = true
+    try {
+      const updated = await pb.collection('roster').update(profile.value.id, {
+        access_mode: mode
+      })
+      profile.value = { ...profile.value, ...updated }
+      return profile.value
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function fetchProfile() {
     if (!user.value) {
       profile.value = null
@@ -143,6 +162,7 @@ export function useProfile() {
     studentKey,
     semesterId,
     fetchProfile,
+    setAccessMode,
     claimProfile,
     claimByStudentKey,
     clearProfile
