@@ -146,6 +146,18 @@ const router = createRouter({
 const { user: authUser } = useAuth()
 
 router.beforeEach((to, from, next) => {
+  // Legacy Canvas links: /practice?module=module-N → class statistics concept review
+  if (to.path === '/practice' && to.query.module && !to.params.classId) {
+    const raw = String(to.query.module)
+    const statsModule = raw.startsWith('stats-module-')
+      ? raw
+      : raw.startsWith('module-')
+        ? raw.replace('module-', 'stats-module-')
+        : `stats-module-${raw}`
+    next({ path: '/class/statistics/practice', query: { ...to.query, module: statsModule } })
+    return
+  }
+
   const isAuthenticated = pb.authStore.isValid
   const userRole = authUser.value?.role
 
@@ -153,6 +165,10 @@ router.beforeEach((to, from, next) => {
     const cid = to.params.classId
     if (!classHasDataAnalysisTool(cid)) {
       next(cid ? `/class/${cid}` : '/')
+      return
+    }
+    if (cid === 'research-methods' || cid === 'experimental') {
+      next({ path: `/class/${cid}`, query: { module: 'rm-module-data-by-path' } })
       return
     }
   }
@@ -169,8 +185,8 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // Check if route requires instructor role
-  if (to.meta.requiresInstructor && userRole !== 'instructor') {
+  // Check if route requires instructor role (admins manage rosters too)
+  if (to.meta.requiresInstructor && userRole !== 'instructor' && userRole !== 'admin') {
     next('/')
     return
   }

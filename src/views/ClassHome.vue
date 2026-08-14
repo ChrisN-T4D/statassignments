@@ -7,26 +7,132 @@
         <div class="class-info">
           <h1>{{ getClassDisplayName(currentClass) }}</h1>
           <p>{{ currentClass.description }}</p>
+          <p v-if="isPsychMethodsClass" class="class-canvas-note">
+            Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
+            Methods Market is for chapter reading, concept review, and assignment help only.
+          </p>
           <div class="header-links">
-            <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-              Stuck on an assignment? Get help →
-            </router-link>
-            <span class="header-links-sep">·</span>
+            <template v-if="isResearchMethodsClass">
+              <a
+                :href="CANVAS_RM_GETTING_STARTED_URL"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="assignment-help-link"
+              >
+                Canvas: how to use Methods Market ↗
+              </a>
+              <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Canvas assignments → chapter help
+              </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
+            <template v-else-if="!isPsychMethodsClass">
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Stuck on an assignment? Get help →
+              </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
             <span class="header-links-sep">·</span>
             <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
             <template v-if="showDataAnalysisNav">
               <span class="header-links-sep">·</span>
-              <router-link :to="`/class/${classId}/data-analysis`" class="assignment-help-link">Analyze your data</router-link>
+              <router-link
+                :to="{ path: `/class/${classId}`, query: { module: RM_MODULE_DATA_BY_PATH_ID } }"
+                class="assignment-help-link"
+              >
+                {{ isExperimentalClass ? 'Statistics &amp; analyze data' : 'Statistics &amp; analyze data by path' }}
+              </router-link>
             </template>
           </div>
         </div>
       </div>
 
+      <!-- Research Methods: student onboarding -->
+      <section
+        v-if="isResearchMethodsClass"
+        id="getting-started"
+        class="rm-getting-started"
+        aria-labelledby="rm-getting-started-title"
+      >
+        <h2 id="rm-getting-started-title">How to use Methods Market in this course</h2>
+        <p class="rm-getting-started-lead">
+          <strong>Canvas</strong> has your capstone deadlines, groups, and graded work.
+          <strong>Methods Market</strong> is where you read chapters and practice concepts.
+        </p>
+        <ol class="rm-getting-started-steps">
+          <li>
+            <router-link to="/auth">Create an account</router-link> or sign in, then
+            <router-link to="/claim">link your student key</router-link> from your instructor (one time).
+          </li>
+          <li>
+            Check <strong>Canvas</strong> for which chapter to read this week
+            (<a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer">full walkthrough ↗</a>).
+          </li>
+          <li>
+            Pick a <strong>part</strong> tab, then a <strong>chapter</strong> → <strong>Topics</strong> to read → <strong>Concept Review</strong> to practice.
+          </li>
+          <li>
+            Stuck on a Canvas assignment?
+            <router-link :to="`/class/${classId}/assignment-help`">Open Assignment Help</router-link>.
+          </li>
+        </ol>
+        <div class="rm-getting-started-links">
+          <a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
+            Canvas setup guide ↗
+          </a>
+        </div>
+      </section>
+
       <!-- Module Navigation -->
       <div class="module-nav">
-        <h2 class="section-title">Course Modules</h2>
-        <div class="module-list">
+        <h2 class="section-title">
+          {{ isPsychMethodsClass ? 'Course content' : 'Course Modules' }}
+        </h2>
+
+        <template v-if="isPsychMethodsClass">
+          <div class="part-tabs" role="tablist" :aria-label="isExperimentalClass ? 'Course sections' : 'Canvas course parts'">
+            <button
+              v-for="part in psychMethodsModuleGroups"
+              :key="part.id"
+              :id="`part-tab-${part.id}`"
+              type="button"
+              role="tab"
+              class="part-tab"
+              :class="{ active: activePartId === part.id }"
+              :aria-selected="activePartId === part.id"
+              @click="selectPart(part.id)"
+            >
+              <span class="part-tab-label">{{ part.label }}</span>
+              <span class="part-tab-title">{{ part.title }}</span>
+            </button>
+          </div>
+          <div
+            v-if="activePartGroup"
+            class="part-panel"
+            role="tabpanel"
+            :aria-labelledby="`part-tab-${activePartGroup.id}`"
+          >
+            <p v-if="activePartGroup.description" class="module-part-desc">{{ activePartGroup.description }}</p>
+            <div class="module-list">
+              <button
+                v-for="mod in activePartGroup.modules"
+                :key="mod.id"
+                class="module-btn"
+                :class="{ active: selectedModuleId === mod.id }"
+                :style="{ '--module-color': mod.color }"
+                @click="selectModule(mod.id)"
+              >
+                <span class="module-icon">{{ mod.icon }}</span>
+                <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
+                <span class="module-title">{{ getModuleDisplayShortTitle(mod) }}</span>
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <div v-else class="module-list">
           <button
             v-for="mod in contentModules"
             :key="mod.id"
@@ -48,6 +154,9 @@
           <div class="module-header-icon">{{ selectedModule.icon }}</div>
           <div class="module-header-info">
             <h2>
+              <span v-if="selectedModule.canvasPart" class="module-canvas-part-label">
+                {{ selectedModule.canvasPart }} —
+              </span>
               <span v-if="selectedModule.number">Module {{ selectedModule.number }}: </span>
               {{ getModuleDisplayTitle(selectedModule) }}
             </h2>
@@ -74,13 +183,8 @@
           </ul>
         </div>
 
-        <!-- Analyze your data (dedicated module tab; jamovi / SPSS / Excel) -->
-        <div v-if="isDataAnalysisModule" class="data-analysis-module-panel">
-          <DataAnalysisHelper :class-id="classId" embedded />
-        </div>
-
-        <!-- Module Progress -->
-        <div v-if="!isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
+        <!-- Path data section: Ch. 12–13 + analyze tool by methodology path -->
+        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
             <span>Module progress</span>
             <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
@@ -96,7 +200,7 @@
         </div>
 
         <!-- Content Tabs -->
-        <div v-if="!isDataAnalysisModule" class="content-tabs">
+        <div v-if="!isDataAnalysisModule && showContentTabs" class="content-tabs">
           <button
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
@@ -114,11 +218,84 @@
 
         <!-- Tab Content -->
         <div v-if="!isDataAnalysisModule" class="tab-content">
+          <!-- Statistics & analysis by methodology path (Ch. 12, 13, analyze tool) -->
+          <template v-if="isPathDataSectionModule">
+            <div
+              v-for="path in activeMethodPaths"
+              v-show="showMethodPathTabs ? activeContentTab === path.id : true"
+              :key="path.id"
+              class="tab-panel path-data-panel"
+            >
+              <p class="path-data-intro">{{ path.statsIntro }}</p>
+
+              <section class="path-chapters-section">
+                <h3 class="path-section-title">Chapters</h3>
+                <div class="path-chapter-cards">
+                  <article class="path-chapter-card">
+                    <h4>Ch. 12 — Descriptive Statistics</h4>
+                    <p>{{ path.chapterFocus[12] }}</p>
+                    <div class="path-chapter-actions">
+                      <router-link :to="`/topic/rm-chapter-12`" class="path-chapter-link">
+                        Read chapter →
+                      </router-link>
+                      <router-link
+                        :to="`/class/${classId}/practice?module=rm-module-12`"
+                        class="path-chapter-link path-chapter-link-secondary"
+                      >
+                        Concept review →
+                      </router-link>
+                    </div>
+                  </article>
+                  <article class="path-chapter-card">
+                    <h4>Ch. 13 — Inferential Statistics</h4>
+                    <p>{{ path.chapterFocus[13] }}</p>
+                    <div class="path-chapter-actions">
+                      <router-link :to="`/topic/rm-chapter-13`" class="path-chapter-link">
+                        Read chapter →
+                      </router-link>
+                      <router-link
+                        :to="`/class/${classId}/practice?module=rm-module-13`"
+                        class="path-chapter-link path-chapter-link-secondary"
+                      >
+                        Concept review →
+                      </router-link>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="path-analyze-section">
+                <h3 class="path-section-title">Analyze your data</h3>
+                <DataAnalysisHelper
+                  :key="path.id"
+                  :class-id="classId"
+                  :method-path-id="path.id"
+                  embedded
+                />
+              </section>
+            </div>
+          </template>
+
+          <template v-else>
           <!-- Lab module: Sampling / Assignment as main tabs -->
           <div
             v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
             class="tab-panel"
           >
+            <router-link
+              v-if="conceptReviewQuestionCount > 0"
+              :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}`"
+              class="practice-link-card lab-concept-review-card"
+            >
+              <div class="link-card-icon">
+                <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Lab Concept Review</h3>
+                <p>Quiz on random assignment, sampling methods, and validity — after the simulations below.</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </router-link>
             <ExperimentalSamplingSimulation :embed-tab="labMiniLabEmbedTab" />
           </div>
 
@@ -199,6 +376,14 @@
               </div>
               <span class="card-arrow">-></span>
             </router-link>
+            <p v-if="!isResearchMethodsClass" class="print-hide" style="margin-top: 0.75rem;">
+              <router-link
+                class="btn-secondary"
+                :to="`/class/${classId}/practice?module=${selectedModuleId}&print=1`"
+              >
+                Print Concept Review packet
+              </router-link>
+            </p>
           </div>
 
           <!-- Software Practice Tab (one lesson per module, like Module 8; lesson may have multiple learn sections) -->
@@ -309,11 +494,20 @@
                   <span class="card-arrow">→</span>
                 </span>
               </div>
+              <p class="print-hide" style="margin-top: 0.75rem;">
+                <router-link
+                  class="btn-secondary"
+                  :to="`/class/${classId}/lesson/${moduleLesson.id}?print=1`"
+                >
+                  Print Software Practice packet
+                </router-link>
+              </p>
             </div>
             <div v-else class="empty-state">
               <p>No software lessons available for this module yet.</p>
             </div>
           </div>
+          </template>
         </div>
       </div>
 
@@ -385,6 +579,8 @@ import {
   getModuleItemsWithChapters,
   classHasDataAnalysisTool
 } from '../data/modules'
+import { groupModulesByCanvasPart, METHOD_PATHS_LIST, getMethodPathById } from '../data/researchMethodsTextbook'
+import { isPsychMethodsCourse } from '../data/psychMethodsCourses'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { getLessonsByModule } from '../data/softwareLessons'
@@ -397,21 +593,43 @@ import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSi
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
+import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated, user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
-const { hasProfile } = useProfile()
+const { hasProfile, fetchProfile } = useProfile()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
+
+const isResearchMethodsClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'research-methods'
+})
+
+const isExperimentalClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'experimental'
+})
+
+const isPsychMethodsClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return isPsychMethodsCourse(slug)
+})
+
 const selectedModuleId = ref(null)
+const activePartId = ref(null)
 const activeContentTab = ref('topics')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
 const showModule8Selector = ref(false)
 
 const RM_MODULE_LAB_ID = 'rm-module-lab'
+const RM_MODULE_DATA_BY_PATH_ID = 'rm-module-data-by-path'
+const RM_LEGACY_DATA_MODULE_IDS = ['rm-module-12', 'rm-module-13', 'rm-module-analyze-data']
+
+const methodPathList = METHOD_PATHS_LIST
 
 const standardContentTabs = [
   { id: 'topics', label: 'Topics', iconSrc: '/topic-icon.png' },
@@ -419,14 +637,43 @@ const standardContentTabs = [
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
 
+const VALID_CONTENT_TAB_IDS = new Set(['topics', 'concepts', 'software'])
+
 const labModuleContentTabs = [
   { id: 'lab-sampling', label: 'Sampling', iconSrc: '/topic-icon.png' },
   { id: 'lab-assignment', label: 'Assignment', iconSrc: '/content-review-icon.png' }
 ]
 
-const effectiveContentTabs = computed(() =>
-  selectedModuleId.value === RM_MODULE_LAB_ID ? labModuleContentTabs : standardContentTabs
-)
+const methodPathContentTabs = methodPathList.map((path) => ({
+  id: path.id,
+  label: path.shortLabel,
+  iconSrc: '/content-review-icon.png'
+}))
+
+const effectiveContentTabs = computed(() => {
+  if (selectedModuleId.value === RM_MODULE_LAB_ID) return labModuleContentTabs
+  if (selectedModuleId.value === RM_MODULE_DATA_BY_PATH_ID && showMethodPathTabs.value) {
+    return methodPathContentTabs
+  }
+  return standardContentTabs
+})
+
+const showMethodPathTabs = computed(() => !selectedModule.value?.fixedMethodPathId)
+
+const activeMethodPaths = computed(() => {
+  const fixedId = selectedModule.value?.fixedMethodPathId
+  if (fixedId) {
+    const path = getMethodPathById(fixedId)
+    return path ? [{ ...path, id: fixedId }] : []
+  }
+  return methodPathList
+})
+
+const showContentTabs = computed(() => {
+  if (isDataAnalysisModule.value) return false
+  if (isPathDataSectionModule.value && !showMethodPathTabs.value) return false
+  return true
+})
 
 const labMiniLabEmbedTab = computed(() =>
   activeContentTab.value === 'lab-assignment' ? 'assignment' : 'sampling'
@@ -454,6 +701,44 @@ const contentModules = computed(() => {
   return getContentModulesByClass(slug)
 })
 
+const psychMethodsModuleGroups = computed(() => {
+  if (!isPsychMethodsClass.value) return []
+  const slug = currentClass.value?.slug || classId.value
+  return groupModulesByCanvasPart(contentModules.value, slug)
+})
+
+const activePartGroup = computed(() => {
+  const groups = psychMethodsModuleGroups.value
+  if (!groups.length) return null
+  return groups.find((p) => p.id === activePartId.value) ?? groups[0]
+})
+
+function partIdForModule(moduleId) {
+  if (!moduleId) return null
+  for (const part of psychMethodsModuleGroups.value) {
+    if (part.modules.some((m) => m.id === moduleId)) return part.id
+  }
+  return null
+}
+
+function syncActivePartFromModule() {
+  if (!isPsychMethodsClass.value) return
+  const partId = partIdForModule(selectedModuleId.value)
+  if (partId) {
+    activePartId.value = partId
+  } else if (psychMethodsModuleGroups.value.length && !activePartId.value) {
+    activePartId.value = psychMethodsModuleGroups.value[0].id
+  }
+}
+
+function selectPart(partId) {
+  activePartId.value = partId
+  const part = psychMethodsModuleGroups.value.find((p) => p.id === partId)
+  if (!part?.modules?.length) return
+  const moduleInPart = part.modules.some((m) => m.id === selectedModuleId.value)
+  if (!moduleInPart) selectModule(part.modules[0].id)
+}
+
 const selectedModule = computed(() => {
   return classModules.value.find(m => m.id === selectedModuleId.value)
 })
@@ -461,6 +746,11 @@ const selectedModule = computed(() => {
 const isDataAnalysisModule = computed(() => {
   const mod = selectedModule.value
   return !!(mod && mod.isDataAnalysisTool)
+})
+
+const isPathDataSectionModule = computed(() => {
+  const mod = selectedModule.value
+  return !!(mod && mod.isPathDataSection)
 })
 
 // Get topics for the selected module
@@ -768,13 +1058,25 @@ function getTabCount(tabId) {
 }
 
 function selectModule(moduleId) {
+  if (RM_LEGACY_DATA_MODULE_IDS.includes(moduleId)) {
+    moduleId = RM_MODULE_DATA_BY_PATH_ID
+  }
   selectedModuleId.value = moduleId
-  activeContentTab.value = moduleId === RM_MODULE_LAB_ID ? 'lab-sampling' : 'topics'
+  if (moduleId === RM_MODULE_LAB_ID) {
+    activeContentTab.value = 'lab-sampling'
+  } else if (moduleId === RM_MODULE_DATA_BY_PATH_ID) {
+    const mod = contentModules.value.find(m => m.id === moduleId)
+    activeContentTab.value =
+      mod?.fixedMethodPathId || methodPathList[0]?.id || 'path-1-survey'
+  } else {
+    activeContentTab.value = 'topics'
+  }
 
   // Show Module 8 selector if customization not completed
   if (moduleId === 'stats-module-8' && !module8Prefs.hasCompletedSelection.value) {
     showModule8Selector.value = true
   }
+  syncActivePartFromModule()
 }
 
 function openModule8Selector() {
@@ -800,10 +1102,21 @@ function toStatsModuleId(value) {
 function syncSelectedModuleFromQuery() {
   const queryModule = normalizeRouteValue(route.query.module)
   if (!queryModule) return
-  const moduleId = toStatsModuleId(queryModule)
+  let moduleId = toStatsModuleId(queryModule)
+  if (RM_LEGACY_DATA_MODULE_IDS.includes(moduleId)) {
+    moduleId = RM_MODULE_DATA_BY_PATH_ID
+  }
   if (contentModules.value.find(mod => mod.id === moduleId)) {
     selectedModuleId.value = moduleId
+    syncActivePartFromModule()
   }
+}
+
+function syncContentTabFromQuery() {
+  const tab = normalizeRouteValue(route.query.tab)
+  if (!tab || !VALID_CONTENT_TAB_IDS.has(tab)) return
+  if (tab === 'software' && !hasSoftwareLessons.value) return
+  activeContentTab.value = tab
 }
 
 function getSoftwareColor(softwareId) {
@@ -880,11 +1193,19 @@ function getSectionCount(lesson, phase) {
 }
 
 // Set default module when class modules load
+function defaultModuleIdForClass(slug) {
+  if (slug === 'research-methods') return 'rm-module-1'
+  if (slug === 'experimental') return 'rm-module-4'
+  return contentModules.value[0]?.id ?? null
+}
+
 function setDefaultModule() {
+  const slug = currentClass.value?.slug || classId.value
   if (contentModules.value.length > 0 && !selectedModuleId.value) {
-    const firstId = contentModules.value[0].id
+    const firstId = defaultModuleIdForClass(slug) || contentModules.value[0].id
     selectedModuleId.value = firstId
     activeContentTab.value = firstId === RM_MODULE_LAB_ID ? 'lab-sampling' : 'topics'
+    syncActivePartFromModule()
   }
 }
 
@@ -902,16 +1223,22 @@ onMounted(async () => {
     selectClass(classId.value)
     setDefaultModule()
     syncSelectedModuleFromQuery()
+    syncContentTabFromQuery()
   }
   refreshReadTopics()
+  if (isAuthenticated.value) {
+    await fetchProfile()
+  }
 })
 
 watch(classId, (newId) => {
   if (newId) {
     selectClass(newId)
-    selectedModuleId.value = null // Reset module selection
+    selectedModuleId.value = null
+    activePartId.value = null
     setDefaultModule()
     syncSelectedModuleFromQuery()
+    syncContentTabFromQuery()
   }
   refreshReadTopics()
 })
@@ -920,12 +1247,17 @@ watch(classId, (newId) => {
 watch(contentModules, () => {
   setDefaultModule()
   syncSelectedModuleFromQuery()
+  syncContentTabFromQuery()
   refreshReadTopics()
 })
 
 watch(() => route.query.module, () => {
   syncSelectedModuleFromQuery()
   refreshReadTopics()
+})
+
+watch(() => route.query.tab, () => {
+  syncContentTabFromQuery()
 })
 
 watch(() => route.fullPath, () => {
@@ -938,7 +1270,22 @@ watch(selectedModuleId, id => {
     if (activeContentTab.value !== 'lab-sampling' && activeContentTab.value !== 'lab-assignment') {
       activeContentTab.value = 'lab-sampling'
     }
-  } else if (activeContentTab.value === 'lab-sampling' || activeContentTab.value === 'lab-assignment') {
+  } else if (id === RM_MODULE_DATA_BY_PATH_ID) {
+    const mod = contentModules.value.find(m => m.id === id)
+    const defaultPath = mod?.fixedMethodPathId || methodPathList[0]?.id || 'path-1-survey'
+    if (activeContentTab.value !== defaultPath && showMethodPathTabs.value) {
+      const pathTabIds = methodPathList.map((p) => p.id)
+      if (!pathTabIds.includes(activeContentTab.value)) {
+        activeContentTab.value = defaultPath
+      }
+    } else if (!showMethodPathTabs.value) {
+      activeContentTab.value = defaultPath
+    }
+  } else if (
+    activeContentTab.value === 'lab-sampling' ||
+    activeContentTab.value === 'lab-assignment' ||
+    methodPathList.some((p) => p.id === activeContentTab.value)
+  ) {
     activeContentTab.value = 'topics'
   }
 })
@@ -1014,6 +1361,85 @@ watch(selectedModuleId, id => {
   margin: 0 0.15rem;
 }
 
+.class-canvas-note {
+  margin: 0.35rem 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 42rem;
+  line-height: 1.5;
+}
+
+/* Path-based statistics & analysis section */
+.path-data-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.path-data-intro {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  max-width: 46rem;
+}
+
+.path-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.path-chapter-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.path-chapter-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.125rem;
+  background: var(--bg-card);
+}
+
+.path-chapter-card h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9375rem;
+}
+
+.path-chapter-card p {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.path-chapter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.path-chapter-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.path-chapter-link:hover {
+  text-decoration: underline;
+}
+
+.path-chapter-link-secondary {
+  color: var(--text-secondary);
+}
+
+.path-analyze-section {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
 /* Section Title */
 .section-title {
   font-size: 1.125rem;
@@ -1025,6 +1451,86 @@ watch(selectedModuleId, id => {
 /* Module Navigation */
 .module-nav {
   margin-bottom: 2rem;
+}
+
+.part-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.part-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0.625rem 1rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  min-width: 8.5rem;
+  flex: 1 1 auto;
+  max-width: 14rem;
+}
+
+.part-tab:hover {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 5%, var(--bg-card));
+}
+
+.part-tab.active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--bg-card));
+}
+
+.part-tab-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.part-tab-title {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.part-tab.active .part-tab-title {
+  color: var(--text-primary);
+}
+
+.part-panel {
+  margin-top: 0.25rem;
+}
+
+.module-part-group {
+  margin-bottom: 1.5rem;
+}
+
+.module-part-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem 0;
+  color: var(--text-primary);
+}
+
+.module-part-desc {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 42rem;
+  line-height: 1.5;
+}
+
+.module-canvas-part-label {
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .module-list {
@@ -1123,6 +1629,57 @@ watch(selectedModuleId, id => {
   margin: 0;
   color: var(--text-secondary);
   font-size: 0.9375rem;
+}
+
+.lab-concept-review-card {
+  margin-bottom: 1.25rem;
+}
+
+.rm-getting-started {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.rm-getting-started h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+}
+
+.rm-getting-started-lead {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.rm-getting-started-steps {
+  margin: 0 0 1rem 0;
+  padding-left: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.rm-getting-started-steps li + li {
+  margin-top: 0.35rem;
+}
+
+.rm-getting-started-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.rm-quick-link {
+  font-size: 0.875rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.rm-quick-link:hover {
+  text-decoration: underline;
 }
 
 /* Learning Objectives */

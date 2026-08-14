@@ -47,6 +47,28 @@ export function filterAnalyses (choices) {
   })
 }
 
+/** Analyses recommended for a Canvas methodology path (Path 1–4). */
+export function getAnalysesForMethodPath (pathId) {
+  return ANALYSES.filter((a) => a.methodPaths?.includes(pathId))
+}
+
+export function filterAnalysesForPath (pathId, choices) {
+  const pool = getAnalysesForMethodPath(pathId)
+  if (!choices || (!choices.variableMain && !choices.goal)) {
+    return pool
+  }
+  return pool.filter((a) => {
+    const c = a.criteria
+    if (choices.variableMain && c.variableMain && !c.variableMain.includes(choices.variableMain)) {
+      return false
+    }
+    if (choices.goal && c.goals && !c.goals.includes(choices.goal)) {
+      return false
+    }
+    return true
+  })
+}
+
 function steps (...lines) {
   return lines
 }
@@ -66,6 +88,7 @@ export const ANALYSES = [
       variableMain: ['numeric', 'categorical'],
       goals: ['describe']
     },
+    methodPaths: ['path-1-survey', 'path-2-qualitative', 'path-3-experimental', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-descriptive-stats',
@@ -114,6 +137,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['one_sample']
     },
+    methodPaths: ['path-3-experimental'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -161,6 +185,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['two_independent']
     },
+    methodPaths: ['path-1-survey', 'path-3-experimental', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -207,6 +232,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['paired']
     },
+    methodPaths: ['path-3-experimental'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -251,6 +277,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['three_plus_groups']
     },
+    methodPaths: ['path-3-experimental'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -297,6 +324,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['correlation']
     },
+    methodPaths: ['path-1-survey', 'path-3-experimental', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -341,6 +369,7 @@ export const ANALYSES = [
       variableMain: ['numeric'],
       goals: ['simple_regression']
     },
+    methodPaths: ['path-1-survey', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -385,6 +414,7 @@ export const ANALYSES = [
       variableMain: ['categorical'],
       goals: ['chi_gof']
     },
+    methodPaths: ['path-1-survey', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',
@@ -429,6 +459,7 @@ export const ANALYSES = [
       variableMain: ['categorical'],
       goals: ['chi_independence']
     },
+    methodPaths: ['path-1-survey', 'path-4-archival'],
     relatedLessonLinks: [
       {
         lessonId: 'jamovi-module-8-unified',

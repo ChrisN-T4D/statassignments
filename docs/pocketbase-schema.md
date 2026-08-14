@@ -56,21 +56,12 @@ Courses/classes that organize all content.
     "is_active": true
   },
   {
-    "name": "Statistics for Assessment",
-    "short_name": "S4A",
-    "description": "Statistical methods for psychological assessment",
-    "color": "#10b981",
-    "icon": "📋",
-    "order": 3,
-    "is_active": true
-  },
-  {
     "name": "Intro to Research",
     "short_name": "Intro",
     "description": "Foundational concepts in psychological research",
     "color": "#f59e0b",
     "icon": "📚",
-    "order": 4,
+    "order": 3,
     "is_active": true
   }
 ]

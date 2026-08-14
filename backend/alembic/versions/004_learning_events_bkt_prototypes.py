@@ -1,7 +1,7 @@
 """Add learning_events and bkt_prototypes for research logging and class-split BKT.
 
-Revision ID: 002
-Revises: 001
+Revision ID: 004
+Revises: 003
 Create Date: 2026-08-14
 """
 
@@ -11,8 +11,8 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
-revision: str = "002"
-down_revision: Union[str, None] = "001"
+revision: str = "004"
+down_revision: Union[str, None] = "003"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

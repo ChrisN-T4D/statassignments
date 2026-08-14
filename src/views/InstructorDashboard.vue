@@ -67,14 +67,44 @@
                 Download Student Keys CSV
               </button>
             </div>
+
+            <div v-if="rosterRows.length" class="preview-table-wrapper" style="margin-top: 1.5rem;">
+              <h3>Access mode</h3>
+              <p class="section-description">Offline primary students get print packets. You can override their choice here.</p>
+              <table class="preview-table">
+                <thead>
+                  <tr>
+                    <th>Student key</th>
+                    <th>Claimed</th>
+                    <th>Access mode</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in rosterRows" :key="row.id">
+                    <td><code>{{ row.student_key }}</code></td>
+                    <td>{{ row.user ? 'Yes' : 'No' }}</td>
+                    <td>
+                      <select
+                        :value="row.access_mode || 'online_primary'"
+                        @change="changeAccessMode(row, $event.target.value)"
+                      >
+                        <option value="online_primary">Online primary</option>
+                        <option value="offline_primary">Offline primary</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <!-- CSV Upload -->
           <div v-if="rosterSemesterId" class="content-section">
-            <h2>Import Roster from Blackboard</h2>
+            <h2>Import Roster from Canvas</h2>
             <p class="section-description">
-              Upload a CSV file exported from Blackboard. The file should contain columns for
-              Username and/or Student ID.
+              Upload a CSV exported from Canvas (People or Gradebook). The file should include
+              Login ID and/or SIS User ID (Student ID) columns. Class is detected from the
+              filename when possible — confirm or override below before creating keys.
             </p>
 
             <div class="upload-area">
@@ -91,6 +121,19 @@
               </label>
             </div>
 
+            <div v-if="csvFile" class="form-group" style="max-width: 360px; margin-top: 1rem;">
+              <label for="importClassId">Class for this roster</label>
+              <select id="importClassId" v-model="importClassId">
+                <option value="">Select a class</option>
+                <option v-for="cls in activeClasses" :key="cls.id" :value="cls.id">
+                  {{ cls.name }} ({{ cls.short_name || cls.slug }})
+                </option>
+              </select>
+              <p v-if="classDetectNote" class="preview-note" style="margin-top: 0.5rem;">
+                {{ classDetectNote }}
+              </p>
+            </div>
+
             <div v-if="parseError" class="error-message">
               {{ parseError }}
             </div>
@@ -103,7 +146,7 @@
                 <table class="preview-table">
                   <thead>
                     <tr>
-                      <th>Username</th>
+                      <th>Login ID</th>
                       <th>Student ID</th>
                       <th>Generated Key</th>
                       <th>Status</th>
@@ -138,7 +181,7 @@
                 <button
                   class="btn-primary"
                   @click="handleCreateRoster"
-                  :disabled="loading || newCount === 0"
+                  :disabled="loading || newCount === 0 || !importClassId"
                 >
                   {{ loading ? 'Creating...' : `Create ${newCount} Roster Entries` }}
                 </button>
@@ -412,6 +455,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import { pb } from '../lib/pocketbase'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
 
 const {
@@ -430,6 +474,7 @@ const {
   exportObjectiveMasteryCSV,
   exportPrototypesCSV,
   parseBlackboardCSV,
+  detectClassFromFilename,
   generateStudentKey,
   fetchRoster,
   createRosterEntries,
@@ -441,6 +486,7 @@ const activeTab = ref('roster')
 
 // Shared state
 const semesters = ref([])
+const activeClasses = ref([])
 
 // Analytics tab state
 const previewStats = ref(null)
@@ -454,10 +500,13 @@ const filters = reactive({
 // Roster tab state
 const rosterSemesterId = ref('')
 const rosterStats = ref(null)
+const rosterRows = ref([])
 const csvFile = ref(null)
 const parsedRows = ref([])
 const parseError = ref('')
 const createResults = ref(null)
+const importClassId = ref('')
+const classDetectNote = ref('')
 
 // Early warning and mastery tab state
 const atRiskList = ref([])
@@ -477,9 +526,18 @@ const duplicateCount = computed(() =>
   parsedRows.value.filter(r => r.isDuplicate).length
 )
 
-// Load semesters on mount
+// Load semesters + classes on mount
 async function loadSemesters() {
   semesters.value = await fetchSemesters()
+  try {
+    activeClasses.value = await pb.collection('classes').getFullList({
+      filter: 'is_active = true',
+      sort: 'order'
+    })
+  } catch (err) {
+    console.error('Error loading classes:', err)
+    activeClasses.value = []
+  }
 }
 
 // Roster management functions
@@ -491,6 +549,7 @@ async function loadRosterStats() {
 
   const roster = await fetchRoster(rosterSemesterId.value)
   const claimed = roster.filter(r => r.user).length
+  rosterRows.value = roster
 
   rosterStats.value = {
     total: roster.length,
@@ -502,6 +561,16 @@ async function loadRosterStats() {
   clearUpload()
 }
 
+async function changeAccessMode(row, mode) {
+  try {
+    await pb.collection('roster').update(row.id, { access_mode: mode })
+    row.access_mode = mode
+  } catch (err) {
+    console.error('Unable to update access mode:', err)
+    alert(err.message || 'Could not update access mode')
+  }
+}
+
 async function handleFileSelect(event) {
   const file = event.target.files[0]
   if (!file) return
@@ -510,15 +579,29 @@ async function handleFileSelect(event) {
   parseError.value = ''
   parsedRows.value = []
   createResults.value = null
+  importClassId.value = ''
+  classDetectNote.value = ''
 
   try {
+    const detected = detectClassFromFilename(file.name, activeClasses.value)
+    if (detected.classId) {
+      importClassId.value = detected.classId
+      const cls = activeClasses.value.find(c => c.id === detected.classId)
+      classDetectNote.value = `Detected from filename: ${cls?.name || detected.matchedOn}. Change the dropdown if that’s wrong.`
+    } else {
+      classDetectNote.value = 'Could not detect class from filename — pick the class below before creating keys.'
+    }
+
     const text = await file.text()
     const rows = parseBlackboardCSV(text)
 
-    // Fetch existing roster to mark duplicates
+    // Fetch existing roster to mark duplicates (within selected/detected class when known)
     const existingRoster = await fetchRoster(rosterSemesterId.value)
-    const existingBbIds = new Set(existingRoster.map(r => r.bb_id).filter(Boolean))
-    const existingBbUsernames = new Set(existingRoster.map(r => r.bb_username).filter(Boolean))
+    const scoped = importClassId.value
+      ? existingRoster.filter(r => (r.class || r.expand?.class?.id) === importClassId.value)
+      : existingRoster
+    const existingBbIds = new Set(scoped.map(r => r.bb_id).filter(Boolean))
+    const existingBbUsernames = new Set(scoped.map(r => r.bb_username).filter(Boolean))
 
     // Add preview keys and duplicate flags
     const semCode = selectedSemester.value?.code || 'XX'
@@ -535,7 +618,7 @@ async function handleFileSelect(event) {
 }
 
 async function handleCreateRoster() {
-  if (!rosterSemesterId.value || !selectedSemester.value) return
+  if (!rosterSemesterId.value || !selectedSemester.value || !importClassId.value) return
 
   const rowsToCreate = parsedRows.value.filter(r => !r.isDuplicate)
 
@@ -543,12 +626,15 @@ async function handleCreateRoster() {
     rowsToCreate,
     rosterSemesterId.value,
     selectedSemester.value.code,
-    false // Not a dry run
+    false, // Not a dry run
+    importClassId.value
   )
 
   // Clear parsed rows and refresh stats
   parsedRows.value = []
   csvFile.value = null
+  importClassId.value = ''
+  classDetectNote.value = ''
   await loadRosterStats()
 }
 
@@ -565,6 +651,8 @@ function clearUpload() {
   parsedRows.value = []
   parseError.value = ''
   createResults.value = null
+  importClassId.value = ''
+  classDetectNote.value = ''
   // Reset file input
   const fileInput = document.getElementById('csvFile')
   if (fileInput) fileInput.value = ''

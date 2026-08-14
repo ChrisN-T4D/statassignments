@@ -5,9 +5,17 @@
         <router-link v-if="!embedded" :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 v-if="!embedded" class="page-title">Analyze your data</h1>
         <p class="page-intro" :class="{ 'page-intro-embedded': embedded }">
-          Walk through a few short steps, then open
-          <strong>jamovi</strong>, <strong>SPSS</strong>, or <strong>Excel</strong>
-          instructions for the analysis you picked. Your preferred software is selected first when you reach the steps.
+          <template v-if="methodPath">
+            Analyses recommended for <strong>{{ methodPath.label }}</strong>.
+            Walk through a few short steps, then open
+            <strong>jamovi</strong>, <strong>SPSS</strong>, or <strong>Excel</strong>
+            instructions for the analysis you picked.
+          </template>
+          <template v-else>
+            Walk through a few short steps, then open
+            <strong>jamovi</strong>, <strong>SPSS</strong>, or <strong>Excel</strong>
+            instructions for the analysis you picked. Your preferred software is selected first when you reach the steps.
+          </template>
         </p>
       </header>
 
@@ -215,13 +223,18 @@ import {
   VARIABLE_MAIN_OPTIONS,
   GOAL_OPTIONS,
   SOFTWARE_TABS,
-  filterAnalyses
+  filterAnalyses,
+  filterAnalysesForPath,
+  getAnalysesForMethodPath
 } from '../data/dataAnalysisRecipes'
+import { getMethodPathById } from '../data/researchMethodsTextbook'
 import { preferredSoftware } from '../composables/usePreferredSoftware'
 
 const props = defineProps({
   classId: { type: String, required: true },
-  embedded: { type: Boolean, default: false }
+  embedded: { type: Boolean, default: false },
+  /** Canvas methodology path id (path-1-survey … path-4-archival) — limits analyses to path recommendations. */
+  methodPathId: { type: String, default: '' }
 })
 
 const wizardStep = ref(1)
@@ -235,6 +248,14 @@ const wizardCardTitle = computed(() =>
   wizardStep.value === 1
     ? 'What kind of variables do you have?'
     : 'What do you want to test or summarize?'
+)
+
+const methodPath = computed(() =>
+  props.methodPathId ? getMethodPathById(props.methodPathId) : null
+)
+
+const pathAnalysisPool = computed(() =>
+  props.methodPathId ? getAnalysesForMethodPath(props.methodPathId) : [...ANALYSES]
 )
 
 const variableMainLabel = computed(() => {
@@ -255,10 +276,16 @@ const filteredGoalOptions = computed(() => {
 
 const displayedAnalyses = computed(() => {
   if (showAllAnalyses.value) {
-    return [...ANALYSES]
+    return pathAnalysisPool.value
   }
   if (!variableMain.value || !goal.value) {
     return []
+  }
+  if (props.methodPathId) {
+    return filterAnalysesForPath(props.methodPathId, {
+      variableMain: variableMain.value,
+      goal: goal.value
+    })
   }
   return filterAnalyses({ variableMain: variableMain.value, goal: goal.value })
 })
@@ -294,6 +321,19 @@ function browseAllAnalyses () {
   goal.value = ''
   wizardStep.value = 3
 }
+
+watch(
+  () => props.methodPathId,
+  (pathId) => {
+    if (!pathId) return
+    selectedId.value = ''
+    variableMain.value = ''
+    goal.value = ''
+    showAllAnalyses.value = true
+    wizardStep.value = 3
+  },
+  { immediate: true }
+)
 
 function browseAllAnalysesFromStep3 () {
   showAllAnalyses.value = true

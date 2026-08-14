@@ -6,12 +6,16 @@
         <div class="help-header">
           <router-link :to="`/class/${classId}/assignment-help`" class="back-link">← Assignment Help</router-link>
           <p class="breadcrumb">
-            <span v-if="block.moduleNumber">Module {{ block.moduleNumber }}</span>
+            <span v-if="block.canvasPart">{{ block.canvasPart }}</span>
+            <span v-else-if="block.moduleNumber">Module {{ block.moduleNumber }}</span>
             <span v-else>Milestone</span>
             — {{ block.moduleTitle }}
+            <span v-if="block.phaseLabel"> · {{ block.phaseLabel }}</span>
           </p>
           <h1 class="help-title">{{ assignment.name }}</h1>
-          <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
+          <div class="assignment-meta">
+            <span class="assignment-type" :class="assignment.type">{{ typeLabel(assignment.type) }}</span>
+          </div>
         </div>
 
         <!-- Benchmark / Final: Practice test link -->
@@ -20,6 +24,14 @@
             {{ practiceTestLinkText }} →
           </router-link>
           <p class="practice-test-desc">Get {{ practiceTestCount }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
+        </div>
+
+        <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
+        <div v-else-if="assignment.methodsMarketPath" class="practice-test-cta">
+          <router-link :to="assignment.methodsMarketPath" class="practice-test-link">
+            {{ methodsMarketLinkText }} →
+          </router-link>
+          <p class="practice-test-desc">{{ methodsMarketLinkDesc }}</p>
         </div>
 
         <!-- Single assignment card content -->
@@ -44,8 +56,12 @@
           </div>
 
           <div v-if="assignment.practiceLinks?.length" class="section">
-            <h2 class="section-title">Review in this site</h2>
-            <p class="section-desc">Topics and lessons that match this assignment:</p>
+            <h2 class="section-title">Review in Methods Market</h2>
+            <p class="section-desc">
+              {{ classId === 'research-methods'
+                ? 'Chapters to read in Methods Market:'
+                : 'Topics and lessons that match this assignment:' }}
+            </p>
             <div class="practice-links">
               <router-link
                 v-for="topicId in assignment.practiceLinks"
@@ -76,6 +92,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
+import { formatResearchMethodsTopicLabel } from '../data/researchMethodsTextbook'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 
 const props = defineProps({
@@ -114,18 +131,40 @@ const practiceTestLinkText = computed(() => {
   return 'Take a practice test'
 })
 
+const methodsMarketLinkText = computed(() => {
+  if (assignment.value?.type === 'software-practice') return 'Open Software Practice'
+  if (assignment.value?.type === 'concept-review') return 'Open Concept Review'
+  return 'Open in Methods Market'
+})
+
+const methodsMarketLinkDesc = computed(() => {
+  if (assignment.value?.type === 'software-practice') {
+    return 'Complete the Learn, Practice, and Apply steps for this module, then mark the Canvas assignment complete.'
+  }
+  if (assignment.value?.type === 'concept-review') {
+    return 'Work through all concept review questions for this module, then mark the Canvas assignment complete.'
+  }
+  return 'Complete this activity in Methods Market, then return to Canvas.'
+})
+
 function typeLabel (type) {
   const labels = {
     assignment: 'Assignment',
     discussion: 'Discussion',
     practice: 'Practice / Quiz',
     benchmark: 'Benchmark',
-    final: 'Final'
+    final: 'Final',
+    'concept-review': 'Concept Review',
+    'software-practice': 'Software Practice'
   }
   return labels[type] || type
 }
 
 function formatTopicId (id) {
+  if (props.classId === 'research-methods') {
+    const rm = formatResearchMethodsTopicLabel(id)
+    if (rm) return rm
+  }
   return id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 </script>
@@ -163,6 +202,31 @@ function formatTopicId (id) {
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
+}
+
+.assignment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.schedule-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.assignment-due,
+.assignment-points {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.assignment-points {
+  font-weight: 600;
 }
 
 .assignment-type {

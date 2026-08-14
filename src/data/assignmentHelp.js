@@ -1,10 +1,13 @@
 /**
- * Assignment Help — Spring 2026 Statistics (LMS)
+ * Assignment Help — Fall 2026 Statistics (LMS)
  * Maps each LMS assignment to tips, in-app resources, and where to get help.
  * Used by the Assignment Help page so students have one place to go when stuck.
  */
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
+import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
+import { enrichResearchMethodsAssignment, allResearchMethodsConceptReviewAssignments } from './researchMethodsCanvasLinks.js'
+import { methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -33,6 +36,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 1,
     moduleTitle: 'Introductions and Why Learn Stats',
     assignments: [
+      ...methodsMarketPracticeAssignments(1),
       {
         id: 'm1-intro-videos',
         name: 'Introduction Videos',
@@ -61,6 +65,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 2,
     moduleTitle: 'Research Design & Measurement',
     assignments: [
+      ...methodsMarketPracticeAssignments(2),
       {
         id: 'm2-levels-quiz',
         name: 'Levels of Measurement (Quiz)',
@@ -100,32 +105,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 3,
     moduleTitle: 'Software and Data Handling',
     assignments: [
-      {
-        id: 'm3-jamovi-exploration',
-        name: 'Jamovi Exploration & Data Familiarization (Week 4)',
-        type: 'assignment',
-        tips: [
-          'Import Personality Data CSV from Files > DATA > Personality Data (or the link in the assignment).',
-          'Use Analyses > Exploration > Descriptives. For two variables, report mean, median, SD; for one variable add a histogram or bar chart.',
-          'Turn in: short paragraph on what was easy/challenging + screenshot of Jamovi with dataset, descriptives table, and graphs.'
-        ],
-        practiceLinks: ['software-interface', 'data-entry', 'variable-types'],
-        getHelp: 'Use the Software lessons for this module (Jamovi interface, importing data, variable types). If the CSV won\'t import or Descriptives is unclear, check the screen-recording tutorial or ask in office hours.'
-      },
-      {
-        id: 'm3-video-jamovi',
-        name: 'Video of Jamovi Work (Week 5)',
-        type: 'assignment',
-        tips: [
-          'Screen record: import same Personality Data CSV, show spreadsheet view, name variables, describe variable types.',
-          'Rename at least one variable to your name. Create a computed variable = mean of agreeableness. Save/export as .omv and upload video + .omv file.'
-        ],
-        formulas: [
-          { name: 'Mean of a variable (Jamovi Compute)', formula: 'VMEAN(agreeableness)', note: 'Data > Compute; use VMEAN for one column (mean of all values in that column). MEAN(A, B, C) is for the mean of several variables per row.' }
-        ],
-        practiceLinks: ['software-interface', 'variable-types'],
-        getHelp: 'Computed variable: use Data > Compute and the formula for mean (e.g. mean of the agreeableness column). Software lessons in Module 3 cover this.'
-      }
+      ...methodsMarketPracticeAssignments(3)
     ],
     noDiscussion: true
   },
@@ -149,9 +129,10 @@ export const assignmentHelpByModule = [
     moduleNumber: 4,
     moduleTitle: 'Descriptive Statistics',
     assignments: [
+      ...methodsMarketPracticeAssignments(4),
       {
         id: 'm4-descriptives',
-        name: 'Descriptive Statistics (Week 6)',
+        name: 'Descriptive Statistics (Week 7)',
         type: 'assignment',
         tips: [
           'Enter the height data in one column in Jamovi (e.g. column name "Height"). Use Descriptives for N, mean, median, mode, range, variance, SD.',
@@ -170,7 +151,7 @@ export const assignmentHelpByModule = [
       },
       {
         id: 'm4-normality-quiz',
-        name: 'Week 7 Practice (Normality Quiz)',
+        name: 'Week 8 Practice (Normality Quiz)',
         type: 'practice',
         tips: [
           'Import Normality-data.csv and follow the instructions at the top of the assignment, then answer the quiz questions.'
@@ -193,24 +174,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 5,
     moduleTitle: 'Graphing and Visualization',
     assignments: [
-      {
-        id: 'm5-week8-9',
-        name: 'Week 8 & 9 Assignment (Screen Record)',
-        type: 'assignment',
-        tips: [
-          'Use Normality-data.csv. Part 1: Descriptives for Num_Media_Posts (mean, median, SD, min, max) + histogram.',
-          'Part 2: Recode Num_Media_Posts into Posts_Bands_Text using Transform > Add recode condition rows (see formulas). Order levels: 0, 1-5, 6-15, 16+. Verify with frequency tables.',
-          'Part 3: Histogram for Test_Scores; bar chart for Posts_Bands. State which band is most common and write caption sentences. Part 4: Brief summary. Submit as one 6–10 min MP4.'
-        ],
-        formulas: [
-          { name: 'Recode: Posts_Bands_Text from Num_Media_Posts', formula: 'if $source == 0 use "0"', note: 'Row 1. In Transform recode, $source is the source variable (Num_Media_Posts).' },
-          { name: '', formula: 'if $source >= 1 and $source <= 5 use "1-5"', note: 'Row 2.' },
-          { name: '', formula: 'if $source >= 6 and $source <= 15 use "6-15"', note: 'Row 3.' },
-          { name: '', formula: 'else use "16+"', note: 'Row 4. Set Output type = Text, Measure = Ordinal; order levels 0, 1-5, 6-15, 16+.' }
-        ],
-        practiceLinks: ['histograms', 'bar-charts', 'transforming-variables', 'tabulating-data'],
-        getHelp: 'Software lessons for transforming variables and building histograms/bar charts match this assignment. If recode conditions are tricky, review the lesson on logical expressions and recodes.'
-      }
+      ...methodsMarketPracticeAssignments(5)
     ],
     noDiscussion: true
   },
@@ -234,49 +198,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 6,
     moduleTitle: 'Probability and Sampling',
     assignments: [
-      {
-        id: 'm6-week11a',
-        name: 'Week 11 Part A: Dice (Probability & Sampling)',
-        type: 'assignment',
-        tips: [
-          'Install Demonstrations module in Jamovi (+ > Library > Demonstrations > Install). Use Throwing Dice.',
-          'A1: Fix Dices=3, Sides=6; change Trials (10 vs 2000). A2: Fix Trials=2000, Sides=6; change Dices (1 vs 6). A3: Fix Trials=2000, Dices=3; change Sides (2 vs 10). Answer the written questions for each. One 4–6 min MP4.'
-        ],
-        practiceLinks: ['probability-concepts', 'law-of-large-numbers'],
-        getHelp: 'This illustrates sample size and scale effects. Review probability/sampling topics if the questions are unclear.'
-      },
-      {
-        id: 'm6-week11b',
-        name: 'Week 11 Part B: Normal Distribution',
-        type: 'assignment',
-        tips: [
-          'Use Normality-data.csv. B1: Pick one normal-like, one right-skewed, one left-skewed variable. Use Descriptives (histogram, density, Q-Q), get skewness and kurtosis with SEs; compute z-skew and z-kurt (see formulas). If |z| < 1.96, note "not statistically different from 0".',
-          'B2: Use Test_Scores with distrACTION > Normal Distribution. Find P(X≥95), P(mean−SD to mean+SD), P(X≤75). Create indicator columns (e.g. Test_Scores >= 95) and use Descriptives to get means as empirical proportions. One 5–7 min MP4.'
-        ],
-        formulas: [
-          { name: 'Z-score for skewness (test if skew ≠ 0)', formula: 'z-skew = skew / SE(skew)', note: 'Get skewness and SE(skew) from Jamovi Descriptives. Compare |z-skew| to 1.96.' },
-          { name: 'Z-score for kurtosis (test if kurt ≠ 0)', formula: 'z-kurt = kurt / SE(kurt)', note: 'Get kurtosis and SE(kurt) from Jamovi Descriptives. Compare |z-kurt| to 1.96.' },
-          { name: 'Interpretation', formula: 'If |z| < 1.96 → not statistically different from 0', note: 'Say this in your recording for each variable.' }
-        ],
-        practiceLinks: ['normal-distribution', 'parameter-estimation'],
-        getHelp: 'Install distrACTION module if needed. Topics on normal distribution and parameter estimation align with this.'
-      },
-      {
-        id: 'm6-week12',
-        name: 'Week 12: Estimating Population Mean from Sample Means',
-        type: 'assignment',
-        tips: [
-          'Part A: New dataset, 30 rows. Add 10 columns X1–X10; each cell uses NORM(100, 15) so each column has 30 values from a normal distribution (mean=100, SD=15).',
-          'Part B: Descriptives for X1–X10; create a Means10 variable with the 10 sample means and plot. Part C: For X1, write down sample mean, SD, n=30; compute SE and 95% CI by hand (see formulas). Part D: Use CLT Demonstrations add-on; run n=5, 30, 100. One screen recording.'
-        ],
-        formulas: [
-          { name: 'Simulated normal data (Jamovi Compute, per cell)', formula: 'NORM(100, 15)', note: 'One value per row. Create 10 columns (X1–X10), 30 rows each. Mean=100, SD=15.' },
-          { name: 'Standard error of the mean', formula: 'SE = s / √n   or   SE = SD / sqrt(n)', note: 'Use sample SD (s) and n=30 from X1 Descriptives. In a calculator: SD / sqrt(30).' },
-          { name: '95% confidence interval for the mean', formula: '95% CI = mean ± 1.96 × SE', note: 'Lower = mean - 1.96*SE; Upper = mean + 1.96*SE. Use X1 mean and the SE you computed.' }
-        ],
-        practiceLinks: ['central-limit-theorem', 'confidence-intervals'],
-        getHelp: 'Central limit theorem and confidence interval topics match this assignment. Stuck on SE or CI formula? Review those topics.'
-      }
+      ...methodsMarketPracticeAssignments(6)
     ],
     noDiscussion: true
   },
@@ -284,9 +206,10 @@ export const assignmentHelpByModule = [
     moduleNumber: 7,
     moduleTitle: 'Hypothesis Testing',
     assignments: [
+      ...methodsMarketPracticeAssignments(7),
       {
         id: 'm7-hypothesis-scenarios',
-        name: 'Writing Hypotheses, Choosing t-test vs ANOVA',
+        name: 'Week 14 Assignment: Writing and Comparing Hypotheses, Choosing the Right Test',
         type: 'assignment',
         tips: [
           'For each scenario: (1) population and parameter, (2) H0 and H1 with symbols and direction, (3) one- vs two-sided and why, (4) Type I and Type II in context, (5) t-test vs ANOVA (two groups = t-test, three+ = ANOVA), (6) use AI to generate hypotheses and compare to yours.',
@@ -310,26 +233,7 @@ export const assignmentHelpByModule = [
     moduleNumber: 8,
     moduleTitle: 'Comparing Groups / Relationships (ANOVA, t-tests, regression)',
     assignments: [
-      {
-        id: 'm8-week15',
-        name: 'Week 15 Assignment (Chi-square, t-tests, regression, ANOVA)',
-        type: 'assignment',
-        tips: [
-          'Part 1: Create Posts_Bands and Age_Bands with recodes (see formulas); run Contingency Tables (Chi-square, Cramer\'s V). Report decision, effect size using anchors below, pattern in row/column %.',
-          'Part 2: One-sample t-test (Test_Scores vs 85). Part 3: Create LowPosts (0–5) and HighPosts (6+); independent-samples t-test on Test_Scores; use Welch if variances unequal. Part 4: Correlation, simple regression, one-way ANOVA (3-level Posts_Bands). Report each with decision, CI, effect size (use anchors below), assumptions. Submit one .mp4 with voiced answers.'
-        ],
-        formulas: [
-          { name: 'Recode: Posts_Bands from Num_Media_Posts', formula: 'if $source == 0 use "0"', note: 'Then: if $source >= 1 and $source <= 5 use "1-5"; if $source >= 6 and $source <= 15 use "6-15"; if $source >= 16 use "16+". Output type = Text, Measure = Ordinal; order 0, 1-5, 6-15, 16+.' },
-          { name: 'Recode: Age_Bands from Age_Retirement', formula: '63-65 and else "66-70"', note: 'Two bands. Measure = Ordinal; order as listed.' },
-          { name: 'Recode: LowPosts vs HighPosts (for t-test)', formula: 'LowPosts = 0–5; HighPosts = 6+', note: 'Two-level group from Posts_Bands for Part 3.' },
-          { name: 'Cramer\'s V (effect size for chi-square)', formula: 'small ~ 0.10, medium ~ 0.30, large ~ 0.50', note: 'Use when interpreting Part 1 contingency table.' },
-          { name: 'Cohen\'s d (effect size for t-tests)', formula: 'small ~ 0.20, medium ~ 0.50, large ~ 0.80', note: 'Use for one-sample (Part 2) and independent-samples (Part 3) t-tests.' },
-          { name: 'Correlation r (strength)', formula: 'small ~ 0.10, medium ~ 0.30, large ~ 0.50', note: 'Sign indicates direction. Use for Part 4A correlation.' },
-          { name: 'Eta² or omega² (effect size for ANOVA)', formula: 'small ~ 0.01, medium ~ 0.06, large ~ 0.14', note: 'Use for Part 4C one-way ANOVA.' }
-        ],
-        practiceLinks: ['chi-square-independence', 'one-sample-t-test', 'independent-t-test', 'welch-t-test'],
-        getHelp: 'Software lessons for Module 8 (chi-square, t-tests, regression, ANOVA) walk through these analyses. Use them step-by-step; if output interpretation is confusing, review effect size and CI in the Topics.'
-      },
+      ...methodsMarketPracticeAssignments(8),
       {
         id: 'm8-discussion',
         name: 'Module 8 Discussion Board',
@@ -337,7 +241,7 @@ export const assignmentHelpByModule = [
         tips: [
           'Put the research-assistant prompt (Test_Scores, Group_Status, choose t-test vs ANOVA vs regression) into two AI models. Include both responses and your evaluation: correct? Explained why?'
         ],
-        getHelp: 'Use this to reinforce when to use t-test vs ANOVA vs regression before the Week 15 assignment.'
+        getHelp: 'Use this to reinforce when to use t-test vs ANOVA vs regression before Module 8 Software Practice.'
       }
     ]
   },
@@ -366,12 +270,34 @@ export const assignmentHelpByModule = [
 ]
 
 /**
- * Get assignment help for a class (e.g. statistics).
- * @param {string} classId - e.g. 'statistics'
- * @returns {Array} assignmentHelpByModule (or filtered by class if we add multiple classes later)
+ * Get assignment help for a class.
+ * @param {string} classId - e.g. 'statistics' | 'research-methods'
  */
 export function getAssignmentHelp (classId) {
+  if (classId === 'research-methods') {
+    const conceptReviewBlock = {
+      canvasPart: 'Course-wide',
+      moduleTitle: 'Chapter Concept Review',
+      phaseLabel: 'Methods Market practice (one per chapter)',
+      assignments: allResearchMethodsConceptReviewAssignments()
+    }
+    return [
+      conceptReviewBlock,
+      ...assignmentHelpResearchMethods.map((block) => ({
+        ...block,
+        assignments: block.assignments.map(enrichResearchMethodsAssignment)
+      }))
+    ]
+  }
   return assignmentHelpByModule
+}
+
+/** Intro copy for the assignment-help index page. */
+export function getAssignmentHelpIntro (classId) {
+  if (classId === 'research-methods') {
+    return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
+  }
+  return 'Match your Canvas assignment below for Methods Market Concept Review and Software Practice links, plus tips for other weekly work. Due dates and points are always in Canvas — not here.'
 }
 
 /**

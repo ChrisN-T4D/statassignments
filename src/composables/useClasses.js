@@ -10,11 +10,23 @@ const FALLBACK_CLASSES = [
     slug: 'research-methods',
     name: 'Research Methods',
     short_name: 'RM',
-    description: 'Introduction to research methodology in psychology, including experimental design, measurement, and ethics.',
+    description: 'Textbook chapters (Jhangiani et al., 4th ed.) plus capstone support for PSYC 4223 — topic selection, methods, IRB, and analysis.',
     color: '#3b82f6',
     icon: '🔬',
     topics: ['sampling', 'hypothesis-testing', 'correlation'],
     order: 1,
+    is_active: true
+  },
+  {
+    id: 'experimental',
+    slug: 'experimental',
+    name: 'Experimental Design',
+    short_name: 'Exp',
+    description: 'Experimental and quasi-experimental design, factorials, and analyzing group-comparison data.',
+    color: '#0ea5e9',
+    icon: '🧪',
+    topics: ['hypothesis-testing'],
+    order: 2,
     is_active: true
   },
   {
@@ -25,17 +37,6 @@ const FALLBACK_CLASSES = [
     color: '#8b5cf6',
     icon: '📊',
     topics: ['descriptive-stats', 'visualizations', 'normal-distribution', 'z-scores', 't-tests', 'correlation', 'regression'],
-    order: 2,
-    is_active: true
-  },
-  {
-    id: 'stats-assessment',
-    name: 'Statistics for Assessment',
-    short_name: 'S4A',
-    description: 'Statistical methods for psychological assessment and testing, including reliability and validity.',
-    color: '#10b981',
-    icon: '📋',
-    topics: ['descriptive-stats', 'normal-distribution', 'z-scores', 'correlation'],
     order: 3,
     is_active: true
   },

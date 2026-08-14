@@ -5,12 +5,9 @@
       <div class="help-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="help-title">Assignment Help</h1>
-        <p class="help-intro">
-          Stuck on an LMS assignment? Choose an assignment below to see tips, formulas, and where to get help.
-        </p>
+        <p class="help-intro">{{ helpIntro }}</p>
       </div>
 
-      <!-- List of modules with links to each assignment -->
       <div class="help-modules">
         <section
           v-for="(block, idx) in helpData"
@@ -18,9 +15,11 @@
           class="help-module"
         >
           <h2 class="module-heading">
-            <span v-if="block.moduleNumber" class="module-num">Module {{ block.moduleNumber }}</span>
+            <span v-if="block.canvasPart" class="module-num">{{ block.canvasPart }}</span>
+            <span v-else-if="block.moduleNumber" class="module-num">Module {{ block.moduleNumber }}</span>
             <span v-else class="module-num">Milestone</span>
             — {{ block.moduleTitle }}
+            <span v-if="block.phaseLabel" class="phase-label">({{ block.phaseLabel }})</span>
           </h2>
 
           <ul class="assignment-links">
@@ -46,13 +45,14 @@
 
 <script setup>
 import { computed } from 'vue'
-import { getAssignmentHelp } from '../data/assignmentHelp'
+import { getAssignmentHelp, getAssignmentHelpIntro } from '../data/assignmentHelp'
 
 const props = defineProps({
   classId: { type: String, required: true }
 })
 
 const helpData = computed(() => getAssignmentHelp(props.classId))
+const helpIntro = computed(() => getAssignmentHelpIntro(props.classId))
 
 function typeLabel (type) {
   const labels = {
@@ -60,7 +60,9 @@ function typeLabel (type) {
     discussion: 'Discussion',
     practice: 'Practice / Quiz',
     benchmark: 'Benchmark',
-    final: 'Final'
+    final: 'Final',
+    'concept-review': 'Concept Review',
+    'software-practice': 'Software Practice'
   }
   return labels[type] || type
 }
@@ -116,88 +118,88 @@ function typeLabel (type) {
 }
 
 .module-heading {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
   color: var(--text-primary);
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
 }
 
 .module-num {
   color: var(--primary);
 }
 
+.phase-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
 .assignment-links {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-.assignment-links li {
-  margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .assignment-link {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  color: var(--text-primary);
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
   text-decoration: none;
-  border-bottom: 1px solid var(--border);
-  transition: color 0.15s, background 0.15s;
-}
-
-.assignment-link:last-child {
-  border-bottom: none;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s;
 }
 
 .assignment-link:hover {
-  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--bg-hover, rgba(0, 0, 0, 0.02));
 }
 
 .assignment-link-name {
-  flex: 1;
   font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 12rem;
 }
 
 .assignment-link-type {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding: 0.2rem 0.45rem;
-  border-radius: 0.25rem;
-  background: var(--border-light);
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  text-transform: capitalize;
 }
 
 .assignment-link-type.assignment {
-  background: var(--primary);
-  color: white;
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
 }
 
-.assignment-link-type.discussion {
-  background: var(--success-bg);
-  color: var(--success);
-}
-
-.assignment-link-type.practice {
-  background: var(--warning-bg);
-  color: var(--warning);
-}
-
-.assignment-link-type.benchmark,
 .assignment-link-type.final {
-  background: var(--danger-bg);
-  color: var(--danger);
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+}
+
+.assignment-link-type.concept-review {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.assignment-link-type.software-practice {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
 }
 
 .no-discussion-note {
   margin: 1rem 0 0 0;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   font-style: italic;
 }

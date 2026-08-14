@@ -91,14 +91,17 @@ class Roster(Base, TimestampMixin):
 
     id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
     semester_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("semesters.id"), nullable=False)
+    class_id: Mapped[str | None] = mapped_column(String(ID_LEN), ForeignKey("classes.id"), index=True)
     student_key: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     claim_token: Mapped[str | None] = mapped_column(String(128))
     user_id: Mapped[str | None] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="SET NULL"))
     claimed_at: Mapped[datetime | None] = mapped_column(DateTime)
     bb_username: Mapped[str | None] = mapped_column(String(255))
     bb_id: Mapped[str | None] = mapped_column(String(128))
+    access_mode: Mapped[str] = mapped_column(String(32), default="online_primary", server_default="online_primary")
 
     semester: Mapped[Semester] = relationship()
+    class_: Mapped["Class | None"] = relationship(foreign_keys=[class_id])
     user: Mapped[User | None] = relationship()
 
 
@@ -323,7 +326,7 @@ COLLECTION_MODELS: dict[str, type[Base]] = {
 }
 
 FIELD_ALIASES: dict[str, dict[str, str]] = {
-    "roster": {"semester": "semester_id", "user": "user_id"},
+    "roster": {"semester": "semester_id", "user": "user_id", "class": "class_id"},
     "modules": {"class": "class_id", "semester": "semester_id"},
     "items": {"module": "module_id"},
     "attempts": {
@@ -347,7 +350,11 @@ REVERSE_ALIASES: dict[str, dict[str, str]] = {
 }
 
 EXPAND_RELATIONS: dict[str, dict[str, tuple[str, type[Base]]]] = {
-    "roster": {"semester": ("semester_id", Semester)},
+    "roster": {
+        "semester": ("semester_id", Semester),
+        "class": ("class_id", Class),
+        "user": ("user_id", User),
+    },
     "modules": {"class": ("class_id", Class), "semester": ("semester_id", Semester)},
     "items": {"module": ("module_id", Module)},
     "attempts": {

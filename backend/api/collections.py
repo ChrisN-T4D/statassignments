@@ -219,6 +219,39 @@ def update_record(
     columns = payload_to_columns(collection, payload)
     class_ids = columns.pop("_class_ids", None)
 
+    # Students may claim an unclaimed key or change only access_mode on their own row.
+    # They cannot change student_key, usernames, class, or semester.
+    claiming = False
+    if collection == "roster" and user and user.role not in ("admin", "instructor"):
+        access_mode = columns.get("access_mode")
+        if access_mode is not None and access_mode not in (
+            "online_primary",
+            "offline_primary",
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail="access_mode must be online_primary or offline_primary",
+            )
+        new_user_id = columns.get("user_id")
+        owns = bool(row.user_id) and str(row.user_id) == str(user.id)
+        is_claim = (not row.user_id) and new_user_id and str(new_user_id) == str(user.id)
+        if is_claim:
+            columns.pop("class_id", None)
+            columns.pop("semester_id", None)
+            columns.pop("student_key", None)
+            columns.pop("bb_username", None)
+            columns.pop("bb_id", None)
+            columns["user_id"] = str(user.id)
+            claiming = True
+        elif owns:
+            columns = {}
+            if access_mode is not None:
+                columns["access_mode"] = access_mode
+        elif row.user_id:
+            raise HTTPException(status_code=400, detail="This student key has already been claimed")
+        else:
+            raise HTTPException(status_code=403, detail="Can only claim a roster key for yourself")
+
     if collection == "users" and "password" in columns:
         columns["password_hash"] = hash_password(columns.pop("password"))
 
@@ -228,6 +261,13 @@ def update_record(
 
     if collection == "users" and class_ids is not None:
         row.classes = db.query(Class).filter(Class.id.in_(class_ids)).all()
+
+    if claiming and getattr(row, "class_id", None):
+        claim_user = db.query(User).options(joinedload(User.classes)).filter(User.id == user.id).first()
+        if claim_user:
+            class_row = db.get(Class, row.class_id)
+            if class_row and class_row not in claim_user.classes:
+                claim_user.classes.append(class_row)
 
     db.commit()
     db.refresh(row)

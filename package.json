@@ -16,6 +16,7 @@
     "parity:map": "node scripts/build-software-equivalency-map.mjs",
     "parity:smoke": "node scripts/check-concept-patches-smoke.mjs",
     "parity:all": "npm run parity:map && npm run parity:concept && npm run parity:practice && npm run parity:smoke",
+    "verify:rm-concepts": "node scripts/verify-rm-concept-review.mjs",
     "contracts:dataflow": "node scripts/check-data-flow-contracts.mjs",
     "audit:software": "node scripts/audit-software-coverage.mjs",
     "open:mobile": "start chrome --window-size=375,812 http://localhost:5173"

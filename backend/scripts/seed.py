@@ -41,16 +41,6 @@ DEFAULT_CLASSES = [
         "order": 2,
     },
     {
-        "slug": "stats-assessment",
-        "name": "Statistics for Assessment",
-        "short_name": "S4A",
-        "description": "Statistical methods for psychological assessment",
-        "color": "#10b981",
-        "icon": "📋",
-        "topics": ["descriptive-stats", "normal-distribution", "z-scores", "correlation"],
-        "order": 3,
-    },
-    {
         "slug": "intro-research",
         "name": "Intro to Research",
         "short_name": "Intro",
@@ -58,7 +48,7 @@ DEFAULT_CLASSES = [
         "color": "#f59e0b",
         "icon": "📚",
         "topics": ["descriptive-stats", "visualizations", "probability"],
-        "order": 4,
+        "order": 3,
     },
 ]
 
@@ -163,8 +153,39 @@ def seed():
             print(f"  + {item_count} items")
 
         admin_email = os.environ.get("ADMIN_EMAIL", "admin@methodsmarket.local")
-        if not db.query(User).filter(User.email == admin_email).first():
-            admin_password = os.environ.get("ADMIN_PASSWORD", "changeme123")
+        admin_password = os.environ.get("ADMIN_PASSWORD", "changeme123")
+        force_reset = os.environ.get("FORCE_ADMIN_PASSWORD_RESET", "").strip() == "1"
+        existing_admin = db.query(User).filter(User.email == admin_email).first()
+
+        if force_reset:
+            print(f"  FORCE_ADMIN_PASSWORD_RESET for ADMIN_EMAIL={admin_email}", flush=True)
+            targets = {
+                u.email: u
+                for u in db.query(User)
+                .filter((User.role == "admin") | (User.email == admin_email))
+                .all()
+            }
+            if targets:
+                for user in targets.values():
+                    user.password_hash = hash_password(admin_password)
+                    user.role = "admin"
+                    user.updated = now
+                    print(f"  ~ reset admin password for {user.email}", flush=True)
+            else:
+                db.add(
+                    User(
+                        id=_new_id(),
+                        email=admin_email,
+                        password_hash=hash_password(admin_password),
+                        name="Admin",
+                        role="admin",
+                        verified=True,
+                        created=now,
+                        updated=now,
+                    )
+                )
+                print(f"  + admin user {admin_email}", flush=True)
+        elif not existing_admin:
             db.add(
                 User(
                     id=_new_id(),

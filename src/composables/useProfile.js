@@ -12,6 +12,25 @@ export function useProfile() {
   const studentKey = computed(() => profile.value?.student_key || null)
   const semesterId = computed(() => profile.value?.semester || null)
 
+  async function setAccessMode(mode) {
+    if (!profile.value?.id) {
+      throw new Error('Link your student key before changing access mode')
+    }
+    if (mode !== 'online_primary' && mode !== 'offline_primary') {
+      throw new Error('Invalid access mode')
+    }
+    loading.value = true
+    try {
+      const updated = await pb.collection('roster').update(profile.value.id, {
+        access_mode: mode
+      })
+      profile.value = { ...profile.value, ...updated }
+      return profile.value
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function fetchProfile() {
     if (!user.value) {
       profile.value = null
@@ -112,11 +131,18 @@ export function useProfile() {
         throw new Error('This student key has already been claimed. If this is your key, please contact your instructor.')
       }
 
-      // Update roster entry to link to current user
+      // Update roster entry to link to current user (backend also assigns roster.class → user.classes)
       const updated = await pb.collection('roster').update(rosterEntry.id, {
         user: user.value.id,
         claimed_at: new Date().toISOString()
       })
+
+      // Refresh auth so assigned classes appear in the UI
+      try {
+        await pb.collection('users').authRefresh()
+      } catch (err) {
+        console.warn('Auth refresh after claim failed:', err)
+      }
 
       profile.value = updated
       return updated
@@ -136,6 +162,7 @@ export function useProfile() {
     studentKey,
     semesterId,
     fetchProfile,
+    setAccessMode,
     claimProfile,
     claimByStudentKey,
     clearProfile

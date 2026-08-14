@@ -965,6 +965,17 @@ async function initializeClasses() {
       is_active: true
     },
     {
+      name: 'Experimental Design',
+      short_name: 'Exp',
+      slug: 'experimental',
+      description: 'Experimental and quasi-experimental design, factorials, and analyzing group-comparison data.',
+      color: '#0ea5e9',
+      icon: '🧪',
+      topics: ['hypothesis-testing'],
+      order: 2,
+      is_active: true
+    },
+    {
       name: 'Statistics',
       short_name: 'Stats',
       slug: 'statistics',
@@ -972,17 +983,6 @@ async function initializeClasses() {
       color: '#8b5cf6',
       icon: '📊',
       topics: ['descriptive-stats', 'visualizations', 'normal-distribution', 'z-scores', 't-tests', 'correlation', 'regression'],
-      order: 2,
-      is_active: true
-    },
-    {
-      name: 'Statistics for Assessment',
-      short_name: 'S4A',
-      slug: 'stats-assessment',
-      description: 'Statistical methods for psychological assessment and testing, including reliability and validity.',
-      color: '#10b981',
-      icon: '📋',
-      topics: ['descriptive-stats', 'normal-distribution', 'z-scores', 'correlation'],
       order: 3,
       is_active: true
     },
@@ -999,7 +999,7 @@ async function initializeClasses() {
     }
   ]
 
-  if (!confirm('This will create the classes collection and add 4 default classes. Continue?')) {
+  if (!confirm('This will create the classes collection and add 3 default classes. Continue?')) {
     return
   }
 

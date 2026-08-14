@@ -8,7 +8,8 @@ export function useInstructorAnalytics() {
 
   // Check if current user is an instructor
   function isInstructor() {
-    return user.value?.role === 'instructor'
+    const role = user.value?.role
+    return role === 'instructor' || role === 'admin'
   }
 
   async function fetchSemesters() {
@@ -232,8 +233,72 @@ export function useInstructorAnalytics() {
 
   // ========== ROSTER MANAGEMENT FUNCTIONS ==========
 
-  // Parse Blackboard CSV export format
-  // Expected columns: Last Name, First Name, Username, Student ID, etc.
+  // Score a CSV filename against active classes (name / short_name / slug / aliases).
+  function detectClassFromFilename(filename, classList = []) {
+    if (!filename || !classList.length) {
+      return { classId: null, confidence: 0, matchedOn: null }
+    }
+
+    const base = String(filename)
+      .replace(/^.*[\\/]/, '')
+      .replace(/\.[^.]+$/, '')
+      .toLowerCase()
+
+    const normalized = base
+      .replace(/[_\-.]+/g, ' ')
+      .replace(/\b(canvas|roster|export|gradebook|people|fall|spring|summer|winter|\d{4}|fa\d{2}|sp\d{2}|su\d{2})\b/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    const aliases = {
+      'research-methods': ['research methods', 'research methodology', 'rm', 'psyc 4223', '4223'],
+      statistics: ['statistics', 'stats', 'psyc 4213', '4213'],
+      'intro-research': ['intro to research', 'intro research', 'intro'],
+      'stats-assessment': ['statistics for assessment', 'stats for assessment', 's4a', 'assessment'],
+    }
+
+    let best = { classId: null, confidence: 0, matchedOn: null }
+
+    for (const cls of classList) {
+      const candidates = [
+        cls.slug,
+        cls.short_name,
+        cls.name,
+        ...(aliases[cls.slug] || []),
+      ]
+        .filter(Boolean)
+        .map(s => String(s).toLowerCase().trim())
+
+      for (const token of candidates) {
+        if (!token) continue
+        const compactToken = token.replace(/\s+/g, '')
+        const compactFile = normalized.replace(/\s+/g, '')
+        let score = 0
+        let matchedOn = token
+
+        if (normalized === token || compactFile === compactToken) {
+          score = 100
+        } else if (normalized.includes(token) || compactFile.includes(compactToken)) {
+          score = 80 + Math.min(19, token.length)
+        } else if (token.length >= 3 && (normalized.includes(token.slice(0, 3)) || base.includes(token))) {
+          score = 40
+        }
+
+        if (score > best.confidence) {
+          best = { classId: cls.id, confidence: score, matchedOn }
+        }
+      }
+    }
+
+    if (best.confidence < 40) {
+      return { classId: null, confidence: best.confidence, matchedOn: best.matchedOn }
+    }
+    return best
+  }
+
+  // Parse Canvas (or legacy Blackboard) roster CSV export.
+  // Canvas common headers: Login ID, SIS Login ID, SIS User ID, Student, sortable_name
+  // Legacy: Username, Student ID, Last Name, First Name
   function parseBlackboardCSV(csvText) {
     const lines = csvText.trim().split('\n')
     if (lines.length < 2) {
@@ -243,14 +308,27 @@ export function useInstructorAnalytics() {
     // Parse header row
     const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim())
 
-    // Find column indices
-    const usernameIdx = headers.findIndex(h => h.includes('username'))
-    const studentIdIdx = headers.findIndex(h => h.includes('student id') || h === 'id')
+    // Find column indices (Canvas + legacy LMS names)
+    const usernameIdx = headers.findIndex(h =>
+      h.includes('username') ||
+      h === 'login id' ||
+      h === 'login_id' ||
+      h === 'sis login id' ||
+      h === 'sis_login_id'
+    )
+    const studentIdIdx = headers.findIndex(h =>
+      h.includes('student id') ||
+      h === 'id' ||
+      h === 'sis user id' ||
+      h === 'sis_user_id' ||
+      h === 'integration_id' ||
+      h === 'integration id'
+    )
     const lastNameIdx = headers.findIndex(h => h.includes('last name') || h === 'lastname')
     const firstNameIdx = headers.findIndex(h => h.includes('first name') || h === 'firstname')
 
     if (usernameIdx === -1 && studentIdIdx === -1) {
-      throw new Error('CSV must contain either a Username or Student ID column')
+      throw new Error('CSV must contain a Login ID / Username or SIS User ID / Student ID column')
     }
 
     const rows = []
@@ -268,6 +346,12 @@ export function useInstructorAnalytics() {
 
       // Skip rows without identifier
       if (!row.bb_username && !row.bb_id) continue
+
+      // Skip Canvas points/totals footer rows sometimes present in gradebook exports
+      const loginLower = row.bb_username.toLowerCase()
+      if (loginLower === 'student' || loginLower.startsWith('points possible') || loginLower === 'notes') {
+        continue
+      }
 
       rows.push(row)
     }
@@ -333,7 +417,8 @@ export function useInstructorAnalytics() {
     try {
       const records = await pb.collection('roster').getFullList({
         filter: `semester = "${semesterId}"`,
-        sort: 'created'
+        sort: 'created',
+        expand: 'class'
       })
       return records
     } catch (err) {
@@ -344,17 +429,21 @@ export function useInstructorAnalytics() {
 
   // Create roster entries from parsed CSV data
   // Returns { created: [], skipped: [], errors: [] }
-  async function createRosterEntries(rows, semesterId, semesterCode, isDryRun = false) {
+  async function createRosterEntries(rows, semesterId, semesterCode, isDryRun = false, classId = null) {
     if (!isInstructor()) {
       throw new Error('Instructor access required')
+    }
+    if (!classId) {
+      throw new Error('Class is required to create roster entries')
     }
 
     loading.value = true
     try {
-      // Fetch existing roster for duplicate detection
+      // Fetch existing roster for duplicate detection (same semester + class)
       const existingRoster = await fetchRoster(semesterId)
-      const existingBbIds = new Set(existingRoster.map(r => r.bb_id).filter(Boolean))
-      const existingBbUsernames = new Set(existingRoster.map(r => r.bb_username).filter(Boolean))
+      const sameClass = existingRoster.filter(r => (r.class || r.expand?.class?.id) === classId)
+      const existingBbIds = new Set(sameClass.map(r => r.bb_id).filter(Boolean))
+      const existingBbUsernames = new Set(sameClass.map(r => r.bb_username).filter(Boolean))
 
       const results = {
         created: [],
@@ -363,7 +452,7 @@ export function useInstructorAnalytics() {
       }
 
       for (const row of rows) {
-        // Check for duplicates
+        // Check for duplicates within this class
         const isDuplicate =
           (row.bb_id && existingBbIds.has(row.bb_id)) ||
           (row.bb_username && existingBbUsernames.has(row.bb_username))
@@ -371,7 +460,7 @@ export function useInstructorAnalytics() {
         if (isDuplicate) {
           results.skipped.push({
             ...row,
-            reason: 'Already exists in roster'
+            reason: 'Already exists in roster for this class'
           })
           continue
         }
@@ -382,12 +471,14 @@ export function useInstructorAnalytics() {
 
         const rosterEntry = {
           semester: semesterId,
+          class: classId,
           student_key: studentKey,
           claim_token: claimToken,
           bb_username: row.bb_username,
           bb_id: row.bb_id,
           user: '', // Not claimed yet
-          claimed_at: null
+          claimed_at: null,
+          access_mode: 'online_primary'
         }
 
         if (isDryRun) {
@@ -414,7 +505,7 @@ export function useInstructorAnalytics() {
     }
   }
 
-  // Export student keys CSV for distribution (bb_username + student_key only)
+  // Export student keys CSV for distribution
   async function exportKeysCSV(semesterId) {
     if (!isInstructor()) {
       throw new Error('Instructor access required')
@@ -422,11 +513,12 @@ export function useInstructorAnalytics() {
 
     const roster = await fetchRoster(semesterId)
 
-    const headers = ['bb_username', 'bb_id', 'student_key', 'claimed']
+    const headers = ['bb_username', 'bb_id', 'student_key', 'class', 'claimed']
     const rows = roster.map(r => [
       r.bb_username || '',
       r.bb_id || '',
       r.student_key || '',
+      r.expand?.class?.slug || r.class || '',
       r.user ? 'Yes' : 'No'
     ])
 
@@ -701,6 +793,7 @@ export function useInstructorAnalytics() {
     exportPrototypesCSV,
     // Roster management
     parseBlackboardCSV,
+    detectClassFromFilename,
     generateStudentKey,
     generateClaimToken,
     fetchRoster,
