@@ -1,6 +1,7 @@
 import secrets
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import (
     Boolean,
@@ -258,6 +259,51 @@ class SoftwareLessonMetric(Base, TimestampMixin):
     event_payload: Mapped[dict | list | None] = mapped_column(JSONB)
 
 
+class LearningEvent(Base, TimestampMixin):
+    __tablename__ = "learning_events"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"))
+    class_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    source: Mapped[str] = mapped_column(String(64), nullable=False)
+    item_id: Mapped[str | None] = mapped_column(String(255))
+    lesson_id: Mapped[str | None] = mapped_column(String(255))
+    module_id: Mapped[str | None] = mapped_column(String(128))
+    objective_ids: Mapped[dict | list | None] = mapped_column(JSONB)
+    is_correct: Mapped[bool | None] = mapped_column(Boolean)
+    answer: Mapped[Any] = mapped_column(JSONB)
+    difficulty: Mapped[str | None] = mapped_column(String(32))
+    active_time_seconds: Mapped[int | None] = mapped_column(Integer)
+    total_time_seconds: Mapped[int | None] = mapped_column(Integer)
+    time_maxed_out: Mapped[bool | None] = mapped_column(Boolean)
+    idle_detected: Mapped[bool | None] = mapped_column(Boolean)
+    time_to_first_selection: Mapped[int | None] = mapped_column(Integer)
+    answer_changes: Mapped[int | None] = mapped_column(Integer)
+    time_since_reading: Mapped[int | None] = mapped_column(Integer)
+    time_since_last_attempt: Mapped[int | None] = mapped_column(Integer)
+    has_read_topic_before: Mapped[bool | None] = mapped_column(Boolean)
+    last_topic_read_time: Mapped[int | None] = mapped_column(Integer)
+    last_attempt_time: Mapped[int | None] = mapped_column(Integer)
+    last_reading_max_scroll_depth: Mapped[int | None] = mapped_column(Integer)
+    last_reading_triggered_by_error: Mapped[bool | None] = mapped_column(Boolean)
+    pL_before: Mapped[float | None] = mapped_column(Float)
+    pL_after: Mapped[float | None] = mapped_column(Float)
+    prototype_id: Mapped[int | None] = mapped_column(Integer)
+    extra: Mapped[dict | list | None] = mapped_column(JSONB)
+
+
+class BktPrototype(Base, TimestampMixin):
+    __tablename__ = "bkt_prototypes"
+    __table_args__ = (UniqueConstraint("user_id", "class_id", name="uq_bkt_prototypes_user_class"),)
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"))
+    class_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    probs: Mapped[dict | list] = mapped_column(JSONB, nullable=False)
+    prototype_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    last_updated: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
 COLLECTION_MODELS: dict[str, type[Base]] = {
     "users": User,
     "classes": Class,
@@ -272,6 +318,8 @@ COLLECTION_MODELS: dict[str, type[Base]] = {
     "topic_readings": TopicReading,
     "bkt_states": BktState,
     "software_lesson_metrics": SoftwareLessonMetric,
+    "learning_events": LearningEvent,
+    "bkt_prototypes": BktPrototype,
 }
 
 FIELD_ALIASES: dict[str, dict[str, str]] = {
@@ -289,6 +337,8 @@ FIELD_ALIASES: dict[str, dict[str, str]] = {
     "topic_readings": {"user": "user_id"},
     "bkt_states": {"user": "user_id"},
     "software_lesson_metrics": {"user": "user_id"},
+    "learning_events": {"user": "user_id"},
+    "bkt_prototypes": {"user": "user_id"},
 }
 
 REVERSE_ALIASES: dict[str, dict[str, str]] = {

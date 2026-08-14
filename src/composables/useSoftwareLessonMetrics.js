@@ -15,6 +15,8 @@
  */
 
 import { pb } from '../lib/pocketbase'
+import { inferClassId } from '../data/classIds.js'
+import { logLearningEvent } from './useLearningEvents'
 
 const METRICS_API_URL = import.meta.env.VITE_METRICS_API_URL || ''
 const COLLECTION = 'software_lesson_metrics'
@@ -48,6 +50,31 @@ async function saveToPocketBase(record) {
   } catch (err) {
     console.warn('[useSoftwareLessonMetrics] PocketBase save failed:', err.message)
   }
+  await logSoftwareMetricAsEvent(record)
+}
+
+function softwareEventSource(eventType, payload = {}) {
+  if (eventType === 'hint_used') return 'software_hint'
+  if (eventType === 'apply_exercise_completed') return 'software_apply'
+  if (eventType === 'lesson_completed') return 'software_lesson_complete'
+  if (eventType === 'phase_completed' && payload.phase === 'weDo') return 'software_wedo'
+  return 'software_phase'
+}
+
+async function logSoftwareMetricAsEvent(record) {
+  const payload = record.event_payload || {}
+  await logLearningEvent({
+    class_id: inferClassId({ moduleId: record.module, hint: 'statistics' }),
+    source: softwareEventSource(record.event_type, payload),
+    lesson_id: record.lesson_id,
+    module_id: record.module,
+    extra: {
+      event_type: record.event_type,
+      lesson_title: record.lesson_title,
+      software: record.software,
+      ...payload
+    }
+  })
 }
 
 /**

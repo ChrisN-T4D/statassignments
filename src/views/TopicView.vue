@@ -55,6 +55,8 @@ import { useTimeTracking } from '../composables/useTimeTracking'
 import { useAuth } from '../composables/useAuth'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { pb } from '../lib/pocketbase'
+import { inferClassId } from '../data/classIds.js'
+import { logLearningEvent } from '../composables/useLearningEvents'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { resolveTopicHtml } from '../content/topics/resolveTopicHtml.js'
 
@@ -264,6 +266,19 @@ async function saveTopicReadingTime() {
       idle_detected: timeData.idleDetected,
       max_scroll_depth: maxScrollDepth.value,
       triggered_by_error: triggeredByError.value
+    })
+    await logLearningEvent({
+      class_id: inferClassId({ moduleId: moduleId.value, hint: route.params.classId }),
+      source: 'topic_read',
+      module_id: moduleId.value,
+      item_id: topicId.value,
+      active_time_seconds: timeData.activeTimeSeconds,
+      total_time_seconds: timeData.totalTimeSeconds,
+      time_maxed_out: timeData.wasMaxedOut,
+      idle_detected: timeData.idleDetected,
+      last_reading_max_scroll_depth: maxScrollDepth.value,
+      last_reading_triggered_by_error: triggeredByError.value,
+      extra: { max_scroll_depth: maxScrollDepth.value, triggered_by_error: triggeredByError.value }
     })
     console.log(`[Topic Reading] Saved ${timeData.activeTimeSeconds}s for topic ${topicId.value}, scroll depth: ${maxScrollDepth.value}%, return visit: ${triggeredByError.value}`)
   } catch (err) {

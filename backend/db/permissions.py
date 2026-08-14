@@ -40,7 +40,7 @@ def can_view(collection: str, user: User | None, record, db: Session) -> bool:
             return True
         return uid and str(getattr(record, "user_id", "")) == uid
 
-    if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states"):
+    if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states", "learning_events", "bkt_prototypes"):
         if _is_instructor(user):
             return True
         return uid and str(getattr(record, "user_id", "")) == uid
@@ -78,6 +78,8 @@ def can_create(collection: str, user: User | None, payload: dict) -> bool:
         "topic_readings": "user",
         "bkt_states": "user",
         "software_lesson_metrics": "user",
+        "learning_events": "user",
+        "bkt_prototypes": "user",
     }
     if collection in owner_fields:
         field = owner_fields[collection]

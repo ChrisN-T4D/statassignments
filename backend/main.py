@@ -6,7 +6,7 @@ Serves predictions from interpretable student models
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Optional, Union, Any
 import os
 import subprocess
 import sys
@@ -14,8 +14,10 @@ from datetime import datetime
 from pathlib import Path
 
 from api.collections import router as collections_router
-from db.bkt_store import hydrate_bkt_model, load_bkt_state, persist_bkt_state
+from db.bkt_store import hydrate_bkt_model, load_bkt_state, persist_bkt_prototype, persist_bkt_state
 from db.database import SessionLocal
+from db.event_log import insert_learning_event
+from models.class_ids import infer_class_id, prototype_key
 from models.neural_bkt import NeuralBKTModel
 from models.bkt_tabular import TabularBKTModel
 
@@ -72,6 +74,12 @@ class BKTUpdateRequest(BaseModel):
     last_attempt_time: Optional[int] = None
     last_reading_max_scroll_depth: Optional[int] = None
     last_reading_triggered_by_error: Optional[bool] = None
+    class_id: Optional[str] = None
+    source: Optional[str] = None
+    answer: Optional[Any] = None
+    module_id: Optional[str] = None
+    lesson_id: Optional[str] = None
+    objective_ids: Optional[List[str]] = None
 
 class BKTStateResponse(BaseModel):
     """BKT state for a single objective"""
@@ -136,6 +144,69 @@ def _save_bkt_to_db(user_id: str, objective_id: str, state: dict, last_updated: 
         persist_bkt_state(db, user_id, objective_id, state, last_updated)
     except Exception as exc:
         print(f"⚠️  Failed to persist BKT state for {user_id}/{objective_id}: {exc}", flush=True)
+    finally:
+        db.close()
+
+
+def _save_prototype_and_event(
+    request: "BKTUpdateRequest",
+    class_id: str,
+    pL_before: float,
+    updated_state: dict,
+    last_updated: datetime,
+    difficulty: str,
+) -> None:
+    db = SessionLocal()
+    proto_id = None
+    try:
+        proto_store = getattr(bkt_model, "student_prototype_probs", None)
+        if isinstance(proto_store, dict):
+            raw = proto_store.get(prototype_key(request.user_id, class_id))
+            if raw is not None:
+                probs = [float(p) for p in list(raw)]
+                proto_id = int(max(range(len(probs)), key=lambda i: probs[i])) if probs else None
+                persist_bkt_prototype(
+                    db,
+                    request.user_id,
+                    class_id,
+                    probs,
+                    proto_id if proto_id is not None else 4,
+                    last_updated,
+                )
+    except Exception as exc:
+        print(f"⚠️  Failed to persist BKT prototype for {request.user_id}/{class_id}: {exc}", flush=True)
+    try:
+        insert_learning_event(
+            db,
+            user_id=request.user_id,
+            class_id=class_id,
+            source=request.source or "concept_review",
+            item_id=request.problem_id,
+            lesson_id=request.lesson_id,
+            module_id=request.module_id,
+            objective_ids=request.objective_ids or [request.objective_id],
+            is_correct=request.is_correct,
+            answer=request.answer,
+            difficulty=difficulty,
+            active_time_seconds=_sanitize_non_negative_int(request.active_time_seconds),
+            total_time_seconds=_sanitize_non_negative_int(request.total_time_seconds),
+            time_maxed_out=request.was_maxed_out,
+            idle_detected=request.idle_detected,
+            time_to_first_selection=_sanitize_non_negative_int(request.time_to_first_selection),
+            answer_changes=_sanitize_non_negative_int(request.answer_changes),
+            time_since_reading=_sanitize_non_negative_int(request.time_since_reading),
+            time_since_last_attempt=_sanitize_non_negative_int(request.time_since_last_attempt),
+            has_read_topic_before=request.has_read_topic_before,
+            last_topic_read_time=_sanitize_non_negative_int(request.last_topic_read_time),
+            last_attempt_time=_sanitize_non_negative_int(request.last_attempt_time),
+            last_reading_max_scroll_depth=_sanitize_non_negative_int(request.last_reading_max_scroll_depth),
+            last_reading_triggered_by_error=request.last_reading_triggered_by_error,
+            pL_before=float(pL_before),
+            pL_after=float(updated_state["pL"]),
+            prototype_id=proto_id,
+        )
+    except Exception as exc:
+        print(f"⚠️  Failed to insert learning_event for {request.user_id}: {exc}", flush=True)
     finally:
         db.close()
 
@@ -259,6 +330,14 @@ async def update_bkt(request: BKTUpdateRequest):
 
     try:
         difficulty = _sanitize_difficulty(request.difficulty)
+        class_id = infer_class_id(
+            objective_id=request.objective_id,
+            hint=request.class_id,
+            module_id=request.module_id,
+            item_id=request.problem_id,
+        )
+        prior = bkt_model.get_state(request.user_id, request.objective_id)
+        pL_before = prior["pL"] if prior else 0.1
 
         # Update BKT state using neural model with time and engagement data
         updated_state = bkt_model.update(
@@ -279,11 +358,20 @@ async def update_bkt(request: BKTUpdateRequest):
             last_attempt_time=_sanitize_non_negative_int(request.last_attempt_time),
             last_reading_max_scroll_depth=_sanitize_non_negative_int(request.last_reading_max_scroll_depth),
             last_reading_triggered_by_error=request.last_reading_triggered_by_error,
+            class_id=class_id,
             problem_id=request.problem_id,
         )
 
         last_updated = datetime.utcnow()
         _save_bkt_to_db(request.user_id, request.objective_id, updated_state, last_updated)
+        _save_prototype_and_event(
+            request=request,
+            class_id=class_id,
+            pL_before=pL_before,
+            updated_state=updated_state,
+            last_updated=last_updated,
+            difficulty=difficulty,
+        )
 
         return BKTStateResponse(
             objective_id=request.objective_id,
@@ -349,7 +437,7 @@ async def get_bkt_state(user_id: str, objective_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/student/profile/{user_id}", response_model=StudentProfileResponse)
-async def get_student_profile(user_id: str):
+async def get_student_profile(user_id: str, class_id: Optional[str] = None):
     """
     Get student's multidimensional ability profile
 
@@ -360,7 +448,7 @@ async def get_student_profile(user_id: str):
         raise HTTPException(status_code=503, detail="Model not loaded")
 
     try:
-        profile = bkt_model.get_student_profile(user_id)
+        profile = bkt_model.get_student_profile(user_id, class_id=class_id)
 
         return StudentProfileResponse(
             user_id=user_id,

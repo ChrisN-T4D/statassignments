@@ -2,6 +2,7 @@
 // Tracks student mastery of learning objectives based on performance
 
 import { pb } from '../lib/pocketbase'
+import { inferClassId } from '../data/classIds.js'
 
 /**
  * BKT Model Parameters:
@@ -133,7 +134,8 @@ async function callNeuralBKT(
   timeData = null,
   confidenceData = null,
   sequenceData = null,
-  problemId = null
+  problemId = null,
+  meta = null
 ) {
   let userId = pb.authStore.record?.id
 
@@ -164,6 +166,24 @@ async function callNeuralBKT(
     if (typeof problemId === 'string' && problemId.length > 0) {
       requestBody.problem_id = problemId
     }
+
+    const classHint = meta?.class_id ?? meta?.classId
+    const moduleId = meta?.module_id ?? meta?.moduleId
+    const lessonId = meta?.lesson_id ?? meta?.lessonId
+    const source = meta?.source
+    const answer = meta?.answer
+    const objectiveIds = meta?.objective_ids ?? meta?.objectiveIds
+    requestBody.class_id = inferClassId({
+      objectiveId,
+      itemId: problemId,
+      hint: classHint,
+      moduleId
+    })
+    if (typeof source === 'string' && source) requestBody.source = source
+    if (answer !== undefined) requestBody.answer = answer
+    if (typeof moduleId === 'string' && moduleId) requestBody.module_id = moduleId
+    if (typeof lessonId === 'string' && lessonId) requestBody.lesson_id = lessonId
+    if (Array.isArray(objectiveIds) && objectiveIds.length) requestBody.objective_ids = objectiveIds
 
     // Add time data if available
     if (timeData) {
@@ -271,7 +291,8 @@ export async function updateBKT(
   timeData = null,
   confidenceData = null,
   sequenceData = null,
-  problemId = null
+  problemId = null,
+  meta = null
 ) {
   // Try Neural BKT first if enabled
   if (USE_NEURAL_BKT) {
@@ -282,7 +303,8 @@ export async function updateBKT(
       timeData,
       confidenceData,
       sequenceData,
-      problemId
+      problemId,
+      meta
     )
     if (neuralState) {
       // Backend persists to Postgres; mirror to local cache for offline reads.

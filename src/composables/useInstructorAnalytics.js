@@ -590,6 +590,100 @@ export function useInstructorAnalytics() {
     return generateCSV(headers, csvRows)
   }
 
+  async function rosterUserMap(semesterId) {
+    const roster = await fetchRoster(semesterId)
+    const userToKey = {}
+    roster.forEach(r => {
+      if (r.user) userToKey[r.user] = r.student_key || ''
+    })
+    const rosterUserIds = roster.filter(r => r.user).map(r => r.user)
+    return { userToKey, rosterSet: new Set(rosterUserIds) }
+  }
+
+  async function exportLearningEventsCSV(semesterId) {
+    if (!isInstructor()) throw new Error('Instructor access required')
+    const { userToKey, rosterSet } = await rosterUserMap(semesterId)
+    const records = await pb.collection('learning_events').getFullList({ sort: 'created' })
+    const headers = [
+      'student_key', 'class_id', 'source', 'item_id', 'lesson_id', 'module_id',
+      'objective_ids', 'is_correct', 'answer', 'difficulty',
+      'active_time_seconds', 'total_time_seconds', 'time_maxed_out', 'idle_detected',
+      'time_to_first_selection', 'answer_changes', 'time_since_reading',
+      'time_since_last_attempt', 'has_read_topic_before',
+      'pL_before', 'pL_after', 'prototype_id', 'created'
+    ]
+    const rows = records
+      .filter(r => rosterSet.has(r.user))
+      .map(r => [
+        userToKey[r.user] || '',
+        r.class_id || '',
+        r.source || '',
+        r.item_id || '',
+        r.lesson_id || '',
+        r.module_id || '',
+        JSON.stringify(r.objective_ids ?? []),
+        r.is_correct == null ? '' : (r.is_correct ? '1' : '0'),
+        r.answer == null ? '' : JSON.stringify(r.answer),
+        r.difficulty || '',
+        r.active_time_seconds ?? '',
+        r.total_time_seconds ?? '',
+        r.time_maxed_out == null ? '' : (r.time_maxed_out ? '1' : '0'),
+        r.idle_detected == null ? '' : (r.idle_detected ? '1' : '0'),
+        r.time_to_first_selection ?? '',
+        r.answer_changes ?? '',
+        r.time_since_reading ?? '',
+        r.time_since_last_attempt ?? '',
+        r.has_read_topic_before == null ? '' : (r.has_read_topic_before ? '1' : '0'),
+        r.pL_before ?? '',
+        r.pL_after ?? '',
+        r.prototype_id ?? '',
+        r.created || ''
+      ])
+    return generateCSV(headers, rows)
+  }
+
+  async function exportObjectiveMasteryCSV(semesterId) {
+    if (!isInstructor()) throw new Error('Instructor access required')
+    const { userToKey, rosterSet } = await rosterUserMap(semesterId)
+    const records = await pb.collection('bkt_states').getFullList({ sort: 'user' })
+    const headers = [
+      'student_key', 'class_id', 'objective_id', 'pL', 'attempts', 'correct', 'incorrect', 'last_updated'
+    ]
+    const rows = records
+      .filter(r => rosterSet.has(r.user))
+      .map(r => {
+        const oid = r.objective_id || ''
+        const classId = String(oid).startsWith('RM') ? 'research-methods' : 'statistics'
+        return [
+          userToKey[r.user] || '',
+          classId,
+          oid,
+          r.pL ?? '',
+          r.attempts ?? '',
+          r.correct ?? '',
+          r.incorrect ?? '',
+          r.last_updated || r.updated || ''
+        ]
+      })
+    return generateCSV(headers, rows)
+  }
+
+  async function exportPrototypesCSV(semesterId) {
+    if (!isInstructor()) throw new Error('Instructor access required')
+    const { userToKey, rosterSet } = await rosterUserMap(semesterId)
+    const records = await pb.collection('bkt_prototypes').getFullList({ sort: 'user' })
+    const headers = ['student_key', 'class_id', 'prototype_id', 'probs']
+    const rows = records
+      .filter(r => rosterSet.has(r.user))
+      .map(r => [
+        userToKey[r.user] || '',
+        r.class_id || '',
+        r.prototype_id ?? '',
+        JSON.stringify(r.probs ?? [])
+      ])
+    return generateCSV(headers, rows)
+  }
+
   return {
     loading,
     isInstructor,
@@ -602,6 +696,9 @@ export function useInstructorAnalytics() {
     exportAtRiskCSV,
     fetchMasteryAndPractice,
     exportMasteryPracticeCSV,
+    exportLearningEventsCSV,
+    exportObjectiveMasteryCSV,
+    exportPrototypesCSV,
     // Roster management
     parseBlackboardCSV,
     generateStudentKey,

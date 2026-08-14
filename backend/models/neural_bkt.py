@@ -17,6 +17,8 @@ from dataclasses import dataclass
 import math
 import time
 
+from models.class_ids import infer_class_id, prototype_key
+
 
 @dataclass
 class StudentPrototype:
@@ -266,7 +268,8 @@ class NeuralBKTModel:
         user_id: str,
         objective_id: str,
         is_correct: bool,
-        difficulty: str
+        difficulty: str,
+        class_id: str
     ) -> np.ndarray:
         """
         Sequential Bayesian updating over student prototypes
@@ -274,11 +277,12 @@ class NeuralBKTModel:
         From research: Update posterior probability of each prototype
         based on observed performance
         """
+        key = prototype_key(user_id, class_id)
         # Get or initialize prototype probabilities (uniform prior)
-        if user_id not in self.student_prototype_probs:
-            self.student_prototype_probs[user_id] = np.ones(self.num_prototypes) / self.num_prototypes
+        if key not in self.student_prototype_probs:
+            self.student_prototype_probs[key] = np.ones(self.num_prototypes) / self.num_prototypes
 
-        probs = self.student_prototype_probs[user_id]
+        probs = np.asarray(self.student_prototype_probs[key], dtype=float)
 
         # Compute likelihood of observation under each prototype
         likelihoods = []
@@ -303,7 +307,7 @@ class NeuralBKTModel:
         posterior = probs * likelihoods
         posterior = posterior / posterior.sum() if posterior.sum() > 0 else probs
 
-        self.student_prototype_probs[user_id] = posterior
+        self.student_prototype_probs[key] = posterior
 
         return posterior
 
@@ -490,6 +494,7 @@ class NeuralBKTModel:
         last_attempt_time: Optional[int] = None,
         last_reading_max_scroll_depth: Optional[int] = None,
         last_reading_triggered_by_error: Optional[bool] = None,
+        class_id: Optional[str] = None,
         problem_id: Optional[str] = None,
     ) -> Dict:
         """
@@ -504,6 +509,8 @@ class NeuralBKTModel:
         difficulty = str(difficulty).lower() if difficulty else 'medium'
         if difficulty not in ('easy', 'medium', 'hard'):
             difficulty = 'medium'
+
+        class_id = infer_class_id(objective_id=objective_id, hint=class_id)
 
         # Initialize user state if needed
         if user_id not in self.student_states:
@@ -565,7 +572,9 @@ class NeuralBKTModel:
         total_pS = max(-0.08, min(0.18, total_pS))
 
         # Update prototype probabilities
-        prototype_probs = self._sequential_bayesian_update(user_id, objective_id, is_correct, difficulty)
+        prototype_probs = self._sequential_bayesian_update(
+            user_id, objective_id, is_correct, difficulty, class_id
+        )
 
         # Get weighted average of BKT updates across prototypes with time + engagement adjustments
         pL_updates = []
@@ -607,13 +616,15 @@ class NeuralBKTModel:
             return self.student_states[user_id][objective_id]
         return None
 
-    def get_student_profile(self, user_id: str) -> Dict:
+    def get_student_profile(self, user_id: str, class_id: Optional[str] = None) -> Dict:
         """
         Get student's multidimensional ability profile
 
         Returns the most likely prototype and its parameters
         """
-        if user_id not in self.student_prototype_probs:
+        class_id = infer_class_id(hint=class_id)
+        key = prototype_key(user_id, class_id)
+        if key not in self.student_prototype_probs:
             # Return a deterministic default profile when no history exists.
             default = next((p for p in self.prototypes if p.name == "Average Student"), self.prototypes[-1])
             base_confidence = 1.0 / max(1, len(self.prototypes))
@@ -627,7 +638,7 @@ class NeuralBKTModel:
                 'confidence': base_confidence  # Uniform prior confidence
             }
 
-        probs = self.student_prototype_probs[user_id]
+        probs = np.asarray(self.student_prototype_probs[key], dtype=float)
         best_idx = np.argmax(probs)
         best_prototype = self.prototypes[best_idx]
 

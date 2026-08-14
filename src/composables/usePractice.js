@@ -484,7 +484,8 @@ export function usePractice() {
           timeData,
           confidenceData,
           sequenceData,
-          problemId
+          problemId,
+          { source: 'concept_review', answer }
         )
 
         // Determine confidence level based on answer changes and deliberation time

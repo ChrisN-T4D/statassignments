@@ -251,7 +251,7 @@ import { getContentModulesByClass, getTopicsForModule, getAllTopics } from '../d
 import { getLessonsByModule } from '../data/softwareLessons.js'
 import { statisticsExercises } from '../data/statisticsPractices.js'
 import { software } from '../data/topics.js'
-import { getObjectivesByModule, getModuleNumber } from '../data/objectives.js'
+import { getObjectivesByModule } from '../data/objectives.js'
 import { useAuth } from '../composables/useAuth'
 import { usePractice } from '../composables/usePractice'
 import { useBKT } from '../composables/useBKT'
@@ -438,9 +438,7 @@ function toggleModuleExpansion(moduleId) {
 }
 
 function getModuleObjectives(module) {
-  const moduleNum = getModuleNumber(module.id)
-  if (!moduleNum) return []
-  return getObjectivesByModule(moduleNum)
+  return getObjectivesByModule(module)
 }
 
 function getObjectiveMastery(objectiveId) {

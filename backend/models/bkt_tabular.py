@@ -144,6 +144,7 @@ class TabularBKTModel:
         last_attempt_time: Optional[int] = None,
         last_reading_max_scroll_depth: Optional[int] = None,
         last_reading_triggered_by_error: Optional[bool] = None,
+        class_id: Optional[str] = None,
         problem_id: Optional[str] = None,
     ) -> Dict:
         difficulty = str(difficulty).lower() if difficulty else "medium"
@@ -220,7 +221,7 @@ class TabularBKTModel:
             "incorrect": raw["incorrect"],
         }
 
-    def get_student_profile(self, user_id: str) -> Dict:
+    def get_student_profile(self, user_id: str, class_id: Optional[str] = None) -> Dict:
         default = next(
             (p for p in _TABULAR_PROTOTYPE_META if p["name"] == "Average Student"),
             _TABULAR_PROTOTYPE_META[-1],

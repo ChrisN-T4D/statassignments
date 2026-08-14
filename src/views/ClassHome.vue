@@ -101,8 +101,8 @@
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
             class="content-tab"
-            :class="{ active: activeContentTab === tab.id, disabled: tab.id === 'software' && !hasSoftwareLessons }"
-            :disabled="tab.id === 'software' && !hasSoftwareLessons"
+            :class="{ active: activeContentTab === tab.id, disabled: tab.id === 'software' && !softwareTabAvailable }"
+            :disabled="tab.id === 'software' && !softwareTabAvailable"
             @click="activeContentTab = tab.id"
           >
             <span class="tab-icon" v-if="!tab.iconSrc">{{ tab.icon }}</span>
@@ -203,7 +203,11 @@
 
           <!-- Software Practice Tab (one lesson per module, like Module 8; lesson may have multiple learn sections) -->
           <div v-else-if="activeContentTab === 'software'" class="tab-panel">
-            <div v-if="moduleLesson" class="software-phases-container">
+            <SoftwarePracticeUnderConstruction
+              v-if="isSoftwarePracticeUnderConstruction"
+              :software-id="preferredSoftware"
+            />
+            <div v-else-if="moduleLesson" class="software-phases-container">
               <!-- Lesson Header -->
               <div class="lesson-header-card">
                 <div class="lesson-header-icon">
@@ -388,6 +392,7 @@ import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
+import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
@@ -535,6 +540,23 @@ const moduleLesson = computed(() => {
 const hasSoftwareLessons = computed(() => {
   return moduleLesson.value !== null || todoExercises.value.length > 0
 })
+
+function moduleHasSoftwarePractice(moduleId) {
+  if (!moduleId) return false
+  if (getLessonsByModule(moduleId).length > 0) return true
+  const practiceId = moduleId.replace('stats-module-', 'module-')
+  return statisticsExercises.some(ex => ex.module === practiceId && ex.is_active !== false)
+}
+
+const isSoftwarePracticeUnderConstruction = computed(() => {
+  const sw = preferredSoftware.value
+  if (!sw || sw === 'jamovi') return false
+  return moduleHasSoftwarePractice(selectedModuleId.value)
+})
+
+const softwareTabAvailable = computed(() =>
+  hasSoftwareLessons.value || isSoftwarePracticeUnderConstruction.value
+)
 
 const { getCompletedPhases, isPhaseLocked, phaseProgressVersion } = useLessonPhaseProgress()
 // Completed phases for current module lesson (reactive to phaseProgressVersion when SoftwareLesson saves)

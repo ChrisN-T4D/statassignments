@@ -1,5 +1,14 @@
 <template>
-  <div class="lesson-page" v-if="lesson">
+  <div v-if="lesson && lesson.software && lesson.software !== 'jamovi'" class="lesson-page">
+    <div class="container">
+      <router-link :to="backLink" class="back-link">Back</router-link>
+      <SoftwarePracticeUnderConstruction
+        :software-id="lesson.software"
+        @switch-to-jamovi="goToJamoviLesson"
+      />
+    </div>
+  </div>
+  <div class="lesson-page" v-else-if="lesson">
     <div class="container">
       <!-- Lesson Header -->
       <div class="lesson-header">
@@ -109,18 +118,18 @@
                   <div v-if="block.type === 'annotated_image'" class="content-block annotated-image">
                     <div class="image-container">
                       <img
-                        v-if="block.image && !imageLoadFailed.has(block.image)"
-                        :src="imageSrc(block.image)"
+                        v-if="annotatedImagePath(block) && !imageLoadFailed.has(annotatedImagePath(block))"
+                        :src="imageSrc(annotatedImagePath(block))"
                         :alt="block.alt"
                         class="annotated-image-img"
                         loading="lazy"
-                        @error="onImageError(block.image)"
+                        @error="onImageError(annotatedImagePath(block))"
                       >
                       <div v-else class="image-placeholder">
                         <span class="placeholder-icon">🖼️</span>
                         <span class="placeholder-text">{{ block.alt }}</span>
                         <span class="placeholder-note">
-                          {{ imageLoadFailed.has(block.image) ? 'Image not found at ' + imageSrc(block.image) : '(Image: ' + (block.image || '') + ')' }}
+                          {{ imageLoadFailed.has(annotatedImagePath(block)) ? 'Image not found at ' + imageSrc(annotatedImagePath(block)) : '(Image: ' + annotatedImagePath(block) + ')' }}
                         </span>
                       </div>
                       <!-- Annotations shown as list for now -->
@@ -264,18 +273,18 @@
               <div v-if="block.type === 'annotated_image'" class="content-block annotated-image">
                 <div class="image-container">
                   <img
-                    v-if="block.image && !imageLoadFailed.has(block.image)"
-                    :src="imageSrc(block.image)"
+                    v-if="annotatedImagePath(block) && !imageLoadFailed.has(annotatedImagePath(block))"
+                    :src="imageSrc(annotatedImagePath(block))"
                     :alt="block.alt"
                     class="annotated-image-img"
                     loading="lazy"
-                    @error="onImageError(block.image)"
+                    @error="onImageError(annotatedImagePath(block))"
                   >
                   <div v-else class="image-placeholder">
                     <span class="placeholder-icon">🖼️</span>
                     <span class="placeholder-text">{{ block.alt }}</span>
                     <span class="placeholder-note">
-                      {{ imageLoadFailed.has(block.image) ? 'Image not found at ' + imageSrc(block.image) : '(Image: ' + (block.image || '') + ')' }}
+                      {{ imageLoadFailed.has(annotatedImagePath(block)) ? 'Image not found at ' + imageSrc(annotatedImagePath(block)) : '(Image: ' + annotatedImagePath(block) + ')' }}
                     </span>
                   </div>
                   <!-- Annotations shown as list for now -->
@@ -768,12 +777,15 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
-import { getLessonById } from '../data/softwareLessons'
+import { getLessonById, getLessonsByModule } from '../data/softwareLessons'
+import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import { getModuleById } from '../data/modules'
 import { getGuidesFlat } from '../data/softwareGuides'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { useSoftwareLessonMetrics } from '../composables/useSoftwareLessonMetrics'
 import { getCompletedPhases, setCompletedPhases } from '../composables/useLessonPhaseProgress'
+import { updateBKT } from '../composables/useBKT'
+import { getSoftwareObjectivesForLesson } from '../data/objectives.js'
 
 // Question Components
 import QuestionMultipleChoice from '../components/questions/QuestionMultipleChoice.vue'
@@ -827,6 +839,9 @@ function imageSrc(path) {
   if (!path) return ''
   const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
   return path.startsWith('http') ? path : base + (path.startsWith('/') ? path : '/' + path)
+}
+function annotatedImagePath(block) {
+  return block?.image || block?.imagePath || ''
 }
 
 // Phase configuration and order (Practice, Self-Check, Apply are locked until previous is completed)
@@ -1032,6 +1047,22 @@ const selfCheckScore = computed(() => {
 })
 
 // Methods
+function goToJamoviLesson() {
+  const moduleId = lesson.value?.module
+  const classId = route.params.classId || 'statistics'
+  const jamoviLesson = moduleId
+    ? getLessonsByModule(moduleId).find(l => l.software === 'jamovi')
+    : null
+  if (jamoviLesson) {
+    router.replace({
+      path: `/class/${classId}/lesson/${jamoviLesson.id}`,
+      query: route.query
+    })
+    return
+  }
+  router.replace(backLink.value)
+}
+
 function loadLesson() {
   const lessonId = route.params.lessonId
   lesson.value = getLessonById(lessonId)
@@ -1101,21 +1132,22 @@ function setAnswer(questionId, value) {
   answers.value = { ...answers.value, [questionId]: value }
 }
 
-function submitAssessment() {
+async function submitAssessment() {
   submitted.value = true
 
-  // Calculate score
   let correct = 0
-  const questions = lesson.value.phases.youDo.questions.filter(q => q.type !== 'screenshot' || !q.placeholder)
+  const questions = (lesson.value?.phases?.youDo?.questions || [])
+    .filter(q => q.type !== 'screenshot' || !q.placeholder)
+  const items = []
 
   questions.forEach(q => {
-    const answer = answers.value[q.id]
-    if (checkAnswer(q, answer)) {
-      correct++
-    }
+    const isCorrect = checkAnswer(q, answers.value[q.id])
+    if (isCorrect) correct++
+    items.push({ id: q.id, isCorrect })
   })
 
   score.value = correct
+  await recordSoftwarePracticeBkt(items, 'youdo')
 }
 
 function checkAnswer(question, answer) {
@@ -1148,9 +1180,55 @@ function resetAssessment() {
 }
 
 // SelfCheck methods
-function submitSelfCheck() {
+function listSelfCheckItems() {
+  const sc = lesson.value?.phases?.selfCheck
+  if (!sc) return []
+  const items = []
+  for (const q of sc.screenshotRecognition || []) {
+    items.push({ id: q.id, isCorrect: selfCheckAnswers.value[q.id] === q.correct })
+  }
+  for (const q of sc.errorDiagnostic || []) {
+    items.push({ id: q.id, isCorrect: selfCheckAnswers.value[q.id] === q.correct })
+  }
+  for (const q of sc.outputInterpretation || []) {
+    items.push({
+      id: q.id,
+      isCorrect: gradeShortAnswer(q, selfCheckAnswers.value[q.id]).isCorrect
+    })
+  }
+  return items
+}
+
+async function recordSoftwarePracticeBkt(items, source) {
+  if (!user.value || !lesson.value || !items.length) return
+  const objectiveIds = getSoftwareObjectivesForLesson(lesson.value)
+  if (!objectiveIds.length) return
+  const bktSource = source === 'youdo' ? 'software_youdo' : 'software_selfcheck'
+  const answerBag = source === 'youdo' ? answers.value : selfCheckAnswers.value
+  for (const item of items) {
+    const problemId = `${source}:${lesson.value.id}:${item.id}`
+    const meta = {
+      source: bktSource,
+      answer: answerBag[item.id],
+      lessonId: lesson.value.id,
+      moduleId: lesson.value.module,
+      classId: route.params.classId || 'statistics',
+      objectiveIds
+    }
+    for (const objectiveId of objectiveIds) {
+      try {
+        await updateBKT(objectiveId, item.isCorrect, 'medium', null, null, null, problemId, meta)
+      } catch (err) {
+        console.warn('[SoftwareLesson] BKT update failed:', err)
+      }
+    }
+  }
+}
+
+async function submitSelfCheck() {
   selfCheckSubmitted.value = true
   trackSelfCheckSubmitted(lesson.value, selfCheckScore.value, totalSelfCheckQuestions.value)
+  await recordSoftwarePracticeBkt(listSelfCheckItems(), 'selfcheck')
 }
 
 function resetSelfCheck() {

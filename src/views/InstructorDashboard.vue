@@ -342,6 +342,30 @@
           >
             Download Mastery & Practice CSV
           </button>
+          <button
+            class="btn-secondary"
+            style="margin-left: 0.5rem;"
+            @click="handleExportLearningEvents"
+            :disabled="loading || !masterySemesterId"
+          >
+            Download events CSV
+          </button>
+          <button
+            class="btn-secondary"
+            style="margin-left: 0.5rem;"
+            @click="handleExportObjectiveMastery"
+            :disabled="loading || !masterySemesterId"
+          >
+            Download per-objective mastery CSV
+          </button>
+          <button
+            class="btn-secondary"
+            style="margin-left: 0.5rem;"
+            @click="handleExportPrototypes"
+            :disabled="loading || !masterySemesterId"
+          >
+            Download prototypes CSV
+          </button>
           <div v-if="masteryPracticeList.length" class="preview-table-wrapper" style="margin-top: 1rem;">
             <table class="preview-table">
               <thead>
@@ -402,6 +426,9 @@ const {
   exportAtRiskCSV,
   fetchMasteryAndPractice,
   exportMasteryPracticeCSV,
+  exportLearningEventsCSV,
+  exportObjectiveMasteryCSV,
+  exportPrototypesCSV,
   parseBlackboardCSV,
   generateStudentKey,
   fetchRoster,
@@ -599,6 +626,29 @@ async function handleExportMasteryPractice() {
   const sem = semesters.value.find(s => s.id === masterySemesterId.value)
   const code = sem?.code || 'mastery'
   downloadCSV(csv, `mastery-practice-${code}.csv`)
+}
+
+function masterySemesterCode() {
+  const sem = semesters.value.find(s => s.id === masterySemesterId.value)
+  return sem?.code || 'export'
+}
+
+async function handleExportLearningEvents() {
+  if (!masterySemesterId.value) return
+  const csv = await exportLearningEventsCSV(masterySemesterId.value)
+  downloadCSV(csv, `learning-events-${masterySemesterCode()}.csv`)
+}
+
+async function handleExportObjectiveMastery() {
+  if (!masterySemesterId.value) return
+  const csv = await exportObjectiveMasteryCSV(masterySemesterId.value)
+  downloadCSV(csv, `bkt-mastery-${masterySemesterCode()}.csv`)
+}
+
+async function handleExportPrototypes() {
+  if (!masterySemesterId.value) return
+  const csv = await exportPrototypesCSV(masterySemesterId.value)
+  downloadCSV(csv, `bkt-prototypes-${masterySemesterCode()}.csv`)
 }
 
 onMounted(() => {

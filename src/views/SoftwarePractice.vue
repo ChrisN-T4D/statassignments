@@ -23,7 +23,7 @@
       </div>
 
       <!-- Module Selection -->
-      <div v-if="availableModules.length > 0" class="module-selector">
+      <div v-if="!isSoftwarePracticeUnderConstruction && availableModules.length > 0" class="module-selector">
         <button
           v-for="mod in availableModules"
           :key="mod.id"
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Progress Bar -->
-      <div v-if="progress.total > 0" class="progress-section">
+      <div v-if="!isSoftwarePracticeUnderConstruction && progress.total > 0" class="progress-section">
         <div class="progress-header">
           <span>Your Progress</span>
           <span class="progress-count">{{ progress.completed }} / {{ progress.total }} completed</span>
@@ -50,7 +50,12 @@
       </div>
 
             <!-- Learn / Practice / Apply Structure -->
-      <div v-if="!currentExercise && !loading" class="practice-structure">
+      <SoftwarePracticeUnderConstruction
+        v-if="isSoftwarePracticeUnderConstruction"
+        :software-id="selectedSoftware"
+        @switch-to-jamovi="selectSoftware('jamovi')"
+      />
+      <div v-else-if="!currentExercise && !loading" class="practice-structure">
         <div class="module-label" v-if="selectedModuleTitle">
           Module: {{ selectedModuleTitle }}
         </div>
@@ -199,6 +204,7 @@ import { useClasses } from '../composables/useClasses'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { preferredSoftware, setPreferredSoftware } from '../composables/usePreferredSoftware.js'
 import { getClassDisplayName } from '../utils/classDisplayName'
+import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 
 // Assignment Tools Component - Now in global ResourcesDrawer
 // import ScreenRecorder from '../components/ScreenRecorder.vue'
@@ -242,6 +248,11 @@ const pageTitle = computed(() => {
 })
 
 const availableSoftware = computed(() => software)
+
+const isSoftwarePracticeUnderConstruction = computed(() => {
+  const sw = selectedSoftware.value
+  return Boolean(sw && sw !== 'jamovi')
+})
 
 const lessonsForSoftware = computed(() => getLessonsBySoftware(selectedSoftware.value))
 
