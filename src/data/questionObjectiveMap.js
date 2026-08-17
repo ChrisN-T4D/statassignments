@@ -28,6 +28,12 @@ export const questionObjectiveMap = {
   'stats-m1-q13': ['M1-O1'],
   'stats-m1-q14': ['M1-O1'],
   'stats-m1-q15': ['M1-O1'],
+  'stats-m1-q16': ['M1-O2'],
+  'stats-m1-q17': ['M1-O2'],
+  'stats-m1-q18': ['M1-O3'],
+  'stats-m1-q19': ['M1-O3'],
+  'stats-m1-q20': ['M1-O4'],
+  'stats-m1-q21': ['M1-O4'],
 
   // ============================================================
   // Module 2: Research Design & Measurement
@@ -49,6 +55,8 @@ export const questionObjectiveMap = {
   'stats-m2-q15': ['M2-O4'],
   'stats-m2-q16': ['M2-O2'],
   'stats-m2-q17': ['M2-O2', 'M2-O4'],
+  'stats-m2-q18': ['M2-O1'],
+  'stats-m2-q19': ['M2-O1'],
 
   // ============================================================
   // Module 3: Software Basics (Jamovi)
@@ -56,11 +64,11 @@ export const questionObjectiveMap = {
   'stats-m3-q1': ['M3-O4'],
   'stats-m3-q2': ['M3-O4'],
   'stats-m3-q3': ['M3-O4'],
-  'stats-m3-q4': ['M3-O2', 'M3-O4'],
+  'stats-m3-q4': ['M3-O4'],
   'stats-m3-q5': ['M3-O2', 'M3-O3'],
   'stats-m3-q6': ['M3-O4'],
-  'stats-m3-q7': ['M3-O4'],
-  'stats-m3-q8': ['M3-O1'],
+  'stats-m3-q7': ['M3-O4', 'M3-O5'],
+  'stats-m3-q8': ['M3-O4'],
   'stats-m3-q9': ['M3-O4'],
   'stats-m3-q10': ['M3-O4'],
   'stats-m3-q11': ['M3-O5'],
@@ -73,8 +81,8 @@ export const questionObjectiveMap = {
   // Module 4: Descriptive Statistics
   // ============================================================
   'stats-m4-q1': ['M4-O1'],
-  'stats-m4-q2': ['M4-O3'],
-  'stats-m4-q3': ['M4-O2'],
+  'stats-m4-q2': ['M4-O1', 'M4-O3'],
+  'stats-m4-q3': ['M4-O1', 'M4-O2'],
   'stats-m4-q4': ['M4-O2'],
   'stats-m4-q5': ['M4-O4'],
   'stats-m4-q6': ['M4-O2'],
@@ -108,7 +116,7 @@ export const questionObjectiveMap = {
   'stats-m5-q12': ['M5-O2'],
   'stats-m5-q13': ['M5-O2'],
   'stats-m5-q14': ['M5-O2'],
-  'stats-m5-q15': ['M5-O2'],
+  'stats-m5-q15': ['M5-O1'],
   'stats-m5-q16': ['M5-O2'],
   'stats-m5-q17': ['M5-O3'],
   'stats-m5-q18': ['M5-O3'],
@@ -144,13 +152,13 @@ export const questionObjectiveMap = {
   'stats-m6-q14': ['M6-O3'],
   'stats-m6-q15': ['M6-O3', 'M6-O4'],
   'stats-m6-q16': ['M6-O3'],
-  'stats-m6-q17': ['M6-O1', 'M6-O3'],
+  'stats-m6-q17': ['M6-O3'],
   'stats-m6-q18': ['M6-O2'],
   'stats-m6-q19': ['M6-O3'],
   'stats-m6-q20': ['M6-O4'],
   'stats-m6-q21': ['M6-O4'],
   'stats-m6-q22': ['M6-O2'],
-  'stats-m6-q23': ['M6-O4'],
+  'stats-m6-q23': ['M6-O3'],
   'stats-m6-q24': ['M6-O4'],
 
   // ============================================================
@@ -160,7 +168,7 @@ export const questionObjectiveMap = {
   'stats-m7-q2': ['M7-O2'],
   'stats-m7-q3': ['M7-O3'],
   'stats-m7-q4': ['M7-O3'],
-  'stats-m7-q5': ['M7-O1', 'M7-O2'],
+  'stats-m7-q5': ['M7-O2', 'M7-O4'],
   'stats-m7-q6': ['M7-O4'],
   'stats-m7-q7': ['M7-O1'],
   'stats-m7-q8': ['M7-O2'],
@@ -192,7 +200,7 @@ export const questionObjectiveMap = {
   'stats-m8-q12': ['M8-O2'],
   'stats-m8-q13': ['M8-O4'],
   'stats-m8-q14': ['M8-O4'],
-  'stats-m8-q15': ['M8-O4'],
+  'stats-m8-q15': ['M8-O3', 'M8-O4'],
   'stats-m8-q16': ['M8-O4'],
   'stats-m8-q17': ['M8-O4'],
   'stats-m8-q18': ['M8-O1'],

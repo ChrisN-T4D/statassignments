@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from './useAuth'
-import { allConceptReviewQuestions, getQuestionsByModule } from '../data/conceptQuestions'
+import { allConceptReviewQuestions, getQuestionById, getQuestionsByModule } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { preferredSoftware } from './usePreferredSoftware.js'
 import { updateBKT, predictPerformance } from './useBKT'
@@ -606,6 +606,16 @@ export function usePractice() {
     return currentProblem.value
   }
 
+  function loadQuestionById(questionId) {
+    if (!questionId) {
+      currentProblem.value = null
+      return null
+    }
+    const staticQ = getQuestionById(questionId)
+    currentProblem.value = staticQ ? convertQuestion(staticQ) : null
+    return currentProblem.value
+  }
+
   return {
     problems,
     loading,
@@ -615,6 +625,7 @@ export function usePractice() {
     startMastery,
     nextMasteryProblem,
     loadNextUnanswered,
+    loadQuestionById,
     masteryIndex,
     masteryTotal,
     submitAnswer,

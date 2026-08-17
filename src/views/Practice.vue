@@ -4,7 +4,11 @@
       <div class="page-header">
         <h1>Practice Problems</h1>
         <p>Test your understanding with interactive practice questions.</p>
-        <div v-if="masteryTotal && !isOfflinePrimary" class="mastery-progress">
+        <div v-if="isStatisticsPractice && !isOfflinePrimary && unlockEligible.length" class="mastery-progress">
+          <span class="mastery-label">Objectives mastered</span>
+          <span class="mastery-value">{{ unlockMasteredCount }} / {{ unlockEligible.length }}</span>
+        </div>
+        <div v-else-if="masteryTotal && !isOfflinePrimary" class="mastery-progress">
           <span class="mastery-label">Mastery progress</span>
           <span class="mastery-value">{{ masteryIndex + (currentProblem ? 1 : 0) }} / {{ masteryTotal }}</span>
         </div>
@@ -15,12 +19,12 @@
           Offline primary: print the packet, work without internet, then enter all answers at once for a Canvas slip.
         </p>
         <p v-else>
-          Online primary: answer questions here. When you have answered every question in this module, print the slip and upload it to Canvas.
+          Online primary: answer questions here until each learning objective is mastered (or you finish the bank). Then print the slip and upload it to Canvas.
         </p>
         <div class="cr-mode-actions">
           <button type="button" class="btn-secondary" @click="showPrintPacket = true">Print packet</button>
           <button
-            v-if="isOfflinePrimary"
+            v-if="canEnterPacketAnswers"
             type="button"
             class="btn-primary"
             @click="startBatchEntry"
@@ -41,7 +45,7 @@
         />
       </div>
 
-      <div v-if="isOfflinePrimary && batchMode" class="batch-entry print-hide">
+      <div v-if="canEnterPacketAnswers && batchMode" class="batch-entry print-hide">
         <h2>Enter answers</h2>
         <p>Submit once. You will see feedback for every question, then your completion slip.</p>
         <form @submit.prevent="submitBatch">
@@ -288,7 +292,8 @@
       </div>
 
       <div v-else-if="!showPrintPacket && !batchMode && !slipVisible" class="empty-state">
-        <p v-if="masteryTotal">You completed this mastery set.</p>
+        <p v-if="isStatisticsPractice">Keep going until each objective is mastered, or until the question bank is finished.</p>
+        <p v-else-if="masteryTotal">You completed this mastery set.</p>
         <p v-else>No practice problems available for this topic yet.</p>
       </div>
     </div>
@@ -314,9 +319,14 @@ import { useAccessMode } from '../composables/useAccessMode.js'
 import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
 import {
   loadConceptReviewCompletion,
-  saveConceptReviewCompletion,
-  markQuestionAnswered
+  markQuestionAnswered,
+  freezeSlip
 } from '../lib/conceptReviewSlipStore.js'
+import {
+  eligibleObjectives,
+  onlineReviewComplete,
+  pickNextConceptReviewQuestion
+} from '../lib/conceptReviewUnlock.js'
 import CompletionSlip from '../components/CompletionSlip.vue'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
@@ -324,6 +334,7 @@ const route = useRoute()
 const { isAuthenticated, user } = useAuth()
 const {
   isOfflinePrimary,
+  canEnterPacketAnswers,
   studentKey,
   ensureLoaded
 } = useAccessMode()
@@ -332,7 +343,7 @@ const {
   loading,
   startMastery,
   nextMasteryProblem,
-  loadNextUnanswered,
+  loadQuestionById,
   masteryIndex,
   masteryTotal,
   submitAnswer
@@ -452,8 +463,14 @@ const slipVisible = ref(false)
 const slipCorrect = ref(null)
 const slipTotal = ref(null)
 const slipCompletedAt = ref('')
+const unlockEligible = ref([])
+const pLByObjective = ref({})
 
-const hideOnlineForBatch = computed(() => isOfflinePrimary.value && (batchMode.value || batchResults.value.length > 0))
+const unlockMasteredCount = computed(() => {
+  return unlockEligible.value.filter((id) => (pLByObjective.value[id] ?? 0) >= 0.9).length
+})
+
+const hideOnlineForBatch = computed(() => canEnterPacketAnswers.value && (batchMode.value || batchResults.value.length > 0))
 
 function batchOptions(q) {
   if (q.type === 'true_false') {
@@ -493,16 +510,25 @@ function startBatchEntry() {
   batchMulti.value = multi
 }
 
-function restoreSlipIfComplete() {
-  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
-  const allIds = moduleQuestions.value.map((q) => q.id)
-  if (!saved || !allIds.length) return
-  const done = allIds.every((id) => (saved.answeredIds || []).includes(id)) && saved.completedAt
-  if (!done) return
+function showFrozenSlip(saved) {
+  if (!saved?.completedAt && !saved?.slipFrozen) return false
   slipCorrect.value = saved.correct
   slipTotal.value = saved.total
   slipCompletedAt.value = saved.completedAt
-  slipVisible.value = true
+  slipVisible.value = Boolean(studentKey.value)
+  return true
+}
+
+function restoreSlipIfComplete() {
+  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  if (!saved) return
+  if (saved.slipFrozen && saved.completedAt) {
+    showFrozenSlip(saved)
+    return
+  }
+  const allIds = moduleQuestions.value.map((q) => q.id)
+  const legacyDone = allIds.length > 0 && allIds.every((id) => (saved.answeredIds || []).includes(id)) && saved.completedAt
+  if (legacyDone) showFrozenSlip(saved)
 }
 
 function submitBatch() {
@@ -521,23 +547,36 @@ function submitBatch() {
       id: q.id,
       question: q.question,
       correct: scored.correct,
-      explanation: scored.explanation
+      explanation: scored.explanation,
+      difficulty: q.difficulty || 'medium',
+      answer
     })
   }
   batchResults.value = results
   batchMode.value = false
-  const completedAt = new Date().toISOString()
-  saveConceptReviewCompletion(studentKey.value, statsModuleId.value, {
-    answeredIds,
-    correct: correctCount,
-    total: results.length,
-    completedAt
-  })
-  recordConceptReviewComplete(statsModuleId.value)
-  slipCorrect.value = correctCount
-  slipTotal.value = results.length
-  slipCompletedAt.value = completedAt
+  const existing = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  const alreadyFrozen = Boolean(existing?.slipFrozen && existing.completedAt)
+  if (!alreadyFrozen) {
+    const completedAt = new Date().toISOString()
+    freezeSlip(studentKey.value, statsModuleId.value, {
+      answeredIds,
+      correct: correctCount,
+      total: results.length,
+      completedAt
+    })
+    recordConceptReviewComplete(statsModuleId.value)
+    slipCorrect.value = correctCount
+    slipTotal.value = results.length
+    slipCompletedAt.value = completedAt
+  } else {
+    showFrozenSlip(existing)
+  }
   slipVisible.value = Boolean(studentKey.value)
+  if (isAuthenticated.value) {
+    for (const row of results) {
+      submitAnswer(row.id, row.answer, row.correct, row.difficulty, null, null, null).catch(() => {})
+    }
+  }
 }
 
 async function loadObjectivesForCurrentProblem() {
@@ -655,6 +694,44 @@ async function loadSequenceContext() {
   }
 }
 
+async function refreshUnlockState() {
+  if (!statsModuleId.value) {
+    unlockEligible.value = []
+    pLByObjective.value = {}
+    return
+  }
+  const ids = eligibleObjectives(statsModuleId.value)
+  unlockEligible.value = ids
+  const next = { ...pLByObjective.value }
+  if (isAuthenticated.value) {
+    for (const objectiveId of ids) {
+      const pct = await getMasteryPercent(objectiveId)
+      next[objectiveId] = (pct || 0) / 100
+    }
+  } else {
+    for (const objectiveId of ids) next[objectiveId] = 0
+  }
+  pLByObjective.value = next
+}
+
+async function startOnlineConceptReview() {
+  await refreshUnlockState()
+  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  if (saved?.slipFrozen && saved.completedAt) {
+    showFrozenSlip(saved)
+    loadQuestionById(null)
+    return
+  }
+  const nextId = pickNextConceptReviewQuestion({
+    moduleId: statsModuleId.value,
+    answeredIds: saved?.answeredIds || [],
+    pLByObjective: pLByObjective.value
+  })
+  loadQuestionById(nextId)
+  await loadObjectivesForCurrentProblem()
+  await maybeUnlockOnlineSlip(saved)
+}
+
 async function loadNextProblem() {
   showResult.value = false
   showHint.value = false
@@ -664,21 +741,26 @@ async function loadNextProblem() {
   matchingAnswers.value = {}
   isCorrect.value = false
   feedbackMessage.value = ''
-  await nextMasteryProblem()
 
-  if (!currentProblem.value && isStatisticsPractice.value && statsModuleId.value) {
+  if (isStatisticsPractice.value && statsModuleId.value) {
+    await refreshUnlockState()
     const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
-    const answered = saved?.answeredIds || []
-    loadNextUnanswered(statsModuleId.value, answered)
+    const nextId = pickNextConceptReviewQuestion({
+      moduleId: statsModuleId.value,
+      answeredIds: saved?.answeredIds || [],
+      pLByObjective: pLByObjective.value
+    })
+    loadQuestionById(nextId)
+    await loadObjectivesForCurrentProblem()
+    if (!nextId) {
+      recordConceptReviewComplete(statsModuleId.value)
+      await maybeUnlockOnlineSlip(saved)
+    }
+    return
   }
 
-  // Reload objectives and mastery for the new problem
+  await nextMasteryProblem()
   await loadObjectivesForCurrentProblem()
-
-  if (!currentProblem.value && isStatisticsPractice.value) {
-    recordConceptReviewComplete(statsModuleId.value)
-    maybeUnlockOnlineSlip()
-  }
 }
 
 function selectAnswer(answer) {
@@ -805,8 +887,6 @@ async function checkAnswer(answer) {
     // Don't clear matchingAnswers on incorrect - let user see what they selected
   }
 
-  isSubmitting.value = false
-
   if (isStatisticsPractice.value && currentProblem.value?.id) {
     const saved = markQuestionAnswered(
       studentKey.value,
@@ -815,15 +895,27 @@ async function checkAnswer(answer) {
       moduleQuestions.value.map((q) => q.id),
       correct
     )
-    maybeUnlockOnlineSlip(saved)
+    if (isAuthenticated.value) {
+      const difficulty = currentProblem.value.difficulty || 'medium'
+      try {
+        await submitAnswer(currentProblem.value.id, answer, correct, difficulty, timeData, confidenceData, sequenceData)
+        await loadObjectivesForCurrentProblem()
+      } catch (err) {
+        console.error('Error submitting answer:', err)
+      }
+    }
+    await maybeUnlockOnlineSlip(saved)
+    isSubmitting.value = false
+    return
   }
+
+  isSubmitting.value = false
 
   // Submit to backend in background (don't await)
   if (isAuthenticated.value) {
     const difficulty = currentProblem.value.difficulty || 'medium'
     submitAnswer(currentProblem.value.id, answer, correct, difficulty, timeData, confidenceData, sequenceData)
       .then(() => {
-        // Update mastery display after answer is submitted
         return loadObjectivesForCurrentProblem()
       })
       .catch(err => {
@@ -832,20 +924,24 @@ async function checkAnswer(answer) {
   }
 }
 
-function maybeUnlockOnlineSlip(saved) {
+async function maybeUnlockOnlineSlip(saved) {
   const record = saved || loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
-  const allIds = moduleQuestions.value.map((q) => q.id)
-  if (!record || !allIds.length) return
-  const done = allIds.every((id) => (record.answeredIds || []).includes(id))
-  if (!done) return
-  if (!record.completedAt) {
-    record.completedAt = new Date().toISOString()
-    saveConceptReviewCompletion(studentKey.value, statsModuleId.value, record)
-  }
-  slipCorrect.value = record.correct
-  slipTotal.value = record.total || allIds.length
-  slipCompletedAt.value = record.completedAt
-  slipVisible.value = Boolean(studentKey.value)
+  if (!record) return
+  await refreshUnlockState()
+  const result = onlineReviewComplete({
+    moduleId: statsModuleId.value,
+    answeredIds: record.answeredIds || [],
+    pLByObjective: pLByObjective.value
+  })
+  if (!result.complete) return
+  const frozen = freezeSlip(studentKey.value, statsModuleId.value, {
+    answeredIds: record.answeredIds || [],
+    correct: record.correct,
+    total: (record.answeredIds || []).length,
+    completedAt: record.completedAt || new Date().toISOString()
+  })
+  recordConceptReviewComplete(statsModuleId.value)
+  showFrozenSlip(frozen)
 }
 
 onMounted(async () => {
@@ -856,7 +952,9 @@ onMounted(async () => {
   if (route.query.print === '1' && isStatisticsPractice.value) {
     showPrintPacket.value = true
   }
-  if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
+  if (isStatisticsPractice.value && !isOfflinePrimary.value) {
+    await startOnlineConceptReview()
+  } else if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
     await startMastery(selectedTopic.value)
   }
 })
@@ -871,7 +969,9 @@ watch(() => [route.query.module, route.params.topicId], async () => {
   batchResults.value = []
   showPrintPacket.value = route.query.print === '1' && isStatisticsPractice.value
   restoreSlipIfComplete()
-  if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
+  if (isStatisticsPractice.value && !isOfflinePrimary.value) {
+    await startOnlineConceptReview()
+  } else if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
     await startMastery(selectedTopic.value)
   }
 })

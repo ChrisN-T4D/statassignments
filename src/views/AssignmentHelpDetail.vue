@@ -142,7 +142,7 @@ const methodsMarketLinkDesc = computed(() => {
     return 'Complete the Learn, Practice, and Apply steps for this module, then mark the Canvas assignment complete.'
   }
   if (assignment.value?.type === 'concept-review') {
-    return 'Work through all concept review questions for this module, then mark the Canvas assignment complete.'
+    return 'Work Concept Review until each learning objective is mastered, then print the slip and mark the Canvas assignment complete.'
   }
   return 'Complete this activity in Methods Market, then return to Canvas.'
 })

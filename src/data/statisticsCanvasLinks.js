@@ -104,7 +104,7 @@ export function conceptReviewAssignment (moduleNum) {
     methodsMarketPath: conceptReviewPath(moduleNum),
     tips: [
       'Sign in to Methods Market with your course profile so practice attempts are tracked.',
-      'Answer every concept review question for this module — work until you understand each learning objective.',
+      'Work Concept Review until each learning objective is mastered (at least two items per objective). Offline-primary students print the packet, enter answers once, then save the slip.',
       'When you finish, print or save the completion slip and upload it to this Canvas assignment for credit.'
     ],
     getHelp:

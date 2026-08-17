@@ -22,7 +22,8 @@ export function saveConceptReviewCompletion(studentKey, moduleId, payload) {
     answeredIds: payload.answeredIds || [],
     correct: payload.correct ?? null,
     total: payload.total ?? null,
-    completedAt: payload.completedAt || new Date().toISOString()
+    completedAt: payload.completedAt || null,
+    slipFrozen: Boolean(payload.slipFrozen)
   }
   try {
     localStorage.setItem(storageKey(studentKey, moduleId), JSON.stringify(record))
@@ -37,20 +38,38 @@ export function markQuestionAnswered(studentKey, moduleId, questionId, allIds, w
     answeredIds: [],
     completedAt: null,
     correct: 0,
-    total: allIds?.length ?? 0
+    total: allIds?.length ?? 0,
+    slipFrozen: false
   }
   const prevIds = existing.answeredIds || []
   const already = prevIds.includes(questionId)
   const answeredIds = [...new Set([...prevIds, questionId])]
-  const correctCount = already
+  const correctCount = existing.slipFrozen
     ? (existing.correct ?? 0)
-    : (existing.correct ?? 0) + (wasCorrect ? 1 : 0)
-  const complete = Array.isArray(allIds) && allIds.length > 0 && allIds.every((id) => answeredIds.includes(id))
+    : already
+      ? (existing.correct ?? 0)
+      : (existing.correct ?? 0) + (wasCorrect ? 1 : 0)
   return saveConceptReviewCompletion(studentKey, moduleId, {
     ...existing,
     answeredIds,
     correct: correctCount,
-    total: allIds?.length ?? existing.total,
-    completedAt: complete ? (existing.completedAt || new Date().toISOString()) : existing.completedAt
+    total: existing.slipFrozen ? existing.total : answeredIds.length,
+    completedAt: existing.completedAt,
+    slipFrozen: existing.slipFrozen
+  })
+}
+
+/** First unlock wins. Later retries keep the frozen score and timestamp. */
+export function freezeSlip(studentKey, moduleId, payload) {
+  const existing = loadConceptReviewCompletion(studentKey, moduleId)
+  if (existing?.slipFrozen && existing.completedAt) return existing
+  return saveConceptReviewCompletion(studentKey, moduleId, {
+    answeredIds: payload.answeredIds || existing?.answeredIds || [],
+    correct: payload.correct ?? existing?.correct ?? 0,
+    total: payload.total ?? payload.answeredIds?.length ?? existing?.total ?? 0,
+    completedAt: payload.completedAt || existing?.completedAt || new Date().toISOString(),
+    slipFrozen: true,
+    studentKey,
+    moduleId
   })
 }

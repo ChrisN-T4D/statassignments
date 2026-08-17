@@ -299,6 +299,102 @@ export const statsModule1Questions = [
       incorrect: 'Replication means repeating a study to see if the result holds up across samples.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m1-q16',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'The belief bias effect is the tendency to:',
+    options: [
+      { id: 'a', text: 'Reject any argument that uses numbers' },
+      { id: 'b', text: 'Judge whether an argument is logically valid based on how believable the conclusion is' },
+      { id: 'c', text: 'Prefer experiments over observational studies' },
+      { id: 'd', text: 'Assume a large sample guarantees a true conclusion' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Belief bias is judging an argument by whether the conclusion matches prior beliefs, not by whether the logic is valid.',
+      incorrect: 'Belief bias means people treat a conclusion as valid because it sounds true, even when the reasoning does not support it.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m1-q17',
+    moduleId: 'stats-module-1',
+    type: 'true_false',
+    question: 'If a conclusion matches what we already believe, we may accept a logically invalid argument as valid. That pattern is the belief bias effect.',
+    correct: true,
+    feedback: {
+      correct: 'Belief bias is accepting (or rejecting) arguments based on how believable the conclusion is rather than on the validity of the reasoning.',
+      incorrect: 'This is true: belief bias is judging arguments by the believability of the conclusion instead of the logic.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m1-q18',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'Deductive validity means:',
+    options: [
+      { id: 'a', text: 'The conclusion is true in the real world' },
+      { id: 'b', text: 'The premises are believable' },
+      { id: 'c', text: 'If the premises were true, the conclusion would have to follow' },
+      { id: 'd', text: 'The sample is representative' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: 'Validity is about logical form: the conclusion follows from the premises. Premises or the conclusion can still be false in the world.',
+      incorrect: 'A valid argument is one where the conclusion must follow if the premises are true. Validity is not the same as the conclusion being true or believable.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m1-q19',
+    moduleId: 'stats-module-1',
+    type: 'true_false',
+    question: 'An argument can be deductively valid even if its premises are false and the conclusion is not actually true.',
+    correct: true,
+    feedback: {
+      correct: 'Validity does not require true premises or a true conclusion. It requires that the conclusion follows from the premises.',
+      incorrect: 'This is true: validity is about whether the conclusion follows, not whether the premises or conclusion are true in the world.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m1-q20',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'Simpson\'s paradox is the situation in which:',
+    options: [
+      { id: 'a', text: 'A p-value below .05 proves a large effect' },
+      { id: 'b', text: 'An association in aggregated data differs from, or reverses, the association in subgroups' },
+      { id: 'c', text: 'Random assignment makes confounding impossible to discuss' },
+      { id: 'd', text: 'Larger samples always reverse small-sample results' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Simpson\'s paradox: the pooled association can differ from (even reverse) the pattern inside subgroups.',
+      incorrect: 'Simpson\'s paradox is when the overall association does not match the association within subgroups.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m1-q21',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'A treatment looks helpful in each hospital but looks harmful when all hospitals are pooled. This is an example of:',
+    options: [
+      { id: 'a', text: 'A valid syllogism' },
+      { id: 'b', text: 'Belief bias' },
+      { id: 'c', text: 'Simpson\'s paradox' },
+      { id: 'd', text: 'A ratio-scale measurement' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: 'The subgroup pattern and the aggregated pattern disagree. That reversal is Simpson\'s paradox.',
+      incorrect: 'When subgroup associations reverse (or differ from) the pooled association, that is Simpson\'s paradox.'
+    },
+    difficulty: 'hard'
   }
 ]
 
@@ -607,6 +703,36 @@ export const statsModule2Questions = [
       incorrect: 'Use a clear measurable definition and evaluate reliability/validity.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m2-q18',
+    moduleId: 'stats-module-2',
+    type: 'multiple_choice',
+    question: 'In psychological measurement, which pairing correctly distinguishes the construct from the observed value?',
+    options: [
+      { id: 'a', text: 'Construct: BDI score of 18; observed value: depression' },
+      { id: 'b', text: 'Construct: depression; observed value: score on a depression inventory' },
+      { id: 'c', text: 'Construct and observed value are the same number' },
+      { id: 'd', text: 'Construct: the sample size; observed value: the p-value' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The construct is the thing you mean to measure (depression). The observed value is the number or category you actually recorded.',
+      incorrect: 'A construct is the theoretical thing (e.g., depression). The measurement is the observed score or record, not the construct itself.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m2-q19',
+    moduleId: 'stats-module-2',
+    type: 'true_false',
+    question: 'The number a researcher records (for example, a reaction time or a questionnaire total) is the construct itself, not a measurement of the construct.',
+    correct: false,
+    feedback: {
+      correct: 'The recorded number is an observed measurement. The construct is the theoretical attribute you are trying to capture.',
+      incorrect: 'This is false. The recorded value is the measurement; the construct is the thing being measured.'
+    },
+    difficulty: 'easy'
   }
 ]
 

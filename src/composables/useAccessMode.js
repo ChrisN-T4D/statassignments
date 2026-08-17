@@ -1,12 +1,16 @@
 import { computed } from 'vue'
 import { useAuth } from './useAuth'
 import { useProfile } from './useProfile'
+import {
+  ACCESS_ONLINE,
+  ACCESS_OFFLINE,
+  canEnterPacketAnswers as packetAnswersAllowed
+} from '../lib/conceptReviewAccess.js'
 
-export const ACCESS_ONLINE = 'online_primary'
-export const ACCESS_OFFLINE = 'offline_primary'
+export { ACCESS_ONLINE, ACCESS_OFFLINE }
 
 export function useAccessMode() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const { profile, loading, fetchProfile, setAccessMode, studentKey, hasProfile } = useProfile()
 
   const accessMode = computed(() =>
@@ -14,6 +18,12 @@ export function useAccessMode() {
   )
   const isOfflinePrimary = computed(() => accessMode.value === ACCESS_OFFLINE)
   const isOnlinePrimary = computed(() => !isOfflinePrimary.value)
+  const canEnterPacketAnswers = computed(() =>
+    packetAnswersAllowed({
+      accessMode: accessMode.value,
+      role: user.value?.role
+    })
+  )
 
   async function ensureLoaded() {
     if (isAuthenticated.value && !profile.value) {
@@ -26,6 +36,7 @@ export function useAccessMode() {
     accessMode,
     isOfflinePrimary,
     isOnlinePrimary,
+    canEnterPacketAnswers,
     hasProfile,
     studentKey,
     loading,
