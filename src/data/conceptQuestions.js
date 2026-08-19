@@ -55,49 +55,54 @@ export const statsModule1Questions = [
   {
     id: 'stats-m1-q2',
     moduleId: 'stats-module-1',
-    type: 'multiple_select',
-    question: 'Which of the following are goals of science? (Select all that apply)',
+    type: 'multiple_choice',
+    question: '§1.1 asks why scientists use statistics instead of common sense. The best answer is that statistics:',
     options: [
-      { id: 'a', text: 'Describe phenomena' },
-      { id: 'b', text: 'Predict outcomes' },
-      { id: 'c', text: 'Explain relationships' },
-      { id: 'd', text: 'Control variables' },
-      { id: 'e', text: 'Prove absolute truths' }
+      { id: 'a', text: 'Guarantees every hypothesis is true' },
+      { id: 'b', text: 'Acts as a safeguard against human bias and limited reasoning' },
+      { id: 'c', text: 'Eliminates the need to collect data' },
+      { id: 'd', text: 'Replaces theory with intuition' }
     ],
-    correct: ['a', 'b', 'c', 'd'],
+    correct: 'b',
     feedback: {
-      correct: 'The four goals of science are to describe, predict, explain, and control.',
-      incorrect: 'Science aims to describe, predict, explain, and control phenomena. It does not prove absolute truths—scientific knowledge is always subject to revision.'
+      correct: 'Chapter 1 argues we do not trust intuition alone; statistics helps control bias and keep researchers honest.',
+      incorrect: 'The chapter’s core answer is that human reasoning is biased, so statistics serves as a safeguard.'
     },
-    difficulty: 'medium'
+    difficulty: 'easy'
   },
   {
     id: 'stats-m1-q3',
     moduleId: 'stats-module-1',
-    type: 'true_false',
-    question: 'Descriptive statistics help us summarize and describe data, while inferential statistics help us make generalizations about populations.',
-    correct: true,
+    type: 'multiple_choice',
+    question: '§1.1.1 (Evans et al., 1983): Overall, people correctly judged logical arguments about what percentage of the time?',
+    options: [
+      { id: 'a', text: 'About 60%' },
+      { id: 'b', text: 'About 95%' },
+      { id: 'c', text: '100%' },
+      { id: 'd', text: '50% exactly' }
+    ],
+    correct: 'a',
     feedback: {
-      correct: 'Descriptive statistics summarize data; inferential statistics allow generalizations from samples to populations.',
-      incorrect: 'This statement is true. Descriptive statistics summarize data, and inferential statistics allow us to make generalizations from samples to populations.'
+      correct: 'Even with some compensation for bias, judgements were correct only about 60% of the time—barely above chance.',
+      incorrect: 'The chapter reports roughly 60% correct judgements overall, which is why statistics is needed.'
     },
-    difficulty: 'easy'
+    difficulty: 'medium'
   },
   {
     id: 'stats-m1-q4',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'A researcher wants to know if a new therapy reduces anxiety. This is an example of which goal of science?',
+    question: '§1.1.1: When a valid argument contradicted pre-existing beliefs, what percentage of people judged it valid?',
     options: [
-      { id: 'a', text: 'Description' },
-      { id: 'b', text: 'Prediction' },
-      { id: 'c', text: 'Explanation' },
-      { id: 'd', text: 'Control' }
+      { id: 'a', text: '8%' },
+      { id: 'b', text: '46%' },
+      { id: 'c', text: '92%' },
+      { id: 'd', text: '100%' }
     ],
-    correct: 'd',
+    correct: 'b',
     feedback: {
-      correct: 'Testing whether a therapy can reduce anxiety is about controlling or influencing an outcome.',
-      incorrect: 'When researchers test interventions to change outcomes, they are pursuing the goal of control.'
+      correct: 'Only 46% recognized valid arguments when the conclusion felt false—belief conflict hurt logical evaluation.',
+      incorrect: 'When beliefs conflicted with structure, valid arguments were accepted only 46% of the time.'
     },
     difficulty: 'medium'
   },
@@ -105,36 +110,35 @@ export const statsModule1Questions = [
     id: 'stats-m1-q5',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Which type of statistic would you use to determine the average test score in a class?',
+    question: '§1.1.1: When an invalid argument agreed with pre-existing beliefs, what percentage of people incorrectly accepted it as valid?',
     options: [
-      { id: 'a', text: 'Inferential statistics' },
-      { id: 'b', text: 'Descriptive statistics' },
-      { id: 'c', text: 'Predictive statistics' },
-      { id: 'd', text: 'Correlational statistics' }
+      { id: 'a', text: '8%' },
+      { id: 'b', text: '46%' },
+      { id: 'c', text: '92%' },
+      { id: 'd', text: '100%' }
     ],
-    correct: 'b',
+    correct: 'c',
     feedback: {
-      correct: 'Calculating an average is a descriptive statistic—it summarizes the data you have.',
-      incorrect: 'Descriptive statistics summarize data, like calculating averages. Inferential statistics are used to make conclusions about populations from samples.'
+      correct: 'People accepted invalid arguments 92% of the time when the conclusion felt believable.',
+      incorrect: 'Belief-consistent invalid arguments were wrongly accepted about 92% of the time.'
     },
-    difficulty: 'easy'
-  }
-  ,
+    difficulty: 'medium'
+  },
   {
     id: 'stats-m1-q6',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Which statement best distinguishes a research hypothesis from a statistical hypothesis?',
+    question: '§1.1.1 argues statistics can improve evidence evaluation from about 60% accuracy to roughly:',
     options: [
-      { id: 'a', text: 'A research hypothesis predicts a population parameter value, while a statistical hypothesis describes a theory.' },
-      { id: 'b', text: 'A research hypothesis is a conceptual claim, while a statistical hypothesis is the testable form using variables/parameters.' },
-      { id: 'c', text: 'A research hypothesis is always null, while a statistical hypothesis is always alternative.' },
-      { id: 'd', text: 'There is no difference; they are the same.' }
+      { id: 'a', text: '65%' },
+      { id: 'b', text: '75%' },
+      { id: 'c', text: '95%' },
+      { id: 'd', text: '100%' }
     ],
-    correct: 'b',
+    correct: 'c',
     feedback: {
-      correct: 'Research hypotheses are conceptual; statistical hypotheses translate them into testable statements about variables or parameters.',
-      incorrect: 'A research hypothesis is conceptual, while a statistical hypothesis expresses it in testable statistical terms.'
+      correct: 'The chapter suggests statistical tools can raise accuracy from ~60% to ~95%.',
+      incorrect: 'Chapter 1 uses ~95% as the kind of improvement statistics can provide over gut judgement alone.'
     },
     difficulty: 'easy'
   },
@@ -160,71 +164,65 @@ export const statsModule1Questions = [
     id: 'stats-m1-q8',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'In behavioral research, a population is _____ and a sample is _____.',
+    question: '§1.2 defines Simpson\'s paradox as occurring when:',
     options: [
-      { id: 'a', text: 'a statistic; a parameter' },
-      { id: 'b', text: 'the full group of interest; the subset studied' },
-      { id: 'c', text: 'the subset studied; the full group of interest' },
-      { id: 'd', text: 'the study results; the study design' }
+      { id: 'a', text: 'A trend in aggregated data reverses or disappears in subgroups' },
+      { id: 'b', text: 'Sample size is too small for any test' },
+      { id: 'c', text: 'All departments admit applicants at identical rates' },
+      { id: 'd', text: 'Correlation proves causation' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'The population is the full group you want to generalize to; the sample is the subset you observed.',
-      incorrect: 'Population is the full group of interest; the sample is the subset actually studied.'
+      correct: 'Simpson\'s paradox is when the overall pattern differs from subgroup patterns.',
+      incorrect: 'The chapter defines Simpson\'s paradox as an aggregate trend that reverses or vanishes when data are split into subgroups.'
     },
-    difficulty: 'easy'
+    difficulty: 'medium'
   },
   {
     id: 'stats-m1-q9',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'A post says "X causes Y" based on a correlation. Which two issues make the claim unwarranted?',
+    question: '§1.2 (Berkeley admissions, overall totals): Males were admitted at about ___% and females at about ___%.',
     options: [
-      { id: 'a', text: 'Random assignment and measurement error' },
-      { id: 'b', text: 'Reverse causation and third-variable confounding' },
-      { id: 'c', text: 'Low sample size and p-hacking' },
-      { id: 'd', text: 'Nonresponse bias and instrumentation changes' }
+      { id: 'a', text: '35%; 44%' },
+      { id: 'b', text: '44%; 35%' },
+      { id: 'c', text: '50%; 50%' },
+      { id: 'd', text: '62%; 82%' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Correlation cannot establish direction or rule out a third variable.',
-      incorrect: 'The key problems are reverse causation and third-variable confounds.'
+      correct: 'The aggregated table shows 44% male vs 35% female admission rates overall.',
+      incorrect: 'Chapter 1 reports 44% admitted for males and 35% for females in the overall Berkeley data.'
     },
     difficulty: 'medium'
   },
   {
     id: 'stats-m1-q10',
     moduleId: 'stats-module-1',
-    type: 'multiple_choice',
-    question: 'Which best captures "summarize data" versus "make inferences from data"?',
-    options: [
-      { id: 'a', text: 'Summarize uses samples; inference uses populations.' },
-      { id: 'b', text: 'Summarize describes observed data; inference generalizes from sample to population.' },
-      { id: 'c', text: 'Summarize is always causal; inference is always descriptive.' },
-      { id: 'd', text: 'Summarize uses graphs; inference uses tables.' }
-    ],
-    correct: 'b',
+    type: 'true_false',
+    question: '§1.2: When Berkeley admissions were examined department by department, most departments admitted females at a slightly higher rate than males.',
+    correct: true,
     feedback: {
-      correct: 'Summaries describe what you observed; inference generalizes beyond the sample.',
-      incorrect: 'Summarize describes observed data; inference generalizes to a population.'
+      correct: 'That reversal at the department level is central to the Simpson\'s paradox example.',
+      incorrect: 'The chapter states that most departments individually had higher admission rates for female applicants.'
     },
     difficulty: 'medium'
   },
   {
     id: 'stats-m1-q11',
     moduleId: 'stats-module-1',
-    type: 'multiple_choice',
-    question: 'Which is a statistical question for the claim "Students who sleep more have better exam scores"?',
+    type: 'multiple_select',
+    question: '§1.3 lists reasons every psychology researcher should know basic statistics. Which are named in the chapter? (Select all that apply)',
     options: [
-      { id: 'a', text: 'Do students like sleeping?' },
-      { id: 'b', text: 'Is the correlation between sleep hours and exam score positive?' },
-      { id: 'c', text: 'Why do students sleep?' },
-      { id: 'd', text: 'Should exams be shorter?' }
+      { id: 'a', text: 'Statistics is intertwined with research design' },
+      { id: 'b', text: 'Reading the literature requires understanding reported analyses' },
+      { id: 'c', text: 'Professional statisticians are often too expensive to rely on exclusively' },
+      { id: 'd', text: 'Statistics eliminates the need for theory' }
     ],
-    correct: 'b',
+    correct: ['a', 'b', 'c'],
     feedback: {
-      correct: 'This asks about a measurable relationship between two variables.',
-      incorrect: 'A statistical question should be measurable, such as a correlation between sleep and scores.'
+      correct: 'Chapter 1 gives design, literature comprehension, and practical cost as core reasons.',
+      incorrect: 'The three reasons are design connection, reading the literature, and limited access to statisticians—not replacing theory.'
     },
     difficulty: 'medium'
   },
@@ -232,19 +230,19 @@ export const statsModule1Questions = [
     id: 'stats-m1-q12',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Which example shows how graphs can mislead and a simple fix?',
+    question: '§1.4 (ABC news sample): What percentage of the 20 articles discussed statistical topics?',
     options: [
-      { id: 'a', text: 'Using a legend; fix by removing it' },
-      { id: 'b', text: 'Truncating the y-axis; fix by starting at zero or clearly indicating the scale break' },
-      { id: 'c', text: 'Using color; fix by making everything gray' },
-      { id: 'd', text: 'Adding a title; fix by removing it' }
+      { id: 'a', text: '20%' },
+      { id: 'b', text: '40%' },
+      { id: 'c', text: '60%' },
+      { id: 'd', text: '75%' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Truncated axes exaggerate differences; starting at zero or showing a break reduces misinterpretation.',
-      incorrect: 'Axis truncation is a common way graphs mislead; the fix is proper scaling or clear breaks.'
+      correct: 'Eight of twenty articles (40%) involved statistical topics.',
+      incorrect: 'The chapter reports 8/20 = 40% of sampled news articles discussed statistical topics.'
     },
-    difficulty: 'medium'
+    difficulty: 'easy'
   },
   {
     id: 'stats-m1-q13',
@@ -286,17 +284,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q15',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Which best defines replication and why it matters?',
+    question: '§1.5 explains why introductory classes emphasize statistics. The main reason given is that undergraduate assignments most often require students to:',
     options: [
-      { id: 'a', text: 'Repeating a study to see if results hold; it checks reliability beyond one sample' },
-      { id: 'b', text: 'Changing the hypothesis; it ensures novelty' },
-      { id: 'c', text: 'Collecting data once; it saves time' },
-      { id: 'd', text: 'Using only large samples; it guarantees significance' }
+      { id: 'a', text: 'Design a full study from scratch with no data provided' },
+      { id: 'b', text: 'Analyze and interpret data collected in studies designed by others' },
+      { id: 'c', text: 'Memorize APA formatting before learning any analysis' },
+      { id: 'd', text: 'Avoid using numbers in psychology courses' }
     ],
-    correct: 'a',
+    correct: 'b',
     feedback: {
-      correct: 'Replication tests whether findings are reliable and not a one-time fluke.',
-      incorrect: 'Replication means repeating a study to see if the result holds up across samples.'
+      correct: 'Chapter 1 notes that assignments commonly ask students to analyze existing datasets, so statistics comes first.',
+      incorrect: 'The chapter says students usually analyze others’ data before they need full research-design training.'
     },
     difficulty: 'hard'
   },
@@ -364,7 +362,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q20',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Why is separating data by meaningful groups often useful in Chapter 1 thinking?',
+    question: '§1.2 (Simpson\'s paradox): Why is separating data by meaningful groups often useful?',
     options: [
       { id: 'a', text: 'It can reveal different patterns hidden by one overall average' },
       { id: 'b', text: 'It always increases sample size automatically' },
@@ -382,17 +380,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q21',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'A class average rose from 70 to 78. Which follow-up question best reflects Chapter 1 statistical reasoning?',
+    question: '§1.2: Berkeley\'s overall admission pattern reversed at the department level. Which follow-up question best reflects that lesson?',
     options: [
-      { id: 'a', text: 'Did all subgroups improve similarly, or did one subgroup drive most of the increase?' },
-      { id: 'b', text: 'Can we conclude the teaching method caused the increase with no other evidence?' },
-      { id: 'c', text: 'Should we ignore sample composition because the average increased?' },
-      { id: 'd', text: 'Does one average answer every research question?' }
+      { id: 'a', text: 'Did each department show the same pattern as the overall totals, or did subgroup rates differ?' },
+      { id: 'b', text: 'Can we ignore how applicants sorted themselves across departments?' },
+      { id: 'c', text: 'Does one overall percentage settle the discrimination question with no further analysis?' },
+      { id: 'd', text: 'Should we only report the aggregate table and stop there?' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Checking subgroup patterns is key to avoiding overgeneralization from a single average.',
-      incorrect: 'Good introductory statistical thinking asks whether overall averages hide subgroup differences.'
+      correct: 'The Berkeley case shows why you must compare subgroup patterns to the aggregate summary.',
+      incorrect: 'Chapter 1’s lesson is to ask whether department-level patterns match the overall average.'
     },
     difficulty: 'hard'
   }

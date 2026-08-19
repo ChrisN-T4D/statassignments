@@ -21,12 +21,18 @@ export const rmModule1Questions = [
   {
     id: 'rm-m1-q2',
     moduleId: 'rm-module-1',
-    type: 'true_false',
-    question: 'A scientific theory is a tentative explanation that can be revised as new evidence accumulates.',
-    correct: true,
+    type: 'multiple_choice',
+    question: '§1 Methods of Knowing: Intuition as a way of knowing relies on:',
+    options: [
+      { id: 'a', text: 'Systematic observation under controlled conditions' },
+      { id: 'b', text: 'Gut feelings, emotions, and instincts rather than rational analysis' },
+      { id: 'c', text: 'Published methods others can verify' },
+      { id: 'd', text: 'Logical rules applied to stated premises' }
+    ],
+    correct: 'b',
     feedback: {
-      correct: 'Theories organize evidence and generate testable ideas; they are revised as knowledge grows.',
-      incorrect: 'Scientific theories are not final dogma—they are explanatory frameworks refined by research.'
+      correct: 'Chapter 1 defines intuition as relying on guts, emotions, and instincts—not systematic evidence.',
+      incorrect: 'Intuition means believing what feels true rather than examining facts with rational rules.'
     },
     difficulty: 'easy'
   },
@@ -34,17 +40,17 @@ export const rmModule1Questions = [
     id: 'rm-m1-q3',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: 'A testable prediction derived from theory is best described as a:',
+    question: '§3 Goals of Science: The three goals of science named in Chapter 1 are to describe, predict, and:',
     options: [
-      { id: 'a', text: 'Law' },
-      { id: 'b', text: 'Hypothesis' },
-      { id: 'c', text: 'Population' },
-      { id: 'd', text: 'Confound' }
+      { id: 'a', text: 'Explain' },
+      { id: 'b', text: 'Control' },
+      { id: 'c', text: 'Legislate' },
+      { id: 'd', text: 'Popularize' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'A hypothesis is a specific, testable prediction.',
-      incorrect: 'Hypotheses are testable predictions; laws summarize broad regularities under specified conditions.'
+      correct: 'Chapter 1 lists describe, predict, and explain as the three goals of science.',
+      incorrect: 'The third goal in this chapter is explain—not control (though control appears elsewhere in research talk).'
     },
     difficulty: 'easy'
   },
@@ -184,17 +190,17 @@ export const rmModule1Questions = [
     id: 'rm-m1-q12',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: 'If two variables are correlated, the strongest immediate conclusion is:',
+    question: '§2 Understanding Science (Popper): A claim that psychic powers "disappear when observed too closely" is problematic because it makes the claim:',
     options: [
-      { id: 'a', text: 'They are associated, but causation is not established by correlation alone' },
-      { id: 'b', text: 'X definitely causes Y' },
-      { id: 'c', text: 'Y definitely causes X' },
-      { id: 'd', text: 'No other explanation is possible' }
+      { id: 'a', text: 'Too expensive to test' },
+      { id: 'b', text: 'Unfalsifiable—no observation could count against it' },
+      { id: 'c', text: 'Too empirical for psychology' },
+      { id: 'd', text: 'Identical to a valid syllogism' }
     ],
-    correct: 'a',
+    correct: 'b',
     feedback: {
-      correct: 'Correlation can indicate a relationship, but causal claims require stronger designs and evidence.',
-      incorrect: 'An observed correlation alone does not establish causal direction or rule out alternatives.'
+      correct: 'Chapter 1 uses ESP-style claims to illustrate unfalsifiable pseudoscience.',
+      incorrect: 'If any outcome can be explained away, the claim cannot be tested or refuted scientifically.'
     },
     difficulty: 'medium'
   }
