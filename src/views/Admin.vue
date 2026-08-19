@@ -50,6 +50,11 @@
             <option value="practice_attempts">Practice Attempts</option>
             <option value="practice_problems">Practice Problems</option>
             <option value="read_topics">Read Topics</option>
+            <option value="learning_events">Learning Events</option>
+            <option value="bkt_states">BKT States</option>
+            <option value="software_lesson_metrics">Software Lesson Metrics</option>
+            <option value="user_progress">User Progress</option>
+            <option value="topic_readings">Topic Readings</option>
           </select>
         </div>
 
@@ -376,6 +381,11 @@
         </div>
       </div>
 
+      <!-- Student Progress -->
+      <div v-if="activeTab === 'progress'" class="content-section">
+        <StudentProgressViewer />
+      </div>
+
       <!-- System Info -->
       <div v-if="activeTab === 'system'" class="content-section">
         <div class="section-header">
@@ -450,12 +460,14 @@ import { objectives } from '../data/objectives'
 import { questionObjectiveMap, getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { allStatisticsQuestions, allConceptReviewQuestions } from '../data/conceptQuestions'
 import { getContentModulesByClass, getAllTopics } from '../data/modules'
+import StudentProgressViewer from '../components/StudentProgressViewer.vue'
 
 const { getAllBKTStates, resetBKT } = useBKT()
 
 // Tab state
 const tabs = [
   { id: 'datasets', label: 'Datasets' },
+  { id: 'progress', label: 'Student Progress' },
   { id: 'bkt', label: 'BKT Analytics' },
   { id: 'questions', label: 'Questions' },
   { id: 'users', label: 'Users' },
