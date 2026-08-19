@@ -100,17 +100,17 @@ export const rmModule10Questions = [
     id: 'rm-m10-q7',
     moduleId: 'rm-module-10',
     type: 'multiple_choice',
-    question: 'Changing-criterion designs demonstrate control by:',
+    question: 'The steady state strategy means researchers change conditions only after:',
     options: [
-      { id: 'a', text: 'Showing behavior tracks stepwise changes in performance standards' },
-      { id: 'b', text: 'Ignoring criteria entirely' },
-      { id: 'c', text: 'Using only between-subjects factors' },
-      { id: 'd', text: 'Deleting the dependent variable' }
+      { id: 'a', text: 'The dependent variable shows fairly consistent responding across observations' },
+      { id: 'b', text: 'A fixed number of days passes regardless of behavior' },
+      { id: 'c', text: 'Every participant has completed the study' },
+      { id: 'd', text: 'Random assignment to phases is finished' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Stepwise criteria test whether behavior follows shifting goals.',
-      incorrect: 'The design hinges on criterion shifts tied to phases.'
+      correct: 'Waiting for stable responding reduces noise and makes phase changes easier to interpret.',
+      incorrect: 'Condition changes depend on the participant\'s behavior reaching a steady state, not a fixed schedule.'
     },
     difficulty: 'hard'
   },
@@ -118,17 +118,17 @@ export const rmModule10Questions = [
     id: 'rm-m10-q8',
     moduleId: 'rm-module-10',
     type: 'multiple_select',
-    question: 'Which are common dependent measures in single-subject work? (Select all that apply)',
+    question: 'Which are core features of single-subject research? (Select all that apply)',
     options: [
-      { id: 'a', text: 'Frequency counts of a target behavior' },
-      { id: 'b', text: 'Duration or latency' },
-      { id: 'c', text: 'National census totals only' },
-      { id: 'd', text: 'Percent of intervals with behavior' }
+      { id: 'a', text: 'Repeated measurement of the dependent variable over time' },
+      { id: 'b', text: 'Distinct phases such as baseline and treatment' },
+      { id: 'c', text: 'Focus on group means with no individual data points' },
+      { id: 'd', text: 'Experimental manipulation with careful behavioral measurement' }
     ],
     correct: ['a', 'b', 'd'],
     feedback: {
-      correct: 'Operant-style metrics are typical; census totals are unrelated.',
-      incorrect: 'Choose operationally defined, repeated outcomes.'
+      correct: 'Single-subject work tracks individuals repeatedly across controlled phases.',
+      incorrect: 'Group means are the emphasis in group research, not single-subject designs.'
     },
     difficulty: 'medium'
   },
@@ -154,11 +154,11 @@ export const rmModule10Questions = [
     id: 'rm-m10-q10',
     moduleId: 'rm-module-10',
     type: 'true_false',
-    question: 'Treatment integrity (fidelity) means the intervention was delivered as planned.',
+    question: 'Social validity refers to whether single-subject treatment effects are strong, important, and feasible to implement in real-world settings.',
     correct: true,
     feedback: {
-      correct: 'Without fidelity, observed changes may reflect implementation drift.',
-      incorrect: 'Fidelity checks are important for interpreting effects.'
+      correct: 'Applied single-subject researchers care about meaningful, replicable effects that practitioners can use.',
+      incorrect: 'Social validity concerns real-world importance and implementability, not just statistical significance.'
     },
     difficulty: 'easy'
   },

@@ -56,7 +56,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q2',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.1 asks why scientists use statistics instead of common sense. The best answer is that statistics:',
+    question: 'Why do scientists use statistics instead of common sense? The best answer is that statistics:',
     options: [
       { id: 'a', text: 'Guarantees every hypothesis is true' },
       { id: 'b', text: 'Acts as a safeguard against human bias and limited reasoning' },
@@ -74,7 +74,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q3',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.1.1 (Evans et al., 1983): Overall, people correctly judged logical arguments about what percentage of the time?',
+    question: 'In Evans et al. (1983), overall, people correctly judged logical arguments about what percentage of the time?',
     options: [
       { id: 'a', text: 'About 60%' },
       { id: 'b', text: 'About 95%' },
@@ -92,7 +92,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q4',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.1.1: When a valid argument contradicted pre-existing beliefs, what percentage of people judged it valid?',
+    question: 'When a valid argument contradicted pre-existing beliefs, what percentage of people judged it valid?',
     options: [
       { id: 'a', text: '8%' },
       { id: 'b', text: '46%' },
@@ -110,7 +110,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q5',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.1.1: When an invalid argument agreed with pre-existing beliefs, what percentage of people incorrectly accepted it as valid?',
+    question: 'When an invalid argument agreed with pre-existing beliefs, what percentage of people incorrectly accepted it as valid?',
     options: [
       { id: 'a', text: '8%' },
       { id: 'b', text: '46%' },
@@ -128,7 +128,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q6',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.1.1 argues statistics can improve evidence evaluation from about 60% accuracy to roughly:',
+    question: 'Statistics can improve evidence evaluation from about 60% accuracy to roughly:',
     options: [
       { id: 'a', text: '65%' },
       { id: 'b', text: '75%' },
@@ -164,7 +164,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q8',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.2 defines Simpson\'s paradox as occurring when:',
+    question: 'Simpson\'s paradox occurs when:',
     options: [
       { id: 'a', text: 'A trend in aggregated data reverses or disappears in subgroups' },
       { id: 'b', text: 'Sample size is too small for any test' },
@@ -182,7 +182,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q9',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.2 (Berkeley admissions, overall totals): Males were admitted at about ___% and females at about ___%.',
+    question: 'In the Berkeley admissions example (overall totals), males were admitted at about ___% and females at about ___%.',
     options: [
       { id: 'a', text: '35%; 44%' },
       { id: 'b', text: '44%; 35%' },
@@ -200,7 +200,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q10',
     moduleId: 'stats-module-1',
     type: 'true_false',
-    question: '§1.2: When Berkeley admissions were examined department by department, most departments admitted females at a slightly higher rate than males.',
+    question: 'When Berkeley admissions were examined department by department, most departments admitted females at a slightly higher rate than males.',
     correct: true,
     feedback: {
       correct: 'That reversal at the department level is central to the Simpson\'s paradox example.',
@@ -212,7 +212,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q11',
     moduleId: 'stats-module-1',
     type: 'multiple_select',
-    question: '§1.3 lists reasons every psychology researcher should know basic statistics. Which are named in the chapter? (Select all that apply)',
+    question: 'Which are reasons every psychology researcher should know basic statistics? (Select all that apply)',
     options: [
       { id: 'a', text: 'Statistics is intertwined with research design' },
       { id: 'b', text: 'Reading the literature requires understanding reported analyses' },
@@ -230,7 +230,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q12',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.4 (ABC news sample): What percentage of the 20 articles discussed statistical topics?',
+    question: 'In a sample of 20 news articles, what percentage discussed statistical topics?',
     options: [
       { id: 'a', text: '20%' },
       { id: 'b', text: '40%' },
@@ -248,7 +248,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q13',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'A headline says, "Study proves teens are addicted to phones." Which Chapter 1 response is best?',
+    question: 'A headline says, "Study proves teens are addicted to phones." Which response is best?',
     options: [
       { id: 'a', text: 'Accept it immediately because the word "proves" is used' },
       { id: 'b', text: 'Ask what was measured, how large the sample was, and whether alternative explanations were considered' },
@@ -284,7 +284,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q15',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.5 explains why introductory classes emphasize statistics. The main reason given is that undergraduate assignments most often require students to:',
+    question: 'Why do introductory classes emphasize statistics? The main reason given is that undergraduate assignments most often require students to:',
     options: [
       { id: 'a', text: 'Design a full study from scratch with no data provided' },
       { id: 'b', text: 'Analyze and interpret data collected in studies designed by others' },
@@ -362,7 +362,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q20',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.2 (Simpson\'s paradox): Why is separating data by meaningful groups often useful?',
+    question: 'Why is separating data by meaningful groups often useful?',
     options: [
       { id: 'a', text: 'It can reveal different patterns hidden by one overall average' },
       { id: 'b', text: 'It always increases sample size automatically' },
@@ -380,7 +380,7 @@ export const statsModule1Questions = [
     id: 'stats-m1-q21',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: '§1.2: Berkeley\'s overall admission pattern reversed at the department level. Which follow-up question best reflects that lesson?',
+    question: 'Berkeley\'s overall admission pattern reversed at the department level. Which follow-up question best reflects that lesson?',
     options: [
       { id: 'a', text: 'Did each department show the same pattern as the overall totals, or did subgroup rates differ?' },
       { id: 'b', text: 'Can we ignore how applicants sorted themselves across departments?' },
@@ -506,18 +506,18 @@ export const statsModule2Questions = [
     id: 'stats-m2-q7',
     moduleId: 'stats-module-2',
     type: 'multiple_select',
-    question: 'Which of the following are threats to internal validity? (Select all that apply)',
+    question: 'In a study testing whether background music improves concentration, which situations describe a confound that threatens internal validity? (Select all that apply)',
     options: [
-      { id: 'a', text: 'History effects' },
-      { id: 'b', text: 'Maturation' },
-      { id: 'c', text: 'Sample size' },
-      { id: 'd', text: 'Selection bias' },
-      { id: 'e', text: 'Attrition' }
+      { id: 'a', text: 'The music and no-music conditions are tested in rooms of different quietness' },
+      { id: 'b', text: 'The music puts participants in a better mood, which may help concentration' },
+      { id: 'c', text: 'The sample size is too small' },
+      { id: 'd', text: 'Music-condition participants are tested in the morning and no-music participants in the afternoon' },
+      { id: 'e', text: 'Participants are randomly assigned to music or no-music conditions' }
     ],
-    correct: ['a', 'b', 'd', 'e'],
+    correct: ['a', 'b', 'd'],
     feedback: {
-      correct: 'History, maturation, selection bias, and attrition are all threats to internal validity.',
-      incorrect: 'Threats to internal validity include history (external events), maturation (natural changes), selection bias (non-equivalent groups), and attrition (participant dropout). Sample size affects statistical power, not internal validity directly.'
+      correct: 'Room quietness, mood, and time of day are confounds mixed up with the music manipulation; random assignment helps control confounds rather than creating them.',
+      incorrect: 'Confounds are variables mixed up with the IV (e.g., room quality, mood, time of day). Random assignment reduces confounds; sample size affects power, not whether a confound is present.'
     },
     difficulty: 'hard'
   }
@@ -526,17 +526,17 @@ export const statsModule2Questions = [
     id: 'stats-m2-q8',
     moduleId: 'stats-module-2',
     type: 'multiple_choice',
-    question: 'Which list correctly classifies these variables: gender category, reaction time (ms), diagnosis (yes/no), number of symptoms endorsed?',
+    question: 'Which list correctly classifies these variables by scale of measurement: gender category, reaction time (ms), diagnosis (yes/no), number of symptoms endorsed?',
     options: [
-      { id: 'a', text: 'categorical, quantitative, categorical, quantitative' },
-      { id: 'b', text: 'quantitative, categorical, quantitative, categorical' },
-      { id: 'c', text: 'categorical, categorical, quantitative, quantitative' },
-      { id: 'd', text: 'quantitative, quantitative, categorical, categorical' }
+      { id: 'a', text: 'nominal, ratio, nominal, ratio' },
+      { id: 'b', text: 'ratio, nominal, ratio, nominal' },
+      { id: 'c', text: 'nominal, nominal, ratio, ratio' },
+      { id: 'd', text: 'ratio, ratio, nominal, nominal' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Gender and diagnosis are categorical; reaction time and symptom count are quantitative.',
-      incorrect: 'Gender/diagnosis are categorical; reaction time and number of symptoms are quantitative.'
+      correct: 'Gender and diagnosis are nominal categories; reaction time and symptom counts are ratio-scale numeric measurements.',
+      incorrect: 'Gender and diagnosis are nominal; reaction time and counts of symptoms are ratio-scale variables.'
     },
     difficulty: 'easy'
   },
@@ -598,17 +598,17 @@ export const statsModule2Questions = [
     id: 'stats-m2-q12',
     moduleId: 'stats-module-2',
     type: 'multiple_choice',
-    question: 'Which statement best distinguishes between-subjects and within-subjects designs?',
+    question: 'Which statement best distinguishes experimental from non-experimental research?',
     options: [
-      { id: 'a', text: 'Between-subjects uses the same participants in all conditions; within-subjects uses different participants.' },
-      { id: 'b', text: 'Between-subjects uses different participants in each condition; within-subjects uses the same participants across conditions.' },
-      { id: 'c', text: 'Between-subjects always has higher power.' },
-      { id: 'd', text: 'Within-subjects cannot include control groups.' }
+      { id: 'a', text: 'Experimental research gives the researcher control over what participants experience; non-experimental research does not' },
+      { id: 'b', text: 'Non-experimental research always uses random assignment; experimental research never does' },
+      { id: 'c', text: 'Experimental research only observes naturally occurring behavior' },
+      { id: 'd', text: 'Non-experimental research can always establish cause and effect' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Between-subjects uses different participants; within-subjects uses the same participants across conditions.',
-      incorrect: 'Between-subjects: different participants per condition; within-subjects: same participants across conditions.'
+      correct: 'Experiments involve researcher control—especially manipulation and assignment—whereas non-experimental designs lack that control.',
+      incorrect: 'The key distinction is control: experiments manipulate conditions and control the study environment; non-experimental designs do not.'
     },
     difficulty: 'medium'
   },
@@ -634,17 +634,17 @@ export const statsModule2Questions = [
     id: 'stats-m2-q14',
     moduleId: 'stats-module-2',
     type: 'multiple_choice',
-    question: 'Which variable is numeric but should often be treated as categorical?',
+    question: 'A dataset codes gender as 1 = male and 2 = female. What scale of measurement is this variable?',
     options: [
-      { id: 'a', text: 'Reaction time in ms' },
-      { id: 'b', text: 'Zip code' },
-      { id: 'c', text: 'Hours of sleep' },
-      { id: 'd', text: 'Number of symptoms' }
+      { id: 'a', text: 'Nominal' },
+      { id: 'b', text: 'Ordinal' },
+      { id: 'c', text: 'Interval' },
+      { id: 'd', text: 'Ratio' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Zip codes are numeric labels, not meaningful quantities.',
-      incorrect: 'Zip codes are identifiers and should be treated as categorical.'
+      correct: 'Numbers used as category codes (1 = male, 2 = female) are still nominal—the values label categories, not meaningful quantities.',
+      incorrect: 'Numeric codes for categories are nominal. The numbers are labels, not measurements on a continuous scale.'
     },
     difficulty: 'medium'
   },
@@ -654,15 +654,15 @@ export const statsModule2Questions = [
     type: 'multiple_choice',
     question: 'Which pairing best matches a threat to internal validity and a threat to construct validity?',
     options: [
-      { id: 'a', text: 'Internal: maturation; Construct: poorly defined measure' },
-      { id: 'b', text: 'Internal: poor wording; Construct: random assignment' },
-      { id: 'c', text: 'Internal: sample bias; Construct: history effects' },
-      { id: 'd', text: 'Internal: instrumentation; Construct: statistical power' }
+      { id: 'a', text: 'Internal: a confound such as room quietness; Construct: the measure does not capture the intended construct' },
+      { id: 'b', text: 'Internal: poor wording of survey items; Construct: random assignment' },
+      { id: 'c', text: 'Internal: results do not generalize to real-world settings; Construct: a confound such as time of day' },
+      { id: 'd', text: 'Internal: the measure looks plausible on the surface; Construct: statistical power' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Maturation threatens internal validity; poor measurement threatens construct validity.',
-      incorrect: 'Internal validity threats include maturation; construct validity threats include weak measures.'
+      correct: 'Confounds threaten internal validity (you cannot tell what caused the effect); a poor measure threatens construct validity (you may not be measuring what you think).',
+      incorrect: 'Internal validity is about causal inference (confounds); construct validity is about whether the measure actually captures the construct of interest.'
     },
     difficulty: 'hard'
   },
@@ -670,17 +670,17 @@ export const statsModule2Questions = [
     id: 'stats-m2-q16',
     moduleId: 'stats-module-2',
     type: 'multiple_choice',
-    question: 'How do random assignment and random sampling differ?',
+    question: 'What is the main purpose of random assignment in an experiment?',
     options: [
-      { id: 'a', text: 'Assignment improves generalizability; sampling improves causal inference' },
-      { id: 'b', text: 'Assignment reduces confounds; sampling improves representativeness' },
-      { id: 'c', text: 'Both are the same and guarantee causation' },
-      { id: 'd', text: 'Assignment is about recruiting; sampling is about measuring' }
+      { id: 'a', text: 'To ensure that, on average, groups are comparable before the manipulation begins' },
+      { id: 'b', text: 'To guarantee that every participant in the population is included in the study' },
+      { id: 'c', text: 'To make the dependent variable independent of all other variables' },
+      { id: 'd', text: 'To replace the need for any control over the study environment' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Random assignment supports causal inference; random sampling supports generalizability.',
-      incorrect: 'Assignment helps with causality; sampling helps with representativeness.'
+      correct: 'Random assignment makes groups equivalent on average at the start, reducing pre-existing differences as an alternative explanation.',
+      incorrect: 'Random assignment helps equate groups before treatment so observed differences are more likely due to the IV, not pre-existing differences.'
     },
     difficulty: 'hard'
   },
@@ -790,18 +790,18 @@ export const statsModule3Questions = [
   {
     id: 'stats-m3-q4',
     moduleId: 'stats-module-3',
-    type: 'ordering',
-    question: 'Put these data preparation steps in the correct order:',
-    items: [
-      { id: 'a', text: 'Run statistical analyses' },
-      { id: 'b', text: 'Import or enter data' },
-      { id: 'c', text: 'Check for errors and missing data' },
-      { id: 'd', text: 'Set variable types and measurement levels' }
+    type: 'multiple_choice',
+    question: 'When importing a CSV file into jamovi, which setting checks whether the first row contains variable names rather than data values?',
+    options: [
+      { id: 'a', text: 'Header row' },
+      { id: 'b', text: 'Separator' },
+      { id: 'c', text: 'Quote character' },
+      { id: 'd', text: 'Syntax mode' }
     ],
-    correctOrder: ['b', 'd', 'c', 'a'],
+    correct: 'a',
     feedback: {
-      correct: 'Import data → Set variable types → Check for errors → Run analyses.',
-      incorrect: 'The correct order is: Import/enter data → Set variable types → Check for errors → Run analyses.'
+      correct: 'The header setting tells jamovi whether the first row lists variable names instead of data.',
+      incorrect: 'Check the header setting: the first row of many CSV files contains variable names, not observations.'
     },
     difficulty: 'medium'
   },
@@ -882,17 +882,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q9',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'Which sequence best matches screening for outliers?',
+    question: 'After importing data, jamovi sometimes assigns the wrong measurement level (e.g., treating numeric ID codes as continuous). What should you do?',
     options: [
-      { id: 'a', text: 'Run t-tests, then check plots, then decide' },
-      { id: 'b', text: 'Check plots/summary, verify data entry, decide on keep/transform/flag' },
-      { id: 'c', text: 'Delete all extreme values immediately' },
-      { id: 'd', text: 'Ignore outliers because they are rare' }
+      { id: 'a', text: 'Delete the variable and re-enter all values manually' },
+      { id: 'b', text: 'Open the variable editor and manually set the correct measurement level' },
+      { id: 'c', text: 'Ignore it because measurement level never affects analyses' },
+      { id: 'd', text: 'Convert every variable to text' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Screen outliers by checking plots/summaries, verifying values, then deciding how to handle them.',
-      incorrect: 'Start with plots/summaries, verify, then decide on handling.'
+      correct: 'Use the variable editor to set the correct measurement level when jamovi\'s automatic guess is wrong.',
+      incorrect: 'Open the variable editor (Setup or double-click the column header) and set the correct level—nominal, ordinal, continuous, or ID.'
     },
     difficulty: 'medium'
   },
@@ -918,17 +918,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q11',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'What does it mean to recode a variable?',
+    question: 'What is a computed variable in jamovi?',
     options: [
-      { id: 'a', text: 'Delete the variable' },
-      { id: 'b', text: 'Change values to new values based on a rule (e.g., reverse scoring)' },
-      { id: 'c', text: 'Change the column name only' },
-      { id: 'd', text: 'Recalculate the sample size' }
+      { id: 'a', text: 'A variable that stores participant ID numbers only' },
+      { id: 'b', text: 'A new variable whose values are calculated automatically from a formula applied to other variables' },
+      { id: 'c', text: 'A variable that can only contain text labels' },
+      { id: 'd', text: 'A duplicate copy of an imported CSV file' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Recoding changes values based on a rule, such as reversing item scores.',
-      incorrect: 'Recoding applies a rule to change values (e.g., reverse scoring).'
+      correct: 'Computed variables are created with formulas (e.g., z-scores, sum-scores, log transforms) and update when the source data change.',
+      incorrect: 'Computed variables take their values from a formula applied to other variables, such as a z-score or mean of items.'
     },
     difficulty: 'medium'
   },
@@ -936,17 +936,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q12',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'Which statement best distinguishes wide versus long data?',
+    question: 'In a jamovi spreadsheet, each row represents _____ and each column represents _____.',
     options: [
-      { id: 'a', text: 'Wide: one row per observation per time; Long: one row per participant with multiple time columns' },
-      { id: 'b', text: 'Wide: multiple columns for repeated measures; Long: multiple rows per participant' },
-      { id: 'c', text: 'Wide: only categorical variables; Long: only numeric variables' },
-      { id: 'd', text: 'Wide and long are identical' }
+      { id: 'a', text: 'a variable; a case or participant' },
+      { id: 'b', text: 'a case or participant; a variable' },
+      { id: 'c', text: 'a statistical test; a result table' },
+      { id: 'd', text: 'an analysis; a data file' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Wide uses separate columns for repeated measures; long uses multiple rows per participant.',
-      incorrect: 'Wide: multiple columns for repeated measures; long: multiple rows per participant.'
+      correct: 'Rows are cases/participants; columns are variables.',
+      incorrect: 'In jamovi, each row is a case (participant) and each column is a variable.'
     },
     difficulty: 'medium'
   },
@@ -954,17 +954,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q13',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'Which is a good reproducible cleaning checklist item?',
+    question: 'Before importing a CSV into jamovi, why should missing values be coded with a placeholder such as 99 or -9999?',
     options: [
-      { id: 'a', text: 'Delete any rows that look odd without notes' },
-      { id: 'b', text: 'Document missing-value codes, data type fixes, and recodes' },
-      { id: 'c', text: 'Only check one variable' },
-      { id: 'd', text: 'Skip documentation to save time' }
+      { id: 'a', text: 'So jamovi can treat them as missing rather than as real data values' },
+      { id: 'b', text: 'So the file will import faster' },
+      { id: 'c', text: 'Because jamovi cannot import files that contain any blank cells' },
+      { id: 'd', text: 'To increase the sample size automatically' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'A reproducible checklist includes documenting missing codes, data types, and recoding steps.',
-      incorrect: 'Good practice is to document each cleaning step and decision.'
+      correct: 'Use a code that cannot be a valid score; jamovi converts it to blank cells on import.',
+      incorrect: 'Choose an impossible value as a missing code so jamovi recognizes and excludes those entries from analysis.'
     },
     difficulty: 'hard'
   },
@@ -972,17 +972,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q14',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'After merging two datasets by participant ID, the sample size drops. Which is a likely cause and check?',
+    question: 'What is the difference between exporting changed data and saving as a jamovi (.omv) file?',
     options: [
-      { id: 'a', text: 'IDs do not match; check for mismatched or duplicate IDs' },
-      { id: 'b', text: 'Too many variables; delete columns' },
-      { id: 'c', text: 'Too many rows; sort by name' },
-      { id: 'd', text: 'Outliers; remove all extreme values' }
+      { id: 'a', text: 'Export saves only the data; a .omv file saves both the data and your analyses' },
+      { id: 'b', text: 'Export saves analyses only; a .omv file saves only raw numbers' },
+      { id: 'c', text: 'They are identical—both formats always include every analysis you ran' },
+      { id: 'd', text: 'Export is for CSV files only; .omv files cannot store variables' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Mismatched or duplicate IDs can drop cases; check ID consistency.',
-      incorrect: 'Check whether IDs match across files and for duplicates.'
+      correct: 'Export data creates a new data file; Save as .omv preserves the dataset together with your analysis results.',
+      incorrect: 'Export writes out the (changed) data; saving as .omv keeps data and analyses together in one jamovi file.'
     },
     difficulty: 'hard'
   },
@@ -990,17 +990,17 @@ export const statsModule3Questions = [
     id: 'stats-m3-q15',
     moduleId: 'stats-module-3',
     type: 'multiple_choice',
-    question: 'Why is documenting data handling decisions important?',
+    question: 'Why is recording your screen while conducting statistical analyses useful?',
     options: [
-      { id: 'a', text: 'It is optional and only for large studies' },
-      { id: 'b', text: 'It supports transparency, reproducibility, and interpretation' },
-      { id: 'c', text: 'It replaces statistical analysis' },
-      { id: 'd', text: 'It guarantees significance' }
+      { id: 'a', text: 'It replaces the need to save your jamovi file' },
+      { id: 'b', text: 'It documents the exact steps you took and helps others see where you are stuck' },
+      { id: 'c', text: 'It automatically fixes data entry errors' },
+      { id: 'd', text: 'It guarantees statistically significant results' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Documentation improves transparency, reproducibility, and interpretability.',
-      incorrect: 'Documenting decisions supports transparency and reproducibility.'
+      correct: 'Screen recordings create a record of your workflow for documentation, review, and getting help.',
+      incorrect: 'Recordings document your process so you can review your work, complete assignments, and show instructors exactly what you did.'
     },
     difficulty: 'hard'
   }
@@ -1275,17 +1275,17 @@ export const statsModule4Questions = [
     id: 'stats-m4-q16',
     moduleId: 'stats-module-4',
     type: 'multiple_choice',
-    question: 'Why can mean and SD be misleading for a bimodal distribution?',
+    question: 'When data are heavily skewed, why might the mean be a poor measure of central tendency?',
     options: [
-      { id: 'a', text: 'They summarize two clusters into a single center and spread' },
-      { id: 'b', text: 'They are always undefined for bimodal data' },
-      { id: 'c', text: 'They depend only on the median' },
-      { id: 'd', text: 'They ignore sample size' }
+      { id: 'a', text: 'The mean is pulled toward the tail of extreme values' },
+      { id: 'b', text: 'The mean cannot be calculated for skewed data' },
+      { id: 'c', text: 'Skewed data always have equal mean and median' },
+      { id: 'd', text: 'The mean uses only the middle value in the sorted list' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Bimodal data may have two clusters; a single mean/SD can hide that structure.',
-      incorrect: 'Mean/SD can obscure multiple peaks; report modes and plots too.'
+      correct: 'In skewed distributions the mean is dragged toward the tail, so the median often better represents the typical value.',
+      incorrect: 'Skew pulls the mean toward extreme values; consider the median when reporting central tendency for skewed data.'
     },
     difficulty: 'hard'
   },
@@ -1293,17 +1293,17 @@ export const statsModule4Questions = [
     id: 'stats-m4-q17',
     moduleId: 'stats-module-4',
     type: 'multiple_choice',
-    question: 'What is restriction of range and how does it affect variability?',
+    question: 'Why is the interquartile range (IQR) more robust than the range when outliers may be present?',
     options: [
-      { id: 'a', text: 'Using a narrow subset of values; it reduces observed variability' },
-      { id: 'b', text: 'Using a wide range; it increases measurement error' },
-      { id: 'c', text: 'A plotting choice; it changes the mean' },
-      { id: 'd', text: 'A data entry error; it creates outliers' }
+      { id: 'a', text: 'IQR spans the middle 50% of data and is less affected by extreme values' },
+      { id: 'b', text: 'IQR always equals the maximum minus the minimum' },
+      { id: 'c', text: 'IQR uses squared deviations from the mean' },
+      { id: 'd', text: 'IQR can only be calculated for nominal data' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Restriction of range limits values and makes variability appear smaller.',
-      incorrect: 'It limits the range of values and reduces observed variability.'
+      correct: 'IQR describes the spread of the middle half of the data and changes little when a single extreme outlier is present.',
+      incorrect: 'Unlike the range, IQR focuses on the middle 50% and is much more robust to outliers.'
     },
     difficulty: 'hard'
   },
@@ -1313,15 +1313,15 @@ export const statsModule4Questions = [
     type: 'multiple_choice',
     question: 'How should you summarize a heavily skewed variable?',
     options: [
-      { id: 'a', text: 'Use mean and SD only' },
-      { id: 'b', text: 'Use median and IQR, and consider a transformation' },
-      { id: 'c', text: 'Use mode only' },
+      { id: 'a', text: 'Use the mean and standard deviation only' },
+      { id: 'b', text: 'Use the median (and IQR for spread) instead of the mean' },
+      { id: 'c', text: 'Use the mode only' },
       { id: 'd', text: 'Avoid summarizing it' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Median/IQR are robust to skew; transformations can improve interpretability.',
-      incorrect: 'Use robust summaries like median/IQR and consider transforming.'
+      correct: 'For skewed data the median is more representative than the mean; IQR pairs well with the median for spread.',
+      incorrect: 'When data are heavily skewed, prefer the median over the mean and use a robust spread measure such as IQR.'
     },
     difficulty: 'hard'
   }
@@ -1372,17 +1372,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q3',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'A distribution with a long tail extending to the left is called:',
+    question: 'When might you apply a log transform to a variable in jamovi?',
     options: [
-      { id: 'a', text: 'Positively skewed' },
-      { id: 'b', text: 'Negatively skewed' },
-      { id: 'c', text: 'Bimodal' },
-      { id: 'd', text: 'Normal' }
+      { id: 'a', text: 'When the data are right-skewed and you want a more symmetric distribution' },
+      { id: 'b', text: 'When the data are nominal and you need category labels' },
+      { id: 'c', text: 'When you want to convert a continuous variable into two categories' },
+      { id: 'd', text: 'When every value is already normally distributed' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Negative skew means the tail extends to the left (toward negative values).',
-      incorrect: 'A left tail indicates negative skew. Remember: the skew is named for the direction of the tail, not the bulk of the data.'
+      correct: 'Log transforms can make right-skewed data more symmetric and are useful for variance stabilization.',
+      incorrect: 'Log transforms are commonly applied to right-skewed continuous data to improve symmetry before analysis.'
     },
     difficulty: 'easy'
   },
@@ -1440,17 +1440,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q7',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'Which plot is most appropriate for: one quantitative distribution, group comparison, two quantitative variables?',
+    question: 'Which plot is most appropriate for: one quantitative distribution, comparing quantitative distributions across groups, two quantitative variables?',
     options: [
-      { id: 'a', text: 'Histogram, bar chart, scatterplot' },
+      { id: 'a', text: 'Histogram, boxplot, scatterplot' },
       { id: 'b', text: 'Scatterplot, histogram, bar chart' },
-      { id: 'c', text: 'Boxplot, line plot, pie chart' },
+      { id: 'c', text: 'Bar chart, line plot, pie chart' },
       { id: 'd', text: 'Pie chart, histogram, bar chart' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Histogram for a distribution, bar/box plot for group comparison, scatterplot for two quantitative variables.',
-      incorrect: 'Histogram, bar/box plot, and scatterplot are the standard choices for those tasks.'
+      correct: 'Use a histogram for one distribution, boxplots to compare groups, and a scatterplot for two quantitative variables.',
+      incorrect: 'Histogram, boxplot, and scatterplot match those three visualization goals in the module content.'
     },
     difficulty: 'easy'
   },
@@ -1494,17 +1494,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q10',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'A histogram with a long right tail indicates:',
+    question: 'A histogram that is strongly right-skewed suggests the data may benefit from:',
     options: [
-      { id: 'a', text: 'Negative skew' },
-      { id: 'b', text: 'Positive skew' },
-      { id: 'c', text: 'No skew and no outliers' },
-      { id: 'd', text: 'Bimodality' }
+      { id: 'a', text: 'A log transform to make the distribution more symmetric' },
+      { id: 'b', text: 'Converting the variable into a contingency table' },
+      { id: 'c', text: 'Replacing the histogram with a bar chart' },
+      { id: 'd', text: 'Deleting all values above the median' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'A long right tail indicates positive skew.',
-      incorrect: 'Right tail = positive skew.'
+      correct: 'Log transforms are often used when data are right-skewed to improve symmetry.',
+      incorrect: 'Right-skewed continuous data is a common reason to apply a log transform before analysis.'
     },
     difficulty: 'medium'
   },
@@ -1530,17 +1530,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q12',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'A plot truncates the y-axis to exaggerate differences. Why is this misleading and how should it be fixed?',
+    question: 'A histogram uses only 4 bins and the distribution shape is hard to see. What does the module suggest?',
     options: [
-      { id: 'a', text: 'It changes the data; fix by changing colors' },
-      { id: 'b', text: 'It exaggerates visual differences; fix by using a full scale or clearly showing the break' },
-      { id: 'c', text: 'It reduces sample size; fix by adding more points' },
-      { id: 'd', text: 'It makes the plot too large; fix by shrinking it' }
+      { id: 'a', text: 'Use more bins or a density plot to see the shape more clearly' },
+      { id: 'b', text: 'Switch to a bar chart because histograms only work with nominal data' },
+      { id: 'c', text: 'Remove all outliers before plotting' },
+      { id: 'd', text: 'Bin width has no effect on how a histogram looks' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Truncation exaggerates differences; use a full axis or show a clear break.',
-      incorrect: 'Use a full scale or clearly mark the break to avoid exaggeration.'
+      correct: 'Too few bins can hide structure; density plots are less sensitive to bin choice.',
+      incorrect: 'Histogram shape depends on binning, and density plots can reveal overall shape more reliably.'
     },
     difficulty: 'medium'
   },
@@ -1548,17 +1548,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q13',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'Why can showing raw data points be better than bars alone for group comparisons?',
+    question: 'Why are boxplots especially useful for comparing distributions across groups?',
     options: [
-      { id: 'a', text: 'It hides variability' },
-      { id: 'b', text: 'It reveals distribution and sample size, not just averages' },
-      { id: 'c', text: 'It makes the graph simpler by removing data' },
-      { id: 'd', text: 'It prevents outliers from showing' }
+      { id: 'a', text: 'They show center, spread, and outliers in a compact side-by-side display' },
+      { id: 'b', text: 'They display exact frequencies for nominal categories only' },
+      { id: 'c', text: 'They require no numeric data at all' },
+      { id: 'd', text: 'They permanently remove outliers from the dataset' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Raw points show distribution, spread, and sample size that bars alone hide.',
-      incorrect: 'Bars hide variability; raw points reveal the data structure.'
+      correct: 'Boxplots summarize median, IQR, and outliers compactly, making group comparisons easy to read.',
+      incorrect: 'Boxplots are designed for compact comparison of distributions across groups.'
     },
     difficulty: 'medium'
   },
@@ -1584,17 +1584,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q15',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'For 3 groups measured at 2 time points, what is a good visualization plan?',
+    question: 'You want to compare distributions across several groups without overwhelming the viewer. What does the module recommend?',
     options: [
-      { id: 'a', text: 'One bar chart of all values combined' },
-      { id: 'b', text: 'Line plot of means over time by group, plus raw/jittered points or boxplots' },
-      { id: 'c', text: 'Only a pie chart for each group' },
-      { id: 'd', text: 'Only a histogram of all observations' }
+      { id: 'a', text: 'Draw multiple boxplots side by side using Split by in jamovi' },
+      { id: 'b', text: 'Draw a separate histogram for every individual observation' },
+      { id: 'c', text: 'Use one pie chart for the entire dataset' },
+      { id: 'd', text: 'Report only the group means with no graph' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'A grouped line plot over time plus raw points/boxplots shows trends and variability.',
-      incorrect: 'Use group-by-time plots and include variability information.'
+      correct: 'Side-by-side boxplots give a compact comparison of center, spread, and outliers across groups.',
+      incorrect: 'Multiple boxplots are designed for comparing groups without the clutter of many histograms.'
     },
     difficulty: 'hard'
   },
@@ -1602,17 +1602,17 @@ export const statsModule5Questions = [
     id: 'stats-m5-q16',
     moduleId: 'stats-module-5',
     type: 'multiple_choice',
-    question: 'When might a mean +/- SE plot be misleading, and what is a better alternative?',
+    question: 'What does a violin plot add compared with a standard boxplot?',
     options: [
-      { id: 'a', text: 'When distributions are skewed; use boxplots or violin plots with raw points' },
-      { id: 'b', text: 'When sample size is large; use no plots' },
-      { id: 'c', text: 'When the mean is accurate; use fewer colors' },
-      { id: 'd', text: 'When there are categories; use a pie chart' }
+      { id: 'a', text: 'It shows kernel probability density at different values in addition to the boxplot summary' },
+      { id: 'b', text: 'It replaces the median with the mean only' },
+      { id: 'c', text: 'It is used only for categorical variables' },
+      { id: 'd', text: 'It permanently deletes outlier values from the dataset' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Mean +/- SE can hide distribution shape; box/violin plots with points show more.',
-      incorrect: 'Use plots that show distribution shape, like box/violin with points.'
+      correct: 'Violin plots add a density curve while still showing median and IQR like a boxplot.',
+      incorrect: 'Violin plots combine density information with the usual boxplot summary statistics.'
     },
     difficulty: 'hard'
   },
@@ -2115,17 +2115,17 @@ export const statsModule6Questions = [
     id: 'stats-m6-q16',
     moduleId: 'stats-module-6',
     type: 'multiple_choice',
-    question: 'How can biased sampling yield a precise but wrong estimate?',
+    question: 'Why can a convenience sample lead to misleading conclusions even with a large sample size?',
     options: [
-      { id: 'a', text: 'Bias shifts the estimate away from the truth even with small SE' },
-      { id: 'b', text: 'Bias always increases SE' },
-      { id: 'c', text: 'Bias only affects large samples' },
-      { id: 'd', text: 'Bias makes estimates unbiased by definition' }
+      { id: 'a', text: 'The sample may systematically differ from the population, so results may not generalize' },
+      { id: 'b', text: 'Large samples always eliminate sampling error entirely' },
+      { id: 'c', text: 'Convenience samples are always simple random samples' },
+      { id: 'd', text: 'Statistical significance guarantees representativeness' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Bias can systematically shift estimates; precision does not guarantee accuracy.',
-      incorrect: 'A biased sample can be precise yet consistently wrong.'
+      correct: 'Convenience samples may be biased and unrepresentative, limiting generalizability regardless of n.',
+      incorrect: 'Representativeness depends on how the sample was chosen, not just sample size or p-values.'
     },
     difficulty: 'hard'
   },
@@ -2361,17 +2361,17 @@ export const statsModule7Questions = [
     id: 'stats-m7-q6',
     moduleId: 'stats-module-7',
     type: 'multiple_choice',
-    question: 'Cohen\'s d is a measure of:',
+    question: 'Effect size measures:',
     options: [
-      { id: 'a', text: 'Statistical significance' },
-      { id: 'b', text: 'Effect size for comparing means' },
-      { id: 'c', text: 'Correlation strength' },
-      { id: 'd', text: 'Sample size adequacy' }
+      { id: 'a', text: 'How far the true population value is from the value assumed by the null hypothesis' },
+      { id: 'b', text: 'The probability that the null hypothesis is true' },
+      { id: 'c', text: 'The Type I error rate you chose before the study' },
+      { id: 'd', text: 'Whether the sample was randomly selected' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Cohen\'s d measures the standardized difference between two means.',
-      incorrect: 'Cohen\'s d is an effect size measure for the difference between two means, expressed in standard deviation units.'
+      correct: 'Effect size quantifies how different the true state of the world is from the null hypothesis.',
+      incorrect: 'Effect size describes magnitude of the difference from the null, not evidence or error rates.'
     },
     difficulty: 'easy'
   },
@@ -2379,17 +2379,17 @@ export const statsModule7Questions = [
     id: 'stats-m7-q7',
     moduleId: 'stats-module-7',
     type: 'multiple_choice',
-    question: 'A one-tailed test is appropriate when:',
+    question: 'In the ESP example, which alternative hypothesis states that performance is better than chance only?',
     options: [
-      { id: 'a', text: 'You want to be more conservative' },
-      { id: 'b', text: 'You predict a specific direction of the effect' },
-      { id: 'c', text: 'Your sample size is small' },
-      { id: 'd', text: 'You are unsure of the direction of the effect' }
+      { id: 'a', text: 'θ > 0.5' },
+      { id: 'b', text: 'θ = 0.5' },
+      { id: 'c', text: 'θ ≠ 0.5' },
+      { id: 'd', text: 'θ < 0.5 only when ESP does not exist' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'One-tailed tests are used when you have a directional hypothesis (e.g., Group A > Group B).',
-      incorrect: 'One-tailed tests are appropriate when you predict the direction of the effect before data collection. Two-tailed tests are used when you just predict a difference, not its direction.'
+      correct: 'θ > 0.5 is the directional alternative for better-than-chance performance.',
+      incorrect: 'A one-sided alternative for better-than-chance performance is θ > 0.5; θ ≠ 0.5 is two-sided.'
     },
     difficulty: 'medium'
   },
@@ -2397,18 +2397,17 @@ export const statsModule7Questions = [
     id: 'stats-m7-q8',
     moduleId: 'stats-module-7',
     type: 'multiple_select',
-    question: 'Which factors increase statistical power? (Select all that apply)',
+    question: 'Which factors increase statistical power according to the module? (Select all that apply)',
     options: [
       { id: 'a', text: 'Larger sample size' },
       { id: 'b', text: 'Larger effect size' },
       { id: 'c', text: 'Lower alpha level' },
-      { id: 'd', text: 'Less variability in the data' },
-      { id: 'e', text: 'Using a one-tailed instead of two-tailed test' }
+      { id: 'd', text: 'A smaller true difference from the null hypothesis' }
     ],
-    correct: ['a', 'b', 'd', 'e'],
+    correct: ['a', 'b'],
     feedback: {
-      correct: 'Power increases with larger n, larger effects, less noise (variability), and one-tailed tests. Lower alpha actually decreases power.',
-      incorrect: 'Power is increased by: larger samples, larger effect sizes, less variability, and one-tailed tests. Decreasing alpha makes it harder to reject H₀, reducing power.'
+      correct: 'Power increases with larger samples and larger effects. Lower alpha reduces power.',
+      incorrect: 'The module emphasizes increasing sample size and effect size to raise power; stricter alpha lowers power.'
     },
     difficulty: 'hard'
   }
@@ -2525,17 +2524,17 @@ export const statsModule7Questions = [
     id: 'stats-m7-q15',
     moduleId: 'stats-module-7',
     type: 'multiple_choice',
-    question: 'When is a one-sided test most justified?',
+    question: 'In the ESP example, which hypotheses test whether performance differs from chance in either direction?',
     options: [
-      { id: 'a', text: 'When any difference is interesting' },
-      { id: 'b', text: 'When a directional hypothesis was specified in advance' },
-      { id: 'c', text: 'When sample size is small' },
-      { id: 'd', text: 'When p is large' }
+      { id: 'a', text: 'H₀: θ = 0.5; H₁: θ ≠ 0.5' },
+      { id: 'b', text: 'H₀: θ ≠ 0.5; H₁: θ = 0.5' },
+      { id: 'c', text: 'H₀: θ = 0.5; H₁: θ > 0.5 only' },
+      { id: 'd', text: 'H₀: θ > 0.5; H₁: θ < 0.5' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'One-sided tests are justified for pre-specified directional hypotheses.',
-      incorrect: 'Use one-sided tests only when direction is justified a priori.'
+      correct: 'A two-sided test uses H₀: θ = 0.5 and H₁: θ ≠ 0.5.',
+      incorrect: 'Testing for any difference from chance means H₀ is 0.5 and H₁ is not equal to 0.5.'
     },
     difficulty: 'medium'
   },
@@ -2870,17 +2869,17 @@ export const statsModule8Questions = [
     id: 'stats-m8-q16',
     moduleId: 'stats-module-8',
     type: 'multiple_choice',
-    question: 'What is an interaction in a factorial design?',
+    question: 'What is a key advantage of repeated measures ANOVA over independent ANOVA?',
     options: [
-      { id: 'a', text: 'The effect of one factor depends on the level of another factor' },
-      { id: 'b', text: 'The main effect of each factor averaged across others' },
-      { id: 'c', text: 'A correlation between two outcomes' },
-      { id: 'd', text: 'A violation of independence' }
+      { id: 'a', text: 'It controls for individual differences and typically has more statistical power' },
+      { id: 'b', text: 'It requires different participants in every condition' },
+      { id: 'c', text: 'It can only compare exactly two group means' },
+      { id: 'd', text: 'It does not require checking any assumptions' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'An interaction means the effect of one factor changes across levels of another.',
-      incorrect: 'Interaction = effect of one factor depends on the other.'
+      correct: 'Repeated measures designs remove individual-difference variance, reducing error and increasing power.',
+      incorrect: 'Within-subjects ANOVA accounts for individual differences, which usually increases power.'
     },
     difficulty: 'medium'
   },

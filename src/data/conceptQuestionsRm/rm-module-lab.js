@@ -184,9 +184,9 @@ export const rmModuleLabQuestions = [
     id: 'rm-mlab-q12',
     moduleId: 'rm-module-lab',
     type: 'multiple_choice',
-    question: 'After running the lab simulations, you should be able to explain why:',
+    question: 'A well-designed study uses random assignment and probability sampling because:',
     options: [
-      { id: 'a', text: 'Random assignment and probability sampling address different validity concerns' },
+      { id: 'a', text: 'They address different validity concerns—causal inference within the study versus generalizing to a population' },
       { id: 'b', text: 'Convenience samples always match the population' },
       { id: 'c', text: 'Sampling and assignment are the same procedure' },
       { id: 'd', text: 'External validity is irrelevant in psychology' }

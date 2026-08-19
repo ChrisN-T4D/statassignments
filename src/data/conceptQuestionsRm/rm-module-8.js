@@ -100,17 +100,17 @@ export const rmModule8Questions = [
     id: 'rm-m8-q7',
     moduleId: 'rm-module-8',
     type: 'multiple_choice',
-    question: 'Propensity scores (conceptually) aim to:',
+    question: 'A pretest-posttest design with switching replication introduces the treatment to one nonequivalent group before the other mainly to:',
     options: [
-      { id: 'a', text: 'Balance observed covariates between treated and untreated groups' },
-      { id: 'b', text: 'Replace the need for any data' },
-      { id: 'c', text: 'Guarantee unobserved confounds are removed' },
-      { id: 'd', text: 'Convert experiments into surveys' }
+      { id: 'a', text: 'Help control history and maturation through staggered treatment introduction' },
+      { id: 'b', text: 'Replace the need for any pretest measurement' },
+      { id: 'c', text: 'Guarantee that groups are randomly assigned' },
+      { id: 'd', text: 'Eliminate all demand characteristics automatically' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'They adjust for measured selection differences; hidden confounds may remain.',
-      incorrect: 'No observational method removes all unmeasured confounding by assumption.'
+      correct: 'Staggered introduction makes it unlikely that one outside event explains changes in both groups.',
+      incorrect: 'Switching replication adds a built-in replication and helps control history and maturation.'
     },
     difficulty: 'hard'
   },
@@ -118,17 +118,17 @@ export const rmModule8Questions = [
     id: 'rm-m8-q8',
     moduleId: 'rm-module-8',
     type: 'multiple_choice',
-    question: 'Diff-in-diff logic compares:',
+    question: 'Adding a nonequivalent control group to an interrupted time-series design strengthens evidence because:',
     options: [
-      { id: 'a', text: 'Changes over time between a treatment and a control group, assuming parallel trends' },
-      { id: 'b', text: 'Only post scores in one group' },
-      { id: 'c', text: 'Means without any time dimension' },
-      { id: 'd', text: 'Likert labels only' }
+      { id: 'a', text: 'It shows whether the pattern changes in the treatment group but not in a similar untreated group' },
+      { id: 'b', text: 'It removes the need for any pre-intervention observations' },
+      { id: 'c', text: 'It guarantees the groups were equivalent before the study began' },
+      { id: 'd', text: 'It converts the study into a true experiment' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Difference-in-differences contrasts trends; parallel pre-trends are a key assumption.',
-      incorrect: 'DiD is inherently about change differences across groups.'
+      correct: 'A control series helps rule out events that would affect both groups similarly.',
+      incorrect: 'The nonequivalent control group provides a comparison for the time-series pattern.'
     },
     difficulty: 'hard'
   },
@@ -154,11 +154,11 @@ export const rmModule8Questions = [
     id: 'rm-m8-q10',
     moduleId: 'rm-module-8',
     type: 'true_false',
-    question: 'In a regression discontinuity design, units just above and below a cutoff are compared, assuming smoothness of potential outcomes at the threshold.',
+    question: 'In a switching replication with treatment removal design, the treatment is withdrawn from the first group when it is added to the second group.',
     correct: true,
     feedback: {
-      correct: 'RD exploits a sharp cutoff while comparing units near the threshold.',
-      incorrect: 'RD is a strong quasi-experimental design when assumptions hold.'
+      correct: 'Removing treatment from the first group while adding it to the second can show reversal and replication of effects.',
+      incorrect: 'Unlike basic switching replication, this design removes treatment from the first group when the second receives it.'
     },
     difficulty: 'hard'
   },
@@ -166,17 +166,17 @@ export const rmModule8Questions = [
     id: 'rm-m8-q11',
     moduleId: 'rm-module-8',
     type: 'multiple_choice',
-    question: 'Pretest sensitization refers to:',
+    question: 'The testing threat in a one-group pretest-posttest design refers to:',
     options: [
-      { id: 'a', text: 'The pretest changing how participants respond to later measures or treatment' },
-      { id: 'b', text: 'Using too few items' },
-      { id: 'c', text: 'IRB approval' },
-      { id: 'd', text: 'Double-blind medication' }
+      { id: 'a', text: 'The pretest changing how participants respond on later measures' },
+      { id: 'b', text: 'Using too few survey items' },
+      { id: 'c', text: 'Failing to obtain IRB approval' },
+      { id: 'd', text: 'Administering medication in a double-blind study' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Testing can alter subsequent behavior or responses.',
-      incorrect: 'It is a validity threat related to measurement order, not ethics approval.'
+      correct: 'Completing a pretest can change later responses by prompting thinking or conversation about the topic.',
+      incorrect: 'Testing is a validity threat related to measurement order, not ethics approval.'
     },
     difficulty: 'medium'
   },

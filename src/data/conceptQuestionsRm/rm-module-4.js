@@ -136,17 +136,17 @@ export const rmModule4Questions = [
     id: 'rm-m4-q9',
     moduleId: 'rm-module-4',
     type: 'multiple_select',
-    question: 'Which threaten construct validity of inferences? (Select all that apply)',
+    question: 'Which can reduce the validity of participants’ self-report scores? (Select all that apply)',
     options: [
-      { id: 'a', text: 'Confounding the construct with method variance (e.g., single method)' },
-      { id: 'b', text: 'Using multiple operationalizations' },
-      { id: 'c', text: 'Participants guessing the hypothesis and changing behavior' },
-      { id: 'd', text: 'Converging evidence from different measures' }
+      { id: 'a', text: 'Demand characteristics that hint at the expected answer' },
+      { id: 'b', text: 'Using multiple operational definitions of the same construct' },
+      { id: 'c', text: 'Socially desirable responding to look good to the researcher' },
+      { id: 'd', text: 'Converging operations across several measures' }
     ],
     correct: ['a', 'c'],
     feedback: {
-      correct: 'Mono-method bias and demand characteristics can distort construct interpretation.',
-      incorrect: 'Triangulation and convergence generally strengthen validity arguments.'
+      correct: 'Hypothesis cues and impression management can distort self-reports; converging operations strengthen validity arguments.',
+      incorrect: 'Multiple operationalizations and convergence generally support—not weaken—validity evidence.'
     },
     difficulty: 'hard'
   },
@@ -184,17 +184,17 @@ export const rmModule4Questions = [
     id: 'rm-m4-q12',
     moduleId: 'rm-module-4',
     type: 'multiple_choice',
-    question: 'A Likert-type attitude scale is often treated as:',
+    question: 'Compared with interval and ratio scales, ordinal scales:',
     options: [
-      { id: 'a', text: 'Strictly ratio' },
-      { id: 'b', text: 'Ordinal or interval-like in practice, depending on assumptions' },
-      { id: 'c', text: 'Nominal only' },
-      { id: 'd', text: 'Always invalid' }
+      { id: 'a', text: 'Rank categories but do not guarantee equal gaps between adjacent levels' },
+      { id: 'b', text: 'Always include a true zero point' },
+      { id: 'c', text: 'Use only category labels with no ordering' },
+      { id: 'd', text: 'Cannot be used in psychological research' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Likert items are ordered; interval treatment is debated but common with many items.',
-      incorrect: 'Likert responses are not nominal; ratio claims are usually too strong.'
+      correct: 'Ordinal data show order, but differences between levels may not represent equal units.',
+      incorrect: 'Nominal scales lack order; ratio scales have a meaningful zero.'
     },
     difficulty: 'medium'
   }

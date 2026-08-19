@@ -34,17 +34,17 @@ export const rmModule7Questions = [
     id: 'rm-m7-q3',
     moduleId: 'rm-module-7',
     type: 'multiple_choice',
-    question: 'Response bias includes:',
+    question: 'Context effects on survey responses include:',
     options: [
-      { id: 'a', text: 'Tendency to agree with statements regardless of content (acquiescence)' },
-      { id: 'b', text: 'Using random digit dialing' },
-      { id: 'c', text: 'Stratified sampling' },
-      { id: 'd', text: 'Pilot testing items' }
+      { id: 'a', text: 'Wording or scale anchors that shift how people interpret and answer items' },
+      { id: 'b', text: 'Using stratified random sampling' },
+      { id: 'c', text: 'Drawing a simple random sample from a frame' },
+      { id: 'd', text: 'Pilot testing a questionnaire before the main study' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Acquiescence and social desirability are classic response biases.',
-      incorrect: 'Probability sampling methods are design choices, not response biases.'
+      correct: 'Response options and item order can change what people retrieve from memory and report.',
+      incorrect: 'Probability sampling and pilot testing are design choices, not context effects on answers.'
     },
     difficulty: 'medium'
   },
@@ -57,7 +57,7 @@ export const rmModule7Questions = [
       { id: 'a', text: 'Clear, specific wording' },
       { id: 'b', text: 'Balanced response options' },
       { id: 'c', text: 'Leading questions that hint at the “right” answer' },
-      { id: 'd', text: 'Pilot testing and cognitive interviewing' }
+      { id: 'd', text: 'Pilot testing items before the main data collection' }
     ],
     correct: ['a', 'b', 'd'],
     feedback: {
@@ -118,17 +118,17 @@ export const rmModule7Questions = [
     id: 'rm-m7-q8',
     moduleId: 'rm-module-7',
     type: 'multiple_select',
-    question: 'Coverage error occurs when: (Select all that apply)',
+    question: 'Sampling bias occurs when: (Select all that apply)',
     options: [
-      { id: 'a', text: 'Parts of the target population are missing from the sampling frame' },
-      { id: 'b', text: 'Everyone in the population has a known chance of selection' },
-      { id: 'c', text: 'Only landlines are used but young adults are mostly mobile-only' },
-      { id: 'd', text: 'Stratification matches population proportions' }
+      { id: 'a', text: 'The sampling frame leaves out part of the target population' },
+      { id: 'b', text: 'Every population member has a known probability of selection' },
+      { id: 'c', text: 'A phone list omits people who use only mobile phones' },
+      { id: 'd', text: 'Stratification matches key subgroup proportions in the population' }
     ],
     correct: ['a', 'c'],
     feedback: {
-      correct: 'Coverage error is frame mismatch; mobile-only populations illustrate phone frames.',
-      incorrect: 'Probability sampling and stratification are tools to improve representation.'
+      correct: 'Bias arises when the frame or method systematically excludes some population members, as in classic polling mistakes.',
+      incorrect: 'Known selection probabilities and planned stratification are tools to improve—not undermine—representation.'
     },
     difficulty: 'hard'
   },
@@ -184,17 +184,17 @@ export const rmModule7Questions = [
     id: 'rm-m7-q12',
     moduleId: 'rm-module-7',
     type: 'multiple_choice',
-    question: 'Social desirability bias is especially a concern when asking about:',
+    question: 'Double-barreled survey items are especially problematic when asking about:',
     options: [
-      { id: 'a', text: 'Stigmatized or normatively loaded behaviors' },
+      { id: 'a', text: 'Two distinct topics in one question, so the answer is ambiguous' },
       { id: 'b', text: 'Favorite ice cream flavors' },
       { id: 'c', text: 'Height in centimeters' },
       { id: 'd', text: 'Zip codes' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Sensitive topics invite impression management.',
-      incorrect: 'Low-stakes factual items show less social desirability pressure.'
+      correct: 'Combining two issues in one item prevents knowing which part the respondent is answering.',
+      incorrect: 'Factual, low-stakes items are less affected by the double-barreled wording problem.'
     },
     difficulty: 'easy'
   }

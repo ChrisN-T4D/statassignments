@@ -88,11 +88,11 @@ export const rmModule2Questions = [
     id: 'rm-m2-q6',
     moduleId: 'rm-module-2',
     type: 'true_false',
-    question: 'A research proposal should align the question, design, measures, and feasibility (timeline, resources).',
+    question: 'Before collecting data, researchers should check that their question, methods, and available resources fit together realistically.',
     correct: true,
     feedback: {
-      correct: 'Alignment across question, methods, and feasibility is central to a strong proposal.',
-      incorrect: 'Proposals should show coherent fit among question, design, measures, and what is doable.'
+      correct: 'Feasibility—time, money, access to participants, and technical skill—is a core criterion when evaluating whether to pursue a question.',
+      incorrect: 'Strong plans match the question to workable methods and what the researcher can actually carry out.'
     },
     difficulty: 'easy'
   },
@@ -100,17 +100,17 @@ export const rmModule2Questions = [
     id: 'rm-m2-q7',
     moduleId: 'rm-module-2',
     type: 'multiple_choice',
-    question: 'Preregistering an analysis plan, when feasible, mainly aims to:',
+    question: 'Double-blind peer review in psychology journals is intended to:',
     options: [
-      { id: 'a', text: 'Prevent any exploratory analyses' },
-      { id: 'b', text: 'Document planned hypotheses and analyses before seeing results, reducing selective reporting' },
-      { id: 'c', text: 'Replace peer review' },
-      { id: 'd', text: 'Ensure p-values are always below .05' }
+      { id: 'a', text: 'Guarantee that published findings are true' },
+      { id: 'b', text: 'Provide expert evaluation of rigor and contribution before publication while reviewers remain anonymous to authors' },
+      { id: 'c', text: 'Replace the need for replication' },
+      { id: 'd', text: 'Eliminate all errors in manuscripts' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Preregistration clarifies what was planned versus exploratory.',
-      incorrect: 'Preregistration reduces selective reporting bias; exploration can still be disclosed.'
+      correct: 'Peer review is quality control, not a guarantee of truth; double-blind review limits bias from knowing authors’ identities.',
+      incorrect: 'Peer review improves rigor and clarity but does not certify correctness or remove the need for replication.'
     },
     difficulty: 'hard'
   },
@@ -136,11 +136,11 @@ export const rmModule2Questions = [
     id: 'rm-m2-q9',
     moduleId: 'rm-module-2',
     type: 'true_false',
-    question: 'Exploratory data analysis can be valuable as long as it is reported transparently and not sold as confirmatory.',
+    question: 'Empirical results can support a theory, but researchers generally avoid saying a theory has been proved.',
     correct: true,
     feedback: {
-      correct: 'Exploration is fine when clearly labeled and interpreted with appropriate caution.',
-      incorrect: 'The issue is conflating exploration with confirmatory claims, not exploration itself.'
+      correct: 'Statistics are probabilistic, and alternative explanations may remain—so theories are revised, not proven once and for all.',
+      incorrect: 'Even strong, statistically significant results leave room for error and future disconfirmation.'
     },
     difficulty: 'medium'
   },
@@ -166,17 +166,17 @@ export const rmModule2Questions = [
     id: 'rm-m2-q11',
     moduleId: 'rm-module-2',
     type: 'multiple_choice',
-    question: 'Secondary analysis uses:',
+    question: 'Reviewing the research literature early in a project helps researchers to:',
     options: [
-      { id: 'a', text: 'Data collected by others, analyzed to address new questions' },
-      { id: 'b', text: 'Only data you personally collected yesterday' },
-      { id: 'c', text: 'Interviews without consent' },
-      { id: 'd', text: 'Fabricated datasets' }
+      { id: 'a', text: 'See whether a question has already been answered and refine it based on prior work' },
+      { id: 'b', text: 'Avoid reading any primary sources' },
+      { id: 'c', text: 'Guarantee a significant result' },
+      { id: 'd', text: 'Skip defining variables' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Secondary analysis reuses existing data for new analyses (with appropriate permissions).',
-      incorrect: 'Secondary analysis works with existing datasets, ethically obtained.'
+      correct: 'Literature reviews map existing evidence, identify gaps, and sharpen new questions.',
+      incorrect: 'Early review builds on prior work; it does not replace careful design or variable definition.'
     },
     difficulty: 'medium'
   },
@@ -184,17 +184,17 @@ export const rmModule2Questions = [
     id: 'rm-m2-q12',
     moduleId: 'rm-module-2',
     type: 'multiple_choice',
-    question: 'A strong introduction in an empirical paper typically moves from:',
+    question: 'A typical empirical research report in a journal describes:',
     options: [
-      { id: 'a', text: 'Broad context → specific gap → purpose/hypotheses' },
-      { id: 'b', text: 'Statistical tables → broad context' },
-      { id: 'c', text: 'Methods → references' },
-      { id: 'd', text: 'Appendix → title' }
+      { id: 'a', text: 'The research question, method, results, and conclusions drawn from the data' },
+      { id: 'b', text: 'Only raw participant identifiers' },
+      { id: 'c', text: 'Methods before any research question is stated' },
+      { id: 'd', text: 'Appendix materials with no summary of findings' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Introductions funnel from general importance to the study’s specific aims.',
-      incorrect: 'Classic structure narrows from context and gap to the study’s purpose.'
+      correct: 'Empirical reports introduce the question, explain methods, present results, and interpret conclusions.',
+      incorrect: 'Published reports summarize methods and findings; they do not list private identifiers.'
     },
     difficulty: 'easy'
   }

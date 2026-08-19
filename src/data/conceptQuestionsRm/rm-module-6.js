@@ -166,17 +166,17 @@ export const rmModule6Questions = [
     id: 'rm-m6-q11',
     moduleId: 'rm-module-6',
     type: 'multiple_choice',
-    question: 'Ethnography typically involves:',
+    question: 'Participant observation typically involves:',
     options: [
-      { id: 'a', text: 'Extended engagement in a cultural context to understand meanings and practices' },
+      { id: 'a', text: 'Joining a group or setting as an active member while studying behavior in context' },
       { id: 'b', text: 'One-shot online polls only' },
       { id: 'c', text: 'Guaranteed representative sampling of a nation' },
-      { id: 'd', text: 'Exclusively laboratory trials' }
+      { id: 'd', text: 'Exclusively laboratory trials with no field contact' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Ethnography emphasizes immersion and contextual interpretation.',
-      incorrect: 'Ethnography is not defined by quick polls or lab-only designs.'
+      correct: 'Participant observers take part in the setting they study, gaining insider access to meanings and practices.',
+      incorrect: 'Participant observation is immersive fieldwork, not a quick poll or lab-only design.'
     },
     difficulty: 'medium'
   },

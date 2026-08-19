@@ -100,17 +100,17 @@ export const rmModule11Questions = [
     id: 'rm-m11-q7',
     moduleId: 'rm-module-11',
     type: 'multiple_choice',
-    question: 'Reporting effect sizes in addition to p-values helps readers assess:',
+    question: 'When reporting results in an APA-style research report, researchers should:',
     options: [
-      { id: 'a', text: 'Magnitude and practical importance of findings' },
-      { id: 'b', text: 'Whether the study was ethical' },
-      { id: 'c', text: 'Font choice' },
-      { id: 'd', text: 'IRB membership' }
+      { id: 'a', text: 'Present each primary result in words as well as with relevant statistics' },
+      { id: 'b', text: 'Include only raw data tables with no narrative explanation' },
+      { id: 'c', text: 'Omit any result that did not reach statistical significance' },
+      { id: 'd', text: 'Avoid describing manipulation checks or exclusions' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Effect sizes convey strength beyond statistical significance.',
-      incorrect: 'Significance alone does not indicate importance.'
+      correct: 'Results should be understandable from the prose even if a reader skips the numbers.',
+      incorrect: 'APA-style results reporting combines statistical values with clear verbal summaries.'
     },
     difficulty: 'medium'
   },
@@ -118,17 +118,17 @@ export const rmModule11Questions = [
     id: 'rm-m11-q8',
     moduleId: 'rm-module-11',
     type: 'multiple_select',
-    question: 'Open science reporting practices can include: (Select all that apply)',
+    question: 'A balanced literature review in an APA-style introduction should: (Select all that apply)',
     options: [
-      { id: 'a', text: 'Sharing analysis code or materials when possible' },
-      { id: 'b', text: 'Preregistering hypotheses and analyses' },
-      { id: 'c', text: 'Hiding all raw data regardless of ethics/privacy' },
-      { id: 'd', text: 'Transparently reporting exclusions and missing data' }
+      { id: 'a', text: 'Discuss prior findings that support the expected pattern when relevant' },
+      { id: 'b', text: 'Discuss prior findings that contradict the expected pattern when relevant' },
+      { id: 'c', text: 'Cite only studies that agree with the author\'s hypothesis' },
+      { id: 'd', text: 'Build an argument for why the current study is worth doing' }
     ],
     correct: ['a', 'b', 'd'],
     feedback: {
-      correct: 'Transparency aids credibility within privacy/ethics constraints.',
-      incorrect: 'Data sharing must respect consent and confidentiality.'
+      correct: 'A balanced review acknowledges supportive and contradictory evidence while justifying the new study.',
+      incorrect: 'Ignoring contradictory evidence weakens the literature review argument.'
     },
     difficulty: 'hard'
   },

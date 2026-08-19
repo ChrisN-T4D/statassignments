@@ -52,17 +52,17 @@ export const rmModule5Questions = [
     id: 'rm-m5-q4',
     moduleId: 'rm-module-5',
     type: 'multiple_select',
-    question: 'Which are examples of threats to internal validity? (Select all that apply)',
+    question: 'Which can threaten causal conclusions in an experiment? (Select all that apply)',
     options: [
-      { id: 'a', text: 'History: outside events co-occur with treatment' },
-      { id: 'b', text: 'Random assignment to conditions' },
-      { id: 'c', text: 'Maturation: participants change naturally over time' },
-      { id: 'd', text: 'Double-blind procedure' }
+      { id: 'a', text: 'A confounding variable that covaries with the independent variable' },
+      { id: 'b', text: 'Random assignment of participants to conditions' },
+      { id: 'c', text: 'Extraneous variables that become confounds because they differ across conditions' },
+      { id: 'd', text: 'Counterbalancing order in a within-subjects design' }
     ],
     correct: ['a', 'c'],
     feedback: {
-      correct: 'History and maturation are classic threats; randomization and blinding reduce threats.',
-      incorrect: 'Randomization and blinding are safeguards, not threats.'
+      correct: 'Confounds offer alternative explanations; random assignment and counterbalancing reduce that risk.',
+      incorrect: 'Random assignment and counterbalancing are controls, not threats.'
     },
     difficulty: 'medium'
   },
@@ -154,17 +154,17 @@ export const rmModule5Questions = [
     id: 'rm-m5-q10',
     moduleId: 'rm-module-5',
     type: 'multiple_choice',
-    question: 'Demand characteristics refer to:',
+    question: 'During pilot testing, researchers watch for demand characteristics because these are:',
     options: [
-      { id: 'a', text: 'Cues that reveal the hypothesis and change participant behavior' },
-      { id: 'b', text: 'Statistical power calculations' },
-      { id: 'c', text: 'IRB requirements' },
-      { id: 'd', text: 'Random sampling methods' }
+      { id: 'a', text: 'Cues that lead participants to guess the hypothesis and change their behavior' },
+      { id: 'b', text: 'Formulas for statistical power' },
+      { id: 'c', text: 'IRB approval forms' },
+      { id: 'd', text: 'Methods for drawing a probability sample' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Demand characteristics are hypothesis cues that distort behavior.',
-      incorrect: 'They concern participant expectations, not power or ethics paperwork alone.'
+      correct: 'Demand characteristics are hypothesis cues that can distort how participants respond.',
+      incorrect: 'They concern participant expectations during the procedure, not power calculations or sampling.'
     },
     difficulty: 'medium'
   },
@@ -222,17 +222,17 @@ export const rmModule5Questions = [
     moduleId: 'rm-module-5',
     type: 'multiple_choice',
     question:
-      'A computer simulation that repeatedly splits the same volunteer pool into two groups can demonstrate why random assignment helps without assuming:',
+      'Strict random assignment in a between-subjects experiment requires that:',
     options: [
-      { id: 'a', text: 'Normally distributed outcomes' },
-      { id: 'b', text: 'A placebo control' },
-      { id: 'c', text: 'Double-blinding' },
-      { id: 'd', text: 'A pretest' }
+      { id: 'a', text: 'Each participant has an equal chance of being assigned to each condition' },
+      { id: 'b', text: 'Every member of the national population has an equal chance of being surveyed' },
+      { id: 'c', text: 'Outcomes are always normally distributed' },
+      { id: 'd', text: 'The dependent variable must be measured on a ratio scale' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Simulations can show balance and variability from random splits using any plausible baseline scores—no normality lecture required.',
-      incorrect: 'Placebo, blinding, and pretests are other design tools; they are not what a simple balance simulation demonstrates.'
+      correct: 'Random assignment gives each participant the same probability of landing in each condition, helping balance confounds across groups.',
+      incorrect: 'Equal selection from a population describes random sampling, not assignment to conditions.'
     },
     difficulty: 'medium'
   },

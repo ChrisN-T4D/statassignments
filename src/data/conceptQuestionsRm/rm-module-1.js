@@ -22,7 +22,7 @@ export const rmModule1Questions = [
     id: 'rm-m1-q2',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: '§1 Methods of Knowing: Intuition as a way of knowing relies on:',
+    question: 'Intuition as a way of knowing relies on:',
     options: [
       { id: 'a', text: 'Systematic observation under controlled conditions' },
       { id: 'b', text: 'Gut feelings, emotions, and instincts rather than rational analysis' },
@@ -40,7 +40,7 @@ export const rmModule1Questions = [
     id: 'rm-m1-q3',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: '§3 Goals of Science: The three goals of science named in Chapter 1 are to describe, predict, and:',
+    question: 'The three goals of science are to describe, predict, and:',
     options: [
       { id: 'a', text: 'Explain' },
       { id: 'b', text: 'Control' },
@@ -190,7 +190,7 @@ export const rmModule1Questions = [
     id: 'rm-m1-q12',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: '§2 Understanding Science (Popper): A claim that psychic powers "disappear when observed too closely" is problematic because it makes the claim:',
+    question: 'A claim that psychic powers "disappear when observed too closely" is problematic because it makes the claim:',
     options: [
       { id: 'a', text: 'Too expensive to test' },
       { id: 'b', text: 'Unfalsifiable—no observation could count against it' },
