@@ -320,7 +320,8 @@ import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
 import {
   loadConceptReviewCompletion,
   markQuestionAnswered,
-  freezeSlip
+  freezeSlip,
+  saveConceptReviewCompletion
 } from '../lib/conceptReviewSlipStore.js'
 import {
   eligibleObjectives,
@@ -438,8 +439,13 @@ function toStatsModuleId(value) {
 }
 
 const isStatisticsPractice = computed(() => {
-  const moduleId = toStatsModuleId(getActiveModuleId() || getActiveTopicId())
-  return route.params.classId === 'statistics' || String(moduleId || '').startsWith('stats-module-')
+  const moduleId = getSelectedTopicId()
+  const classId = route.params.classId
+  if (classId === 'research-methods' && String(moduleId || '').startsWith('rm-module-')) {
+    return true
+  }
+  const normalized = toStatsModuleId(moduleId)
+  return classId === 'statistics' || String(normalized || '').startsWith('stats-module-')
 })
 
 const statsModuleId = computed(() => toStatsModuleId(getSelectedTopicId()))
@@ -519,8 +525,8 @@ function showFrozenSlip(saved) {
   return true
 }
 
-function restoreSlipIfComplete() {
-  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+async function restoreSlipIfComplete() {
+  const saved = await hydrateCompletionFromServer(statsModuleId.value)
   if (!saved) return
   if (saved.slipFrozen && saved.completedAt) {
     showFrozenSlip(saved)
@@ -528,7 +534,13 @@ function restoreSlipIfComplete() {
   }
   const allIds = moduleQuestions.value.map((q) => q.id)
   const legacyDone = allIds.length > 0 && allIds.every((id) => (saved.answeredIds || []).includes(id)) && saved.completedAt
-  if (legacyDone) showFrozenSlip(saved)
+  if (legacyDone) {
+    showFrozenSlip(saved)
+    return
+  }
+  if (isStatisticsPractice.value && statsModuleId.value) {
+    await maybeUnlockOnlineSlip(saved)
+  }
 }
 
 function submitBatch() {
@@ -694,6 +706,40 @@ async function loadSequenceContext() {
   }
 }
 
+async function hydrateCompletionFromServer(moduleId) {
+  const saved = loadConceptReviewCompletion(studentKey.value, moduleId)
+  if (saved?.answeredIds?.length || !isAuthenticated.value || !user.value?.id || !moduleId) {
+    return saved
+  }
+
+  const moduleQIds = new Set(moduleQuestions.value.map((q) => q.id))
+  if (!moduleQIds.size) return saved
+
+  try {
+    const attempts = await pb.collection('practice_attempts').getFullList({
+      filter: `user = "${user.value.id}"`,
+      sort: 'created'
+    })
+    const answeredIds = [
+      ...new Set(attempts.map((a) => a.problem).filter((id) => moduleQIds.has(id)))
+    ]
+    if (!answeredIds.length) return saved
+
+    const correctIds = new Set(
+      attempts.filter((a) => moduleQIds.has(a.problem) && a.is_correct).map((a) => a.problem)
+    )
+    return saveConceptReviewCompletion(studentKey.value, moduleId, {
+      answeredIds,
+      correct: correctIds.size,
+      total: answeredIds.length,
+      slipFrozen: false
+    })
+  } catch (err) {
+    console.warn('Unable to hydrate Concept Review completion from server:', err)
+    return saved
+  }
+}
+
 async function refreshUnlockState() {
   if (!statsModuleId.value) {
     unlockEligible.value = []
@@ -716,7 +762,7 @@ async function refreshUnlockState() {
 
 async function startOnlineConceptReview() {
   await refreshUnlockState()
-  const saved = loadConceptReviewCompletion(studentKey.value, statsModuleId.value)
+  const saved = await hydrateCompletionFromServer(statsModuleId.value)
   if (saved?.slipFrozen && saved.completedAt) {
     showFrozenSlip(saved)
     loadQuestionById(null)
@@ -947,7 +993,7 @@ async function maybeUnlockOnlineSlip(saved) {
 onMounted(async () => {
   selectedTopic.value = getSelectedTopicId()
   await ensureLoaded()
-  restoreSlipIfComplete()
+  await restoreSlipIfComplete()
   window.addEventListener('afterprint', afterPrint)
   if (route.query.print === '1' && isStatisticsPractice.value) {
     showPrintPacket.value = true
@@ -968,7 +1014,7 @@ watch(() => [route.query.module, route.params.topicId], async () => {
   batchMode.value = false
   batchResults.value = []
   showPrintPacket.value = route.query.print === '1' && isStatisticsPractice.value
-  restoreSlipIfComplete()
+  await restoreSlipIfComplete()
   if (isStatisticsPractice.value && !isOfflinePrimary.value) {
     await startOnlineConceptReview()
   } else if (!(isOfflinePrimary.value && isStatisticsPractice.value)) {
