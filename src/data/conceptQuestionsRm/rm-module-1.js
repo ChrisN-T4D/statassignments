@@ -118,17 +118,17 @@ export const rmModule1Questions = [
     id: 'rm-m1-q8',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: 'In psychology, “operationalizing” a construct means:',
+    question: 'A claim is most scientific when it is:',
     options: [
-      { id: 'a', text: 'Defining how the construct will be measured or manipulated in a study' },
-      { id: 'b', text: 'Proving the construct is real' },
-      { id: 'c', text: 'Ignoring measurement error' },
-      { id: 'd', text: 'Using only self-report' }
+      { id: 'a', text: 'Framed so evidence could potentially disconfirm it' },
+      { id: 'b', text: 'Protected from disproof by vague wording' },
+      { id: 'c', text: 'Accepted because it feels intuitive' },
+      { id: 'd', text: 'Declared true by authority' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'Operationalization specifies concrete procedures representing abstract constructs.',
-      incorrect: 'Operationalization ties abstract ideas to observable procedures—not proof by itself.'
+      correct: 'Scientific claims are testable and falsifiable: data could support or challenge them.',
+      incorrect: 'Science requires claims that can, in principle, be tested and potentially disproven.'
     },
     difficulty: 'medium'
   },
@@ -184,17 +184,17 @@ export const rmModule1Questions = [
     id: 'rm-m1-q12',
     moduleId: 'rm-module-1',
     type: 'multiple_choice',
-    question: 'A “third-variable problem” in interpreting an association between X and Y means:',
+    question: 'If two variables are correlated, the strongest immediate conclusion is:',
     options: [
-      { id: 'a', text: 'Another variable might explain the relationship between X and Y' },
-      { id: 'b', text: 'Only three variables may be measured in any study' },
-      { id: 'c', text: 'Correlation implies causation when N > 30' },
-      { id: 'd', text: 'Y always causes X' }
+      { id: 'a', text: 'They are associated, but causation is not established by correlation alone' },
+      { id: 'b', text: 'X definitely causes Y' },
+      { id: 'c', text: 'Y definitely causes X' },
+      { id: 'd', text: 'No other explanation is possible' }
     ],
     correct: 'a',
     feedback: {
-      correct: 'A third variable could produce a spurious association between X and Y.',
-      incorrect: 'Third-variable confounds mean an unmeasured cause could explain a correlation.'
+      correct: 'Correlation can indicate a relationship, but causal claims require stronger designs and evidence.',
+      incorrect: 'An observed correlation alone does not establish causal direction or rule out alternatives.'
     },
     difficulty: 'medium'
   }

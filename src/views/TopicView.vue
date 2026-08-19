@@ -75,6 +75,8 @@ const errorProblemId = ref(null)
 
 const topicId = computed(() => route.params.id)
 const topic = computed(() => topics.find(t => t.id === topicId.value))
+const moduleId = computed(() => topic.value?.moduleId || null)
+const topicClassId = computed(() => inferClassId({ moduleId: moduleId.value, hint: route.params.classId }))
 
 const resolvedContentHtml = computed(() =>
   resolveTopicHtml(topic.value, preferredSoftware.value)
@@ -98,7 +100,7 @@ const pageTitle = computed(() => {
       .filter(t => t.chapter === topic.value.chapter)
       .sort((a, b) => {
         // Sort by their order in the module
-        const statsModuleId = toStatsModuleId(moduleId.value)
+        const statsModuleId = toClassModuleId(moduleId.value, topicClassId.value)
         const module = statsModuleId ? getModuleById(statsModuleId) : null
         if (module?.topics?.length) {
           const indexA = module.topics.indexOf(a.id)
@@ -119,16 +121,14 @@ const pageTitle = computed(() => {
   return topic.value?.title || 'Topic'
 })
 
-const moduleId = computed(() => topic.value?.moduleId || null)
-
 const moduleInfo = computed(() => {
-  const statsModuleId = toStatsModuleId(moduleId.value)
+  const statsModuleId = toClassModuleId(moduleId.value, topicClassId.value)
   return statsModuleId ? getModuleById(statsModuleId) : null
 })
 
 const moduleTopics = computed(() => {
   if (!moduleId.value) return []
-  const statsModuleId = toStatsModuleId(moduleId.value)
+  const statsModuleId = toClassModuleId(moduleId.value, topicClassId.value)
   const module = statsModuleId ? getModuleById(statsModuleId) : null
 
   // Get all topics in the module
@@ -157,7 +157,7 @@ const moduleTopics = computed(() => {
 // Get all selected topics across all chapters for Module 8
 const allSelectedModuleTopics = computed(() => {
   if (!moduleId.value) return []
-  const statsModuleId = toStatsModuleId(moduleId.value)
+  const statsModuleId = toClassModuleId(moduleId.value, topicClassId.value)
   const module = statsModuleId ? getModuleById(statsModuleId) : null
 
   // Get all topics in the module
@@ -182,7 +182,7 @@ const nextTopic = computed(() => {
   if (!topic.value) return null
 
   // For Module 8 with preferences, look across all selected topics
-  const statsModuleId = toStatsModuleId(moduleId.value)
+  const statsModuleId = toClassModuleId(moduleId.value, topicClassId.value)
   if (statsModuleId === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
     const index = allSelectedModuleTopics.value.findIndex(t => t.id === topic.value.id)
     if (index === -1) return null
@@ -286,10 +286,13 @@ async function saveTopicReadingTime() {
   }
 }
 
-function toStatsModuleId(value) {
+function toClassModuleId(value, classId) {
   if (!value) return null
-  if (value.startsWith('stats-module-')) return value
-  if (value.startsWith('module-')) return value.replace('module-', 'stats-module-')
+  if (value.startsWith('stats-module-') || value.startsWith('rm-module-')) return value
+  // Legacy stats topic metadata still uses module-1..8. Normalize only for stats.
+  if (value.startsWith('module-') && classId === 'statistics') {
+    return value.replace('module-', 'stats-module-')
+  }
   return value
 }
 
@@ -299,8 +302,8 @@ function getNextButtonText() {
   }
 
   // For Module 8, provide context about chapter changes
-  const statsModuleId = toStatsModuleId(moduleId.value)
-  if (statsModuleId === 'stats-module-8' && topic.value?.chapter && nextTopic.value?.chapter) {
+  const classModuleId = toClassModuleId(moduleId.value, topicClassId.value)
+  if (classModuleId === 'stats-module-8' && topic.value?.chapter && nextTopic.value?.chapter) {
     if (topic.value.chapter !== nextTopic.value.chapter) {
       // Moving to a different chapter
       const nextChapterNum = nextTopic.value.chapter.split('-')[1]
@@ -313,12 +316,13 @@ function getNextButtonText() {
 
 async function goToModule() {
   await saveTopicReadingTime()
-  const statsModuleId = toStatsModuleId(moduleId.value)
-  if (statsModuleId) {
-    router.push(`/class/statistics?module=${statsModuleId}`)
+  const classId = topicClassId.value || 'statistics'
+  const classModuleId = toClassModuleId(moduleId.value, classId)
+  if (classModuleId) {
+    router.push(`/class/${classId}?module=${classModuleId}`)
     return
   }
-  router.push('/class/statistics')
+  router.push(`/class/${classId}`)
 }
 
 async function goToNext() {
@@ -328,10 +332,11 @@ async function goToNext() {
     router.push(`/topic/${nextTopic.value.id}`)
     return
   }
-  const statsModuleId = toStatsModuleId(moduleId.value)
-  const reviewPath = statsModuleId
-    ? `/class/statistics/practice?module=${statsModuleId}`
-    : '/class/statistics/practice'
+  const classId = topicClassId.value || 'statistics'
+  const classModuleId = toClassModuleId(moduleId.value, classId)
+  const reviewPath = classModuleId
+    ? `/class/${classId}/practice?module=${classModuleId}`
+    : `/class/${classId}/practice`
   router.push(reviewPath)
 }
 

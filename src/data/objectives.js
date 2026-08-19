@@ -34,7 +34,7 @@ export const objectives = [
     module: 1,
     objectiveType: 'content',
     objectiveId: 'M1-O4',
-    objective: 'Describe Simpson\'s paradox as a case where an aggregated association can differ from or reverse relative to disaggregated (subgroup) associations.'
+    objective: 'Interpret overall summaries cautiously by checking subgroup patterns and asking whether aggregated results hide important differences.'
   },
 
   // Module 2: Research Design & Measurement
@@ -378,7 +378,7 @@ export const objectives = [
     module: 1,
     objectiveType: 'content',
     objectiveId: 'RM1-O4',
-    objective: 'Explain operationalization and the third-variable problem when interpreting associations.'
+    objective: 'Distinguish falsifiable scientific claims from unfalsifiable claims and avoid causal overreach from correlation alone.'
   },
 
   // RM Ch 2

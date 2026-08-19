@@ -250,17 +250,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q13',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Why does "statistically significant" not necessarily mean "important"?',
+    question: 'A headline says, "Study proves teens are addicted to phones." Which Chapter 1 response is best?',
     options: [
-      { id: 'a', text: 'Significance guarantees a large effect' },
-      { id: 'b', text: 'Significance only says the data are unlikely under H0, not that the effect is large or meaningful' },
-      { id: 'c', text: 'Significance only applies to qualitative data' },
-      { id: 'd', text: 'Significance means the result is always wrong' }
+      { id: 'a', text: 'Accept it immediately because the word "proves" is used' },
+      { id: 'b', text: 'Ask what was measured, how large the sample was, and whether alternative explanations were considered' },
+      { id: 'c', text: 'Reject it because all studies are useless' },
+      { id: 'd', text: 'Ignore methods and look only at the conclusion' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Statistical significance reflects evidence against H0, not effect size or practical impact.',
-      incorrect: 'Significance is about evidence, not size or importance of an effect.'
+      correct: 'Statistical thinking starts with method questions (measurement, sampling, alternatives), not headline language.',
+      incorrect: 'Chapter 1 emphasizes critical evaluation of claims by examining measurement and method.'
     },
     difficulty: 'hard'
   },
@@ -268,17 +268,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q14',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Which scenario shows a result that is practically important but not statistically significant?',
+    question: 'Which statement best reflects why psychology students learn statistics?',
     options: [
-      { id: 'a', text: 'A tiny effect with a huge sample is significant and meaningful' },
-      { id: 'b', text: 'A moderate effect in a small sample misses significance due to low power' },
-      { id: 'c', text: 'A null effect with a large sample is significant' },
-      { id: 'd', text: 'A large effect always becomes significant' }
+      { id: 'a', text: 'To replace theory with formulas' },
+      { id: 'b', text: 'To evaluate claims and make better evidence-based decisions in research and real life' },
+      { id: 'c', text: 'To avoid uncertainty entirely' },
+      { id: 'd', text: 'To memorize software menus only' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Small samples can miss significance even when the effect would matter in practice.',
-      incorrect: 'Low power can hide meaningful effects, leading to nonsignificant results.'
+      correct: 'Chapter 1 frames statistics as a tool for evaluating evidence and making sound decisions.',
+      incorrect: 'The core purpose is evidence-based judgment, not replacing theory or avoiding uncertainty.'
     },
     difficulty: 'hard'
   },
@@ -364,17 +364,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q20',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'Simpson\'s paradox is the situation in which:',
+    question: 'Why is separating data by meaningful groups often useful in Chapter 1 thinking?',
     options: [
-      { id: 'a', text: 'A p-value below .05 proves a large effect' },
-      { id: 'b', text: 'An association in aggregated data differs from, or reverses, the association in subgroups' },
-      { id: 'c', text: 'Random assignment makes confounding impossible to discuss' },
-      { id: 'd', text: 'Larger samples always reverse small-sample results' }
+      { id: 'a', text: 'It can reveal different patterns hidden by one overall average' },
+      { id: 'b', text: 'It always increases sample size automatically' },
+      { id: 'c', text: 'It guarantees causal conclusions' },
+      { id: 'd', text: 'It removes all measurement error' }
     ],
-    correct: 'b',
+    correct: 'a',
     feedback: {
-      correct: 'Simpson\'s paradox: the pooled association can differ from (even reverse) the pattern inside subgroups.',
-      incorrect: 'Simpson\'s paradox is when the overall association does not match the association within subgroups.'
+      correct: 'Looking at subgroups can prevent misleading interpretations from overall summaries alone.',
+      incorrect: 'Chapter 1 emphasizes that overall summaries can hide important subgroup differences.'
     },
     difficulty: 'medium'
   },
@@ -382,17 +382,17 @@ export const statsModule1Questions = [
     id: 'stats-m1-q21',
     moduleId: 'stats-module-1',
     type: 'multiple_choice',
-    question: 'A treatment looks helpful in each hospital but looks harmful when all hospitals are pooled. This is an example of:',
+    question: 'A class average rose from 70 to 78. Which follow-up question best reflects Chapter 1 statistical reasoning?',
     options: [
-      { id: 'a', text: 'A valid syllogism' },
-      { id: 'b', text: 'Belief bias' },
-      { id: 'c', text: 'Simpson\'s paradox' },
-      { id: 'd', text: 'A ratio-scale measurement' }
+      { id: 'a', text: 'Did all subgroups improve similarly, or did one subgroup drive most of the increase?' },
+      { id: 'b', text: 'Can we conclude the teaching method caused the increase with no other evidence?' },
+      { id: 'c', text: 'Should we ignore sample composition because the average increased?' },
+      { id: 'd', text: 'Does one average answer every research question?' }
     ],
-    correct: 'c',
+    correct: 'a',
     feedback: {
-      correct: 'The subgroup pattern and the aggregated pattern disagree. That reversal is Simpson\'s paradox.',
-      incorrect: 'When subgroup associations reverse (or differ from) the pooled association, that is Simpson\'s paradox.'
+      correct: 'Checking subgroup patterns is key to avoiding overgeneralization from a single average.',
+      incorrect: 'Good introductory statistical thinking asks whether overall averages hide subgroup differences.'
     },
     difficulty: 'hard'
   }
