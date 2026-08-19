@@ -227,6 +227,7 @@ export function useClasses() {
     classes: assignedClasses,
     allClasses: classes,
     activeClasses,
+    assignedClasses,
     selectedClassId,
     selectedClass,
     classTopics,
@@ -240,4 +241,38 @@ export function useClasses() {
     syncWithRoute,
     navigateToClass
   }
+}
+
+/** Load class catalog (module-level cache). Safe outside Vue setup. */
+export async function ensureClassesLoaded() {
+  if (initialized.value) return classes.value
+
+  loading.value = true
+  try {
+    const records = await pb.collection('classes').getFullList({
+      filter: 'is_active = true',
+      sort: 'order'
+    })
+    classes.value = records
+    initialized.value = true
+    return records
+  } catch (err) {
+    console.warn('[useClasses] ensureClassesLoaded fallback:', err.message)
+    classes.value = FALLBACK_CLASSES
+    initialized.value = true
+    return FALLBACK_CLASSES
+  } finally {
+    loading.value = false
+  }
+}
+
+/** Students may only open courses assigned on their account (from roster claim). */
+export async function canStudentAccessClassSlug(classSlug, user) {
+  if (!user || user.role === 'admin' || user.role === 'instructor') return true
+  const assigned = user.classes
+  if (!assigned || !Array.isArray(assigned) || assigned.length === 0) return false
+  await ensureClassesLoaded()
+  const cls = classes.value.find(c => c.slug === classSlug || c.id === classSlug)
+  if (!cls) return false
+  return assigned.includes(cls.id)
 }

@@ -23,6 +23,7 @@ import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { classHasDataAnalysisTool } from '../data/modules'
+import { canStudentAccessClassSlug } from '../composables/useClasses'
 
 const routes = [
   { path: '/', component: Home },
@@ -145,7 +146,7 @@ const router = createRouter({
 // Navigation guards
 const { user: authUser } = useAuth()
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // Legacy Canvas links: /practice?module=module-N → class statistics concept review
   if (to.path === '/practice' && to.query.module && !to.params.classId) {
     const raw = String(to.query.module)
@@ -201,6 +202,15 @@ router.beforeEach((to, from, next) => {
       next('/')
     }
     return
+  }
+
+  // Students may only access courses assigned to their account
+  if (to.params.classId && isAuthenticated && userRole === 'student') {
+    const allowed = await canStudentAccessClassSlug(to.params.classId, authUser.value)
+    if (!allowed) {
+      next('/')
+      return
+    }
   }
 
   next()

@@ -15,6 +15,9 @@ export function inferClassId({ objectiveId, hint, moduleId, itemId } = {}) {
       return RESEARCH_METHODS
     }
     if (lowered === STATISTICS) return STATISTICS
+    if (lowered.startsWith('stats-') || lowered.startsWith('stats-module-')) {
+      return STATISTICS
+    }
   }
   return STATISTICS
 }

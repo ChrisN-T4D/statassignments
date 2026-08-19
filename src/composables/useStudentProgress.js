@@ -2,6 +2,18 @@ import { ref } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { getQuestionById } from '../data/conceptQuestions'
 import { getLessonById } from '../data/softwareLessons'
+import { RESEARCH_METHODS, STATISTICS } from '../data/classIds'
+
+export function inferCourseFromQuestionId(questionId) {
+  const id = String(questionId || '').toLowerCase()
+  if (id.startsWith('rm-') || id.startsWith('rm-module-')) return RESEARCH_METHODS
+  if (id.startsWith('stats-') || id.startsWith('stats-module-')) return STATISTICS
+  const q = getQuestionById(questionId)
+  const moduleId = String(q?.moduleId || '').toLowerCase()
+  if (moduleId.startsWith('rm-')) return RESEARCH_METHODS
+  if (moduleId.startsWith('stats-')) return STATISTICS
+  return ''
+}
 
 export function useStudentProgress() {
   const loading = ref(false)
@@ -130,11 +142,13 @@ export function useStudentProgress() {
   function enrichConceptAttempts(attempts) {
     return attempts.map(a => {
       const q = getQuestionById(a.problem)
+      const courseId = inferCourseFromQuestionId(a.problem) || inferCourseFromQuestionId(q?.moduleId)
       return {
         ...a,
         question_id: a.problem,
         question_text: q?.question || q?.prompt || '',
         module_id: q?.moduleId || '',
+        course_id: courseId,
         question_type: q?.type || '',
         formatted_answer: formatConceptAnswer(a.problem, a.answer)
       }
@@ -185,7 +199,10 @@ export function useStudentProgress() {
           phase_label: phaseLabel,
           lesson_title: lesson?.title || e.lesson_id || parsed.lessonId || '—',
           formatted_answer: formatAnswerValue(e.answer),
-          software: lesson?.software || ''
+          software: lesson?.software || '',
+          course_id: e.class_id
+            || (String(lesson?.module || e.module_id || '').startsWith('rm-') ? RESEARCH_METHODS : '')
+            || (String(lesson?.module || e.module_id || '').startsWith('stats-') ? STATISTICS : '')
         }
       })
   }
@@ -234,6 +251,7 @@ export function useStudentProgress() {
     groupSoftwareByLesson,
     enrichSoftwareMetrics,
     formatConceptAnswer,
-    formatAnswerValue
+    formatAnswerValue,
+    inferCourseFromQuestionId
   }
 }

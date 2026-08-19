@@ -49,6 +49,15 @@
       </div>
 
       <div class="form-group">
+        <label for="sp-course">Filter by course</label>
+        <select id="sp-course" v-model="courseFilter">
+          <option value="">All courses</option>
+          <option value="research-methods">Research Methods</option>
+          <option value="statistics">Statistics</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="sp-module">Filter by module</label>
         <select id="sp-module" v-model="moduleFilter">
           <option value="">All modules</option>
@@ -59,11 +68,18 @@
 
     <div v-if="selectedStudentLabel" class="selected-student-banner">
       Viewing: <code>{{ selectedStudentLabel }}</code>
+      <span v-if="rosterClassSlug" class="summary-inline">
+        · Roster class: <strong>{{ rosterClassSlug }}</strong>
+      </span>
       <span v-if="summaryStats" class="summary-inline">
-        · {{ summaryStats.conceptAttempts }} concept answers
-        · {{ summaryStats.softwareAnswers }} software answers
+        · {{ summaryStats.conceptAttempts }} concept answers shown
+        · {{ summaryStats.softwareAnswers }} software answers shown
         · {{ summaryStats.objectivesTracked }} objectives tracked
       </span>
+    </div>
+
+    <div v-if="crossClassWarning" class="cross-class-alert">
+      {{ crossClassWarning }}
     </div>
 
     <div v-if="!selectedUserId" class="empty-state">
@@ -93,6 +109,7 @@
             <thead>
               <tr>
                 <th>When</th>
+                <th>Course</th>
                 <th>Module</th>
                 <th>Question</th>
                 <th>Answer</th>
@@ -104,6 +121,7 @@
             <tbody>
               <tr v-for="row in filteredConceptAttempts" :key="row.id">
                 <td class="nowrap">{{ formatDate(row.created) }}</td>
+                <td>{{ row.course_id || '—' }}</td>
                 <td><code>{{ row.module_id || '—' }}</code></td>
                 <td class="question-cell">
                   <div class="question-id"><code>{{ row.question_id }}</code></div>
@@ -255,7 +273,9 @@ const selectedRosterKey = ref('')
 const selectedUserIdDirect = ref('')
 const selectedUserId = ref('')
 const selectedStudentLabel = ref('')
+const rosterClassSlug = ref('')
 
+const courseFilter = ref('')
 const moduleFilter = ref('')
 const activeSubTab = ref('concept')
 
@@ -268,19 +288,29 @@ const enrichedConcept = computed(() => enrichConceptAttempts(conceptAttempts.val
 const enrichedSoftware = computed(() => enrichSoftwareEvents(softwareEvents.value))
 const enrichedMetrics = computed(() => enrichSoftwareMetrics(softwareMetrics.value))
 
+function matchesCourseFilter(row) {
+  if (!courseFilter.value) return true
+  return (row.course_id || row.class_id) === courseFilter.value
+}
+
 const filteredConceptAttempts = computed(() => {
-  if (!moduleFilter.value) return enrichedConcept.value
-  return enrichedConcept.value.filter(r => r.module_id === moduleFilter.value)
+  let rows = enrichedConcept.value
+  if (courseFilter.value) rows = rows.filter(matchesCourseFilter)
+  if (moduleFilter.value) rows = rows.filter(r => r.module_id === moduleFilter.value)
+  return rows
 })
 
 const filteredSoftwareEvents = computed(() => {
-  if (!moduleFilter.value) return enrichedSoftware.value
-  return enrichedSoftware.value.filter(r => r.module_id === moduleFilter.value)
+  let rows = enrichedSoftware.value
+  if (courseFilter.value) rows = rows.filter(matchesCourseFilter)
+  if (moduleFilter.value) rows = rows.filter(r => r.module_id === moduleFilter.value)
+  return rows
 })
 
 const filteredMetrics = computed(() => {
-  if (!moduleFilter.value) return enrichedMetrics.value
-  return enrichedMetrics.value.filter(r => r.module_id === moduleFilter.value)
+  let rows = enrichedMetrics.value
+  if (moduleFilter.value) rows = rows.filter(r => r.module_id === moduleFilter.value)
+  return rows
 })
 
 const softwareLessonGroups = computed(() => {
@@ -306,6 +336,22 @@ const summaryStats = computed(() => {
     ).length,
     objectivesTracked: bktStates.value.length
   }
+})
+
+const crossClassCounts = computed(() => {
+  const counts = { 'research-methods': 0, statistics: 0 }
+  for (const row of enrichedConcept.value) {
+    if (row.course_id && counts[row.course_id] != null) counts[row.course_id]++
+  }
+  return counts
+})
+
+const crossClassWarning = computed(() => {
+  if (!rosterClassSlug.value) return ''
+  const other = rosterClassSlug.value === 'research-methods' ? 'statistics' : 'research-methods'
+  const otherCount = crossClassCounts.value[other] || 0
+  if (otherCount === 0) return ''
+  return `This student is rostered for ${rosterClassSlug.value} only, but has ${otherCount} Concept Review answer(s) from ${other} — likely from visiting that course URL before access restrictions were added. Use the course filter to focus on roster activity.`
 })
 
 const subTabs = computed(() => [
@@ -335,6 +381,8 @@ async function onSemesterChange() {
 function onRosterSelect() {
   selectedUserIdDirect.value = ''
   const entry = rosterStudents.value.find(s => s.student_key === selectedRosterKey.value)
+  rosterClassSlug.value = entry?.class_slug || ''
+  courseFilter.value = entry?.class_slug || ''
   if (entry?.user_id) {
     selectedUserId.value = entry.user_id
     selectedStudentLabel.value = entry.student_key + (entry.email ? ` (${entry.email})` : '')
@@ -348,6 +396,8 @@ function onRosterSelect() {
 
 function onUserDirectSelect() {
   selectedRosterKey.value = ''
+  rosterClassSlug.value = ''
+  courseFilter.value = ''
   selectedUserId.value = selectedUserIdDirect.value
   const user = studentUsers.value.find(u => u.user_id === selectedUserIdDirect.value)
   selectedStudentLabel.value = user?.email || user?.username || selectedUserIdDirect.value
@@ -585,6 +635,16 @@ onMounted(async () => {
 .details-cell {
   max-width: 240px;
   word-break: break-word;
+}
+
+.cross-class-alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  font-size: 0.875rem;
 }
 
 .empty-state {
