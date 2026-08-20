@@ -1,4 +1,4 @@
-// Module 7 — Hypothesis testing intro (SPSS, R, Excel, Stata). P-values lesson is software-agnostic; binomial & one-sample t are adapted.
+// Module 7 - Hypothesis testing intro (SPSS, R, Excel, Stata). P-values lesson is software-agnostic; binomial & one-sample t are adapted.
 
 const P_VALUE_PHASES = {
   iDo: {
@@ -196,7 +196,7 @@ export const module7LessonsOther = [
           question: 'p = 0.264 for 52/80 heads vs 0.5. Conclusion?',
           options: ['Biased coin proved', 'Fair coin proved', 'Do not reject H₀', 'Invalid test'],
           correctAnswer: 2,
-          feedback: { correct: 'Yes — p > .05.', incorrect: 'Fail to reject when p > α.' }
+          feedback: { correct: 'Yes - p > .05.', incorrect: 'Fail to reject when p > α.' }
         }
       },
       youDo: {
@@ -513,7 +513,7 @@ export const module7LessonsOther = [
           {
             type: 'text',
             content:
-              '**Data → Data Analysis → t-Test: One-Sample for Mean** (Microsoft 365) or use **T.TEST** with array and mu via manual formula; older Excel may lack one-sample — use `=T.INV.2T` with manual t statistic or use SPSS/R for reporting.'
+              '**Data → Data Analysis → t-Test: One-Sample for Mean** (Microsoft 365) or use **T.TEST** with array and mu via manual formula; older Excel may lack one-sample - use `=T.INV.2T` with manual t statistic or use SPSS/R for reporting.'
           }
         ]
       },

@@ -47,16 +47,22 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'callout',
+                style: 'tip',
+                content: '<strong>Class datasets (Tools bar):</strong> Download from Methods Market <strong>Tools</strong> (right side), then jamovi <strong>☰ → Open</strong>. Use <strong>personality_data.csv</strong> (gender, ethnicity, age, Big Five scales), <strong>bmi_and_exercise.csv</strong> (bmi, exercise_per_week, consumption_vegetables_per_day), and when needed <strong>Normality data.csv</strong>. Do not invent a spreadsheet for this module.'
+              },
+
+              {
+                type: 'callout',
                 style: 'info',
                 content: '**Research Question Example:** A die is rolled 60 times. Does it produce equal frequencies for all six sides (fair die), or is it biased?'
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **categorical variable** (the categories being counted)\n- **Observed frequencies** (how many times each category occurred)\n- **Expected frequencies** (what you\'d expect if the null hypothesis is true)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **personality_data.csv** → ☰ → Open.\n- Use a **categorical** column such as **ethnicity** (or **gender**)\n- Set measure type to **Nominal**\n- Under Expected Proportions, enter what you expect under H₀ (e.g. equal proportions across ethnicity levels)'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **Frequencies** → **N Outcomes (χ² Goodness of Fit)**\n2. Move your categorical variable to **Variable**\n3. Under **Expected Proportions**, enter what you expect for each category'
+                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **Frequencies** → **N Outcomes (χ² Goodness of Fit)**\n2. Move **ethnicity** (or **gender**) to **Variable**\n3. Under **Expected Proportions**, enter what you expect for each category'
               },
               {
                 type: 'text',
@@ -93,11 +99,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- **Two categorical variables** (e.g., Gender and Voting_Preference)\n- Each row represents one person with their category on both variables'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **personality_data.csv** → ☰ → Open.\n- Two **Nominal** columns: **gender** and **ethnicity**\n- Each row is one person with a value on both variables'
               },
               {
                 type: 'text',
-                content: '**Step 2: Create a Contingency Table**\n\n1. Click **Analyses** → **Frequencies** → **Independent Samples (χ² test of association)**\n2. Move one variable to **Rows** (e.g., Gender)\n3. Move the other to **Columns** (e.g., Voting_Preference)\n\nJamovi will create a contingency table showing observed frequencies in each cell.'
+                content: '**Step 2: Create a Contingency Table**\n\n1. Click **Analyses** → **Frequencies** → **Independent Samples (χ² test of association)**\n2. Move **gender** to **Rows**\n3. Move **ethnicity** to **Columns**\n\nJamovi creates a contingency table of observed frequencies.'
               },
               {
                 type: 'text',
@@ -147,11 +153,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **grouping variable** (categorical: which group each person is in, e.g., Gender with levels Male/Female)\n- One **dependent variable** (continuous: the measurement being compared, e.g., Anxiety_Score)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **personality_data.csv** → ☰ → Open.\n- Grouping: **gender** (Nominal, two levels)\n- Dependent: a continuous Big Five column such as **extraversion** (Continuous)'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **Independent Samples T-Test**\n2. Move your dependent variable (e.g., Anxiety_Score) to **Dependent Variables**\n3. Move your grouping variable (e.g., Gender) to **Grouping Variable**'
+                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **Independent Samples T-Test**\n2. Move **extraversion** to **Dependent Variables**\n3. Move **gender** to **Grouping Variable**'
               },
               {
                 type: 'text',
@@ -196,11 +202,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- **Two columns** containing the paired measurements (e.g., Weight_Before and Weight_After)\n- Each row represents one participant with both measurements'
+                content: '**Step 1: Open a Tools dataset (menu practice)**\n\nTrue before/after pairs are rare in the class CSVs. For learning the **menu**, Tools → download **Normality data.csv** → ☰ → Open.\n- Pair two continuous columns on the same row (e.g. **Test_Scores** and **Exam_Scores**)\n- Note: this teaches the buttons; a real paired design compares the *same* construct at two times'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **Paired Samples T-Test**\n2. Select BOTH variables (e.g., Weight_Before and Weight_After) and move them to **Paired Variables** as a pair'
+                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **Paired Samples T-Test**\n2. Select **Test_Scores** and **Exam_Scores** and move them to **Paired Variables** as a pair'
               },
               {
                 type: 'text',
@@ -246,11 +252,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **continuous variable** (the measurement, e.g., IQ_Score)\n- A **test value** (the population mean you\'re comparing to, e.g., 100)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Continuous column: **bmi**\n- Example test value: **25** (or your instructor\'s value)'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **One Sample T-Test**\n2. Move your variable (e.g., IQ_Score) to **Dependent Variables**\n3. Enter your **Hypothesis** test value (e.g., 100) in the box'
+                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **One Sample T-Test**\n2. Move **bmi** to **Dependent Variables**\n3. Enter **Hypothesis** test value **25** (or your instructor\'s value)'
               },
               {
                 type: 'text',
@@ -291,7 +297,7 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- **Two or more continuous variables** (e.g., Hours_Studied, Exam_Score)\n- Each row represents one participant with measurements on all variables'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Continuous columns: **bmi** and **exercise_per_week** (optionally **consumption_vegetables_per_day**)\n- Or use Big Five scales from **personality_data.csv**'
               },
               {
                 type: 'text',
@@ -345,11 +351,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **predictor variable** (X, independent variable, e.g., Hours_Studied)\n- One **outcome variable** (Y, dependent variable, e.g., Exam_Score)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Predictor (X): **exercise_per_week**\n- Outcome (Y): **bmi**'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Regression**\n\n1. Click **Analyses** → **Regression** → **Linear Regression**\n2. Move your outcome variable (e.g., Exam_Score) to **Dependent Variable**\n3. Move your predictor (e.g., Hours_Studied) to **Covariates** (for continuous predictors)'
+                content: '**Step 2: Run the Regression**\n\n1. Click **Analyses** → **Regression** → **Linear Regression**\n2. Move **bmi** to **Dependent Variable**\n3. Move **exercise_per_week** to **Covariates**'
               },
               {
                 type: 'text',
@@ -394,11 +400,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **outcome variable** (continuous, e.g., Salary)\n- **Multiple predictor variables** (e.g., Experience, Education, Age)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Outcome: **bmi**\n- Predictors: **exercise_per_week** and **consumption_vegetables_per_day**\n- (Alternative: **personality_data.csv** — predict **neuroticism** from **extraversion** + **age**)'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Regression**\n\n1. Click **Analyses** → **Regression** → **Linear Regression**\n2. Move outcome to **Dependent Variable**\n3. Move ALL predictors to **Covariates** (for continuous) or **Factors** (for categorical)'
+                content: '**Step 2: Run the Regression**\n\n1. Click **Analyses** → **Regression** → **Linear Regression**\n2. Move **bmi** to **Dependent Variable**\n3. Move **exercise_per_week** and **consumption_vegetables_per_day** to **Covariates**'
               },
               {
                 type: 'text',
@@ -448,20 +454,20 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Prepare Your Data**\n\nYour data should have:\n- One **grouping variable** (categorical: which group each person is in)\n- One **dependent variable** (continuous: the outcome being measured)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **personality_data.csv** → ☰ → Open.\n- Grouping (3+ levels): **ethnicity** (Nominal)\n- Dependent: **extraversion** (Continuous)'
               },
               {
                 type: 'annotated_image',
                 image: '/images/lessons/jamovi/anova-data-setup.png',
-                alt: 'Jamovi data view showing study method and exam scores',
+                alt: 'Jamovi data view with ethnicity (grouping) and extraversion (dependent) from personality_data.csv',
                 annotations: [
-                  { x: 20, y: 30, label: 'Grouping Variable', description: 'Categories: Visual, Auditory, Kinesthetic' },
-                  { x: 50, y: 30, label: 'Dependent Variable', description: 'Continuous measure: Exam_Score' }
+                  { x: 20, y: 30, label: 'Grouping Variable', description: 'ethnicity from personality_data.csv (3+ levels)' },
+                  { x: 50, y: 30, label: 'Dependent Variable', description: 'extraversion (Continuous)' }
                 ]
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the One-Way ANOVA**\n\n1. Click **Analyses** → **ANOVA** → **One-Way ANOVA**\n2. Move your dependent variable (e.g., Exam_Score) to **Dependent Variables**\n3. Move your grouping variable (e.g., Study_Method) to **Grouping Variable**'
+                content: '**Step 2: Run the One-Way ANOVA**\n\n1. Click **Analyses** → **ANOVA** → **One-Way ANOVA**\n2. Move **extraversion** to **Dependent Variables**\n3. Move **ethnicity** to **Grouping Variable**'
               },
               {
                 type: 'text',
@@ -491,59 +497,50 @@ export const module8UnifiedLessons = [
         title: 'Guided Practice: Advanced Statistical Analyses',
         instructions: 'Follow along in jamovi. Use class datasets from the Methods Market Tools bar: personality_data.csv and bmi_and_exercise.csv (☰ → Open). Work through each analysis type below.',
         steps: [
-          // Chi-Square Goodness-of-Fit practice steps would go here
           {
-            instruction: 'With personality_data.csv open, practice chi-square goodness-of-fit using a categorical column such as gender or ethnicity.',
-            hint: 'Use Analyses → Frequencies → N Outcomes (χ² Goodness of Fit)',
-            checkpoint: 'You should be able to interpret χ² statistics and determine if observed frequencies match expected distributions.'
+            instruction: 'Tools → personality_data.csv → ☰ Open. Run χ² goodness-of-fit on ethnicity (or gender) under Analyses → Frequencies → N Outcomes.',
+            hint: 'Set the variable to Nominal. Enter expected proportions under H₀ (e.g. equal across levels).',
+            checkpoint: 'You can interpret χ² and whether observed frequencies match the expected pattern.'
           },
-          // Chi-Square Independence practice steps
           {
-            instruction: 'Practice contingency tables / chi-square independence (e.g. gender crossed with another categorical variable from personality_data.csv).',
-            hint: 'Use Analyses → Frequencies → Independent Samples (χ² test of association)',
-            checkpoint: 'You should be able to create contingency tables, add expected counts and percentages, and interpret association results.'
+            instruction: 'With personality_data.csv open, run χ² independence: gender in Rows, ethnicity in Columns (Frequencies → Independent Samples).',
+            hint: 'Add χ², Cramér\'s V, expected counts, and row or column percentages.',
+            checkpoint: 'You can build a contingency table and interpret association results.'
           },
-          // Independent t-test practice steps
           {
-            instruction: 'Practice independent samples t-tests with a continuous outcome and a two-level group from the Tools datasets. Check assumptions first.',
-            hint: 'Use Analyses → T-Tests → Independent Samples T-Test. Check assumptions first!',
-            checkpoint: 'You should be able to compare two independent groups, check Levene\'s test, and interpret Cohen\'s d.'
+            instruction: 'With personality_data.csv open, run Independent Samples T-Test: Dependent = extraversion, Grouping = gender. Check assumptions.',
+            hint: 'Analyses → T-Tests → Independent Samples T-Test. Request Levene\'s and Cohen\'s d.',
+            checkpoint: 'You can compare two groups and interpret Cohen\'s d.'
           },
-          // Paired t-test practice steps
           {
-            instruction: 'Practice paired samples t-tests when you have two related continuous columns (or your instructor\'s pairing example on class data).',
-            hint: 'Use Analyses → T-Tests → Paired Samples T-Test. Select both variables as a pair.',
-            checkpoint: 'You should be able to analyze repeated measures data and interpret mean differences.'
+            instruction: 'Tools → Normality data.csv → ☰ Open. Practice Paired Samples T-Test with Test_Scores and Exam_Scores (menu practice; not a true before/after design).',
+            hint: 'Analyses → T-Tests → Paired Samples T-Test. Move both columns into Paired Variables as a pair.',
+            checkpoint: 'You can run the paired menu and read the mean difference output.'
           },
-          // One-sample t-test practice steps
           {
-            instruction: 'Practice a one-sample t-test on bmi from bmi_and_exercise.csv (Test value e.g. 25).',
-            hint: 'Use Analyses → T-Tests → One Sample T-Test. Enter the test value carefully.',
-            checkpoint: 'You should be able to test if a sample mean differs significantly from a hypothesized value.'
+            instruction: 'Tools → bmi_and_exercise.csv → ☰ Open. One Sample T-Test on bmi with Test value 25.',
+            hint: 'Analyses → T-Tests → One Sample T-Test. Enter the test value carefully.',
+            checkpoint: 'You can test whether mean BMI differs from a hypothesized value.'
           },
-          // Correlation practice steps
           {
-            instruction: 'Practice creating correlation matrices and interpreting correlation coefficients.',
-            hint: 'Use Analyses → Regression → Correlation Matrix. Always create scatterplots first!',
-            checkpoint: 'You should be able to assess the strength, direction, and significance of relationships between variables.'
+            instruction: 'With bmi_and_exercise.csv open, Correlation Matrix for bmi and exercise_per_week (optional: add consumption_vegetables_per_day). Scatterplot first.',
+            hint: 'Analyses → Regression → Correlation Matrix. Use Exploration → Scatterplot first.',
+            checkpoint: 'You can report r, direction, and significance.'
           },
-          // Simple regression practice steps
           {
-            instruction: 'Practice running simple linear regression and interpreting regression equations.',
-            hint: 'Use Analyses → Regression → Linear Regression. Check assumption plots!',
-            checkpoint: 'You should be able to predict outcomes from a single predictor and interpret R² and regression coefficients.'
+            instruction: 'With bmi_and_exercise.csv open, Linear Regression: Dependent = bmi, Covariates = exercise_per_week. Check assumption plots.',
+            hint: 'Analyses → Regression → Linear Regression. Request R² and residual plots.',
+            checkpoint: 'You can interpret the slope and R² for a single predictor.'
           },
-          // Multiple regression practice steps
           {
-            instruction: 'Practice running multiple regression with several predictors.',
-            hint: 'Use Linear Regression with multiple covariates. Check VIF for multicollinearity!',
-            checkpoint: 'You should be able to compare the importance of multiple predictors using standardized coefficients.'
+            instruction: 'Still on bmi_and_exercise.csv: Multiple regression — Dependent = bmi; Covariates = exercise_per_week and consumption_vegetables_per_day. Check VIF.',
+            hint: 'Add Collinearity statistics (VIF) under Model Coefficients.',
+            checkpoint: 'You can compare predictors with standardized coefficients and check multicollinearity.'
           },
-          // One-way ANOVA practice steps
           {
-            instruction: 'Practice running one-way ANOVA with post-hoc tests.',
-            hint: 'Use Analyses → ANOVA → One-Way ANOVA. Always add post-hoc tests if ANOVA is significant!',
-            checkpoint: 'You should be able to compare three or more groups and determine which groups differ significantly.'
+            instruction: 'Tools → personality_data.csv → ☰ Open. One-Way ANOVA: Dependent = extraversion, Grouping = ethnicity. Add post-hoc if significant.',
+            hint: 'Analyses → ANOVA → One-Way ANOVA. Tukey or Holm post-hoc; request η².',
+            checkpoint: 'You can compare 3+ ethnicity groups and read which pairs differ.'
           }
         ]
       },

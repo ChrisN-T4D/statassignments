@@ -78,8 +78,13 @@ export const module5UnifiedLessons = [
             estimatedTime: 25,
             content: [
               {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Dataset:</strong> Tools → download <strong>personality_data.csv</strong> → ☰ → Open. Use a Continuous column such as <strong>extraversion</strong> (match casing — often lowercase).'
+              },
+              {
                 type: 'text',
-                content: 'Filters let you analyze subsets of your data without deleting any rows. When a filter is active, only cases that meet your criteria are included in analyses. <strong>Dataset:</strong> Tools → download <strong>personality_data.csv</strong> → ☰ → Open. Use a scale column such as <strong>extraversion</strong> (confirm Continuous).'
+                content: 'Filters let you analyze subsets of data without deleting any rows. When a filter is active, only cases that meet your criteria are included in analyses.'
               },
               {
                 type: 'step_sequence',

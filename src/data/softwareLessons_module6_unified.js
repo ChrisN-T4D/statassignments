@@ -76,13 +76,15 @@ export const module6UnifiedLessons = [
                     step: 3,
                     title: 'Name the z-score variable',
                     description:
-                      'Name the new variable (e.g. <strong>z_bmi</strong>). Check the <strong>exact casing</strong> of your column — the Tools file uses lowercase <strong>bmi</strong>.'
+                      'Name the new variable (e.g. <strong>z_bmi</strong>). Check the <strong>exact casing</strong> of your column — the Tools file uses lowercase <strong>bmi</strong>.',
+                    image: '/images/lessons/jamovi/jamovi-compute-name.png'
                   },
                   {
                     step: 4,
                     title: 'Enter the z formula',
                     description:
-                      'In the formula box type: <strong>(bmi − 25) / 5</strong> (or the mean/SD your instructor assigns). This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills.'
+                      'In the formula box type: <strong>(bmi − 25) / 5</strong> (or the mean/SD your instructor assigns). This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills.',
+                    image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
                     step: 5,
