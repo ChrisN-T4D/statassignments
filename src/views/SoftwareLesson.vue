@@ -174,7 +174,7 @@
                       <div class="step-content">
                         <h4>{{ step.title }}</h4>
                         <div v-html="step.description"></div>
-                        <img v-if="step.image" :src="step.image" :alt="step.title" class="step-image" />
+                        <img v-if="step.image" :src="imageSrc(step.image)" :alt="step.title" class="step-image" loading="lazy" @error="onImageError(step.image)" />
                       </div>
                     </div>
                   </div>
@@ -205,7 +205,7 @@
                               <div class="step-content">
                                 <h4>{{ step.title }}</h4>
                                 <div v-html="step.description"></div>
-                                <img v-if="step.image" :src="step.image" :alt="step.title" class="step-image" />
+                                <img v-if="step.image" :src="imageSrc(step.image)" :alt="step.title" class="step-image" loading="lazy" @error="onImageError(step.image)" />
                               </div>
                             </div>
                           </div>
@@ -329,7 +329,7 @@
                   <div class="step-content">
                     <h4>{{ step.title }}</h4>
                     <div v-html="step.description"></div>
-                    <img v-if="step.image" :src="step.image" :alt="step.title" class="step-image" />
+                    <img v-if="step.image" :src="imageSrc(step.image)" :alt="step.title" class="step-image" loading="lazy" @error="onImageError(step.image)" />
                   </div>
                 </div>
               </div>
@@ -360,7 +360,7 @@
                           <div class="step-content">
                             <h4>{{ step.title }}</h4>
                             <div v-html="step.description"></div>
-                            <img v-if="step.image" :src="step.image" :alt="step.title" class="step-image" />
+                            <img v-if="step.image" :src="imageSrc(step.image)" :alt="step.title" class="step-image" loading="lazy" @error="onImageError(step.image)" />
                           </div>
                         </div>
                       </div>
@@ -461,7 +461,7 @@
                   <p class="exercise-question">{{ exercise.question }}</p>
 
                   <div v-if="exercise.image" class="exercise-image">
-                    <img :src="exercise.image" :alt="`Screenshot ${i + 1}`" />
+                    <img :src="imageSrc(exercise.image)" :alt="`Screenshot ${i + 1}`" loading="lazy" @error="onImageError(exercise.image)" />
                   </div>
 
                   <div class="exercise-options">
@@ -566,7 +566,7 @@
 
                   <!-- Screenshot of analysis results -->
                   <div v-if="exercise.image" class="exercise-image">
-                    <img :src="exercise.image" :alt="`Analysis output ${i + 1}`" />
+                    <img :src="imageSrc(exercise.image)" :alt="`Analysis output ${i + 1}`" loading="lazy" @error="onImageError(exercise.image)" />
                   </div>
 
                   <!-- Short answer text area -->
