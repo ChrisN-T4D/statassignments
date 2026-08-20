@@ -700,6 +700,7 @@ export const softwareLessonObjectiveMap = {
   'jamovi-descriptive-stats': ['M4-S1'],
   'jamovi-module-4': ['M4-S1'],
   'jamovi-module-5-unified': ['M5-S1'],
+  'jamovi-module-6-unified': ['M6-S1', 'M6-S2'],
   'jamovi-normal-distribution': ['M6-S1'],
   'jamovi-confidence-intervals': ['M6-S2'],
   'jamovi-binomial-test': ['M7-S1'],

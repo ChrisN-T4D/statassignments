@@ -489,35 +489,35 @@ export const module8UnifiedLessons = [
       weDo: {
         type: 'guided_practice',
         title: 'Guided Practice: Advanced Statistical Analyses',
-        instructions: 'Follow along with these step-by-step exercises covering all nine analysis types. Work through each section to practice what you\'ve learned.',
+        instructions: 'Follow along in jamovi. Use class datasets from the Methods Market Tools bar: personality_data.csv and bmi_and_exercise.csv (☰ → Open). Work through each analysis type below.',
         steps: [
           // Chi-Square Goodness-of-Fit practice steps would go here
           {
-            instruction: 'Practice running chi-square goodness-of-fit tests with the provided datasets.',
+            instruction: 'With personality_data.csv open, practice chi-square goodness-of-fit using a categorical column such as gender or ethnicity.',
             hint: 'Use Analyses → Frequencies → N Outcomes (χ² Goodness of Fit)',
             checkpoint: 'You should be able to interpret χ² statistics and determine if observed frequencies match expected distributions.'
           },
           // Chi-Square Independence practice steps
           {
-            instruction: 'Practice creating contingency tables and running chi-square tests of independence.',
+            instruction: 'Practice contingency tables / chi-square independence (e.g. gender crossed with another categorical variable from personality_data.csv).',
             hint: 'Use Analyses → Frequencies → Independent Samples (χ² test of association)',
             checkpoint: 'You should be able to create contingency tables, add expected counts and percentages, and interpret association results.'
           },
           // Independent t-test practice steps
           {
-            instruction: 'Practice running independent samples t-tests with assumption checks.',
+            instruction: 'Practice independent samples t-tests with a continuous outcome and a two-level group from the Tools datasets. Check assumptions first.',
             hint: 'Use Analyses → T-Tests → Independent Samples T-Test. Check assumptions first!',
             checkpoint: 'You should be able to compare two independent groups, check Levene\'s test, and interpret Cohen\'s d.'
           },
           // Paired t-test practice steps
           {
-            instruction: 'Practice running paired samples t-tests for before/after comparisons.',
+            instruction: 'Practice paired samples t-tests when you have two related continuous columns (or your instructor\'s pairing example on class data).',
             hint: 'Use Analyses → T-Tests → Paired Samples T-Test. Select both variables as a pair.',
             checkpoint: 'You should be able to analyze repeated measures data and interpret mean differences.'
           },
           // One-sample t-test practice steps
           {
-            instruction: 'Practice comparing sample means to known population values.',
+            instruction: 'Practice a one-sample t-test on bmi from bmi_and_exercise.csv (Test value e.g. 25).',
             hint: 'Use Analyses → T-Tests → One Sample T-Test. Enter the test value carefully.',
             checkpoint: 'You should be able to test if a sample mean differs significantly from a hypothesized value.'
           },
@@ -602,7 +602,7 @@ export const module8UnifiedLessons = [
       youDo: {
         type: 'independent_practice',
         title: 'Apply Your Skills',
-        instructions: 'Now it\'s your turn! Complete hands-on exercises for all nine analysis types. These exercises will help you build confidence with advanced statistical analyses. Work through each analysis type independently and apply what you\'ve learned.'
+        instructions: 'Now it\'s your turn! Use Tools datasets (personality_data.csv and/or bmi_and_exercise.csv). Complete hands-on exercises for the Module 8 analysis types, record your You do, and upload the video to Canvas.'
         // Exercises are pulled from statisticsPractices.js based on module='stats-module-8' and software='jamovi'
       }
     }

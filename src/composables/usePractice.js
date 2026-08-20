@@ -52,12 +52,13 @@ export function usePractice() {
     else if (q.type === 'multiple_select') question_type = 'multiple_choice' // treat as MC for now
     else if (q.type === 'true_false') question_type = 'true_false'
     else if (q.type === 'fill_blank') question_type = 'numeric' // use numeric input
-    else if (q.type === 'matching') question_type = 'multiple_choice' // simplified
+    else if (q.type === 'matching') question_type = 'matching'
     else if (q.type === 'ordering') question_type = 'multiple_choice' // simplified
 
     // Build options array
     let options = []
     let correct_answer = ''
+    let pairs = undefined
 
     if (q.type === 'multiple_choice') {
       options = q.options.map(opt => opt.text)
@@ -74,9 +75,9 @@ export function usePractice() {
     } else if (q.type === 'fill_blank') {
       correct_answer = Array.isArray(q.answer) ? q.answer[0] : q.answer
     } else if (q.type === 'matching') {
-      // For matching, show first pair as a simplified question
-      options = q.pairs.map(p => p.right)
-      correct_answer = q.pairs[0]?.right || ''
+      pairs = q.pairs || []
+      options = pairs.map(p => p.right)
+      correct_answer = Object.fromEntries(pairs.map(p => [p.left, p.right]))
     } else if (q.type === 'ordering') {
       options = q.items.map(item => item.text)
       correct_answer = q.items.find(item => item.id === q.correctOrder[0])?.text || ''
@@ -88,6 +89,7 @@ export function usePractice() {
       question: q.question,
       question_type: q.type === 'multiple_select' ? 'multiple_select' : question_type,
       options,
+      pairs,
       correct_answer,
       explanation: q.feedback?.correct || '',
       hint: q.hint || q.feedback?.incorrect || null,

@@ -28,6 +28,7 @@ import { module3UnifiedLessons } from './softwareLessons_module3_unified.js'
 import { module4DescriptiveLessonsOther } from './softwareLessons_module4_descriptives_other.js'
 import { module5UnifiedLessons } from './softwareLessons_module5_unified.js'
 import { module5UnifiedLessonsOther } from './softwareLessons_module5_unified_other.js'
+import { module6UnifiedLessons } from './softwareLessons_module6_unified.js'
 import { module6LessonsOther } from './softwareLessons_module6_other.js'
 import { module7LessonsOther } from './softwareLessons_module7_other.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
@@ -70,8 +71,13 @@ export const softwareLessons = [
             estimatedTime: 10,
             content: [
               {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Dataset (Tools bar):</strong> In Methods Market, open <strong>Tools</strong> (right side) → download <strong>bmi_and_exercise.csv</strong> → in jamovi use <strong>☰ → Open</strong>. Columns include <strong>bmi</strong> and <strong>exercise_per_week</strong> (names are lowercase — match casing in Compute). You will reuse Tools datasets in every later Software Practice module.'
+              },
+              {
                 type: 'text',
-                content: 'Descriptive statistics summarize your data. In Jamovi, you\'ll find them under **Analyses → Exploration → Descriptives**. Use your **BMI and exercise** dataset (variables such as BMI and exercise hours).'
+                content: 'Descriptive statistics summarize your data. In Jamovi, you\'ll find them under **Analyses → Exploration → Descriptives**. With <strong>bmi_and_exercise.csv</strong> open, use continuous variables such as <strong>bmi</strong> and <strong>exercise_per_week</strong>.'
               },
               {
                 type: 'step_sequence',
@@ -79,7 +85,7 @@ export const softwareLessons = [
                   {
                     step: 1,
                     title: 'Go to Analyses tab',
-                    description: 'Click the Analyses tab to see the analysis icons. Have your BMI and exercise data open.',
+                    description: 'Click the Analyses tab to see the analysis icons. Have bmi_and_exercise.csv open from Tools.',
                     image: '/images/lessons/jamovi/jamovi-analyses-tab.png'
                   },
                   {
@@ -97,14 +103,14 @@ export const softwareLessons = [
                   {
                     step: 4,
                     title: 'Add variables',
-                    description: 'Drag **BMI** and/or **exercise** (or exercise_hours) to the "Variables" box. You can add multiple variables at once.',
+                    description: 'Drag <strong>bmi</strong> and/or <strong>exercise_per_week</strong> to the "Variables" box. You can add multiple variables at once. Match the exact column names in your file.',
                     image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
                   }
                 ]
               },
               {
                 type: 'text',
-                content: 'The output will show N (count), Mean, Median, Standard Deviation, Minimum, and Maximum for each variable (e.g. BMI, exercise hours).'
+                content: 'The output will show N (count), Mean, Median, Standard Deviation, Minimum, and Maximum for each variable (e.g. bmi, exercise_per_week).'
               },
               {
                 type: 'callout',
@@ -125,7 +131,7 @@ export const softwareLessons = [
             content: [
               {
                 type: 'text',
-                content: 'The <strong>deviation</strong> of a value from the mean is how far that value is from the average: <em>deviation = X − mean</em>. With your **BMI and exercise** data, run Descriptives on **BMI** to get the mean, then use <strong>Data → Compute</strong> to create a new column of deviations: <strong>BMI − VMEAN(BMI)</strong>. (VMEAN = mean of one column; MEAN(A,B,C) = mean of several variables per row.)'
+                content: 'The <strong>deviation</strong> of a value from the mean is how far that value is from the average: <em>deviation = X − mean</em>. With <strong>bmi_and_exercise.csv</strong> from Tools open, run Descriptives on <strong>bmi</strong>, then use <strong>Data → Compute</strong> to create deviations: <strong>bmi − VMEAN(bmi)</strong>. (Match lowercase <strong>bmi</strong> to your column name. VMEAN = mean of one column.)'
               },
               {
                 type: 'step_sequence',
@@ -133,28 +139,33 @@ export const softwareLessons = [
                   {
                     step: 1,
                     title: 'Open Compute',
-                    description: 'Go to the <strong>Data</strong> tab and click <strong>Compute</strong> (or the formula/fx button). Have your BMI and exercise dataset open.',
+                    description: 'Go to the <strong>Data</strong> tab and click <strong>Compute</strong> (or the formula/fx button). Have <strong>bmi_and_exercise.csv</strong> open (from Tools).',
                     image: '/images/lessons/jamovi/jamovi-compute-button.png'
                   },
                   {
                     step: 2,
                     title: 'Name the variable',
-                    description: 'Give the new variable a name, e.g. <strong>bmi_deviation</strong> or <strong>dev_BMI</strong>.',
+                    description: 'Give the new variable a name, e.g. <strong>bmi_deviation</strong> or <strong>dev_bmi</strong>.',
                     image: '/images/lessons/jamovi/jamovi-compute-name.png'
                   },
                   {
                     step: 3,
                     title: 'Enter the deviation formula',
-                    description: 'In the formula box, type: <strong>BMI − VMEAN(BMI)</strong>. (If your variable is named differently, e.g. <strong>bmi</strong>, use <strong>bmi − VMEAN(bmi)</strong>. Jamovi is case-sensitive.) VMEAN gives the mean of that single column; each row will show that person\'s BMI minus the overall mean BMI.',
+                    description: 'In the formula box, type: <strong>bmi − VMEAN(bmi)</strong>. <strong>Check the casing of your variable name first</strong> — the Tools file uses lowercase <strong>bmi</strong>. If your column were <strong>BMI</strong>, you would type <strong>BMI</strong>. Jamovi is case-sensitive, so a mismatch will break the formula. VMEAN gives the mean of that single column; each row will show that person\'s BMI minus the overall mean BMI.',
                     image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
                     step: 4,
                     title: 'Check the result',
-                    description: 'The new column shows each person\'s BMI deviation from the mean. Some values are positive (above average BMI), some negative (below). Sum this column in Descriptives: the total is zero.',
+                    description: 'The new column shows each person\'s BMI deviation from the mean. Some values are positive (above average BMI), some negative (below). Run <strong>Analyses → Exploration → Descriptives</strong> on your deviation variable and request <strong>Sum</strong>. The sum should be zero.',
                     image: '/images/lessons/jamovi/jamovi-compute-results.png'
                   }
                 ]
+              },
+              {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Reading scientific notation (e−something):</strong> Jamovi may show the Sum as <strong>4.00e−13</strong> (or similar) instead of exactly 0. The <strong>e−13</strong> means “times 10 to the power of −13” — a tiny number from computer rounding. <strong>Rule of thumb:</strong> when you see <strong>e</strong> followed by a <em>negative</em> number (e−10, e−13, e−15, …), treat it as <strong>zero</strong> for practical purposes. A real leftover sum would look like an ordinary number (e.g. 12.4), not scientific notation with a negative exponent.'
               },
               {
                 type: 'callout',
@@ -175,7 +186,7 @@ export const softwareLessons = [
             content: [
               {
                 type: 'text',
-                content: 'Because deviations sum to zero, we <strong>square</strong> them to measure spread. <strong>Squared deviation = (X − mean)²</strong>. With your **BMI** data, use Compute to create <strong>(BMI − VMEAN(BMI))^2</strong>. The <strong>sum of squared deviations (SS)</strong> is the numerator in the variance formula; use <strong>VSUM</strong> on that column for SS. Variance = SS/(N−1) and standard deviation = √variance.'
+                content: 'Because deviations sum to zero, we <strong>square</strong> them to measure spread. <strong>Squared deviation = (X − mean)²</strong>. With <strong>bmi</strong> from Tools file <strong>bmi_and_exercise.csv</strong>, use Compute to create <strong>(bmi − VMEAN(bmi))^2</strong>. The <strong>sum of squared deviations (SS)</strong> is the numerator in the variance formula. Variance = SS/(N−1) and standard deviation = √variance.'
               },
               {
                 type: 'step_sequence',
@@ -183,19 +194,19 @@ export const softwareLessons = [
                   {
                     step: 1,
                     title: 'Create a squared deviation variable',
-                    description: 'Use <strong>Data → Compute</strong> again. Name the new variable (e.g. <strong>bmi_sq_dev</strong> or <strong>sq_dev_BMI</strong>). In the formula box, type: <strong>(BMI − VMEAN(BMI))^2</strong>. (Use your actual BMI variable name if different.)',
-                    image: '/images/lessons/jamovi/jamovi-compute-formula.png'
+                    description: 'Use <strong>Data → Compute</strong> again. Name the new variable (e.g. <strong>squared_deviation</strong> or <strong>bmi_sq_dev</strong>). In the formula box, type: <strong>(bmi − VMEAN(bmi))^2</strong>. Match the <strong>exact casing</strong> of your column name from Tools (usually lowercase <strong>bmi</strong>) — Jamovi is case-sensitive.',
+                    image: '/images/lessons/jamovi/jamovi-compute-sq-formula.png'
                   },
                   {
                     step: 2,
-                    title: 'Check the squared deviations',
-                    description: 'The new column has only positive values (squares). Larger BMI deviations from the mean produce larger squared deviations.',
-                    image: '/images/lessons/jamovi/jamovi-compute-results.png'
+                    title: 'Look at the new column in the spreadsheet',
+                    description: 'Close or collapse the Compute panel so you can see the data grid. Find the new column (e.g. <strong>squared_deviation</strong>). Every value should be <strong>zero or positive</strong> — never negative — because you squared the deviations. Bigger BMI deviations from the mean produce bigger numbers in this column.',
+                    image: '/images/lessons/jamovi/jamovi-compute-sq-column.png'
                   },
                   {
                     step: 3,
                     title: 'Get the sum of squared deviations (SS)',
-                    description: 'Run <strong>Analyses → Exploration → Descriptives</strong> on your squared deviation variable. Add it to the Variables box, then in Statistics request <strong>Sum</strong>. The <strong>Sum</strong> is the sum of squared deviations (SS) for BMI.',
+                    description: 'Run <strong>Analyses → Exploration → Descriptives</strong> on your squared deviation variable. Add it to the Variables box, then in Statistics request <strong>Sum</strong>. The <strong>Sum</strong> is the sum of squared deviations (SS) for BMI. This should be a normal-looking number (not e−something near zero).',
                     image: '/images/lessons/jamovi/jamovi-descriptives-variables.png'
                   },
                   {
@@ -218,27 +229,27 @@ export const softwareLessons = [
       weDo: {
         type: 'guided_practice',
         title: 'Let\'s Run Descriptives and Compute with BMI and Exercise Data',
-        instructions: 'Follow along in Jamovi with your BMI and exercise dataset.',
+        instructions: 'Follow along in Jamovi. Reminder: download <strong>bmi_and_exercise.csv</strong> from the Methods Market <strong>Tools</strong> bar (right side), then ☰ → Open in jamovi.',
         steps: [
           {
-            instruction: 'Open your BMI and exercise dataset (or create one: columns BMI and exercise_hours with a few values, e.g. BMI: 22, 25, 28, 21, 26; exercise_hours: 2, 5, 1, 4, 3). Set both to Continuous.',
-            hint: 'You need at least two numeric variables: BMI and exercise (or exercise_hours).',
-            checkpoint: 'You should have BMI and exercise data in the spreadsheet.'
+            instruction: 'From Tools, download bmi_and_exercise.csv and open it in jamovi (☰ → Open). Confirm columns include bmi and exercise_per_week; set both to Continuous if needed.',
+            hint: 'Tools is on the right in Software Practice. Column names in this file are lowercase.',
+            checkpoint: 'You should have bmi and exercise_per_week visible in the spreadsheet.'
           },
           {
-            instruction: 'Click Analyses → Exploration → Descriptives. Drag BMI and exercise (or exercise_hours) to the Variables box.',
+            instruction: 'Click Analyses → Exploration → Descriptives. Drag bmi and exercise_per_week to the Variables box.',
             hint: 'Exploration is the bar chart icon; Descriptives is in the dropdown.',
             checkpoint: 'The Results panel should show N, Mean, Median, SD, Min, Max for each variable.'
           },
           {
-            instruction: 'Note the mean of BMI from the output. Then use Data → Compute. Name the new variable bmi_deviation. In the formula box type: BMI − VMEAN(BMI) (use your variable name, case-sensitive).',
+            instruction: 'Note the mean of bmi from the output. Then use Data → Compute. Name the new variable bmi_deviation. In the formula box type: bmi − VMEAN(bmi) (exact casing).',
             hint: 'Compute is in the Data tab. The formula gives each person\'s BMI minus the mean BMI.',
             checkpoint: 'The new column should have positive and negative values that sum to zero (check with Descriptives → Sum).'
           },
           {
-            instruction: 'Use Compute again. Name the variable bmi_sq_dev. Formula: (BMI − VMEAN(BMI))^2. Then run Descriptives on bmi_sq_dev and request Sum (or use VSUM on that column). That is the sum of squared deviations (SS) for BMI.',
+            instruction: 'Use Compute again. Name the variable bmi_sq_dev (or squared_deviation). Formula: (bmi − VMEAN(bmi))^2. Then run Descriptives on that column and request Sum. That Sum is SS for bmi.',
             hint: 'Squared deviations are all positive. Sum them in Descriptives to get SS.',
-            checkpoint: 'You have SS for BMI. Variance = SS/(N−1); SD = √variance. Compare with the SD for BMI in Descriptives.'
+            checkpoint: 'You have SS for bmi. Variance = SS/(N−1); SD = √variance. Compare with the SD for bmi in Descriptives.'
           }
         ]
       },
@@ -361,313 +372,7 @@ export const softwareLessons = [
   ...module5UnifiedLessonsOther,
 
   // ============ STATISTICS MODULE 6: Probability and Sampling ============
-  {
-    id: 'jamovi-normal-distribution',
-    module: 'stats-module-6',
-    title: 'Working with the Normal Distribution in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Calculate z-scores to standardize values',
-      'Find probabilities using the normal distribution',
-      'Apply the empirical rule (68-95-99.7)'
-    ],
-    estimatedTime: 25,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: The Normal Distribution',
-        content: [
-          {
-            type: 'text',
-            content: 'The normal distribution is the foundation of many statistical methods. Understanding how to work with it - calculating z-scores, finding probabilities, and applying the empirical rule - is essential.'
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: 'Z-Score',
-                icon: 'Z',
-                definition: 'Number of standard deviations from the mean: z = (X - μ) / σ',
-                color: '#3b82f6'
-              },
-              {
-                term: 'Empirical Rule',
-                icon: '68',
-                definition: '68% within ±1 SD, 95% within ±2 SD, 99.7% within ±3 SD',
-                color: '#10b981'
-              },
-              {
-                term: 'Probability',
-                icon: 'P',
-                definition: 'Area under the curve between two values',
-                color: '#f59e0b'
-              }
-            ]
-          },
-          {
-            type: 'text',
-            content: 'In Jamovi, you can create z-scores using Compute variables and calculate probabilities using statistical tables or online calculators.'
-          },
-          {
-            type: 'callout',
-            style: 'tip',
-            content: 'Remember: A z-score tells you how unusual a value is. Z-scores beyond ±2 are noteworthy, and beyond ±3 are very rare.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Practice with Z-Scores',
-        instructions: 'Work with IQ scores (mean=100, SD=15)',
-        steps: [
-          {
-            instruction: 'Create a column "IQ" with values: 85, 100, 115, 130, 145, 70, 95, 110, 125',
-            hint: 'Set to Continuous measurement level.',
-            checkpoint: 'You should have 9 IQ scores.'
-          },
-          {
-            instruction: 'Run Descriptives (Analyses → Exploration → Descriptives) on IQ to verify the mean and SD',
-            hint: 'The mean should be around 108 and SD around 23.',
-            checkpoint: 'Check that you have the correct values for mean and SD.'
-          },
-          {
-            instruction: 'Create a z-score variable. Go to Data → Compute, name it "z_score", formula: (IQ - 100) / 15',
-            hint: 'This standardizes IQ scores to the population mean=100, SD=15.',
-            checkpoint: 'Z-scores should range from negative to positive values.'
-          },
-          {
-            instruction: 'Interpret the z-scores. A z of 2.0 means the IQ is 2 standard deviations above average.',
-            hint: 'Use the formula: Original IQ = 100 + (z × 15)',
-            checkpoint: 'Can you identify which IQs are more than 2 SDs from the mean?'
-          },
-          {
-            instruction: 'Use the empirical rule: About 68% of people have IQs between 85 and 115 (100 ± 15)',
-            hint: 'Count how many of your 9 scores fall in this range.',
-            checkpoint: 'This range represents ±1 standard deviation from the mean.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'If IQ scores have mean=100 and SD=15, what is the z-score for an IQ of 130?',
-            options: [
-              { id: 'a', text: 'z = 1.0' },
-              { id: 'b', text: 'z = 1.5' },
-              { id: 'c', text: 'z = 2.0' },
-              { id: 'd', text: 'z = 2.5' }
-            ],
-            correct: 'c',
-            feedback: {
-              correct: 'Correct! z = (130 - 100) / 15 = 30 / 15 = 2.0',
-              incorrect: 'Use the formula z = (X - μ) / σ = (130 - 100) / 15 = 2.0'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_choice',
-            question: 'According to the empirical rule, approximately what percentage of values fall within ±2 standard deviations of the mean?',
-            options: [
-              { id: 'a', text: '68%' },
-              { id: 'b', text: '95%' },
-              { id: 'c', text: '99.7%' },
-              { id: 'd', text: '100%' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Right! About 95% of values fall within ±2 SD of the mean.',
-              incorrect: 'The empirical rule: 68% within ±1 SD, 95% within ±2 SD, 99.7% within ±3 SD.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'fill_blank',
-            question: 'For a normal distribution with mean=50 and SD=10, the formula for computing z-scores is: (X - ____) / ____',
-            answer: ['50, 10', '50) / 10'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! z = (X - 50) / 10 for this distribution.',
-              incorrect: 'The z-score formula is always (X - mean) / SD, so (X - 50) / 10'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'multiple_choice',
-            question: 'A test score has a z-score of -1.5. This means the score is:',
-            options: [
-              { id: 'a', text: '1.5 points below the mean' },
-              { id: 'b', text: '1.5 standard deviations below the mean' },
-              { id: 'c', text: '1.5 standard deviations above the mean' },
-              { id: 'd', text: 'Exactly average' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! Negative z-scores are below the mean.',
-              incorrect: 'Z-scores represent standard deviations. A z of -1.5 means 1.5 standard deviations below the mean.'
-            }
-          }
-        ]
-      }
-    }
-  },
-
-  {
-    id: 'jamovi-confidence-intervals',
-    module: 'stats-module-6',
-    title: 'Understanding Confidence Intervals in Jamovi',
-    software: 'jamovi',
-    objectives: [
-      'Calculate confidence intervals for means',
-      'Interpret confidence interval width and meaning',
-      'Understand how sample size affects confidence intervals'
-    ],
-    estimatedTime: 25,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Watch: Confidence Intervals',
-        content: [
-          {
-            type: 'text',
-            content: 'A confidence interval gives a range of plausible values for a population parameter. It quantifies our uncertainty about where the true value lies.'
-          },
-          {
-            type: 'definition_list',
-            items: [
-              {
-                term: '95% CI',
-                icon: 'CI',
-                definition: 'If we repeated the study many times, 95% of CIs would contain the true parameter',
-                color: '#3b82f6'
-              },
-              {
-                term: 'Width',
-                icon: '↔',
-                definition: 'Narrower CI = more precision, wider CI = more uncertainty',
-                color: '#f59e0b'
-              },
-              {
-                term: 'Factors',
-                icon: '∑',
-                definition: 'CI width depends on sample size, variability, and confidence level',
-                color: '#8b5cf6'
-              }
-            ]
-          },
-          {
-            type: 'text',
-            content: 'In Jamovi, confidence intervals appear automatically in many analyses. You can also request them in Descriptives.'
-          },
-          {
-            type: 'callout',
-            style: 'warning',
-            content: 'Common mistake: A 95% CI does NOT mean "95% probability the true mean is in this interval." It means the procedure produces intervals that capture the true value 95% of the time.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Let\'s Calculate Confidence Intervals',
-        instructions: 'Explore how CIs work with different sample sizes.',
-        steps: [
-          {
-            instruction: 'Create "score" column with: 78, 82, 85, 88, 91, 76, 80, 84, 87, 90',
-            hint: 'Set to Continuous. This is a small sample (n=10).',
-            checkpoint: 'You should have 10 scores.'
-          },
-          {
-            instruction: 'Run Descriptives on score. Under Statistics section, check "Confidence interval"',
-            hint: 'Navigate to Analyses → Exploration → Descriptives.',
-            checkpoint: 'You should see a 95% CI displayed in the output.'
-          },
-          {
-            instruction: 'Note the CI width. The interval shows the lower and upper bounds.',
-            hint: 'For example, if mean = 84.1, CI might be [80.2, 88.0].',
-            checkpoint: 'Write down the CI values.'
-          },
-          {
-            instruction: 'Now add 10 more scores (similar values) to increase sample size to 20.',
-            hint: 'Add: 79, 83, 86, 89, 92, 77, 81, 85, 88, 91',
-            checkpoint: 'Descriptives should update automatically if still open.'
-          },
-          {
-            instruction: 'Compare the new CI to the original. It should be narrower (more precise).',
-            hint: 'Larger samples produce narrower CIs because standard error decreases.',
-            checkpoint: 'The CI width should have decreased with n=20 vs n=10.'
-          }
-        ]
-      },
-      youDo: {
-        type: 'assessment',
-        title: 'Check Your Understanding',
-        questions: [
-          {
-            id: 'q1',
-            type: 'multiple_choice',
-            question: 'You calculate a 95% CI for mean IQ as [95, 105]. What is the correct interpretation?',
-            options: [
-              { id: 'a', text: '95% of people have IQs between 95 and 105' },
-              { id: 'b', text: 'We are 95% confident the true population mean is between 95 and 105' },
-              { id: 'c', text: 'There is a 95% probability the true mean is between 95 and 105' },
-              { id: 'd', text: 'The sample mean is 95 or 105' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Correct! We express confidence that the interval captures the true parameter.',
-              incorrect: 'The correct interpretation: We are 95% confident the true population mean lies within this interval.'
-            }
-          },
-          {
-            id: 'q2',
-            type: 'multiple_select',
-            question: 'What makes a confidence interval narrower (more precise)? (Select all that apply)',
-            options: [
-              { id: 'a', text: 'Larger sample size' },
-              { id: 'b', text: 'Smaller standard deviation' },
-              { id: 'c', text: 'Lower confidence level (e.g., 90% instead of 95%)' },
-              { id: 'd', text: 'Higher confidence level (e.g., 99% instead of 95%)' }
-            ],
-            correct: ['a', 'b', 'c'],
-            feedback: {
-              correct: 'Right! Larger n, less variability, and lower confidence all create narrower CIs.',
-              incorrect: 'Narrower CIs result from: larger sample size, less variability, or lower confidence level. Higher confidence makes CIs wider, not narrower.'
-            }
-          },
-          {
-            id: 'q3',
-            type: 'multiple_choice',
-            question: 'A 95% CI for a mean is [82, 88]. A researcher claims the population mean is 90. What can you conclude?',
-            options: [
-              { id: 'a', text: 'The data support the claim (90 is plausible)' },
-              { id: 'b', text: 'The data contradict the claim (90 is outside the CI)' },
-              { id: 'c', text: 'Cannot conclude anything from a CI' },
-              { id: 'd', text: 'Need a p-value to decide' }
-            ],
-            correct: 'b',
-            feedback: {
-              correct: 'Right! Since 90 falls outside the 95% CI, we can reject that claim at the 0.05 level.',
-              incorrect: 'When a hypothesized value (90) falls outside the 95% CI, the data contradict that hypothesis.'
-            }
-          },
-          {
-            id: 'q4',
-            type: 'fill_blank',
-            question: 'If you want to be MORE confident your interval captures the true value, you would use a ____ % confidence level, which makes the interval ____.',
-            answer: ['higher, wider', '99, wider', 'higher, wider', 'greater, wider'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! Higher confidence (e.g., 99%) produces wider intervals.',
-              incorrect: 'To be more confident, use a higher % (e.g., 99% instead of 95%), which makes the interval wider.'
-            }
-          }
-        ]
-      }
-    }
-  },
+  ...module6UnifiedLessons,
 
   ...module6LessonsOther,
 
@@ -687,140 +392,105 @@ export const softwareLessons = [
     phases: {
       iDo: {
         type: 'demonstration',
-        title: 'Watch: Testing ESP with the Binomial Test',
+        title: 'Learn: Binomial Test (2 Outcomes) in Jamovi',
         content: [
           {
             type: 'text',
-            content: 'The binomial test helps us determine if observed proportions differ significantly from what we\'d expect by chance. Let\'s use the ESP example from Chapter 9: 62 out of 100 people correctly guessed the card color. Is this evidence of ESP, or just chance?'
+            content: 'The binomial test asks whether the proportion of one outcome differs from a hypothesized value (often 0.5 for “fair chance”). Chapter 9 uses an ESP card-guessing story (62/100 correct vs 50%). <strong>In jamovi you need a real dataset with one row per person and a two-level (binary) column</strong> — not just the summary “62 out of 100.”'
+          },
+          {
+            type: 'callout',
+            style: 'tip',
+            content: '<strong>Dataset for this lesson:</strong> Open Tools → download <strong>personality_data.csv</strong> → open it in jamovi. We will use the <strong>gender</strong> column (two levels, e.g. Female / Male). Set <strong>gender</strong> to <strong>Nominal</strong> if it is not already. Null hypothesis: the proportion of one gender level = 0.5 (equal split).'
           },
           {
             type: 'annotated_image',
             imagePath: '/lessons/hypothesis-testing/jamovi/binomial-setup.png',
+            alt: 'jamovi Analyses → Frequencies menu showing 2 Outcomes (Binomial test)',
             annotations: [
-              { x: 20, y: 15, label: '1. Click Frequencies', description: 'Start in the Analyses tab' },
-              { x: 45, y: 30, label: '2. Select Proportion Test', description: 'Choose the binomial test option' },
-              { x: 60, y: 50, label: '3. Move outcome variable', description: 'Place your binary variable here' },
-              { x: 40, y: 70, label: '4. Set test value', description: 'Enter 0.5 for 50% chance' }
+              { x: 20, y: 15, label: '1. Analyses tab', description: 'Open Analyses' },
+              { x: 45, y: 25, label: '2. Frequencies', description: 'Click the Frequencies icon' },
+              { x: 50, y: 45, label: '3. 2 Outcomes', description: 'Choose 2 Outcomes (Binomial test) — not “Proportion Test”' }
             ]
           },
           {
             type: 'text',
-            content: '<h4>Understanding the Setup</h4><ul><li><strong>Null Hypothesis (H₀):</strong> θ = 0.5 (people are just guessing, 50% success rate)</li><li><strong>Alternative Hypothesis (H₁):</strong> θ ≠ 0.5 (ESP exists, success rate differs from 50%)</li><li><strong>Test value:</strong> 0.5 represents our null hypothesis probability</li><li><strong>Two-sided test:</strong> We check for both higher and lower success rates</li></ul>'
-          },
-          {
-            type: 'code',
-            language: 'text',
-            code: 'Results:\n  Binomial Test\n  ─────────────────────────────\n   Outcome    Level  Count  Total  Proportion    p\n  ─────────────────────────────\n   Response     1      62    100     0.620     0.021\n  ─────────────────────────────\n  Note: H₀ is proportion = 0.5'
+            content: '<h4>After the menu opens</h4><ol><li>Move <strong>gender</strong> into the variable box.</li><li>Under Hypothesis, set the <strong>Test value</strong> to <strong>0.5</strong> (equal proportions under H₀).</li><li>Keep the alternative as ≠ Test value (two-sided) unless your instructor says otherwise.</li><li>Optional: check <strong>Confidence interval</strong> under additional statistics.</li></ol>'
           },
           {
             type: 'text',
-            content: '<h4>Interpreting the Results</h4><ul><li><strong>Proportion = 0.620:</strong> 62% success rate in our sample</li><li><strong>p = 0.021:</strong> If the null hypothesis (50% guessing) were true, we\'d see results this extreme only 2.1% of the time</li><li><strong>Decision:</strong> Since p < 0.05, we reject the null hypothesis</li><li><strong>Conclusion:</strong> We have evidence that the success rate differs significantly from chance guessing</li></ul>'
+            content: '<h4>Understanding the Setup</h4><ul><li><strong>Null Hypothesis (H₀):</strong> θ = 0.5 (equal probability of each gender level in the population)</li><li><strong>Alternative Hypothesis (H₁):</strong> θ ≠ 0.5</li><li><strong>Menu name in jamovi:</strong> <strong>Frequencies → 2 Outcomes</strong> (labeled Binomial test)</li><li><strong>Test value:</strong> 0.5 is the hypothesized proportion under H₀</li></ul>'
+          },
+          {
+            type: 'text',
+            content: '<h4>Interpreting the Results</h4><ul><li>Read the observed <strong>proportion</strong> and the <strong>p</strong>-value for your chosen level.</li><li>If <strong>p &lt; .05</strong>, reject H₀ (evidence the population proportion differs from 0.5).</li><li>If <strong>p ≥ .05</strong>, fail to reject H₀ (not enough evidence of unequal proportions).</li><li>Same logic as the Chapter 9 ESP example — but here the analysis runs on your open jamovi data file.</li></ul>'
           }
         ]
       },
       weDo: {
         type: 'guided_practice',
-        title: 'Let\'s Practice Together: Testing a Coin Flip',
-        scenario: 'A student claims they have a lucky coin that comes up heads more often than tails. They flip it 80 times and get 52 heads. Let\'s test if this is evidence of a biased coin.',
+        title: 'Practice: Binomial test with personality gender',
+        scenario: 'Using personality_data.csv, test whether the proportion of one gender level differs from 0.5.',
         data: {
-          description: 'Coin flip data: 52 heads, 28 tails out of 80 flips',
-          file: 'coin_flip_data.omv'
+          description: 'personality_data.csv from Tools (column: gender)',
+          file: 'personality_data.csv'
         },
+        instructions: 'Keep personality_data.csv open in jamovi. Follow each step.',
         steps: [
           {
-            instruction: 'Open the Frequencies menu and select Proportion Test (2 Outcomes)',
-            hint: 'Analyses → Frequencies → Proportion Test (2 Outcomes)',
-            checkpoint: 'The Proportion Test panel should appear on the right'
+            instruction: 'Confirm personality_data.csv is open and gender is Nominal with two levels.',
+            hint: 'Tools → download personality_data.csv if needed. Click the gender column header to check measure type.',
+            checkpoint: 'gender is Nominal; data grid shows Female/Male (or similar).'
           },
           {
-            instruction: 'Move the "outcome" variable to the Variable box',
-            hint: 'Drag the outcome variable from the left to the Variable box in the panel',
-            checkpoint: 'You should see "outcome" listed in the Variable box'
+            instruction: 'Go to Analyses → Frequencies → 2 Outcomes (Binomial test).',
+            hint: 'The menu says “2 Outcomes,” with “Binomial test” underneath — not “Proportion Test.”',
+            checkpoint: 'The 2 Outcomes / binomial panel opens on the right.'
           },
           {
-            instruction: 'In the Hypothesis section, set the Test value to 0.5',
-            hint: 'This represents our null hypothesis that the coin is fair (50% heads)',
-            checkpoint: 'The Test value box should show 0.5'
+            instruction: 'Move gender into the Variable box.',
+            hint: 'Drag gender from the left list into the analysis panel.',
+            checkpoint: 'gender appears in the Variable box; counts appear in Results.'
           },
           {
-            instruction: 'Check that the alternative hypothesis is set to ≠ Test value (two-sided)',
-            hint: 'This tests whether the proportion differs from 0.5 in either direction',
-            checkpoint: 'The hypothesis dropdown should show "≠ Test value"'
+            instruction: 'Set Test value to 0.5 and keep the alternative ≠ Test value (two-sided).',
+            hint: 'Hypothesis section in the panel.',
+            checkpoint: 'Test value shows 0.5.'
           },
           {
-            instruction: 'Under Additional Statistics, check "Confidence interval"',
-            hint: 'This gives us a range of plausible values for the true proportion',
-            checkpoint: 'Results now include a 95% confidence interval'
+            instruction: 'Optional: check Confidence interval. Read p for your level — decide reject or fail to reject H₀ at α = .05.',
+            hint: 'Compare p to .05; do not treat “not significant” as proof of exactly 50/50.',
+            checkpoint: 'You can state a decision and what p means under H₀.'
           }
         ],
         assessment: {
           type: 'multiple_choice',
-          question: 'Based on the results (p = 0.264, proportion = 0.65), what should we conclude?',
+          question: 'In jamovi, where do you start a binomial test for a two-level variable?',
           options: [
-            'The coin is definitely biased',
-            'The coin is definitely fair',
-            'We do not have sufficient evidence to conclude the coin is biased',
-            'We need more data to make any conclusion'
+            'Analyses → T-Tests → One Sample T-Test',
+            'Analyses → Frequencies → 2 Outcomes',
+            'Data → Compute',
+            'Analyses → ANOVA'
           ],
-          correctAnswer: 2,
+          correctAnswer: 1,
           feedback: {
-            correct: 'Correct! With p = 0.264 > 0.05, we fail to reject the null hypothesis. While 52/80 heads is higher than 50%, this difference could easily occur by chance.',
-            incorrect: 'Remember: p = 0.264 > 0.05, so we fail to reject the null hypothesis. The observed difference from 50% is not statistically significant.'
+            correct: 'Correct — Frequencies → 2 Outcomes (Binomial test).',
+            incorrect: 'Use Analyses → Frequencies → 2 Outcomes for the binomial / two-outcome proportion test.'
           }
         }
       },
       youDo: {
         type: 'independent_practice',
-        title: 'Your Turn: Testing a Medical Treatment',
-        scenario: 'A new treatment is being tested. Previous treatments had a 40% success rate. In a trial of 120 patients, 58 patients showed improvement. Is this new treatment significantly better?',
-        task: 'Use Jamovi to conduct a binomial test and determine if the success rate differs significantly from 0.40.',
+        title: 'Apply: Binomial thinking with your data',
+        scenario: 'Still using personality_data.csv (or a binary column you create). Record your screen while you run Frequencies → 2 Outcomes.',
+        task: 'Run the binomial (2 Outcomes) test on gender with test value 0.5. State H₀, the observed proportion, p, and your decision at α = .05.',
         data: {
-          description: 'Treatment outcome data: 58 successes out of 120 patients',
-          file: 'treatment_test.omv',
-          variables: ['patient_id', 'improved']
+          description: 'personality_data.csv — gender (Nominal, two levels)',
+          file: 'personality_data.csv',
+          variables: ['gender']
         },
-        assessment: [
-          {
-            type: 'multiple_choice',
-            question: 'What test value should you use for this analysis?',
-            options: [
-              '0.50 (50%)',
-              '0.40 (40%)',
-              '0.58 (58%)',
-              '0.48 (48%)'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Correct! The test value should be 0.40 because that\'s the success rate we\'re comparing against (the previous treatment rate).',
-              incorrect: 'The test value should match the null hypothesis. We want to test if the new treatment differs from the previous 40% success rate.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'The Jamovi output shows p = 0.091. At α = 0.05, what is the correct decision?',
-            options: [
-              'Reject the null hypothesis - the new treatment is significantly better',
-              'Fail to reject the null hypothesis - insufficient evidence of improvement',
-              'The test is inconclusive',
-              'The p-value is invalid'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Correct! Since p = 0.091 > 0.05, we fail to reject the null hypothesis. While the sample proportion (58/120 = 48.3%) is higher than 40%, this difference is not statistically significant.',
-              incorrect: 'When p > α, we fail to reject the null hypothesis. Here p = 0.091 > 0.05, so we don\'t have sufficient evidence to conclude the new treatment is better.'
-            }
-          },
-          {
-            type: 'fill_blank',
-            question: 'If we observed p = 0.091, this means that if the null hypothesis were true, we would see results this extreme about ____% of the time.',
-            answer: ['9.1', '9', 'nine'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! The p-value of 0.091 means 9.1% - this is the probability of observing our data (or more extreme) if the null hypothesis is true.',
-              incorrect: 'The p-value is expressed as a probability. Multiply by 100 to convert to percentage: 0.091 × 100 = 9.1%'
-            }
-          }
-        ]
+        instructions: 'Record with Tools (or your phone). Open personality_data.csv in jamovi, run Analyses → Frequencies → 2 Outcomes on gender (test value 0.5), talk through the output, then upload the video to Canvas Module 7: Software Practice.',
+        summary: 'Apply = You do recording. Use the real personality dataset, not a Chapter 9 summary count alone.'
       }
     }
   },
@@ -840,164 +510,97 @@ export const softwareLessons = [
     phases: {
       iDo: {
         type: 'demonstration',
-        title: 'Watch: Testing if IQ Scores Differ from Population Average',
+        title: 'Learn: One-Sample t-Test in Jamovi',
         content: [
           {
             type: 'text',
-            content: 'The one-sample t-test helps us determine if a sample mean differs significantly from a known population value. Let\'s test if a group of students has an average IQ different from the population mean of 100.'
+            content: 'The one-sample t-test asks whether a sample mean differs from a hypothesized value. <strong>Dataset for this lesson:</strong> Tools → download <strong>bmi_and_exercise.csv</strong> → open in jamovi. Use continuous column <strong>bmi</strong>. Example H₀: μ = 25 (change the Test value if your instructor assigns a different number).'
           },
           {
             type: 'text',
-            content: '<h4>When to Use a One-Sample t-Test</h4><ul><li>You have <strong>one group</strong> of continuous data</li><li>You want to compare the <strong>sample mean</strong> to a <strong>known value</strong> (e.g., population mean, theoretical value)</li><li>Your data is approximately normally distributed (or n > 30)</li></ul>'
+            content: '<h4>When to Use a One-Sample t-Test</h4><ul><li>You have <strong>one group</strong> of continuous data</li><li>You want to compare the <strong>sample mean</strong> to a <strong>known value</strong></li><li>Data are approximately normal (or n is reasonably large)</li></ul>'
           },
           {
             type: 'annotated_image',
             imagePath: '/lessons/hypothesis-testing/jamovi/t-test-setup.png',
+            alt: 'jamovi One Sample T-Test setup panel',
             annotations: [
               { x: 20, y: 15, label: '1. Click T-Tests', description: 'In the Analyses tab' },
               { x: 45, y: 30, label: '2. Select One Sample T-Test', description: 'Choose the one-sample option' },
-              { x: 60, y: 50, label: '3. Move dependent variable', description: 'Place your continuous variable here' },
-              { x: 40, y: 70, label: '4. Set test value', description: 'Enter the population mean (100)' }
+              { x: 60, y: 50, label: '3. Move bmi', description: 'Place continuous bmi in Dependent Variables' },
+              { x: 40, y: 70, label: '4. Set test value', description: 'Enter the hypothesized mean (e.g. 25)' }
             ]
           },
           {
-            type: 'code',
-            language: 'text',
-            code: 'One Sample T-Test\n────────────────────────────────────────\n                      Statistic    df      p\n────────────────────────────────────────\n  IQ_Score              2.543      24    0.018\n────────────────────────────────────────\nNote: H₀ is population mean = 100\n\nDescriptives\n────────────────────────────\n            N    Mean     SD\n────────────────────────────\n  IQ_Score  25   106.8   13.4\n────────────────────────────\n\nEffect Size (Cohen\'s d = 0.509)'
-          },
-          {
             type: 'text',
-            content: '<h4>Interpreting the Results</h4><ul><li><strong>Mean = 106.8:</strong> Our sample average IQ</li><li><strong>t(24) = 2.543:</strong> The t-statistic measures how many standard errors the sample mean is from 100</li><li><strong>p = 0.018:</strong> If the true mean were 100, we\'d see results this extreme only 1.8% of the time</li><li><strong>Cohen\'s d = 0.509:</strong> Medium effect size - the difference is practically meaningful</li><li><strong>Decision:</strong> Since p < 0.05, we reject the null hypothesis</li><li><strong>Conclusion:</strong> This group has a significantly higher mean IQ than the population average</li></ul>'
-          },
-          {
-            type: 'text',
-            content: '<h4>Understanding Hypotheses</h4><ul><li><strong>Null Hypothesis (H₀):</strong> μ = 100 (population mean)</li><li><strong>Alternative Hypothesis (H₁):</strong> μ ≠ 100 (two-sided test)</li><li><strong>One-sided alternative:</strong> You could test H₁: μ > 100 if you specifically predicted higher IQ</li></ul>'
+            content: '<h4>Reading the output</h4><ul><li><strong>t, df, p:</strong> evidence against H₀: μ = test value</li><li><strong>Mean / SD:</strong> describe your sample</li><li><strong>Cohen\'s d</strong> (if requested): size of the difference, not just significance</li><li>If <strong>p &lt; .05</strong>, reject H₀; if <strong>p ≥ .05</strong>, fail to reject H₀</li></ul>'
           }
         ]
       },
       weDo: {
         type: 'guided_practice',
-        title: 'Let\'s Practice Together: Testing Reaction Time',
-        scenario: 'Research suggests the average reaction time for adults is 250 milliseconds. You test 30 college students and want to know if their reaction time differs from this value.',
+        title: 'Practice: One-sample t-test with BMI data',
+        scenario: 'Using bmi_and_exercise.csv, test whether mean BMI differs from a hypothesized value (e.g. 25).',
         data: {
-          description: 'Reaction time data for 30 students (in milliseconds)',
-          file: 'reaction_time.omv'
+          description: 'bmi_and_exercise.csv from Tools (column: bmi)',
+          file: 'bmi_and_exercise.csv'
         },
+        instructions: 'Keep bmi_and_exercise.csv open in jamovi.',
         steps: [
           {
-            instruction: 'Open Analyses → T-Tests → One Sample T-Test',
-            hint: 'Navigate through the menus to find the one-sample t-test',
-            checkpoint: 'The One Sample T-Test panel appears'
+            instruction: 'Confirm bmi is Continuous.',
+            hint: 'Click the bmi column header to check measure type.',
+            checkpoint: 'bmi is Continuous with many numeric rows.'
           },
           {
-            instruction: 'Move "reaction_time" to the Dependent Variables box',
-            hint: 'Drag the variable from the left into the Dependent Variables box',
-            checkpoint: 'reaction_time appears in the Dependent Variables box'
+            instruction: 'Open Analyses → T-Tests → One Sample T-Test.',
+            hint: 'Analyses tab → T-Tests icon.',
+            checkpoint: 'The One Sample T-Test panel appears.'
           },
           {
-            instruction: 'Under "Tests", set the Test value to 250',
-            hint: 'This is the population value we\'re testing against (250 ms)',
-            checkpoint: 'The Test value shows 250'
+            instruction: 'Move bmi to Dependent Variables.',
+            hint: 'Drag bmi from the left list.',
+            checkpoint: 'bmi appears in Dependent Variables.'
           },
           {
-            instruction: 'Under "Hypothesis", check that it\'s set to "≠ Test value"',
-            hint: 'This creates a two-sided test',
-            checkpoint: 'The hypothesis is two-sided'
+            instruction: 'Set Test value to 25 (or your instructor\'s value). Keep ≠ Test value (two-sided).',
+            hint: 'Hypothesis / Tests section in the panel.',
+            checkpoint: 'Test value is set; results update.'
           },
           {
-            instruction: 'Under "Additional Statistics", check "Mean difference" and "Effect size"',
-            hint: 'These give us the actual difference and Cohen\'s d',
-            checkpoint: 'Results include mean difference and Cohen\'s d'
-          },
-          {
-            instruction: 'Under "Assumption Checks", check "Normality test"',
-            hint: 'This runs a Shapiro-Wilk test to check if data is normally distributed',
-            checkpoint: 'A normality test table appears in the results'
+            instruction: 'Optional: check Effect size and Normality under Assumption Checks. Read t, df, p and decide at α = .05.',
+            hint: 'Compare p to .05.',
+            checkpoint: 'You can state reject or fail to reject H₀ from the jamovi output.'
           }
         ],
         assessment: {
           type: 'multiple_choice',
-          question: 'The results show: Mean = 243.6, t(29) = -1.892, p = 0.069. What should we conclude?',
+          question: 'If jamovi shows p = 0.069 for mean BMI vs test value 25 at α = .05, what is the correct decision?',
           options: [
-            'College students have significantly faster reaction times than the general population',
-            'We do not have sufficient evidence to conclude college students differ in reaction time',
-            'College students have significantly slower reaction times',
-            'The test is invalid because p > 0.05'
+            'Reject H₀ — mean BMI differs from 25',
+            'Fail to reject H₀ — not enough evidence that mean BMI differs from 25',
+            'The test is invalid because BMI is continuous',
+            'Accept H₀ as proven true'
           ],
           correctAnswer: 1,
           feedback: {
-            correct: 'Correct! With p = 0.069 > 0.05, we fail to reject the null hypothesis. While the sample mean (243.6) is lower than 250, this difference is not statistically significant at the α = 0.05 level.',
-            incorrect: 'Since p = 0.069 > 0.05, we fail to reject the null hypothesis. The difference between 243.6 and 250 ms could easily be due to chance.'
+            correct: 'Correct — p > .05 means fail to reject H₀.',
+            incorrect: 'When p > α, fail to reject H₀. That is not proof the mean equals 25.'
           }
         }
       },
       youDo: {
         type: 'independent_practice',
-        title: 'Your Turn: Testing Body Temperature',
-        scenario: 'The traditional "normal" body temperature is 98.6°F (37°C). However, recent studies suggest this might be outdated. You measure the body temperature of 40 healthy adults. Test if the average differs from 98.6°F.',
-        task: 'Conduct a one-sample t-test to determine if the sample mean body temperature differs significantly from 98.6°F.',
+        title: 'Apply: One-sample t-test with BMI',
+        scenario: 'Record yourself testing mean BMI against a hypothesized value in jamovi.',
+        task: 'Using bmi_and_exercise.csv, run One Sample T-Test on bmi with Test value 25 (or your instructor\'s value). State H₀, mean, t, p, and your decision.',
         data: {
-          description: 'Body temperature data for 40 adults (in °F)',
-          file: 'body_temp.omv',
-          variables: ['subject_id', 'temperature']
+          description: 'bmi_and_exercise.csv — bmi (Continuous)',
+          file: 'bmi_and_exercise.csv',
+          variables: ['bmi']
         },
-        assessment: [
-          {
-            type: 'multiple_choice',
-            question: 'The output shows: Mean = 98.25°F, t(39) = -2.703, p = 0.010. What is the correct interpretation?',
-            options: [
-              'We fail to reject the null hypothesis; no evidence of a difference',
-              'We reject the null hypothesis; the sample mean is significantly lower than 98.6°F',
-              'The test is inconclusive',
-              'The p-value indicates the probability that the null hypothesis is true'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Correct! Since p = 0.010 < 0.05, we reject H₀. The sample mean (98.25°F) is significantly lower than the traditional value of 98.6°F.',
-              incorrect: 'With p = 0.010 < 0.05, we reject the null hypothesis. The negative t-value and low p-value indicate the sample mean is significantly lower than 98.6°F.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'The output shows Cohen\'s d = 0.428. How would you interpret this effect size?',
-            options: [
-              'Small effect - the difference is not practically important',
-              'Medium effect - the difference is moderate and meaningful',
-              'Large effect - the difference is very substantial',
-              'Effect size cannot be interpreted without more context'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Correct! Cohen\'s d = 0.428 is considered a small-to-medium effect. While statistically significant, the practical importance is moderate (about 0.35°F difference).',
-              incorrect: 'Cohen\'s d guidelines: small ≈ 0.2, medium ≈ 0.5, large ≈ 0.8. A value of 0.428 falls in the small-to-medium range.'
-            }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'If the Shapiro-Wilk normality test shows p = 0.156, what does this tell us?',
-            options: [
-              'The data is definitely normally distributed',
-              'We do not have evidence that the data deviates from normality; t-test is appropriate',
-              'The data is not normal; we cannot use the t-test',
-              'We need a larger sample size'
-            ],
-            correctAnswer: 1,
-            feedback: {
-              correct: 'Correct! For the Shapiro-Wilk test, p > 0.05 means we don\'t reject the normality assumption. The data appears consistent with normality, so the t-test is appropriate.',
-              incorrect: 'For normality tests, p > 0.05 is good news - it means we don\'t have evidence of non-normality. With p = 0.156, we can proceed with the t-test.'
-            }
-          },
-          {
-            type: 'fill_blank',
-            question: 'In APA style, we would report this result as: t(____) = -2.703, p = .010',
-            answer: ['39'],
-            caseSensitive: false,
-            feedback: {
-              correct: 'Correct! The degrees of freedom for a one-sample t-test is n - 1. With 40 subjects, df = 40 - 1 = 39.',
-              incorrect: 'Degrees of freedom = n - 1. With 40 subjects: df = 40 - 1 = 39'
-            }
-          }
-        ]
+        instructions: 'Record with Tools (or your phone). Open bmi_and_exercise.csv, run Analyses → T-Tests → One Sample T-Test on bmi, talk through the output, then upload the video to Canvas Module 7: Software Practice.',
+        summary: 'Apply = You do recording with the real BMI dataset from Tools.'
       }
     }
   },
@@ -1021,7 +624,7 @@ export const softwareLessons = [
         content: [
           {
             type: 'text',
-            content: '<h3>What is a P-Value?</h3><p>The p-value is one of the most important (and misunderstood) concepts in statistics. Let\'s clarify what it actually means.</p>'
+            content: '<h3>What is a P-Value?</h3><p>The p-value is one of the most important (and misunderstood) concepts in statistics. Let\'s clarify what it actually means. When you practice in jamovi, use the same class files from <strong>Tools</strong> (<strong>personality_data.csv</strong>, <strong>bmi_and_exercise.csv</strong>) so your p-values come from real analyses, not made-up numbers.</p>'
           },
           {
             type: 'text',

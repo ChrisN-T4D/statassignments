@@ -13,23 +13,45 @@
             {{ opt.id }}. {{ opt.text }}
           </li>
         </ul>
-        <p v-for="(line, i) in extraLines(q)" :key="i" class="q-extra">{{ line }}</p>
-        <p class="q-blank">Answer: ____________________________</p>
+        <template v-if="q.type === 'matching'">
+          <ul class="q-match-blanks">
+            <li v-for="(line, i) in matchingParts(q)?.blanks || []" :key="'b-' + i">{{ line }}</li>
+          </ul>
+          <p class="q-match-bank-label">Descriptions (write the letter next to each term; use each once):</p>
+          <ul class="q-match-bank">
+            <li v-for="(line, i) in matchingParts(q)?.bank || []" :key="'k-' + i">{{ line }}</li>
+          </ul>
+        </template>
+        <p v-for="(line, i) in nonMatchingExtra(q)" :key="i" class="q-extra">{{ line }}</p>
+        <p v-if="showAnswerBlank(q)" class="q-blank">Answer: ____________________________</p>
       </li>
     </ol>
   </div>
 </template>
 
 <script setup>
-import { questionPromptLines } from '../lib/conceptReviewScoring.js'
+import {
+  matchingPrintParts,
+  questionPromptLines,
+  usesWrittenAnswerBlank
+} from '../lib/conceptReviewScoring.js'
 
 defineProps({
   questions: { type: Array, default: () => [] },
   moduleLabel: { type: String, default: '' }
 })
 
-function extraLines(q) {
+function matchingParts(q) {
+  return matchingPrintParts(q)
+}
+
+function nonMatchingExtra(q) {
+  if (q?.type === 'matching') return []
   return questionPromptLines(q)
+}
+
+function showAnswerBlank(q) {
+  return usesWrittenAnswerBlank(q)
 }
 </script>
 
@@ -52,9 +74,20 @@ function extraLines(q) {
   margin-bottom: 1.25rem;
   break-inside: avoid;
 }
-.q-options {
+.q-options,
+.q-match-blanks,
+.q-match-bank {
   list-style: none;
   padding-left: 0;
+  margin: 0.35rem 0;
+}
+.q-match-blanks li,
+.q-match-bank li {
+  margin: 0.2rem 0;
+}
+.q-match-bank-label {
+  margin: 0.5rem 0 0.15rem;
+  font-weight: 600;
 }
 .q-blank {
   margin-top: 0.35rem;

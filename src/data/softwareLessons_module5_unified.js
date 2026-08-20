@@ -29,6 +29,11 @@ export const module5UnifiedLessons = [
             estimatedTime: 20,
             content: [
               {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Dataset:</strong> Download <strong>bmi_and_exercise.csv</strong> from the Methods Market <strong>Tools</strong> bar (right side), then ☰ → Open in jamovi. For this section use continuous column <strong>bmi</strong> (lowercase).'
+              },
+              {
                 type: 'text',
                 content: 'Histograms show the distribution of a continuous variable. They help you see the shape, center, and spread of your data at a glance.'
               },
@@ -38,13 +43,13 @@ export const module5UnifiedLessons = [
                   {
                     step: 1,
                     title: 'Go to Exploration',
-                    description: 'Navigate to Analyses → Exploration → Descriptives',
+                    description: 'With bmi_and_exercise.csv open, navigate to Analyses → Exploration → Descriptives',
                     image: '/images/lessons/jamovi/jamovi-exploration-menu.png'
                   },
                   {
                     step: 2,
                     title: 'Add your variable',
-                    description: 'Drag your continuous variable to the Variables box',
+                    description: 'Drag <strong>bmi</strong> to the Variables box',
                     image: '/images/lessons/jamovi/jamovi-histogram-variable.png'
                   },
                   {
@@ -74,7 +79,7 @@ export const module5UnifiedLessons = [
             content: [
               {
                 type: 'text',
-                content: 'Filters let you analyze subsets of your data without deleting any rows. When a filter is active, only cases that meet your criteria are included in analyses. This section uses <strong>personality data</strong> (e.g. a dataset with variables like Extraversion, Agreeableness, Neuroticism on a 1–5 or 1–7 scale).'
+                content: 'Filters let you analyze subsets of your data without deleting any rows. When a filter is active, only cases that meet your criteria are included in analyses. <strong>Dataset:</strong> Tools → download <strong>personality_data.csv</strong> → ☰ → Open. Use a scale column such as <strong>extraversion</strong> (confirm Continuous).'
               },
               {
                 type: 'step_sequence',
@@ -82,7 +87,7 @@ export const module5UnifiedLessons = [
                   {
                     step: 1,
                     title: 'Open Filters',
-                    description: 'Go to <strong>Data</strong> tab → <strong>Filters</strong> button. Have your personality dataset open (with at least one numeric variable such as Extraversion).',
+                    description: 'Go to <strong>Data</strong> tab → <strong>Filters</strong> button. Have <strong>personality_data.csv</strong> open from Tools (with at least one numeric variable such as extraversion).',
                     image: '/images/lessons/jamovi/jamovi-open-filters.png'
                   },
                   {
@@ -140,7 +145,7 @@ export const module5UnifiedLessons = [
             content: [
               {
                 type: 'text',
-                content: 'With your <strong>personality data</strong> open (Extraversion, Agreeableness, etc.), use Jamovi\'s <strong>Transform</strong> tool to create new variables: recode continuous scores into categories (e.g. High/Low Extraversion), rescale or center variables, and apply transformation rules. The Transform tool keeps your source variable unchanged and adds a new transformed column.'
+                content: 'With <strong>personality_data.csv</strong> open from Tools (columns such as <strong>extraversion</strong>, <strong>agreeableness</strong>), use Jamovi\'s <strong>Transform</strong> tool to create new variables: recode continuous scores into categories (e.g. High/Low), rescale or center variables, and apply transformation rules. The Transform tool keeps your source variable unchanged and adds a new transformed column.'
               },
               {
                 type: 'step_sequence',
@@ -148,13 +153,13 @@ export const module5UnifiedLessons = [
                   {
                     step: 1,
                     title: 'Select the variable to transform',
-                    description: 'Choose <strong>Extraversion</strong> as the source variable (the one you want to transform or recode). In the transform dialog you’ll select it from the variable list; or right‑click the Extraversion column and choose Transform so it’s already selected.',
+                    description: 'Choose <strong>extraversion</strong> as the source variable (match casing in the Tools file). In the transform dialog you’ll select it from the variable list; or right‑click the extraversion column and choose Transform so it’s already selected.',
                     image: '/images/lessons/jamovi/jamovi-transform-button.png'
                   },
                   {
                     step: 2,
                     title: 'Open Transform',
-                    description: 'Go to the <strong>Data</strong> tab and click the <strong>Transform</strong> button (or right‑click the Extraversion column and select Transform). Have your personality dataset open.',
+                    description: 'Go to the <strong>Data</strong> tab and click the <strong>Transform</strong> button (or right‑click the extraversion column and select Transform). Have <strong>personality_data.csv</strong> open from Tools.',
                     image: '/images/lessons/jamovi/jamovi-transform-button.png'
                   },
                   {
@@ -203,32 +208,32 @@ export const module5UnifiedLessons = [
       weDo: {
         type: 'guided_practice',
         title: "Let's Practice: Histograms, Filtering, and Transforming",
-        instructions: 'Follow along in Jamovi. First create a histogram, then practice filters, then transform/recode variables.',
+        instructions: 'Follow along in Jamovi. Use Tools → download <strong>personality_data.csv</strong> (and <strong>bmi_and_exercise.csv</strong> for the histogram if you prefer bmi). Open with ☰ → Open.',
         steps: [
           {
-            instruction: 'Open your personality dataset (Extraversion, Agreeableness, etc.). If needed, create a small dataset: column Extraversion with values 1–5 (e.g. 3, 4, 5, 2, 4, 3, 5) and Agreeableness with values 1–5. Set both to Continuous.',
-            hint: 'You need at least Extraversion and optionally Agreeableness for this practice.',
-            checkpoint: 'You should have personality data (Extraversion and optionally Agreeableness) in the spreadsheet.'
+            instruction: 'From Tools, download personality_data.csv and open it in jamovi (☰ → Open). Confirm columns such as extraversion; set Continuous if needed. (For the histogram you may instead open bmi_and_exercise.csv and use bmi.)',
+            hint: 'Tools is on the right in Software Practice. Match exact column casing.',
+            checkpoint: 'A Tools CSV is open in jamovi with continuous columns visible.'
           },
           {
-            instruction: 'Go to Analyses → Exploration → Descriptives, drag Extraversion to Variables, then expand Plots and check Histogram.',
+            instruction: 'Go to Analyses → Exploration → Descriptives, drag extraversion (or bmi) to Variables, then expand Plots and check Histogram.',
             hint: 'Click the Analyses tab, then the Exploration icon.',
-            checkpoint: 'A histogram of Extraversion should appear in the Results panel.'
+            checkpoint: 'A histogram should appear in the Results panel.'
           },
           {
-            instruction: 'Create a filter named High_Extraversion. In the expression box, type: Extraversion >= 4. Toggle the filter on and note how many cases match.',
+            instruction: 'With personality_data.csv open, create a filter named High_Extraversion. Expression: extraversion >= 4 (match casing). Toggle the filter on and note how many cases match.',
             hint: 'Data tab → Filters → New Filter. Use >= for "greater than or equal to".',
-            checkpoint: 'With Extraversion >= 4, you should see only rows where Extraversion is 4 or 5; other rows appear faded.'
+            checkpoint: 'Only matching rows are included; other rows appear faded.'
           },
           {
-            instruction: 'Use Data → Transform. Create a transformed variable Extraversion_category from Extraversion: add a Recode Condition so Extraversion ≥ 4 → "High", else → "Low". Set the new variable\'s measure to Nominal.',
-            hint: 'In the Transform editor, select Extraversion, add Recode Condition, and define the threshold.',
-            checkpoint: 'You should see a new column with High or Low for each person\'s Extraversion.'
+            instruction: 'Use Data → Transform. Create Extraversion_category from extraversion: Recode Condition so extraversion ≥ 4 → "High", else → "Low". Set measure to Nominal.',
+            hint: 'In the Transform editor, select extraversion, add Recode Condition, and define the threshold.',
+            checkpoint: 'You should see a new column with High or Low.'
           },
           {
-            instruction: 'Use Transform again: create Extraversion_centered from Extraversion using a rescale/center rule (Extraversion − mean of Extraversion). Check with Descriptives that the new column sums to zero.',
-            hint: 'Add a transformation rule that centers Extraversion (e.g. Extraversion - mean of Extraversion).',
-            checkpoint: 'The Extraversion_centered column should have positive and negative values that sum to zero.'
+            instruction: 'Use Transform again: create Extraversion_centered from extraversion (center around the mean). Check with Descriptives that the new column sums near zero.',
+            hint: 'Add a transformation rule that centers extraversion.',
+            checkpoint: 'The centered column has positive and negative values that sum near zero.'
           }
         ]
       },

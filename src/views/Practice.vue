@@ -63,6 +63,15 @@
                 {{ opt.text }}
               </label>
             </template>
+            <template v-else-if="q.type === 'matching'">
+              <div v-for="(pair, pi) in q.pairs" :key="pi" class="batch-match-row">
+                <span class="batch-match-left">{{ pair.left }}</span>
+                <select v-model="batchMatch[q.id][pair.left]" class="batch-match-select">
+                  <option value="">Select match...</option>
+                  <option v-for="(p, oi) in q.pairs" :key="oi" :value="p.right">{{ p.right }}</option>
+                </select>
+              </div>
+            </template>
             <template v-else>
               <input type="text" v-model="batchAnswers[q.id]" class="batch-text" />
             </template>
@@ -464,6 +473,7 @@ const showPrintPacket = ref(false)
 const batchMode = ref(false)
 const batchAnswers = ref({})
 const batchMulti = ref({})
+const batchMatch = ref({})
 const batchResults = ref([])
 const slipVisible = ref(false)
 const slipCorrect = ref(null)
@@ -510,10 +520,15 @@ function startBatchEntry() {
   batchResults.value = []
   slipVisible.value = false
   const multi = {}
+  const match = {}
   for (const q of moduleQuestions.value) {
     if (q.type === 'multiple_select') multi[q.id] = []
+    if (q.type === 'matching') {
+      match[q.id] = Object.fromEntries((q.pairs || []).map((p) => [p.left, '']))
+    }
   }
   batchMulti.value = multi
+  batchMatch.value = match
 }
 
 function showFrozenSlip(saved) {
@@ -548,7 +563,14 @@ function submitBatch() {
   let correctCount = 0
   const answeredIds = []
   for (const q of moduleQuestions.value) {
-    const answer = q.type === 'multiple_select' ? (batchMulti.value[q.id] || []) : batchAnswers.value[q.id]
+    let answer
+    if (q.type === 'multiple_select') {
+      answer = batchMulti.value[q.id] || []
+    } else if (q.type === 'matching') {
+      answer = batchMatch.value[q.id] || {}
+    } else {
+      answer = batchAnswers.value[q.id]
+    }
     const scored = scoreConceptAnswer(
       q,
       q.type === 'true_false' ? (answer === 'true' || answer === true) : answer
@@ -1526,6 +1548,20 @@ watch(currentProblem, async (problem) => {
 .batch-text {
   width: 100%;
   padding: 0.5rem;
+}
+.batch-match-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.4rem 0;
+}
+.batch-match-left {
+  min-width: 6rem;
+  font-weight: 600;
+}
+.batch-match-select {
+  flex: 1;
+  padding: 0.4rem 0.5rem;
 }
 .batch-result.ok {
   border-left: 4px solid #059669;

@@ -237,6 +237,11 @@ export const module3UnifiedLessons = [
                 content: '<h3>☰ The Hamburger Menu</h3><p>In the top-left corner, the three horizontal lines (☰) open the main menu for file operations:</p><ul><li><strong>New:</strong> Start a new blank data file</li><li><strong>Open:</strong> Load existing Jamovi (.omv) files, CSV, Excel, SPSS data</li><li><strong>Special import:</strong> Import from SPSS, SAS, Stata, or other formats with custom options</li><li><strong>Save/Save As:</strong> Save your work as a .omv file (includes data + analyses)</li><li><strong>Export:</strong> Export results to PDF, HTML, or data to CSV/Excel</li></ul>'
               },
               {
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Where are the class datasets?</strong> In Methods Market, open the <strong>Tools</strong> panel on the right side of Software Practice. Download <strong>bmi_and_exercise.csv</strong> or <strong>personality_data.csv</strong>, then in jamovi use <strong>☰ → Open</strong> to load the CSV. You will use these same files in later modules — remember Tools.'
+              },
+              {
                 type: 'annotated_image',
                 image: '/images/lessons/jamovi/jamovi-hamburger-menu.png',
                 alt: 'Jamovi hamburger menu open with New, Open, Save, Special import, Export options',
@@ -343,13 +348,18 @@ export const module3UnifiedLessons = [
       weDo: {
         type: 'guided_practice',
         title: 'Guided Practice: Jamovi Fundamentals',
-        instructions: 'Follow along with these step-by-step exercises to practice what you\'ve learned. Each step has an instruction, a hint if you get stuck, and a checkpoint so you know when you\'ve done it correctly.',
+        instructions: 'Follow along with these step-by-step exercises. Class CSVs are in the Methods Market <strong>Tools</strong> bar (right side) — download them there, then open in jamovi with ☰ → Open.',
         steps: [
           // From Installation lesson
           {
             instruction: 'Launch Jamovi on your device. Use the method that matches your operating system: on Windows open the Start menu and search for Jamovi; on Mac open Applications and find Jamovi; on Chromebook open the app launcher and look in the Linux apps folder (or open Terminal and run: flatpak run org.jamovi.jamovi).',
             hint: 'If you haven\'t installed Jamovi yet, go back to the Learn section and follow the "Installing Jamovi on Your Device" steps first. Once launched, the main window should show a blank grid with columns labeled A, B, C.',
             checkpoint: 'You have successfully opened Jamovi. You should see a blank spreadsheet with empty columns (A, B, C, …) and no data. The window title may say "jamovi" or "Untitled".'
+          },
+          {
+            instruction: 'In Methods Market, open the Tools panel (right side). Download personality_data.csv (or bmi_and_exercise.csv). In jamovi, use ☰ → Open and select that CSV so the data grid fills with real class data.',
+            hint: 'Tools is the drawer/button on the right in Software Practice — not inside jamovi. After download, jamovi ☰ → Open → choose the .csv file.',
+            checkpoint: 'You see columns such as gender / extraversion (personality) or bmi / exercise_per_week (BMI file) in the jamovi grid.'
           },
           {
             instruction: 'Find the hamburger menu (☰) in Jamovi. It is the icon with three horizontal lines, usually in the top-left corner of the window. This menu gives you access to New, Open, Special import, Save, and Export. Click it once to confirm it opens a dropdown menu.',

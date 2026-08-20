@@ -1479,22 +1479,22 @@ export const statisticsExercises = [
     title: 'Run a Binomial Test (Proportion Test)',
     phase: 'learn',
     description: 'Test if an observed proportion differs from a hypothesized value',
-    instructions: 'You have data on 100 coin flips with 62 heads. Test if this differs significantly from the expected 50% using a binomial test (Proportion Test in Jamovi).',
+    instructions: 'Open personality_data.csv (Tools). Test whether gender proportions differ from 0.5 using Frequencies → 2 Outcomes (Binomial test) in Jamovi.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Go to Analyses > Frequencies > Proportion Test (2 Outcomes). Set the test value to 0.5.',
+    hint: 'Go to Analyses > Frequencies > 2 Outcomes (Binomial test). Set the test value to 0.5.',
     expected_selections: [
-      { menu: 'analyses', option: 'frequencies', subOption: 'proportion_test' }
+      { menu: 'analyses', option: 'frequencies', subOption: '2_outcomes' }
     ],
     sample_data: {
-      columns: ['flip_id', 'outcome'],
+      columns: ['id', 'gender'],
       rows: [
-        { flip_id: 1, outcome: 'heads' },
-        { flip_id: 2, outcome: 'heads' },
-        { flip_id: 3, outcome: 'tails' }
+        { id: 1, gender: 'Female' },
+        { id: 2, gender: 'Male' },
+        { id: 3, gender: 'Female' }
       ]
     },
-    success_message: 'Correct! Analyses > Frequencies > Proportion Test. This tests if your observed proportion (62/100 = 0.62) differs significantly from the test value (0.5).',
+    success_message: 'Correct! Analyses > Frequencies > 2 Outcomes runs the binomial test on a two-level variable. Set the test value (often 0.5).',
     order: 5,
     is_active: true
   },
