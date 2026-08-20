@@ -47,28 +47,28 @@ export const module7UnifiedLessons = [
                     title: 'Open personality_data.csv and find the variables',
                     description:
                       'Tools → download <strong>personality_data.csv</strong> → jamovi <strong>☰ → Open</strong>. In the variable list you should see <strong>id</strong>, <strong>gender</strong>, <strong>age</strong>, <strong>ethnicity</strong>, and the Big Five scales (<strong>extraversion</strong>, <strong>agreeableness</strong>, and so on).',
-                    image: '/lessons/hypothesis-testing/jamovi/personality-variables.png'
+                    image: '/images/lessons/jamovi/personality-variables.png'
                   },
                   {
                     step: 2,
                     title: 'Set gender to Nominal',
                     description:
                       'Open variable setup for <strong>gender</strong> (click the column header / Setup). Set <strong>Measure type</strong> to <strong>Nominal</strong> and <strong>Data type</strong> to <strong>Text</strong>. Levels should show <strong>Female</strong> and <strong>Male</strong>.',
-                    image: '/lessons/hypothesis-testing/jamovi/gender-nominal-setup.png'
+                    image: '/images/lessons/jamovi/gender-nominal-setup.png'
                   },
                   {
                     step: 3,
                     title: 'Open Frequencies → 2 Outcomes',
                     description:
                       'Go to <strong>Analyses → Frequencies</strong>. Under One Sample Proportion Tests, choose <strong>2 Outcomes (Binomial test)</strong>. The analysis panel is titled <strong>Proportion Test (2 Outcomes)</strong>.',
-                    image: '/lessons/hypothesis-testing/jamovi/frequencies-2outcomes-menu.png'
+                    image: '/images/lessons/jamovi/frequencies-2outcomes-menu.png'
                   },
                   {
                     step: 4,
                     title: 'Move gender and set Test value',
                     description:
                       'Move <strong>gender</strong> into the Variable box. Leave <strong>Values are counts</strong> unchecked. Set <strong>Test value</strong> to <strong>0.5</strong>. Keep <strong>≠ Test value</strong> (two-sided). Optional: check <strong>Confidence intervals</strong> (95%).',
-                    image: '/lessons/hypothesis-testing/jamovi/binomial-setup.png'
+                    image: '/images/lessons/jamovi/binomial-setup.png'
                   },
                   {
                     step: 5,
@@ -120,14 +120,14 @@ export const module7UnifiedLessons = [
                     title: 'Open One Sample T-Test',
                     description:
                       'Go to <strong>Analyses → T-Tests</strong> and choose <strong>One Sample T-Test</strong>.',
-                    image: '/lessons/hypothesis-testing/jamovi/t-tests-one-sample-menu.png'
+                    image: '/images/lessons/jamovi/t-tests-one-sample-menu.png'
                   },
                   {
                     step: 3,
                     title: 'Move bmi and set Test value to 25',
                     description:
                       'Move <strong>bmi</strong> to <strong>Dependent Variables</strong>. Under Hypothesis, set <strong>Test value</strong> to <strong>25</strong> and keep <strong>≠ Test value</strong> (two-sided). Leave Student\'s test checked.',
-                    image: '/lessons/hypothesis-testing/jamovi/t-test-setup.png'
+                    image: '/images/lessons/jamovi/t-test-setup.png'
                   },
                   {
                     step: 4,
