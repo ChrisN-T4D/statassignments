@@ -39,3 +39,4 @@ Thumbs.db
 # Cursor->Ollama build handoff (machine-local)
 .ollama-handoff/
 .aider*
+.worktrees/
