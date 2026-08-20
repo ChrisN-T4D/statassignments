@@ -303,35 +303,38 @@ export const module7UnifiedLessons = [
           {
             id: 'm7-interpret-binomial',
             question:
-              'Look at this <strong>Proportion Test (2 Outcomes)</strong> setup: <strong>gender</strong> is in the Variable box and Test value is <strong>0.5</strong>. Suppose the Binomial Test results show a sample proportion near 0.52 and <strong>p = 0.48</strong>. At α = .05: (1) State H₀ in plain language. (2) Do you reject or fail to reject H₀? Does that decision prove the population is exactly 50/50? Why or why not?',
-            image: '/images/lessons/jamovi/binomial-setup.png',
+              'Look at this <strong>Binomial Test</strong> output for <strong>gender</strong> (Test value 0.5). (1) What is the sample proportion Female, and is it above or below 0.5? (2) At α = .05, do you reject or fail to reject H₀: the population proportion equals 0.5? (3) In one sentence, what does <strong>p &lt; .001</strong> mean under H₀ (not “probability H₀ is true”)?',
+            image: '/images/lessons/jamovi/jamovi-binomial-results.png',
             placeholder:
-              'e.g. H₀ says the population proportion for a gender level is 0.5. With p = 0.48 I fail to reject; that is not proof the population is exactly 50/50...',
-            hint: 'Compare p to .05. Fail to reject ≠ prove H₀ is true.',
+              'e.g. Female proportion is 0.586 (above 0.5). Reject H₀. p < .001 means data this extreme would be very unlikely if the true proportion were 0.5...',
+            hint: 'Read the Proportion and p columns. Decision: compare p to .05. Remember what p means assuming H₀.',
             requiredKeywords: [
-              '0.5', 'proportion', 'h0', 'h₀', 'null', 'population',
-              'fail', 'reject', '0.48', '.48', 'p = 0.48', 'p=0.48',
-              'prove', 'not prove', 'does not prove', 'evidence', 'insufficient', 'not true'
+              '0.586', '.586', '0.58', 'female', 'above', 'greater', 'higher', 'more than',
+              'reject', '.001', '0.001', 'p < .001', 'p<.001',
+              '0.5', 'proportion', 'h0', 'h₀', 'null',
+              'unlikely', 'assuming', 'if', 'true', 'under', 'extreme', 'probability'
             ],
-            minRequiredKeywords: 4,
+            minRequiredKeywords: 5,
             feedback:
-              'H₀: the population proportion for a gender level equals 0.5. With p = 0.48 (greater than .05), fail to reject H₀. That means insufficient evidence against H₀ - it does not prove the population is exactly 50/50.'
+              'Female proportion = 0.586 (above 0.5; Male = 0.414). Reject H₀ at α = .05 because p < .001. That p-value means: if the population proportion really were 0.5, results this extreme (or more) would be very unlikely - it is not the probability that H₀ is true.'
           },
           {
             id: 'm7-interpret-ttest',
             question:
-              'Look at this <strong>One Sample T-Test</strong> setup for <strong>bmi</strong> with Test value <strong>25</strong>. Suppose Results show <strong>t = 2.10</strong>, <strong>df = 249</strong>, mean ≈ 29.8, and <strong>p = 0.037</strong>. At α = .05: (1) Do you reject or fail to reject H₀: μ = 25? (2) Name two numbers from this output (besides p) you would report in a write-up.',
-            image: '/images/lessons/jamovi/t-test-setup.png',
+              'Look at this <strong>One Sample T-Test</strong> output for <strong>age</strong> with Test value <strong>0</strong>. (1) Report the t statistic and df. (2) At α = .05, do you reject or fail to reject H₀: μ = 0? (3) What does the note “Hₐ is μ ≠ 0” tell you about the alternative hypothesis?',
+            image: '/images/lessons/jamovi/jamovi-onesample-ttest-results.png',
             placeholder:
-              'e.g. Reject H₀ because p = 0.037 < .05. I would report t = 2.10 and df = 249 (or the mean)...',
-            hint: 'Decision uses p vs .05. Typical write-ups include t and df (and often the mean or Cohen\'s d).',
+              'e.g. t = 148, df = 733. Reject H₀. The note means the alternative is two-sided (mean not equal to 0)...',
+            hint: 'Read the Student\'s t row. Decision uses p vs .05. The Hₐ note matches ≠ Test value.',
             requiredKeywords: [
-              'reject', '0.037', '.037', 'p = 0.037', 'p=0.037',
-              't', '2.10', '2.1', 'df', '249', 'mean', '29.8', 'cohen', 'd', '25'
+              '148', 't', '733', 'df',
+              'reject', '.001', '0.001', 'p < .001', 'p<.001',
+              '0', 'mean', 'mu', 'μ', 'h0', 'h₀', 'null',
+              'not equal', '≠', 'two', 'two-sided', 'two sided', 'alternative', 'ha', 'hₐ', 'h_a'
             ],
-            minRequiredKeywords: 4,
+            minRequiredKeywords: 5,
             feedback:
-              'Reject H₀ (p = 0.037 < .05): there is evidence the mean BMI differs from 25. Report t (e.g. 2.10) and df (249); the sample mean (and Cohen\'s d, if requested) are also useful.'
+              't = 148, df = 733. Reject H₀ at α = .05 (p < .001): mean age differs from 0. The note means the alternative hypothesis is two-sided (μ ≠ 0), matching ≠ Test value in the setup.'
           }
         ]
       },
@@ -340,9 +343,9 @@ export const module7UnifiedLessons = [
         type: 'independent_practice',
         title: 'Apply Your Skills',
         summary:
-          'Record yourself completing Module 7 Software Practice in jamovi: binomial (2 Outcomes) on gender from personality_data.csv, one-sample t-test on bmi from bmi_and_exercise.csv, and clear p-value decisions. Talk through menus and output, then upload to Canvas.',
+          'Record yourself completing Module 7 Software Practice in jamovi on <strong>different</strong> variables/files than Learn and Practice: (1) binomial / 2 Outcomes on a <strong>two-level variable you create</strong> from <strong>bmi_and_exercise.csv</strong> (e.g. Transform bmi into under 25 vs 25+), not gender from personality_data.csv; (2) one-sample t-test on <strong>age</strong> (or a Big Five scale) from <strong>personality_data.csv</strong>, not bmi. Talk through menus, output, and p-value decisions, then upload to Canvas.',
         instructions:
-          'Start recording (Tools or your phone). Open class CSVs from the Tools bar, complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 7: Software Practice. Mark each exercise complete when finished.'
+          'Start recording (Tools or your phone). Use the Apply datasets above (bmi_and_exercise.csv for the binomial; personality_data.csv for the t-test). Complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 7: Software Practice. Mark each exercise complete when finished.'
       }
     }
   }

@@ -272,17 +272,19 @@ export const module6UnifiedLessons = [
           {
             id: 'm6-interpret-z-ci',
             question:
-              'In a short answer: (1) What does a z-score of 2 mean for an IQ-style score with mean 100 and SD 15? (2) If a 95% CI for a mean gets narrower when you add more data, what does that say about precision?',
+              'Look at this jamovi <strong>Normal Distribution</strong> calculator output (Mean = 100, SD = 15). (1) What probability is being computed (in words: between which scores)? (2) What is that probability from the Results table? (3) In one sentence, what does the shaded region on the plot represent?',
+            image: '/images/lessons/jamovi/jamovi-normal-probability-results.png',
             placeholder:
-              'e.g. z = 2 means two SDs above the mean (IQ 130); a narrower CI means a more precise estimate of the mean...',
-            hint: 'Tie z to “number of SDs from the mean,” and CI width to precision / sample size.',
+              'e.g. Probability between 85 and 120; 0.750; the shaded area is that probability under the normal curve...',
+            hint: 'Read x1, x2, and the Probability row. Tie the shaded “P (Area)” to that result.',
             requiredKeywords: [
-              '2', 'two', 'standard deviation', 'sd', 'above', 'mean',
-              '130', 'narrow', 'narrower', 'precise', 'precision', 'sample', 'larger', 'more data', 'n'
+              '85', '120', 'between', 'from', 'to',
+              '0.750', '0.75', '.750', '.75', '75%', 'probability',
+              'shaded', 'area', 'curve', 'under', 'plot', 'region', 'normal'
             ],
             minRequiredKeywords: 4,
             feedback:
-              'A z of 2 means two standard deviations above the mean (for IQ: 100 + 2×15 = 130). A narrower CI with more data usually means a more precise estimate of the population mean.'
+              'The calculator is finding P(85 ≤ X ≤ 120) for a Normal(100, 15) distribution. The Results table shows probability 0.750. The shaded region under the curve is that probability (area between 85 and 120).'
           }
         ]
       },
@@ -290,9 +292,9 @@ export const module6UnifiedLessons = [
         type: 'independent_practice',
         title: 'Apply Your Skills',
         summary:
-          'Record yourself completing the Module 6 Software Practice tasks in jamovi using Tools datasets (bmi_and_exercise.csv and/or personality_data.csv): z-scores, confidence intervals in Descriptives, and the Module 6 Apply exercises listed below. Talk through what you click and what the output means.',
+          'Record yourself completing the Module 6 Software Practice tasks in jamovi. Use a <strong>different</strong> Tools file than Learn/Practice: open <strong>personality_data.csv</strong> (not bmi_and_exercise.csv). Run z-scores and a confidence interval for the mean on a continuous scale such as <strong>extraversion</strong> or <strong>age</strong>, then complete the Module 6 Apply exercises below.',
         instructions:
-          'Start recording (Tools or your phone), open a class CSV from the Tools bar, complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 6: Software Practice. Mark each exercise complete when finished.'
+          'Start recording (Tools or your phone). Open <strong>personality_data.csv</strong> from Tools, complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 6: Software Practice. Mark each exercise complete when finished.'
         // Exercises come from statisticsPractices.js (module-6, software jamovi)
       }
     }

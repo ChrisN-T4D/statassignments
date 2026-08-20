@@ -80,7 +80,7 @@ export const module5UnifiedLessons = [
               {
                 type: 'callout',
                 style: 'tip',
-                content: '<strong>Dataset:</strong> Tools → download <strong>personality_data.csv</strong> → ☰ → Open. Use a Continuous column such as <strong>extraversion</strong> (match casing — often lowercase).'
+                content: '<strong>Dataset:</strong> Tools → download <strong>personality_data.csv</strong> → ☰ → Open. Use a Continuous column such as <strong>extraversion</strong> (match casing - often lowercase).'
               },
               {
                 type: 'text',

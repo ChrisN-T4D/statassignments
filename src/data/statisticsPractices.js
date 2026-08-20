@@ -830,29 +830,30 @@ export const statisticsExercises = [
   },
 
   // ============ MODULE 5: Graphing and Visualization ============
-  // Apply uses the BMI dataset (Learn used personality).
+  // Apply prefers bmi_and_exercise.csv when Learn/Practice used personality (filters/transforms),
+  // and personality_data.csv when Learn used bmi for histograms.
   {
     module: 'module-5',
     topic: 'visualizations',
     practiceObjectiveKey: 'm5-histogram-menu',
     title: 'Create a Histogram',
-    description: 'Using bmi_and_exercise.csv from Tools, visualize the distribution of BMI',
-    instructions: 'Using bmi_and_exercise.csv from Tools, create a histogram for BMI. Find where to create plots in Jamovi (Exploration > Descriptives > Plots).',
+    description: 'Using personality_data.csv from Tools, visualize the distribution of extraversion',
+    instructions: 'Using <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv - that file was used in Learn for histograms), create a histogram for <strong>extraversion</strong>. Find where to create plots in Jamovi (Exploration > Descriptives > Plots).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Histograms can be created in Exploration > Descriptives under the "Plots" options. Add BMI to Variables and check Histogram.',
+    hint: 'Histograms can be created in Exploration > Descriptives under the "Plots" options. Add extraversion to Variables and check Histogram.',
     expected_selections: [
       { menu: 'analyses', option: 'exploration', subOption: 'descriptives' }
     ],
     sample_data: {
-      columns: ['ID', 'BMI'],
+      columns: ['ID', 'extraversion'],
       rows: [
-        { ID: 1, BMI: 22 },
-        { ID: 2, BMI: 28 },
-        { ID: 3, BMI: 21 }
+        { ID: 1, extraversion: 3.2 },
+        { ID: 2, extraversion: 4.1 },
+        { ID: 3, extraversion: 2.8 }
       ]
     },
-    success_message: 'Correct! In Descriptives, add BMI to Variables, expand "Plots" and check "Histogram".',
+    success_message: 'Correct! In Descriptives, add extraversion to Variables, expand "Plots" and check "Histogram".',
     order: 1,
     is_active: true
   },
@@ -911,11 +912,11 @@ export const statisticsExercises = [
     practiceObjectiveKey: 'm5-histogram-interpret',
     title: 'Create a Histogram and Interpret Shape',
     phase: 'practice',
-    description: 'Using bmi_and_exercise.csv from Tools, create a histogram for BMI and describe its shape',
-    instructions: 'Using bmi_and_exercise.csv from Tools, produce a histogram for BMI in Descriptives > Plots. Describe the shape: symmetric or skewed? Unimodal or bimodal? Note any obvious outliers.',
+    description: 'Using personality_data.csv from Tools, create a histogram for extraversion and describe its shape',
+    instructions: 'Using <strong>personality_data.csv</strong> from Tools, produce a histogram for <strong>extraversion</strong> in Descriptives > Plots. Describe the shape: symmetric or skewed? Unimodal or bimodal? Note any obvious outliers.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'In Descriptives, add BMI to Variables and under Plots check Histogram. Use the default bins.',
+    hint: 'In Descriptives, add extraversion to Variables and under Plots check Histogram. Use the default bins.',
     submission: 'Histogram screenshot and 2-3 sentences describing the distribution shape.',
     order: 4,
     is_active: true
@@ -997,19 +998,19 @@ export const statisticsExercises = [
     topic: 'data-manipulation',
     practiceObjectiveKey: 'm5-contingency-table-menu',
     title: 'Create a Contingency Table',
-    description: 'Using bmi_and_exercise.csv from Tools, cross-tabulate two categorical variables',
-    instructions: 'Using personality_data.csv from Tools, create a contingency table of gender by ethnicity (both Nominal). Use Frequencies > Contingency Tables. (bmi_and_exercise.csv has no categorical demographics.)',
+    description: 'Using bmi_and_exercise.csv from Tools, cross-tabulate two categories you create',
+    instructions: 'Using <strong>bmi_and_exercise.csv</strong> from Tools (not personality_data.csv - that file was used in Practice for filters/transforms), Transform/Compute two categorical variables (e.g. bmi under 25 vs 25+, and exercise_per_week Low vs High). Then create a contingency table of those two categories (Frequencies > Contingency Tables).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Frequencies > Contingency Tables > Independent Samples. Add one variable to Rows and one to Columns.',
+    hint: 'Frequencies > Contingency Tables > Independent Samples. Add one category to Rows and one to Columns.',
     expected_selections: [
       { menu: 'analyses', option: 'frequencies', subOption: 'contingency' }
     ],
     sample_data: {
-      columns: ['ID', 'Gender', 'BMI_category'],
+      columns: ['ID', 'bmi_cat', 'exercise_cat'],
       rows: [
-        { ID: 1, Gender: 'Male', BMI_category: 'Normal' },
-        { ID: 2, Gender: 'Female', BMI_category: 'Overweight' }
+        { ID: 1, bmi_cat: 'Under 25', exercise_cat: 'Low' },
+        { ID: 2, bmi_cat: '25+', exercise_cat: 'High' }
       ]
     },
     success_message: 'Correct! Frequencies > Contingency Tables creates a crosstab. Add row and column percentages under "Cells" options.',
@@ -1146,7 +1147,7 @@ export const statisticsExercises = [
     title: 'Contingency Table with Row and Column Percentages',
     phase: 'practice',
     description: 'Using bmi_and_exercise.csv from Tools, create a contingency table with row and column percentages',
-    instructions: 'Using personality_data.csv from Tools, create a contingency table of gender by ethnicity. Display it with row percentages, then with column percentages. Explain how the interpretation differs.',
+    instructions: 'Using <strong>bmi_and_exercise.csv</strong> from Tools, create two category variables (e.g. from bmi and exercise_per_week), then a contingency table with row percentages, then with column percentages. Explain how the interpretation differs.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'Frequencies > Contingency Tables. Under Cells options, request row percentages and column percentages.',
@@ -1177,7 +1178,7 @@ export const statisticsExercises = [
     practiceObjectiveKey: 'm6-normal-probabilities',
     title: 'Find Probabilities Using the Normal Distribution',
     description: 'Use Jamovi to find areas under the normal curve',
-    instructions: 'You need to find the probability of scoring above a certain z-score. Use Jamovi\'s distribution functions.',
+    instructions: 'Open <strong>personality_data.csv</strong> from Tools if you need a continuous scale for context, or use Analyses → Exploration → Distribution with Mean = 100 and SD = 15 (IQ-style). Find the probability of scoring above a chosen z-score / value.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
     hint: 'Look under Analyses > Exploration > Distribution for probability calculators',
@@ -1195,7 +1196,7 @@ export const statisticsExercises = [
     practiceObjectiveKey: 'm6-ci-mean-menu',
     title: 'Calculate Confidence Intervals',
     description: 'Find confidence intervals for the mean in Descriptives',
-    instructions: 'Calculate a 95% confidence interval for the mean test score. Find where to request confidence intervals.',
+    instructions: 'Open <strong>personality_data.csv</strong> from Tools (Apply uses this file; Learn/Practice used bmi_and_exercise.csv). Calculate a 95% confidence interval for the mean of <strong>extraversion</strong> (or age). Find where to request confidence intervals.',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
     hint: 'Confidence intervals are in Descriptives under the "Statistics" section',
@@ -1363,7 +1364,7 @@ export const statisticsExercises = [
     practiceObjectiveKey: 'm6-interpret-ci',
     title: 'Interpret Confidence Intervals',
     description: 'Understand what confidence intervals mean',
-    instructions: 'Calculate a 95% CI for a sample mean and explain what this interval tells us. Include both the correct frequentist interpretation and common misinterpretations.',
+    instructions: 'Calculate a 95% CI for the mean of <strong>extraversion</strong> (or age) in <strong>personality_data.csv</strong> and explain what this interval tells us. Include both the correct frequentist interpretation and common misinterpretations.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'A 95% CI means: if we repeated this study many times, 95% of intervals would contain the true population mean.',
@@ -1408,7 +1409,7 @@ export const statisticsExercises = [
     practiceObjectiveKey: 'm7-one-sample-t-menu',
     title: 'Run a One-Sample T-Test',
     description: 'Test if a sample mean differs from a known population value',
-    instructions: 'Test whether your sample\'s mean IQ differs from the population mean of 100. Find the one-sample t-test.',
+    instructions: 'Open <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv - that file was used for the one-sample t in Learn/Practice). Run a one-sample t-test on <strong>age</strong> (or a Big Five scale) vs a sensible Test value (e.g. age vs 0, or extraversion vs 3).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
     hint: 'T-tests are under Analyses > T-Tests',
@@ -1464,7 +1465,7 @@ export const statisticsExercises = [
     title: 'Robustness to an Outlier Filter',
     phase: 'apply',
     description: 'Compare results before and after filtering an outlier',
-    instructions: 'Run a one-sample t-test, then re-run it after applying a filter that removes an outlier. Discuss what changed and what stayed stable.',
+    instructions: 'Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test on age (or a Big Five scale), then re-run it after applying a filter that removes an outlier. Discuss what changed and what stayed stable.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'Use the Filters panel and compare outputs side by side.',
@@ -1479,19 +1480,19 @@ export const statisticsExercises = [
     title: 'Run a Binomial Test (Proportion Test)',
     phase: 'learn',
     description: 'Test if an observed proportion differs from a hypothesized value',
-    instructions: 'Open personality_data.csv (Tools). Test whether gender proportions differ from 0.5 using Frequencies → 2 Outcomes (Binomial test) in Jamovi.',
+    instructions: 'Open <strong>bmi_and_exercise.csv</strong> from Tools (not personality_data.csv - gender was used in Learn/Practice). Transform <strong>bmi</strong> into a two-level Nominal variable (e.g. under 25 vs 25+), then test whether those proportions differ from 0.5 using Frequencies → 2 Outcomes (Binomial test).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Go to Analyses > Frequencies > 2 Outcomes (Binomial test). Set the test value to 0.5.',
+    hint: 'Go to Analyses > Frequencies > 2 Outcomes (Binomial test). Set the test value to 0.5. The variable must be Nominal with exactly two levels.',
     expected_selections: [
       { menu: 'analyses', option: 'frequencies', subOption: '2_outcomes' }
     ],
     sample_data: {
-      columns: ['id', 'gender'],
+      columns: ['id', 'bmi_cat'],
       rows: [
-        { id: 1, gender: 'Female' },
-        { id: 2, gender: 'Male' },
-        { id: 3, gender: 'Female' }
+        { id: 1, bmi_cat: 'Under 25' },
+        { id: 2, bmi_cat: '25+' },
+        { id: 3, bmi_cat: 'Under 25' }
       ]
     },
     success_message: 'Correct! Analyses > Frequencies > 2 Outcomes runs the binomial test on a two-level variable. Set the test value (often 0.5).',
@@ -1570,7 +1571,7 @@ export const statisticsExercises = [
     title: 'Calculate and Report Cohen\'s d',
     phase: 'practice',
     description: 'Find effect size in Jamovi output and interpret its magnitude',
-    instructions: 'Run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen\'s d value and classify it as small (~0.2), medium (~0.5), or large (~0.8).',
+    instructions: 'Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen\'s d value and classify it as small (~0.2), medium (~0.5), or large (~0.8).',
     software_type: 'jamovi',
     exercise_type: 'instructional',
     hint: 'In the one-sample t-test options panel, check "Effect size" under Additional Statistics.',
@@ -1650,7 +1651,7 @@ export const statisticsExercises = [
     title: 'Write an APA-Style Results Statement',
     phase: 'apply',
     description: 'Report hypothesis test results in proper APA format',
-    instructions: 'Run a one-sample t-test and write a complete APA-style results sentence including: descriptive statistics, test statistic with df, p-value, and effect size. Example format: "Participants (M = 106.8, SD = 13.4) scored significantly higher than the population mean of 100, t(24) = 2.54, p = .018, d = 0.51."',
+    instructions: 'Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test on age (or a Big Five scale) and write a complete APA-style results sentence including: descriptive statistics, test statistic with df, p-value, and effect size. Example format: "Participants (M = 106.8, SD = 13.4) scored significantly higher than the population mean of 100, t(24) = 2.54, p = .018, d = 0.51."',
     software_type: 'jamovi',
     exercise_type: 'written_response',
     hint: 'Include: sample mean and SD, test name with df in parentheses, test statistic value, exact p-value, and Cohen\'s d.',

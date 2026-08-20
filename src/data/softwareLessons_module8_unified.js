@@ -400,7 +400,7 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Outcome: **bmi**\n- Predictors: **exercise_per_week** and **consumption_vegetables_per_day**\n- (Alternative: **personality_data.csv** — predict **neuroticism** from **extraversion** + **age**)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Outcome: **bmi**\n- Predictors: **exercise_per_week** and **consumption_vegetables_per_day**\n- (Alternative: **personality_data.csv** - predict **neuroticism** from **extraversion** + **age**)'
               },
               {
                 type: 'text',
@@ -533,7 +533,7 @@ export const module8UnifiedLessons = [
             checkpoint: 'You can interpret the slope and R² for a single predictor.'
           },
           {
-            instruction: 'Still on bmi_and_exercise.csv: Multiple regression — Dependent = bmi; Covariates = exercise_per_week and consumption_vegetables_per_day. Check VIF.',
+            instruction: 'Still on bmi_and_exercise.csv: Multiple regression - Dependent = bmi; Covariates = exercise_per_week and consumption_vegetables_per_day. Check VIF.',
             hint: 'Add Collinearity statistics (VIF) under Model Coefficients.',
             checkpoint: 'You can compare predictors with standardized coefficients and check multicollinearity.'
           },
@@ -599,7 +599,7 @@ export const module8UnifiedLessons = [
       youDo: {
         type: 'independent_practice',
         title: 'Apply Your Skills',
-        instructions: 'Now it\'s your turn! Use Tools datasets (personality_data.csv and/or bmi_and_exercise.csv). Complete hands-on exercises for the Module 8 analysis types, record your You do, and upload the video to Canvas.'
+        instructions: 'Now it\'s your turn! Use a <strong>different</strong> Tools file than the matching Learn/Practice walkthrough for each analysis: for χ², independent-samples t, and ANOVA use <strong>bmi_and_exercise.csv</strong> (create categories with Transform when you need Nominal variables); for correlation and regression use <strong>personality_data.csv</strong> (Big Five / age). Complete the Module 8 Apply exercises, record your You do, and upload the video to Canvas.'
         // Exercises are pulled from statisticsPractices.js based on module='stats-module-8' and software='jamovi'
       }
     }
