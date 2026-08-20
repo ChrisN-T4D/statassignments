@@ -133,7 +133,7 @@ const m8SectionsSPSS = [
       {
         type: 'callout',
         style: 'warning',
-        content: 'If many expected counts are small, SPSS may warn you; consult your instructor about **exact** or **Monte Carlo** options.'
+        content: 'If many expected counts are small, SPSS may warn you; use **exact** or **Monte Carlo** options when available.'
       }
     ]
   },
@@ -166,7 +166,7 @@ const m8SectionsSPSS = [
       {
         type: 'text',
         content:
-          '**Run in SPSS**\n\n1. **Analyze → Descriptive Statistics → Crosstabs**.\n2. Place one variable in **Rows**, the other in **Columns**.\n3. Click **Statistics** → check **Chi-square**; optionally **Phi and Cramer’s V**.\n4. Click **Cells** → check **Expected** counts; add **Row**, **Column**, or **Total** **%** as your instructor prefers.\n5. **OK** — read **Pearson Chi-Square** (or Fisher’s Exact if shown for small expected counts).'
+          '**Run in SPSS**\n\n1. **Analyze → Descriptive Statistics → Crosstabs**.\n2. Place one variable in **Rows**, the other in **Columns**.\n3. Click **Statistics** → check **Chi-square**; optionally **Phi and Cramer’s V**.\n4. Click **Cells** → check **Expected** counts; add **Row**, **Column**, or **Total** **%** as needed for interpretation.\n5. **OK** — read **Pearson Chi-Square** (or Fisher’s Exact if shown for small expected counts).'
       },
       {
         type: 'text',
@@ -499,7 +499,7 @@ const m8SectionsSPSS = [
       {
         type: 'text',
         content:
-          '**If Levene p < .05:** variances unequal — report **Welch** or **Brown-Forsythe** if available, or robust ANOVA per instructor.\n\n**Effect size:** **η²** or **ω²** from **Options** or compute (course notes).'
+          '**If Levene p < .05:** variances unequal — report **Welch** or **Brown-Forsythe** if available, or another robust ANOVA option.\n\n**Effect size:** **η²** or **ω²** from **Options** or compute (course notes).'
       },
       {
         type: 'text',
@@ -884,7 +884,7 @@ const m8SectionsExcel = [
       {
         type: 'text',
         content:
-          'Excel has **no single-button GOF** in all versions. Options: (1) **CHISQ.TEST** when you have **observed** and **expected** **counts** in parallel ranges (same length). (2) **Real Statistics Resource Pack** add-in (if allowed). (3) Run in **SPSS/R/Stata** and paste results — acceptable if your instructor allows.'
+          'Excel has **no single-button GOF** in all versions. Options: (1) **CHISQ.TEST** when you have **observed** and **expected** **counts** in parallel ranges (same length). (2) **Real Statistics Resource Pack** add-in (if allowed). (3) Run in **SPSS/R/Stata** and paste results when Excel cannot complete the analysis.'
       },
       {
         type: 'text',
@@ -1088,7 +1088,7 @@ const m8SectionsExcel = [
       {
         type: 'callout',
         style: 'warning',
-        content: 'For **3+ groups** and **reporting**, confirm with your instructor whether **Excel-only** post hoc is acceptable.'
+        content: 'For **3+ groups** and formal reporting, prefer **SPSS/R/Stata** (or an Excel add-in) for post hoc tests rather than Excel-only workarounds.'
       }
     ]
   }
@@ -1098,7 +1098,7 @@ const m8WeDoExcel = {
   type: 'guided_practice',
   title: 'Guided Practice: Advanced Statistical Analyses (Excel)',
   instructions:
-    'Enable **Analysis ToolPak**. Where Excel is weak (GOF, post hoc, VIF), note limitations and use the approach your instructor approves (including replicating in SPSS/R/Stata).',
+    'Enable **Analysis ToolPak**. Where Excel is weak (GOF, post hoc, VIF), note the limitation and replicate in SPSS/R/Stata when you need the full analysis.',
   steps: [
     { instruction: 'GOF: CHISQ.TEST or manual χ² + CHISQ.DIST.RT', hint: 'Observed vs expected ranges', checkpoint: 'p-value' },
     { instruction: 'Independence: PivotTable + CHISQ.TEST', hint: '', checkpoint: 'p-value' },
@@ -1108,7 +1108,7 @@ const m8WeDoExcel = {
     { instruction: 'CORREL + scatter chart', hint: '', checkpoint: 'r + plot' },
     { instruction: 'Regression: Data Analysis; residual plot option', hint: '', checkpoint: 'R², coefficients' },
     { instruction: 'Multiple X columns; check multicollinearity via correlations', hint: '', checkpoint: 'Model summary' },
-    { instruction: 'ANOVA: Single Factor; plan post hoc per instructor', hint: '', checkpoint: 'F, p' }
+    { instruction: 'ANOVA: Single Factor; plan Tukey or Bonferroni post hoc', hint: '', checkpoint: 'F, p' }
   ]
 }
 

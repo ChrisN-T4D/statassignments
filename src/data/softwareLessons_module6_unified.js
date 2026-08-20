@@ -32,12 +32,12 @@ export const module6UnifiedLessons = [
               {
                 type: 'text',
                 content:
-                  'A <strong>z-score</strong> tells you how many standard deviations a value is from a reference mean: <em>z = (X − μ) / σ</em>. <strong>Dataset:</strong> Tools → download <strong>bmi_and_exercise.csv</strong> → ☰ → Open. Use continuous column <strong>bmi</strong>. Build z-scores with <strong>Data → Compute</strong>. Example teaching formula against a fixed reference: <strong>(bmi − 25) / 5</strong> (or use your instructor\'s mean/SD). Match lowercase <strong>bmi</strong>.'
+                  'A <strong>z-score</strong> tells you how many standard deviations a value is from a reference mean: <em>z = (X − μ) / σ</em>. <strong>Dataset:</strong> Tools → download <strong>bmi_and_exercise.csv</strong> → ☰ → Open. Use continuous column <strong>bmi</strong>. Build z-scores with <strong>Data → Compute</strong>. Use this teaching formula against a fixed reference: <strong>(bmi − 25) / 5</strong>. Match lowercase <strong>bmi</strong>.'
               },
               {
                 type: 'callout',
                 style: 'tip',
-                content: 'Class CSVs live in the Methods Market <strong>Tools</strong> panel (right side). Use the same files across modules — do not invent a one-off spreadsheet unless your instructor says so.'
+                content: 'Class CSVs live in the Methods Market <strong>Tools</strong> panel (right side). Use the same files across modules - do not invent a one-off spreadsheet for this course.'
               },
               {
                 type: 'definition_list',
@@ -83,7 +83,7 @@ export const module6UnifiedLessons = [
                     step: 4,
                     title: 'Enter the z formula',
                     description:
-                      'In the formula box type: <strong>(bmi − 25) / 5</strong> (or the mean/SD your instructor assigns). This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills.',
+                      'In the formula box type: <strong>(bmi − 25) / 5</strong>. This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills.',
                     image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
@@ -149,7 +149,7 @@ export const module6UnifiedLessons = [
                     step: 2,
                     title: 'Request the confidence interval',
                     description:
-                      'Open the <strong>Statistics</strong> section in the options panel. Check <strong>Confidence interval</strong> (for the mean). Leave the level at 95% unless your instructor says otherwise.'
+                      'Open the <strong>Statistics</strong> section in the options panel. Check <strong>Confidence interval</strong> (for the mean). Leave the level at 95%.'
                   },
                   {
                     step: 3,

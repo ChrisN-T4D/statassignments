@@ -74,7 +74,7 @@ function steps (...lines) {
 }
 
 const reporting = {
-  reportStats: 'Report the test name, relevant statistics (e.g. t, df, p), and effect size if your instructor requires it. State whether you reject H₀ at α = .05.',
+  reportStats: 'Report the test name, relevant statistics (e.g. t, df, p), and effect size. State whether you reject H₀ at α = .05.',
   checkAssumptions: 'Mention whether you checked assumptions (normality, homogeneity of variance, expected counts ≥ 5, etc.) as your course requires.'
 }
 
@@ -171,7 +171,7 @@ export const ANALYSES = [
         steps: steps(
           'Data → Data Analysis → t-Test: Paired Two Sample for Mean is for paired data; for one-sample, compute manually or use formulas.',
           'Practical path in Excel: calculate sample mean and SD, then t = (mean − μ) / (SD/√n); use T.DIST.2T for two-tailed p.',
-          'Alternatively export data to jamovi/SPSS if your instructor prefers menu-driven output.'
+          'Alternatively export data to jamovi/SPSS for menu-driven output.'
         ),
         reportingTips: ['Show mean, SD, n, test value, computed t, and p; or submit software output from jamovi/SPSS if allowed.']
       }
@@ -445,7 +445,7 @@ export const ANALYSES = [
         steps: steps(
           'Compute χ² = Σ (O − E)² / E in helper cells; df = (#categories − 1 − #estimated params).',
           'Use CHISQ.TEST(observed_range, expected_range) for a shortcut when expected are proportional.',
-          'For formal reporting, confirm with your instructor or use jamovi/SPSS output.'
+          'For formal reporting, use jamovi/SPSS output (or the package you ran the analysis in).'
         ),
         reportingTips: [reporting.reportStats, 'Show observed vs expected table in your write-up.']
       }

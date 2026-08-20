@@ -252,11 +252,11 @@ export const module8UnifiedLessons = [
               },
               {
                 type: 'text',
-                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Continuous column: **bmi**\n- Example test value: **25** (or your instructor\'s value)'
+                content: '**Step 1: Open the Tools dataset**\n\nTools → download **bmi_and_exercise.csv** → ☰ → Open.\n- Continuous column: **bmi**\n- Test value: **25**'
               },
               {
                 type: 'text',
-                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **One Sample T-Test**\n2. Move **bmi** to **Dependent Variables**\n3. Enter **Hypothesis** test value **25** (or your instructor\'s value)'
+                content: '**Step 2: Run the Test**\n\n1. Click **Analyses** → **T-Tests** → **One Sample T-Test**\n2. Move **bmi** to **Dependent Variables**\n3. Enter **Hypothesis** test value **25**'
               },
               {
                 type: 'text',

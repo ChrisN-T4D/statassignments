@@ -44,28 +44,31 @@ export const module7UnifiedLessons = [
                 steps: [
                   {
                     step: 1,
-                    title: 'Open personality_data.csv',
+                    title: 'Open personality_data.csv and find the variables',
                     description:
-                      'Tools → download <strong>personality_data.csv</strong> → jamovi <strong>☰ → Open</strong>. Confirm columns such as <strong>gender</strong>, <strong>extraversion</strong>, and <strong>age</strong>.'
+                      'Tools → download <strong>personality_data.csv</strong> → jamovi <strong>☰ → Open</strong>. In the variable list you should see <strong>id</strong>, <strong>gender</strong>, <strong>age</strong>, <strong>ethnicity</strong>, and the Big Five scales (<strong>extraversion</strong>, <strong>agreeableness</strong>, and so on).',
+                    image: '/lessons/hypothesis-testing/jamovi/personality-variables.png'
                   },
                   {
                     step: 2,
-                    title: 'Check gender is Nominal',
+                    title: 'Set gender to Nominal',
                     description:
-                      'Click the <strong>gender</strong> column header (or Variables / Setup). Measure type should be <strong>Nominal</strong> with two levels (e.g. Female and Male).'
+                      'Open variable setup for <strong>gender</strong> (click the column header / Setup). Set <strong>Measure type</strong> to <strong>Nominal</strong> and <strong>Data type</strong> to <strong>Text</strong>. Levels should show <strong>Female</strong> and <strong>Male</strong>.',
+                    image: '/lessons/hypothesis-testing/jamovi/gender-nominal-setup.png'
                   },
                   {
                     step: 3,
-                    title: 'Open Proportion Test (2 Outcomes)',
+                    title: 'Open Frequencies → 2 Outcomes',
                     description:
-                      'Go to <strong>Analyses → Frequencies → 2 Outcomes</strong>. The panel is titled <strong>Proportion Test (2 Outcomes)</strong> (Binomial Test). Leave <strong>Values are counts</strong> unchecked for row-level data like gender.',
-                    image: '/lessons/hypothesis-testing/jamovi/binomial-setup.png'
+                      'Go to <strong>Analyses → Frequencies</strong>. Under One Sample Proportion Tests, choose <strong>2 Outcomes (Binomial test)</strong>. The analysis panel is titled <strong>Proportion Test (2 Outcomes)</strong>.',
+                    image: '/lessons/hypothesis-testing/jamovi/frequencies-2outcomes-menu.png'
                   },
                   {
                     step: 4,
                     title: 'Move gender and set Test value',
                     description:
-                      'Move <strong>gender</strong> into the Variable box. Set <strong>Test value</strong> to <strong>0.5</strong>. Keep <strong>≠ Test value</strong> (two-sided) unless your instructor says otherwise. Optional: check <strong>Confidence intervals</strong> (95%).'
+                      'Move <strong>gender</strong> into the Variable box. Leave <strong>Values are counts</strong> unchecked. Set <strong>Test value</strong> to <strong>0.5</strong>. Keep <strong>≠ Test value</strong> (two-sided). Optional: check <strong>Confidence intervals</strong> (95%).',
+                    image: '/lessons/hypothesis-testing/jamovi/binomial-setup.png'
                   },
                   {
                     step: 5,
@@ -96,7 +99,7 @@ export const module7UnifiedLessons = [
                 type: 'callout',
                 style: 'tip',
                 content:
-                  '<strong>Dataset:</strong> Tools → download <strong>bmi_and_exercise.csv</strong> → ☰ → Open. Use continuous column <strong>bmi</strong>. Example H₀: μ = 25 (or your instructor\'s Test value).'
+                  '<strong>Dataset:</strong> Tools → download <strong>bmi_and_exercise.csv</strong> → ☰ → Open. Use continuous column <strong>bmi</strong>. For this lesson, H₀: μ = 25.'
               },
               {
                 type: 'text',
@@ -116,19 +119,21 @@ export const module7UnifiedLessons = [
                     step: 2,
                     title: 'Open One Sample T-Test',
                     description:
-                      'Go to <strong>Analyses → T-Tests → One Sample T-Test</strong>.'
+                      'Go to <strong>Analyses → T-Tests</strong> and choose <strong>One Sample T-Test</strong>.',
+                    image: '/lessons/hypothesis-testing/jamovi/t-tests-one-sample-menu.png'
                   },
                   {
                     step: 3,
-                    title: 'Move bmi and set Test value',
+                    title: 'Move bmi and set Test value to 25',
                     description:
-                      'Move <strong>bmi</strong> to <strong>Dependent Variables</strong>. Set <strong>Test value</strong> to <strong>25</strong> (or your instructor\'s value). Keep <strong>≠ Test value</strong> (two-sided).'
+                      'Move <strong>bmi</strong> to <strong>Dependent Variables</strong>. Under Hypothesis, set <strong>Test value</strong> to <strong>25</strong> and keep <strong>≠ Test value</strong> (two-sided). Leave Student\'s test checked.',
+                    image: '/lessons/hypothesis-testing/jamovi/t-test-setup.png'
                   },
                   {
                     step: 4,
                     title: 'Optional: effect size and assumptions',
                     description:
-                      'Check <strong>Effect size</strong> (Cohen\'s d) and normality under Assumption Checks if your instructor wants them.'
+                      'Under Additional Statistics, you can check <strong>Effect size</strong> (Cohen\'s d). Under Assumption Checks, you can request a normality test or Q-Q plot.'
                   },
                   {
                     step: 5,
@@ -223,7 +228,7 @@ export const module7UnifiedLessons = [
           },
           {
             instruction:
-              'Analyses → T-Tests → One Sample T-Test. Dependent = bmi; Test value = 25 (or instructor value).',
+              'Analyses → T-Tests → One Sample T-Test. Dependent = bmi; Test value = 25.',
             hint: 'Optional: check Effect size for Cohen\'s d.',
             checkpoint: 'Results show t, df, p, and mean for bmi.'
           },
