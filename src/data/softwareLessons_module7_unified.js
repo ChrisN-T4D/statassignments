@@ -247,13 +247,7 @@ export const module7UnifiedLessons = [
             id: 'm7-binomial-panel',
             question:
               'This jamovi panel is open. What analysis is this, and which menu path opens it?',
-            image: '/lessons/hypothesis-testing/jamovi/binomial-setup.png',
-            options: [
-              'One Sample T-Test - Analyses → T-Tests',
-              'Proportion Test (2 Outcomes) / binomial - Analyses → Frequencies → 2 Outcomes',
-              'Chi-square goodness-of-fit - Analyses → ANOVA',
-              'Descriptives - Analyses → Exploration'
-            ],
+            image: '/images/lessons/jamovi/binomial-setup.png',
             correct: 1,
             explanation:
               'The panel title is Proportion Test (2 Outcomes). Open it with Analyses → Frequencies → 2 Outcomes.'
@@ -307,20 +301,37 @@ export const module7UnifiedLessons = [
         ],
         outputInterpretation: [
           {
-            id: 'm7-interpret-decision',
+            id: 'm7-interpret-binomial',
             question:
-              'In a short answer: (1) For gender with Test value 0.5, what does H₀ say? (2) For bmi vs 25, name two numbers besides p you would report. (3) What does "fail to reject H₀" mean (does it prove the null?)?',
+              'Look at this <strong>Proportion Test (2 Outcomes)</strong> setup: <strong>gender</strong> is in the Variable box and Test value is <strong>0.5</strong>. Suppose the Binomial Test results show a sample proportion near 0.52 and <strong>p = 0.48</strong>. At α = .05: (1) State H₀ in plain language. (2) Do you reject or fail to reject H₀? Does that decision prove the population is exactly 50/50? Why or why not?',
+            image: '/images/lessons/jamovi/binomial-setup.png',
             placeholder:
-              'e.g. H₀: proportion = 0.5; report t and mean (or df); fail to reject means insufficient evidence, not proof...',
-            hint: 'Name H₀, reportable statistics, and avoid "accept H₀ as proven."',
+              'e.g. H₀ says the population proportion for a gender level is 0.5. With p = 0.48 I fail to reject; that is not proof the population is exactly 50/50...',
+            hint: 'Compare p to .05. Fail to reject ≠ prove H₀ is true.',
             requiredKeywords: [
-              '0.5', 'proportion', 'h0', 'h₀', 'null',
-              't', 'mean', 'df', 'cohen', 'd', '25', 'bmi',
-              'fail', 'reject', 'evidence', 'not prove', 'does not prove', 'insufficient'
+              '0.5', 'proportion', 'h0', 'h₀', 'null', 'population',
+              'fail', 'reject', '0.48', '.48', 'p = 0.48', 'p=0.48',
+              'prove', 'not prove', 'does not prove', 'evidence', 'insufficient', 'not true'
             ],
             minRequiredKeywords: 4,
             feedback:
-              'H₀ for the binomial example: population proportion = 0.5. For the t-test, report t (and usually df/mean/Cohen\'s d) with p. Fail to reject means insufficient evidence against H₀ - not proof the null is true.'
+              'H₀: the population proportion for a gender level equals 0.5. With p = 0.48 (greater than .05), fail to reject H₀. That means insufficient evidence against H₀ - it does not prove the population is exactly 50/50.'
+          },
+          {
+            id: 'm7-interpret-ttest',
+            question:
+              'Look at this <strong>One Sample T-Test</strong> setup for <strong>bmi</strong> with Test value <strong>25</strong>. Suppose Results show <strong>t = 2.10</strong>, <strong>df = 249</strong>, mean ≈ 29.8, and <strong>p = 0.037</strong>. At α = .05: (1) Do you reject or fail to reject H₀: μ = 25? (2) Name two numbers from this output (besides p) you would report in a write-up.',
+            image: '/images/lessons/jamovi/t-test-setup.png',
+            placeholder:
+              'e.g. Reject H₀ because p = 0.037 < .05. I would report t = 2.10 and df = 249 (or the mean)...',
+            hint: 'Decision uses p vs .05. Typical write-ups include t and df (and often the mean or Cohen\'s d).',
+            requiredKeywords: [
+              'reject', '0.037', '.037', 'p = 0.037', 'p=0.037',
+              't', '2.10', '2.1', 'df', '249', 'mean', '29.8', 'cohen', 'd', '25'
+            ],
+            minRequiredKeywords: 4,
+            feedback:
+              'Reject H₀ (p = 0.037 < .05): there is evidence the mean BMI differs from 25. Report t (e.g. 2.10) and df (249); the sample mean (and Cohen\'s d, if requested) are also useful.'
           }
         ]
       },

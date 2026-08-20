@@ -1,4 +1,4 @@
-// Module 6: Probability and Sampling — Unified Jamovi lesson
+// Module 6: Probability and Sampling - Unified Jamovi lesson
 // Learn (I do) → Practice + Self-Check (We do) → Apply (You do)
 
 export const module6UnifiedLessons = [
@@ -76,14 +76,14 @@ export const module6UnifiedLessons = [
                     step: 3,
                     title: 'Name the z-score variable',
                     description:
-                      'Name the new variable (e.g. <strong>z_bmi</strong>). Check the <strong>exact casing</strong> of your column — the Tools file uses lowercase <strong>bmi</strong>.',
+                      'Name the new variable (e.g. <strong>z_bmi</strong>). Check the <strong>exact casing</strong> of your column - the Tools file uses lowercase <strong>bmi</strong>.',
                     image: '/images/lessons/jamovi/jamovi-compute-name.png'
                   },
                   {
                     step: 4,
                     title: 'Enter the z formula',
                     description:
-                      'In the formula box type: <strong>(bmi − 25) / 5</strong>. This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills.',
+                      'In the formula box type: <strong>(bmi − 25) / 5</strong>. This standardizes each BMI against a fixed reference. Click away or press Enter so the new column fills. <strong>Population vs sample:</strong> Here we use a fixed reference (e.g. 25 and 5) for teaching. You can also compute z with the <em>sample</em> mean and SD from Descriptives - same idea, different numbers.',
                     image: '/images/lessons/jamovi/jamovi-compute-formula.png'
                   },
                   {
@@ -93,12 +93,6 @@ export const module6UnifiedLessons = [
                       'A z of <strong>2</strong> means 2 SDs above the reference mean. A negative z means below the reference. Values with |z| &gt; 2 are unusual under the empirical rule for a normal distribution.'
                   }
                 ]
-              },
-              {
-                type: 'callout',
-                style: 'tip',
-                content:
-                  '<strong>Population vs sample:</strong> Here we use a fixed reference (e.g. 25 and 5) for teaching. You can also compute z with the <em>sample</em> mean and SD from Descriptives — same idea, different numbers.'
               }
             ]
           },
@@ -115,7 +109,7 @@ export const module6UnifiedLessons = [
               {
                 type: 'text',
                 content:
-                  'A <strong>confidence interval (CI)</strong> for the mean is a range of plausible values for the population mean. <strong>Dataset:</strong> keep <strong>bmi_and_exercise.csv</strong> open from Tools. In Jamovi you request the CI inside <strong>Descriptives</strong> under Statistics — not as a separate menu.'
+                  'A <strong>confidence interval (CI)</strong> for the mean is a range of plausible values for the population mean. <strong>Dataset:</strong> keep <strong>bmi_and_exercise.csv</strong> open from Tools. In Jamovi you request the CI inside <strong>Descriptives</strong> under Statistics, not as a separate menu.'
               },
               {
                 type: 'definition_list',
@@ -124,7 +118,7 @@ export const module6UnifiedLessons = [
                     term: '95% CI',
                     icon: 'CI',
                     definition:
-                      'The procedure that produces intervals that capture the true mean about 95% of the time across many repeated samples — not “95% probability this one interval contains the mean.”',
+                      'The procedure that produces intervals that capture the true mean about 95% of the time across many repeated samples, not “95% probability this one interval contains the mean.”',
                     color: '#3b82f6'
                   },
                   {
@@ -149,20 +143,21 @@ export const module6UnifiedLessons = [
                     step: 2,
                     title: 'Request the confidence interval',
                     description:
-                      'Open the <strong>Statistics</strong> section in the options panel. Check <strong>Confidence interval</strong> (for the mean). Leave the level at 95%.'
+                      'Open the <strong>Statistics</strong> section in the options panel. Check <strong>Confidence interval for Mean</strong> (leave the level at 95%).',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-ci-statistics.png'
                   },
                   {
                     step: 3,
                     title: 'Read the output',
                     description:
-                      'In the Results panel, find the CI lower and upper bounds next to the mean for <strong>bmi</strong>.',
-                    image: '/images/selfcheck/jamovi/jamovi-results-panel.png'
+                      'In the Results panel, find the <strong>95% CI mean lower bound</strong> and <strong>upper bound</strong> next to the mean for <strong>bmi</strong>.',
+                    image: '/images/lessons/jamovi/jamovi-descriptives-ci-results.png'
                   },
                   {
                     step: 4,
                     title: 'Compare precision',
                     description:
-                      'Note the CI width. Larger samples (or less variability) usually produce a <strong>narrower</strong> CI — more precision, all else equal. You can also run Descriptives on <strong>exercise_per_week</strong> from the same Tools file and compare widths.'
+                      'Note the CI width. Larger samples (or less variability) usually produce a <strong>narrower</strong> CI - more precision, all else equal. You can also run Descriptives on <strong>exercise_per_week</strong> from the same Tools file and compare widths.'
                   }
                 ]
               },
@@ -209,7 +204,7 @@ export const module6UnifiedLessons = [
           {
             instruction:
               'Also run Descriptives + CI on exercise_per_week from the same file. Compare which CI looks wider and why (variability / scale).',
-            hint: 'Wider intervals often go with more spread or different units — discuss precision, not just sample size.',
+            hint: 'Wider intervals often go with more spread or different units - discuss precision, not just sample size.',
             checkpoint: 'You compared two CIs from the same Tools dataset.'
           }
         ]
@@ -232,7 +227,7 @@ export const module6UnifiedLessons = [
           {
             id: 'm6-ci-location',
             question: 'Where do you turn on a confidence interval for the mean?',
-            image: '/images/lessons/jamovi/jamovi-descriptives-menu.png',
+            image: '/images/lessons/jamovi/jamovi-descriptives-ci-full.png',
             options: [
               'Analyses → Regression only',
               'Descriptives → Statistics → Confidence interval',
@@ -250,7 +245,7 @@ export const module6UnifiedLessons = [
               'You typed (BMI − 25) / 5 in Compute, but the spreadsheet column is named bmi (lowercase). The new column is empty or shows an error.',
             errorMessage: 'Unknown variable / empty column',
             options: [
-              'Jamovi is case-sensitive — match the exact column name (bmi vs BMI)',
+              'Jamovi is case-sensitive - match the exact column name (bmi vs BMI)',
               'You must use SPSS syntax in Jamovi',
               'Z-scores only work for N > 30',
               'You need Analyses → ANOVA first'
@@ -270,7 +265,7 @@ export const module6UnifiedLessons = [
               'CIs only appear for categorical variables'
             ],
             correct: 0,
-            explanation: 'The CI is optional — enable it under Statistics in the Descriptives panel.'
+            explanation: 'The CI is optional - enable it under Statistics in the Descriptives panel.'
           }
         ],
         outputInterpretation: [
@@ -278,7 +273,6 @@ export const module6UnifiedLessons = [
             id: 'm6-interpret-z-ci',
             question:
               'In a short answer: (1) What does a z-score of 2 mean for an IQ-style score with mean 100 and SD 15? (2) If a 95% CI for a mean gets narrower when you add more data, what does that say about precision?',
-            image: '/images/selfcheck/jamovi/jamovi-results-panel.png',
             placeholder:
               'e.g. z = 2 means two SDs above the mean (IQ 130); a narrower CI means a more precise estimate of the mean...',
             hint: 'Tie z to “number of SDs from the mean,” and CI width to precision / sample size.',
