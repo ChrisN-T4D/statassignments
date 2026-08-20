@@ -248,12 +248,17 @@ function handleScroll() {
 }
 
 async function saveTopicReadingTime() {
-  if (!isAuthenticated.value || !user.value || !topicId.value) return
+  if (!topicId.value) return
 
   const timeData = timeTracker.stop()
 
-  // Only save if there was meaningful engagement (> 10 seconds active time)
+  // Only count / save if there was meaningful engagement (≥ 10 seconds active time)
   if (timeData.activeTimeSeconds < 10) return
+
+  // UI progress: any leave path with enough engagement marks the topic read
+  recordTopicRead(topicId.value)
+
+  if (!isAuthenticated.value || !user.value) return
 
   try {
     await pb.collection('topic_readings').create({
@@ -327,7 +332,6 @@ async function goToModule() {
 
 async function goToNext() {
   await saveTopicReadingTime()
-  recordTopicRead(topicId.value)
   if (nextTopic.value) {
     router.push(`/topic/${nextTopic.value.id}`)
     return
