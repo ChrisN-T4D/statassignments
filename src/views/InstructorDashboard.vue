@@ -44,6 +44,13 @@
             </div>
           </div>
 
+          <AddOneStudent
+            v-if="rosterSemesterId"
+            :semester-id="rosterSemesterId"
+            :semester-code="selectedSemester?.code || 'XX'"
+            @roster-updated="loadRosterStats"
+          />
+
           <!-- Roster Stats -->
           <div v-if="rosterSemesterId && rosterStats" class="content-section">
             <h2>Current Roster</h2>
@@ -433,6 +440,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
+import AddOneStudent from '../components/AddOneStudent.vue'
 
 const {
   loading,
