@@ -488,26 +488,43 @@ const currentInstall = computed(() => {
 })
 
 const datasets = computed(() => {
-  // Files live in public/ at site root (served as /filename.csv).
-  // Names match Software Practice copy: bmi_and_exercise.csv, personality_data.csv, Normality data.csv
+  // CSV files in public/ (site root). No .omv — students open CSV in jamovi via ☰ → Open.
   return [
     {
       name: 'BMI and Exercise',
-      description: 'bmi, exercise_per_week, vegetables — class CSV for jamovi',
+      description: 'bmi, exercise_per_week, vegetables — Software Practice class CSV',
       filename: 'bmi_and_exercise.csv',
       url: '/bmi_and_exercise.csv'
     },
     {
       name: 'Personality Data',
-      description: 'Demographics and Big Five scales — class CSV for jamovi',
+      description: 'Demographics and Big Five scales — Software Practice class CSV',
       filename: 'personality_data.csv',
       url: '/personality_data.csv'
     },
     {
       name: 'Normality Data',
-      description: 'Practice file for normality / paired-menu demos',
+      description: 'Height, test/exam scores, reaction time — normality quizzes & demos',
       filename: 'Normality data.csv',
       url: '/Normality%20data.csv'
+    },
+    {
+      name: 'Module 4 Sample Data',
+      description: 'Grade and Score — Module 4 sample / practice file',
+      filename: 'module4sampledata.csv',
+      url: '/module4sampledata.csv'
+    },
+    {
+      name: 'Cleaned Wide Sample 2',
+      description: 'Open-access wide sample (demographics, DASS, PHQ, GAD, and more)',
+      filename: 'cleanedWide.Sample2.open.access.csv',
+      url: '/cleanedWide.Sample2.open.access.csv'
+    },
+    {
+      name: 'Final Benchmark Data',
+      description: 'Study_Mode and Score — Final Benchmark assignment file',
+      filename: 'Final Benchmark Data.csv',
+      url: '/Final%20Benchmark%20Data.csv'
     }
   ]
 })

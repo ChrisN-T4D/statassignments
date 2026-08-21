@@ -1479,6 +1479,9 @@ function getAllExercisesInstructions() {
         <li><a href="/bmi_and_exercise.csv" download>BMI and Exercise Data</a> - Body mass index and exercise habits</li>
         <li><a href="/personality_data.csv" download>Personality Data</a> - Personality traits and demographics</li>
         <li><a href="/Normality data.csv" download>Normality Data</a> - Dataset for testing statistical assumptions</li>
+        <li><a href="/module4sampledata.csv" download>Module 4 Sample Data</a> - Grade and Score practice file</li>
+        <li><a href="/cleanedWide.Sample2.open.access.csv" download>Cleaned Wide Sample 2</a> - Open-access wide sample dataset</li>
+        <li><a href="/Final Benchmark Data.csv" download>Final Benchmark Data</a> - Study_Mode and Score for the Final Benchmark</li>
       </ul>
       <p><em>Right-click any link above and select "Save Link As..." to download</em></p>
     </div>

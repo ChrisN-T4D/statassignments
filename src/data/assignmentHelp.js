@@ -154,7 +154,7 @@ export const assignmentHelpByModule = [
         name: 'Week 8 Practice (Normality Quiz)',
         type: 'practice',
         tips: [
-          'Import Normality-data.csv and follow the instructions at the top of the assignment, then answer the quiz questions.'
+          'Import Normality data.csv (from Tools) and follow the instructions at the top of the assignment, then answer the quiz questions.'
         ],
         practiceLinks: ['skew-kurtosis'],
         getHelp: 'Review skewness/kurtosis and normality in the Module 4 topics before the quiz.'
@@ -254,11 +254,11 @@ export const assignmentHelpByModule = [
         name: 'Final Benchmark Assignment',
         type: 'final',
         tips: [
-          'Open note, open book, open resource. Use Final Benchmark Data.csv (Study_Mode: Solo/Pair/Group; Test_Scores 0–100).',
+          'Open note, open book, open resource. Use Final Benchmark Data.csv from Tools (Study_Mode: Solo/Pair/Group; Score).',
           'Follow "What to write": purpose and constructs, variables and scales, design and sampling, data screening, descriptives, visualizations, assumptions, preregistered hypotheses, run analysis in Jamovi, report results and plain-language conclusion, limitations.'
         ],
         formulas: [
-          { name: 'One-way ANOVA (3 groups)', formula: 'H₀: μ₁ = μ₂ = μ₃; H₁: at least one mean differs', note: 'Three groups (Solo, Pair, Group) on Test_Scores → one-way ANOVA.' },
+          { name: 'One-way ANOVA (3 groups)', formula: 'H₀: μ₁ = μ₂ = μ₃; H₁: at least one mean differs', note: 'Three groups (Solo, Pair, Group) on Score → one-way ANOVA.' },
           { name: 'Eta² or omega² (effect size for ANOVA)', formula: 'small ~ 0.01, medium ~ 0.06, large ~ 0.14', note: 'Use when interpreting your ANOVA output.' },
           { name: 'Decision rule', formula: 'If p < .05, reject H₀; conclude study mode is associated with exam performance.', note: 'Report F, df, p, effect size, and group means with 95% CIs.' }
         ],
