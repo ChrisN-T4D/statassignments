@@ -217,6 +217,8 @@
 
         <!-- Analytics Tab -->
         <div v-if="activeTab === 'analytics'">
+          <ClassMasteryPanel :semesters="semesters" :onExportAll="handleExportAllResearch" />
+
           <!-- Filters -->
         <div class="content-section">
           <h2>Export Filters</h2>
@@ -262,7 +264,7 @@
           <div class="export-options">
             <div class="export-card">
               <h3>Attempt-Level Export</h3>
-              <p>One row per attempt. Includes individual responses, timestamps, and item details.</p>
+              <p>One row per Concept Review practice attempt (practice_attempts).</p>
               <button
                 class="btn-primary"
                 @click="handleExportAttempts"
@@ -274,7 +276,7 @@
 
             <div class="export-card">
               <h3>Student Summary Export</h3>
-              <p>One row per student. Aggregated stats including accuracy by software track.</p>
+              <p>One row per student. Aggregated Concept Review accuracy from practice_attempts.</p>
               <button
                 class="btn-primary"
                 @click="handleExportSummary"
@@ -457,6 +459,8 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { pb } from '../lib/pocketbase'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
+import { useClassMasteryAnalytics } from '../composables/useClassMasteryAnalytics'
+import ClassMasteryPanel from '../components/ClassMasteryPanel.vue'
 
 const {
   loading,
@@ -480,6 +484,8 @@ const {
   createRosterEntries,
   exportKeysCSV
 } = useInstructorAnalytics()
+
+const { exportAllResearchData } = useClassMasteryAnalytics()
 
 // Tab state
 const activeTab = ref('roster')
@@ -675,11 +681,21 @@ async function handleExportSummary() {
   downloadCSV(csv, `student-summary-${timestamp}.csv`)
 }
 
+async function handleExportAllResearch(semesterId) {
+  if (!semesterId) return
+  await exportAllResearchData(semesterId, {
+    exportLearningEventsCSV,
+    exportObjectiveMasteryCSV,
+    exportPrototypesCSV,
+    exportKeysCSV
+  })
+}
+
 async function loadPreviewStats() {
   const attempts = await fetchAttempts(filters)
 
-  const uniqueStudents = new Set(attempts.map(a => a.profile))
-  const uniqueItems = new Set(attempts.map(a => a.item))
+  const uniqueStudents = new Set(attempts.map(a => a.student_key || a.expand?.profile?.student_key))
+  const uniqueItems = new Set(attempts.map(a => a.item || a.problem))
   const correctAttempts = attempts.filter(a => a.is_correct).length
   const overallAccuracy = attempts.length > 0
     ? Math.round((correctAttempts / attempts.length) * 100)
