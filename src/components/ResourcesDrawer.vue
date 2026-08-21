@@ -118,6 +118,7 @@
                 :href="dataset.url"
                 :download="dataset.filename"
                 class="tool-card dataset-card"
+                @click="downloadDataset($event, dataset)"
               >
                 <span class="tool-icon">📄</span>
                 <div class="tool-info">
@@ -127,6 +128,9 @@
                 <span class="download-icon">⬇</span>
               </a>
             </div>
+            <p v-if="datasetDownloadError" class="section-desc dataset-download-error">
+              {{ datasetDownloadError }}
+            </p>
           </div>
 
           <!-- Software install (matches preferred software) -->
@@ -286,6 +290,7 @@ const route = useRoute()
 const classIdForGuides = computed(() => route.params.classId || 'statistics')
 const isOpen = ref(false)
 const recorderActive = ref(false)
+const datasetDownloadError = ref('')
 
 const toggleBtnRef = ref(null)
 const position = ref(loadStoredPosition())
@@ -483,37 +488,26 @@ const currentInstall = computed(() => {
 })
 
 const datasets = computed(() => {
-  // Always show standard datasets for all modules
+  // Files live in public/ at site root (served as /filename.csv).
+  // Names match Software Practice copy: bmi_and_exercise.csv, personality_data.csv, Normality data.csv
   return [
     {
-      name: 'BMI and Exercise Data',
-      description: 'Body mass index and exercise habits',
-      filename: 'bmi_exercise.omv',
-      url: '/datasets/bmi_exercise.omv'
+      name: 'BMI and Exercise',
+      description: 'bmi, exercise_per_week, vegetables — class CSV for jamovi',
+      filename: 'bmi_and_exercise.csv',
+      url: '/bmi_and_exercise.csv'
     },
     {
       name: 'Personality Data',
-      description: 'Personality traits and demographics',
-      filename: 'personality.omv',
-      url: '/datasets/personality.omv'
+      description: 'Demographics and Big Five scales — class CSV for jamovi',
+      filename: 'personality_data.csv',
+      url: '/personality_data.csv'
     },
     {
       name: 'Normality Data',
-      description: 'Dataset for testing statistical assumptions',
+      description: 'Practice file for normality / paired-menu demos',
       filename: 'Normality data.csv',
-      url: '/datasets/Normality data.csv'
-    },
-    {
-      name: 'Sample Dataset 1',
-      description: 'General practice dataset',
-      filename: 'sample_data_1.csv',
-      url: '/datasets/sample_data_1.csv'
-    },
-    {
-      name: 'Sample Dataset 2',
-      description: 'Additional practice data',
-      filename: 'sample_data_2.csv',
-      url: '/datasets/sample_data_2.csv'
+      url: '/Normality%20data.csv'
     }
   ]
 })
@@ -549,6 +543,35 @@ function popOutCurrentPage() {
 
 function onRecorderActiveChange(active) {
   recorderActive.value = Boolean(active)
+}
+
+/** Fetch + save so browsers don't navigate to SPA HTML on a bad/missing path. */
+async function downloadDataset(event, dataset) {
+  event.preventDefault()
+  datasetDownloadError.value = ''
+  try {
+    const response = await fetch(dataset.url, { credentials: 'same-origin' })
+    if (!response.ok) {
+      throw new Error(`Download failed (${response.status})`)
+    }
+    const contentType = (response.headers.get('content-type') || '').toLowerCase()
+    if (contentType.includes('text/html')) {
+      throw new Error('File not found on the server (got a web page instead of a CSV).')
+    }
+    const blob = await response.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = objectUrl
+    link.download = dataset.filename
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000)
+  } catch (err) {
+    console.error('Dataset download failed:', err)
+    datasetDownloadError.value =
+      err?.message || 'Could not download that dataset. Try again or ask your instructor.'
+  }
 }
 
 function goToSupport() {
@@ -773,6 +796,11 @@ document.addEventListener('keydown', (e) => {
 
 .drawer-recorder-inline .recorder-hint {
   margin-bottom: 0.75rem;
+}
+
+.dataset-download-error {
+  margin-top: 0.75rem;
+  color: #b91c1c;
 }
 
 .recorder-active-chip {
