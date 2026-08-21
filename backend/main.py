@@ -10,6 +10,7 @@ from typing import List, Dict, Optional, Union
 import os
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -157,12 +158,50 @@ def _sanitize_non_negative_int(value: Optional[int]) -> Optional[int]:
 # Startup/Shutdown Events
 # ============================================================
 
+def _run_db_backup():
+    """Snapshot Postgres before alembic. Fail closed when REQUIRE_DB_BACKUP=1."""
+    require = os.environ.get("REQUIRE_DB_BACKUP", "").strip() == "1"
+    enabled = os.environ.get("BACKUP_BEFORE_MIGRATE", "1").strip().lower() not in {
+        "0",
+        "false",
+        "no",
+        "off",
+    }
+    if not enabled:
+        print("BACKUP_BEFORE_MIGRATE disabled — skipping pre-migrate backup.", flush=True)
+        return
+
+    try:
+        from scripts.backup_postgres import backup_database
+
+        database_url = (
+            os.environ.get("DATABASE_URL")
+            or os.environ.get("DATABASE_PUBLIC_URL")
+            or ""
+        )
+        out_root = Path(
+            os.environ.get("BACKUP_DIR", "").strip()
+            or str(Path(tempfile.gettempdir()) / "methods-market-db-backups")
+        )
+        backup_path = backup_database(database_url, out_root)
+        print(f"Pre-migrate backup saved: {backup_path}", flush=True)
+    except Exception as exc:
+        print(f"⚠️  Pre-migrate database backup failed: {exc}", flush=True)
+        import traceback
+        traceback.print_exc()
+        if require:
+            raise RuntimeError(
+                "REQUIRE_DB_BACKUP=1 and pre-migrate backup failed — refusing alembic upgrade"
+            ) from exc
+
+
 def _run_migrations():
     backend_dir = Path(__file__).resolve().parent
     if os.environ.get("SKIP_DB_MIGRATE") == "1":
         print("SKIP_DB_MIGRATE=1 — skipping migrate/seed", flush=True)
         return
     try:
+        _run_db_backup()
         subprocess.run(
             [sys.executable, "-m", "alembic", "upgrade", "head"],
             cwd=backend_dir,
