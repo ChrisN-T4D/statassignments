@@ -40,3 +40,6 @@ Thumbs.db
 .ollama-handoff/
 .aider*
 .worktrees/
+
+# Brainstorm visual companion (local mockups)
+.superpowers/
