@@ -31,70 +31,84 @@ export function useInstructorAnalytics() {
 
     loading.value = true
     try {
-      const filterParts = []
-
+      let roster = []
       if (filters.semesterId) {
-        filterParts.push(`semester = "${filters.semesterId}"`)
+        roster = await fetchRoster(filters.semesterId)
+      } else {
+        roster = await pb.collection('roster').getFullList({ expand: 'class' })
       }
-      if (filters.moduleId) {
-        filterParts.push(`module = "${filters.moduleId}"`)
+
+      const userToKey = {}
+      const rosterSet = new Set()
+      for (const r of roster) {
+        if (!r.user) continue
+        rosterSet.add(r.user)
+        userToKey[r.user] = r.student_key || ''
       }
-      if (filters.itemId) {
-        filterParts.push(`item = "${filters.itemId}"`)
-      }
-      if (filters.softwareType) {
-        filterParts.push(`software_type = "${filters.softwareType}"`)
-      }
+
+      let records = await pb.collection('practice_attempts').getFullList({
+        sort: '-created'
+      })
+      records = records.filter(r => rosterSet.has(r.user))
+
       if (filters.startDate) {
-        filterParts.push(`created >= "${filters.startDate}"`)
+        const start = filters.startDate
+        records = records.filter(r => (r.created || '') >= start)
       }
       if (filters.endDate) {
-        filterParts.push(`created <= "${filters.endDate}"`)
+        const end = `${filters.endDate}T23:59:59`
+        records = records.filter(r => (r.created || '') <= end)
+      }
+      if (filters.itemId) {
+        const needle = String(filters.itemId)
+        records = records.filter(
+          r => r.problem === needle || String(r.problem || '').includes(needle)
+        )
       }
 
-      const records = await pb.collection('attempts').getFullList({
-        filter: filterParts.length > 0 ? filterParts.join(' && ') : undefined,
-        sort: '-created',
-        expand: 'profile,module,item,semester'
+      return records.map(a => {
+        const student_key = userToKey[a.user] || ''
+        return {
+          student_key,
+          problem: a.problem,
+          item: a.problem,
+          is_correct: a.is_correct,
+          difficulty: a.difficulty,
+          active_time_seconds: a.active_time_seconds,
+          total_time_seconds: a.total_time_seconds,
+          time_spent_seconds: a.active_time_seconds,
+          created: a.created,
+          software_type: '',
+          hint_used: false,
+          expand: { profile: { student_key } }
+        }
       })
-
-      return records
     } finally {
       loading.value = false
     }
   }
 
-  // Generate attempt-level CSV export (pseudonymous)
+  // Generate attempt-level CSV export (pseudonymous) — Concept Review practice_attempts
   async function exportAttemptsCSV(filters = {}) {
     const attempts = await fetchAttempts(filters)
 
     const headers = [
-      'semester_code',
       'student_key',
-      'software_type',
-      'module_id',
-      'module_title',
-      'item_id',
+      'problem',
       'is_correct',
-      'score',
-      'time_spent_seconds',
-      'attempt_no',
-      'hint_used',
+      'difficulty',
+      'active_time_seconds',
+      'total_time_seconds',
       'created'
     ]
 
     const rows = attempts.map(a => [
-      a.expand?.semester?.code || '',
-      a.expand?.profile?.student_key || '',
-      a.software_type || '',
-      a.expand?.module?.topic_id || '',
-      a.expand?.module?.title || '',
-      a.item || '',
+      a.expand?.profile?.student_key || a.student_key || '',
+      a.problem || a.item || '',
       a.is_correct ? '1' : '0',
-      a.score ?? '',
-      a.time_spent_seconds ?? '',
-      a.attempt_no ?? '',
-      a.hint_used ? '1' : '0',
+      a.difficulty || '',
+      a.active_time_seconds ?? '',
+      a.total_time_seconds ?? '',
       a.created || ''
     ])
 
@@ -555,9 +569,7 @@ export function useInstructorAnalytics() {
       if (m.total_attempts >= AT_RISK_MIN_ATTEMPTS_LOW_ACC && accuracy < AT_RISK_ACCURACY_THRESHOLD) {
         reasons.push('Low accuracy')
       }
-      if (m.total_attempts >= AT_RISK_MIN_ATTEMPTS_HINT && hintRate > AT_RISK_HINT_RATE_THRESHOLD) {
-        reasons.push('High hint use')
-      }
+      // practice_attempts has no hint_used; skip High hint use for Concept Review exports
       if (hasEngagement && m.total_attempts < AT_RISK_LOW_ENGAGEMENT_ATTEMPTS) {
         reasons.push('Very low engagement')
       }
