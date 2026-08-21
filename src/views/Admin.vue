@@ -30,6 +30,12 @@
         <div class="section-header">
           <h2>Dataset Viewer</h2>
           <div class="actions">
+            <select v-model="adminExportSemesterId" class="semester-select-inline" aria-label="Semester for export">
+              <option value="">Semester for export…</option>
+              <option v-for="sem in adminSemesters" :key="sem.id" :value="sem.id">
+                {{ sem.name || sem.code }}
+              </option>
+            </select>
             <button @click="exportAllData" class="btn-primary">Export All Data</button>
             <button @click="refreshData" class="btn-secondary">Refresh</button>
           </div>
@@ -42,14 +48,12 @@
             <option value="users">Users</option>
             <option value="attempts">Attempts</option>
             <option value="classes">Classes</option>
-            <option value="courses">Courses</option>
             <option value="items">Items</option>
             <option value="modules">Modules</option>
             <option value="roster">Roster</option>
             <option value="semesters">Semesters</option>
             <option value="practice_attempts">Practice Attempts</option>
             <option value="practice_problems">Practice Problems</option>
-            <option value="read_topics">Read Topics</option>
             <option value="learning_events">Learning Events</option>
             <option value="bkt_states">BKT States</option>
             <option value="software_lesson_metrics">Software Lesson Metrics</option>
@@ -84,6 +88,11 @@
         <div v-else-if="selectedCollection && collectionData.length === 0" class="empty-state">
           No data found in {{ selectedCollection }}
         </div>
+      </div>
+
+      <!-- Class Mastery -->
+      <div v-if="activeTab === 'class-mastery'" class="content-section">
+        <ClassMasteryPanel :semesters="adminSemesters" :onExportAll="handleAdminExportAll" />
       </div>
 
       <!-- BKT Analytics -->
@@ -127,7 +136,8 @@
         <div class="bkt-data-table">
           <h3>All BKT States</h3>
           <p class="note">
-            BKT data can be stored in PocketBase for persistence across devices.
+            This table shows BKT states for the signed-in admin account only (personal / local migration utility).
+            For class-level mastery by module, use the Class Mastery tab.
             Use "Migrate to Database" to transfer any localStorage data to the database.
           </p>
           <div v-if="Object.keys(allBKTStates).length > 0" class="table-scroll">
@@ -461,12 +471,24 @@ import { questionObjectiveMap, getObjectivesForQuestion } from '../data/question
 import { allStatisticsQuestions, allConceptReviewQuestions } from '../data/conceptQuestions'
 import { getContentModulesByClass, getAllTopics } from '../data/modules'
 import StudentProgressViewer from '../components/StudentProgressViewer.vue'
+import ClassMasteryPanel from '../components/ClassMasteryPanel.vue'
+import { useClassMasteryAnalytics } from '../composables/useClassMasteryAnalytics'
+import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
 
 const { getAllBKTStates, resetBKT } = useBKT()
+const { exportAllResearchData } = useClassMasteryAnalytics()
+const {
+  fetchSemesters,
+  exportLearningEventsCSV,
+  exportObjectiveMasteryCSV,
+  exportPrototypesCSV,
+  exportKeysCSV
+} = useInstructorAnalytics()
 
 // Tab state
 const tabs = [
   { id: 'datasets', label: 'Datasets' },
+  { id: 'class-mastery', label: 'Class Mastery' },
   { id: 'progress', label: 'Student Progress' },
   { id: 'bkt', label: 'BKT Analytics' },
   { id: 'questions', label: 'Questions' },
@@ -474,6 +496,8 @@ const tabs = [
   { id: 'system', label: 'System Info' }
 ]
 const activeTab = ref('datasets')
+const adminSemesters = ref([])
+const adminExportSemesterId = ref('')
 
 // Dataset viewer state
 const selectedCollection = ref('')
@@ -921,27 +945,43 @@ function exportCollection() {
   URL.revokeObjectURL(url)
 }
 
-function exportAllData() {
-  const allData = {
-    bkt: getAllBKTStates(),
-    objectives: objectives,
-    questionMappings: questionObjectiveMap,
-    questions: allConceptReviewQuestions,
-    localStorage: {
-      preferredSoftware: localStorage.getItem('preferredSoftware'),
-      readTopics: localStorage.getItem('readTopics')
-    },
-    exportedAt: new Date().toISOString()
+async function exportAllData() {
+  if (!adminExportSemesterId.value) {
+    alert('Select a semester next to Export All Data first.')
+    return
   }
+  await exportAllResearchData(adminExportSemesterId.value, {
+    exportLearningEventsCSV,
+    exportObjectiveMasteryCSV,
+    exportPrototypesCSV,
+    exportKeysCSV
+  })
+}
 
-  const dataStr = JSON.stringify(allData, null, 2)
-  const blob = new Blob([dataStr], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `admin-export-${Date.now()}.json`
-  link.click()
-  URL.revokeObjectURL(url)
+async function handleAdminExportAll(semesterId) {
+  if (!semesterId) {
+    alert('Select a semester in Class Mastery first.')
+    return
+  }
+  await exportAllResearchData(semesterId, {
+    exportLearningEventsCSV,
+    exportObjectiveMasteryCSV,
+    exportPrototypesCSV,
+    exportKeysCSV
+  })
+}
+
+async function loadAdminSemesters() {
+  try {
+    adminSemesters.value = await fetchSemesters()
+    if (!adminExportSemesterId.value && adminSemesters.value.length) {
+      const active = adminSemesters.value.find(s => s.is_active) || adminSemesters.value[0]
+      adminExportSemesterId.value = active?.id || ''
+    }
+  } catch (err) {
+    console.error('Failed to load semesters:', err)
+    adminSemesters.value = []
+  }
 }
 
 function exportSystemConfig() {
@@ -1075,10 +1115,14 @@ watch(activeTab, (tab) => {
   if (tab === 'users') {
     loadUsers()
   }
+  if (tab === 'class-mastery' || tab === 'datasets') {
+    loadAdminSemesters()
+  }
 })
 
 onMounted(() => {
   loadBKTData()
+  loadAdminSemesters()
   if (activeTab.value === 'users') loadUsers()
 })
 </script>
@@ -1169,6 +1213,15 @@ onMounted(() => {
 .actions {
   display: flex;
   gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.semester-select-inline {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 0.375rem;
+  min-width: 10rem;
 }
 
 .dataset-selector {
