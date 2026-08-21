@@ -20,7 +20,8 @@
     "verify:concept-review": "node scripts/verify-concept-review-scoring.mjs",
     "contracts:dataflow": "node scripts/check-data-flow-contracts.mjs",
     "audit:software": "node scripts/audit-software-coverage.mjs",
-    "open:mobile": "start chrome --window-size=375,812 http://localhost:5173"
+    "open:mobile": "start chrome --window-size=375,812 http://localhost:5173",
+    "verify:screen-recorder": "node scripts/verify-screen-recording-support.mjs"
   },
   "dependencies": {
     "vue": "^3.4.0",

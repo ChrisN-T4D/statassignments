@@ -1,6 +1,6 @@
 <template>
-  <div class="assignment-tools">
-    <div class="tools-header">
+  <div class="assignment-tools" :class="{ embedded }">
+    <div v-if="!embedded" class="tools-header">
       <h3>🎯 Assignment Tools</h3>
       <p class="tools-help">Tools to help you complete and submit your assignment</p>
     </div>
@@ -8,8 +8,16 @@
     <div class="tools-controls">
       <!-- Not Recording State -->
       <template v-if="!isRecording && !isPaused">
+        <div v-if="!recordingSupport.supported" class="av-error-help recorder-unsupported">
+          <div class="error-header">
+            <span class="error-icon">⚠️</span>
+            <strong>Screen recording unavailable here</strong>
+          </div>
+          <p class="error-details">{{ recordingSupport.message }}</p>
+        </div>
+
         <!-- Action Buttons Row (Side by Side) -->
-        <div class="action-buttons-row">
+        <div v-else class="action-buttons-row">
           <!-- Pop-Out Instructions Button -->
           <div v-if="instructionsContent" class="tool-section">
             <PopOutButton
@@ -34,13 +42,13 @@
               Start Recording
             </button>
             <p class="tool-hint">
-              You'll be asked to select what to record (entire screen, window, or browser tab)
+              You'll be asked to select what to record (entire screen, window, or browser tab). Works in Chrome, Edge, Firefox, and Safari on desktop.
             </p>
           </div>
         </div>
 
         <!-- Audio/Video Settings Row (Below Action Buttons) -->
-        <div class="av-settings-row">
+        <div v-if="recordingSupport.supported && recordingSupport.hasGetUserMedia" class="av-settings-row">
           <!-- Microphone Settings -->
           <div class="tool-section av-setting">
             <label class="av-toggle">
@@ -172,7 +180,7 @@
 
         <div class="recording-actions">
           <button
-            v-if="isRecording"
+            v-if="isRecording && supportsPause"
             @click="pauseRecording"
             class="btn-pause"
           >
@@ -180,7 +188,7 @@
             Pause
           </button>
           <button
-            v-if="isPaused"
+            v-if="isPaused && supportsPause"
             @click="resumeRecording"
             class="btn-resume"
           >
@@ -245,6 +253,13 @@
 <script setup>
 import { ref, computed, onUnmounted, watch, nextTick } from 'vue'
 import PopOutButton from './PopOutButton.vue'
+import {
+  getSupportedRecorderMimeType,
+  fileExtensionForMime,
+  getDisplayMediaConstraintAttempts,
+  detectRecordingSupport,
+  canPauseMediaRecorder
+} from '../utils/screenRecordingSupport.js'
 
 const props = defineProps({
   allowUpload: {
@@ -275,10 +290,15 @@ const props = defineProps({
   instructionsHeight: {
     type: Number,
     default: 700
+  },
+  /** Hide outer header when nested in Resources drawer */
+  embedded: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['recording-complete', 'upload-complete'])
+const emit = defineEmits(['recording-complete', 'upload-complete', 'active-change'])
 
 // Recording state
 const isRecording = ref(false)
@@ -304,6 +324,9 @@ const mediaStream = ref(null)
 const recordedChunks = ref([])
 const recordedVideoUrl = ref(null)
 const recordedBlob = ref(null)
+const activeMimeType = ref('')
+const mixAudioContext = ref(null)
+const sourceScreenStream = ref(null)
 
 // Canvas compositing for camera overlay
 const compositeCanvas = ref(null)
@@ -315,6 +338,9 @@ const startTime = ref(0)
 const elapsedTime = ref(0)
 const timerInterval = ref(null)
 
+const recordingSupport = computed(() => detectRecordingSupport())
+const supportsPause = computed(() => canPauseMediaRecorder())
+
 // Computed
 const formattedTime = computed(() => {
   const seconds = Math.floor(elapsedTime.value / 1000)
@@ -322,6 +348,8 @@ const formattedTime = computed(() => {
   const secs = seconds % 60
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 })
+
+const downloadExtension = computed(() => fileExtensionForMime(activeMimeType.value))
 
 // Handle microphone toggle
 async function handleMicToggle() {
@@ -384,11 +412,24 @@ async function handleCameraToggle() {
 }
 
 // Combine audio streams (screen audio + microphone)
-function combineAudioStreams(screenStream, microphoneStream) {
-  const audioContext = new AudioContext()
+async function combineAudioStreams(screenStream, microphoneStream) {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext
+  if (!AudioCtx) {
+    return microphoneStream?.getAudioTracks()?.[0] || null
+  }
+
+  const audioContext = new AudioCtx()
+  mixAudioContext.value = audioContext
+  if (audioContext.state === 'suspended') {
+    try {
+      await audioContext.resume()
+    } catch (_) {
+      /* Safari may still allow destinations after a user gesture */
+    }
+  }
+
   const destination = audioContext.createMediaStreamDestination()
 
-  // Add screen audio if available
   const screenAudioTracks = screenStream.getAudioTracks()
   if (screenAudioTracks.length > 0) {
     const screenSource = audioContext.createMediaStreamSource(
@@ -397,101 +438,156 @@ function combineAudioStreams(screenStream, microphoneStream) {
     screenSource.connect(destination)
   }
 
-  // Add microphone audio
   if (microphoneStream) {
     const micSource = audioContext.createMediaStreamSource(microphoneStream)
     micSource.connect(destination)
   }
 
-  return destination.stream.getAudioTracks()[0]
+  return destination.stream.getAudioTracks()[0] || null
 }
 
-// Create composite stream with camera overlay
-function createCompositeStream(screenStream, cameraVideoStream) {
-  // Create canvas for compositing
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+function prepareVideoElement(stream) {
+  const video = document.createElement('video')
+  video.srcObject = stream
+  video.muted = true
+  video.playsInline = true
+  video.setAttribute('playsinline', '')
+  video.setAttribute('webkit-playsinline', '')
+  return video
+}
 
-  // Create video elements for screen and camera
-  const screenVideo = document.createElement('video')
-  screenVideo.srcObject = screenStream
-  screenVideo.play()
-
-  const cameraVideo = document.createElement('video')
-  cameraVideo.srcObject = cameraVideoStream
-  cameraVideo.play()
-
-  // Wait for video metadata to set canvas size
-  screenVideo.onloadedmetadata = () => {
-    canvas.width = screenVideo.videoWidth
-    canvas.height = screenVideo.videoHeight
-
-    compositeCanvas.value = canvas
-    compositeContext.value = ctx
-
-    // Camera bubble dimensions (bottom-right corner, 20% of screen width)
-    const bubbleWidth = Math.floor(canvas.width * 0.2)
-    const bubbleHeight = Math.floor(bubbleWidth * 0.75) // 4:3 aspect ratio
-    const bubblePadding = 20
-    const bubbleX = canvas.width - bubbleWidth - bubblePadding
-    const bubbleY = canvas.height - bubbleHeight - bubblePadding
-
-    // Animation loop to composite frames
-    function drawFrame() {
-      // Draw screen capture
-      ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height)
-
-      // Draw camera bubble with rounded corners and border
-      if (cameraVideo.readyState >= 2) {
-        // Save context state
-        ctx.save()
-
-        // Create rounded rectangle path
-        const radius = 10
-        ctx.beginPath()
-        ctx.moveTo(bubbleX + radius, bubbleY)
-        ctx.lineTo(bubbleX + bubbleWidth - radius, bubbleY)
-        ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY, bubbleX + bubbleWidth, bubbleY + radius)
-        ctx.lineTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight - radius)
-        ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight, bubbleX + bubbleWidth - radius, bubbleY + bubbleHeight)
-        ctx.lineTo(bubbleX + radius, bubbleY + bubbleHeight)
-        ctx.quadraticCurveTo(bubbleX, bubbleY + bubbleHeight, bubbleX, bubbleY + bubbleHeight - radius)
-        ctx.lineTo(bubbleX, bubbleY + radius)
-        ctx.quadraticCurveTo(bubbleX, bubbleY, bubbleX + radius, bubbleY)
-        ctx.closePath()
-        ctx.clip()
-
-        // Draw camera feed
-        ctx.drawImage(cameraVideo, bubbleX, bubbleY, bubbleWidth, bubbleHeight)
-
-        // Restore context
-        ctx.restore()
-
-        // Draw border
-        ctx.strokeStyle = '#4f46e5'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.moveTo(bubbleX + radius, bubbleY)
-        ctx.lineTo(bubbleX + bubbleWidth - radius, bubbleY)
-        ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY, bubbleX + bubbleWidth, bubbleY + radius)
-        ctx.lineTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight - radius)
-        ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight, bubbleX + bubbleWidth - radius, bubbleY + bubbleHeight)
-        ctx.lineTo(bubbleX + radius, bubbleY + bubbleHeight)
-        ctx.quadraticCurveTo(bubbleX, bubbleY + bubbleHeight, bubbleX, bubbleY + bubbleHeight - radius)
-        ctx.lineTo(bubbleX, bubbleY + radius)
-        ctx.quadraticCurveTo(bubbleX, bubbleY, bubbleX + radius, bubbleY)
-        ctx.closePath()
-        ctx.stroke()
-      }
-
-      compositeAnimationFrame.value = requestAnimationFrame(drawFrame)
-    }
-
-    drawFrame()
+// Create composite stream with camera overlay (falls back to screen-only on failure)
+async function createCompositeStream(screenStream, cameraVideoStream) {
+  if (typeof HTMLCanvasElement === 'undefined' || !HTMLCanvasElement.prototype.captureStream) {
+    return screenStream
   }
 
-  // Return canvas stream
-  return canvas.captureStream(30) // 30 fps
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return screenStream
+
+  const screenVideo = prepareVideoElement(screenStream)
+  const cameraVideo = prepareVideoElement(cameraVideoStream)
+
+  try {
+    await Promise.all([
+      screenVideo.play().catch(() => {}),
+      cameraVideo.play().catch(() => {})
+    ])
+  } catch (_) {
+    return screenStream
+  }
+
+  await new Promise((resolve) => {
+    if (screenVideo.videoWidth > 0) {
+      resolve()
+      return
+    }
+    screenVideo.onloadedmetadata = () => resolve()
+    setTimeout(resolve, 1500)
+  })
+
+  const trackSettings = screenStream.getVideoTracks()[0]?.getSettings?.() || {}
+  canvas.width = screenVideo.videoWidth || trackSettings.width || 1280
+  canvas.height = screenVideo.videoHeight || trackSettings.height || 720
+
+  compositeCanvas.value = canvas
+  compositeContext.value = ctx
+
+  const bubbleWidth = Math.floor(canvas.width * 0.2)
+  const bubbleHeight = Math.floor(bubbleWidth * 0.75)
+  const bubblePadding = 20
+  const bubbleX = canvas.width - bubbleWidth - bubblePadding
+  const bubbleY = canvas.height - bubbleHeight - bubblePadding
+
+  function drawFrame() {
+    ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height)
+
+    if (cameraVideo.readyState >= 2) {
+      ctx.save()
+      const radius = 10
+      ctx.beginPath()
+      ctx.moveTo(bubbleX + radius, bubbleY)
+      ctx.lineTo(bubbleX + bubbleWidth - radius, bubbleY)
+      ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY, bubbleX + bubbleWidth, bubbleY + radius)
+      ctx.lineTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight - radius)
+      ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight, bubbleX + bubbleWidth - radius, bubbleY + bubbleHeight)
+      ctx.lineTo(bubbleX + radius, bubbleY + bubbleHeight)
+      ctx.quadraticCurveTo(bubbleX, bubbleY + bubbleHeight, bubbleX, bubbleY + bubbleHeight - radius)
+      ctx.lineTo(bubbleX, bubbleY + radius)
+      ctx.quadraticCurveTo(bubbleX, bubbleY, bubbleX + radius, bubbleY)
+      ctx.closePath()
+      ctx.clip()
+      ctx.drawImage(cameraVideo, bubbleX, bubbleY, bubbleWidth, bubbleHeight)
+      ctx.restore()
+
+      ctx.strokeStyle = '#4f46e5'
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(bubbleX + radius, bubbleY)
+      ctx.lineTo(bubbleX + bubbleWidth - radius, bubbleY)
+      ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY, bubbleX + bubbleWidth, bubbleY + radius)
+      ctx.lineTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight - radius)
+      ctx.quadraticCurveTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight, bubbleX + bubbleWidth - radius, bubbleY + bubbleHeight)
+      ctx.lineTo(bubbleX + radius, bubbleY + bubbleHeight)
+      ctx.quadraticCurveTo(bubbleX, bubbleY + bubbleHeight, bubbleX, bubbleY + bubbleHeight - radius)
+      ctx.lineTo(bubbleX, bubbleY + radius)
+      ctx.quadraticCurveTo(bubbleX, bubbleY, bubbleX + radius, bubbleY)
+      ctx.closePath()
+      ctx.stroke()
+    }
+
+    compositeAnimationFrame.value = requestAnimationFrame(drawFrame)
+  }
+
+  drawFrame()
+  return canvas.captureStream(30)
+}
+
+async function requestScreenStream() {
+  const attempts = getDisplayMediaConstraintAttempts()
+  let lastError = null
+
+  for (const constraints of attempts) {
+    try {
+      return await navigator.mediaDevices.getDisplayMedia(constraints)
+    } catch (err) {
+      lastError = err
+      // User cancelled / denied — do not keep retrying
+      if (err?.name === 'NotAllowedError' || err?.name === 'AbortError') {
+        throw err
+      }
+    }
+  }
+
+  throw lastError || new Error('Unable to start screen capture')
+}
+
+function createMediaRecorder(stream, mimeType) {
+  const bitRate = { videoBitsPerSecond: 2500000 }
+
+  if (mimeType) {
+    try {
+      return new MediaRecorder(stream, { mimeType, ...bitRate })
+    } catch (_) {
+      /* fall through */
+    }
+  }
+
+  try {
+    return new MediaRecorder(stream, bitRate)
+  } catch (_) {
+    return new MediaRecorder(stream)
+  }
+}
+
+function startMediaRecorder(recorder) {
+  // 1s timeslice is safer than 100ms on Safari; fall back to no timeslice
+  try {
+    recorder.start(1000)
+  } catch (_) {
+    recorder.start()
+  }
 }
 
 // Start recording
@@ -499,139 +595,185 @@ async function startRecording() {
   try {
     error.value = null
 
-    // Request screen capture
-    const screenStream = await navigator.mediaDevices.getDisplayMedia({
-      video: {
-        cursor: 'always',
-        displaySurface: 'monitor' // Can be 'monitor', 'window', 'application', or 'browser'
-      },
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        sampleRate: 44100
-      }
-    })
+    if (!recordingSupport.value.supported) {
+      error.value = recordingSupport.value.message
+      return
+    }
 
-    // Determine final video stream (with or without camera overlay)
+    const screenStream = await requestScreenStream()
+    sourceScreenStream.value = screenStream
+
     let videoStream = screenStream
 
     if (cameraEnabled.value && cameraStream.value) {
-      // Create composite stream with camera bubble overlay
-      videoStream = createCompositeStream(screenStream, cameraStream.value)
+      try {
+        videoStream = await createCompositeStream(screenStream, cameraStream.value)
+      } catch (compositeErr) {
+        console.warn('Camera overlay unavailable, recording screen only:', compositeErr)
+        videoStream = screenStream
+      }
     }
 
-    // Combine audio streams if microphone is enabled
     let finalStream = videoStream
 
     if (micEnabled.value && micStream.value) {
-      // Create a new MediaStream with video and combined audio
       const videoTrack = videoStream.getVideoTracks()[0]
-      const combinedAudioTrack = combineAudioStreams(screenStream, micStream.value)
-
-      finalStream = new MediaStream([videoTrack, combinedAudioTrack])
+      const combinedAudioTrack = await combineAudioStreams(screenStream, micStream.value)
+      const tracks = [videoTrack]
+      if (combinedAudioTrack) {
+        tracks.push(combinedAudioTrack)
+      } else {
+        const micTrack = micStream.value.getAudioTracks()[0]
+        if (micTrack) tracks.push(micTrack)
+      }
+      finalStream = new MediaStream(tracks)
     }
 
     mediaStream.value = finalStream
     recordedChunks.value = []
+    activeMimeType.value = getSupportedRecorderMimeType()
 
-    // Create MediaRecorder
-    const options = {
-      mimeType: getSupportedMimeType(),
-      videoBitsPerSecond: 2500000 // 2.5 Mbps
+    mediaRecorder.value = createMediaRecorder(finalStream, activeMimeType.value)
+    if (mediaRecorder.value.mimeType) {
+      activeMimeType.value = mediaRecorder.value.mimeType
     }
 
-    mediaRecorder.value = new MediaRecorder(finalStream, options)
-
-    // Handle data available
     mediaRecorder.value.ondataavailable = (event) => {
       if (event.data && event.data.size > 0) {
         recordedChunks.value.push(event.data)
       }
     }
 
-    // Handle stop
+    mediaRecorder.value.onerror = (event) => {
+      console.error('MediaRecorder error:', event)
+      error.value = 'Recording failed in this browser. Try Chrome or Edge, or turn off the camera overlay and retry.'
+      stopRecording()
+    }
+
     mediaRecorder.value.onstop = handleRecordingStop
 
-    // Handle stream end (user stops sharing)
-    finalStream.getVideoTracks()[0].addEventListener('ended', () => {
-      if (isRecording.value) {
-        stopRecording()
-      }
-    })
+    // Listen on the real screen track — canvas tracks may not fire "ended" when sharing stops
+    const screenTrack = screenStream.getVideoTracks()[0]
+    if (screenTrack) {
+      screenTrack.addEventListener('ended', () => {
+        if (isRecording.value || isPaused.value) {
+          stopRecording()
+        }
+      })
+    }
 
-    // Start recording
-    mediaRecorder.value.start(100) // Collect data every 100ms
+    startMediaRecorder(mediaRecorder.value)
     isRecording.value = true
+    isPaused.value = false
 
-    // Start timer
     startTime.value = Date.now()
     startTimer()
-
   } catch (err) {
     console.error('Error starting recording:', err)
-    if (err.name === 'NotAllowedError') {
-      error.value = 'Permission denied. Please allow screen recording to continue.'
-    } else if (err.name === 'NotSupportedError') {
-      error.value = 'Screen recording is not supported in your browser. Try Chrome, Edge, or Firefox.'
+    cleanupCaptureStreams()
+    if (err.name === 'NotAllowedError' || err.name === 'AbortError') {
+      error.value = 'Permission denied or cancelled. Please allow screen recording to continue.'
+    } else if (err.name === 'NotSupportedError' || err.name === 'NotFoundError') {
+      error.value =
+        'Screen recording is not supported in this browser. Try the latest Chrome, Edge, Firefox, or Safari on a computer.'
     } else {
-      error.value = `Failed to start recording: ${err.message}`
+      error.value = `Failed to start recording: ${err.message || err.name || 'Unknown error'}`
     }
   }
 }
 
 // Pause recording
 function pauseRecording() {
-  if (mediaRecorder.value && isRecording.value) {
+  if (!supportsPause.value || !mediaRecorder.value || !isRecording.value) return
+  try {
     mediaRecorder.value.pause()
     isRecording.value = false
     isPaused.value = true
     stopTimer()
+  } catch (err) {
+    console.warn('Pause not available:', err)
+    error.value = 'Pause is not supported in this browser. Click Stop & Save when you are done.'
   }
 }
 
 // Resume recording
 function resumeRecording() {
-  if (mediaRecorder.value && isPaused.value) {
+  if (!supportsPause.value || !mediaRecorder.value || !isPaused.value) return
+  try {
     mediaRecorder.value.resume()
     isPaused.value = false
     isRecording.value = true
     startTimer()
+  } catch (err) {
+    console.warn('Resume not available:', err)
   }
+}
+
+function cleanupCaptureStreams() {
+  if (compositeAnimationFrame.value) {
+    cancelAnimationFrame(compositeAnimationFrame.value)
+    compositeAnimationFrame.value = null
+  }
+
+  if (mediaStream.value) {
+    mediaStream.value.getTracks().forEach((track) => {
+      try {
+        track.stop()
+      } catch (_) {}
+    })
+  }
+
+  if (sourceScreenStream.value) {
+    sourceScreenStream.value.getTracks().forEach((track) => {
+      try {
+        track.stop()
+      } catch (_) {}
+    })
+    sourceScreenStream.value = null
+  }
+
+  if (mixAudioContext.value) {
+    mixAudioContext.value.close?.().catch?.(() => {})
+    mixAudioContext.value = null
+  }
+
+  compositeCanvas.value = null
+  compositeContext.value = null
 }
 
 // Stop recording
 function stopRecording() {
-  if (mediaRecorder.value) {
-    mediaRecorder.value.stop()
-    isRecording.value = false
-    isPaused.value = false
-    stopTimer()
-
-    // Stop composite animation if running
-    if (compositeAnimationFrame.value) {
-      cancelAnimationFrame(compositeAnimationFrame.value)
-      compositeAnimationFrame.value = null
+  if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
+    try {
+      // Request final chunk before stop (supported in Chromium; ignored elsewhere)
+      if (typeof mediaRecorder.value.requestData === 'function') {
+        mediaRecorder.value.requestData()
+      }
+      mediaRecorder.value.stop()
+    } catch (err) {
+      console.warn('Error stopping MediaRecorder:', err)
+      handleRecordingStop()
     }
-
-    // Stop all tracks
-    if (mediaStream.value) {
-      mediaStream.value.getTracks().forEach(track => track.stop())
-    }
-
-    // Clean up canvas
-    compositeCanvas.value = null
-    compositeContext.value = null
+  } else if (recordedChunks.value.length > 0 && !recordedBlob.value) {
+    handleRecordingStop()
   }
+
+  isRecording.value = false
+  isPaused.value = false
+  stopTimer()
+
+  // Stop capture tracks after recorder stops so the final chunk is flushed
+  setTimeout(() => {
+    cleanupCaptureStreams()
+  }, 250)
 }
 
 // Handle recording stop
 function handleRecordingStop() {
   isProcessing.value = true
 
-  // Create blob from chunks
-  const blob = new Blob(recordedChunks.value, {
-    type: getSupportedMimeType()
-  })
+  const mime = activeMimeType.value || getSupportedRecorderMimeType() || 'video/webm'
+  const blob = new Blob(recordedChunks.value, { type: mime })
 
   recordedBlob.value = blob
   recordedVideoUrl.value = URL.createObjectURL(blob)
@@ -642,7 +784,8 @@ function handleRecordingStop() {
     blob,
     url: recordedVideoUrl.value,
     duration: elapsedTime.value,
-    size: blob.size
+    size: blob.size,
+    mimeType: mime
   })
 }
 
@@ -654,7 +797,7 @@ function downloadRecording() {
   const a = document.createElement('a')
   a.style.display = 'none'
   a.href = url
-  a.download = `${props.filename}-${new Date().toISOString().slice(0, 10)}.webm`
+  a.download = `${props.filename}-${new Date().toISOString().slice(0, 10)}.${downloadExtension.value}`
   document.body.appendChild(a)
   a.click()
 
@@ -672,10 +815,12 @@ async function uploadRecording() {
     isUploading.value = true
     error.value = null
 
+    const ext = downloadExtension.value
     const formData = new FormData()
-    formData.append('recording', recordedBlob.value, `${props.filename}.webm`)
+    formData.append('recording', recordedBlob.value, `${props.filename}.${ext}`)
     formData.append('duration', elapsedTime.value)
     formData.append('size', recordedBlob.value.size)
+    formData.append('mimeType', activeMimeType.value || recordedBlob.value.type || '')
 
     const response = await fetch(props.uploadEndpoint, {
       method: 'POST',
@@ -689,10 +834,6 @@ async function uploadRecording() {
 
     const result = await response.json()
     emit('upload-complete', result)
-
-    // Optionally clear the recording after successful upload
-    // discardRecording()
-
   } catch (err) {
     console.error('Upload error:', err)
     error.value = `Upload failed: ${err.message}`
@@ -710,6 +851,7 @@ function discardRecording() {
   recordedVideoUrl.value = null
   recordedBlob.value = null
   recordedChunks.value = []
+  activeMimeType.value = ''
   elapsedTime.value = 0
   error.value = null
 }
@@ -728,24 +870,6 @@ function stopTimer() {
   }
 }
 
-// Get supported MIME type
-function getSupportedMimeType() {
-  const types = [
-    'video/webm;codecs=vp9',
-    'video/webm;codecs=vp8',
-    'video/webm',
-    'video/mp4'
-  ]
-
-  for (const type of types) {
-    if (MediaRecorder.isTypeSupported(type)) {
-      return type
-    }
-  }
-
-  return 'video/webm'
-}
-
 // Watch for camera stream changes and connect to video element
 watch(cameraStream, async (newStream) => {
   if (newStream && cameraPreview.value) {
@@ -756,27 +880,35 @@ watch(cameraStream, async (newStream) => {
   }
 })
 
+// Let parent keep UI mounted while recording / preview is active
+watch(
+  [isRecording, isPaused, recordedVideoUrl],
+  ([recording, paused, previewUrl]) => {
+    emit('active-change', Boolean(recording || paused || previewUrl))
+  },
+  { immediate: true }
+)
+
 // Cleanup on unmount
 onUnmounted(() => {
   stopTimer()
 
-  // Stop composite animation
-  if (compositeAnimationFrame.value) {
-    cancelAnimationFrame(compositeAnimationFrame.value)
+  if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
+    try {
+      mediaRecorder.value.onstop = null
+      mediaRecorder.value.stop()
+    } catch (_) {}
   }
 
-  // Stop all streams
-  if (mediaStream.value) {
-    mediaStream.value.getTracks().forEach(track => track.stop())
-  }
+  cleanupCaptureStreams()
+
   if (micStream.value) {
-    micStream.value.getTracks().forEach(track => track.stop())
+    micStream.value.getTracks().forEach((track) => track.stop())
   }
   if (cameraStream.value) {
-    cameraStream.value.getTracks().forEach(track => track.stop())
+    cameraStream.value.getTracks().forEach((track) => track.stop())
   }
 
-  // Clean up URLs
   if (recordedVideoUrl.value) {
     URL.revokeObjectURL(recordedVideoUrl.value)
   }
@@ -790,6 +922,19 @@ onUnmounted(() => {
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.assignment-tools.embedded {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.assignment-tools.embedded .action-buttons-row,
+.assignment-tools.embedded .av-settings-row {
+  flex-direction: column;
 }
 
 .tools-header h3 {

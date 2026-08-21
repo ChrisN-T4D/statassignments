@@ -38,9 +38,9 @@
       ></div>
     </transition>
 
-    <!-- Drawer Panel -->
+    <!-- Keep panel mounted (v-show) so an in-progress recording is not destroyed when Tools closes -->
     <transition name="drawer-slide">
-      <div v-if="isOpen" class="drawer-panel">
+      <div v-show="isOpen" class="drawer-panel">
         <!-- Header -->
         <div class="drawer-header">
           <h2>📚 Resources</h2>
@@ -93,43 +93,16 @@
                   <div class="tool-desc">View in separate window</div>
                 </div>
               </button>
+            </div>
 
-              <!-- Screen Recording -->
-              <button
-                v-if="showRecording"
-                class="tool-card recording"
-                @click="startRecording"
-              >
-                <span class="tool-icon">⏺</span>
-                <div class="tool-info">
-                  <div class="tool-title">Start Recording</div>
-                  <div class="tool-desc">Capture your work</div>
-                </div>
-              </button>
-
-              <!-- Microphone Toggle -->
-              <div v-if="showRecording" class="tool-card toggle-card">
-                <label class="toggle-label-wrapper">
-                  <input type="checkbox" v-model="microphoneEnabled" />
-                  <span class="tool-icon">🎤</span>
-                  <div class="tool-info">
-                    <div class="tool-title">Microphone: {{ microphoneEnabled ? 'ON' : 'OFF' }}</div>
-                    <div class="tool-desc">Narrate your recording</div>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Camera Toggle -->
-              <div v-if="showRecording" class="tool-card toggle-card">
-                <label class="toggle-label-wrapper">
-                  <input type="checkbox" v-model="cameraEnabled" />
-                  <span class="tool-icon">📹</span>
-                  <div class="tool-info">
-                    <div class="tool-title">Camera: {{ cameraEnabled ? 'ON' : 'OFF' }}</div>
-                    <div class="tool-desc">Show yourself</div>
-                  </div>
-                </label>
-              </div>
+            <div v-if="showRecording" class="drawer-recorder-inline">
+              <p class="section-desc recorder-hint">
+                Enable mic/camera if needed, then start recording. Desktop Chrome, Edge, Firefox, and Safari are supported. On iPhone/iPad use Control Center screen recording, then upload to Canvas. Re-open Tools anytime to pause, stop, or download.
+              </p>
+              <ScreenRecorder
+                embedded
+                @active-change="onRecorderActiveChange"
+              />
             </div>
           </div>
 
@@ -214,12 +187,24 @@
         </div>
       </div>
     </transition>
+
+    <!-- Re-open Tools while a recording/preview is active -->
+    <button
+      v-if="showRecording && recorderActive && !isOpen"
+      type="button"
+      class="recorder-active-chip"
+      @click="isOpen = true"
+    >
+      <span class="recorder-active-dot" aria-hidden="true"></span>
+      Recording active — open Tools to stop or download
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import ScreenRecorder from './ScreenRecorder.vue'
 import {
   preferredSoftware,
   softwareOptions,
@@ -295,13 +280,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['pop-out-instructions', 'start-recording'])
+const emit = defineEmits(['pop-out-instructions'])
 
 const route = useRoute()
 const classIdForGuides = computed(() => route.params.classId || 'statistics')
 const isOpen = ref(false)
-const microphoneEnabled = ref(false)
-const cameraEnabled = ref(false)
+const recorderActive = ref(false)
 
 const toggleBtnRef = ref(null)
 const position = ref(loadStoredPosition())
@@ -563,9 +547,8 @@ function popOutCurrentPage() {
   closeDrawer()
 }
 
-function startRecording() {
-  emit('start-recording')
-  closeDrawer()
+function onRecorderActiveChange(active) {
+  recorderActive.value = Boolean(active)
 }
 
 function goToSupport() {
@@ -780,6 +763,53 @@ document.addEventListener('keydown', (e) => {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.drawer-recorder-inline {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.drawer-recorder-inline .recorder-hint {
+  margin-bottom: 0.75rem;
+}
+
+.recorder-active-chip {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1003;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.35);
+  cursor: pointer;
+}
+
+.recorder-active-chip:hover {
+  background: #b91c1c;
+}
+
+.recorder-active-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #fff;
+  animation: recorder-chip-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes recorder-chip-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
 }
 
 .tool-card {
