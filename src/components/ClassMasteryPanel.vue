@@ -230,8 +230,9 @@ function exportModule() {
   color: #fff;
 }
 .btn-secondary {
-  background: #e2e8f0;
-  color: #0f172a;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 .btn-primary:disabled,
 .btn-secondary:disabled {
@@ -245,22 +246,26 @@ function exportModule() {
   margin: 1rem 0;
 }
 .stat-card {
-  border: 1px solid #e2e8f0;
+  background: var(--bg-main);
   border-radius: 0.5rem;
-  padding: 1rem;
-  background: #f8fafc;
+  padding: 1.5rem;
+  text-align: center;
 }
 .stat-value {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
 }
 .stat-label {
-  font-size: 0.85rem;
-  color: #475569;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 .stat-sub {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-top: 0.25rem;
 }
 .preview-table-wrapper {
