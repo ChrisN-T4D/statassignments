@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from '../composables/useAuth'
+import { useClasses } from '../composables/useClasses'
 
 // Import views
 import Home from '../views/Home.vue'
@@ -27,83 +28,95 @@ import { classHasDataAnalysisTool } from '../data/modules'
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
-  { path: '/topic/:id', component: TopicView, props: true },
+  { path: '/topic/:id', component: TopicView, props: true, meta: { requiresAuth: true } },
   { path: '/auth', component: Auth },
-  { path: '/practice', component: Practice },
-  { path: '/practice/:topicId', component: Practice, props: true },
-  { path: '/software-practice/:topicId', component: SoftwarePractice, props: true },
+  { path: '/practice', component: Practice, meta: { requiresAuth: true } },
+  { path: '/practice/:topicId', component: Practice, props: true, meta: { requiresAuth: true } },
+  { path: '/software-practice/:topicId', component: SoftwarePractice, props: true, meta: { requiresAuth: true } },
   // Class routes
   {
     path: '/class/:classId',
     name: 'class-home',
     component: ClassHome,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help',
     name: 'assignment-help',
     component: AssignmentHelp,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help/:benchmarkSlug/practice',
     name: 'benchmark-practice',
     component: BenchmarkPractice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help/:assignmentId',
     name: 'assignment-help-detail',
     component: AssignmentHelpDetail,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/jamovi-guides',
     name: 'jamovi-guides',
     component: SoftwareGuidesIndex,
-    props: (route) => ({ classId: route.params.classId, software: 'jamovi' })
+    props: (route) => ({ classId: route.params.classId, software: 'jamovi' }),
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/excel-guides',
     name: 'excel-guides',
     component: SoftwareGuidesIndex,
-    props: (route) => ({ classId: route.params.classId, software: 'excel' })
+    props: (route) => ({ classId: route.params.classId, software: 'excel' }),
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/data-analysis',
     name: 'data-analysis-helper',
     component: DataAnalysisHelper,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/topics',
     name: 'class-topics',
     component: Home, // Reuse Home with class filter for now
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/practice',
     name: 'class-practice',
     component: Practice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/software',
     name: 'class-software',
     component: SoftwarePractice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/lesson/:lessonId',
     name: 'lesson',
     component: SoftwareLesson,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/lesson/:lessonId',
     name: 'class-lesson',
     component: SoftwareLesson,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',
@@ -144,8 +157,23 @@ const router = createRouter({
 
 // Navigation guards
 const { user: authUser } = useAuth()
+const { fetchClasses, allClasses } = useClasses()
 
-router.beforeEach((to, from, next) => {
+function userMayAccessClass(classIdOrSlug) {
+  const role = authUser.value?.role
+  if (role === 'admin' || role === 'instructor') return true
+  const assignedIds = authUser.value?.classes
+  if (!assignedIds || !Array.isArray(assignedIds) || assignedIds.length === 0) {
+    return false
+  }
+  const cls = allClasses.value.find(
+    (c) => c.slug === classIdOrSlug || c.id === classIdOrSlug
+  )
+  if (!cls) return false
+  return assignedIds.includes(cls.id)
+}
+
+router.beforeEach(async (to, from, next) => {
   // Legacy Canvas links: /practice?module=module-N → class statistics concept review
   if (to.path === '/practice' && to.query.module && !to.params.classId) {
     const raw = String(to.query.module)
@@ -175,7 +203,7 @@ router.beforeEach((to, from, next) => {
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/auth')
+    next({ path: '/auth', query: { redirect: to.fullPath } })
     return
   }
 
@@ -189,6 +217,15 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresInstructor && userRole !== 'instructor' && userRole !== 'admin') {
     next('/')
     return
+  }
+
+  if (isAuthenticated && to.path.startsWith('/class/')) {
+    await fetchClasses()
+    const classIdOrSlug = to.params.classId
+    if (classIdOrSlug && !userMayAccessClass(classIdOrSlug)) {
+      next({ path: '/', query: { notice: 'not-enrolled' } })
+      return
+    }
   }
 
   // Redirect authenticated users away from auth page

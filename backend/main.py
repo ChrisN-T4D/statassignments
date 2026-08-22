@@ -14,6 +14,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
+from api.auth_register import router as auth_register_router
 from api.collections import router as collections_router
 from db.bkt_store import hydrate_bkt_model, load_bkt_state, persist_bkt_state
 from db.database import SessionLocal
@@ -246,6 +247,7 @@ def _run_migrations():
 
 
 app.include_router(collections_router)
+app.include_router(auth_register_router)
 
 
 @app.on_event("startup")
