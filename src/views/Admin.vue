@@ -236,7 +236,17 @@
           </div>
         </div>
 
-        <div v-if="users.length > 0" class="table-scroll">
+        <div class="user-search">
+          <label for="user-search">Find user</label>
+          <input
+            id="user-search"
+            v-model="userSearch"
+            type="search"
+            placeholder="Email or name"
+          />
+        </div>
+
+        <div v-if="filteredUsers.length > 0" class="table-scroll">
           <table class="data-table">
             <thead>
               <tr>
@@ -252,7 +262,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="user in users" :key="user.id">
+              <tr v-for="user in filteredUsers" :key="user.id">
                 <td><code>{{ user.id.substring(0, 8) }}</code></td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.username || '-' }}</td>
@@ -267,19 +277,27 @@
                 <td>{{ formatDate(user.created) }}</td>
                 <td>{{ formatDate(user.updated) }}</td>
                 <td>{{ user.verified ? '✓' : '✗' }}</td>
-                <td>
+                <td class="user-row-actions">
                   <button type="button" class="btn-sm btn-secondary" @click="openAssignClasses(user)">
                     {{ user.classes?.length ? 'Edit classes' : 'Assign classes' }}
+                  </button>
+                  <button type="button" class="btn-sm btn-secondary" @click="openResetPassword(user)">
+                    Reset password
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div v-else class="empty-state">
+        <div v-else-if="users.length === 0" class="empty-state">
           No users found or unable to load user data.
         </div>
+        <div v-else class="empty-state">
+          No users match that search.
+        </div>
       </div>
+
+      <ResetUserPasswordModal :user="resettingUser" @close="resettingUser = null" />
 
       <!-- Modal: Assign classes to user -->
       <div v-if="editingUser" class="modal-overlay" @click.self="editingUser = null">
@@ -450,6 +468,7 @@ import { objectives } from '../data/objectives'
 import { questionObjectiveMap, getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { allStatisticsQuestions, allConceptReviewQuestions } from '../data/conceptQuestions'
 import { getContentModulesByClass, getAllTopics } from '../data/modules'
+import ResetUserPasswordModal from '../components/ResetUserPasswordModal.vue'
 
 const { getAllBKTStates, resetBKT } = useBKT()
 
@@ -526,10 +545,23 @@ const questionsWithMappings = computed(() => {
 
 // Users state
 const users = ref([])
+const userSearch = ref('')
+const resettingUser = ref(null)
 const adminClasses = ref([])
 const editingUser = ref(null)
 const selectedClassIdsForEdit = ref([])
 const savingUserClasses = ref(false)
+
+const filteredUsers = computed(() => {
+  const q = userSearch.value.trim().toLowerCase()
+  if (!q) return users.value
+  return users.value.filter((u) => {
+    const email = (u.email || '').toLowerCase()
+    const name = (u.name || '').toLowerCase()
+    const username = (u.username || '').toLowerCase()
+    return email.includes(q) || name.includes(q) || username.includes(q)
+  })
+})
 
 // Add user modal state
 const showAddUserModal = ref(false)
@@ -776,6 +808,10 @@ function openAssignClasses(user) {
   editingUser.value = user
   selectedClassIdsForEdit.value = Array.isArray(user.classes) ? [...user.classes] : []
   if (adminClasses.value.length === 0) loadAdminClasses()
+}
+
+function openResetPassword(user) {
+  resettingUser.value = user
 }
 
 async function saveUserClasses() {
@@ -1338,6 +1374,35 @@ onMounted(() => {
 .classes-cell {
   max-width: 200px;
   font-size: 0.8125rem;
+}
+
+.user-search {
+  margin-bottom: 1rem;
+  max-width: 360px;
+}
+
+.user-search label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.user-search input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+}
+
+.user-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .modal-overlay {
