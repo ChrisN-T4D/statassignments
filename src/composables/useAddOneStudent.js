@@ -34,7 +34,10 @@ export function useAddOneStudent() {
 
   async function fetchClasses() {
     try {
-      return await pb.collection('classes').getFullList({ sort: 'order' })
+      return await pb.collection('classes').getFullList({
+        filter: 'is_active = true',
+        sort: 'order'
+      })
     } catch {
       return []
     }
@@ -95,7 +98,8 @@ export function useAddOneStudent() {
         bb_username: normalizedEmail,
         bb_id: '',
         user: '',
-        claimed_at: null
+        claimed_at: null,
+        access_mode: 'online_primary'
       })
     } finally {
       loading.value = false

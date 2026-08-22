@@ -20,5 +20,8 @@ numpy==1.26.3
 # HTTP client
 httpx==0.26.0
 
+# Tests
+pytest==8.0.0
+
 # Environment variables
 python-dotenv==1.0.0

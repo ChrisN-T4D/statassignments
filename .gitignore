@@ -43,3 +43,6 @@ Thumbs.db
 
 # Brainstorm visual companion (local mockups)
 .superpowers/
+
+# Local Postgres logical backups (pre-deploy)
+backups/

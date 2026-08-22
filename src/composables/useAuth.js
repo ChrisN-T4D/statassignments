@@ -78,22 +78,19 @@ export function useAuth() {
     }
   }
 
-  async function signUp(email, password, fullName) {
+  async function signUp(email, password, fullName, studentKey) {
     loading.value = true
     authError.value = null
     logAuth('Signing up...', { email })
 
     try {
-      const data = await pb.collection('users').create({
+      const data = await pb.registerWithKey({
+        student_key: studentKey,
         email,
         password,
-        passwordConfirm: password,
         name: fullName
       })
-      logAuth('Signup successful', { userId: data.id })
-
-      // Auto login after signup
-      await signIn(email, password)
+      logAuth('Signup successful', { userId: data.record?.id })
       return { data, error: null }
     } catch (err) {
       logAuth('Signup failed', { error: err.message, data: err.data })
@@ -152,6 +149,15 @@ export function useAuth() {
 
   // Parse PocketBase errors into user-friendly messages
   function parseAuthError(err) {
+    if (err.status === 404) {
+      return 'This email is not recognized. Use your school .edu email, or sign up with your student key.'
+    }
+    if (err.status === 400 && err.message && err.message !== 'Bad Request') {
+      return err.message
+    }
+    if (err.status === 403 && err.message && err.message !== 'Forbidden') {
+      return err.message
+    }
     if (err.status === 400) {
       if (err.data?.data?.email) {
         return 'Invalid email address or email already in use.'
@@ -166,9 +172,6 @@ export function useAuth() {
     }
     if (err.status === 403) {
       return 'Access denied. Your account may be disabled.'
-    }
-    if (err.status === 404) {
-      return 'Account not found. Please check your email or sign up.'
     }
     if (err.status === 0 || err.message?.includes('fetch')) {
       return 'Unable to connect to server. Please check your internet connection.'

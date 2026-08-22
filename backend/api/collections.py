@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 
 from db.auth import (
@@ -45,14 +46,23 @@ def _expand_list(expand: Optional[str]) -> list[str]:
 
 @router.post("/users/auth-with-password")
 def auth_with_password(body: AuthPasswordBody, db: Session = Depends(get_db)):
+    identity = (body.identity or "").strip().lower()
     user = (
         db.query(User)
         .options(joinedload(User.classes))
-        .filter(User.email == body.identity)
+        .filter(func.lower(User.email) == identity)
         .first()
     )
-    if not user or not verify_password(body.password, user.password_hash):
-        raise HTTPException(status_code=400, detail="Invalid login credentials")
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                "This email is not recognized. Use your school .edu email, "
+                "or sign up with your student key."
+            ),
+        )
+    if not verify_password(body.password, user.password_hash):
+        raise HTTPException(status_code=400, detail="Invalid login credentials.")
     token = create_access_token(user.id, user.email, user.role)
     return {"token": token, "record": user_to_record(user)}
 
@@ -162,9 +172,8 @@ def create_record(
             raise HTTPException(status_code=400, detail="email and password required")
         if db.query(User).filter(User.email == email).first():
             raise HTTPException(status_code=400, detail="Email already in use")
-        is_admin_create = user and user.role == "admin"
-        if not is_admin_create and user:
-            raise HTTPException(status_code=403, detail="Only admins can create users while logged in")
+        if not (user and user.role == "admin"):
+            raise HTTPException(status_code=403, detail="Only admins can create users")
         new_user = User(
             email=email,
             password_hash=hash_password(password),

@@ -28,83 +28,95 @@ import { canStudentAccessClassSlug } from '../composables/useClasses'
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
-  { path: '/topic/:id', component: TopicView, props: true },
+  { path: '/topic/:id', component: TopicView, props: true, meta: { requiresAuth: true } },
   { path: '/auth', component: Auth },
-  { path: '/practice', component: Practice },
-  { path: '/practice/:topicId', component: Practice, props: true },
-  { path: '/software-practice/:topicId', component: SoftwarePractice, props: true },
+  { path: '/practice', component: Practice, meta: { requiresAuth: true } },
+  { path: '/practice/:topicId', component: Practice, props: true, meta: { requiresAuth: true } },
+  { path: '/software-practice/:topicId', component: SoftwarePractice, props: true, meta: { requiresAuth: true } },
   // Class routes
   {
     path: '/class/:classId',
     name: 'class-home',
     component: ClassHome,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help',
     name: 'assignment-help',
     component: AssignmentHelp,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help/:benchmarkSlug/practice',
     name: 'benchmark-practice',
     component: BenchmarkPractice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/assignment-help/:assignmentId',
     name: 'assignment-help-detail',
     component: AssignmentHelpDetail,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/jamovi-guides',
     name: 'jamovi-guides',
     component: SoftwareGuidesIndex,
-    props: (route) => ({ classId: route.params.classId, software: 'jamovi' })
+    props: (route) => ({ classId: route.params.classId, software: 'jamovi' }),
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/excel-guides',
     name: 'excel-guides',
     component: SoftwareGuidesIndex,
-    props: (route) => ({ classId: route.params.classId, software: 'excel' })
+    props: (route) => ({ classId: route.params.classId, software: 'excel' }),
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/data-analysis',
     name: 'data-analysis-helper',
     component: DataAnalysisHelper,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/topics',
     name: 'class-topics',
     component: Home, // Reuse Home with class filter for now
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/practice',
     name: 'class-practice',
     component: Practice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/software',
     name: 'class-software',
     component: SoftwarePractice,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/lesson/:lessonId',
     name: 'lesson',
     component: SoftwareLesson,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/class/:classId/lesson/:lessonId',
     name: 'class-lesson',
     component: SoftwareLesson,
-    props: true
+    props: true,
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',
@@ -176,7 +188,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/auth')
+    next({ path: '/auth', query: { redirect: to.fullPath } })
     return
   }
 
@@ -205,10 +217,10 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Students may only access courses assigned to their account
-  if (to.params.classId && isAuthenticated && userRole === 'student') {
+  if (to.params.classId && isAuthenticated) {
     const allowed = await canStudentAccessClassSlug(to.params.classId, authUser.value)
     if (!allowed) {
-      next('/')
+      next({ path: '/', query: { notice: 'not-enrolled' } })
       return
     }
   }
