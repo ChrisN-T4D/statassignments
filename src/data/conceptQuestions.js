@@ -426,7 +426,7 @@ export const statsModule2Questions = [
     question: 'Match each scale of measurement with its description:',
     pairs: [
       { left: 'Nominal', right: 'Categories with no inherent order (e.g., eye color)' },
-      { left: 'Ordinal', right: 'Ranked categories with unequal intervals (e.g., race placement)' },
+      { left: 'Ordinal', right: 'Ranked categories with unequal intervals (e.g., race placement, Likert scales)' },
       { left: 'Interval', right: 'Equal intervals but no true zero (e.g., temperature in Celsius)' },
       { left: 'Ratio', right: 'Equal intervals with a true zero (e.g., weight, height)' }
     ],

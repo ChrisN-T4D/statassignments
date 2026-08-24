@@ -43,6 +43,21 @@ Stack: **Vue frontend** + **FastAPI backend** + **Railway Postgres** (no PocketB
 
 Migrations run automatically on backend startup (`alembic upgrade head`).
 
+**Before any backend deploy that may migrate**, take a local copy of production data:
+
+```powershell
+$env:DATABASE_PUBLIC_URL = '<from Railway Postgres → Variables>'
+.\scripts\Backup-RailwayPostgres.ps1
+```
+
+Backups land in `backups/postgres/methods-market-<timestamp>/` (gitignored). On Railway, set:
+
+| Variable | Value | Notes |
+|----------|-------|-------|
+| `BACKUP_BEFORE_MIGRATE` | `1` (default) | Dump JSON tables before alembic |
+| `BACKUP_DIR` | `/data/db-backups` | Mount a volume here so dumps survive restarts |
+| `REQUIRE_DB_BACKUP` | `1` | Fail boot if the pre-migrate backup fails |
+
 Generate a **public domain** for the API.
 
 Health check: `GET /health` (includes `database: connected`).

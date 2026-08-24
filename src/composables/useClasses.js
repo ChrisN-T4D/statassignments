@@ -103,12 +103,12 @@ export function useClasses() {
     return classes.value.filter(c => c.is_active)
   })
 
-  // Only classes the user is assigned to (or all for admins / when not authenticated)
+  // Only classes the user is assigned to (or all for admins/instructors)
   const assignedClasses = computed(() => {
     const active = activeClasses.value
     const u = user.value
-    if (!u) return active
-    if (u.role === 'admin') return active
+    if (!u) return []
+    if (u.role === 'admin' || u.role === 'instructor') return active
     const ids = u.classes
     if (!ids || !Array.isArray(ids) || ids.length === 0) return []
     return active.filter(c => ids.includes(c.id))

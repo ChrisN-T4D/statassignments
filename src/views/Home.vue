@@ -1,20 +1,42 @@
 <template>
   <div class="home">
     <div class="container">
-      <!-- Hero Section -->
       <div class="hero">
         <h1>Methods<span>Market</span></h1>
         <p>Research methods modules, statistics support, and software how-tos for psychology.</p>
       </div>
 
-      <!-- Class Selection -->
-      <div class="classes-section">
+      <div
+        v-if="route.query.notice === 'not-enrolled'"
+        class="notice-banner"
+        role="status"
+      >
+        You’re not enrolled in this class.
+      </div>
+
+      <div v-if="!isAuthenticated" class="landing-actions">
+        <p class="section-subtitle">Sign in with your school email, or sign up with the student key from your instructor.</p>
+        <div class="landing-buttons">
+          <router-link to="/auth" class="btn-primary">Sign In</router-link>
+          <router-link to="/auth?mode=signup" class="btn-secondary">Sign Up</router-link>
+        </div>
+      </div>
+
+      <div v-else class="classes-section">
         <h2>Select Your Course</h2>
         <p class="section-subtitle">Choose your course to access relevant topics and practice exercises.</p>
 
         <div v-if="loading" class="loading-state">
           <div class="spinner"></div>
           <span>Loading courses...</span>
+        </div>
+
+        <div v-else-if="isStudent && classes.length === 0" class="empty-classes">
+          <p>No course is linked to this account yet.</p>
+          <p>
+            <router-link to="/claim">Link your student key</router-link>
+            to see your class.
+          </p>
         </div>
 
         <div v-else class="classes-grid">
@@ -36,7 +58,6 @@
         </div>
       </div>
 
-      <!-- Footer: About, FAQ, Help for professors -->
       <footer class="home-footer">
         <div class="footer-links">
           <router-link to="/about">About</router-link>
@@ -53,14 +74,25 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
 import { getClassDisplayName } from '../utils/classDisplayName'
 
+const route = useRoute()
+const { isAuthenticated, user } = useAuth()
 const { classes, loading, fetchClasses, selectClass } = useClasses()
 
+const isStudent = computed(() => {
+  const role = user.value?.role
+  return !role || role === 'student'
+})
+
 onMounted(() => {
-  fetchClasses()
+  if (isAuthenticated.value) {
+    fetchClasses()
+  }
 })
 </script>
 
@@ -106,6 +138,60 @@ onMounted(() => {
 .section-subtitle {
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
+}
+
+.notice-banner {
+  background: var(--danger-bg, #fef2f2);
+  color: var(--danger, #dc2626);
+  border: 1px solid var(--danger, #dc2626);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.landing-actions {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.landing-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.landing-buttons .btn-primary,
+.landing-buttons .btn-secondary {
+  display: inline-block;
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.landing-buttons .btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.landing-buttons .btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.empty-classes {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem 1rem;
+}
+
+.empty-classes a {
+  color: var(--primary);
+  font-weight: 500;
 }
 
 .loading-state {

@@ -185,4 +185,14 @@ export const pb = {
   collection(name) {
     return new CollectionClient(name)
   },
+  async registerWithKey({ student_key, email, password, name }) {
+    const data = await apiFetch(`/api/auth/register-with-key`, {
+      method: 'POST',
+      body: { student_key, email, password, name },
+    })
+    authStore.token = data.token
+    authStore.record = data.record
+    saveAuth(data.token, data.record)
+    return data
+  },
 }

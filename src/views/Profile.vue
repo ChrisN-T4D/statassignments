@@ -37,6 +37,8 @@
           <button class="btn-secondary" @click="handleSignOut">Sign Out</button>
         </div>
 
+        <ChangePasswordCard />
+
         <div class="access-mode-card">
           <h2>How you work in Methods Market</h2>
           <p>
@@ -288,6 +290,7 @@ import { useBKT } from '../composables/useBKT'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { useAccessMode } from '../composables/useAccessMode.js'
+import ChangePasswordCard from '../components/ChangePasswordCard.vue'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()

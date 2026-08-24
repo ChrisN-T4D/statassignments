@@ -4,10 +4,22 @@
       <div class="auth-card">
         <h1>{{ isLogin ? 'Sign In' : 'Create Account' }}</h1>
         <p class="auth-subtitle">
-          {{ isLogin ? 'Welcome back! Sign in to track your progress.' : 'Join to track your learning progress.' }}
+          {{ isLogin ? 'Welcome back! Sign in to track your progress.' : 'Use your student key and school .edu email to create an account.' }}
         </p>
 
         <form @submit.prevent="handleSubmit" class="auth-form">
+          <div v-if="!isLogin" class="form-group">
+            <label for="studentKey">Student Key</label>
+            <input
+              id="studentKey"
+              v-model="studentKey"
+              type="text"
+              placeholder="e.g., 2026FA-X7K9M2"
+              required
+            />
+            <span class="hint">This was provided by your instructor</span>
+          </div>
+
           <div v-if="!isLogin" class="form-group">
             <label for="name">Full Name</label>
             <input
@@ -25,7 +37,7 @@
               id="email"
               v-model="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="you@nwosu.edu"
               required
             />
           </div>
@@ -38,7 +50,7 @@
               type="password"
               placeholder="••••••••"
               required
-              minlength="6"
+              minlength="8"
             />
           </div>
 
@@ -98,16 +110,17 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
-const router = useRouter()
+const route = useRoute()
 const { signIn, signUp, resetPassword, authError, loading, clearError } = useAuth()
 
-const isLogin = ref(true)
+const isLogin = ref(route.query.mode !== 'signup')
 const email = ref('')
 const password = ref('')
 const fullName = ref('')
+const studentKey = ref('')
 const localError = ref('')
 const success = ref('')
 
@@ -115,12 +128,34 @@ const showResetPassword = ref(false)
 const resetEmail = ref('')
 const resetSuccess = ref('')
 
-// Clear errors when switching between login/signup
+function safeRedirect(path) {
+  if (typeof path !== 'string') return null
+  if (!path.startsWith('/')) return null
+  if (path.startsWith('//')) return null
+  return path
+}
+
+function destinationFor(result) {
+  const redirect = safeRedirect(route.query.redirect)
+  if (redirect) return redirect
+  const userRole = result.data?.record?.role
+  if (userRole === 'admin') return '/admin'
+  if (userRole === 'instructor') return '/instructor'
+  return '/'
+}
+
 watch(isLogin, () => {
   localError.value = ''
   success.value = ''
   clearError()
 })
+
+watch(
+  () => route.query.mode,
+  (mode) => {
+    isLogin.value = mode !== 'signup'
+  }
+)
 
 async function handleSubmit() {
   localError.value = ''
@@ -132,26 +167,17 @@ async function handleSubmit() {
     if (result.error) {
       localError.value = result.error
     } else {
-      // Route based on user role
-      const userRole = result.data?.record?.role
-      // Force full page reload to properly load auth state with role
-      if (userRole === 'admin') {
-        window.location.href = '/admin'
-      } else if (userRole === 'instructor') {
-        window.location.href = '/instructor'
-      } else {
-        // Students go to home or claim if no profile linked
-        window.location.href = '/'
-      }
+      window.location.href = destinationFor(result)
     }
   } else {
-    const result = await signUp(email.value, password.value, fullName.value)
+    const result = await signUp(email.value, password.value, fullName.value, studentKey.value)
     if (result.error) {
       localError.value = result.error
     } else {
       success.value = 'Account created successfully! You are now signed in.'
-      // Auto-redirect after signup - force full page reload to properly load auth state
-      setTimeout(() => window.location.href = '/', 1500)
+      setTimeout(() => {
+        window.location.href = destinationFor(result)
+      }, 1500)
     }
   }
 }
@@ -233,6 +259,11 @@ async function handleResetPassword() {
   outline: none;
   border-color: var(--primary);
   box-shadow: var(--focus-ring);
+}
+
+.form-group .hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
 }
 
 .btn-primary {

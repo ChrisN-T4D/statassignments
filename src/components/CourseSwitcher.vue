@@ -2,7 +2,7 @@
   <nav v-if="visible" class="course-switcher" aria-label="Psychology methods courses">
     <div class="container course-switcher-inner">
       <router-link
-        v-for="course in PSYCH_METHODS_COURSES"
+        v-for="course in visibleCourses"
         :key="course.slug"
         :to="linkFor(course.slug)"
         class="course-tab"
@@ -17,13 +17,30 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
+import { useClasses } from '../composables/useClasses'
 import { PSYCH_METHODS_COURSES, isPsychMethodsCourse } from '../data/psychMethodsCourses'
 
 const route = useRoute()
+const { isAuthenticated, user } = useAuth()
+const { classes: assignedClasses } = useClasses()
+
+const visibleCourses = computed(() => {
+  const role = user.value?.role
+  if (role === 'admin' || role === 'instructor') {
+    return PSYCH_METHODS_COURSES
+  }
+  const assigned = assignedClasses.value || []
+  return PSYCH_METHODS_COURSES.filter((course) =>
+    assigned.some((cls) => cls.slug === course.slug || cls.id === course.id || cls.id === course.slug)
+  )
+})
 
 const visible = computed(() => {
+  if (!isAuthenticated.value) return false
   const slug = route.params.classId
-  return isPsychMethodsCourse(slug) && route.path.startsWith('/class/')
+  if (!isPsychMethodsCourse(slug) || !route.path.startsWith('/class/')) return false
+  return visibleCourses.value.length > 1
 })
 
 function isActive (slug) {
