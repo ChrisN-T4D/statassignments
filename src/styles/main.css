@@ -979,3 +979,61 @@ a:hover {
     padding: 1.25rem;
   }
 }
+
+/*
+  Print / Save PDF: browser print paints the live DOM.
+  App chrome (sticky header, course tabs, fixed Tools drawer with
+  vertical writing-mode) and animated body backgrounds otherwise
+  sit on top of packets/slips and squash or overlap content.
+*/
+@media print {
+  @page {
+    size: auto;
+    margin: 0.6in;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body::before,
+  body::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .header,
+  .course-switcher,
+  .resources-drawer-container,
+  .drawer-toggle-btn,
+  .drawer-drag-overlay,
+  .drawer-overlay,
+  .drawer-panel {
+    display: none !important;
+  }
+
+  /* Fixed/sticky/absolute layers collapse so content flows as pages */
+  .summary-overlay,
+  .print-packet-overlay,
+  .mastery-celebration {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+}

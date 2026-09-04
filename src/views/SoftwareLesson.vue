@@ -2845,16 +2845,24 @@ watch(currentPhase, () => {
     display: none !important;
   }
   .print-packet-overlay {
-    position: static;
+    position: static !important;
     background: #fff;
+    inset: auto;
+    overflow: visible;
   }
   .lesson-page:not(.print-packet-open) .container {
     display: none !important;
   }
   .summary-overlay {
-    position: static;
+    position: static !important;
     background: transparent;
     padding: 0;
+  }
+  .summary-card {
+    box-shadow: none;
+    max-width: none;
+    color: #111;
+    background: #fff;
   }
 }
 /* Not Found */

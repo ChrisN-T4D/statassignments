@@ -129,9 +129,16 @@ async function copySlip() {
   .print-hide {
     display: none !important;
   }
+  .completion-slip {
+    color: #111;
+    background: #fff;
+  }
   .slip-card {
     border: 1px solid #000;
     max-width: none;
+    background: #fff;
+    color: #111;
+    box-shadow: none;
   }
 }
 </style>

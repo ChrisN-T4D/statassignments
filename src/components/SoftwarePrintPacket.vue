@@ -73,11 +73,16 @@ defineProps({
 }
 .packet-section {
   margin-top: 1.5rem;
-  break-inside: avoid;
+}
+.we-step,
+.you-tasks li,
+.learn-section {
+  margin-bottom: 0.85rem;
 }
 .we-step,
 .you-tasks li {
-  margin-bottom: 0.85rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 .q-blank {
   margin-top: 0.25rem;
@@ -85,6 +90,8 @@ defineProps({
 @media print {
   .sp-print-packet {
     padding: 0;
+    color: #111;
+    background: #fff;
   }
 }
 </style>

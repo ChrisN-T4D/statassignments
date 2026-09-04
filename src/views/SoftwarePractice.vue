@@ -1269,20 +1269,20 @@ watch(currentExercise, () => {
   }
 
   .summary-overlay {
-    position: static;
+    position: static !important;
     background: transparent;
     padding: 0;
   }
 
   .summary-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  width: 100%;
-  max-width: 520px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  color: #111827;
-}
+    background: white;
+    padding: 2rem;
+    border-radius: 0;
+    width: 100%;
+    max-width: none;
+    box-shadow: none;
+    color: #111827;
+  }
 
   .print-hide {
     display: none !important;

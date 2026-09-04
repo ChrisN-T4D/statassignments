@@ -72,7 +72,10 @@ function showAnswerBlank(q) {
 }
 .packet-q {
   margin-bottom: 1.25rem;
-  break-inside: avoid;
+  /* Allow page breaks inside long questions (matching banks) so print
+     engines do not squash an oversized block onto one page. */
+  break-inside: auto;
+  page-break-inside: auto;
 }
 .q-options,
 .q-match-blanks,
@@ -80,6 +83,8 @@ function showAnswerBlank(q) {
   list-style: none;
   padding-left: 0;
   margin: 0.35rem 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 .q-match-blanks li,
 .q-match-bank li {
@@ -91,6 +96,8 @@ function showAnswerBlank(q) {
 }
 .q-blank {
   margin-top: 0.35rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 @media print {
   .cr-print-packet {

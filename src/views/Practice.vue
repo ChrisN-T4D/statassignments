@@ -1584,7 +1584,6 @@ watch(currentProblem, async (problem) => {
   .objectives-tracker,
   .problem-card,
   .page-header,
-  .header,
   .cr-mode-bar {
     display: none !important;
   }
@@ -1593,6 +1592,11 @@ watch(currentProblem, async (problem) => {
   }
   .printing-slip .container > :not(.completion-slip) {
     display: none !important;
+  }
+  .print-packet-wrap,
+  .completion-slip {
+    color: #111;
+    background: #fff;
   }
 }
 </style>
