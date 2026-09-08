@@ -6,7 +6,9 @@ import {
   getSupportedRecorderMimeType,
   fileExtensionForMime,
   getDisplayMediaConstraintAttempts,
-  detectRecordingSupport
+  detectRecordingSupport,
+  isMp4MimeType,
+  RECORDER_TIMESLICE_MS
 } from '../src/utils/screenRecordingSupport.js'
 
 let failed = 0
@@ -23,8 +25,9 @@ function assert(cond, msg) {
 // Pass 1: MIME preference — Safari-like (mp4 only)
 {
   const mime = getSupportedRecorderMimeType((t) => t.startsWith('video/mp4'))
-  assert(mime === 'video/mp4;codecs=avc1.42E01E,mp4a.40.2' || mime.startsWith('video/mp4'), 'Safari-like picks mp4 first')
+  assert(mime === 'video/mp4;codecs=avc1.42E01E,mp4a.40.2' || mime.startsWith('video/mp4'), 'Safari-like picks mp4 when webm unavailable')
   assert(fileExtensionForMime(mime) === 'mp4', 'mp4 mime → .mp4 extension')
+  assert(isMp4MimeType(mime), 'isMp4MimeType true for Safari mime')
 }
 
 // Pass 2: Chrome-like (webm vp9, no mp4 recorder)
@@ -32,6 +35,20 @@ function assert(cond, msg) {
   const mime = getSupportedRecorderMimeType((t) => t.includes('webm') && t.includes('vp9'))
   assert(mime.includes('webm') && mime.includes('vp9'), 'Chrome-like picks vp9 webm when mp4 unsupported')
   assert(fileExtensionForMime(mime) === 'webm', 'webm mime → .webm extension')
+}
+
+// Pass 2b: Modern Chrome (both mp4 and webm) must prefer webm — mp4 freezes video
+{
+  const mime = getSupportedRecorderMimeType(
+    (t) =>
+      t.startsWith('video/mp4') ||
+      t === 'video/webm;codecs=vp9,opus' ||
+      t === 'video/webm;codecs=vp8,opus' ||
+      t === 'video/webm'
+  )
+  assert(mime.includes('webm'), 'Chrome-with-mp4 still prefers webm over mp4')
+  assert(!isMp4MimeType(mime), 'Chrome-with-mp4 result is not mp4')
+  assert(RECORDER_TIMESLICE_MS === 1000, 'timeslice constant stays 1000ms for MP4 keyframe sync')
 }
 
 // Pass 3: Firefox-like (vp8 webm, no vp9)

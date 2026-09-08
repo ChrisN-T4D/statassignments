@@ -1,19 +1,28 @@
 /**
  * Cross-browser helpers for getDisplayMedia + MediaRecorder.
- * Prefer MP4 when available (Safari + QuickTime / Canvas-friendly), then WebM fallbacks.
+ *
+ * Prefer WebM on Chromium/Firefox (stable A/V sync). Prefer MP4 only when
+ * WebM is unavailable (Safari). Chrome's MP4 MediaRecorder + timeslice is
+ * known to emit continuous audio with a frozen first video frame unless
+ * keyframe interval matches the timeslice.
  */
+
+/** Timeslice used by ScreenRecorder.start — keep in sync with MP4 keyframe ms. */
+export const RECORDER_TIMESLICE_MS = 1000
 
 /** @param {(type: string) => boolean} [isTypeSupported] */
 export function getSupportedRecorderMimeType(isTypeSupported = defaultIsTypeSupported) {
+  // WebM first: Chrome/Edge advertise video/mp4 now, but that muxer freezes
+  // video while audio continues. Safari does not support WebM recording.
   const types = [
-    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
-    'video/mp4;codecs=avc1.42E01E',
-    'video/mp4',
     'video/webm;codecs=vp9,opus',
     'video/webm;codecs=vp8,opus',
     'video/webm;codecs=vp9',
     'video/webm;codecs=vp8',
-    'video/webm'
+    'video/webm',
+    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+    'video/mp4;codecs=avc1.42E01E',
+    'video/mp4'
   ]
 
   for (const type of types) {
@@ -33,6 +42,10 @@ export function fileExtensionForMime(mimeType = '') {
   if (mime.includes('webm')) return 'webm'
   if (mime.includes('ogg')) return 'ogg'
   return 'webm'
+}
+
+export function isMp4MimeType(mimeType = '') {
+  return String(mimeType).toLowerCase().includes('mp4')
 }
 
 /**

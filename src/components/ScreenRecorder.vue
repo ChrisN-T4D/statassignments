@@ -258,7 +258,9 @@ import {
   fileExtensionForMime,
   getDisplayMediaConstraintAttempts,
   detectRecordingSupport,
-  canPauseMediaRecorder
+  canPauseMediaRecorder,
+  isMp4MimeType,
+  RECORDER_TIMESLICE_MS
 } from '../utils/screenRecordingSupport.js'
 
 const props = defineProps({
@@ -565,26 +567,38 @@ async function requestScreenStream() {
 
 function createMediaRecorder(stream, mimeType) {
   const bitRate = { videoBitsPerSecond: 2500000 }
+  // Chromium MP4 only flushes video on IDR frames; keyframe interval must
+  // match timeslice or playback shows a frozen frame with continuous audio.
+  const mp4Keyframe =
+    mimeType && isMp4MimeType(mimeType)
+      ? { videoKeyFrameIntervalDuration: RECORDER_TIMESLICE_MS }
+      : {}
 
+  const optionAttempts = []
   if (mimeType) {
+    optionAttempts.push({ mimeType, ...bitRate, ...mp4Keyframe })
+    if (Object.keys(mp4Keyframe).length) {
+      optionAttempts.push({ mimeType, ...bitRate })
+    }
+  }
+  optionAttempts.push(bitRate)
+  optionAttempts.push({})
+
+  for (const opts of optionAttempts) {
     try {
-      return new MediaRecorder(stream, { mimeType, ...bitRate })
+      return new MediaRecorder(stream, opts)
     } catch (_) {
-      /* fall through */
+      /* try next */
     }
   }
 
-  try {
-    return new MediaRecorder(stream, bitRate)
-  } catch (_) {
-    return new MediaRecorder(stream)
-  }
+  return new MediaRecorder(stream)
 }
 
 function startMediaRecorder(recorder) {
   // 1s timeslice is safer than 100ms on Safari; fall back to no timeslice
   try {
-    recorder.start(1000)
+    recorder.start(RECORDER_TIMESLICE_MS)
   } catch (_) {
     recorder.start()
   }
