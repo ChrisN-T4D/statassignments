@@ -59,8 +59,8 @@ markQuestionAnswered('KEY1', 'stats-module-1', 'q2', allIds, false)
 let saved = loadConceptReviewCompletion('KEY1', 'stats-module-1')
 const slipChecks = [
   saved?.correct === 1,
-  saved?.total === 2,
-  Array.isArray(saved?.answeredIds) && saved.answeredIds.includes('q1') && saved.answeredIds.includes('q2'),
+  saved?.total === 1,
+  Array.isArray(saved?.answeredIds) && saved.answeredIds.includes('q1') && !saved.answeredIds.includes('q2'),
   !saved?.completedAt,
   saved?.slipFrozen !== true
 ]
@@ -86,7 +86,7 @@ saved = loadConceptReviewCompletion('KEY1', 'stats-module-1')
 const freezeChecks = [
   saved?.slipFrozen === true,
   saved?.correct === 1,
-  saved?.total === 2,
+  saved?.total === 1,
   saved?.completedAt === '2026-08-17T12:00:00.000Z',
   saved?.answeredIds.includes('q3')
 ]

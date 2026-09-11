@@ -289,9 +289,19 @@
             <h4>Explanation</h4>
             <p>{{ currentProblem.explanation }}</p>
           </div>
-          <button class="btn-primary" @click="loadNextProblem">
-            Next Question
-          </button>
+          <div class="result-actions">
+            <button
+              v-if="!isCorrect"
+              type="button"
+              class="btn-secondary"
+              @click="retryQuestion"
+            >
+              Try again
+            </button>
+            <button type="button" class="btn-primary" @click="loadNextProblem">
+              Next question
+            </button>
+          </div>
         </div>
       </div>
 
@@ -743,7 +753,11 @@ async function hydrateCompletionFromServer(moduleId) {
       sort: 'created'
     })
     const answeredIds = [
-      ...new Set(attempts.map((a) => a.problem).filter((id) => moduleQIds.has(id)))
+      ...new Set(
+        attempts
+          .filter((a) => a.is_correct && moduleQIds.has(a.problem))
+          .map((a) => a.problem)
+      )
     ]
     if (!answeredIds.length) return saved
 
@@ -890,7 +904,24 @@ function recordIncorrectAnswer(topicId) {
   }
 }
 
+function retryQuestion() {
+  showResult.value = false
+  showHint.value = false
+  feedbackMessage.value = ''
+  if (currentProblem.value?.question_type !== 'multiple_select') {
+    selectedAnswer.value = null
+  }
+  selectedAnswers.value = []
+  numericAnswer.value = ''
+  matchingAnswers.value = {}
+  questionDisplayTime.value = Date.now()
+  firstSelectionTime.value = null
+  answerChanges.value = 0
+  timeTracker.start()
+}
+
 async function checkAnswer(answer) {
+  if (isSubmitting.value) return
   isSubmitting.value = true
 
   // Calculate correctness immediately
@@ -938,22 +969,16 @@ async function checkAnswer(answer) {
     last_reading_triggered_by_error: lastReadingTriggeredByError.value
   }
 
-  // Show result immediately to user
-  if (correct) {
-    showResult.value = true
-    feedbackMessage.value = ''
-  } else {
-    // Track incorrect answer for return visit detection
+  showResult.value = true
+  feedbackMessage.value = ''
+  if (!correct) {
     recordIncorrectAnswer(currentProblem.value.topic_id)
-
-    feedbackMessage.value = 'Incorrect. Try again.'
     if (attemptsByProblem.value[currentProblem.value.id] >= hintThreshold) {
       showHint.value = true
     }
-    selectedAnswer.value = null
-    numericAnswer.value = ''
-    // Don't clear matchingAnswers on incorrect - let user see what they selected
   }
+
+  isSubmitting.value = false
 
   if (isStatisticsPractice.value && currentProblem.value?.id) {
     const saved = markQuestionAnswered(
@@ -965,19 +990,25 @@ async function checkAnswer(answer) {
     )
     if (isAuthenticated.value) {
       const difficulty = currentProblem.value.difficulty || 'medium'
-      try {
-        await submitAnswer(currentProblem.value.id, answer, correct, difficulty, timeData, confidenceData, sequenceData)
-        await loadObjectivesForCurrentProblem()
-      } catch (err) {
-        console.error('Error submitting answer:', err)
-      }
+      submitAnswer(
+        currentProblem.value.id,
+        answer,
+        correct,
+        difficulty,
+        timeData,
+        confidenceData,
+        sequenceData
+      )
+        .then(() => loadObjectivesForCurrentProblem())
+        .then(() => maybeUnlockOnlineSlip(saved))
+        .catch((err) => {
+          console.error('Error submitting answer:', err)
+        })
+    } else {
+      maybeUnlockOnlineSlip(saved)
     }
-    await maybeUnlockOnlineSlip(saved)
-    isSubmitting.value = false
     return
   }
-
-  isSubmitting.value = false
 
   // Submit to backend in background (don't await)
   if (isAuthenticated.value) {
@@ -1282,6 +1313,13 @@ watch(currentProblem, async (problem) => {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
   color: var(--text-secondary);
+}
+
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .btn-primary {

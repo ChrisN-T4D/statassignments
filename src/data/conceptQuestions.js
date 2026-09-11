@@ -1003,6 +1003,60 @@ export const statsModule3Questions = [
       incorrect: 'Recordings document your process so you can review your work, complete assignments, and show instructors exactly what you did.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m3-q16',
+    moduleId: 'stats-module-3',
+    type: 'multiple_choice',
+    question: 'In jamovi, what is the main purpose of creating a z-score computed variable?',
+    options: [
+      { id: 'a', text: 'To delete outliers from the dataset' },
+      { id: 'b', text: 'To express each case\'s value in standard deviation units from the mean' },
+      { id: 'c', text: 'To change nominal variables into text' },
+      { id: 'd', text: 'To replace missing values with zero' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Z-scores rescale values so you can compare scores from different scales using standard deviation units.',
+      incorrect: 'A z-score computed variable standardizes values (mean 0, SD 1) for each case—it does not delete data or fix missing values.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m3-q17',
+    moduleId: 'stats-module-3',
+    type: 'multiple_choice',
+    question: 'In jamovi\'s computed variables dialog, what does MEAN(var1, var2, var3) create for each row?',
+    options: [
+      { id: 'a', text: 'The largest value among the three variables' },
+      { id: 'b', text: 'The average of the three variables for that case' },
+      { id: 'c', text: 'A count of how many variables are missing' },
+      { id: 'd', text: 'A copy of only the first variable' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'MEAN() computes the row-wise average across the listed variables—useful for sum-scores or composite means.',
+      incorrect: 'MEAN(var1, var2, var3) returns the average of those variables for each participant (row).'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m3-q18',
+    moduleId: 'stats-module-3',
+    type: 'multiple_select',
+    question: 'Which are appropriate uses of computed variables in jamovi? (Select all that apply)',
+    options: [
+      { id: 'a', text: 'Creating a total or mean score from several survey items' },
+      { id: 'b', text: 'Applying a formula transform such as a log or z-score' },
+      { id: 'c', text: 'Skipping measurement-level checks because formulas fix everything' },
+      { id: 'd', text: 'Replacing the need to import or save data files' }
+    ],
+    correct: ['a', 'b'],
+    feedback: {
+      correct: 'Computed variables are for new values from formulas—composite scores and transforms—not for bypassing data hygiene.',
+      incorrect: 'Use computed variables for composites and transforms. You still need appropriate measurement levels and a saved data workflow.'
+    },
+    difficulty: 'medium'
   }
 ]
 
