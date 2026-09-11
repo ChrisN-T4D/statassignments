@@ -39,6 +39,14 @@
 
         <ChangePasswordCard />
 
+        <div class="feedback-card">
+          <h2>Something wrong?</h2>
+          <p>
+            Report bugs, confusing questions, or access problems. We capture the page you were on to help us investigate.
+          </p>
+          <router-link to="/report-issue" class="btn-secondary">Report an issue</router-link>
+        </div>
+
         <div class="access-mode-card">
           <h2>How you work in Methods Market</h2>
           <p>
@@ -597,6 +605,23 @@ watch(isAuthenticated, (newVal) => {
 .user-details p {
   color: var(--text-secondary);
   font-size: 0.875rem;
+}
+
+.feedback-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feedback-card h2 {
+  margin-top: 0;
+}
+
+.feedback-card p {
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .access-mode-card {

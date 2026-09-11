@@ -24,6 +24,12 @@ def can_list(collection: str, user: User | None) -> bool:
         return True
     if collection == "users":
         return _is_admin(user)
+    if collection == "feedback_reports":
+        if _is_admin(user):
+            return True
+        if _is_instructor(user):
+            return False
+        return user is not None
     return user is not None
 
 
@@ -42,6 +48,11 @@ def can_view(collection: str, user: User | None, record, db: Session) -> bool:
         if not getattr(record, "user_id", None):
             return uid is not None
         return uid and str(record.user_id) == uid
+
+    if collection == "feedback_reports":
+        if _is_admin(user):
+            return True
+        return uid and str(getattr(record, "user_id", "")) == uid
 
     if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states", "learning_events", "bkt_prototypes"):
         if _is_instructor(user):
@@ -83,6 +94,7 @@ def can_create(collection: str, user: User | None, payload: dict) -> bool:
         "software_lesson_metrics": "user",
         "learning_events": "user",
         "bkt_prototypes": "user",
+        "feedback_reports": "user",
     }
     if collection in owner_fields:
         field = owner_fields[collection]
@@ -121,6 +133,9 @@ def can_update(collection: str, user: User | None, record) -> bool:
             return True
         return False
 
+    if collection == "feedback_reports":
+        return _is_admin(user)
+
     if collection in ("user_progress", "topic_readings", "bkt_states"):
         return uid and str(getattr(record, "user_id", "")) == uid
 
@@ -130,6 +145,9 @@ def can_update(collection: str, user: User | None, record) -> bool:
 def can_delete(collection: str, user: User | None, record) -> bool:
     if _is_admin(user):
         return True
+    if collection == "feedback_reports":
+        return _is_admin(user)
+
     if collection in ("bkt_states", "topic_readings", "user_progress"):
         uid = str(user.id) if user else None
         return uid and str(getattr(record, "user_id", "")) == uid

@@ -29,6 +29,14 @@
             <h4>How is my progress tracked?</h4>
             <p>When you sign in, the platform uses Bayesian Knowledge Tracing to estimate your mastery of each learning objective. You can view your progress on your Profile page.</p>
           </div>
+          <div class="faq-item">
+            <h4>Something broken or confusing?</h4>
+            <p>
+              Signed-in students can
+              <router-link to="/report-issue">report an issue</router-link>
+              from the menu or profile page. We link the report to your account and save page context to help us fix problems faster.
+            </p>
+          </div>
         </div>
       </section>
 

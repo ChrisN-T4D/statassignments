@@ -17,6 +17,7 @@ import BKTTester from '../components/BKTTester.vue'
 import Admin from '../views/Admin.vue'
 import RoleChecker from '../views/RoleChecker.vue'
 import About from '../views/About.vue'
+import ReportIssue from '../views/ReportIssue.vue'
 import AssignmentHelp from '../views/AssignmentHelp.vue'
 import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
@@ -121,6 +122,11 @@ const routes = [
   {
     path: '/profile',
     component: Profile,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/report-issue',
+    component: ReportIssue,
     meta: { requiresAuth: true }
   },
   {

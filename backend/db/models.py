@@ -307,6 +307,24 @@ class BktPrototype(Base, TimestampMixin):
     last_updated: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
+class FeedbackReport(Base, TimestampMixin):
+    __tablename__ = "feedback_reports"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"))
+    student_key: Mapped[str | None] = mapped_column(String(64))
+    category: Mapped[str] = mapped_column(String(32), nullable=False)
+    subject: Mapped[str] = mapped_column(String(120), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="open")
+    page_url: Mapped[str | None] = mapped_column(Text)
+    route_path: Mapped[str | None] = mapped_column(String(255))
+    class_id: Mapped[str | None] = mapped_column(String(64))
+    module_id: Mapped[str | None] = mapped_column(String(128))
+    context: Mapped[dict | list | None] = mapped_column(JSONB)
+    admin_notes: Mapped[str | None] = mapped_column(Text)
+
+
 COLLECTION_MODELS: dict[str, type[Base]] = {
     "users": User,
     "classes": Class,
@@ -323,6 +341,7 @@ COLLECTION_MODELS: dict[str, type[Base]] = {
     "software_lesson_metrics": SoftwareLessonMetric,
     "learning_events": LearningEvent,
     "bkt_prototypes": BktPrototype,
+    "feedback_reports": FeedbackReport,
 }
 
 FIELD_ALIASES: dict[str, dict[str, str]] = {
@@ -342,6 +361,7 @@ FIELD_ALIASES: dict[str, dict[str, str]] = {
     "software_lesson_metrics": {"user": "user_id"},
     "learning_events": {"user": "user_id"},
     "bkt_prototypes": {"user": "user_id"},
+    "feedback_reports": {"user": "user_id"},
 }
 
 REVERSE_ALIASES: dict[str, dict[str, str]] = {
