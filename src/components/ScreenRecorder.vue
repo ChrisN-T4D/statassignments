@@ -221,9 +221,9 @@
         ></video>
 
         <div class="preview-actions">
-          <button @click="downloadRecording" class="btn-download">
+          <button @click="downloadRecording" class="btn-download btn-download-primary">
             <span class="btn-icon">💾</span>
-            Download Recording
+            {{ hasDownloaded ? 'Download Again' : 'Download Recording' }}
           </button>
           <button
             v-if="allowUpload"
@@ -239,6 +239,10 @@
             Record Again
           </button>
         </div>
+        <p class="download-hint">
+          Save the <strong>.{{ downloadExtension }}</strong> video file, then upload that file to Canvas.
+          Closing this tab or leaving the page will erase the recording — Methods Market does not keep a copy.
+        </p>
       </div>
     </div>
 
@@ -247,6 +251,45 @@
       <strong>⚠️ Error:</strong> {{ error }}
       <button @click="error = null" class="btn-dismiss">✕</button>
     </div>
+
+    <!-- Full-screen prompt so Stop always surfaces download (drawer can be small) -->
+    <Teleport to="body">
+      <div
+        v-if="showDownloadPrompt && recordedBlob"
+        class="download-prompt-backdrop"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="download-prompt-title"
+      >
+        <div class="download-prompt-card">
+          <h2 id="download-prompt-title">Save your recording</h2>
+          <p class="download-prompt-lead">
+            Your video is ready. Download it now — Methods Market does not keep a copy after you leave this page.
+          </p>
+          <p class="download-prompt-file">
+            File: <code>{{ downloadFileName }}</code>
+          </p>
+          <button
+            type="button"
+            class="btn-download btn-download-hero"
+            @click="downloadRecording"
+          >
+            <span class="btn-icon">💾</span>
+            {{ hasDownloaded ? 'Download Again' : 'Download Recording' }}
+          </button>
+          <p class="download-prompt-warn">
+            Closing the browser or navigating away from this page will lose the recording. Download it before you leave, then upload the video file to Canvas.
+          </p>
+          <button
+            type="button"
+            class="btn-download-dismiss"
+            @click="dismissDownloadPrompt"
+          >
+            {{ hasDownloaded ? 'Done — I downloaded it' : 'Close (download later from Tools)' }}
+          </button>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -327,6 +370,9 @@ const recordedChunks = ref([])
 const recordedVideoUrl = ref(null)
 const recordedBlob = ref(null)
 const activeMimeType = ref('')
+const showDownloadPrompt = ref(false)
+const hasDownloaded = ref(false)
+const frozenDownloadName = ref('')
 const mixAudioContext = ref(null)
 const sourceScreenStream = ref(null)
 
@@ -352,6 +398,11 @@ const formattedTime = computed(() => {
 })
 
 const downloadExtension = computed(() => fileExtensionForMime(activeMimeType.value))
+const downloadFileName = computed(
+  () =>
+    frozenDownloadName.value ||
+    `${props.filename}-${new Date().toISOString().slice(0, 10)}.${downloadExtension.value}`
+)
 
 // Handle microphone toggle
 async function handleMicToggle() {
@@ -791,6 +842,9 @@ function handleRecordingStop() {
 
   recordedBlob.value = blob
   recordedVideoUrl.value = URL.createObjectURL(blob)
+  hasDownloaded.value = false
+  frozenDownloadName.value = `${props.filename}-${new Date().toISOString().slice(0, 10)}.${fileExtensionForMime(mime)}`
+  showDownloadPrompt.value = true
 
   isProcessing.value = false
 
@@ -801,24 +855,43 @@ function handleRecordingStop() {
     size: blob.size,
     mimeType: mime
   })
+
+  // Best-effort auto-download. Many browsers revoke the Stop click's user gesture
+  // by the time MediaRecorder fires onstop, so the modal is the reliable path.
+  nextTick(() => {
+    try {
+      downloadRecording({ auto: true })
+    } catch (_) {
+      /* modal still shown */
+    }
+  })
 }
 
 // Download recording
-function downloadRecording() {
+function downloadRecording(options = {}) {
   if (!recordedBlob.value) return
 
   const url = URL.createObjectURL(recordedBlob.value)
   const a = document.createElement('a')
   a.style.display = 'none'
   a.href = url
-  a.download = `${props.filename}-${new Date().toISOString().slice(0, 10)}.${downloadExtension.value}`
+  a.download = downloadFileName.value
   document.body.appendChild(a)
   a.click()
+
+  // Only mark success on an explicit click (auto may be blocked silently)
+  if (!options.auto) {
+    hasDownloaded.value = true
+  }
 
   setTimeout(() => {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }, 100)
+}
+
+function dismissDownloadPrompt() {
+  showDownloadPrompt.value = false
 }
 
 // Upload recording
@@ -866,6 +939,9 @@ function discardRecording() {
   recordedBlob.value = null
   recordedChunks.value = []
   activeMimeType.value = ''
+  showDownloadPrompt.value = false
+  hasDownloaded.value = false
+  frozenDownloadName.value = ''
   elapsedTime.value = 0
   error.value = null
 }
@@ -1074,6 +1150,107 @@ onUnmounted(() => {
 
 .btn-download:hover {
   filter: brightness(1.1);
+}
+
+.btn-download-primary {
+  flex: 1 1 100%;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.download-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.download-prompt-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.download-prompt-card {
+  width: min(28rem, 100%);
+  padding: 1.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background: var(--bg-card, #fff);
+  color: var(--text-primary, #111);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.download-prompt-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.375rem;
+}
+
+.download-prompt-lead,
+.download-prompt-warn {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #444);
+}
+
+.download-prompt-file {
+  margin: 0 0 1.25rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #444);
+}
+
+.download-prompt-file code {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.25rem;
+  background: var(--bg-elevated, #f3f4f6);
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+
+.btn-download-hero {
+  width: 100%;
+  justify-content: center;
+  padding: 1.1rem 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.download-prompt-warn {
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+
+.btn-download-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border, #d1d5db);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--text-secondary, #555);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn-download-dismiss:hover {
+  background: var(--bg-elevated, #f9fafb);
 }
 
 .btn-upload {
