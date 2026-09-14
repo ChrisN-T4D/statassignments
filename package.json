@@ -22,7 +22,8 @@
     "audit:software": "node scripts/audit-software-coverage.mjs",
     "open:mobile": "start chrome --window-size=375,812 http://localhost:5173",
     "verify:screen-recorder": "node scripts/verify-screen-recording-support.mjs",
-    "build:benchmark-study-guides": "node scripts/build-benchmark-study-guide-pdfs.mjs"
+    "build:benchmark-study-guides": "node scripts/build-benchmark-study-guide-pdfs.mjs",
+    "fetch:benchmark-study-guides-canvas": "node scripts/fetch-canvas-benchmark-study-guides-playwright.mjs"
   },
   "dependencies": {
     "vue": "^3.4.0",

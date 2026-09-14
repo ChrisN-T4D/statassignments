@@ -22,6 +22,8 @@ import { CANVAS_STATISTICS_ONLINE_COURSE_ID } from '../src/data/statisticsCanvas
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT_DIR = join(__dirname, '..', 'public', 'study-guides')
 const fromCanvas = process.argv.includes('--from-canvas')
+const onlyIdx = process.argv.findIndex((a) => a.startsWith('--only='))
+const onlySlug = onlyIdx >= 0 ? process.argv[onlyIdx].slice('--only='.length) : null
 
 const SLUG_TO_CANVAS_SEARCH = {
   'benchmark-1': ['benchmark 1 study', 'benchmark 1'],
@@ -149,6 +151,7 @@ async function main () {
 
   for (const bench of STATISTICS_BENCHMARK_LINKS) {
     const slug = bench.slug
+    if (onlySlug && slug !== onlySlug) continue
     const outName = bench.studyGuidePdf.replace(/^\/study-guides\//, '')
     const outPath = join(OUT_DIR, outName)
     let source = 'generated'
