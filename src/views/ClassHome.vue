@@ -137,7 +137,7 @@
             v-for="mod in contentModules"
             :key="mod.id"
             class="module-btn"
-            :class="{ active: selectedModuleId === mod.id }"
+            :class="{ active: selectedModuleId === mod.id, 'benchmark-module': mod.isBenchmark }"
             :style="{ '--module-color': mod.color }"
             @click="selectModule(mod.id)"
           >
@@ -184,7 +184,7 @@
         </div>
 
         <!-- Path data section: Ch. 12–13 + analyze tool by methodology path -->
-        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
+        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && !isBenchmarkModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
             <span>Module progress</span>
             <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
@@ -199,8 +199,36 @@
           </div>
         </div>
 
+        <!-- Benchmark review (Statistics milestones between modules) -->
+        <div v-if="isBenchmarkModule" class="benchmark-module-panel">
+          <p class="benchmark-module-intro">
+            Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then take this
+            formative practice test before your graded Canvas benchmark.
+          </p>
+          <router-link
+            v-if="benchmarkPracticeUrl"
+            :to="benchmarkPracticeUrl"
+            class="practice-link-card benchmark-practice-card"
+          >
+            <div class="link-card-icon">
+              <img src="/content-review-icon.png" alt="Benchmark practice" class="link-card-icon-img" />
+            </div>
+            <div class="link-card-content">
+              <h3>Start Benchmark Practice Test</h3>
+              <p>
+                {{ benchmarkQuestionCount }} questions — weighted toward modules where you still need help.
+                You will get links to review topics you miss.
+              </p>
+            </div>
+            <span class="card-arrow">-></span>
+          </router-link>
+          <router-link v-if="benchmarkHelpUrl" :to="benchmarkHelpUrl" class="benchmark-help-link">
+            Assignment Help (tips and what to review) →
+          </router-link>
+        </div>
+
         <!-- Content Tabs -->
-        <div v-if="!isDataAnalysisModule && showContentTabs" class="content-tabs">
+        <div v-if="!isDataAnalysisModule && !isBenchmarkModule && showContentTabs" class="content-tabs">
           <button
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
@@ -217,7 +245,7 @@
         </div>
 
         <!-- Tab Content -->
-        <div v-if="!isDataAnalysisModule" class="tab-content">
+        <div v-if="!isDataAnalysisModule && !isBenchmarkModule" class="tab-content">
           <!-- Statistics & analysis by methodology path (Ch. 12, 13, analyze tool) -->
           <template v-if="isPathDataSectionModule">
             <div
@@ -594,6 +622,7 @@ import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
 import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
+import { getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
@@ -670,6 +699,7 @@ const activeMethodPaths = computed(() => {
 })
 
 const showContentTabs = computed(() => {
+  if (isBenchmarkModule.value) return false
   if (isDataAnalysisModule.value) return false
   if (isPathDataSectionModule.value && !showMethodPathTabs.value) return false
   return true
@@ -695,10 +725,33 @@ const classModules = computed(() => {
   return getModulesByClassId(slug)
 })
 
-// Filter modules to content modules only
+// Filter modules to content modules only (Statistics includes benchmark milestones in the picker)
 const contentModules = computed(() => {
   const slug = currentClass.value?.slug || classId.value
+  if (slug === 'statistics') {
+    return getModulesByClassId(slug)
+  }
   return getContentModulesByClass(slug)
+})
+
+const isBenchmarkModule = computed(() => !!selectedModule.value?.isBenchmark)
+
+const benchmarkPracticeUrl = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return null
+  return `/class/${classId.value}/assignment-help/${slug}/practice`
+})
+
+const benchmarkHelpUrl = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return null
+  return `/class/${classId.value}/assignment-help/${slug}`
+})
+
+const benchmarkQuestionCount = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return 15
+  return getStatisticsBenchmarkLink(slug)?.questionCount ?? 15
 })
 
 const psychMethodsModuleGroups = computed(() => {
@@ -1560,6 +1613,46 @@ watch(selectedModuleId, id => {
 .module-btn.active {
   border-color: var(--module-color, var(--primary));
   background: color-mix(in srgb, var(--module-color, var(--primary)) 15%, var(--bg-card));
+}
+
+.module-btn.benchmark-module {
+  border-style: dashed;
+  font-weight: 600;
+}
+
+.module-btn.benchmark-module .module-title {
+  color: var(--module-color, #f59e0b);
+}
+
+.benchmark-module-panel {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: color-mix(in srgb, #f59e0b 8%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.75rem;
+}
+
+.benchmark-module-intro {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 42rem;
+}
+
+.benchmark-practice-card {
+  margin-bottom: 1rem;
+}
+
+.benchmark-help-link {
+  display: inline-block;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.benchmark-help-link:hover {
+  text-decoration: underline;
 }
 
 .module-icon {

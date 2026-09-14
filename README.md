@@ -46,6 +46,7 @@ statassignments/
 
 ## Documentation
 
+- **[Methodology](docs/METHODOLOGY.md)** - Educational theory, content sources, BKT implementation, and technical architecture
 - **[Full Setup Guide](docs/README-FULL.md)** - Complete setup instructions
 - **[Setup Guide](docs/SETUP.md)** - Detailed configuration steps
 - **[Troubleshooting](docs/QUICK-FIX.md)** - Common issues and fixes
