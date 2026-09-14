@@ -202,12 +202,8 @@
         <!-- Benchmark review (Statistics milestones between modules) -->
         <div v-if="isBenchmarkModule" class="benchmark-module-panel">
           <p class="benchmark-module-intro">
-            Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then take this
-            formative practice test before your graded Canvas benchmark.
-          </p>
-          <p v-if="selectedModule.benchmarkSlug === 'benchmark-1'" class="benchmark-proctor-note">
-            <strong>Practice like the real exam:</strong> use no notes, textbook, or other help. Graded Benchmark 1
-            is proctored in Canvas (LockDown Browser) with no aids allowed.
+            Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then use the
+            formative practice test below before your graded Canvas benchmark.
           </p>
           <router-link
             v-if="benchmarkPracticeUrl"
@@ -219,9 +215,15 @@
             </div>
             <div class="link-card-content">
               <h3>Start Benchmark Practice Test</h3>
+              <p v-if="benchmarkGuidance" class="benchmark-card-highlight">
+                {{ benchmarkGuidance.retakeNote }}
+              </p>
+              <p v-if="benchmarkGuidance" class="benchmark-card-highlight benchmark-card-proctor">
+                {{ benchmarkGuidance.proctorNote }}
+              </p>
               <p>
-                {{ benchmarkQuestionCount }} questions — weighted toward modules where you still need help.
-                You will get links to review topics you miss.
+                {{ benchmarkQuestionCount }} questions per attempt — weighted toward modules where you still need help.
+                You will get strengths, weaknesses, and review links when you finish.
               </p>
             </div>
             <span class="card-arrow">-></span>
@@ -626,7 +628,7 @@ import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
 import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
-import { getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
+import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
@@ -756,6 +758,11 @@ const benchmarkQuestionCount = computed(() => {
   const slug = selectedModule.value?.benchmarkSlug
   if (!slug) return 15
   return getStatisticsBenchmarkLink(slug)?.questionCount ?? 15
+})
+
+const benchmarkGuidance = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  return slug ? getBenchmarkCardGuidance(slug) : null
 })
 
 const psychMethodsModuleGroups = computed(() => {
@@ -1652,6 +1659,22 @@ watch(selectedModuleId, id => {
   border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
   border-radius: 0.5rem;
   color: var(--text-primary);
+}
+
+.benchmark-card-highlight {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.65rem;
+  line-height: 1.45;
+  font-size: 0.875rem;
+  background: color-mix(in srgb, #f59e0b 10%, var(--bg-elevated));
+  border-left: 3px solid #f59e0b;
+  border-radius: 0.25rem;
+  color: var(--text-primary);
+}
+
+.benchmark-card-proctor {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
+  border-left-color: var(--primary);
 }
 
 .benchmark-practice-card {

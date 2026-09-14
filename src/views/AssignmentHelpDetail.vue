@@ -23,7 +23,14 @@
           <router-link :to="practiceTestUrl" class="practice-test-link">
             {{ practiceTestLinkText }} →
           </router-link>
-          <p class="practice-test-desc">Get {{ practiceTestCount }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
+          <template v-if="benchmarkGuidance">
+            <p class="practice-test-desc practice-test-highlight">{{ benchmarkGuidance.retakeNote }}</p>
+            <p class="practice-test-desc practice-test-highlight proctor">{{ benchmarkGuidance.proctorNote }}</p>
+          </template>
+          <p class="practice-test-desc">
+            Get {{ practiceTestCount }} questions per attempt. Questions target areas we detect you might need help on.
+            At the end you will see strengths, weaknesses, and review links.
+          </p>
         </div>
 
         <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
@@ -93,6 +100,7 @@
 import { computed } from 'vue'
 import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
 import { formatResearchMethodsTopicLabel } from '../data/researchMethodsTextbook'
+import { getBenchmarkCardGuidance, getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 
 const props = defineProps({
@@ -119,10 +127,15 @@ const formulaIntro = computed(() => {
   }
   return `Use these when you type or compute by hand. ${bySw[sw] || bySw.jamovi}`
 })
-const practiceTestCount = 15
+const practiceTestCount = computed(() =>
+  getStatisticsBenchmarkLink(props.assignmentId)?.questionCount ?? 15
+)
 
 const practiceTestSlugs = ['benchmark-1', 'benchmark-2', 'final-benchmark']
 const showPracticeTestCta = computed(() => practiceTestSlugs.includes(props.assignmentId))
+const benchmarkGuidance = computed(() =>
+  showPracticeTestCta.value ? getBenchmarkCardGuidance(props.assignmentId) : null
+)
 const practiceTestUrl = computed(() => `/class/${props.classId}/assignment-help/${props.assignmentId}/practice`)
 const practiceTestLinkText = computed(() => {
   if (props.assignmentId === 'benchmark-1') return 'Take a practice test (Chapters 1–3)'

@@ -61,22 +61,39 @@ export function getStatisticsBenchmarkLink (slug) {
   return STATISTICS_BENCHMARK_LINKS.find((b) => b.slug === slug) ?? null
 }
 
+/** Shared copy for benchmark practice cards (Class Home, practice intro, Assignment Help). */
+export function getBenchmarkCardGuidance (slug) {
+  const gradedLabel =
+    slug === 'final-benchmark'
+      ? 'Final Benchmark'
+      : slug === 'benchmark-2'
+        ? 'Benchmark 2'
+        : 'Benchmark 1'
+  return {
+    retakeNote:
+      'You may take this practice test as many times as you want. Each attempt draws a new random sample and updates your mastery profile.',
+    proctorNote: `Practice without notes, textbook, or other help. Your graded ${gradedLabel} in Canvas is proctored (LockDown Browser) with no aids allowed on the real exam.`
+  }
+}
+
 export function benchmarkPracticeAssignment (slug) {
   const bench = getStatisticsBenchmarkLink(slug)
   if (!bench) return null
+  const guidance = getBenchmarkCardGuidance(slug)
   return {
     id: slug,
     name: `${bench.title} (Methods Market)`,
     type: 'benchmark',
     methodsMarketPath: benchmarkPracticePath(slug),
     tips: [
+      guidance.retakeNote,
+      guidance.proctorNote,
       `Covers ${bench.modulesLabel}: complete Concept Review for those modules before the benchmark.`,
-      'Take the practice test without notes or other help — graded benchmarks are proctored with no aids.',
       `You will get ${bench.questionCount} questions; harder topics appear more often if practice data shows you are still learning them.`,
       'Each answer updates your mastery model. At the end you get a score, strengths/weaknesses by module, and review links.'
     ],
     getHelp:
-      'Open the benchmark below after finishing Concept Review for the listed modules. Sign in and link your student key so practice is tracked. Canvas records completion; your score is shown in Methods Market when you finish.'
+      'Open the benchmark practice test below after finishing Concept Review for the listed modules. Sign in and link your student key so practice is tracked. The graded Canvas benchmark is separate and proctored.'
   }
 }
 

@@ -9,9 +9,11 @@
         <div v-if="!started && !finished" class="intro">
           <h1>{{ config.title }}</h1>
           <p>{{ displaySubtitle }}</p>
-          <p class="intro-proctor-note" v-if="isBenchmark1">
-            <strong>Simulate test conditions:</strong> Take this practice test without notes, textbooks, or other help.
-            Your graded Benchmark 1 in Canvas is proctored (LockDown Browser) with no aids allowed.
+          <p class="intro-proctor-note" v-if="benchmarkGuidance">
+            {{ benchmarkGuidance.proctorNote }}
+          </p>
+          <p class="intro-retake-note" v-if="benchmarkGuidance">
+            {{ benchmarkGuidance.retakeNote }}
           </p>
           <p>You’ll get {{ questionCount }} questions. Questions will target areas we detect you might need help on. Each answer updates your mastery model so later practice stays fresh. At the end you’ll see strengths, weaknesses, and review links.</p>
           <p v-if="priorAttempts.length" class="prior-attempts">
@@ -229,7 +231,7 @@ import { updateBKT, useBKT } from '../composables/useBKT'
 import { usePractice } from '../composables/usePractice'
 import { useProfile } from '../composables/useProfile'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap.js'
-import { getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
+import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance } from '../data/statisticsCanvasLinks.js'
 import {
   loadBenchmarkAttemptHistory,
   saveBenchmarkAttempt,
@@ -244,8 +246,10 @@ const displaySubtitle = computed(() =>
   applySoftwareLabelsToText(config.value?.subtitle || '', preferredSoftware.value || 'jamovi')
 )
 const backUrl = computed(() => config.value ? `/class/${classId.value}/assignment-help/${benchmarkSlug.value}` : `/class/${classId.value}/assignment-help`)
-const isBenchmark1 = computed(() => benchmarkSlug.value === 'benchmark-1')
 const questionCount = computed(() => getStatisticsBenchmarkLink(benchmarkSlug.value)?.questionCount ?? 15)
+const benchmarkGuidance = computed(() =>
+  benchmarkSlug.value ? getBenchmarkCardGuidance(benchmarkSlug.value) : null
+)
 
 const rawQuestions = ref([])
 const questions = ref([])
@@ -532,12 +536,18 @@ function formatTopicId(id) {
   line-height: 1.5;
 }
 
-.intro-proctor-note {
+.intro-proctor-note,
+.intro-retake-note {
   padding: 0.75rem 1rem;
   background: color-mix(in srgb, #f59e0b 12%, var(--bg-card));
   border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
   border-radius: 0.5rem;
   color: var(--text-primary);
+}
+
+.intro-proctor-note {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
 }
 
 .prior-attempts {
