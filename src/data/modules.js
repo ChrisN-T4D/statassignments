@@ -74,6 +74,24 @@ export const statisticsModules = [
     isDynamicSoftware: true  // Flag to indicate this module adapts to software preference
   },
   {
+    id: 'stats-benchmark-1',
+    classId: 'statistics',
+    number: null,
+    title: 'Benchmark 1 Review',
+    shortTitle: 'Benchmark 1',
+    description: 'Formative practice test covering Modules 1–3 before your graded Canvas benchmark.',
+    icon: 'B1',
+    color: '#f59e0b',
+    isBenchmark: true,
+    benchmarkSlug: 'benchmark-1',
+    coversModulesLabel: '1–3',
+    learningObjectives: [
+      'Review why we learn statistics and how research design supports inference',
+      'Check measurement levels, reliability, validity, and variable types',
+      'Practice software basics and data-handling concepts from Module 3'
+    ]
+  },
+  {
     id: 'stats-module-4',
     classId: 'statistics',
     number: 4,
@@ -128,6 +146,24 @@ export const statisticsModules = [
       'Extract subsets of data using filters'
     ],
     hasSoftwarePractice: true
+  },
+  {
+    id: 'stats-benchmark-2',
+    classId: 'statistics',
+    number: null,
+    title: 'Benchmark 2 Review',
+    shortTitle: 'Benchmark 2',
+    description: 'Formative practice test covering Modules 4–5 before your graded Canvas benchmark.',
+    icon: 'B2',
+    color: '#f59e0b',
+    isBenchmark: true,
+    benchmarkSlug: 'benchmark-2',
+    coversModulesLabel: '4–5',
+    learningObjectives: [
+      'Review descriptive statistics, z-scores, and distribution shape',
+      'Check graph types and when to use histograms, box plots, bar charts, and scatterplots',
+      'Practice choosing the right visualization and summary for a data type'
+    ]
   },
   {
     id: 'stats-module-6',
@@ -242,6 +278,24 @@ export const statisticsModules = [
       'Calculate and interpret effect sizes (η² and ω²)'
     ],
     hasSoftwarePractice: true
+  },
+  {
+    id: 'stats-final-benchmark',
+    classId: 'statistics',
+    number: null,
+    title: 'Final Benchmark Review',
+    shortTitle: 'Final Benchmark',
+    description: 'Formative practice test covering Modules 6–8 before your graded final benchmark (not comprehensive).',
+    icon: 'BF',
+    color: '#f59e0b',
+    isBenchmark: true,
+    benchmarkSlug: 'final-benchmark',
+    coversModulesLabel: '6–8',
+    learningObjectives: [
+      'Review probability, sampling, and confidence intervals',
+      'Check hypothesis testing, p-values, and effect sizes',
+      'Practice choosing t-tests, ANOVA, chi-square, and regression for a scenario'
+    ]
   }
 ]
 
