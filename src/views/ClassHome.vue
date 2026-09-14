@@ -205,6 +205,10 @@
             Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then take this
             formative practice test before your graded Canvas benchmark.
           </p>
+          <p v-if="selectedModule.benchmarkSlug === 'benchmark-1'" class="benchmark-proctor-note">
+            <strong>Practice like the real exam:</strong> use no notes, textbook, or other help. Graded Benchmark 1
+            is proctored in Canvas (LockDown Browser) with no aids allowed.
+          </p>
           <router-link
             v-if="benchmarkPracticeUrl"
             :to="benchmarkPracticeUrl"
@@ -1637,6 +1641,17 @@ watch(selectedModuleId, id => {
   color: var(--text-secondary);
   line-height: 1.6;
   max-width: 42rem;
+}
+
+.benchmark-proctor-note {
+  margin: 0 0 1rem 0;
+  padding: 0.75rem 1rem;
+  max-width: 42rem;
+  line-height: 1.55;
+  background: color-mix(in srgb, #f59e0b 10%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.5rem;
+  color: var(--text-primary);
 }
 
 .benchmark-practice-card {

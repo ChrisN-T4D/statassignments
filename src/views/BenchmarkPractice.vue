@@ -9,7 +9,15 @@
         <div v-if="!started && !finished" class="intro">
           <h1>{{ config.title }}</h1>
           <p>{{ displaySubtitle }}</p>
-          <p>You’ll get {{ QUESTIONS_COUNT }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
+          <p class="intro-proctor-note" v-if="isBenchmark1">
+            <strong>Simulate test conditions:</strong> Take this practice test without notes, textbooks, or other help.
+            Your graded Benchmark 1 in Canvas is proctored (LockDown Browser) with no aids allowed.
+          </p>
+          <p>You’ll get {{ questionCount }} questions. Questions will target areas we detect you might need help on. Each answer updates your mastery model so later practice stays fresh. At the end you’ll see strengths, weaknesses, and review links.</p>
+          <p v-if="priorAttempts.length" class="prior-attempts">
+            Past practice on this benchmark:
+            <span v-for="(a, i) in priorAttempts.slice(0, 5)" :key="i" class="prior-score">{{ a.score }}/{{ a.total }}</span>
+          </p>
           <button type="button" class="btn-primary" :disabled="loading" @click="start">
             {{ loading ? 'Loading…' : 'Start practice test' }}
           </button>
@@ -99,8 +107,60 @@
         <div v-else-if="finished" class="results">
           <h1>Practice test complete</h1>
           <p class="score">You got {{ score }} out of {{ questions.length }} correct.</p>
+          <p v-if="bktSaved" class="bkt-note">Your answers were saved to your mastery profile for smarter question selection next time.</p>
 
-          <section v-if="Object.keys(conceptsToReview).length > 0" class="concepts-section">
+          <section v-if="moduleStrengths.length" class="summary-section strengths-section">
+            <h2>Strengths on this attempt</h2>
+            <p>You answered every question correctly in these areas:</p>
+            <ul class="summary-list">
+              <li v-for="item in moduleStrengths" :key="item.moduleId" class="summary-item strength-item">
+                <span class="summary-label">{{ item.label }}</span>
+                <span class="summary-stat">{{ item.correct }}/{{ item.total }} correct</span>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="moduleWeaknesses.length" class="summary-section weaknesses-section">
+            <h2>Focus areas next</h2>
+            <p>Review these modules before your proctored benchmark:</p>
+            <ul class="concepts-list">
+              <li v-for="item in moduleWeaknesses" :key="item.moduleId" class="concept-item">
+                <span class="concept-label">{{ item.label }}</span>
+                <span class="summary-stat">{{ item.correct }}/{{ item.total }} correct on this test</span>
+                <div class="review-links">
+                  <span v-if="item.topicIds?.length" class="review-group">
+                    <span class="review-group-label">Topics:</span>
+                    <router-link
+                      v-for="topicId in item.topicIds"
+                      :key="topicId"
+                      :to="`/topic/${topicId}`"
+                      class="topic-link"
+                    >
+                      {{ formatTopicId(topicId) }}
+                    </router-link>
+                  </span>
+                  <span v-if="item.classModuleId" class="review-group">
+                    <router-link
+                      :to="`/class/${classId}?module=${item.classModuleId}`"
+                      class="topic-link"
+                    >
+                      Concept Review for this module
+                    </router-link>
+                  </span>
+                  <span v-if="item.hasSoftware" class="review-group">
+                    <router-link
+                      :to="`/class/${classId}/software?module=${item.classModuleId}`"
+                      class="topic-link"
+                    >
+                      Software practice
+                    </router-link>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="Object.keys(conceptsToReview).length > 0 && moduleWeaknesses.length === 0" class="concepts-section">
             <h2>Concepts you may want to review</h2>
             <p>Based on the questions you missed, use these links to review content:</p>
             <ul class="concepts-list">
@@ -139,7 +199,9 @@
             </ul>
           </section>
 
-          <p v-else class="all-correct">You answered every question correctly. Keep reviewing the Topics to stay sharp.</p>
+          <p v-if="moduleStrengths.length && !moduleWeaknesses.length" class="all-correct">
+            Strong work — you missed nothing grouped by module on this attempt. Keep reviewing Topics to stay sharp for the proctored exam.
+          </p>
 
           <div class="results-actions">
             <button type="button" class="btn-secondary" @click="restart">Try again</button>
@@ -157,13 +219,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getBenchmarkPracticeConfig } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
-import { useBKT } from '../composables/useBKT'
+import { updateBKT, useBKT } from '../composables/useBKT'
+import { usePractice } from '../composables/usePractice'
+import { useProfile } from '../composables/useProfile'
+import { getObjectivesForQuestion } from '../data/questionObjectiveMap.js'
+import { getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
+import {
+  loadBenchmarkAttemptHistory,
+  saveBenchmarkAttempt,
+  summarizeBenchmarkByModule
+} from '../lib/benchmarkPracticeStore.js'
 
 const route = useRoute()
 const classId = computed(() => route.params.classId)
@@ -173,8 +244,9 @@ const displaySubtitle = computed(() =>
   applySoftwareLabelsToText(config.value?.subtitle || '', preferredSoftware.value || 'jamovi')
 )
 const backUrl = computed(() => config.value ? `/class/${classId.value}/assignment-help/${benchmarkSlug.value}` : `/class/${classId.value}/assignment-help`)
+const isBenchmark1 = computed(() => benchmarkSlug.value === 'benchmark-1')
+const questionCount = computed(() => getStatisticsBenchmarkLink(benchmarkSlug.value)?.questionCount ?? 15)
 
-const QUESTIONS_COUNT = 15
 const rawQuestions = ref([])
 const questions = ref([])
 const started = ref(false)
@@ -186,8 +258,14 @@ const showResult = ref(false)
 const lastCorrect = ref(false)
 const answers = ref([])
 const loading = ref(false)
+const bktSaved = ref(false)
+const moduleStrengths = ref([])
+const moduleWeaknesses = ref([])
+const priorAttempts = ref([])
 
 const { getAllBKTStates } = useBKT()
+const { submitAnswer } = usePractice()
+const { studentKey } = useProfile()
 
 const currentQuestion = computed(() => questions.value[currentIndex.value] || null)
 const isLastQuestion = computed(() => currentIndex.value === questions.value.length - 1)
@@ -213,6 +291,16 @@ const conceptsToReview = computed(() => {
   })
   return list
 })
+
+onMounted(() => {
+  if (benchmarkSlug.value) {
+    priorAttempts.value = loadBenchmarkAttemptHistory(studentKey.value, benchmarkSlug.value)
+  }
+})
+
+function applyLabel(text) {
+  return applySoftwareLabelsToText(text, preferredSoftware.value || 'jamovi')
+}
 
 function convertQuestion(q) {
   if (!q) return null
@@ -266,9 +354,9 @@ async function start() {
   try {
     const states = await getAllBKTStates()
     const masteryByModule = masteryByModuleFromBKT(states)
-    rawQuestions.value = config.value.getQuestionsWeighted(masteryByModule, QUESTIONS_COUNT)
+    rawQuestions.value = config.value.getQuestionsWeighted(masteryByModule, questionCount.value)
     if (rawQuestions.value.length === 0) {
-      rawQuestions.value = config.value.getQuestions(QUESTIONS_COUNT)
+      rawQuestions.value = config.value.getQuestions(questionCount.value)
     }
     questions.value = rawQuestions.value
       .map(q => convertQuestion(q))
@@ -304,7 +392,49 @@ function submitMultiSelect() {
   checkAndRecord()
 }
 
-function checkAndRecord() {
+function answerTextForRecord(q) {
+  if (!q) return ''
+  if (q.question_type === 'multiple_select') {
+    return [...selectedAnswers.value].sort().join('; ')
+  }
+  return selectedAnswer.value || ''
+}
+
+async function persistBenchmarkAnswer(rawQ, isCorrect) {
+  if (!rawQ?.id) return
+  const difficulty = rawQ.difficulty || 'medium'
+  const answerText = answerTextForRecord(convertQuestion(rawQ))
+  const meta = {
+    source: 'benchmark_practice',
+    answer: answerText,
+    module_id: rawQ.moduleId,
+    class_id: classId.value,
+    benchmark_slug: benchmarkSlug.value
+  }
+
+  const { error } = await submitAnswer(rawQ.id, answerText, isCorrect, difficulty, null, null, null, meta)
+  if (!error) {
+    bktSaved.value = true
+    return
+  }
+
+  const objectives = getObjectivesForQuestion(rawQ.id)
+  for (const objectiveId of objectives) {
+    await updateBKT(
+      objectiveId,
+      isCorrect,
+      difficulty,
+      null,
+      null,
+      null,
+      rawQ.id,
+      meta
+    ).catch(() => {})
+  }
+  if (objectives.length) bktSaved.value = true
+}
+
+async function checkAndRecord() {
   const q = currentQuestion.value
   if (!q) return
   let correct = false
@@ -317,24 +447,50 @@ function checkAndRecord() {
     correct = selectedAnswer.value === q.correct_answer
   }
   lastCorrect.value = correct
-  answers.value.push({ correct, moduleId: q.moduleId })
+  answers.value.push({ correct, moduleId: q.moduleId, questionId: q.id })
   showResult.value = true
+  const rawQ = rawQuestions.value[currentIndex.value]
+  await persistBenchmarkAnswer(rawQ, correct)
 }
 
-function next() {
+async function finishBenchmark() {
+  if (!config.value) return
+  const summary = summarizeBenchmarkByModule(
+    answers.value,
+    questions.value,
+    (mid) => config.value.getConceptLabel(mid),
+    applyLabel
+  )
+  moduleStrengths.value = summary.strengths
+  moduleWeaknesses.value = summary.weaknesses
+
+  saveBenchmarkAttempt(studentKey.value, {
+    slug: benchmarkSlug.value,
+    score: score.value,
+    total: questions.value.length,
+    moduleResults: summary.moduleResults,
+    questionIds: questions.value.map((q) => q.id)
+  })
+  priorAttempts.value = loadBenchmarkAttemptHistory(studentKey.value, benchmarkSlug.value)
+}
+
+async function next() {
   if (!isLastQuestion.value) {
     currentIndex.value++
     showResult.value = false
     selectedAnswer.value = null
     selectedAnswers.value = []
   } else {
+    await finishBenchmark()
     finished.value = true
   }
 }
 
 async function restart() {
-  await start()
+  moduleStrengths.value = []
+  moduleWeaknesses.value = []
   finished.value = false
+  await start()
 }
 
 function formatTopicId(id) {
@@ -374,6 +530,27 @@ function formatTopicId(id) {
   color: var(--text-secondary);
   margin: 0 0 0.5rem 0;
   line-height: 1.5;
+}
+
+.intro-proctor-note {
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, #f59e0b 12%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+}
+
+.prior-attempts {
+  font-size: 0.9rem;
+}
+
+.prior-score {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.15rem 0.45rem;
+  background: var(--bg-elevated);
+  border-radius: 0.35rem;
+  font-weight: 600;
 }
 
 .intro .btn-primary {
@@ -477,7 +654,70 @@ function formatTopicId(id) {
 .score {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.75rem 0;
+}
+
+.bkt-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 1.25rem 0;
+}
+
+.summary-section {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.strengths-section {
+  background: color-mix(in srgb, var(--success) 8%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--success) 30%, var(--border));
+}
+
+.weaknesses-section {
+  background: var(--tip-bg);
+  border: 1px solid var(--border);
+}
+
+.summary-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.summary-section > p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.summary-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.summary-stat {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .concepts-section {

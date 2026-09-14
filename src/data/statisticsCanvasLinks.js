@@ -71,8 +71,9 @@ export function benchmarkPracticeAssignment (slug) {
     methodsMarketPath: benchmarkPracticePath(slug),
     tips: [
       `Covers ${bench.modulesLabel}: complete Concept Review for those modules before the benchmark.`,
+      'Take the practice test without notes or other help — graded benchmarks are proctored with no aids.',
       `You will get ${bench.questionCount} questions; harder topics appear more often if practice data shows you are still learning them.`,
-      'At the end you get a score and links to review topics you missed.'
+      'Each answer updates your mastery model. At the end you get a score, strengths/weaknesses by module, and review links.'
     ],
     getHelp:
       'Open the benchmark below after finishing Concept Review for the listed modules. Sign in and link your student key so practice is tracked. Canvas records completion; your score is shown in Methods Market when you finish.'
