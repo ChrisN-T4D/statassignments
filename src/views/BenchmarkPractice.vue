@@ -1,12 +1,72 @@
 <template>
-  <div class="benchmark-practice">
+  <div class="benchmark-practice" :class="{ 'printing-packet': printFocus === 'packet' }">
     <div class="container">
       <template v-if="config">
         <!-- Back -->
         <router-link :to="backUrl" class="back-link">← Assignment Help: {{ config.title }}</router-link>
 
+        <div v-if="benchmarkStudyGuide && !started && !finished" class="study-guide-row print-hide">
+          <a :href="benchmarkStudyGuide.pdfPath" class="btn-secondary" download>
+            Download {{ benchmarkStudyGuide.label }} (PDF)
+          </a>
+        </div>
+
+        <div v-if="!started && !finished" class="cr-mode-bar print-hide">
+          <p v-if="isOfflinePrimary">
+            Offline primary: print the packet, work without internet, then enter all answers at once for scored feedback.
+          </p>
+          <p v-else>
+            Online primary: take the practice test here, or print a packet if you want paper practice first.
+          </p>
+          <div class="cr-mode-actions">
+            <button type="button" class="btn-secondary" @click="openPrintPacket">Print packet</button>
+            <button
+              v-if="canEnterPacketAnswers"
+              type="button"
+              class="btn-primary"
+              @click="startBatchEntry"
+            >
+              Enter answers
+            </button>
+          </div>
+        </div>
+
+        <div v-if="showPrintPacket" class="print-packet-wrap">
+          <div class="print-hide packet-toolbar">
+            <button type="button" class="btn-primary" @click="printPacket">Print / Save PDF</button>
+            <button type="button" class="btn-secondary" @click="showPrintPacket = false">Close packet</button>
+          </div>
+          <ConceptReviewPrintPacket
+            :questions="packetQuestions"
+            :module-label="packetLabel"
+          />
+        </div>
+
+        <div v-if="canEnterPacketAnswers && batchMode" class="batch-entry print-hide">
+          <h2>Enter answers</h2>
+          <p>Submit once. You will see your score, strengths, weaknesses, and review links.</p>
+          <form @submit.prevent="submitBatch">
+            <fieldset v-for="(q, index) in packetQuestions" :key="q.id" class="batch-q">
+              <legend>{{ index + 1 }}. {{ q.question }}</legend>
+              <template v-if="q.type === 'multiple_choice' || q.type === 'true_false'">
+                <label v-for="opt in batchOptions(q)" :key="opt.id">
+                  <input type="radio" :name="q.id" :value="opt.id" v-model="batchAnswers[q.id]" />
+                  {{ opt.text }}
+                </label>
+              </template>
+              <template v-else-if="q.type === 'multiple_select'">
+                <label v-for="opt in q.options" :key="opt.id">
+                  <input type="checkbox" :value="opt.id" v-model="batchMulti[q.id]" />
+                  {{ opt.text }}
+                </label>
+              </template>
+            </fieldset>
+            <button type="submit" class="btn-primary">Submit all answers</button>
+          </form>
+        </div>
+
         <!-- Intro (before start) -->
-        <div v-if="!started && !finished" class="intro">
+        <div v-if="!started && !finished && !showPrintPacket && !batchMode" class="intro">
           <h1>{{ config.title }}</h1>
           <p>{{ displaySubtitle }}</p>
           <p class="intro-proctor-note" v-if="benchmarkGuidance">
@@ -26,7 +86,7 @@
         </div>
 
         <!-- Question -->
-        <div v-else-if="started && !finished && currentQuestion" class="question-card">
+        <div v-else-if="started && !finished && currentQuestion && !batchMode" class="question-card">
           <div class="progress">
             Question {{ currentIndex + 1 }} of {{ questions.length }}
           </div>
@@ -221,22 +281,29 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
-import { getBenchmarkPracticeConfig } from '../data/conceptQuestions'
+import { getBenchmarkPracticeConfig, getBenchmarkPacketQuestions } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { updateBKT, useBKT } from '../composables/useBKT'
 import { usePractice } from '../composables/usePractice'
 import { useProfile } from '../composables/useProfile'
+import { useAccessMode } from '../composables/useAccessMode'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap.js'
-import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance } from '../data/statisticsCanvasLinks.js'
+import {
+  getStatisticsBenchmarkLink,
+  getBenchmarkCardGuidance,
+  getBenchmarkStudyGuide
+} from '../data/statisticsCanvasLinks.js'
 import {
   loadBenchmarkAttemptHistory,
   saveBenchmarkAttempt,
   summarizeBenchmarkByModule
 } from '../lib/benchmarkPracticeStore.js'
+import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
+import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const route = useRoute()
 const classId = computed(() => route.params.classId)
@@ -250,9 +317,17 @@ const questionCount = computed(() => getStatisticsBenchmarkLink(benchmarkSlug.va
 const benchmarkGuidance = computed(() =>
   benchmarkSlug.value ? getBenchmarkCardGuidance(benchmarkSlug.value) : null
 )
+const benchmarkStudyGuide = computed(() =>
+  benchmarkSlug.value ? getBenchmarkStudyGuide(benchmarkSlug.value) : null
+)
+const packetLabel = computed(() => `${config.value?.title || 'Benchmark practice'} (print packet)`)
+const packetSeed = computed(() => `${studentKey.value || 'guest'}:${benchmarkSlug.value}:packet`)
+
+const { isOfflinePrimary, canEnterPacketAnswers, ensureLoaded } = useAccessMode()
 
 const rawQuestions = ref([])
 const questions = ref([])
+const packetQuestions = ref([])
 const started = ref(false)
 const finished = ref(false)
 const currentIndex = ref(0)
@@ -266,6 +341,11 @@ const bktSaved = ref(false)
 const moduleStrengths = ref([])
 const moduleWeaknesses = ref([])
 const priorAttempts = ref([])
+const showPrintPacket = ref(false)
+const batchMode = ref(false)
+const batchAnswers = ref({})
+const batchMulti = ref({})
+const printFocus = ref(null)
 
 const { getAllBKTStates } = useBKT()
 const { submitAnswer } = usePractice()
@@ -296,11 +376,122 @@ const conceptsToReview = computed(() => {
   return list
 })
 
-onMounted(() => {
+onMounted(async () => {
+  await ensureLoaded()
   if (benchmarkSlug.value) {
     priorAttempts.value = loadBenchmarkAttemptHistory(studentKey.value, benchmarkSlug.value)
   }
+  loadPacketQuestions()
+  window.addEventListener('afterprint', afterPrint)
+  if (route.query.print === '1') {
+    showPrintPacket.value = true
+  }
+  if (route.query.batch === '1' && canEnterPacketAnswers.value) {
+    startBatchEntry()
+  }
 })
+
+onUnmounted(() => {
+  window.removeEventListener('afterprint', afterPrint)
+})
+
+watch(
+  () => [benchmarkSlug.value, studentKey.value, preferredSoftware.value],
+  () => loadPacketQuestions()
+)
+
+watch(
+  () => [route.query.print, route.query.batch],
+  () => {
+    showPrintPacket.value = route.query.print === '1'
+    if (route.query.batch === '1' && canEnterPacketAnswers.value) {
+      startBatchEntry()
+    } else if (route.query.batch !== '1') {
+      batchMode.value = false
+    }
+  }
+)
+
+function loadPacketQuestions() {
+  if (!config.value || !benchmarkSlug.value) {
+    packetQuestions.value = []
+    return
+  }
+  const sw = preferredSoftware.value || 'jamovi'
+  const qs = getBenchmarkPacketQuestions(
+    benchmarkSlug.value,
+    packetSeed.value,
+    questionCount.value
+  )
+  packetQuestions.value = qs.map((q) => prepareConceptQuestionForSoftware(q, sw))
+}
+
+function batchOptions(q) {
+  if (q.type === 'true_false') {
+    return [
+      { id: 'true', text: 'True' },
+      { id: 'false', text: 'False' }
+    ]
+  }
+  return q.options || []
+}
+
+function afterPrint() {
+  printFocus.value = null
+}
+
+function printPacket() {
+  printFocus.value = 'packet'
+  nextTick(() => window.print())
+}
+
+function openPrintPacket() {
+  loadPacketQuestions()
+  showPrintPacket.value = true
+}
+
+function startBatchEntry() {
+  loadPacketQuestions()
+  showPrintPacket.value = false
+  batchMode.value = true
+  const multi = {}
+  for (const q of packetQuestions.value) {
+    if (q.type === 'multiple_select') multi[q.id] = []
+  }
+  batchMulti.value = multi
+  batchAnswers.value = {}
+}
+
+async function submitBatch() {
+  if (!config.value || packetQuestions.value.length === 0) return
+  loading.value = true
+  bktSaved.value = false
+  answers.value = []
+  try {
+    for (const q of packetQuestions.value) {
+      let answer
+      if (q.type === 'multiple_select') {
+        answer = batchMulti.value[q.id] || []
+      } else {
+        answer = batchAnswers.value[q.id]
+      }
+      const scored = scoreConceptAnswer(
+        q,
+        q.type === 'true_false' ? (answer === 'true' || answer === true) : answer
+      )
+      answers.value.push({ correct: scored.correct, moduleId: q.moduleId, questionId: q.id })
+      await persistBenchmarkAnswer(q, scored.correct)
+    }
+    rawQuestions.value = packetQuestions.value
+    questions.value = packetQuestions.value.map((q) => convertQuestion(q)).filter(Boolean)
+    batchMode.value = false
+    started.value = true
+    await finishBenchmark()
+    finished.value = true
+  } finally {
+    loading.value = false
+  }
+}
 
 function applyLabel(text) {
   return applySoftwareLabelsToText(text, preferredSoftware.value || 'jamovi')
@@ -853,5 +1044,68 @@ function formatTopicId(id) {
 
 .not-found p {
   color: var(--text-secondary);
+}
+
+.study-guide-row {
+  margin-bottom: 1rem;
+}
+
+.study-guide-row .btn-secondary {
+  text-decoration: none;
+}
+
+.cr-mode-bar {
+  max-width: 36rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.cr-mode-bar p {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.cr-mode-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.batch-entry {
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
+
+.batch-q {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.batch-q label {
+  display: block;
+  margin: 0.35rem 0;
+}
+
+.packet-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media print {
+  .printing-packet .container > :not(.print-packet-wrap) {
+    display: none !important;
+  }
+
+  .print-packet-wrap {
+    display: block !important;
+  }
 }
 </style>

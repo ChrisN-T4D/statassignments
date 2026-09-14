@@ -205,6 +205,36 @@
             Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then use the
             formative practice test below before your graded Canvas benchmark.
           </p>
+          <div v-if="benchmarkStudyGuide" class="benchmark-study-guide">
+            <a
+              :href="benchmarkStudyGuide.pdfPath"
+              class="btn-secondary benchmark-study-guide-btn"
+              download
+            >
+              Download {{ benchmarkStudyGuide.label }} (PDF)
+            </a>
+          </div>
+          <div v-if="isOfflinePrimary" class="benchmark-offline-bar print-hide">
+            <p v-if="benchmarkGuidance" class="benchmark-offline-note">
+              {{ benchmarkGuidance.offlineNote }}
+            </p>
+            <div class="benchmark-offline-actions">
+              <router-link
+                v-if="benchmarkPrintUrl"
+                :to="benchmarkPrintUrl"
+                class="btn-secondary"
+              >
+                Print practice packet
+              </router-link>
+              <router-link
+                v-if="benchmarkBatchUrl"
+                :to="benchmarkBatchUrl"
+                class="btn-primary"
+              >
+                Enter answers
+              </router-link>
+            </div>
+          </div>
           <router-link
             v-if="benchmarkPracticeUrl"
             :to="benchmarkPracticeUrl"
@@ -606,6 +636,7 @@ import { useRoute } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
+import { useAccessMode } from '../composables/useAccessMode'
 import {
   getModulesByClassId,
   getContentModulesByClass,
@@ -628,13 +659,14 @@ import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
 import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
-import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance } from '../data/statisticsCanvasLinks.js'
+import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated, user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
 const { hasProfile, fetchProfile } = useProfile()
+const { isOfflinePrimary, ensureLoaded: ensureAccessLoaded } = useAccessMode()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
@@ -763,6 +795,21 @@ const benchmarkQuestionCount = computed(() => {
 const benchmarkGuidance = computed(() => {
   const slug = selectedModule.value?.benchmarkSlug
   return slug ? getBenchmarkCardGuidance(slug) : null
+})
+
+const benchmarkStudyGuide = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  return slug ? getBenchmarkStudyGuide(slug) : null
+})
+
+const benchmarkPrintUrl = computed(() => {
+  if (!benchmarkPracticeUrl.value) return null
+  return `${benchmarkPracticeUrl.value}?print=1`
+})
+
+const benchmarkBatchUrl = computed(() => {
+  if (!benchmarkPracticeUrl.value) return null
+  return `${benchmarkPracticeUrl.value}?batch=1`
 })
 
 const psychMethodsModuleGroups = computed(() => {
@@ -1292,6 +1339,7 @@ onMounted(async () => {
   refreshReadTopics()
   if (isAuthenticated.value) {
     await fetchProfile()
+    await ensureAccessLoaded()
   }
 })
 
@@ -1648,6 +1696,42 @@ watch(selectedModuleId, id => {
   color: var(--text-secondary);
   line-height: 1.6;
   max-width: 42rem;
+}
+
+.benchmark-study-guide {
+  margin-bottom: 1rem;
+}
+
+.benchmark-study-guide-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.benchmark-offline-bar {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  max-width: 42rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.benchmark-offline-note {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.benchmark-offline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.benchmark-offline-actions .btn-primary,
+.benchmark-offline-actions .btn-secondary {
+  text-decoration: none;
 }
 
 .benchmark-proctor-note {

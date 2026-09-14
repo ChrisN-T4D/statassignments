@@ -18,6 +18,7 @@ import {
   rmModule12Questions,
   rmModule13Questions
 } from './conceptQuestionsRm/index.js'
+import { seededShuffle } from '../lib/conceptReviewScoring.js'
 
 /*
 Question Types:
@@ -3190,6 +3191,36 @@ export function getBenchmark1QuestionsWeighted(masteryByModule, totalCount = 15)
   }
 
   return chosen.sort(() => Math.random() - 0.5)
+}
+
+/**
+ * Deterministic benchmark question set for offline print packets (same questions on reprint).
+ * @param {string[]} modules
+ * @param {string[]} questionTypes
+ * @param {number} totalCount
+ * @param {string} seed
+ */
+function getBenchmarkQuestionsSeeded(modules, questionTypes, totalCount, seed) {
+  const perModule = Math.max(1, Math.floor(totalCount / modules.length))
+  const questions = []
+  for (const moduleId of modules) {
+    const pool = getQuestionsByModule(moduleId).filter((q) => questionTypes.includes(q.type))
+    const shuffled = seededShuffle(pool, `${seed}:${moduleId}`)
+    questions.push(...shuffled.slice(0, perModule))
+  }
+  return seededShuffle(questions, `${seed}:mix`).slice(0, totalCount)
+}
+
+/** Offline print packet: fixed question set per student + benchmark slug. */
+export function getBenchmarkPacketQuestions(slug, seed, totalCount) {
+  const configs = {
+    'benchmark-1': [BENCHMARK1_MODULES, BENCHMARK1_QUESTION_TYPES],
+    'benchmark-2': [BENCHMARK2_MODULES, BENCHMARK2_QUESTION_TYPES],
+    'final-benchmark': [FINAL_MODULES, FINAL_QUESTION_TYPES]
+  }
+  const cfg = configs[slug]
+  if (!cfg) return []
+  return getBenchmarkQuestionsSeeded(cfg[0], cfg[1], totalCount, seed)
 }
 
 export function getConceptLabelForModule(moduleId) {

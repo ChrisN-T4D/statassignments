@@ -20,13 +20,29 @@
 
         <!-- Benchmark / Final: Practice test link -->
         <div v-if="showPracticeTestCta" class="practice-test-cta">
+          <div v-if="benchmarkStudyGuide" class="benchmark-study-guide-row">
+            <a
+              :href="benchmarkStudyGuide.pdfPath"
+              class="btn-secondary benchmark-study-guide-btn"
+              download
+            >
+              Download {{ benchmarkStudyGuide.label }} (PDF)
+            </a>
+          </div>
           <router-link :to="practiceTestUrl" class="practice-test-link">
             {{ practiceTestLinkText }} →
           </router-link>
           <template v-if="benchmarkGuidance">
             <p class="practice-test-desc practice-test-highlight">{{ benchmarkGuidance.retakeNote }}</p>
             <p class="practice-test-desc practice-test-highlight proctor">{{ benchmarkGuidance.proctorNote }}</p>
+            <p v-if="isOfflinePrimary" class="practice-test-desc practice-test-highlight offline">
+              {{ benchmarkGuidance.offlineNote }}
+            </p>
           </template>
+          <div v-if="isOfflinePrimary" class="benchmark-offline-actions">
+            <router-link :to="benchmarkPrintUrl" class="btn-secondary">Print practice packet</router-link>
+            <router-link :to="benchmarkBatchUrl" class="btn-primary">Enter answers</router-link>
+          </div>
           <p class="practice-test-desc">
             Get {{ practiceTestCount }} questions per attempt. Questions target areas we detect you might need help on.
             At the end you will see strengths, weaknesses, and review links.
@@ -97,15 +113,26 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
 import { formatResearchMethodsTopicLabel } from '../data/researchMethodsTextbook'
-import { getBenchmarkCardGuidance, getStatisticsBenchmarkLink } from '../data/statisticsCanvasLinks.js'
+import {
+  getBenchmarkCardGuidance,
+  getBenchmarkStudyGuide,
+  getStatisticsBenchmarkLink
+} from '../data/statisticsCanvasLinks.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
+import { useAccessMode } from '../composables/useAccessMode'
 
 const props = defineProps({
   classId: { type: String, required: true },
   assignmentId: { type: String, required: true }
+})
+
+const { isOfflinePrimary, ensureLoaded } = useAccessMode()
+
+onMounted(() => {
+  ensureLoaded()
 })
 
 const resolved = computed(() => getAssignmentById(props.classId, props.assignmentId))
@@ -137,6 +164,11 @@ const benchmarkGuidance = computed(() =>
   showPracticeTestCta.value ? getBenchmarkCardGuidance(props.assignmentId) : null
 )
 const practiceTestUrl = computed(() => `/class/${props.classId}/assignment-help/${props.assignmentId}/practice`)
+const benchmarkStudyGuide = computed(() =>
+  showPracticeTestCta.value ? getBenchmarkStudyGuide(props.assignmentId) : null
+)
+const benchmarkPrintUrl = computed(() => `${practiceTestUrl.value}?print=1`)
+const benchmarkBatchUrl = computed(() => `${practiceTestUrl.value}?batch=1`)
 const practiceTestLinkText = computed(() => {
   if (props.assignmentId === 'benchmark-1') return 'Take a practice test (Chapters 1–3)'
   if (props.assignmentId === 'benchmark-2') return 'Take a practice test (Chapters 4–6)'
@@ -296,10 +328,49 @@ function formatTopicId (id) {
 }
 
 .practice-test-desc {
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.4;
+}
+
+.practice-test-highlight {
+  padding: 0.5rem 0.65rem;
+  color: var(--text-primary);
+  background: color-mix(in srgb, #f59e0b 10%, var(--bg-card));
+  border-left: 3px solid #f59e0b;
+  border-radius: 0.25rem;
+}
+
+.practice-test-highlight.proctor {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
+  border-left-color: var(--primary);
+}
+
+.practice-test-highlight.offline {
+  background: color-mix(in srgb, var(--bg-elevated) 80%, var(--bg-card));
+  border-left-color: var(--border);
+}
+
+.benchmark-study-guide-row {
+  margin-bottom: 0.75rem;
+}
+
+.benchmark-study-guide-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.benchmark-offline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.benchmark-offline-actions .btn-primary,
+.benchmark-offline-actions .btn-secondary {
+  text-decoration: none;
 }
 
 .assignment-card {

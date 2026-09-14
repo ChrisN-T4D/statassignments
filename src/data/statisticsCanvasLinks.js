@@ -34,6 +34,8 @@ export const STATISTICS_BENCHMARK_LINKS = [
     modulesLabel: 'Chapters 1–3',
     moduleIds: ['stats-module-1', 'stats-module-2', 'stats-module-3'],
     questionCount: 15,
+    studyGuideLabel: 'Benchmark 1 Study Guide',
+    studyGuidePdf: '/study-guides/benchmark-1-study-guide.pdf',
     practiceUrl: fullUrl(benchmarkPracticePath('benchmark-1')),
     helpUrl: fullUrl(benchmarkAssignmentHelpPath('benchmark-1'))
   },
@@ -43,6 +45,8 @@ export const STATISTICS_BENCHMARK_LINKS = [
     modulesLabel: 'Chapters 4–5',
     moduleIds: ['stats-module-4', 'stats-module-5'],
     questionCount: 30,
+    studyGuideLabel: 'Benchmark 2 Study Guide',
+    studyGuidePdf: '/study-guides/benchmark-2-study-guide.pdf',
     practiceUrl: fullUrl(benchmarkPracticePath('benchmark-2')),
     helpUrl: fullUrl(benchmarkAssignmentHelpPath('benchmark-2'))
   },
@@ -52,6 +56,8 @@ export const STATISTICS_BENCHMARK_LINKS = [
     modulesLabel: 'Chapters 6–8',
     moduleIds: ['stats-module-6', 'stats-module-7', 'stats-module-8'],
     questionCount: 36,
+    studyGuideLabel: 'Final Benchmark Study Guide',
+    studyGuidePdf: '/study-guides/final-benchmark-study-guide.pdf',
     practiceUrl: fullUrl(benchmarkPracticePath('final-benchmark')),
     helpUrl: fullUrl(benchmarkAssignmentHelpPath('final-benchmark'))
   }
@@ -59,6 +65,15 @@ export const STATISTICS_BENCHMARK_LINKS = [
 
 export function getStatisticsBenchmarkLink (slug) {
   return STATISTICS_BENCHMARK_LINKS.find((b) => b.slug === slug) ?? null
+}
+
+export function getBenchmarkStudyGuide (slug) {
+  const bench = getStatisticsBenchmarkLink(slug)
+  if (!bench?.studyGuidePdf) return null
+  return {
+    label: bench.studyGuideLabel || `${bench.title} Study Guide`,
+    pdfPath: bench.studyGuidePdf
+  }
 }
 
 /** Shared copy for benchmark practice cards (Class Home, practice intro, Assignment Help). */
@@ -72,7 +87,9 @@ export function getBenchmarkCardGuidance (slug) {
   return {
     retakeNote:
       'You may take this practice test as many times as you want. Each attempt draws a new random sample and updates your mastery profile.',
-    proctorNote: `Practice without notes, textbook, or other help. Your graded ${gradedLabel} in Canvas is proctored (LockDown Browser) with no aids allowed on the real exam.`
+    proctorNote: `Practice without notes, textbook, or other help. Your graded ${gradedLabel} in Canvas is proctored (LockDown Browser) with no aids allowed on the real exam.`,
+    offlineNote:
+      'Offline primary: download the study guide, print the practice packet, work without internet, then enter all answers at once when you are back online.'
   }
 }
 
@@ -88,6 +105,8 @@ export function benchmarkPracticeAssignment (slug) {
     tips: [
       guidance.retakeNote,
       guidance.proctorNote,
+      guidance.offlineNote,
+      `Download the ${bench.studyGuideLabel || 'study guide'} (PDF) from Class Home or Assignment Help before you practice.`,
       `Covers ${bench.modulesLabel}: complete Concept Review for those modules before the benchmark.`,
       `You will get ${bench.questionCount} questions; harder topics appear more often if practice data shows you are still learning them.`,
       'Each answer updates your mastery model. At the end you get a score, strengths/weaknesses by module, and review links.'
