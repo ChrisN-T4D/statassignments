@@ -26,6 +26,10 @@
                 Canvas assignments → chapter help
               </router-link>
               <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
+                Study Plan
+              </router-link>
+              <span class="header-links-sep">·</span>
             </template>
             <template v-else-if="!isPsychMethodsClass">
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">

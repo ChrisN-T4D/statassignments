@@ -49,6 +49,16 @@
           </p>
         </div>
 
+        <!-- Study Plan capstone worksheets -->
+        <div v-else-if="studyPlanUrl" class="practice-test-cta">
+          <router-link :to="studyPlanUrl" class="practice-test-link">
+            Open Study Plan →
+          </router-link>
+          <p class="practice-test-desc">
+            Draft your worksheet in Methods Market, then export and paste into Canvas when you are ready to submit.
+          </p>
+        </div>
+
         <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
         <div v-else-if="assignment.methodsMarketPath" class="practice-test-cta">
           <router-link :to="assignment.methodsMarketPath" class="practice-test-link">
@@ -163,6 +173,10 @@ const showPracticeTestCta = computed(() => practiceTestSlugs.includes(props.assi
 const benchmarkGuidance = computed(() =>
   showPracticeTestCta.value ? getBenchmarkCardGuidance(props.assignmentId) : null
 )
+const studyPlanUrl = computed(() => {
+  const section = assignment.value?.studyPlanSection
+  return section ? `/class/${props.classId}/study-plan/${section}` : null
+})
 const practiceTestUrl = computed(() => `/class/${props.classId}/assignment-help/${props.assignmentId}/practice`)
 const benchmarkStudyGuide = computed(() =>
   showPracticeTestCta.value ? getBenchmarkStudyGuide(props.assignmentId) : null

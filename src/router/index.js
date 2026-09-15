@@ -23,6 +23,8 @@ import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
+import StudyPlanHub from '../views/StudyPlanHub.vue'
+import StudyPlanSection from '../views/StudyPlanSection.vue'
 import { classHasDataAnalysisTool } from '../data/modules'
 import { canStudentAccessClassSlug } from '../composables/useClasses'
 
@@ -81,6 +83,20 @@ const routes = [
     path: '/class/:classId/data-analysis',
     name: 'data-analysis-helper',
     component: DataAnalysisHelper,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/class/:classId/study-plan',
+    name: 'study-plan',
+    component: StudyPlanHub,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/class/:classId/study-plan/:sectionId',
+    name: 'study-plan-section',
+    component: StudyPlanSection,
     props: true,
     meta: { requiresAuth: true }
   },
@@ -179,6 +195,13 @@ router.beforeEach(async (to, from, next) => {
 
   const isAuthenticated = pb.authStore.isValid
   const userRole = authUser.value?.role
+
+  if (to.name === 'study-plan' || to.name === 'study-plan-section') {
+    if (to.params.classId !== 'research-methods') {
+      next(to.params.classId ? `/class/${to.params.classId}` : '/')
+      return
+    }
+  }
 
   if (to.name === 'data-analysis-helper') {
     const cid = to.params.classId

@@ -89,6 +89,7 @@ export const assignmentHelpResearchMethods = [
           'Attach a PDF for every article in Canvas; use Study Plan in Methods Market to draft and export before you submit.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-11'],
+        studyPlanSection: 'article-review',
         getHelp: 'Use Ch. 2 to evaluate sources and gaps; Ch. 4 for methodology vocabulary; Ch. 11 for APA references. Study Plan mirrors the worksheet field order.'
       }
     ]
@@ -111,6 +112,7 @@ export const assignmentHelpResearchMethods = [
           'Jot working gap and theme notes in Study Plan (Methods Market) as you draft — they feed your Phase 3 elevator speech later.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
+        studyPlanSection: 'study-focus',
         getHelp: 'Check Canvas for the due date. Bring an outline to office hours before you submit. Draft 1 is for feedback, not a polished final.'
       },
       {
@@ -126,6 +128,7 @@ export const assignmentHelpResearchMethods = [
           'Use the Literature Review Checklist in Canvas.'
         ],
         practiceLinks: [...CH.litReview, 'rm-chapter-8', 'rm-chapter-3', 'rm-chapter-9'],
+        studyPlanSection: 'study-focus',
         getHelp: 'Due date is in Canvas. Follow the chapter links Canvas provides each week — complete each chapter fully before moving on.'
       }
     ]
@@ -147,6 +150,7 @@ export const assignmentHelpResearchMethods = [
           'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
+        studyPlanSection: 'phase-3',
         getHelp: 'Open Study Plan in Methods Market for the elevator speech template. Ch. 2 covers synthesis and gaps; Ch. 11 for clear prose. Submit with Phase 4 on the date shown in Canvas.'
       },
       {
@@ -161,6 +165,7 @@ export const assignmentHelpResearchMethods = [
           'Use the Helpful Table wiki page in Canvas and the Path 1–4 guides; Ch. 4 for measurement.'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
+        studyPlanSection: 'phase-4',
         getHelp: 'Same due date as Phase 3 in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
       }
     ]
