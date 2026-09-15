@@ -138,7 +138,7 @@ export const PHASE4_PARTS = [
     fields: [
       {
         id: 'ivConceptual',
-        label: 'Independent Variable (IV),  conceptual',
+        label: 'Independent Variable (IV), conceptual',
         exportLabel: 'Independent Variable (IV): (Define based on Lit Review)',
         required: true,
         multiline: true,
@@ -148,7 +148,7 @@ export const PHASE4_PARTS = [
       },
       {
         id: 'dvConceptual',
-        label: 'Dependent Variable (DV),  conceptual',
+        label: 'Dependent Variable (DV), conceptual',
         exportLabel: 'Dependent Variable (DV): (Define based on Lit Review)',
         required: true,
         multiline: true,
@@ -166,7 +166,7 @@ export const PHASE4_PARTS = [
     fields: [
       {
         id: 'ivOperational',
-        label: 'Independent Variable (IV),  operational',
+        label: 'Independent Variable (IV), operational',
         exportLabel: 'Independent Variable (IV): (Operational definition)',
         required: true,
         multiline: true,
@@ -176,7 +176,7 @@ export const PHASE4_PARTS = [
       },
       {
         id: 'dvOperational',
-        label: 'Dependent Variable (DV),  operational',
+        label: 'Dependent Variable (DV), operational',
         exportLabel: 'Dependent Variable (DV): (Operational definition)',
         required: true,
         multiline: true,
