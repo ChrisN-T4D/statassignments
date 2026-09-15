@@ -261,7 +261,7 @@
     .feeds-list { margin: 0 0 0.75rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
     .resource-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
     #spotlight-tour-lro, #spotlight-tour-p3, #spotlight-tour-p4 { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
-    #spotlight-tour-lro.active, #spotlight-tour-p3.active, #spotlight-tour-p4.active { display: block; }
+    #spotlight-tour-lro.active, #spotlight-tour-p3.active, #spotlight-tour-p4.active { display: block; pointer-events: auto; }
     .preview-text { margin: 0; padding: 1rem; border-radius: 0.5rem; background: rgba(0,0,0,0.25); font-family: ui-monospace, monospace; font-size: 0.78rem; line-height: 1.55; white-space: pre-wrap; color: var(--muted); max-height: 20rem; overflow-y: auto; }
     .theme-bucket-static { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
     .theme-bucket-static:last-child { border-bottom: none; }
@@ -847,6 +847,47 @@
     let articleState = loadArticleState();
     let saveCardsTimer = null;
 
+    // Article Review meta (problem draft + early RQ) — must init before updateProgressUI → refreshLroReminders
+    const ARTICLE_META_KEY = 'study-plan-drafts-article-meta-v1';
+    let articleMeta = { problemStatementDraft: '', researchQuestions: '' };
+    let saveMetaTimer = null;
+
+    function loadArticleMeta () {
+      try {
+        const raw = localStorage.getItem(ARTICLE_META_KEY);
+        if (raw) return { ...articleMeta, ...JSON.parse(raw) };
+      } catch (_) { /* ignore */ }
+      return { ...articleMeta };
+    }
+
+    function persistArticleMeta () {
+      if (saveMetaTimer) clearTimeout(saveMetaTimer);
+      saveMetaTimer = setTimeout(() => {
+        localStorage.setItem(ARTICLE_META_KEY, JSON.stringify(articleMeta));
+        refreshLroReminders();
+      }, 400);
+    }
+
+    function initArticleMeta () {
+      articleMeta = loadArticleMeta();
+      const problemEl = document.getElementById('ar-problem-draft');
+      const rqEl = document.getElementById('ar-research-questions');
+      if (problemEl) {
+        problemEl.value = articleMeta.problemStatementDraft ?? '';
+        problemEl.addEventListener('input', () => {
+          articleMeta.problemStatementDraft = problemEl.value;
+          persistArticleMeta();
+        });
+      }
+      if (rqEl) {
+        rqEl.value = articleMeta.researchQuestions ?? '';
+        rqEl.addEventListener('input', () => {
+          articleMeta.researchQuestions = rqEl.value;
+          persistArticleMeta();
+        });
+      }
+    }
+
     function cardStatus (card) {
       const required = TEXT_FIELDS.map(([k]) => k);
       const filled = required.filter((k) => (card[k] ?? '').trim()).length;
@@ -1093,50 +1134,8 @@
       document.getElementById('download-article-pdf')?.addEventListener('click', downloadStaticPdf);
     }
 
-    initArticleCards();
-
-    // Article Review meta (problem draft + early RQ) — feeds Lit Review Outline reminders
-    const ARTICLE_META_KEY = 'study-plan-drafts-article-meta-v1';
-    let articleMeta = { problemStatementDraft: '', researchQuestions: '' };
-    let saveMetaTimer = null;
-
-    function loadArticleMeta () {
-      try {
-        const raw = localStorage.getItem(ARTICLE_META_KEY);
-        if (raw) return { ...articleMeta, ...JSON.parse(raw) };
-      } catch (_) { /* ignore */ }
-      return { ...articleMeta };
-    }
-
-    function persistArticleMeta () {
-      if (saveMetaTimer) clearTimeout(saveMetaTimer);
-      saveMetaTimer = setTimeout(() => {
-        localStorage.setItem(ARTICLE_META_KEY, JSON.stringify(articleMeta));
-        refreshLroReminders();
-      }, 400);
-    }
-
-    function initArticleMeta () {
-      articleMeta = loadArticleMeta();
-      const problemEl = document.getElementById('ar-problem-draft');
-      const rqEl = document.getElementById('ar-research-questions');
-      if (problemEl) {
-        problemEl.value = articleMeta.problemStatementDraft ?? '';
-        problemEl.addEventListener('input', () => {
-          articleMeta.problemStatementDraft = problemEl.value;
-          persistArticleMeta();
-        });
-      }
-      if (rqEl) {
-        rqEl.value = articleMeta.researchQuestions ?? '';
-        rqEl.addEventListener('input', () => {
-          articleMeta.researchQuestions = rqEl.value;
-          persistArticleMeta();
-        });
-      }
-    }
-
     initArticleMeta();
+    initArticleCards();
 
     // Lit Review Outline Compiler — localStorage, compile, tour
     const LRO_STORAGE_KEY = 'study-plan-drafts-lit-review-outline-v1';
