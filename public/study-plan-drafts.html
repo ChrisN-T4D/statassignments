@@ -112,10 +112,107 @@
     .look-for li { margin-bottom: 0.35rem; }
     .pdf-sniff { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
     .pdf-sniff h4 { color: var(--muted); font-weight: 600; }
+    .draft-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.25rem;
+      background: #1a1208;
+      color: #fbbf24;
+      border: 1px solid #3d2e10;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .search-builder { margin-bottom: 1.25rem; }
+    .builder-grid { display: grid; gap: 0.75rem; }
+    @media (min-width: 640px) { .builder-grid { grid-template-columns: 1fr 1fr; } }
+    .concept-slot {
+      padding: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: #0f0f0f;
+    }
+    .concept-slot.optional { opacity: 0.92; }
+    .slot-label { font-size: 0.8rem; font-weight: 600; margin: 0 0 0.35rem; }
+    .slot-hint { font-size: 0.75rem; color: var(--muted); margin: 0 0 0.5rem; }
+    .slot-row { display: flex; gap: 0.4rem; }
+    .slot-row input { flex: 1; padding: 0.45rem 0.6rem; font-size: 0.85rem; }
+    .slot-row button, .btn-secondary, .btn-copy {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.45rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .btn-copy { border-color: var(--primary); color: var(--primary); }
+    .term-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; min-height: 1.5rem; }
+    .term-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(230, 57, 70, 0.12);
+      border: 1px solid rgba(230, 57, 70, 0.35);
+      color: #fca5a5;
+    }
+    .term-chip button {
+      border: none;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .query-preview {
+      margin-top: 1rem;
+      padding: 0.85rem;
+      border-radius: 0.5rem;
+      background: #0a0a0a;
+      border: 1px dashed var(--border);
+    }
+    .query-preview-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+    .query-string {
+      font-family: ui-monospace, monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #d1d5db;
+      word-break: break-word;
+    }
+    .query-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.65rem; align-items: center; }
+    .and-join {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0.15rem 0;
+    }
+    .search-log-table input, .search-log-table select {
+      width: 100%;
+      padding: 0.35rem 0.45rem;
+      font-size: 0.78rem;
+    }
+    .search-log-table td { vertical-align: top; }
+    .log-empty { color: var(--muted); font-size: 0.85rem; font-style: italic; }
   </style>
 </head>
 <body>
-  <div class="banner">UI draft preview — static mock for layout review. Interactive app at /class/research-methods/study-plan (requires sign-in).</div>
+  <div class="banner">UI draft preview — static mock for layout review. Article Review tab includes peer-review reference + expanded source self-check. Full interactive app: /class/research-methods/study-plan (requires sign-in).</div>
   <div class="wrap">
     <h1>Study Plan — Draft Preview</h1>
     <p class="intro">Capstone draft workspace for PSYC 4223. Methods Market holds notes; Canvas is graded.</p>
@@ -156,6 +253,97 @@
     </section>
 
     <section id="article" class="panel">
+      <div class="card search-builder">
+        <h2>Search term builder <span class="draft-badge">UI mock</span></h2>
+        <p class="hint">Build Boolean strings for PsycINFO and other library databases. Add synonyms for each part of your topic, then copy the preview into your database. Methods Market does not run searches for you.</p>
+
+        <div class="builder-grid">
+          <div class="concept-slot" data-slot="iv">
+            <p class="slot-label">IV / predictor construct</p>
+            <p class="slot-hint">What you manipulate or compare (e.g., social media use)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., social media" data-input="iv" />
+              <button type="button" data-add="iv">Add</button>
+            </div>
+            <div class="term-chips" id="chips-iv"></div>
+          </div>
+          <div class="concept-slot" data-slot="dv">
+            <p class="slot-label">DV / outcome construct</p>
+            <p class="slot-hint">What you measure (e.g., sleep quality)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., sleep quality" data-input="dv" />
+              <button type="button" data-add="dv">Add</button>
+            </div>
+            <div class="term-chips" id="chips-dv"></div>
+          </div>
+        </div>
+        <p class="and-join">AND</p>
+        <div class="builder-grid">
+          <div class="concept-slot" data-slot="pop">
+            <p class="slot-label">Population</p>
+            <p class="slot-hint">Who you study (e.g., college students)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., undergraduates" data-input="pop" />
+              <button type="button" data-add="pop">Add</button>
+            </div>
+            <div class="term-chips" id="chips-pop"></div>
+          </div>
+          <div class="concept-slot optional" data-slot="ctx">
+            <p class="slot-label">Context <span class="chip">optional</span></p>
+            <p class="slot-hint">Setting or qualifier (e.g., United States, smartphone)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., smartphone" data-input="ctx" />
+              <button type="button" data-add="ctx">Add</button>
+            </div>
+            <div class="term-chips" id="chips-ctx"></div>
+          </div>
+        </div>
+
+        <div class="query-preview">
+          <p class="query-preview-label">Preview — copy into PsycINFO</p>
+          <p class="query-string" id="query-preview">Add at least one term above to build a query.</p>
+          <div class="query-actions">
+            <button type="button" class="btn-copy" id="copy-query">Copy query</button>
+            <span class="hint" id="copy-status" style="margin:0"></span>
+          </div>
+        </div>
+
+        <p class="hint" style="margin-top:0.85rem">Ch. 2 tip: if you get too many hits, open the PsycINFO thesaurus for <strong>index terms</strong> (e.g., “Human Sex Differences” instead of “gender”). Combine a broad term with a narrower one. Try citation chaining from one good article’s reference list.</p>
+      </div>
+
+      <div class="card">
+        <h2>Search log <span class="draft-badge">UI mock</span></h2>
+        <p class="hint">Record each search attempt so you remember what worked. Link rows to article cards when you find a keeper.</p>
+        <table class="search-log-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Database</th>
+              <th>Query used</th>
+              <th>What happened?</th>
+              <th>Article #</th>
+            </tr>
+          </thead>
+          <tbody id="search-log-body">
+            <tr>
+              <td>9/10</td>
+              <td>PsycINFO</td>
+              <td><code style="font-size:0.75rem">social media AND sleep AND college</code></td>
+              <td>2,400 hits — too broad; added "smartphone" and index term</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>9/11</td>
+              <td>PsycINFO</td>
+              <td><code style="font-size:0.75rem">("social media" OR "screen time") AND (sleep OR insomnia) AND (college OR undergraduate)</code></td>
+              <td>47 hits — skimmed abstracts; saved 3 PDFs</td>
+              <td>1, 2, 3</td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn-secondary" id="add-log-row" style="margin-top:0.75rem">+ Log a search</button>
+      </div>
+
       <div class="ref-box">
         <h2>What counts as peer-reviewed?</h2>
         <p class="hint">Use this while you evaluate each source. Methods Market does not decide for you — you look, then you check the boxes on each article card.</p>
@@ -344,6 +532,88 @@
       btn.classList.add('active');
       document.getElementById(btn.dataset.panel).classList.add('active');
     });
+
+    // Search term builder mock (demo interactivity)
+    const slotTerms = { iv: ['social media', 'screen time'], dv: ['sleep', 'insomnia'], pop: ['college students', 'undergraduates'], ctx: [] };
+    const slotLabels = { iv: 'IV', dv: 'DV', pop: 'Population', ctx: 'Context' };
+
+    function quoteTerm (t) {
+      return t.includes(' ') ? `"${t}"` : t;
+    }
+
+    function renderChips (slot) {
+      const el = document.getElementById('chips-' + slot);
+      el.innerHTML = slotTerms[slot].map((term, i) =>
+        `<span class="term-chip">${term}<button type="button" data-remove="${slot}" data-index="${i}" aria-label="Remove">×</button></span>`
+      ).join('');
+    }
+
+    function buildQuery () {
+      const groups = ['iv', 'dv', 'pop', 'ctx']
+        .map((slot) => {
+          if (!slotTerms[slot].length) return null;
+          const inner = slotTerms[slot].map(quoteTerm).join(' OR ');
+          return slotTerms[slot].length > 1 ? `(${inner})` : inner;
+        })
+        .filter(Boolean);
+      const preview = document.getElementById('query-preview');
+      preview.textContent = groups.length
+        ? groups.join(' AND ')
+        : 'Add at least one term above to build a query.';
+    }
+
+    function initSearchBuilder () {
+      ['iv', 'dv', 'pop', 'ctx'].forEach((slot) => {
+        renderChips(slot);
+        document.querySelector(`[data-add="${slot}"]`).addEventListener('click', () => {
+          const input = document.querySelector(`[data-input="${slot}"]`);
+          const val = input.value.trim();
+          if (!val || slotTerms[slot].includes(val)) return;
+          slotTerms[slot].push(val);
+          input.value = '';
+          renderChips(slot);
+          buildQuery();
+        });
+        document.querySelector(`[data-input="${slot}"]`).addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            document.querySelector(`[data-add="${slot}"]`).click();
+          }
+        });
+      });
+      buildQuery();
+
+      document.getElementById('chips-iv').closest('.search-builder').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-remove]');
+        if (!btn) return;
+        const slot = btn.dataset.remove;
+        slotTerms[slot].splice(Number(btn.dataset.index), 1);
+        renderChips(slot);
+        buildQuery();
+      });
+
+      document.getElementById('copy-query').addEventListener('click', async () => {
+        const text = document.getElementById('query-preview').textContent;
+        if (text.startsWith('Add at least')) return;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('copy-status').textContent = 'Copied!';
+        setTimeout(() => { document.getElementById('copy-status').textContent = ''; }, 2000);
+      });
+
+      document.getElementById('add-log-row').addEventListener('click', () => {
+        const tbody = document.getElementById('search-log-body');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" placeholder="9/15" /></td>
+          <td><select><option>PsycINFO</option><option>Academic Search Complete</option><option>Google Scholar</option><option>Other</option></select></td>
+          <td><input type="text" placeholder="Paste query from builder" /></td>
+          <td><input type="text" placeholder="Too many hits? Found a good one?" /></td>
+          <td><input type="text" placeholder="e.g., 4" style="max-width:4rem" /></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    initSearchBuilder();
   </script>
 </body>
 </html>
