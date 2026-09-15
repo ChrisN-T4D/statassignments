@@ -54,7 +54,48 @@
         </div>
 
         <div class="theory-card">
+          <h3>Bloom's Taxonomy — Learning at Every Level</h3>
+          <p>
+            Research methods and statistics are not just memorization. Methods Market is organized around
+            <strong>Bloom's revised taxonomy</strong> — a pyramid of thinking skills from basic recall up
+            through evaluating and creating original work. Different parts of the platform scaffold
+            different levels:
+          </p>
+          <ul class="bloom-levels">
+            <li>
+              <strong>Remember &amp; Understand</strong> — chapter reading and Concept Review (definitions,
+              explanations, immediate feedback)
+            </li>
+            <li>
+              <strong>Apply</strong> — Software Practice and lab simulations (use concepts in guided scenarios)
+            </li>
+            <li>
+              <strong>Analyze</strong> — Study Plan article reviews and lit review outlines (break down research,
+              organize themes)
+            </li>
+            <li>
+              <strong>Evaluate</strong> — strengths/weaknesses notes, source checklists, Phase 4 pathway
+              comparisons (judge quality and tradeoffs)
+            </li>
+            <li>
+              <strong>Create</strong> — gap statements, elevator speeches, and operationalization choices
+              (synthesize your own project)
+            </li>
+          </ul>
+          <p>
+            The platform uses <strong>automated tracking</strong> (Concept Review and BKT) for the foundation
+            levels and <strong>structured workspaces</strong> (Study Plan) for higher-level work that you
+            export and submit in Canvas, where your instructor evaluates the quality of your thinking.
+          </p>
+        </div>
+
+        <div class="theory-card">
           <h3>Bayesian Knowledge Tracing (BKT)</h3>
+          <p class="bkt-scope-note">
+            BKT primarily tracks <strong>Remember through Apply</strong> — whether you have mastered the
+            concepts behind Concept Review and software exercises. It does not grade the quality of your
+            capstone drafts; that is assessed on your exported Study Plan work in Canvas.
+          </p>
           <p>
             At the core of our system is <strong>Bayesian Knowledge Tracing</strong>, a probabilistic
             cognitive model originally developed at Carnegie Mellon University for intelligent tutoring systems.

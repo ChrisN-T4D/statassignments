@@ -24,6 +24,7 @@ The platform combines:
 - **Concept Review** — auto-scored conceptual questions mapped to learning objectives
 - **Software Practice** — guided click-path exercises in statistical software
 - **Assignment Help** — Canvas workflow guidance and data-analysis recipes
+- **Study Plan** (Research Methods) — capstone worksheet workspace (article review, lit review outline, Phase 3 elevator speech, Phase 4 operationalization)
 - **Adaptive mastery tracking** — BKT estimates per learning objective (knowledge component)
 
 ### 1.2 Pedagogical Philosophy
@@ -37,6 +38,30 @@ Methods Market implements **mastery-based learning**: progress is tied to demons
 5. **Adapts question selection** toward objectives with lowest estimated mastery
 
 This design follows intelligent tutoring system (ITS) principles (Corbett & Anderson, 1995; VanLehn, 2011) adapted for a single-semester undergraduate context with 5–15 attempts per KC per student.
+
+### 1.3 Bloom's Revised Taxonomy — Multi-Level Scaffolding
+
+Research methods and statistics require more than recall. Methods Market is intentionally built around **Bloom's revised taxonomy** (Anderson & Krathwohl, 2001): a hierarchy from foundational knowledge up through evaluation and creation. Different platform features scaffold and assess different levels — no single tool covers the whole pyramid.
+
+| Bloom level | What it means in methods/stats | Methods Market scaffolding | How it is evaluated |
+|-------------|--------------------------------|----------------------------|---------------------|
+| **Remember** | Recall terms, definitions, notation | Topic reading; chapter HTML from open textbooks | Informal (reading engagement telemetry) |
+| **Understand** | Explain concepts in own words | Topic reading; Concept Review explanations after each item | Concept Review → BKT (P(L) per objective) |
+| **Apply** | Use concepts in structured scenarios | Software Practice; lab simulations; structured checkpoints (planned) | BKT from guided exercises; deterministic scoring |
+| **Analyze** | Break down studies, compare parts, see structure | Study Plan article cards (RQ, methods, results); lit review theme buckets | Instructor rubric on exported worksheet text (Canvas) |
+| **Evaluate** | Judge quality of sources, designs, and claims | Source self-check prompts; strengths/weaknesses fields; Phase 4 pathway comparison | Instructor/workshop rubric; peer review (Canvas) |
+| **Create** | Synthesize literature, state gaps, propose designs | Lit review outline compiler; Phase 3 elevator speech; Phase 4 operationalization choice | Instructor rubric on capstone submissions (Canvas) |
+
+**Design principle:** Lower levels (Remember → Apply) suit **automated, item-level assessment** and BKT. Upper levels (Analyze → Create) require **authentic work samples** — the student's own project notes — and are scaffolded in Study Plan but graded by instructors in Canvas, not auto-scored by the platform.
+
+Methods Market therefore operates on **two complementary tracks**:
+
+1. **Concept mastery track** — Concept Review, Software Practice, and BKT estimate whether the student has the conceptual toolkit (chiefly Remember through Apply).
+2. **Performance track** — Study Plan captures structured drafts for capstone work; quality of analysis, evaluation, and synthesis is assessed with human rubrics on export/submit.
+
+The platform links the tracks (chapter help links on worksheet fields, Assignment Help pairing Concept Review modules with Study Plan sections) but does not treat worksheet prose as binary correct/incorrect for BKT. That separation preserves the pedagogy: **critical thinking stays with the student**; MM holds the template, points to resources, and exports their words.
+
+**Reference:** Anderson, L. W., & Krathwohl, D. R. (Eds.). (2001). *A taxonomy for learning, teaching, and assessing: A revision of Bloom's taxonomy of educational objectives.* Longman.
 
 ---
 
@@ -169,7 +194,36 @@ Guided exercises in `SoftwareLesson.vue` / `SoftwarePractice.vue` using `statist
 
 **Class analytics:** `src/lib/classMasteryStats.js` uses 0.90 mastery threshold; a module is "ready" when ≥75% of objectives are mastered per student.
 
-### 3.6 Student Privacy
+### 3.6 Study Plan (Capstone Worksheets)
+
+**Course:** PSYC 4223 Research Methods only (`classId: research-methods`).
+
+**Purpose:** Scaffold **Analyze, Evaluate, and Create** levels (Section 1.3) for the semester capstone arc: article review → literature review outline → elevator speech → operationalization exploration.
+
+**Routes:** `/class/research-methods/study-plan` (hub) and `/class/research-methods/study-plan/:sectionId`.
+
+| Section ID | Canvas alignment | Primary Bloom levels |
+|------------|------------------|----------------------|
+| `article-review` | Article Review and Problem Statement | Analyze, Evaluate |
+| `study-focus` | Lit Review Outline (weeks 5–10) | Analyze, Create |
+| `phase-3` | Phase 3 elevator speech | Create (distillation) |
+| `phase-4` | Phase 4 operationalization | Apply, Evaluate, Create |
+
+**Scaffolding (guide, don't decide):**
+
+- Field-level chapter links (`helpTopicId` on schema fields)
+- Guided spotlight tours per section (completion stored locally)
+- Source self-check checklists (student judgment, not auto-scored)
+- Factual progress chips (e.g., "4 of 6 article cards complete") — not quality scores
+- Export to plain text/PDF for Canvas paste
+
+**Evaluation:** Worksheet quality is **not** graded in Methods Market. Instructors evaluate exported submissions in Canvas using rubrics aligned to worksheet fields. BKT may inform prerequisite concept readiness (e.g., Ch. 2 source evaluation, Ch. 4 measurement) but does not update from free-text field edits.
+
+**Code:** `src/composables/useCapstoneProject.js`, `src/data/capstoneWorksheetSchemas.js`, `src/lib/capstoneValidation.js`, `src/components/study-plan/`.
+
+**Design spec:** `docs/superpowers/specs/2026-09-15-capstone-worksheets-studio-design.md`.
+
+### 3.7 Student Privacy
 
 Students authenticate with pseudonymous accounts and claim roster keys (`student_key`). Instructor exports use roster identifiers, not email, unless explicitly provided. See About page data privacy section.
 
