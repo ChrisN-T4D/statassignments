@@ -3,7 +3,7 @@
     <button type="button" class="tour-start-btn" @click="startTour">
       {{ completed ? 'Replay guided tour' : 'Start guided tour' }}
     </button>
-    <p class="tour-hint">Highlights each part of the worksheet and explains why it matters — including when to narrow or widen your topic.</p>
+    <p class="tour-hint">Highlights each part of the worksheet and explains why it matters, including when to narrow or widen your topic.</p>
 
     <SpotlightTour
       :active="tour.active"

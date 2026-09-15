@@ -1,5 +1,5 @@
 /**
- * Study Plan export helpers — format student text for Canvas paste.
+ * Study Plan export helpers: format student text for Canvas paste.
  * No pass/fail validation; guide-only.
  */
 
@@ -142,7 +142,7 @@ function buildLitReviewOutlineExport (project) {
 
 function buildPhase3Export (project) {
   const p3 = project.phase3 ?? {}
-  const lines = [sectionHeader('Phase 3 — Elevator Speech')]
+  const lines = [sectionHeader('Phase 3: Elevator Speech')]
   for (const part of PHASE3_PARTS) {
     lines.push(`\n${part.title}\n`)
     for (const field of part.fields) {
@@ -154,7 +154,7 @@ function buildPhase3Export (project) {
 
 function buildPhase4Export (project) {
   const p4 = project.phase4 ?? {}
-  const lines = [sectionHeader('Phase 4 — Operationalization Exploration')]
+  const lines = [sectionHeader('Phase 4: Operationalization Exploration')]
 
   for (const part of PHASE4_PARTS) {
     lines.push(`\n${part.title}\n`)
@@ -163,7 +163,7 @@ function buildPhase4Export (project) {
     }
   }
 
-  lines.push('\nPart C: Exploration — Operational Paths\n')
+  lines.push('\nPart C: Exploration, Operational Paths\n')
   for (const pathway of PHASE4_PATHWAYS) {
     lines.push(`\n${pathway.label}\n`)
     const responses = p4.pathwayResponses?.[pathway.id] ?? {}

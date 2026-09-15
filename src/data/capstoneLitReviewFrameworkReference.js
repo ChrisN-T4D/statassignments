@@ -1,5 +1,5 @@
 /**
- * Browse-only framework reference for Lit Review Outline — MM never recommends by topic.
+ * Browse-only framework reference for Lit Review Outline. MM never recommends by topic.
  */
 
 export const FRAMEWORK_REFERENCE_AREAS = [

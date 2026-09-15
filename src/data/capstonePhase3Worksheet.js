@@ -1,5 +1,5 @@
 /**
- * PSYC 4223 Phase 3 Worksheet — elevator speech (replaces legacy gap→RQ Canvas worksheet).
+ * PSYC 4223 Phase 3 Worksheet, elevator speech (replaces legacy gap→RQ Canvas worksheet).
  *
  * MM schema is instructor-authored. Canvas assignment 44903 may still show the old
  * gap-to-research-question text until the instructor updates it. Phase 4 remains
@@ -9,7 +9,7 @@
 export const PHASE3_META = {
   assignmentId: '44903',
   assignmentUrl: 'https://nwosu.instructure.com/courses/2406/assignments/44903',
-  title: 'Phase 3 — Elevator Speech',
+  title: 'Phase 3: Elevator Speech',
   objective:
     'Prepare a 1–2 minute spiel about your research: what the field knows, what gap your study addresses, and how your proposed study fits.'
 }
@@ -62,7 +62,7 @@ export const PHASE3_PARTS = [
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-11',
-        helpNote: `Aim for ~${ELEVATOR_SPEECH_WORD_COUNT_HINT.min}–${ELEVATOR_SPEECH_WORD_COUNT_HINT.max} words — a ${ELEVATOR_SPEECH_WORD_COUNT_HINT.readAloudLabel} about your research when read aloud.`,
+        helpNote: `Aim for ~${ELEVATOR_SPEECH_WORD_COUNT_HINT.min}–${ELEVATOR_SPEECH_WORD_COUNT_HINT.max} words, a ${ELEVATOR_SPEECH_WORD_COUNT_HINT.readAloudLabel} about your research when read aloud.`,
         wordCountHint: true
       }
     ]

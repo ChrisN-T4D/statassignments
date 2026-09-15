@@ -1,5 +1,5 @@
 /**
- * PSYC 4223 Phase 4 Worksheet — field schema from Canvas assignment instructions.
+ * PSYC 4223 Phase 4 Worksheet: field schema from Canvas assignment instructions.
  * Source: course 2406 assignment 44935 (fetched via Playwright).
  * Wiki page /pages/phase-4-worksheet is an empty shell; instructions live on the assignment.
  * Supplementary: /pages/helpful-table (IV/DV logic table) and path-1…4 guide wiki pages.
@@ -99,7 +99,7 @@ export const PHASE4_PATHWAYS = [
   }
 ]
 
-/** Part D comparison table — student fills cells; MM shows Helpful Table link, does not score. */
+/** Part D comparison table, student fills cells; MM shows Helpful Table link, does not score. */
 export const PHASE4_COMPARISON_CRITERIA = [
   { id: 'feasibility', label: 'Feasibility this semester' },
   { id: 'accessToParticipants', label: 'Access to participants / data' },
@@ -134,11 +134,11 @@ export const PHASE4_PARTS = [
     id: 'part-b-conceptual-definitions',
     title: 'Part B: Conceptual Definitions',
     instruction:
-      'Conceptual definitions describe what your IV and DV mean in theory — the abstract constructs as your literature defines them.',
+      'Conceptual definitions describe what your IV and DV mean in theory, the abstract constructs as your literature defines them.',
     fields: [
       {
         id: 'ivConceptual',
-        label: 'Independent Variable (IV) — conceptual',
+        label: 'Independent Variable (IV),  conceptual',
         exportLabel: 'Independent Variable (IV): (Define based on Lit Review)',
         required: true,
         multiline: true,
@@ -148,13 +148,13 @@ export const PHASE4_PARTS = [
       },
       {
         id: 'dvConceptual',
-        label: 'Dependent Variable (DV) — conceptual',
+        label: 'Dependent Variable (DV),  conceptual',
         exportLabel: 'Dependent Variable (DV): (Define based on Lit Review)',
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-4',
         helpNote:
-          'What outcome or behavior are you trying to explain? Describe the construct — not the survey item or task score yet.'
+          'What outcome or behavior are you trying to explain? Describe the construct, not the survey item or task score yet.'
       }
     ]
   },
@@ -162,11 +162,11 @@ export const PHASE4_PARTS = [
     id: 'part-b-operational-definitions',
     title: 'Part B (continued): Operational Definitions',
     instruction:
-      'Operational definitions specify how you would measure or manipulate each variable in a real study — concrete enough that another researcher could replicate your procedure.',
+      'Operational definitions specify how you would measure or manipulate each variable in a real study, concrete enough that another researcher could replicate your procedure.',
     fields: [
       {
         id: 'ivOperational',
-        label: 'Independent Variable (IV) — operational',
+        label: 'Independent Variable (IV),  operational',
         exportLabel: 'Independent Variable (IV): (Operational definition)',
         required: true,
         multiline: true,
@@ -176,13 +176,13 @@ export const PHASE4_PARTS = [
       },
       {
         id: 'dvOperational',
-        label: 'Dependent Variable (DV) — operational',
+        label: 'Dependent Variable (DV),  operational',
         exportLabel: 'Dependent Variable (DV): (Operational definition)',
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-4',
         helpNote:
-          'How would you score or record the DV? Name the scale, task outcome, observation code, or dataset variable — including units or scoring rules when you know them.'
+          'How would you score or record the DV? Name the scale, task outcome, observation code, or dataset variable, including units or scoring rules when you know them.'
       }
     ]
   }

@@ -2,7 +2,7 @@
   <section class="export-panel" aria-labelledby="export-panel-title">
     <h2 id="export-panel-title" class="export-title">Export for Canvas</h2>
     <p class="export-note">
-      Methods Market is your draft workspace. Canvas is graded — copy your text below and paste into the
+      Methods Market is your draft workspace. Canvas is graded, copy your text below and paste into the
       worksheet or submission box when you are ready.
     </p>
     <div class="export-actions">

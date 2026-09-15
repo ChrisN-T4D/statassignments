@@ -5,7 +5,7 @@
     <div class="arc-banner" data-tour="tour-lro-intro">
       <p class="section-intro">
         Use this <strong>literature review outline compiler</strong> while drafting (weeks 5–10).
-        It is <strong>not a Canvas submission</strong> — root your review in one organizing framework,
+        It is <strong>not a Canvas submission</strong>. Root your review in one organizing framework,
         sort evidence into theme buckets, and export for Draft 1.
       </p>
       <p class="arc-flow">
@@ -16,7 +16,7 @@
 
     <aside v-if="hasArticleReviewContext" class="reminders-panel" data-tour="tour-lro-reminders">
       <h2 class="reminders-title">From your Article Review</h2>
-      <p class="reminders-note">Starting points — refine as you read more than your original article cards.</p>
+      <p class="reminders-note">Starting points, refine as you read more than your original article cards.</p>
       <div v-if="articleProgress" class="reminder-block">
         <h3>Article cards</h3>
         <p class="reminder-text">{{ articleProgress }}</p>
@@ -35,14 +35,14 @@
     <aside v-else class="reminders-panel reminders-empty" data-tour="tour-lro-reminders">
       <h2 class="reminders-title">From your Article Review</h2>
       <p class="reminders-note">
-        Complete Article Review first — your problem statement and early RQ will appear here as starting points.
+        Complete Article Review first, your problem statement and early RQ will appear here as starting points.
       </p>
       <router-link :to="articleReviewLink" class="reminder-link">Go to Article Review →</router-link>
     </aside>
 
     <section class="worksheet-block" data-tour="tour-lro-framework">
       <h2 class="block-title">Organizing framework</h2>
-      <p class="block-intro">Name the theory or model that routes your literature review — not just your topic keywords.</p>
+      <p class="block-intro">Name the theory or model that routes your literature review, not just your topic keywords.</p>
       <SchemaField
         v-for="field in ORGANIZING_FRAMEWORK_FIELDS"
         :key="field.id"
@@ -60,7 +60,7 @@
         <h3 class="reference-area-title">{{ area.label }}</h3>
         <ul class="reference-list">
           <li v-for="entry in area.entries" :key="entry.name">
-            <strong>{{ entry.name }}</strong> — {{ entry.summary }}
+            <strong>{{ entry.name }}</strong>, {{ entry.summary }}
             <router-link :to="`/topic/${entry.helpTopicId}`" class="reference-link">Ch. help →</router-link>
           </li>
         </ul>
@@ -69,7 +69,7 @@
 
     <section class="worksheet-block" data-tour="tour-lro-themes">
       <h2 class="block-title">Theme buckets</h2>
-      <p class="block-intro">Synthesis sections under your framework. Link article card numbers manually — MM does not copy card text into notes.</p>
+      <p class="block-intro">Synthesis sections under your framework. Link article card numbers manually. MM does not copy card text into notes.</p>
 
       <article
         v-for="(bucket, index) in outline.themeBuckets"
@@ -142,13 +142,13 @@
 
     <section class="compiled-preview" data-tour="tour-lro-preview">
       <h2 class="block-title">Compiled outline preview</h2>
-      <p class="block-intro">Live assembly of your framework, themes, and gap — your words only.</p>
+      <p class="block-intro">Live assembly of your framework, themes, and gap, your words only.</p>
       <pre class="preview-text">{{ compiledPreview }}</pre>
     </section>
 
     <div class="resource-links">
-      <router-link to="/topic/rm-chapter-2" class="resource-link">Ch. 2 — gaps and synthesis</router-link>
-      <router-link to="/topic/rm-chapter-11" class="resource-link">Ch. 11 — APA and clear prose</router-link>
+      <router-link to="/topic/rm-chapter-2" class="resource-link">Ch. 2: gaps and synthesis</router-link>
+      <router-link to="/topic/rm-chapter-11" class="resource-link">Ch. 11: APA and clear prose</router-link>
     </div>
 
     <div class="feeds-forward">

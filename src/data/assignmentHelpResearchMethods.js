@@ -1,7 +1,7 @@
 /**
- * Assignment Help — PSYC 4223 Research Methodology (Canvas / NWOSU)
+ * Assignment Help: PSYC 4223 Research Methodology (Canvas / NWOSU)
  * Maps Canvas assignments to Pressbooks chapters in Methods Market.
- * Due dates and points live in Canvas only — not in this file.
+ * Due dates and points live in Canvas only, not in this file.
  */
 
 /** Shared chapter bundles for Canvas methodology paths */
@@ -23,14 +23,14 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 1',
     moduleTitle: 'Introduction & literature review',
-    phaseLabel: 'Introduction — read Ch. 1 first',
+    phaseLabel: 'Introduction: read Ch. 1 first',
     assignments: [
       {
         id: 'rm-ch1-intro',
         name: 'Ch. 1: The Science of Psychology (course intro)',
         type: 'assignment',
         tips: [
-          'Read this chapter first — it is the foundation for Part 1 and the rest of the capstone.',
+          'Read this chapter first, it is the foundation for Part 1 and the rest of the capstone.',
           'Complete all of Ch. 1 (reading + Concept Review) when Canvas directs you to it.',
           'Focus on methods of knowing, what makes psychology a science, and goals of science (describe, predict, explain).'
         ],
@@ -43,7 +43,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Read the full syllabus in Canvas before you acknowledge.',
-          'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in Phase 4 — it determines which Pressbooks chapters matter most later.'
+          'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in Phase 4: it determines which Pressbooks chapters matter most later.'
         ],
         practiceLinks: ['rm-chapter-1'],
         getHelp: 'Questions about course structure? Use the Course Discussion Board in Canvas or office hours.'
@@ -54,7 +54,7 @@ export const assignmentHelpResearchMethods = [
         type: 'practice',
         tips: [
           'Think about complementary skills: who is strong on writing, stats, recruitment, or IRB paperwork?',
-          'Your group will share one IRB protocol and methods document — agree early on a single research topic and design.'
+          'Your group will share one IRB protocol and methods document, agree early on a single research topic and design.'
         ],
         getHelp: 'Group issues? Contact your instructor before conflicts become hard to fix.'
       }
@@ -63,14 +63,14 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 1',
     moduleTitle: 'Introduction & literature review',
-    phaseLabel: 'Phase 1 — Choosing a Topic',
+    phaseLabel: 'Phase 1: Choosing a Topic',
     assignments: [
       {
         id: 'rm-phase-1-workshop',
         name: 'Phase 1 Workshop',
         type: 'assignment',
         tips: [
-          'Move from a broad interest to a narrow, researchable focus — one population, one construct, one context.',
+          'Move from a broad interest to a narrow, researchable focus, one population, one construct, one context.',
           'Start a running list of search terms and synonyms; you will reuse them for the article review and full literature review.',
           'Skim Pressbooks Ch. 1–2 on why science beats intuition and how researchers find topics.'
         ],
@@ -82,10 +82,10 @@ export const assignmentHelpResearchMethods = [
         name: 'Article Review and Problem Statement',
         type: 'assignment',
         tips: [
-          'Open Study Plan and click “Start guided tour” — it highlights each section and explains why it exists and when to narrow or widen your topic.',
-          'Canvas requires at least 6 completed peer-reviewed article reviews (6–8 on the template). In Study Plan you can add unlimited cards — export includes every card with content.',
+          'Open Study Plan and click “Start guided tour”, it highlights each section and explains why it exists and when to narrow or widen your topic.',
+          'Canvas requires at least 6 completed peer-reviewed article reviews (6–8 on the template). In Study Plan you can add unlimited cards, export includes every card with content.',
           'For each article: APA reference, the authors’ “what” and “why” questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal.',
-          'Write in complete sentences; summarize — do not copy and paste from the article.',
+          'Write in complete sentences; summarize; do not copy and paste from the article.',
           'After all article cards: draft your Problem Statement (what we know, gap, what we want to know) and preliminary research question(s) and hypothesis(es).',
           'Attach a PDF for every article in Canvas; use Study Plan in Methods Market to draft and export before you submit.'
         ],
@@ -98,18 +98,18 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 1',
     moduleTitle: 'Introduction & literature review',
-    phaseLabel: 'Phase 2 — Literature Review',
+    phaseLabel: 'Phase 2: Literature Review',
     assignments: [
       {
         id: 'rm-lit-review-draft-1',
         name: 'Literature Review Draft 1',
         type: 'assignment',
         tips: [
-          'Submit an outline plus a partial draft (not bullet points) — aim for roughly half of your final length with clear section headings.',
+          'Submit an outline plus a partial draft (not bullet points), aim for roughly half of your final length with clear section headings.',
           'While you draft, work through Ch. 6 and Ch. 7 in Methods Market when Canvas assigns them (one full chapter at a time).',
           'Include a working References list in APA 7 format; use Ch. 11 when Canvas assigns APA/style reading.',
           'When summarizing each study, name the design using vocabulary from the chapters you have completed.',
-          'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.',
+          'End Draft 1 with a preliminary gap statement, your instructor feedback should sharpen it for the Final.',
           'Open Study Plan → Lit Review Outline. Name your organizing framework, fill theme buckets, and export the compiled outline for Draft 1.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
@@ -121,23 +121,23 @@ export const assignmentHelpResearchMethods = [
         name: 'Literature Review Final / References Section',
         type: 'assignment',
         tips: [
-          'Revise using instructor comments from Draft 1 — see Canvas for the final due date.',
-          'Complete the Pressbooks chapters Canvas assigns during revision (often Ch. 11, 8, 3, 9) — one full chapter at a time.',
-          'In the lit review body, describe prior methods precisely (design, sample, measures) — not just findings.',
-          'Synthesize themes across studies — do not write one paragraph per article in isolation.',
+          'Revise using instructor comments from Draft 1, see Canvas for the final due date.',
+          'Complete the Pressbooks chapters Canvas assigns during revision (often Ch. 11, 8, 3, 9), one full chapter at a time.',
+          'In the lit review body, describe prior methods precisely (design, sample, measures), not just findings.',
+          'Synthesize themes across studies; do not write one paragraph per article in isolation.',
           'End with a clear gap your study will address; that gap feeds directly into the combined Phase 3 & 4 worksheets.',
           'Use the Literature Review Checklist in Canvas.'
         ],
         practiceLinks: [...CH.litReview, 'rm-chapter-8', 'rm-chapter-3', 'rm-chapter-9'],
         studyPlanSection: 'study-focus',
-        getHelp: 'Due date is in Canvas. Follow the chapter links Canvas provides each week — complete each chapter fully before moving on.'
+        getHelp: 'Due date is in Canvas. Follow the chapter links Canvas provides each week, complete each chapter fully before moving on.'
       }
     ]
   },
   {
     canvasPart: 'Part 2',
     moduleTitle: 'Research Question & Methodological Route',
-    phaseLabel: 'Phase 3 & 4 — Research question & operationalization',
+    phaseLabel: 'Phase 3 & 4: Research question & operationalization',
     assignments: [
       {
         id: 'rm-phase-3-worksheet',
@@ -145,10 +145,10 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 4 on the same due date (see Canvas).',
-          'Phase 3 is an elevator speech: a 1–2 minute spiel about your research — what the field knows, the gap, and how your study fits.',
+          'Phase 3 is an elevator speech: a 1–2 minute spiel about your research, what the field knows, the gap, and how your study fits.',
           'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
           'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~130–300 words).',
-          'Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline — then refine into spoken prose.',
+          'Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline, then refine into spoken prose.',
           'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
@@ -162,9 +162,9 @@ export const assignmentHelpResearchMethods = [
         tips: [
           'Submit together with Phase 3 on the same due date.',
           'Recap your topic and research question (Part A); define IV and DV conceptually and operationally (Part B).',
-          'Explore all four pathways in Part C (survey, experimental task, observation, archival) — mark a path “not viable” if it does not fit.',
+          'Explore all four pathways in Part C (survey, experimental task, observation, archival), mark a path “not viable” if it does not fit.',
           'Complete the Part D comparison table, then choose ONE pathway in Part E.',
-          'Mark pathways “not viable” when they truly do not fit — that is good thinking, not failure.',
+          'Mark pathways “not viable” when they truly do not fit; that is good thinking, not failure.',
           'Use the Helpful Table wiki page in Canvas and the Path 1–4 guides; Ch. 4 for measurement.'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
@@ -197,7 +197,7 @@ export const assignmentHelpResearchMethods = [
     assignments: [
       {
         id: 'rm-path-1-survey',
-        name: 'Path 1 — Survey Methodology',
+        name: 'Path 1: Survey Methodology',
         type: 'assignment',
         tips: [
           'Pressbooks Ch. 4: choose or build reliable, valid measures.',
@@ -209,7 +209,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-path-2-qualitative',
-        name: 'Path 2 — Qualitative Interview',
+        name: 'Path 2: Qualitative Interview',
         type: 'assignment',
         tips: [
           'Pressbooks Ch. 6: qualitative logic, interviewing, coding, and theme development.',
@@ -221,7 +221,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-path-3-experimental',
-        name: 'Path 3 — Experimental Design',
+        name: 'Path 3: Experimental Design',
         type: 'assignment',
         tips: [
           'Ch. 4: operationalize IV and DV; Ch. 5: random assignment, control, manipulation checks, internal validity.',
@@ -233,7 +233,7 @@ export const assignmentHelpResearchMethods = [
       },
       {
         id: 'rm-path-4-archival',
-        name: 'Path 4 — Archival Data',
+        name: 'Path 4: Archival Data',
         type: 'assignment',
         tips: [
           'Pressbooks Ch. 6: non-experimental and existing-data designs; be explicit about what you cannot infer causally.',
@@ -280,7 +280,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: ['Review deception, debriefing, and when debriefing must restore informed consent.'],
         practiceLinks: CH.ethics,
-        getHelp: 'Experimental designs with deception need extra IRB detail — see Ch. 3 special ethical issues.'
+        getHelp: 'Experimental designs with deception need extra IRB detail, see Ch. 3 special ethical issues.'
       },
       {
         id: 'rm-hrt-lesson-5',
@@ -302,7 +302,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Use the Itemized Checklist and Research Proposal Template in Canvas.',
-          'Align protocol text with your Methods Section — same participants, procedures, and risks.',
+          'Align protocol text with your Methods Section, same participants, procedures, and risks.',
           'Ch. 3 covers IRB purpose and consent; Ch. 11 covers clear scientific writing.'
         ],
         practiceLinks: CH.irb,
@@ -317,7 +317,7 @@ export const assignmentHelpResearchMethods = [
           'Attach all instruments (surveys, interview guides) and evidence of training completion if required.'
         ],
         practiceLinks: CH.irb,
-        getHelp: 'This version goes to the IRB — treat it as a formal protocol, not a class essay.'
+        getHelp: 'This version goes to the IRB, treat it as a formal protocol, not a class essay.'
       },
       {
         id: 'rm-irb-status-update',
@@ -329,7 +329,7 @@ export const assignmentHelpResearchMethods = [
           'If approved, note any conditions; if pending, list what you are waiting on and your backup plan.'
         ],
         practiceLinks: [...CH.irb, 'rm-chapter-5', 'rm-chapter-7'],
-        getHelp: 'This is a high-stakes checkpoint — meet with your instructor if IRB status is uncertain two weeks before the deadline.'
+        getHelp: 'This is a high-stakes checkpoint, meet with your instructor if IRB status is uncertain two weeks before the deadline.'
       }
     ]
   }

@@ -21,7 +21,7 @@
     <p class="ref-reminder">{{ PEER_REVIEW_REFERENCE.reminder }}</p>
 
     <div class="ref-links">
-      <router-link to="/topic/rm-chapter-2" class="resource-link">Read Ch. 2 — evaluating sources</router-link>
+      <router-link to="/topic/rm-chapter-2" class="resource-link">Read Ch. 2: evaluating sources</router-link>
       <router-link
         to="/class/research-methods/practice?module=rm-module-2"
         class="resource-link"

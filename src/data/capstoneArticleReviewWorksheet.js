@@ -25,7 +25,7 @@ export const ARTICLE_REVIEW_HEADER_FIELDS = [
 
 /**
  * One card per article. Canvas expects 6–8 completed reviews (minimum 6).
- * Methods Market starts with 8 cards; students may add unlimited cards — export includes every card with content.
+ * Methods Market starts with 8 cards; students may add unlimited cards, export includes every card with content.
  * @type {Array<{ id: string, label: string, exportLabel: string, required: boolean, multiline?: boolean, helpTopicId?: string, helpNote?: string }>}
  */
 export const ARTICLE_CARD_FIELDS = [
@@ -127,8 +127,8 @@ export const ARTICLE_CARD_FIELDS = [
 ]
 
 /**
- * Self-check only — not on Canvas template; guides searching and peer-review evaluation.
- * MM shows lookFor prompts; student checks boxes after looking — no pass/fail.
+ * Self-check only, not on Canvas template; guides searching and peer-review evaluation.
+ * MM shows lookFor prompts; student checks boxes after looking, no pass/fail.
  */
 export const SOURCE_SELF_CHECK_ITEMS = [
   {
@@ -158,7 +158,7 @@ export const SOURCE_SELF_CHECK_ITEMS = [
   },
   {
     id: 'originalEmpiricalStudy',
-    label: 'It reports an original empirical study (Method and Results with data — not only a review or meta-analysis).',
+    label: 'It reports an original empirical study (Method and Results with data, not only a review or meta-analysis).',
     helpTopicId: 'rm-chapter-2',
     helpNote: 'Your article cards should be primary studies you read, not summaries of other people\'s work.',
     lookFor: [
@@ -181,11 +181,11 @@ export const SOURCE_SELF_CHECK_ITEMS = [
   }
 ]
 
-/** Always-visible reference — guide only, not graded. */
+/** Always-visible reference: guide only, not graded. */
 export const PEER_REVIEW_REFERENCE = {
   title: 'What counts as peer-reviewed?',
   intro:
-    'Use this while you evaluate each source. Methods Market does not decide for you — you look, then you check the boxes below on each article card.',
+    'Use this while you evaluate each source. Methods Market does not decide for you. You look, then you check the boxes below on each article card.',
   usuallyPeerReviewed: [
     'Journal of ___ Psychology (or similar scholarly journal)',
     'Volume + issue + page range or DOI',
@@ -202,7 +202,7 @@ export const PEER_REVIEW_REFERENCE = {
     'Predatory journals exist. When in doubt, ask a librarian or your instructor before you spend time on the article.'
 }
 
-/** Where to look inside the PDF — shown on each article card. */
+/** Where to look inside the PDF, shown on each article card. */
 export const PDF_SNIFF_TEST = {
   title: 'Where to look in the PDF',
   items: [
@@ -214,7 +214,7 @@ export const PDF_SNIFF_TEST = {
   ]
 }
 
-/** After all article cards — still part of Article Review assignment. */
+/** After all article cards, still part of Article Review assignment. */
 export const ARTICLE_REVIEW_PROBLEM_STATEMENT = {
   id: 'problemStatement',
   sectionTitle: 'Problem Statement',
@@ -255,7 +255,7 @@ export const ARTICLE_REVIEW_PROBLEM_STATEMENT = {
   helpTopicId: 'rm-chapter-2'
 }
 
-/** End of Article Review worksheet — early draft; refined in lit review and Phase 3. */
+/** End of Article Review worksheet, early draft; refined in lit review and Phase 3. */
 export const ARTICLE_REVIEW_RQ_HYPOTHESIS = {
   sectionTitle: 'Research Question(s) and Hypothesis(es)',
   fields: [

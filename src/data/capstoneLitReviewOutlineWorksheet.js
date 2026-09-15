@@ -1,5 +1,5 @@
 /**
- * Lit Review Outline Compiler — framework, theme buckets, gap, compile helper.
+ * Lit Review Outline Compiler, framework, theme buckets, gap, compile helper.
  */
 
 export const LIT_REVIEW_OUTLINE_META = {

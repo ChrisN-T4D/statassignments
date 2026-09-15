@@ -13,7 +13,7 @@
 
     <aside v-if="hasReminders" class="sidebar-reminders" data-tour="tour-p3-reminders">
       <h2 class="sidebar-title">From your Lit Review Outline</h2>
-      <p class="reminders-note">Starting points — refine into spoken prose for Canvas.</p>
+      <p class="reminders-note">Starting points, refine into spoken prose for Canvas.</p>
       <div v-if="frameworkName" class="reminder-block">
         <h3>Organizing framework</h3>
         <p class="reminder-text">{{ frameworkName }}</p>
@@ -35,7 +35,7 @@
 
     <aside v-else class="sidebar-reminders sidebar-empty" data-tour="tour-p3-reminders">
       <h2 class="sidebar-title">From your Lit Review Outline</h2>
-      <p class="reminders-note">Fill your Lit Review Outline first — framework, themes, and gap will appear here.</p>
+      <p class="reminders-note">Fill your Lit Review Outline first, framework, themes, and gap will appear here.</p>
       <router-link :to="outlineLink" class="reminder-link">Go to Lit Review Outline →</router-link>
     </aside>
 
@@ -76,8 +76,8 @@
     </section>
 
     <div class="resource-links">
-      <router-link to="/topic/rm-chapter-2" class="resource-link">Ch. 2 — synthesis and gaps</router-link>
-      <router-link to="/topic/rm-chapter-11" class="resource-link">Ch. 11 — clear prose</router-link>
+      <router-link to="/topic/rm-chapter-2" class="resource-link">Ch. 2: synthesis and gaps</router-link>
+      <router-link to="/topic/rm-chapter-11" class="resource-link">Ch. 11: clear prose</router-link>
     </div>
 
     <div data-tour="tour-p3-export">
@@ -114,7 +114,7 @@ const outline = computed(() => props.project.litReviewOutline ?? {})
 
 const progressLabel = computed(() => {
   const { filled, total, words, ready } = countPhase3Progress(props.project)
-  if (ready) return `${filled}/${total} parts · ${words} words — ready to export`
+  if (ready) return `${filled}/${total} parts · ${words} words, ready to export`
   if (filled) return `${filled}/${total} parts · ${words} words in speech`
   return 'Elevator speech not started'
 })

@@ -5,7 +5,7 @@
     <p class="section-intro" data-tour="tour-intro">
       Capture notes for each article in your own words. Canvas expects at least
       <strong>{{ ARTICLE_REVIEW_MIN_ARTICLES }}</strong> completed reviews (up to
-      {{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }} on the template). Add as many article cards as you need here —
+      {{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }} on the template). Add as many article cards as you need here -
       every card with content is included when you export.
       <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
     </p>

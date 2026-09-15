@@ -36,7 +36,7 @@
 
     <aside v-else class="sidebar-reminders sidebar-empty" data-tour="tour-p4-reminders">
       <h2 class="sidebar-title">From Phase 3 and your outline</h2>
-      <p class="reminders-note">Complete Phase 3 and your Lit Review Outline first — summaries will appear here.</p>
+      <p class="reminders-note">Complete Phase 3 and your Lit Review Outline first, summaries will appear here.</p>
       <router-link :to="phase3Link" class="reminder-link">Go to Phase 3 →</router-link>
     </aside>
 
@@ -67,7 +67,7 @@
     </section>
 
     <section class="worksheet-block" data-tour="tour-p4-part-c">
-      <h2 class="block-title">Part C: Exploration — Four Operational Paths</h2>
+      <h2 class="block-title">Part C: Exploration: Four Operational Paths</h2>
       <p class="block-intro">
         Explore each pathway. Mark a path as not viable if it does not fit your question.
         Each path links to a Canvas guide and chapter.
@@ -110,7 +110,7 @@
       <p class="block-intro">
         Compare pathways on feasibility, access, measurement, and ethics. Use the
         <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer">Helpful Table</a>
-        in Canvas as a reference — you decide what fits.
+        in Canvas as a reference, you decide what fits.
       </p>
       <div class="comparison-table-wrap">
         <table class="comparison-table">
@@ -158,7 +158,7 @@
       </div>
 
       <div v-if="chosenPathway" class="embedded-helper">
-        <h3 class="helper-title">Data analysis helper — {{ chosenPathway.label }}</h3>
+        <h3 class="helper-title">Data analysis helper: {{ chosenPathway.label }}</h3>
         <DataAnalysisHelper
           :class-id="classId"
           embedded
