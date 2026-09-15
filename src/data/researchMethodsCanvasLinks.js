@@ -18,6 +18,24 @@ export const CANVAS_RM_ASSIGNMENTS = {
   phase4: 'https://nwosu.instructure.com/courses/2406/assignments/44935'
 }
 
+export const CANVAS_RM_ASSIGNMENT_IDS = {
+  articleReview: '44898',
+  phase3: '44903',
+  phase4: '44935'
+}
+
+export function studyPlanPath (sectionId) {
+  return `/class/${RESEARCH_METHODS_CLASS}/study-plan/${sectionId}`
+}
+
+export function studyPlanHubPath () {
+  return `/class/${RESEARCH_METHODS_CLASS}/study-plan`
+}
+
+export function assignmentHelpPath () {
+  return `/class/${RESEARCH_METHODS_CLASS}/assignment-help`
+}
+
 /** Wiki pages linked from Phase 4 and path guides. */
 export const CANVAS_RM_WIKI_PAGES = {
   helpfulTable: 'https://nwosu.instructure.com/courses/2406/pages/helpful-table',

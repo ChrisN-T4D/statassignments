@@ -1,9 +1,8 @@
 /**
  * PSYC 4223 Phase 3 Worksheet, elevator speech (replaces legacy gap→RQ Canvas worksheet).
  *
- * MM schema is instructor-authored. Canvas assignment 44903 may still show the old
- * gap-to-research-question text until the instructor updates it. Phase 4 remains
- * synced from Canvas assignment 44935 via Playwright.
+ * MM schema is instructor-authored. Canvas assignment 44903 is updated via
+ * scripts/sync-canvas-rm-mm-assignments.mjs to match this elevator-speech workflow.
  */
 
 export const PHASE3_META = {
