@@ -209,6 +209,27 @@
     }
     .search-log-table td { vertical-align: top; }
     .log-empty { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+    .editing-banner { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin: 0.5rem 0; }
+    .article-jump { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0 1rem; }
+    .jump-btn {
+      width: 2rem; height: 2rem; border-radius: 0.45rem; border: 1px solid var(--border);
+      background: var(--card); color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .jump-btn.active { border-color: var(--primary); color: var(--primary); }
+    .jump-btn.complete { background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.4); }
+    .article-card-item { margin-bottom: 0.65rem; border: 1px solid var(--border); border-radius: 0.65rem; overflow: hidden; }
+    .article-card-item.open { border-color: rgba(230, 57, 70, 0.45); }
+    .article-card-toggle {
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 1rem; border: none; background: var(--card); color: var(--text); cursor: pointer; text-align: left;
+    }
+    .article-card-toggle .card-title { font-weight: 600; font-size: 0.95rem; }
+    .article-card-toggle .card-ref { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 34rem; }
+    .article-card-body { display: none; padding: 0 1rem 1rem; border-top: 1px solid var(--border); background: #101010; }
+    .article-card-item.open .article-card-body { display: block; }
+    .card-status-label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+    .card-status-label.complete { color: #86efac; }
+    #save-status { margin-top: 0.5rem; font-size: 0.78rem; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -231,8 +252,8 @@
       <div class="grid two" style="margin-top:1.25rem">
         <div class="card">
           <h2>Article Review</h2>
-          <p class="hint">Eight article cards, problem statement, early RQ.</p>
-          <span class="chip">0/8 article cards started</span>
+          <p class="hint">8 numbered slots · Canvas expects 5–8 completed reviews.</p>
+          <span class="chip" id="hub-article-progress">0/5–8 complete</span>
         </div>
         <div class="card">
           <h2>Study Focus</h2>
@@ -370,90 +391,15 @@
         <p class="ref-reminder">Predatory journals exist. When in doubt, ask a librarian or your instructor before you spend time on the article.</p>
       </div>
 
-      <div class="card">
-        <h2>Article 1 <span class="chip">In progress</span></h2>
-        <label>Complete reference (APA)</label>
-        <p class="hint">Use Ch. 11 for APA 7. Verify the source in your library database before you cite it.</p>
-        <textarea rows="2"></textarea>
-        <label>Researchers' "what" question</label>
-        <p class="hint">Summarize in your own words. Do not copy from the article abstract.</p>
-        <textarea rows="2"></textarea>
-        <label>Researchers' "why" question</label>
-        <p class="hint">What gap or rationale did the authors give in the introduction?</p>
-        <textarea rows="2"></textarea>
-        <label>Participants / subjects</label>
-        <textarea rows="2"></textarea>
-        <label>Methodology overview</label>
-        <p class="hint">Name design type in plain language. Include measures and instruments.</p>
-        <textarea rows="2"></textarea>
-        <label>Results / discussion / conclusion</label>
-        <textarea rows="2"></textarea>
-        <label>Strengths</label>
-        <textarea rows="2"></textarea>
-        <label>Weaknesses</label>
-        <textarea rows="2"></textarea>
-        <label>Connection to your proposal</label>
-        <textarea rows="2"></textarea>
-
-        <h3>Source self-check (Methods Market only)</h3>
-        <p class="hint">Look at your PDF, then check each box you can honestly confirm. Methods Market does not grade these.</p>
-
-        <div class="self-check-block">
-          <label class="check-main"><input type="checkbox" /> <span>I found this article through a library database (e.g., PsycINFO).</span></label>
-          <p class="hint" style="margin-left:1.5rem">Start in your university library databases, not the open web alone.</p>
-          <ul class="look-for">
-            <li>I searched PsycINFO, Academic Search Complete, or another library database</li>
-            <li>I can name which database I used</li>
-            <li>I did not rely on Google or a random .com page as my only source</li>
-          </ul>
-        </div>
-
-        <div class="self-check-block">
-          <label class="check-main"><input type="checkbox" /> <span>It appears in a scholarly, peer-reviewed journal (not a magazine, blog, or textbook chapter).</span></label>
-          <p class="hint" style="margin-left:1.5rem">Peer review means experts evaluated the manuscript before publication. It does not mean the study is correct.</p>
-          <ul class="look-for">
-            <li>The PDF shows a journal name (not a news site, magazine, or blog)</li>
-            <li>Volume and issue numbers appear (e.g., Vol. 42, No. 3)</li>
-            <li>Authors list university or research affiliations</li>
-            <li>A DOI or stable journal URL is present</li>
-            <li>If unsure whether the journal is peer-reviewed, I checked with a librarian or instructor</li>
-          </ul>
-        </div>
-
-        <div class="self-check-block">
-          <label class="check-main"><input type="checkbox" /> <span>It reports an original empirical study (Method and Results with data — not only a review or meta-analysis).</span></label>
-          <p class="hint" style="margin-left:1.5rem">Your article cards should be primary studies you read, not summaries of other people's work.</p>
-          <ul class="look-for">
-            <li>The PDF has a Method (or Methods) section describing participants and procedure</li>
-            <li>The PDF has a Results section with data (not just opinions)</li>
-            <li>It is not a literature review, meta-analysis, book chapter, or editorial</li>
-            <li>I can describe what the researchers actually did in my own words</li>
-          </ul>
-        </div>
-
-        <div class="self-check-block">
-          <label class="check-main"><input type="checkbox" /> <span>I saved the PDF and have the complete APA reference ready.</span></label>
-          <p class="hint" style="margin-left:1.5rem">You will attach PDFs in Canvas and reuse references in your literature review.</p>
-          <ul class="look-for">
-            <li>I downloaded the full-text PDF (not just the abstract page)</li>
-            <li>My APA reference includes authors, year, title, journal, volume, issue, and pages or DOI</li>
-            <li>I can attach this PDF when I submit the Canvas assignment</li>
-          </ul>
-        </div>
-
-        <div class="pdf-sniff">
-          <h4>Where to look in the PDF</h4>
-          <ul class="look-for" style="margin-left:0">
-            <li>Title page or header → journal name?</li>
-            <li>First pages → abstract describes original data collection?</li>
-            <li>Method section → participants, measures, design?</li>
-            <li>Results section → statistics or data findings?</li>
-            <li>Reference list → one citation you could follow next (citation chaining)</li>
-          </ul>
-        </div>
+      <div class="card" id="articles-workspace">
+        <h2>Article cards</h2>
+        <p class="hint">Canvas expects <strong>5–8</strong> peer-reviewed article reviews. Methods Market gives you <strong>8 numbered slots</strong> on the same template — complete as many as you need (minimum 5 for Canvas). Each card saves in this browser as you type.</p>
+        <p class="progress-chip" id="article-progress">0 complete · 0/8 started · Canvas expects 5–8</p>
+        <p class="editing-banner" id="editing-banner">Editing Article 1 of 8</p>
+        <nav class="article-jump" id="article-jump" aria-label="Jump to article"></nav>
+        <div id="article-cards"></div>
+        <p id="save-status"></p>
       </div>
-
-      <div class="card"><h2>Articles 2–8</h2><p class="hint">Collapsed cards — expand to edit. Each includes the same source self-check scaffold.</p></div>
 
       <div class="card">
         <h2>Problem Statement</h2>
@@ -614,6 +560,196 @@
     }
 
     initSearchBuilder();
+
+    // Article cards — 8 slots, localStorage autosave, collapsible
+    const ARTICLE_COUNT = 8;
+    const CANVAS_MIN = 5;
+    const CANVAS_RANGE = '5–8';
+    const CARD_STORAGE_KEY = 'study-plan-drafts-article-cards-v1';
+    const TEXT_FIELDS = [
+      ['apaReference', 'Complete reference (APA)', 2, 'Use Ch. 11 for APA 7. Verify in your library database.'],
+      ['researcherWhatQuestion', 'Researchers\' "what" question', 2, 'Summarize in your own words — do not copy the abstract.'],
+      ['researcherWhyQuestion', 'Researchers\' "why" question', 2, 'What gap or rationale did the authors give?'],
+      ['participantsSummary', 'Participants / subjects', 2, ''],
+      ['methodologyOverview', 'Methodology overview', 2, 'Name design type; include measures and instruments.'],
+      ['resultsSummary', 'Results / discussion / conclusion', 2, ''],
+      ['strengths', 'Strengths', 2, ''],
+      ['weaknesses', 'Weaknesses', 2, ''],
+      ['connectionToProposal', 'Connection to your proposal', 2, '']
+    ];
+    const SELF_CHECK = [
+      ['foundInLibraryDatabase', 'I found this article through a library database (e.g., PsycINFO).'],
+      ['scholarlyJournal', 'It appears in a scholarly, peer-reviewed journal.'],
+      ['originalEmpiricalStudy', 'It reports an original empirical study (Method and Results with data).'],
+      ['pdfSaved', 'I saved the PDF and have the complete APA reference ready.']
+    ];
+
+    function emptyCard () {
+      return {
+        apaReference: '', researcherWhatQuestion: '', researcherWhyQuestion: '',
+        participantsSummary: '', methodologyOverview: '', resultsSummary: '',
+        strengths: '', weaknesses: '', connectionToProposal: '',
+        sourceSelfCheck: { foundInLibraryDatabase: false, scholarlyJournal: false, originalEmpiricalStudy: false, pdfSaved: false }
+      };
+    }
+
+    function loadArticleState () {
+      try {
+        const raw = localStorage.getItem(CARD_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            cards: Array.from({ length: ARTICLE_COUNT }, (_, i) => ({ ...emptyCard(), ...(parsed.cards?.[i] ?? {}) })),
+            openIndex: typeof parsed.openIndex === 'number' ? parsed.openIndex : 0
+          };
+        }
+      } catch (_) { /* ignore */ }
+      return { cards: Array.from({ length: ARTICLE_COUNT }, emptyCard), openIndex: 0 };
+    }
+
+    let articleState = loadArticleState();
+    let saveCardsTimer = null;
+
+    function cardStatus (card) {
+      const required = TEXT_FIELDS.map(([k]) => k);
+      const filled = required.filter((k) => (card[k] ?? '').trim()).length;
+      if (filled === 0) return 'Not started';
+      if (filled < required.length) return 'In progress';
+      return 'Complete';
+    }
+
+    function cardRefSnippet (card) {
+      const ref = (card.apaReference ?? '').trim();
+      if (!ref) return '';
+      const line = ref.split('\n')[0].trim();
+      return line.length > 72 ? line.slice(0, 69) + '…' : line;
+    }
+
+    function countCards () {
+      let started = 0, complete = 0;
+      articleState.cards.forEach((c) => {
+        const s = cardStatus(c);
+        if (s !== 'Not started') started++;
+        if (s === 'Complete') complete++;
+      });
+      return { started, complete };
+    }
+
+    function persistCards () {
+      if (saveCardsTimer) clearTimeout(saveCardsTimer);
+      saveCardsTimer = setTimeout(() => {
+        localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({
+          cards: articleState.cards,
+          openIndex: articleState.openIndex,
+          lastSavedAt: new Date().toISOString()
+        }));
+        const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        document.getElementById('save-status').textContent = 'Saved locally at ' + t;
+      }, 400);
+    }
+
+    function updateProgressUI () {
+      const { started, complete } = countCards();
+      document.getElementById('article-progress').textContent =
+        `${complete} complete · ${started}/${ARTICLE_COUNT} started · Canvas expects ${CANVAS_RANGE}`;
+      const hub = document.getElementById('hub-article-progress');
+      if (hub) hub.textContent = `${complete}/${CANVAS_RANGE} complete`;
+      const idx = articleState.openIndex;
+      document.getElementById('editing-banner').textContent =
+        `Editing Article ${idx + 1} of ${ARTICLE_COUNT}`;
+      document.querySelectorAll('.jump-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+        btn.classList.toggle('complete', cardStatus(articleState.cards[i]) === 'Complete');
+      });
+      document.querySelectorAll('.article-card-item').forEach((el, i) => {
+        el.classList.toggle('open', i === idx);
+        const statusEl = el.querySelector('.card-status-label');
+        const st = cardStatus(articleState.cards[i]);
+        statusEl.textContent = st;
+        statusEl.classList.toggle('complete', st === 'Complete');
+        const refEl = el.querySelector('.card-ref');
+        const snippet = cardRefSnippet(articleState.cards[i]);
+        refEl.textContent = snippet;
+        refEl.style.display = snippet ? 'block' : 'none';
+      });
+    }
+
+    function renderArticleCards () {
+      const container = document.getElementById('article-cards');
+      container.innerHTML = articleState.cards.map((card, index) => {
+        const fieldsHtml = TEXT_FIELDS.map(([key, label, rows, hint]) =>
+          `<label>${label}</label>${hint ? `<p class="hint">${hint}</p>` : ''}<textarea rows="${rows}" data-card="${index}" data-field="${key}">${escHtml(card[key] ?? '')}</textarea>`
+        ).join('');
+        const checksHtml = SELF_CHECK.map(([key, label]) =>
+          `<label class="check-main"><input type="checkbox" data-card="${index}" data-check="${key}" ${card.sourceSelfCheck?.[key] ? 'checked' : ''} /> <span>${label}</span></label>`
+        ).join('');
+        return `<article class="article-card-item${index === articleState.openIndex ? ' open' : ''}" data-index="${index}">
+          <button type="button" class="article-card-toggle" data-toggle="${index}">
+            <span><div class="card-title">Article ${index + 1}</div><div class="card-ref">${escHtml(cardRefSnippet(card))}</div></span>
+            <span class="card-status-label${cardStatus(card) === 'Complete' ? ' complete' : ''}">${cardStatus(card)}</span>
+          </button>
+          <div class="article-card-body">
+            ${fieldsHtml}
+            <h3>Source self-check (Methods Market only)</h3>
+            <p class="hint">Look at your PDF, then check each box you can honestly confirm.</p>
+            ${checksHtml}
+          </div>
+        </article>`;
+      }).join('');
+
+      const jump = document.getElementById('article-jump');
+      jump.innerHTML = articleState.cards.map((_, i) =>
+        `<button type="button" class="jump-btn${i === articleState.openIndex ? ' active' : ''}${cardStatus(articleState.cards[i]) === 'Complete' ? ' complete' : ''}" data-jump="${i}">${i + 1}</button>`
+      ).join('');
+    }
+
+    function escHtml (s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function openArticle (index) {
+      articleState.openIndex = index;
+      renderArticleCards();
+      updateProgressUI();
+      persistCards();
+      document.getElementById('articles-workspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function initArticleCards () {
+      renderArticleCards();
+      updateProgressUI();
+
+      document.getElementById('articles-workspace').addEventListener('click', (e) => {
+        const jump = e.target.closest('[data-jump]');
+        if (jump) { openArticle(Number(jump.dataset.jump)); return; }
+        const toggle = e.target.closest('[data-toggle]');
+        if (toggle) {
+          openArticle(Number(toggle.dataset.toggle));
+        }
+      });
+
+      document.getElementById('articles-workspace').addEventListener('input', (e) => {
+        const ta = e.target.closest('textarea[data-card]');
+        if (ta) {
+          const i = Number(ta.dataset.card);
+          articleState.cards[i][ta.dataset.field] = ta.value;
+          updateProgressUI();
+          persistCards();
+          return;
+        }
+      });
+
+      document.getElementById('articles-workspace').addEventListener('change', (e) => {
+        const cb = e.target.closest('input[type=checkbox][data-check]');
+        if (cb) {
+          const i = Number(cb.dataset.card);
+          articleState.cards[i].sourceSelfCheck[cb.dataset.check] = cb.checked;
+          persistCards();
+        }
+      });
+    }
+
+    initArticleCards();
   </script>
 </body>
 </html>

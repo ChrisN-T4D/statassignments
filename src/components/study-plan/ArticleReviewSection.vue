@@ -1,11 +1,28 @@
 <template>
   <div class="article-review-section">
     <p class="section-intro">
-      Capture notes for each article in your own words. Complete at least
-      {{ ARTICLE_REVIEW_MIN_ARTICLES }} of {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }} cards before submitting in Canvas.
+      Capture notes for each article in your own words. Canvas expects
+      <strong>{{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }}</strong> peer-reviewed reviews; this workspace has
+      {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }} numbered slots — complete at least
+      {{ ARTICLE_REVIEW_MIN_ARTICLES }} before you submit.
       <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
     </p>
     <p class="progress-chip">{{ progressLabel }}</p>
+    <p v-if="activeArticleNumber != null" class="editing-banner">
+      Editing Article {{ activeArticleNumber }} of {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }}
+    </p>
+    <nav class="article-jump" aria-label="Jump to article card">
+      <button
+        v-for="(card, index) in articleReview.articleCards"
+        :key="card.id"
+        type="button"
+        class="jump-btn"
+        :class="{ active: openCards[index], complete: cardStatus(card) === 'Fields complete' }"
+        @click="openCard(index)"
+      >
+        {{ index + 1 }}
+      </button>
+    </nav>
 
     <PeerReviewReference />
 
@@ -32,7 +49,10 @@
         :aria-expanded="openCards[index]"
         @click="toggleCard(index)"
       >
-        <span>Article {{ index + 1 }}</span>
+        <span class="card-heading">
+          <span class="card-number">Article {{ index + 1 }}</span>
+          <span v-if="cardReferenceSnippet(card)" class="card-ref-snippet">{{ cardReferenceSnippet(card) }}</span>
+        </span>
         <span class="card-status">{{ cardStatus(card) }}</span>
       </button>
       <div v-show="openCards[index]" class="card-body">
@@ -88,7 +108,8 @@ import {
   ARTICLE_REVIEW_PROBLEM_STATEMENT,
   ARTICLE_REVIEW_RQ_HYPOTHESIS,
   ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
-  ARTICLE_REVIEW_MIN_ARTICLES
+  ARTICLE_REVIEW_MIN_ARTICLES,
+  ARTICLE_REVIEW_CANVAS_RANGE_LABEL
 } from '../../data/capstoneArticleReviewWorksheet.js'
 import { CANVAS_RM_ASSIGNMENTS } from '../../data/researchMethodsCanvasLinks.js'
 import { countArticleCards } from '../../lib/capstoneValidation.js'
@@ -109,8 +130,13 @@ const openCards = ref([true, false, false, false, false, false, false, false])
 const articleReview = computed(() => props.project.articleReview ?? {})
 
 const progressLabel = computed(() => {
-  const { started, total, minRequired } = countArticleCards(props.project)
-  return `${started} of ${total} article cards started (${minRequired} minimum for Canvas)`
+  const { started, complete, total, rangeLabel } = countArticleCards(props.project)
+  return `${complete} complete · ${started}/${total} started · Canvas expects ${rangeLabel}`
+})
+
+const activeArticleNumber = computed(() => {
+  const idx = openCards.value.findIndex(Boolean)
+  return idx >= 0 ? idx + 1 : null
 })
 
 function emitUpdate (articleReview) {
@@ -144,8 +170,19 @@ function setRqField (id, value) {
   emitUpdate({ ...articleReview.value, [id]: value })
 }
 
+function openCard (index) {
+  openCards.value = openCards.value.map((_, i) => i === index)
+}
+
 function toggleCard (index) {
   openCards.value[index] = !openCards.value[index]
+}
+
+function cardReferenceSnippet (card) {
+  const ref = (card.apaReference ?? '').trim()
+  if (!ref) return ''
+  const firstLine = ref.split('\n')[0].trim()
+  return firstLine.length > 72 ? `${firstLine.slice(0, 69)}…` : firstLine
 }
 
 function cardStatus (card) {
@@ -176,7 +213,43 @@ function cardStatus (card) {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.editing-banner {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0 0 0.75rem;
+}
+
+.article-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.jump-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jump-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.jump-btn.complete {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.4);
 }
 
 .worksheet-block {
@@ -204,6 +277,7 @@ function cardStatus (card) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 0;
   border: none;
   background: none;
@@ -212,6 +286,23 @@ function cardStatus (card) {
   font-weight: 600;
   cursor: pointer;
   text-align: left;
+}
+
+.card-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.card-ref-snippet {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 36rem;
 }
 
 .card-status {

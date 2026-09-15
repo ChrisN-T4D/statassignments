@@ -58,8 +58,9 @@ const { project, updateProject, lastSavedAt, isGuestDraft } = useCapstoneProject
 function sectionProgress (sectionId) {
   switch (sectionId) {
     case 'article-review': {
-      const { started, total } = countArticleCards(project.value)
-      return `${started}/${total} article cards started`
+      const { complete, started, total, rangeLabel } = countArticleCards(project.value)
+      if (complete > 0) return `${complete}/${rangeLabel} complete · ${started}/${total} started`
+      return `${started}/${total} started · Canvas expects ${rangeLabel}`
     }
     case 'study-focus': {
       const sf = project.value.studyFocus ?? {}

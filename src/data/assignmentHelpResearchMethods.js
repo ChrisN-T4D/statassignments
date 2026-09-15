@@ -82,7 +82,7 @@ export const assignmentHelpResearchMethods = [
         name: 'Article Review and Problem Statement',
         type: 'assignment',
         tips: [
-          'The Canvas template has eight article blocks — complete at least six peer-reviewed, original-research articles (every required blank filled).',
+          'The Canvas template has eight article blocks — complete 5–8 peer-reviewed, original-research articles (every required blank filled on each article you submit).',
           'For each article: APA reference, the authors’ “what” and “why” questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal.',
           'Write in complete sentences; summarize — do not copy and paste from the article.',
           'After all article cards: draft your Problem Statement (what we know, gap, what we want to know) and preliminary research question(s) and hypothesis(es).',

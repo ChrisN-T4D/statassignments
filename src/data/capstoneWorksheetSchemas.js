@@ -11,7 +11,7 @@ export const STUDY_PLAN_SECTIONS = [
     id: 'article-review',
     title: 'Article Review',
     shortTitle: 'Article Review',
-    description: 'Eight article cards, problem statement, and early research questions.',
+    description: 'Up to eight article slots (Canvas expects 5–8 completed), problem statement, and early research questions.',
     dueNote: 'Due week 4 — submit in Canvas with PDF attachments.'
   },
   {

@@ -24,7 +24,7 @@ export const ARTICLE_REVIEW_HEADER_FIELDS = [
 ]
 
 /**
- * One card per article. Template has 8 slots; course may require 6–8 completed.
+ * One card per article. Canvas template has 8 slots; submit 5–8 completed reviews.
  * @type {Array<{ id: string, label: string, exportLabel: string, required: boolean, multiline?: boolean, helpTopicId?: string, helpNote?: string }>}
  */
 export const ARTICLE_CARD_FIELDS = [
@@ -279,7 +279,10 @@ export const ARTICLE_REVIEW_RQ_HYPOTHESIS = {
 }
 
 export const ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT = 8
-export const ARTICLE_REVIEW_MIN_ARTICLES = 6
+/** Minimum peer-reviewed articles required for Canvas submission (same as Canvas assignment text). */
+export const ARTICLE_REVIEW_MIN_ARTICLES = 5
+/** Human-readable range shown in UI — matches Canvas assignment wording. */
+export const ARTICLE_REVIEW_CANVAS_RANGE_LABEL = '5–8'
 
 export function emptyArticleCard () {
   return {

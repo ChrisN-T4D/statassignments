@@ -9,7 +9,8 @@ import {
   ARTICLE_REVIEW_PROBLEM_STATEMENT,
   ARTICLE_REVIEW_RQ_HYPOTHESIS,
   ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
-  ARTICLE_REVIEW_MIN_ARTICLES
+  ARTICLE_REVIEW_MIN_ARTICLES,
+  ARTICLE_REVIEW_CANVAS_RANGE_LABEL
 } from '../data/capstoneArticleReviewWorksheet.js'
 import { PHASE3_PARTS, elevatorSpeechWordCount } from '../data/capstonePhase3Worksheet.js'
 import {
@@ -31,11 +32,21 @@ function fieldBlock (exportLabel, value) {
 export function countArticleCards (project) {
   const cards = project?.articleReview?.articleCards ?? []
   let started = 0
+  let complete = 0
+  const requiredFields = ARTICLE_CARD_FIELDS.filter((f) => f.required)
   for (const card of cards) {
     const hasContent = ARTICLE_CARD_FIELDS.some((f) => (card[f.id] ?? '').trim())
     if (hasContent) started++
+    const filledRequired = requiredFields.filter((f) => (card[f.id] ?? '').trim()).length
+    if (filledRequired === requiredFields.length && requiredFields.length > 0) complete++
   }
-  return { started, total: ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT, minRequired: ARTICLE_REVIEW_MIN_ARTICLES }
+  return {
+    started,
+    complete,
+    total: ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
+    minRequired: ARTICLE_REVIEW_MIN_ARTICLES,
+    rangeLabel: ARTICLE_REVIEW_CANVAS_RANGE_LABEL
+  }
 }
 
 export function buildExportText (sectionId, project) {
