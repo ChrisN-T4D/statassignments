@@ -11,14 +11,14 @@ export const PHASE3_META = {
   assignmentUrl: 'https://nwosu.instructure.com/courses/2406/assignments/44903',
   title: 'Phase 3 — Elevator Speech',
   objective:
-    'Prepare a 1–2 minute spiel (at most) about your research: what the field knows, what gap your study addresses, and how your proposed study fits.'
+    'Prepare a 1–2 minute spiel about your research: what the field knows, what gap your study addresses, and how your proposed study fits.'
 }
 
 /** Display-only hint; not enforced as pass/fail. */
 export const ELEVATOR_SPEECH_WORD_COUNT_HINT = {
   min: 130,
   max: 300,
-  readAloudLabel: '1–2 minute spiel (at most)'
+  readAloudLabel: '1–2 minute spiel'
 }
 
 export const PHASE3_PARTS = [

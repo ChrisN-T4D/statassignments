@@ -10,7 +10,7 @@ export const PHASE3_TOUR_STEPS = [
     target: 'tour-p3-intro',
     title: 'Distill your lit review into a speech',
     body:
-      'Phase 3 is a 1–2 minute spiel (at most) about your research: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas. IV/DV and methods belong in Phase 4.',
+      'Phase 3 is a 1–2 minute spiel about your research: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas. IV/DV and methods belong in Phase 4.',
     beforeShow: null
   },
   {

@@ -145,7 +145,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 4 on the same due date (see Canvas).',
-          'Phase 3 is an elevator speech: a 1–2 minute spiel (at most) about your research — what the field knows, the gap, and how your study fits.',
+          'Phase 3 is an elevator speech: a 1–2 minute spiel about your research — what the field knows, the gap, and how your study fits.',
           'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
           'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~130–300 words).',
           'Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline — then refine into spoken prose.',

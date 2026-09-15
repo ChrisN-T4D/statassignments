@@ -583,7 +583,7 @@
     <section id="phase3" class="panel">
       <div class="tour-launcher">
         <button type="button" class="tour-start-btn" id="start-p3-tour-btn">Start guided tour</button>
-        <p class="hint" style="margin:0.55rem 0 0">Prepare a 1–2 minute spiel (at most) about your research.</p>
+        <p class="hint" style="margin:0.55rem 0 0">Prepare a 1–2 minute spiel about your research.</p>
       </div>
       <div id="spotlight-tour-p3" role="dialog" aria-modal="true" aria-label="Phase 3 guided tour">
         <div class="spotlight-backdrop"></div>
@@ -617,7 +617,7 @@
       <div class="card" data-tour="tour-p3-speech">
         <label for="p3-elevatorSpeech">Full elevator speech</label>
         <textarea id="p3-elevatorSpeech" rows="6" data-p3-field="elevatorSpeech"></textarea>
-        <p class="hint" id="p3-word-count">0 words (aim for ~130–300; 1–2 minute spiel at most)</p>
+        <p class="hint" id="p3-word-count">0 words (aim for ~130–300; 1–2 minute spiel)</p>
       </div>
       <div class="card" data-tour="tour-p3-export">
         <h2>Export Phase 3</h2>
@@ -1676,7 +1676,7 @@
       const label = filled ? `${filled}/4 parts · ${words} words` : 'Elevator speech not started';
       setText('p3-progress', label);
       setText('hub-phase3-progress', label);
-      setText('p3-word-count', `${words} words (aim for ~130–300; 1–2 minute spiel at most)`);
+      setText('p3-word-count', `${words} words (aim for ~130–300; 1–2 minute spiel)`);
     }
 
     function updateP4Progress () {
@@ -1926,7 +1926,7 @@
     }
 
     makeTour('p3', [
-      { target: 'tour-p3-intro', title: 'Spiel about your research', body: 'Phase 3 is a 1–2 minute spiel (at most) about your research. Submit with Phase 4.' },
+      { target: 'tour-p3-intro', title: 'Spiel about your research', body: 'Phase 3 is a 1–2 minute spiel about your research. Submit with Phase 4.' },
       { target: 'tour-p3-reminders', title: 'From your outline', body: 'Framework, themes, gap, and transition are starting points.' },
       { target: 'tour-p3-what-we-know', title: 'What we know', body: 'Synthesis from theme buckets — not a list of articles.', narrow: 'One study only? Name a pattern.', widen: 'Too broad? Focus on gap-relevant findings.' },
       { target: 'tour-p3-gap', title: 'The gap', body: 'What is still unknown or contested?' },
