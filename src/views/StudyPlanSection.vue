@@ -17,7 +17,7 @@
 
     <div v-else class="container">
       <p>Unknown section.</p>
-      <router-link :to="`/class/${classId}/study-plan`" class="back-link">← Study Plan</router-link>
+      <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
     </div>
   </div>
 </template>
