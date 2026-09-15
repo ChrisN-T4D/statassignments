@@ -148,6 +148,7 @@ export const assignmentHelpResearchMethods = [
           'Phase 3 is an elevator speech: distill your completed lit review into what the field knows, the gap, and how your study fits (~60–90 seconds read aloud).',
           'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
           'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~150–250 words).',
+          'Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline — then refine into spoken prose.',
           'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
@@ -163,6 +164,7 @@ export const assignmentHelpResearchMethods = [
           'Recap your topic and research question from your lit review; define IV and DV conceptually (Part B).',
           'Explore all four pathways in Part C (survey, experimental task, observation, archival) — mark a path “not viable” if it does not fit.',
           'Complete the Part D comparison table, then choose ONE pathway in Part E.',
+          'Mark pathways “not viable” when they truly do not fit — that is good thinking, not failure.',
           'Use the Helpful Table wiki page in Canvas and the Path 1–4 guides; Ch. 4 for measurement.'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
