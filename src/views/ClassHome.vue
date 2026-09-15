@@ -13,17 +13,8 @@
           </p>
           <div class="header-links">
             <template v-if="isResearchMethodsClass">
-              <a
-                :href="CANVAS_RM_GETTING_STARTED_URL"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="assignment-help-link"
-              >
-                Canvas: how to use Methods Market ↗
-              </a>
-              <span class="header-links-sep">·</span>
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-                Canvas assignments → chapter help
+                Assignment Help
               </router-link>
               <span class="header-links-sep">·</span>
               <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
@@ -52,50 +43,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Research Methods: student onboarding -->
-      <section
-        v-if="isResearchMethodsClass"
-        id="getting-started"
-        class="rm-getting-started"
-        aria-labelledby="rm-getting-started-title"
-      >
-        <h2 id="rm-getting-started-title">How to use Methods Market in this course</h2>
-        <p class="rm-getting-started-lead">
-          <strong>Canvas</strong> has your capstone deadlines, groups, and graded work.
-          <strong>Methods Market</strong> is where you read chapters and practice concepts.
-        </p>
-        <ol class="rm-getting-started-steps">
-          <li>
-            <router-link to="/auth">Create an account</router-link> or sign in, then
-            <router-link to="/claim">link your student key</router-link> from your instructor (one time).
-          </li>
-          <li>
-            Check <strong>Canvas</strong> for which chapter to read this week
-            (<a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer">full walkthrough ↗</a>).
-          </li>
-          <li>
-            Pick a <strong>part</strong> tab, then a <strong>chapter</strong> → <strong>Topics</strong> to read → <strong>Concept Review</strong> to practice.
-          </li>
-          <li>
-            Draft capstone worksheets in
-            <router-link :to="`/class/${classId}/study-plan`">Study Plan</router-link>
-            (article reviews, lit review outline, Phase 3 elevator speech, Phase 4 operationalization), then export and submit in Canvas.
-          </li>
-          <li>
-            Stuck on a Canvas assignment?
-            <router-link :to="`/class/${classId}/assignment-help`">Open Assignment Help</router-link>.
-          </li>
-        </ol>
-        <div class="rm-getting-started-links">
-          <router-link :to="`/class/${classId}/study-plan`" class="rm-quick-link rm-quick-link-primary">
-            Open Study Plan →
-          </router-link>
-          <a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
-            Canvas setup guide ↗
-          </a>
-        </div>
-      </section>
 
       <!-- Module Navigation -->
       <div class="module-nav">
@@ -699,7 +646,6 @@ import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSi
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
-import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
 import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
@@ -1951,78 +1897,6 @@ watch(selectedModuleId, id => {
 
 .lab-concept-review-card {
   margin-bottom: 1.25rem;
-}
-
-.rm-getting-started {
-  background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
-  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
-  border-radius: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.rm-getting-started h2 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.125rem;
-}
-
-.rm-getting-started-lead {
-  margin: 0 0 0.75rem 0;
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-}
-
-.rm-getting-started-steps {
-  margin: 0 0 1rem 0;
-  padding-left: 1.25rem;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
-
-.rm-getting-started-steps li + li {
-  margin-top: 0.35rem;
-}
-
-.rm-getting-started-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.rm-getting-started-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  align-items: center;
-}
-
-.rm-quick-link {
-  font-size: 0.875rem;
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.rm-quick-link-primary {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background: var(--primary);
-  color: #fff !important;
-  font-weight: 600;
-}
-
-.rm-quick-link-primary:hover {
-  text-decoration: none;
-  filter: brightness(1.08);
-}
-
-.rm-quick-link:hover {
-  text-decoration: underline;
-}
-
-.rm-quick-link-primary:hover {
-  text-decoration: none;
 }
 
 /* Learning Objectives */
