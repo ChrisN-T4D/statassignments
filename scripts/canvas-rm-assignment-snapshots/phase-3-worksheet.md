@@ -1,24 +1,50 @@
-# Phase 3: Elevator Speech (Methods Market target)
+# Phase 3 Worksheet
 
-**Canvas assignment 44903** — synced via `scripts/sync-canvas-rm-mm-assignments.mjs`
+From Literature Review to Research Question (Phase 3)
 
-## Objective
+Objective: To synthesize findings from your completed literature review, identify research gaps, and draft a specific, measurable research question using operational variables.
 
-Prepare a **1–2 minute spiel** about your research: what the field knows, what gap your study addresses, and how your proposed study fits. Submit together with Phase 4 on the same due date.
+Part A: Gap Analysis
 
-**Study Plan:** https://methods-market.clneu.com/class/research-methods/study-plan/phase-3
+Instruction: Refer back to your Phase 2 Literature Summary. Look for where the existing studies agree, disagree, or leave questions unanswered.
 
-IV/DV definitions and methodology path choice belong in **Phase 4**, not Phase 3.
+Current Consensus: What do most of the published articles say about this topic? (Summarize in one sentence)
 
-## Draft four parts in Study Plan
+Identified Gap/Contradiction: Based on your reading, what specific relationship or population has not been studied enough yet? Be specific. Is there a new variable missing? A different context not covered before (e.g., younger age group, specific technology)?
 
-1. **What we know** — 2–4 sentences on what prior research agrees on
-2. **The gap** — 1–3 sentences on what is still unknown or contested
-3. **My study pitch** — 1–3 sentences on how your study fits the gap
-4. **Full elevator speech** — combined script (~130–300 words, about 1–2 minutes read aloud)
+Part B: Narrowing the Scope
 
-Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline, then refine into spoken prose. Export from Study Plan and submit with Phase 4.
+A broad question is impossible to answer in one study. Complete these constraints.
 
-## Legacy note
+Target Population: Who exactly are you studying? (Avoid "people"; be specific like "first-year undergraduates" or "remote workers").
+Answer: _________________________________________________________________
 
-Canvas previously used a gap-to-research-question worksheet (Parts A–D with IV/DV and final RQ). Methods Market replaced that schema with the elevator speech workflow above.
+Time Frame/Context: When and where does the data collection happen? If relevant to your IV/DV.
+Example: During finals week OR Across a full semester.
+Answer: _________________________________________________________________
+
+Part C: Variable Selection & Definition
+
+Before asking "How do X affect Y?", you must define exactly what those measurements will be based on the gap above.
+
+Independent Variable (IV): What is this? How are you categorizing or manipulating it in your study notes from the lit review?
+(e.g., High vs Low usage, Authoritative Parenting style)
+
+Dependent Variable (DV): What outcome will change as a result of changes to the IV? Ensure this is measurable using existing tools found during your literature search.
+(e.g., Anxiety score on GAD-7 scale OR GPA point average)
+
+Part D: Drafting & Refining the Question
+
+Draft, edit, and finalize your Research Statement.
+
+First Draft (Too Broad?): "How does [IV] affect [DV]" in my population?
+Student Input: _____________________________________________________________
+
+Second Draft (Adding Context): Add constraints from Part B here.
+"In a sample of ______________, how does [IV] level relate to changes in [DV]?"
+
+Final Question Statement: Write your final version below. Ensure it answers the gap identified in Part A without trying to solve "the world's problems."
+
+“Research Question:”
+
+Peer Check (If working with others): Is this question answerable within a semester? If yes, why?

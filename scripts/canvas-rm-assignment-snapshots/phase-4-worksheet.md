@@ -1,45 +1,165 @@
-# Phase 4 Worksheet (Operationalization Exploration)
+# Phase 4 Worksheet
 
-**Canvas assignment 44935** — synced via `scripts/sync-canvas-rm-mm-assignments.mjs`
+Operationalization Exploration
 
-Compare four data-collection pathways and choose **one** by the end of Phase 4. Submit together with Phase 3 on the same due date.
+(Use this sheet to compare three different ways you could collect data for your one Research Question. Choose ONE pathway by the end of Phase 4)
 
-**Study Plan:** https://methods-market.clneu.com/class/research-methods/study-plan/phase-4
+ 
 
-**Helpful Table:** https://nwosu.instructure.com/courses/2406/pages/helpful-table
+Part A: Context & Variables (Recap from Step 3)
 
-## Part A: Context & Variables (Recap from Step 3)
+Broad Topic Area: (e.g., Social Media, Sleep, Parenting...)
 
-- Broad Topic Area
-- Proposed Research Question
+ 
 
-## Part B: Conceptual Definitions
+ 
 
-Define IV and DV in theory — the abstract constructs as your literature defines them.
+Proposed Research Question:
 
-- Independent Variable (IV), conceptual
-- Dependent Variable (DV), conceptual
+ 
 
-## Part B (continued): Operational Definitions
+ 
 
-Specify how you would measure or manipulate each variable in a real study.
+Part B: Define Your Variables using the Conceptual Definition
 
-- Independent Variable (IV), operational
-- Dependent Variable (DV), operational
+Independent Variable (IV): (Define based on Lit Review)
 
-## Part C: Exploration — Four Operational Paths
+ 
 
-For each pathway, fill out details. Mark **Not Viable** when a method does not fit.
+Dependent Variable (DV): (Define based on Lit Review)
 
-- Pathway 1 (Self-Report / Survey) — validated scales
-- Pathway 2 (Performance / Experimental Task) — task, duration, comparison group
-- Pathway 3 (Observation / Naturalistic Recording) — what to observe, for how long
-- Pathway 4 (Archival) — existing dataset with your IV and DV
 
-## Part D: Comparative Analysis
 
-Compare pathways on feasibility, access to participants/data, measurement quality, and ethics/IRB.
+Part C: Exploration - Three Operational Paths
 
-## Part E: Final Decision
+(For each variable defined in Part B, fill out the details for three different data collection methods. If a method doesn't exist or fit well, mark it as 'Not Viable'.)
+Pathway 1 (Self-Report / Survey)
 
-Choose **one** pathway. That choice unlocks the matching method-path guide in Canvas (Path 1–4 wiki pages).
+What validated scales:
+
+ 
+
+ 
+
+ 
+
+Pathway 2: Performance / Experimental Task
+
+What task would they complete and for how long?
+
+ 
+
+ 
+
+ 
+
+What would be the comparison group?
+
+ 
+
+ 
+
+ 
+
+ 
+
+Pathway 3: Observation / Naturalistic Recording
+
+What would you observe/record?
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+For how long?
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Pathway 4: Archival
+
+ 
+
+Is there a dataset that already has your independent and dependent variables in it you could use?
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Part D: Comparative Analysis
+
+Criterion
+
+	
+
+Pathway 1
+(Self-Report)
+
+	
+
+Pathway 2
+(Experimental)
+
+	
+
+Pathway 3
+(Interview/Qualitative)
+
+	
+
+Pathway 4 (Archival)
+
+
+
+ 
+	
+ 
+
+ 
+
+ 
+
+ 
+
+	
+ 
+	
+ 
+	
+ 
+
+Part E: Final Decision on Methodology (Phase 4 Choice)
+
+Chosen Data Collection Strategy: (Circle ONE)
+□ Pathway 1
+
+□ Pathway 2
+
+□ Pathway 3
+
+□ Pathway 4

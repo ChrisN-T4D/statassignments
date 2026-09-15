@@ -25,7 +25,9 @@
     "build:benchmark-study-guides": "node scripts/build-benchmark-study-guide-pdfs.mjs",
     "fetch:benchmark-study-guides-canvas": "node scripts/fetch-canvas-benchmark-study-guides-playwright.mjs",
     "sync:canvas-rm": "node scripts/sync-canvas-rm-mm-assignments.mjs",
-    "sync:canvas-rm:apply": "node scripts/sync-canvas-rm-mm-assignments.mjs --apply"
+    "sync:canvas-rm:apply": "node scripts/sync-canvas-rm-mm-assignments.mjs --apply",
+    "sync:canvas-rm:playwright": "node scripts/sync-canvas-rm-mm-assignments-playwright.mjs",
+    "sync:canvas-rm:playwright:apply": "node scripts/sync-canvas-rm-mm-assignments-playwright.mjs --apply"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",
