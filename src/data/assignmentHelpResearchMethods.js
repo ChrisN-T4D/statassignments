@@ -141,13 +141,13 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 4 on the same due date (see Canvas).',
-          'Phase 3: synthesize your completed literature review — state consensus, identify the gap, narrow population and context, define IV/DV, and draft a final research question.',
-          'Use your Lit Review Final and article reviews; do not start from scratch.',
-          'Complete Parts A–D on the Canvas assignment: gap analysis, scope, variables, and refined question drafts.',
-          'Your final research question feeds directly into Phase 4 operationalization.'
+          'Phase 3 is an elevator speech: distill your completed lit review into what the field knows, the gap, and how your study fits (~60–90 seconds read aloud).',
+          'Use your Lit Review Final, study focus notes, and article reviews; do not start from scratch.',
+          'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~150–250 words).',
+          'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
         ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-7'],
-        getHelp: 'Open Study Plan in Methods Market (mirrors Canvas Parts A–D). Ch. 2 covers gaps and questions; Ch. 4 covers variables; Ch. 7 for population/sampling language. Submit with Phase 4 on the date shown in Canvas.'
+        practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
+        getHelp: 'Open Study Plan in Methods Market for the elevator speech template. Ch. 2 covers synthesis and gaps; Ch. 11 for clear prose. Submit with Phase 4 on the date shown in Canvas.'
       },
       {
         id: 'rm-phase-4-worksheet',
@@ -155,7 +155,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 3 on the same due date.',
-          'Recap your topic and research question from Phase 3; define IV and DV conceptually (Part B).',
+          'Recap your topic and research question from your lit review; define IV and DV conceptually (Part B).',
           'Explore all four pathways in Part C (survey, experimental task, observation, archival) — mark a path “not viable” if it does not fit.',
           'Complete the Part D comparison table, then choose ONE pathway in Part E.',
           'Use the Helpful Table wiki page in Canvas and the Path 1–4 guides; Ch. 4 for measurement.'

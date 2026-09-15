@@ -1,132 +1,65 @@
 /**
- * PSYC 4223 Phase 3 Worksheet — field schema from Canvas assignment instructions.
- * Source: course 2406 assignment 44903 (fetched via Playwright).
- * Wiki page /pages/phase-3-worksheet is an empty shell; instructions live on the assignment.
+ * PSYC 4223 Phase 3 Worksheet — elevator speech (replaces legacy gap→RQ Canvas worksheet).
+ *
+ * MM schema is instructor-authored. Canvas assignment 44903 may still show the old
+ * gap-to-research-question text until the instructor updates it. Phase 4 remains
+ * synced from Canvas assignment 44935 via Playwright.
  */
 
-export const PHASE3_CANVAS = {
+export const PHASE3_META = {
   assignmentId: '44903',
   assignmentUrl: 'https://nwosu.instructure.com/courses/2406/assignments/44903',
-  wikiPageUrl: 'https://nwosu.instructure.com/courses/2406/pages/phase-3-worksheet',
-  title: 'From Literature Review to Research Question (Phase 3)',
+  title: 'Phase 3 — Elevator Speech',
   objective:
-    'To synthesize findings from your completed literature review, identify research gaps, and draft a specific, measurable research question using operational variables.'
+    'Distill your completed literature review into a short spoken summary of what the field knows, what gap your study addresses, and how your proposed study fits.'
 }
+
+/** Display-only hint; not enforced as pass/fail. */
+export const ELEVATOR_SPEECH_WORD_COUNT_HINT = { min: 150, max: 250, readAloudSeconds: '60–90' }
 
 export const PHASE3_PARTS = [
   {
-    id: 'part-a-gap-analysis',
-    title: 'Part A: Gap Analysis',
+    id: 'elevator-speech',
+    title: 'Elevator Speech',
     instruction:
-      'Refer back to your Phase 2 Literature Summary. Look for where the existing studies agree, disagree, or leave questions unanswered.',
+      'Summarize your lit review in about 60–90 seconds when read aloud. IV/DV tables and methodology path choice belong in Phase 4.',
     fields: [
       {
-        id: 'currentConsensus',
-        label: 'Current Consensus',
-        exportLabel:
-          'Current Consensus: What do most of the published articles say about this topic? (Summarize in one sentence)',
-        required: true,
-        multiline: true,
-        helpTopicId: 'rm-chapter-2'
-      },
-      {
-        id: 'identifiedGap',
-        label: 'Identified Gap / Contradiction',
-        exportLabel:
-          'Identified Gap/Contradiction: Based on your reading, what specific relationship or population has not been studied enough yet? Be specific.',
+        id: 'whatWeKnow',
+        label: 'What we know',
+        exportLabel: 'What we know: What does prior research agree on about your topic?',
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-2',
-        helpNote: 'Is there a new variable missing? A different context not covered before?'
-      }
-    ]
-  },
-  {
-    id: 'part-b-narrowing-scope',
-    title: 'Part B: Narrowing the Scope',
-    instruction: 'A broad question is impossible to answer in one study. Complete these constraints.',
-    fields: [
-      {
-        id: 'targetPopulation',
-        label: 'Target Population',
-        exportLabel: 'Target Population',
-        required: true,
-        multiline: true,
-        helpTopicId: 'rm-chapter-7',
-        helpNote: 'Avoid "people"; be specific (e.g., first-year undergraduates, remote workers).'
+        helpNote: 'In 2–4 sentences: what does the literature agree on?'
       },
       {
-        id: 'timeFrameContext',
-        label: 'Time Frame / Context',
-        exportLabel: 'Time Frame/Context: When and where does the data collection happen?',
-        required: true,
-        multiline: true,
-        helpNote: 'Example: During finals week OR across a full semester.'
-      }
-    ]
-  },
-  {
-    id: 'part-c-variables',
-    title: 'Part C: Variable Selection & Definition',
-    instruction:
-      'Before asking how X affects Y, define exactly what those measurements will be based on the gap above.',
-    fields: [
-      {
-        id: 'independentVariable',
-        label: 'Independent Variable (IV)',
-        exportLabel: 'Independent Variable (IV)',
-        required: true,
-        multiline: true,
-        helpTopicId: 'rm-chapter-4',
-        helpNote: 'How are you categorizing or manipulating it? (e.g., High vs Low usage)'
-      },
-      {
-        id: 'dependentVariable',
-        label: 'Dependent Variable (DV)',
-        exportLabel: 'Dependent Variable (DV)',
-        required: true,
-        multiline: true,
-        helpTopicId: 'rm-chapter-4',
-        helpNote: 'Ensure measurable using tools found during your literature search (e.g., GAD-7, GPA).'
-      }
-    ]
-  },
-  {
-    id: 'part-d-research-question',
-    title: 'Part D: Drafting & Refining the Question',
-    instruction: 'Draft, edit, and finalize your Research Statement.',
-    fields: [
-      {
-        id: 'firstDraft',
-        label: 'First Draft (Too Broad?)',
-        exportLabel: 'First Draft: How does [IV] affect [DV] in my population?',
-        required: true,
-        multiline: true
-      },
-      {
-        id: 'secondDraft',
-        label: 'Second Draft (Adding Context)',
-        exportLabel:
-          'Second Draft: In a sample of ______________, how does [IV] level relate to changes in [DV]?',
-        required: true,
-        multiline: true
-      },
-      {
-        id: 'finalResearchQuestion',
-        label: 'Final Question Statement',
-        exportLabel: 'Research Question:',
+        id: 'theGap',
+        label: 'The gap',
+        exportLabel: 'The gap: What is still unknown, untested, or contested?',
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-2',
-        helpNote: 'Ensure it answers the gap from Part A without trying to solve the whole field.'
+        helpNote: 'In 1–3 sentences: what has not been studied enough?'
       },
       {
-        id: 'peerCheckAnswerable',
-        label: 'Peer Check',
-        exportLabel:
-          'Peer Check (If working with others): Is this question answerable within a semester? If yes, why?',
-        required: false,
-        multiline: true
+        id: 'myStudyPitch',
+        label: 'My study pitch',
+        exportLabel: 'My study: How will your proposed study address that gap?',
+        required: true,
+        multiline: true,
+        helpTopicId: 'rm-chapter-2',
+        helpNote: 'In 1–3 sentences: how does your study fit?'
+      },
+      {
+        id: 'elevatorSpeech',
+        label: 'Full elevator speech',
+        exportLabel: 'Elevator speech (combined script)',
+        required: true,
+        multiline: true,
+        helpTopicId: 'rm-chapter-11',
+        helpNote: `Aim for ~${ELEVATOR_SPEECH_WORD_COUNT_HINT.min}–${ELEVATOR_SPEECH_WORD_COUNT_HINT.max} words; practice reading aloud in about ${ELEVATOR_SPEECH_WORD_COUNT_HINT.readAloudSeconds} seconds.`,
+        wordCountHint: true
       }
     ]
   }
@@ -140,4 +73,9 @@ export function emptyPhase3 () {
     }
   }
   return phase3
+}
+
+export function elevatorSpeechWordCount (text) {
+  if (!text || typeof text !== 'string') return 0
+  return text.trim().split(/\s+/).filter(Boolean).length
 }

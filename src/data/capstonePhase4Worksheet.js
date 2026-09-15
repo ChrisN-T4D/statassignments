@@ -126,7 +126,7 @@ export const PHASE4_PARTS = [
         exportLabel: 'Proposed Research Question:',
         required: true,
         multiline: true,
-        prefillFrom: 'phase3.finalResearchQuestion'
+        prefillFrom: 'studyFocus.workingResearchQuestion'
       }
     ]
   },
@@ -140,8 +140,7 @@ export const PHASE4_PARTS = [
         exportLabel: 'Independent Variable (IV): (Define based on Lit Review)',
         required: true,
         multiline: true,
-        helpTopicId: 'rm-chapter-4',
-        prefillFrom: 'phase3.independentVariable'
+        helpTopicId: 'rm-chapter-4'
       },
       {
         id: 'dvConceptual',
@@ -149,8 +148,7 @@ export const PHASE4_PARTS = [
         exportLabel: 'Dependent Variable (DV): (Define based on Lit Review)',
         required: true,
         multiline: true,
-        helpTopicId: 'rm-chapter-4',
-        prefillFrom: 'phase3.dependentVariable'
+        helpTopicId: 'rm-chapter-4'
       }
     ]
   }
