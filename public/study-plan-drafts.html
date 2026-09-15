@@ -706,7 +706,7 @@
       if (hub) hub.textContent = `${complete}/${CANVAS_RANGE} complete`;
       const idx = articleState.openIndex;
       document.getElementById('editing-banner').textContent =
-        `Editing Article ${idx + 1} of ${ARTICLE_COUNT}`;
+        idx >= 0 ? `Editing Article ${idx + 1} of ${ARTICLE_COUNT}` : 'Select an article card to edit';
       document.querySelectorAll('.jump-btn').forEach((btn, i) => {
         btn.classList.toggle('active', i === idx);
         btn.classList.toggle('complete', cardStatus(articleState.cards[i]) === 'Complete');
