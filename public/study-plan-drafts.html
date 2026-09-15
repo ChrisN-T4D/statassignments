@@ -252,8 +252,8 @@
       <div class="grid two" style="margin-top:1.25rem">
         <div class="card">
           <h2>Article Review</h2>
-          <p class="hint">8 numbered slots · Canvas expects 5–8 completed reviews.</p>
-          <span class="chip" id="hub-article-progress">0/5–8 complete</span>
+          <p class="hint">8 numbered slots · Canvas expects 6–8 completed reviews.</p>
+          <span class="chip" id="hub-article-progress">0/6–8 complete</span>
         </div>
         <div class="card">
           <h2>Study Focus</h2>
@@ -393,12 +393,23 @@
 
       <div class="card" id="articles-workspace">
         <h2>Article cards</h2>
-        <p class="hint">Canvas expects <strong>5–8</strong> peer-reviewed article reviews. Methods Market gives you <strong>8 numbered slots</strong> on the same template — complete as many as you need (minimum 5 for Canvas). Each card saves in this browser as you type.</p>
-        <p class="progress-chip" id="article-progress">0 complete · 0/8 started · Canvas expects 5–8</p>
+        <p class="hint">Canvas expects <strong>6–8</strong> peer-reviewed article reviews. Methods Market gives you <strong>8 numbered slots</strong> on the same template — complete at least 6 for Canvas. Each card saves in this browser as you type.</p>
+        <p class="progress-chip" id="article-progress">0 complete · 0/8 started · Canvas expects 6–8</p>
         <p class="editing-banner" id="editing-banner">Editing Article 1 of 8</p>
         <nav class="article-jump" id="article-jump" aria-label="Jump to article"></nav>
         <div id="article-cards"></div>
         <p id="save-status"></p>
+      </div>
+
+      <div class="card">
+        <h2>Export for Canvas</h2>
+        <p class="hint">Download a PDF of your article cards (and problem statement if filled) to keep offline or paste from the text preview. Attach article PDFs separately in Canvas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-article-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-article-pdf">Download PDF</button>
+        </div>
+        <textarea id="article-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="export-status" class="hint" style="margin-top:0.5rem"></p>
       </div>
 
       <div class="card">
@@ -563,8 +574,8 @@
 
     // Article cards — 8 slots, localStorage autosave, collapsible
     const ARTICLE_COUNT = 8;
-    const CANVAS_MIN = 5;
-    const CANVAS_RANGE = '5–8';
+    const CANVAS_MIN = 6;
+    const CANVAS_RANGE = '6–8';
     const CARD_STORAGE_KEY = 'study-plan-drafts-article-cards-v1';
     const TEXT_FIELDS = [
       ['apaReference', 'Complete reference (APA)', 2, 'Use Ch. 11 for APA 7. Verify in your library database.'],
@@ -715,9 +726,90 @@
       document.getElementById('articles-workspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    const FIELD_LABELS = Object.fromEntries(TEXT_FIELDS.map(([k, label]) => [k, label]));
+
+    function buildStaticExportText () {
+      const lines = ['Article Review and Problem Statement', '='.repeat(36), ''];
+      articleState.cards.forEach((card, i) => {
+        const hasContent = TEXT_FIELDS.some(([k]) => (card[k] ?? '').trim());
+        if (!hasContent) return;
+        lines.push(`Article ${i + 1}`, '='.repeat(10 + String(i + 1).length), '');
+        TEXT_FIELDS.forEach(([key]) => {
+          const val = (card[key] ?? '').trim();
+          lines.push(FIELD_LABELS[key], val || '(not filled in)', '');
+        });
+      });
+      return lines.join('\n').trim() || '';
+    }
+
+    function refreshExportPreview () {
+      const ta = document.getElementById('article-export-preview');
+      if (ta) ta.value = buildStaticExportText();
+    }
+
+    async function downloadStaticPdf () {
+      const body = buildStaticExportText();
+      const status = document.getElementById('export-status');
+      if (!body) {
+        status.textContent = 'Add content to at least one article card first.';
+        return;
+      }
+      status.textContent = 'Building PDF…';
+      try {
+        const { PDFDocument, StandardFonts, rgb } = await import('https://esm.sh/pdf-lib@1.17.1');
+        const doc = await PDFDocument.create();
+        const font = await doc.embedFont(StandardFonts.Helvetica);
+        const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+        const margin = 54, pageW = 612, pageH = 792, contentW = pageW - margin * 2;
+        let page = doc.addPage([pageW, pageH]);
+        let y = pageH - margin;
+        const sanitize = (t) => String(t).replace(/[^\x00-\xFF]/g, '?');
+        const wrap = (text, f, size) => {
+          const words = sanitize(text).split(/\s+/).filter(Boolean);
+          const out = []; let line = '';
+          for (const w of words) {
+            const test = line ? line + ' ' + w : w;
+            if (f.widthOfTextAtSize(test, size) > contentW) { if (line) out.push(line); line = w; }
+            else line = test;
+          }
+          if (line) out.push(line);
+          return out.length ? out : [''];
+        };
+        const drawWrap = (text, size, bold) => {
+          const f = bold ? fontBold : font;
+          for (const ln of wrap(text, f, size)) {
+            if (y < margin + 20) { page = doc.addPage([pageW, pageH]); y = pageH - margin; }
+            page.drawText(ln, { x: margin, y, size, font: f, color: rgb(0.12, 0.12, 0.12) });
+            y -= size + 4;
+          }
+        };
+        const exportLines = body.split('\n');
+        for (let i = 0; i < exportLines.length; i++) {
+          const line = exportLines[i];
+          const next = (exportLines[i + 1] ?? '').trim();
+          if (/^=+$/.test(line.trim())) continue;
+          if (/^=+$/.test(next)) { y -= 6; drawWrap(line.trim(), 12, true); i++; continue; }
+          if (!line.trim()) { y -= 8; continue; }
+          drawWrap(line.trim(), 10, false);
+        }
+        const bytes = await doc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'article-review-draft-' + new Date().toISOString().slice(0, 10) + '.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        status.textContent = 'PDF downloaded.';
+      } catch (err) {
+        status.textContent = 'PDF download failed — try Copy export text instead.';
+      }
+    }
+
     function initArticleCards () {
       renderArticleCards();
       updateProgressUI();
+      refreshExportPreview();
 
       document.getElementById('articles-workspace').addEventListener('click', (e) => {
         const jump = e.target.closest('[data-jump]');
@@ -734,6 +826,7 @@
           const i = Number(ta.dataset.card);
           articleState.cards[i][ta.dataset.field] = ta.value;
           updateProgressUI();
+          refreshExportPreview();
           persistCards();
           return;
         }
@@ -744,9 +837,18 @@
         if (cb) {
           const i = Number(cb.dataset.card);
           articleState.cards[i].sourceSelfCheck[cb.dataset.check] = cb.checked;
+          refreshExportPreview();
           persistCards();
         }
       });
+
+      document.getElementById('copy-article-export')?.addEventListener('click', async () => {
+        const text = buildStaticExportText();
+        if (!text) return;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('export-status').textContent = 'Copied to clipboard.';
+      });
+      document.getElementById('download-article-pdf')?.addEventListener('click', downloadStaticPdf);
     }
 
     initArticleCards();

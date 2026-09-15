@@ -5,9 +5,20 @@
       Methods Market is your draft workspace. Canvas is graded — copy your text below and paste into the
       worksheet or submission box when you are ready.
     </p>
-    <button type="button" class="btn-secondary" @click="copyExport">
-      {{ copied ? 'Copied!' : 'Copy export text' }}
-    </button>
+    <div class="export-actions">
+      <button type="button" class="btn-secondary" @click="copyExport">
+        {{ copied ? 'Copied!' : 'Copy export text' }}
+      </button>
+      <button
+        type="button"
+        class="btn-secondary"
+        :disabled="pdfBusy || !exportText.trim()"
+        @click="downloadPdf"
+      >
+        {{ pdfBusy ? 'Building PDF…' : 'Download PDF' }}
+      </button>
+    </div>
+    <p v-if="pdfError" class="export-error">{{ pdfError }}</p>
     <textarea
       class="export-preview"
       readonly
@@ -21,6 +32,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { buildExportText } from '../../lib/capstoneValidation.js'
+import { downloadStudyPlanPdf } from '../../lib/capstoneExportPdf.js'
 
 const props = defineProps({
   sectionId: { type: String, required: true },
@@ -28,6 +40,8 @@ const props = defineProps({
 })
 
 const copied = ref(false)
+const pdfBusy = ref(false)
+const pdfError = ref('')
 
 const exportText = computed(() => buildExportText(props.sectionId, props.project))
 
@@ -38,6 +52,18 @@ async function copyExport () {
     setTimeout(() => { copied.value = false }, 2000)
   } catch {
     copied.value = false
+  }
+}
+
+async function downloadPdf () {
+  pdfError.value = ''
+  pdfBusy.value = true
+  try {
+    await downloadStudyPlanPdf(props.sectionId, props.project)
+  } catch (err) {
+    pdfError.value = err?.message || 'Could not build PDF.'
+  } finally {
+    pdfBusy.value = false
   }
 }
 </script>
@@ -63,6 +89,13 @@ async function copyExport () {
   line-height: 1.5;
 }
 
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .btn-secondary {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -72,12 +105,22 @@ async function copyExport () {
   color: var(--text-primary);
   cursor: pointer;
   font-size: 0.9rem;
-  margin-bottom: 1rem;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   border-color: var(--primary);
   color: var(--primary);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.export-error {
+  font-size: 0.85rem;
+  color: var(--primary);
+  margin: 0 0 0.75rem;
 }
 
 .export-preview {

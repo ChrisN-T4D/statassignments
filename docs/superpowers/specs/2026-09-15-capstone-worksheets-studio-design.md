@@ -82,7 +82,7 @@ Unsigned users: localStorage draft; sign-in to persist.
 
 #### A. Article Review (`article-review`)
 
-**Due:** 2026-09-11 · 200 pts · **8 article slots** on Canvas template (submit **5–8** completed reviews; same wording in Canvas and Methods Market)
+**Due:** 2026-09-11 · 200 pts · **8 article slots** on Canvas template (submit **6–8** completed reviews; same wording in Canvas and Methods Market)
 
 **Canonical schema:** `src/data/capstoneArticleReviewWorksheet.js` (from Canvas `article_review` PDF).
 
