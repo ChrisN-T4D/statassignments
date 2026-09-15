@@ -1,16 +1,50 @@
 <template>
-  <div class="phase4-section">
-    <p class="section-intro">
-      {{ PHASE4_CANVAS.intro }}
-      <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
-      ·
-      <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Helpful Table ↗</a>
-    </p>
+  <div ref="sectionRoot" class="phase4-section">
+    <Phase4Walkthrough :root-el="sectionRoot" />
+
+    <div class="arc-banner" data-tour="tour-p4-intro">
+      <p class="section-intro">
+        {{ PHASE4_CANVAS.intro }}
+        <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
+        ·
+        <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Helpful Table ↗</a>
+      </p>
+      <p class="arc-flow">Phase 3 elevator speech + <strong>Phase 4 operationalization</strong> (week 11, submit together)</p>
+      <p class="progress-chip">{{ progressLabel }}</p>
+    </div>
+
+    <aside v-if="hasReminders" class="sidebar-reminders" data-tour="tour-p4-reminders">
+      <h2 class="sidebar-title">From Phase 3 and your outline</h2>
+      <p class="reminders-note">Use your elevator speech and outline as starting points for IV/DV and pathway choices.</p>
+      <div v-if="p3WhatWeKnow" class="reminder-block">
+        <h3>What we know (Phase 3)</h3>
+        <p class="reminder-text">{{ p3WhatWeKnow }}</p>
+      </div>
+      <div v-if="p3Gap" class="reminder-block">
+        <h3>The gap (Phase 3)</h3>
+        <p class="reminder-text">{{ p3Gap }}</p>
+      </div>
+      <div v-if="workingRq" class="reminder-block">
+        <h3>Working research question</h3>
+        <p class="reminder-text">{{ workingRq }}</p>
+      </div>
+      <div class="reminder-links">
+        <router-link :to="phase3Link" class="reminder-link">Open Phase 3 →</router-link>
+        <router-link :to="outlineLink" class="reminder-link">Open Lit Review Outline →</router-link>
+      </div>
+    </aside>
+
+    <aside v-else class="sidebar-reminders sidebar-empty" data-tour="tour-p4-reminders">
+      <h2 class="sidebar-title">From Phase 3 and your outline</h2>
+      <p class="reminders-note">Complete Phase 3 and your Lit Review Outline first — summaries will appear here.</p>
+      <router-link :to="phase3Link" class="reminder-link">Go to Phase 3 →</router-link>
+    </aside>
 
     <section
       v-for="part in PHASE4_PARTS"
       :key="part.id"
       class="worksheet-block"
+      :data-tour="part.id === 'part-a-context' ? 'tour-p4-part-a' : 'tour-p4-part-b'"
     >
       <h2 class="block-title">{{ part.title }}</h2>
       <SchemaField
@@ -21,17 +55,17 @@
         :model-value="phase4[field.id]"
         @update:model-value="setTopLevel(field.id, $event)"
       />
-      <button
-        v-if="part.id === 'part-a-context' && canPrefillRq"
-        type="button"
-        class="prefill-btn"
-        @click="prefillResearchQuestion"
-      >
-        Copy working research question from Lit Review Outline
-      </button>
+      <div v-if="part.id === 'part-a-context'" class="prefill-row">
+        <button v-if="canPrefillTopic" type="button" class="prefill-btn" @click="prefillTopic">
+          Copy project topic → Broad topic area
+        </button>
+        <button v-if="canPrefillRq" type="button" class="prefill-btn" @click="prefillResearchQuestion">
+          Copy working RQ from Lit Review Outline
+        </button>
+      </div>
     </section>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-p4-part-c">
       <h2 class="block-title">Part C: Exploration — Four Operational Paths</h2>
       <p class="block-intro">
         Explore each pathway. Mark a path as not viable if it does not fit your question.
@@ -70,7 +104,7 @@
       </article>
     </section>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-p4-part-d">
       <h2 class="block-title">Part D: Comparative Analysis</h2>
       <p class="block-intro">
         Compare pathways on feasibility, access, measurement, and ethics. Use the
@@ -102,7 +136,7 @@
       </div>
     </section>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-p4-part-e">
       <h2 class="block-title">Part E: Final Decision</h2>
       <p class="block-intro">Choose one data collection strategy. This unlocks the data analysis helper for your path.</p>
       <div class="pathway-choices">
@@ -132,22 +166,26 @@
       </div>
     </section>
 
-    <StudyPlanExportPanel section-id="phase-4" :project="project" />
+    <div data-tour="tour-p4-export">
+      <StudyPlanExportPanel section-id="phase-4" :project="project" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import {
   PHASE4_CANVAS,
   PHASE4_PARTS,
   PHASE4_PATHWAYS,
   PHASE4_COMPARISON_CRITERIA
 } from '../../data/capstonePhase4Worksheet.js'
+import { countPhase4Progress } from '../../lib/capstoneValidation.js'
 import { CANVAS_RM_ASSIGNMENTS, CANVAS_RM_WIKI_PAGES } from '../../data/researchMethodsCanvasLinks.js'
 import { getProjectValue } from '../../data/capstoneWorksheetSchemas.js'
 import DataAnalysisHelper from '../../views/DataAnalysisHelper.vue'
 import SchemaField from './SchemaField.vue'
+import Phase4Walkthrough from './Phase4Walkthrough.vue'
 import StudyPlanExportPanel from './StudyPlanExportPanel.vue'
 
 const props = defineProps({
@@ -157,6 +195,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update'])
 
+const sectionRoot = ref(null)
 const canvasUrl = CANVAS_RM_ASSIGNMENTS.phase4
 const helpfulTableUrl = CANVAS_RM_WIKI_PAGES.helpfulTable
 
@@ -164,14 +203,39 @@ const phase4 = computed(() => props.project.phase4 ?? {})
 const pathwayResponses = computed(() => phase4.value.pathwayResponses ?? {})
 const comparisonTable = computed(() => phase4.value.comparisonTable ?? {})
 
+const progressLabel = computed(() => {
+  const p = countPhase4Progress(props.project)
+  if (p.chosen) return 'Pathway chosen · ready to export'
+  if (p.recapFilled >= 2 || p.pathsExplored) {
+    return `Parts A–B: ${p.recapFilled}/${p.recapTotal} · ${p.pathsExplored}/${p.pathsTotal} paths explored`
+  }
+  return 'Not started'
+})
+
+const p3WhatWeKnow = computed(() => props.project.phase3?.whatWeKnow?.trim() || '')
+const p3Gap = computed(() => props.project.phase3?.theGap?.trim() || '')
+const workingRq = computed(() =>
+  props.project.litReviewOutline?.gapAndTransition?.workingResearchQuestion?.trim() || ''
+)
+const hasReminders = computed(() => Boolean(p3WhatWeKnow.value || p3Gap.value || workingRq.value))
+
+const phase3Link = computed(() => `/class/${props.classId}/study-plan/phase-3`)
+const outlineLink = computed(() => `/class/${props.classId}/study-plan/study-focus`)
+
 const chosenPathway = computed(() =>
   PHASE4_PATHWAYS.find((p) => p.id === phase4.value.chosenPathwayId) ?? null
 )
 
 const canPrefillRq = computed(() => {
-  const working = props.project.litReviewOutline?.gapAndTransition?.workingResearchQuestion?.trim()
+  const working = workingRq.value
   const current = phase4.value.proposedResearchQuestion?.trim()
   return working && !current
+})
+
+const canPrefillTopic = computed(() => {
+  const topic = props.project.topic?.trim()
+  const current = phase4.value.broadTopicArea?.trim()
+  return topic && !current
 })
 
 function emitPhase4 (patch) {
@@ -221,6 +285,11 @@ function prefillResearchQuestion () {
   if (value) emitPhase4({ proposedResearchQuestion: value })
 }
 
+function prefillTopic () {
+  const topic = props.project.topic?.trim()
+  if (topic) emitPhase4({ broadTopicArea: topic })
+}
+
 function pathwayShortLabel (pathway) {
   if (pathway.id.includes('survey')) return 'Survey'
   if (pathway.id.includes('experimental')) return 'Experimental'
@@ -233,7 +302,27 @@ function pathwayShortLabel (pathway) {
 .section-intro {
   color: var(--text-secondary);
   line-height: 1.55;
-  margin-bottom: 1.5rem;
+  margin: 0 0 0.75rem;
+}
+
+.arc-flow {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.45rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+}
+
+.progress-chip {
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  margin: 0;
 }
 
 .canvas-link {
@@ -241,8 +330,58 @@ function pathwayShortLabel (pathway) {
   text-decoration: none;
 }
 
-.canvas-link:hover {
-  text-decoration: underline;
+.sidebar-reminders {
+  margin-bottom: 1.5rem;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.sidebar-empty {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.sidebar-title {
+  font-size: 1.05rem;
+  margin: 0 0 0.35rem;
+}
+
+.reminders-note {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.85rem;
+  line-height: 1.45;
+}
+
+.reminder-block {
+  margin-bottom: 0.85rem;
+}
+
+.reminder-block h3 {
+  font-size: 0.85rem;
+  margin: 0 0 0.25rem;
+  color: var(--primary);
+}
+
+.reminder-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.reminder-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.reminder-link {
+  font-size: 0.88rem;
+  color: var(--primary);
+  text-decoration: none;
 }
 
 .worksheet-block {
@@ -269,6 +408,13 @@ function pathwayShortLabel (pathway) {
   color: var(--primary);
 }
 
+.prefill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
 .prefill-btn {
   font-size: 0.85rem;
   padding: 0.4rem 0.75rem;
@@ -277,7 +423,6 @@ function pathwayShortLabel (pathway) {
   background: transparent;
   color: var(--primary);
   cursor: pointer;
-  margin-top: 0.5rem;
 }
 
 .pathway-card {

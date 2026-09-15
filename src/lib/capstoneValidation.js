@@ -35,6 +35,29 @@ export function countLitReviewOutlineProgressForProject (project) {
   return countLitReviewOutlineProgress(project?.litReviewOutline)
 }
 
+export function countPhase3Progress (project) {
+  const p3 = project?.phase3 ?? {}
+  const keys = ['whatWeKnow', 'theGap', 'myStudyPitch', 'elevatorSpeech']
+  const filled = keys.filter((k) => (p3[k] ?? '').trim()).length
+  const words = elevatorSpeechWordCount(p3.elevatorSpeech)
+  return { filled, total: keys.length, words, ready: filled === keys.length && words >= 120 }
+}
+
+export function countPhase4Progress (project) {
+  const p4 = project?.phase4 ?? {}
+  const topFields = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'dvConceptual']
+  const recapFilled = topFields.filter((k) => (p4[k] ?? '').trim()).length
+  const pathways = p4.pathwayResponses ?? {}
+  let pathsExplored = 0
+  for (const path of PHASE4_PATHWAYS) {
+    const r = pathways[path.id] ?? {}
+    if (r.notViable) pathsExplored++
+    else if (path.fields.some((f) => (r[f.id] ?? '').trim())) pathsExplored++
+  }
+  const chosen = Boolean(p4.chosenPathwayId)
+  return { recapFilled, recapTotal: topFields.length, pathsExplored, pathsTotal: PHASE4_PATHWAYS.length, chosen }
+}
+
 export function countArticleCards (project) {
   const cards = project?.articleReview?.articleCards ?? []
   let started = 0

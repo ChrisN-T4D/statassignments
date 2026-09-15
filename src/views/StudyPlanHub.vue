@@ -47,7 +47,12 @@
 <script setup>
 import { useCapstoneProject } from '../composables/useCapstoneProject'
 import { STUDY_PLAN_SECTIONS } from '../data/capstoneWorksheetSchemas.js'
-import { countArticleCards, countLitReviewOutlineProgressForProject, elevatorSpeechWordCount } from '../lib/capstoneValidation.js'
+import {
+  countArticleCards,
+  countLitReviewOutlineProgressForProject,
+  countPhase3Progress,
+  countPhase4Progress
+} from '../lib/capstoneValidation.js'
 
 const props = defineProps({
   classId: { type: String, required: true }
@@ -68,17 +73,17 @@ function sectionProgress (sectionId) {
       return `Framework · ${p.themesStarted}/${p.themesTotal} themes`
     }
     case 'phase-3': {
-      const p3 = project.value.phase3 ?? {}
-      const filled = ['whatWeKnow', 'theGap', 'myStudyPitch', 'elevatorSpeech']
-        .filter((k) => (p3[k] ?? '').trim()).length
-      const words = elevatorSpeechWordCount(p3.elevatorSpeech)
-      return filled ? `${filled}/4 parts · ${words} words in speech` : 'Elevator speech not started'
+      const p = countPhase3Progress(project.value)
+      if (p.ready) return `${p.filled}/4 parts · ${p.words} words`
+      return p.filled ? `${p.filled}/4 parts · ${p.words} words` : 'Elevator speech not started'
     }
     case 'phase-4': {
-      const p4 = project.value.phase4 ?? {}
-      if (p4.chosenPathwayId) return 'Pathway chosen'
-      const paths = Object.values(p4.pathwayResponses ?? {}).filter((r) => r && !r.notViable && Object.keys(r).length > 1)
-      return paths.length ? `${paths.length} pathways explored` : 'Not started'
+      const p = countPhase4Progress(project.value)
+      if (p.chosen) return 'Pathway chosen'
+      if (p.recapFilled || p.pathsExplored) {
+        return `A–B ${p.recapFilled}/${p.recapTotal} · ${p.pathsExplored}/${p.pathsTotal} paths`
+      }
+      return 'Not started'
     }
     default:
       return ''

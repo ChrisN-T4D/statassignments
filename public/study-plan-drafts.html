@@ -260,8 +260,8 @@
     .feeds-forward { margin-bottom: 1.25rem; padding: 1.15rem 1.25rem; border: 1px dashed var(--border); border-radius: 0.75rem; }
     .feeds-list { margin: 0 0 0.75rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
     .resource-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
-    #spotlight-tour-lro { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
-    #spotlight-tour-lro.active { display: block; }
+    #spotlight-tour-lro, #spotlight-tour-p3, #spotlight-tour-p4 { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
+    #spotlight-tour-lro.active, #spotlight-tour-p3.active, #spotlight-tour-p4.active { display: block; }
     .preview-text { margin: 0; padding: 1rem; border-radius: 0.5rem; background: rgba(0,0,0,0.25); font-family: ui-monospace, monospace; font-size: 0.78rem; line-height: 1.55; white-space: pre-wrap; color: var(--muted); max-height: 20rem; overflow-y: auto; }
     .theme-bucket-static { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
     .theme-bucket-static:last-child { border-bottom: none; }
@@ -309,12 +309,12 @@
         <div class="card">
           <h2>Phase 3</h2>
           <p class="hint">Elevator speech: what we know, gap, pitch.</p>
-          <span class="chip">Elevator speech not started</span>
+          <span class="chip" id="hub-phase3-progress">Elevator speech not started</span>
         </div>
         <div class="card">
           <h2>Phase 4</h2>
           <p class="hint">Compare four pathways; choose one.</p>
-          <span class="chip">Not started</span>
+          <span class="chip" id="hub-phase4-progress">Not started</span>
         </div>
       </div>
     </section>
@@ -581,41 +581,109 @@
     </section>
 
     <section id="phase3" class="panel">
-      <div class="card">
-        <h2>Phase 3 — Elevator Speech</h2>
-        <p class="hint">~60–90 seconds read aloud. IV/DV belongs in Phase 4.</p>
-        <label>What we know</label><textarea></textarea>
-        <label>The gap</label><textarea></textarea>
-        <label>My study pitch</label><textarea></textarea>
-        <label>Full elevator speech</label><textarea rows="5"></textarea>
-        <p class="hint">0 words (aim for ~150–250)</p>
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-p3-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Distill your lit review into a ~60–90 second elevator speech.</p>
+      </div>
+      <div id="spotlight-tour-p3" role="dialog" aria-modal="true" aria-label="Phase 3 guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-p3" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-p3" hidden></div>
+      </div>
+      <div class="card" data-tour="tour-p3-intro">
+        <p class="hint" style="margin-top:0">Distill your completed literature review: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas.</p>
+        <p class="arc-flow">Lit Review Outline → <strong>Phase 3</strong> + Phase 4 (week 11)</p>
+        <span class="progress-chip" id="p3-progress">Elevator speech not started</span>
+      </div>
+      <aside class="reminders-panel empty" id="p3-reminders" data-tour="tour-p3-reminders">
+        <h2 class="reminders-title">From your Lit Review Outline</h2>
+        <div id="p3-reminders-body"></div>
+      </aside>
+      <div class="card" data-tour="tour-p3-what-we-know">
+        <h2>Elevator speech parts</h2>
+        <div id="p3-prefill-row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem"></div>
+        <label for="p3-whatWeKnow">What we know</label>
+        <p class="hint">In 2–4 sentences: what does prior research agree on?</p>
+        <textarea id="p3-whatWeKnow" rows="3" data-p3-field="whatWeKnow"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-gap">
+        <label for="p3-theGap">The gap</label>
+        <textarea id="p3-theGap" rows="3" data-p3-field="theGap"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-pitch">
+        <label for="p3-myStudyPitch">My study pitch</label>
+        <textarea id="p3-myStudyPitch" rows="3" data-p3-field="myStudyPitch"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-speech">
+        <label for="p3-elevatorSpeech">Full elevator speech</label>
+        <textarea id="p3-elevatorSpeech" rows="6" data-p3-field="elevatorSpeech"></textarea>
+        <p class="hint" id="p3-word-count">0 words (aim for ~150–250)</p>
+      </div>
+      <div class="card" data-tour="tour-p3-export">
+        <h2>Export Phase 3</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-p3-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-p3-pdf">Download PDF</button>
+        </div>
+        <textarea id="p3-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="p3-save-status" class="hint" style="margin-top:0.35rem"></p>
       </div>
     </section>
 
     <section id="phase4" class="panel">
-      <div class="card">
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-p4-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Parts A–E: recap, IV/DV, four pathways, comparison, final choice.</p>
+      </div>
+      <div id="spotlight-tour-p4" role="dialog" aria-modal="true" aria-label="Phase 4 guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-p4" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-p4" hidden></div>
+      </div>
+      <div class="card" data-tour="tour-p4-intro">
+        <p class="hint" style="margin-top:0">Compare four ways to collect data for your research question. Choose ONE pathway. Submit with Phase 3 in Canvas.</p>
+        <p class="arc-flow">Phase 3 + <strong>Phase 4 operationalization</strong> (week 11)</p>
+        <span class="progress-chip" id="p4-progress">Not started</span>
+      </div>
+      <aside class="reminders-panel empty" id="p4-reminders" data-tour="tour-p4-reminders">
+        <h2 class="reminders-title">From Phase 3 and your outline</h2>
+        <div id="p4-reminders-body"></div>
+      </aside>
+      <div class="card" data-tour="tour-p4-part-a">
         <h2>Part A — Context recap</h2>
-        <label>Broad topic area</label><input />
-        <label>Proposed research question</label><textarea></textarea>
+        <div id="p4-prefill-row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem"></div>
+        <label for="p4-broadTopicArea">Broad topic area</label>
+        <input id="p4-broadTopicArea" type="text" data-p4-top="broadTopicArea" />
+        <label for="p4-proposedResearchQuestion">Proposed research question</label>
+        <textarea id="p4-proposedResearchQuestion" rows="2" data-p4-top="proposedResearchQuestion"></textarea>
       </div>
-      <div class="card">
+      <div class="card" data-tour="tour-p4-part-b">
+        <h2>Part B — Conceptual IV and DV</h2>
+        <label for="p4-ivConceptual">Independent variable (IV)</label>
+        <textarea id="p4-ivConceptual" rows="2" data-p4-top="ivConceptual"></textarea>
+        <label for="p4-dvConceptual">Dependent variable (DV)</label>
+        <textarea id="p4-dvConceptual" rows="2" data-p4-top="dvConceptual"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p4-part-c">
         <h2>Part C — Four pathways</h2>
-        <h3>Pathway 1 (Survey)</h3>
-        <label>What validated scales?</label><textarea rows="2"></textarea>
-        <h3>Pathway 2 (Experimental)</h3>
-        <label>Task and comparison group</label><textarea rows="2"></textarea>
+        <div id="p4-pathways"></div>
       </div>
-      <div class="card">
+      <div class="card" data-tour="tour-p4-part-d">
         <h2>Part D — Comparison table</h2>
-        <table>
-          <tr><th>Criterion</th><th>Survey</th><th>Experimental</th><th>Observation</th><th>Archival</th></tr>
-          <tr><td>Feasibility</td><td></td><td></td><td></td><td></td></tr>
-          <tr><td>Access</td><td></td><td></td><td></td><td></td></tr>
-        </table>
+        <div id="p4-comparison-wrap" style="overflow-x:auto"></div>
       </div>
-      <div class="card">
+      <div class="card" data-tour="tour-p4-part-e">
         <h2>Part E — Choose one pathway</h2>
-        <p class="hint"><input type="radio" name="path" /> Survey &nbsp; <input type="radio" name="path" /> Experimental &nbsp; <input type="radio" name="path" /> Observation &nbsp; <input type="radio" name="path" /> Archival</p>
+        <div id="p4-choices"></div>
+      </div>
+      <div class="card" data-tour="tour-p4-export">
+        <h2>Export Phase 4</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-p4-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-p4-pdf">Download PDF</button>
+        </div>
+        <textarea id="p4-export-preview" rows="10" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="p4-save-status" class="hint" style="margin-top:0.35rem"></p>
       </div>
     </section>
   </div>
@@ -1426,6 +1494,443 @@
         document.getElementById('start-lro-tour-btn').textContent = 'Replay guided tour';
       }
     } catch (_) {}
+
+
+    // Phase 3 & 4 — localStorage, reminders, export, tours
+    const P3_STORAGE_KEY = 'study-plan-drafts-phase3-v1';
+    const P4_STORAGE_KEY = 'study-plan-drafts-phase4-v1';
+    const P4_PATHWAY_DEFS = [
+      { id: 'pathway-1-survey', label: 'Pathway 1 (Survey)', short: 'Survey', fields: [{ id: 'validatedScales', label: 'What validated scales?' }] },
+      { id: 'pathway-2-experimental', label: 'Pathway 2 (Experimental)', short: 'Experimental', fields: [{ id: 'taskDescription', label: 'What task and how long?' }, { id: 'comparisonGroup', label: 'Comparison group' }] },
+      { id: 'pathway-3-observation', label: 'Pathway 3 (Observation)', short: 'Observation', fields: [{ id: 'whatToObserve', label: 'What to observe/record' }, { id: 'observationDuration', label: 'For how long?' }] },
+      { id: 'pathway-4-archival', label: 'Pathway 4 (Archival)', short: 'Archival', fields: [{ id: 'existingDataset', label: 'Existing dataset' }] }
+    ];
+    const P4_CRITERIA = [
+      { id: 'feasibility', label: 'Feasibility this semester' },
+      { id: 'accessToParticipants', label: 'Access to participants / data' },
+      { id: 'measurementQuality', label: 'Measurement quality' },
+      { id: 'ethicsIrB', label: 'Ethics / IRB considerations' },
+      { id: 'notes', label: 'Notes (optional)' }
+    ];
+
+    function emptyP3 () {
+      return { whatWeKnow: '', theGap: '', myStudyPitch: '', elevatorSpeech: '' };
+    }
+
+    function emptyP4Pathways () {
+      const o = {};
+      P4_PATHWAY_DEFS.forEach((p) => {
+        o[p.id] = { notViable: false };
+        p.fields.forEach((f) => { o[p.id][f.id] = ''; });
+      });
+      return o;
+    }
+
+    function emptyP4Comparison () {
+      const rows = {};
+      P4_CRITERIA.forEach((c) => {
+        rows[c.id] = {};
+        P4_PATHWAY_DEFS.forEach((p) => { rows[c.id][p.id] = ''; });
+      });
+      return rows;
+    }
+
+    function emptyP4 () {
+      return {
+        broadTopicArea: '', proposedResearchQuestion: '', ivConceptual: '', dvConceptual: '',
+        pathwayResponses: emptyP4Pathways(), comparisonTable: emptyP4Comparison(), chosenPathwayId: ''
+      };
+    }
+
+    let p3State = emptyP3();
+    let p4State = emptyP4();
+    let saveP3Timer = null;
+    let saveP4Timer = null;
+
+    function loadP3 () {
+      try { const raw = localStorage.getItem(P3_STORAGE_KEY); if (raw) return { ...emptyP3(), ...JSON.parse(raw) }; } catch (_) {}
+      return emptyP3();
+    }
+
+    function loadP4 () {
+      try {
+        const raw = localStorage.getItem(P4_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return { ...emptyP4(), ...parsed, pathwayResponses: { ...emptyP4Pathways(), ...parsed.pathwayResponses }, comparisonTable: { ...emptyP4Comparison(), ...parsed.comparisonTable } };
+        }
+      } catch (_) {}
+      return emptyP4();
+    }
+
+    function p3WordCount (t) {
+      return (t || '').trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function lroThemeSummary () {
+      return (lroState.themeBuckets || []).map((b) => (b.synthesisNotes || '').trim()).filter(Boolean).join('\n\n');
+    }
+
+    function refreshP3Reminders () {
+      const body = document.getElementById('p3-reminders-body');
+      const panel = document.getElementById('p3-reminders');
+      if (!body) return;
+      const fw = (lroState.organizingFramework?.theoryName || '').trim();
+      const themes = lroThemeSummary();
+      const gap = (lroState.gapAndTransition?.gapStatement || '').trim();
+      const trans = (lroState.gapAndTransition?.transitionToStudy || '').trim();
+      const has = fw || themes || gap || trans;
+      panel?.classList.toggle('empty', !has);
+      if (!has) {
+        body.innerHTML = '<p class="hint" style="margin:0 0 0.85rem">Fill your Lit Review Outline first.</p><a href="#" class="reminder-link" data-goto="focus">Go to Lit Review Outline →</a>';
+        return;
+      }
+      let html = '<p class="hint" style="margin:0 0 0.85rem">Starting points — refine into spoken prose.</p>';
+      if (fw) html += `<div class="reminder-block"><h3>Organizing framework</h3><p class="reminder-text">${escHtml(fw)}</p></div>`;
+      if (themes) html += `<div class="reminder-block"><h3>Theme synthesis</h3><p class="reminder-text">${escHtml(themes.slice(0, 400))}${themes.length > 400 ? '…' : ''}</p></div>`;
+      if (gap) html += `<div class="reminder-block"><h3>Working gap</h3><p class="reminder-text">${escHtml(gap)}</p></div>`;
+      if (trans) html += `<div class="reminder-block"><h3>Transition</h3><p class="reminder-text">${escHtml(trans)}</p></div>`;
+      html += '<a href="#" class="reminder-link" data-goto="focus">Open Lit Review Outline →</a>';
+      body.innerHTML = html;
+    }
+
+    function refreshP4Reminders () {
+      const body = document.getElementById('p4-reminders-body');
+      const panel = document.getElementById('p4-reminders');
+      if (!body) return;
+      const wk = (p3State.whatWeKnow || '').trim();
+      const gap = (p3State.theGap || '').trim();
+      const rq = (lroState.gapAndTransition?.workingResearchQuestion || '').trim();
+      const has = wk || gap || rq;
+      panel?.classList.toggle('empty', !has);
+      if (!has) {
+        body.innerHTML = '<p class="hint" style="margin:0 0 0.85rem">Complete Phase 3 and Lit Review Outline first.</p><a href="#" class="reminder-link" data-goto="phase3">Go to Phase 3 →</a>';
+        return;
+      }
+      let html = '';
+      if (wk) html += `<div class="reminder-block"><h3>What we know (Phase 3)</h3><p class="reminder-text">${escHtml(wk)}</p></div>`;
+      if (gap) html += `<div class="reminder-block"><h3>The gap (Phase 3)</h3><p class="reminder-text">${escHtml(gap)}</p></div>`;
+      if (rq) html += `<div class="reminder-block"><h3>Working RQ</h3><p class="reminder-text">${escHtml(rq)}</p></div>`;
+      html += '<a href="#" class="reminder-link" data-goto="phase3">Open Phase 3 →</a>';
+      body.innerHTML = html;
+    }
+
+    function buildP3Export () {
+      const lines = ['Phase 3 — Elevator Speech', '='.repeat(24), '',
+        'What we know\n' + ((p3State.whatWeKnow || '').trim() || '(not filled in)'),
+        '\nThe gap\n' + ((p3State.theGap || '').trim() || '(not filled in)'),
+        '\nMy study pitch\n' + ((p3State.myStudyPitch || '').trim() || '(not filled in)'),
+        '\nFull elevator speech\n' + ((p3State.elevatorSpeech || '').trim() || '(not filled in)')];
+      return lines.join('\n');
+    }
+
+    function buildP4Export () {
+      const lines = ['Phase 4 — Operationalization', '='.repeat(28), '',
+        'Broad Topic Area:\n' + (p4State.broadTopicArea || '(not filled in)'),
+        '\nProposed Research Question:\n' + (p4State.proposedResearchQuestion || '(not filled in)'),
+        '\nIV:\n' + (p4State.ivConceptual || '(not filled in)'),
+        '\nDV:\n' + (p4State.dvConceptual || '(not filled in)')];
+      P4_PATHWAY_DEFS.forEach((p) => {
+        lines.push('\n' + p.label);
+        const r = p4State.pathwayResponses[p.id] || {};
+        if (r.notViable) { lines.push('(Marked not viable)'); return; }
+        p.fields.forEach((f) => lines.push(f.label + ': ' + ((r[f.id] || '').trim() || '(not filled in)')));
+      });
+      lines.push('\nPart D: Comparative Analysis');
+      P4_CRITERIA.forEach((c) => {
+        lines.push('\n' + c.label);
+        P4_PATHWAY_DEFS.forEach((p) => {
+          lines.push('  ' + p.short + ': ' + ((p4State.comparisonTable[c.id]?.[p.id] || '').trim() || '(not filled in)'));
+        });
+      });
+      const chosen = P4_PATHWAY_DEFS.find((p) => p.id === p4State.chosenPathwayId);
+      lines.push('\nChosen pathway: ' + (chosen?.label || '(not chosen)'));
+      return lines.join('\n');
+    }
+
+    function updateP3Progress () {
+      const keys = ['whatWeKnow', 'theGap', 'myStudyPitch', 'elevatorSpeech'];
+      const filled = keys.filter((k) => (p3State[k] || '').trim()).length;
+      const words = p3WordCount(p3State.elevatorSpeech);
+      const label = filled ? `${filled}/4 parts · ${words} words` : 'Elevator speech not started';
+      document.getElementById('p3-progress')?.textContent = label;
+      document.getElementById('hub-phase3-progress')?.textContent = label;
+      document.getElementById('p3-word-count')?.textContent = `${words} words (aim for ~150–250)`;
+    }
+
+    function updateP4Progress () {
+      const top = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'dvConceptual'];
+      const recap = top.filter((k) => (p4State[k] || '').trim()).length;
+      let paths = 0;
+      P4_PATHWAY_DEFS.forEach((p) => {
+        const r = p4State.pathwayResponses[p.id] || {};
+        if (r.notViable || p.fields.some((f) => (r[f.id] || '').trim())) paths++;
+      });
+      let label = 'Not started';
+      if (p4State.chosenPathwayId) label = 'Pathway chosen';
+      else if (recap || paths) label = `A–B ${recap}/4 · ${paths}/4 paths`;
+      document.getElementById('p4-progress')?.textContent = label;
+      document.getElementById('hub-phase4-progress')?.textContent = label;
+    }
+
+    function renderP4Pathways () {
+      const el = document.getElementById('p4-pathways');
+      if (!el) return;
+      el.innerHTML = P4_PATHWAY_DEFS.map((p) => {
+        const r = p4State.pathwayResponses[p.id] || {};
+        const fields = p.fields.map((f) =>
+          `<label>${f.label}</label><textarea rows="2" data-pathway="${p.id}" data-path-field="${f.id}" ${r.notViable ? 'disabled' : ''}>${escHtml(r[f.id] || '')}</textarea>`
+        ).join('');
+        return `<div class="theme-bucket-static"><h3>${p.label}</h3>
+          <label class="check-main"><input type="checkbox" data-path-not-viable="${p.id}" ${r.notViable ? 'checked' : ''} /> Not viable for my question</label>
+          ${fields}</div>`;
+      }).join('');
+    }
+
+    function renderP4Comparison () {
+      const wrap = document.getElementById('p4-comparison-wrap');
+      if (!wrap) return;
+      let html = '<table class="search-log-table"><thead><tr><th>Criterion</th>';
+      P4_PATHWAY_DEFS.forEach((p) => { html += `<th>${p.short}</th>`; });
+      html += '</tr></thead><tbody>';
+      P4_CRITERIA.forEach((c) => {
+        html += `<tr><th>${c.label}</th>`;
+        P4_PATHWAY_DEFS.forEach((p) => {
+          html += `<td><textarea rows="2" data-crit="${c.id}" data-crit-path="${p.id}">${escHtml(p4State.comparisonTable[c.id]?.[p.id] || '')}</textarea></td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+    }
+
+    function renderP4Choices () {
+      const el = document.getElementById('p4-choices');
+      if (!el) return;
+      el.innerHTML = P4_PATHWAY_DEFS.map((p) =>
+        `<label class="check-main" style="margin-bottom:0.5rem"><input type="radio" name="p4-chosen" value="${p.id}" ${p4State.chosenPathwayId === p.id ? 'checked' : ''} /> ${p.label}</label>`
+      ).join('');
+    }
+
+    function refreshP3Views () {
+      updateP3Progress();
+      document.getElementById('p3-export-preview')?.value = buildP3Export();
+      refreshP3Reminders();
+      refreshP4Reminders();
+      const prefill = document.getElementById('p3-prefill-row');
+      if (prefill) {
+        const btns = [];
+        const themes = lroThemeSummary();
+        if (themes && !(p3State.whatWeKnow || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="whatWeKnow">Copy theme notes → What we know</button>');
+        if ((lroState.gapAndTransition?.gapStatement || '').trim() && !(p3State.theGap || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="theGap">Copy outline gap → The gap</button>');
+        if ((lroState.gapAndTransition?.transitionToStudy || '').trim() && !(p3State.myStudyPitch || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="myStudyPitch">Copy transition → My study pitch</button>');
+        prefill.innerHTML = btns.join('');
+      }
+    }
+
+    function refreshP4Views () {
+      updateP4Progress();
+      document.getElementById('p4-export-preview')?.value = buildP4Export();
+      refreshP4Reminders();
+      const prefill = document.getElementById('p4-prefill-row');
+      if (prefill) {
+        const btns = [];
+        const rq = (lroState.gapAndTransition?.workingResearchQuestion || '').trim();
+        if (rq && !(p4State.proposedResearchQuestion || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p4-prefill="rq">Copy working RQ</button>');
+        prefill.innerHTML = btns.join('');
+      }
+    }
+
+    function persistP3 () {
+      if (saveP3Timer) clearTimeout(saveP3Timer);
+      saveP3Timer = setTimeout(() => {
+        localStorage.setItem(P3_STORAGE_KEY, JSON.stringify(p3State));
+        document.getElementById('p3-save-status')?.textContent = 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      }, 400);
+    }
+
+    function persistP4 () {
+      if (saveP4Timer) clearTimeout(saveP4Timer);
+      saveP4Timer = setTimeout(() => {
+        localStorage.setItem(P4_STORAGE_KEY, JSON.stringify(p4State));
+        document.getElementById('p4-save-status')?.textContent = 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      }, 400);
+    }
+
+    function initPhase3 () {
+      p3State = loadP3();
+      document.querySelectorAll('[data-p3-field]').forEach((el) => {
+        el.value = p3State[el.dataset.p3Field] ?? '';
+        el.addEventListener('input', () => {
+          p3State[el.dataset.p3Field] = el.value;
+          refreshP3Views();
+          persistP3();
+        });
+      });
+      refreshP3Views();
+      document.getElementById('phase3')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (link) { e.preventDefault(); document.querySelector(`.tabs button[data-panel="${link.dataset.goto}"]`)?.click(); return; }
+        const pre = e.target.closest('[data-p3-prefill]');
+        if (!pre) return;
+        const field = pre.dataset.p3Prefill;
+        if (field === 'whatWeKnow') p3State.whatWeKnow = lroThemeSummary();
+        if (field === 'theGap') p3State.theGap = lroState.gapAndTransition?.gapStatement || '';
+        if (field === 'myStudyPitch') p3State.myStudyPitch = lroState.gapAndTransition?.transitionToStudy || '';
+        document.querySelectorAll('[data-p3-field]').forEach((el) => { el.value = p3State[el.dataset.p3Field] ?? ''; });
+        refreshP3Views();
+        persistP3();
+      });
+      document.getElementById('copy-p3-export')?.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(buildP3Export());
+      });
+    }
+
+    function initPhase4 () {
+      p4State = loadP4();
+      document.querySelectorAll('[data-p4-top]').forEach((el) => {
+        el.value = p4State[el.dataset.p4Top] ?? '';
+        el.addEventListener('input', () => {
+          p4State[el.dataset.p4Top] = el.value;
+          refreshP4Views();
+          persistP4();
+        });
+      });
+      renderP4Pathways();
+      renderP4Comparison();
+      renderP4Choices();
+      refreshP4Views();
+
+      document.getElementById('p4-pathways')?.addEventListener('input', (e) => {
+        const ta = e.target.closest('[data-path-field]');
+        if (ta) {
+          p4State.pathwayResponses[ta.dataset.pathway][ta.dataset.pathField] = ta.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-pathways')?.addEventListener('change', (e) => {
+        const cb = e.target.closest('[data-path-not-viable]');
+        if (cb) {
+          p4State.pathwayResponses[cb.dataset.pathNotViable].notViable = cb.checked;
+          renderP4Pathways();
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-comparison-wrap')?.addEventListener('input', (e) => {
+        const ta = e.target.closest('[data-crit]');
+        if (ta) {
+          if (!p4State.comparisonTable[ta.dataset.crit]) p4State.comparisonTable[ta.dataset.crit] = {};
+          p4State.comparisonTable[ta.dataset.crit][ta.dataset.critPath] = ta.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-choices')?.addEventListener('change', (e) => {
+        if (e.target.name === 'p4-chosen') {
+          p4State.chosenPathwayId = e.target.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('phase4')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (link) { e.preventDefault(); document.querySelector(`.tabs button[data-panel="${link.dataset.goto}"]`)?.click(); return; }
+        const pre = e.target.closest('[data-p4-prefill]');
+        if (pre?.dataset.p4Prefill === 'rq') {
+          p4State.proposedResearchQuestion = lroState.gapAndTransition?.workingResearchQuestion || '';
+          document.getElementById('p4-proposedResearchQuestion').value = p4State.proposedResearchQuestion;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('copy-p4-export')?.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(buildP4Export());
+      });
+    }
+
+    initPhase3();
+    initPhase4();
+
+    // Patch LRO refresh to update Phase 3/4 reminders
+    const _onLroChangeOrig = onLroChange;
+    onLroChange = function () {
+      _onLroChangeOrig();
+      refreshP3Reminders();
+      refreshP4Reminders();
+      refreshP3Views();
+    };
+
+    function makeTour (prefix, steps, ringId, popId, tourId, storageKey, startBtnId) {
+      let idx = 0;
+      function tourEl (id) { return document.querySelector(`#${prefix === 'p3' ? 'phase3' : 'phase4'} [data-tour="${id}"]`); }
+      async function layout () {
+        const step = steps[idx];
+        await new Promise((r) => setTimeout(r, 80));
+        const el = tourEl(step.target);
+        const ring = document.getElementById(ringId);
+        const pop = document.getElementById(popId);
+        if (!el) { ring.hidden = true; pop.hidden = false; pop.innerHTML = `<p class="popover-step">${idx+1} of ${steps.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="${prefix}-tour-skip">Skip</button><button type="button" class="btn-copy" id="${prefix}-tour-next">${idx >= steps.length-1 ? 'Finish' : 'Next'}</button></div>`; bind(); return; }
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await new Promise((r) => setTimeout(r, 280));
+        const rect = el.getBoundingClientRect();
+        const pad = 8;
+        ring.style.top = (rect.top - pad) + 'px'; ring.style.left = (rect.left - pad) + 'px';
+        ring.style.width = (rect.width + pad * 2) + 'px'; ring.style.height = (rect.height + pad * 2) + 'px';
+        ring.hidden = false;
+        const adj = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+        pop.innerHTML = `<p class="popover-step">${idx+1} of ${steps.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adj}<div class="popover-actions"><button type="button" class="btn-secondary" id="${prefix}-tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="${prefix}-tour-back"${idx===0?' disabled':''}>Back</button><button type="button" class="btn-copy" id="${prefix}-tour-next">${idx >= steps.length-1 ? 'Finish' : 'Next'}</button></div></div>`;
+        pop.hidden = false;
+        const popW = Math.min(380, window.innerWidth - 32);
+        let popTop = rect.bottom + 16;
+        if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+        pop.style.transform = 'none'; pop.style.top = popTop + 'px'; pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px'; pop.style.width = popW + 'px';
+        bind();
+      }
+      function bind () {
+        document.getElementById(`${prefix}-tour-skip`)?.addEventListener('click', end);
+        document.getElementById(`${prefix}-tour-back`)?.addEventListener('click', () => { if (idx > 0) { idx--; layout(); } });
+        document.getElementById(`${prefix}-tour-next`)?.addEventListener('click', () => { if (idx >= steps.length - 1) end(); else { idx++; layout(); } });
+      }
+      function start () { idx = 0; document.getElementById(tourId).classList.add('active'); document.body.classList.add('tour-active'); layout(); }
+      function end () {
+        document.getElementById(tourId).classList.remove('active'); document.body.classList.remove('tour-active');
+        document.getElementById(ringId).hidden = true; document.getElementById(popId).hidden = true;
+        try { localStorage.setItem(storageKey, '1'); } catch (_) {}
+        document.getElementById(startBtnId).textContent = 'Replay guided tour';
+      }
+      document.getElementById(startBtnId)?.addEventListener('click', start);
+      try { if (localStorage.getItem(storageKey) === '1') document.getElementById(startBtnId).textContent = 'Replay guided tour'; } catch (_) {}
+    }
+
+    makeTour('p3', [
+      { target: 'tour-p3-intro', title: 'Distill your lit review', body: 'Phase 3 is ~60–90 seconds read aloud. Submit with Phase 4.' },
+      { target: 'tour-p3-reminders', title: 'From your outline', body: 'Framework, themes, gap, and transition are starting points.' },
+      { target: 'tour-p3-what-we-know', title: 'What we know', body: 'Synthesis from theme buckets — not a list of articles.', narrow: 'One study only? Name a pattern.', widen: 'Too broad? Focus on gap-relevant findings.' },
+      { target: 'tour-p3-gap', title: 'The gap', body: 'What is still unknown or contested?' },
+      { target: 'tour-p3-pitch', title: 'My study pitch', body: 'How your study addresses the gap — no methods yet.' },
+      { target: 'tour-p3-speech', title: 'Full script', body: 'Combine parts (~150–250 words). Practice aloud.' },
+      { target: 'tour-p3-export', title: 'Export', body: 'Copy for Canvas Phase 3 worksheet.' }
+    ], 'spotlight-ring-p3', 'spotlight-popover-p3', 'spotlight-tour-p3', 'study-plan-drafts-p3-tour-done', 'start-p3-tour-btn');
+
+    makeTour('p4', [
+      { target: 'tour-p4-intro', title: 'Compare four paths', body: 'Survey, experimental, observation, archival — choose ONE.' },
+      { target: 'tour-p4-reminders', title: 'From Phase 3', body: 'Elevator speech and working RQ guide IV/DV and pathway choice.' },
+      { target: 'tour-p4-part-a', title: 'Part A', body: 'Broad topic and proposed research question.' },
+      { target: 'tour-p4-part-b', title: 'Part B', body: 'Conceptual IV and DV from your lit review.' },
+      { target: 'tour-p4-part-c', title: 'Part C', body: 'Explore each pathway; mark not viable honestly.' },
+      { target: 'tour-p4-part-d', title: 'Part D', body: 'Compare feasibility, access, measurement, ethics.' },
+      { target: 'tour-p4-part-e', title: 'Part E', body: 'Choose one data collection strategy.' },
+      { target: 'tour-p4-export', title: 'Export', body: 'Copy full worksheet for Canvas.' }
+    ], 'spotlight-ring-p4', 'spotlight-popover-p4', 'spotlight-tour-p4', 'study-plan-drafts-p4-tour-done', 'start-p4-tour-btn');
+
+    document.getElementById('tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-panel]');
+      if (!btn) return;
+      if (btn.dataset.panel === 'phase3') { refreshP3Reminders(); refreshP3Views(); }
+      if (btn.dataset.panel === 'phase4') { refreshP4Reminders(); refreshP4Views(); renderP4Pathways(); renderP4Comparison(); renderP4Choices(); }
+    });
 
     const TOUR_STEPS = [
       { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
