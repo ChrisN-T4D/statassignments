@@ -2,6 +2,10 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 
 const PAD = 8
 
+if (typeof document !== 'undefined') {
+  document.body.classList.remove('spotlight-tour-active')
+}
+
 /**
  * @param {import('vue').Ref<HTMLElement|null>} rootRef
  * @param {import('vue').ComputedRef<Array>} steps
