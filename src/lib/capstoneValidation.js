@@ -28,6 +28,12 @@ function fieldBlock (exportLabel, value) {
   return `${exportLabel}\n${text || '(not filled in)'}\n`
 }
 
+export function countStudyFocusFields (project) {
+  const sf = project?.studyFocus ?? {}
+  const filled = STUDY_FOCUS_FIELDS.filter((f) => (sf[f.id] ?? '').trim()).length
+  return { filled, total: STUDY_FOCUS_FIELDS.length }
+}
+
 export function countArticleCards (project) {
   const cards = project?.articleReview?.articleCards ?? []
   let started = 0

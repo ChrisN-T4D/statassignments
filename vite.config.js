@@ -7,5 +7,11 @@ export default defineConfig({
     alias: {
       '@': '/src'
     }
+  },
+  server: {
+    host: true,
+    port: 5173,
+    // Allow Cloudflare quick-tunnel hostnames for live draft previews from private workers.
+    allowedHosts: ['.trycloudflare.com', 'localhost']
   }
 })

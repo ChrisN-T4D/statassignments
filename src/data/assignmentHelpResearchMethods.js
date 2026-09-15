@@ -110,7 +110,7 @@ export const assignmentHelpResearchMethods = [
           'Include a working References list in APA 7 format; use Ch. 11 when Canvas assigns APA/style reading.',
           'When summarizing each study, name the design using vocabulary from the chapters you have completed.',
           'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.',
-          'Jot working gap and theme notes in Study Plan (Methods Market) as you draft — they feed your Phase 3 elevator speech later.'
+          'Open Study Plan → Study Focus and use the guided tour. Jot working gap and theme notes as you draft — they feed Phase 3 and Phase 4.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
         studyPlanSection: 'study-focus',

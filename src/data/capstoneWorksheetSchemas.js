@@ -18,7 +18,7 @@ export const STUDY_PLAN_SECTIONS = [
     id: 'study-focus',
     title: 'Study Focus',
     shortTitle: 'Study Focus',
-    description: 'Working notes while you draft your literature review (weeks 5–10).',
+    description: 'Lit-review working notes with guided tour — feeds Phase 3 and Phase 4.',
     dueNote: 'Not a Canvas submission — feeds Phase 3 and Phase 4.'
   },
   {

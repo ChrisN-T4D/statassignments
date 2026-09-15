@@ -247,6 +247,21 @@
     .narrow .adjust-label { color: #fca5a5; }
     .widen .adjust-label { color: #93c5fd; }
     .tour-launcher { margin-bottom: 1.25rem; padding: 1rem 1.15rem; border: 1px dashed var(--border); border-radius: 0.75rem; background: rgba(230,57,70,0.05); }
+    .progress-chip { display: inline-block; font-size: 0.85rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); margin: 0.5rem 0 0; }
+    .arc-flow { font-size: 0.88rem; color: var(--muted); margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border-radius: 0.45rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+    .reminders-panel { margin-bottom: 1.25rem; padding: 1.15rem 1.25rem; border: 1px solid var(--border); border-radius: 0.75rem; background: rgba(59,130,246,0.06); }
+    .reminders-panel.empty { background: rgba(255,255,255,0.02); }
+    .reminders-title { font-size: 1.05rem; margin: 0 0 0.35rem; }
+    .reminder-block { margin-bottom: 0.85rem; }
+    .reminder-block h3 { font-size: 0.85rem; margin: 0 0 0.25rem; color: var(--primary); }
+    .reminder-text { font-size: 0.88rem; color: var(--muted); line-height: 1.45; margin: 0; white-space: pre-wrap; }
+    .reminder-link { font-size: 0.88rem; color: var(--primary); text-decoration: none; }
+    .reminder-link:hover { text-decoration: underline; }
+    .feeds-forward { margin-bottom: 1.25rem; padding: 1.15rem 1.25rem; border: 1px dashed var(--border); border-radius: 0.75rem; }
+    .feeds-list { margin: 0 0 0.75rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    #spotlight-tour-sf { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
+    #spotlight-tour-sf.active { display: block; }
     .tour-start-btn { padding: 0.55rem 1rem; border: 1px solid var(--primary); border-radius: 0.5rem; background: var(--primary); color: #fff; font-size: 0.92rem; font-weight: 600; cursor: pointer; }
     #spotlight-tour { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
     #spotlight-tour.active { display: block; }
@@ -261,7 +276,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">UI draft preview — static mock for layout review. Article Review tab includes peer-review reference + expanded source self-check. Full interactive app: /class/research-methods/study-plan (requires sign-in).</div>
+  <div class="banner">UI draft preview — static mock for layout review. Article Review and Study Focus tabs include guided tours, local autosave, and export. Full interactive app: /class/research-methods/study-plan (requires sign-in).</div>
   <div class="wrap">
     <h1>Study Plan — Draft Preview</h1>
     <p class="intro">Capstone draft workspace for PSYC 4223. Methods Market holds notes; Canvas is graded.</p>
@@ -286,7 +301,7 @@
         <div class="card">
           <h2>Study Focus</h2>
           <p class="hint">Lit review notes weeks 5–10.</p>
-          <span class="chip">Optional lit review notes</span>
+          <span class="chip" id="hub-focus-progress">Lit review working notes</span>
         </div>
         <div class="card">
           <h2>Phase 3</h2>
@@ -463,12 +478,12 @@
         <label>What we want to know</label><textarea></textarea>
         <label>Problem statement (combined)</label>
         <p class="hint">Example structure: Although [what we know], [gap], which is concerning because [why it matters]. This study addresses this problem by [brief preview].</p>
-        <textarea rows="3"></textarea>
+        <textarea id="ar-problem-draft" rows="3"></textarea>
       </div>
 
       <div class="card" data-tour="tour-rq">
         <h2>Research Question(s) and Hypothesis(es)</h2>
-        <label>Research question(s)</label><textarea></textarea>
+        <label>Research question(s)</label><textarea id="ar-research-questions"></textarea>
         <label>Hypothesis(es)</label>
         <p class="hint">You will refine these after your full literature review.</p>
         <textarea></textarea>
@@ -476,11 +491,80 @@
     </section>
 
     <section id="focus" class="panel">
-      <div class="card">
-        <label>Working gap</label><p class="hint">What is still unknown? Update as you read.</p><textarea></textarea>
-        <label>Working research question</label><textarea></textarea>
-        <label>Lit review themes</label><textarea></textarea>
-        <label>Sources to cite</label><textarea></textarea>
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-sf-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Highlights each Study Focus field and explains how lit-review notes feed Phase 3 and Phase 4.</p>
+      </div>
+
+      <div id="spotlight-tour-sf" role="dialog" aria-modal="true" aria-label="Study Focus guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-sf" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-sf" hidden></div>
+      </div>
+
+      <div class="card" data-tour="tour-sf-intro">
+        <p class="hint" style="margin-top:0">Use this section while drafting your literature review (weeks 5–10). It is <strong>not a Canvas submission</strong> — it is your working notebook. Notes here feed your Phase 3 elevator speech and Phase 4 research question.</p>
+        <p class="arc-flow">Article Review (week 4) → <strong>Study Focus</strong> (lit review weeks) → Phase 3 &amp; 4 (week 11)</p>
+        <span class="progress-chip" id="sf-progress">0/4 note fields filled</span>
+      </div>
+
+      <aside class="reminders-panel empty" id="sf-reminders" data-tour="tour-sf-reminders">
+        <h2 class="reminders-title">From your Article Review</h2>
+        <div id="sf-reminders-body"></div>
+      </aside>
+
+      <div class="card" data-tour="tour-sf-gap">
+        <label for="sf-workingGap">Working gap</label>
+        <p class="hint">What is still unknown or contested? Update as you read more articles.</p>
+        <textarea id="sf-workingGap" rows="3" data-sf-field="workingGap"></textarea>
+      </div>
+
+      <div class="card" data-tour="tour-sf-rq">
+        <label for="sf-workingResearchQuestion">Working research question</label>
+        <p class="hint">A draft question in plain language; refine in your lit review prose.</p>
+        <textarea id="sf-workingResearchQuestion" rows="3" data-sf-field="workingResearchQuestion"></textarea>
+      </div>
+
+      <div class="card" data-tour="tour-sf-themes">
+        <label for="sf-litReviewThemes">Lit review themes</label>
+        <p class="hint">Bullet notes on consensus, disagreements, or patterns across sources.</p>
+        <textarea id="sf-litReviewThemes" rows="4" data-sf-field="litReviewThemes"></textarea>
+      </div>
+
+      <div class="card" data-tour="tour-sf-sources">
+        <label for="sf-sourcesToCite">Sources to cite</label>
+        <p class="hint">Running reminder list while you draft — not a duplicate of article cards.</p>
+        <textarea id="sf-sourcesToCite" rows="3" data-sf-field="sourcesToCite"></textarea>
+      </div>
+
+      <div class="feeds-forward" data-tour="tour-sf-feeds">
+        <h2>Where these notes go next</h2>
+        <ul class="feeds-list">
+          <li><strong>Working gap</strong> → reminder in Phase 3 elevator speech</li>
+          <li><strong>Working research question</strong> → copy button in Phase 4 Part A</li>
+          <li><strong>Lit review themes</strong> → “what we know” in your elevator speech</li>
+        </ul>
+        <div class="resource-links">
+          <a href="#" class="reminder-link" data-goto="phase3">Open Phase 3 →</a>
+          <a href="#" class="reminder-link" data-goto="phase4">Open Phase 4 →</a>
+        </div>
+      </div>
+
+      <div class="resource-links">
+        <a href="/topic/rm-chapter-2">Ch. 2 — gaps and synthesis</a>
+        <a href="/topic/rm-chapter-11">Ch. 11 — APA and clear prose</a>
+      </div>
+
+      <div class="card" data-tour="tour-sf-export">
+        <h2>Export Study Focus notes</h2>
+        <p class="hint">Copy or download a PDF to keep an offline copy while you write in Word or Canvas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-sf-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-sf-pdf">Download PDF</button>
+        </div>
+        <textarea id="sf-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="sf-export-status" class="hint" style="margin-top:0.5rem"></p>
+        <p id="sf-save-status" class="hint" style="margin-top:0.35rem"></p>
       </div>
     </section>
 
@@ -531,6 +615,9 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById(btn.dataset.panel).classList.add('active');
+      if (btn.dataset.panel === 'focus' && typeof refreshStudyFocusReminders === 'function') {
+        refreshStudyFocusReminders();
+      }
     });
 
     // Search term builder mock (demo interactivity)
@@ -714,6 +801,7 @@
         `${complete}/${CANVAS_MIN} complete · ${total} cards`;
       const hub = document.getElementById('hub-article-progress');
       if (hub) hub.textContent = `${complete}/${CANVAS_MIN} complete`;
+      if (typeof refreshStudyFocusReminders === 'function') refreshStudyFocusReminders();
       const hint = document.getElementById('add-card-hint');
       if (hint) hint.textContent = `${total} cards · export includes all with content`;
       const idx = articleState.openIndex;
@@ -915,6 +1003,323 @@
     }
 
     initArticleCards();
+
+    // Article Review meta (problem draft + early RQ) — feeds Study Focus reminders
+    const ARTICLE_META_KEY = 'study-plan-drafts-article-meta-v1';
+    let articleMeta = { problemStatementDraft: '', researchQuestions: '' };
+    let saveMetaTimer = null;
+
+    function loadArticleMeta () {
+      try {
+        const raw = localStorage.getItem(ARTICLE_META_KEY);
+        if (raw) return { ...articleMeta, ...JSON.parse(raw) };
+      } catch (_) { /* ignore */ }
+      return { ...articleMeta };
+    }
+
+    function persistArticleMeta () {
+      if (saveMetaTimer) clearTimeout(saveMetaTimer);
+      saveMetaTimer = setTimeout(() => {
+        localStorage.setItem(ARTICLE_META_KEY, JSON.stringify(articleMeta));
+        refreshStudyFocusReminders();
+      }, 400);
+    }
+
+    function initArticleMeta () {
+      articleMeta = loadArticleMeta();
+      const problemEl = document.getElementById('ar-problem-draft');
+      const rqEl = document.getElementById('ar-research-questions');
+      if (problemEl) {
+        problemEl.value = articleMeta.problemStatementDraft ?? '';
+        problemEl.addEventListener('input', () => {
+          articleMeta.problemStatementDraft = problemEl.value;
+          persistArticleMeta();
+        });
+      }
+      if (rqEl) {
+        rqEl.value = articleMeta.researchQuestions ?? '';
+        rqEl.addEventListener('input', () => {
+          articleMeta.researchQuestions = rqEl.value;
+          persistArticleMeta();
+        });
+      }
+    }
+
+    initArticleMeta();
+
+    // Study Focus — localStorage autosave, reminders, export, guided tour
+    const FOCUS_STORAGE_KEY = 'study-plan-drafts-study-focus-v1';
+    const SF_FIELDS = [
+      ['workingGap', 'Working gap (draft as lit review evolves)'],
+      ['workingResearchQuestion', 'Working research question (optional)'],
+      ['litReviewThemes', 'What the field agrees on (theme notes)'],
+      ['sourcesToCite', 'Sources to cite']
+    ];
+    let studyFocusState = {};
+    let saveFocusTimer = null;
+
+    function emptyStudyFocus () {
+      return { workingGap: '', workingResearchQuestion: '', litReviewThemes: '', sourcesToCite: '' };
+    }
+
+    function loadStudyFocus () {
+      try {
+        const raw = localStorage.getItem(FOCUS_STORAGE_KEY);
+        if (raw) return { ...emptyStudyFocus(), ...JSON.parse(raw) };
+      } catch (_) { /* ignore */ }
+      return emptyStudyFocus();
+    }
+
+    function countStudyFocusFilled () {
+      let filled = 0;
+      SF_FIELDS.forEach(([key]) => { if ((studyFocusState[key] ?? '').trim()) filled++; });
+      return { filled, total: SF_FIELDS.length };
+    }
+
+    function updateStudyFocusProgress () {
+      const { filled, total } = countStudyFocusFilled();
+      const label = filled ? `${filled}/${total} note fields filled` : 'Lit review working notes';
+      const chip = document.getElementById('sf-progress');
+      if (chip) chip.textContent = `${filled}/${total} note fields filled`;
+      const hub = document.getElementById('hub-focus-progress');
+      if (hub) hub.textContent = label;
+    }
+
+    function refreshStudyFocusReminders () {
+      const panel = document.getElementById('sf-reminders');
+      const body = document.getElementById('sf-reminders-body');
+      if (!panel || !body) return;
+      const problem = (articleMeta.problemStatementDraft ?? '').trim();
+      const rq = (articleMeta.researchQuestions ?? '').trim();
+      const { complete } = countCards();
+      const total = articleState.cards.length;
+      const articleLine = (complete > 0 || total > 0)
+        ? `${complete}/${CANVAS_MIN} article cards complete · ${total} cards total`
+        : '';
+      const hasContext = Boolean(problem || rq || articleLine);
+      panel.classList.toggle('empty', !hasContext);
+      if (!hasContext) {
+        body.innerHTML = `<p class="hint" style="margin:0 0 0.85rem">Complete Article Review first — your problem statement and early RQ will appear here as starting points.</p><a href="#" class="reminder-link" data-goto="article">Go to Article Review →</a>`;
+        return;
+      }
+      let html = '<p class="hint" style="margin:0 0 0.85rem">Starting points — refine as you read more than your original article cards.</p>';
+      if (articleLine) {
+        html += `<div class="reminder-block"><h3>Article cards</h3><p class="reminder-text">${escHtml(articleLine)}</p></div>`;
+      }
+      if (problem) {
+        html += `<div class="reminder-block"><h3>Problem statement (draft)</h3><p class="reminder-text">${escHtml(problem)}</p></div>`;
+      }
+      if (rq) {
+        html += `<div class="reminder-block"><h3>Early research question</h3><p class="reminder-text">${escHtml(rq)}</p></div>`;
+      }
+      html += '<a href="#" class="reminder-link" data-goto="article">Open Article Review to update →</a>';
+      body.innerHTML = html;
+    }
+
+    function buildStudyFocusExportText () {
+      const lines = ['Study Focus — Lit Review Notes', '='.repeat(36), ''];
+      SF_FIELDS.forEach(([key, label]) => {
+        const text = (studyFocusState[key] ?? '').trim() || '(not filled in)';
+        lines.push(`${label}\n${text}\n`);
+      });
+      return lines.join('\n').trim();
+    }
+
+    function refreshStudyFocusExport () {
+      const preview = document.getElementById('sf-export-preview');
+      if (preview) preview.value = buildStudyFocusExportText();
+    }
+
+    function persistStudyFocus () {
+      if (saveFocusTimer) clearTimeout(saveFocusTimer);
+      saveFocusTimer = setTimeout(() => {
+        localStorage.setItem(FOCUS_STORAGE_KEY, JSON.stringify({
+          ...studyFocusState,
+          lastSavedAt: new Date().toISOString()
+        }));
+        const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        const status = document.getElementById('sf-save-status');
+        if (status) status.textContent = 'Saved locally at ' + t;
+      }, 400);
+    }
+
+    async function downloadStudyFocusPdf () {
+      const status = document.getElementById('sf-export-status');
+      const text = buildStudyFocusExportText();
+      if (!text) return;
+      status.textContent = 'Building PDF…';
+      try {
+        const { PDFDocument, StandardFonts } = await import('https://esm.sh/pdf-lib@1.17.1');
+        const doc = await PDFDocument.create();
+        const font = await doc.embedFont(StandardFonts.Helvetica);
+        const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+        let page = doc.addPage();
+        const margin = 50;
+        let y = page.getHeight() - margin;
+        const lineHeight = 14;
+        const maxWidth = page.getWidth() - margin * 2;
+        const drawWrap = (line, size, isBold) => {
+          const f = isBold ? bold : font;
+          const words = line.split(' ');
+          let current = '';
+          for (const word of words) {
+            const test = current ? current + ' ' + word : word;
+            if (f.widthOfTextAtSize(test, size) > maxWidth) {
+              if (y < margin + lineHeight) { page = doc.addPage(); y = page.getHeight() - margin; }
+              page.drawText(current, { x: margin, y, size, font: f });
+              y -= lineHeight;
+              current = word;
+            } else current = test;
+          }
+          if (current) {
+            if (y < margin + lineHeight) { page = doc.addPage(); y = page.getHeight() - margin; }
+            page.drawText(current, { x: margin, y, size, font: f });
+            y -= lineHeight;
+          }
+        };
+        const exportLines = text.split('\n');
+        for (let i = 0; i < exportLines.length; i++) {
+          const line = exportLines[i];
+          const next = (exportLines[i + 1] ?? '').trim();
+          if (/^=+$/.test(line.trim())) continue;
+          if (/^=+$/.test(next)) { y -= 6; drawWrap(line.trim(), 12, true); i++; continue; }
+          if (!line.trim()) { y -= 8; continue; }
+          drawWrap(line.trim(), 10, false);
+        }
+        const bytes = await doc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'study-focus-draft-' + new Date().toISOString().slice(0, 10) + '.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        status.textContent = 'PDF downloaded.';
+      } catch (err) {
+        status.textContent = 'PDF download failed — try Copy export text instead.';
+      }
+    }
+
+    function initStudyFocus () {
+      studyFocusState = loadStudyFocus();
+      document.querySelectorAll('[data-sf-field]').forEach((el) => {
+        const key = el.dataset.sfField;
+        el.value = studyFocusState[key] ?? '';
+        el.addEventListener('input', () => {
+          studyFocusState[key] = el.value;
+          updateStudyFocusProgress();
+          refreshStudyFocusExport();
+          persistStudyFocus();
+        });
+      });
+      updateStudyFocusProgress();
+      refreshStudyFocusExport();
+      refreshStudyFocusReminders();
+
+      document.getElementById('copy-sf-export')?.addEventListener('click', async () => {
+        const text = buildStudyFocusExportText();
+        if (!text) return;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('sf-export-status').textContent = 'Copied to clipboard.';
+      });
+      document.getElementById('download-sf-pdf')?.addEventListener('click', downloadStudyFocusPdf);
+
+      document.getElementById('focus')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (!link) return;
+        e.preventDefault();
+        const target = link.dataset.goto;
+        const btn = document.querySelector(`.tabs button[data-panel="${target}"]`);
+        if (btn) btn.click();
+      });
+    }
+
+    initStudyFocus();
+
+    const SF_TOUR_STEPS = [
+      { target: 'tour-sf-intro', title: 'Your lit-review notebook (weeks 5–10)', body: 'Study Focus is not graded in Canvas. It is where you capture thinking while you draft your literature review — so you do not start from zero at Phase 3. Update these notes as you read and revise.' },
+      { target: 'tour-sf-reminders', title: 'Start from your Article Review', body: 'Your problem statement and early research question from week 4 are starting points — not final answers. Refine them here as you read more sources than your original six article cards.' },
+      { target: 'tour-sf-gap', title: 'Working gap — update as you read', body: 'The gap is what the literature still has not answered. It should get sharper (narrower) as you synthesize — or you may discover you need more reading (widen).', narrow: 'Gap still sounds like a whole topic area? Name one relationship, population, and outcome you could test.', widen: 'Gap disappeared after more reading? You may need a different angle or more sources before claiming a problem.' },
+      { target: 'tour-sf-rq', title: 'Working research question', body: 'Plain-language draft of what you might study. Your lit review prose will refine wording; Phase 4 will add design detail. This field prefills Phase 4’s proposed research question.', narrow: 'Multiple constructs in one sentence? Pick the core IV–DV relationship for this project.', widen: 'Too vague to guide reading? Add who you study and in what context.' },
+      { target: 'tour-sf-themes', title: 'Lit review themes — synthesis, not lists', body: 'Bullet what the field agrees on, where studies disagree, and patterns across methods. This trains you to write theme paragraphs instead of one paragraph per article.', narrow: 'Themes are just article titles restated? Group studies by finding or method.', widen: 'Only one theme so far? You may need more diverse sources or a broader construct.' },
+      { target: 'tour-sf-sources', title: 'Sources to cite', body: 'A running reminder list while you draft — not a duplicate of article cards. Jot authors you must not forget when you assemble your References section.' },
+      { target: 'tour-sf-export', title: 'Feeds Phase 3 & Phase 4', body: 'Working gap appears in Phase 3 elevator speech reminders. Working RQ can copy into Phase 4. Export anytime to keep an offline copy while you write in Word or Canvas.' }
+    ];
+
+    let sfTourIndex = 0;
+
+    function sfTourEl (id) {
+      return document.querySelector(`#focus [data-tour="${id}"]`);
+    }
+
+    async function layoutSfTourStep () {
+      const step = SF_TOUR_STEPS[sfTourIndex];
+      await new Promise((r) => setTimeout(r, 80));
+      const el = sfTourEl(step.target);
+      const ring = document.getElementById('spotlight-ring-sf');
+      const pop = document.getElementById('spotlight-popover-sf');
+      if (!el) {
+        ring.hidden = true;
+        pop.innerHTML = `<p class="popover-step">${sfTourIndex + 1} of ${SF_TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="sf-tour-skip">Skip</button><button type="button" class="btn-copy" id="sf-tour-next">${sfTourIndex >= SF_TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div>`;
+        pop.hidden = false;
+        pop.style.top = '80px'; pop.style.left = '50%'; pop.style.transform = 'translateX(-50%)';
+        bindSfTourButtons();
+        return;
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise((r) => setTimeout(r, 280));
+      const rect = el.getBoundingClientRect();
+      const pad = 8;
+      ring.style.top = (rect.top - pad) + 'px';
+      ring.style.left = (rect.left - pad) + 'px';
+      ring.style.width = (rect.width + pad * 2) + 'px';
+      ring.style.height = (rect.height + pad * 2) + 'px';
+      ring.hidden = false;
+      const adjustHtml = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+      pop.innerHTML = `<p class="popover-step">${sfTourIndex + 1} of ${SF_TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adjustHtml}<div class="popover-actions"><button type="button" class="btn-secondary" id="sf-tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="sf-tour-back"${sfTourIndex === 0 ? ' disabled' : ''}>Back</button><button type="button" class="btn-copy" id="sf-tour-next">${sfTourIndex >= SF_TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div></div>`;
+      pop.hidden = false;
+      const popW = Math.min(380, window.innerWidth - 32);
+      let popTop = rect.bottom + 16;
+      if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+      pop.style.transform = 'none';
+      pop.style.top = popTop + 'px';
+      pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px';
+      pop.style.width = popW + 'px';
+      bindSfTourButtons();
+    }
+
+    function bindSfTourButtons () {
+      document.getElementById('sf-tour-skip')?.addEventListener('click', endSfTour);
+      document.getElementById('sf-tour-back')?.addEventListener('click', () => { if (sfTourIndex > 0) { sfTourIndex--; layoutSfTourStep(); } });
+      document.getElementById('sf-tour-next')?.addEventListener('click', () => {
+        if (sfTourIndex >= SF_TOUR_STEPS.length - 1) endSfTour();
+        else { sfTourIndex++; layoutSfTourStep(); }
+      });
+    }
+
+    function startSfTour () {
+      sfTourIndex = 0;
+      document.getElementById('spotlight-tour-sf').classList.add('active');
+      document.body.classList.add('tour-active');
+      layoutSfTourStep();
+    }
+
+    function endSfTour () {
+      document.getElementById('spotlight-tour-sf').classList.remove('active');
+      document.body.classList.remove('tour-active');
+      document.getElementById('spotlight-ring-sf').hidden = true;
+      document.getElementById('spotlight-popover-sf').hidden = true;
+      try { localStorage.setItem('study-plan-drafts-sf-tour-done', '1'); } catch (_) {}
+      const btn = document.getElementById('start-sf-tour-btn');
+      if (btn) btn.textContent = 'Replay guided tour';
+    }
+
+    document.getElementById('start-sf-tour-btn')?.addEventListener('click', startSfTour);
+    try {
+      if (localStorage.getItem('study-plan-drafts-sf-tour-done') === '1') {
+        document.getElementById('start-sf-tour-btn').textContent = 'Replay guided tour';
+      }
+    } catch (_) {}
 
     const TOUR_STEPS = [
       { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
