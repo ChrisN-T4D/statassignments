@@ -217,7 +217,9 @@ Guided exercises in `SoftwareLesson.vue` / `SoftwarePractice.vue` using `statist
 - Factual progress chips (e.g., "4 of 6 article cards complete") — not quality scores
 - Export to plain text/PDF for Canvas paste
 
-**Evaluation:** Worksheet quality is **not** graded in Methods Market. Instructors evaluate exported submissions in Canvas using rubrics aligned to worksheet fields. BKT may inform prerequisite concept readiness (e.g., Ch. 2 source evaluation, Ch. 4 measurement) but does not update from free-text field edits.
+**Evaluation:** Worksheet quality is **not** graded in Methods Market. Instructors evaluate exported submissions in Canvas using rubrics aligned to worksheet fields.
+
+**BKT policy (locked):** Study Plan does **not** feed BKT evaluation. Free-text field edits, tour completion, export events, and factual progress chips do not call `updateBKT()`. Concept Review and Software Practice remain the automated mastery instruments; Study Plan is the performance track only (Section 1.3). Optional future structured checkpoints (e.g., gradable MC on source type) would be explicit quiz items — not prose grading — if added later.
 
 **Code:** `src/composables/useCapstoneProject.js`, `src/data/capstoneWorksheetSchemas.js`, `src/lib/capstoneValidation.js`, `src/components/study-plan/`.
 
