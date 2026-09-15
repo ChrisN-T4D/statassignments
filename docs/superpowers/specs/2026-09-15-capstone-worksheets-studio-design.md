@@ -1,8 +1,8 @@
 # Design: Capstone Study Plan (PSYC 4223)
 
-**Date:** 2026-09-15 (rev. 2)  
+**Date:** 2026-09-15 (rev. 3)  
 **Scope:** Fall 2026 PSYC 4223 Research Methods — Methods Market `/class/research-methods` plus Canvas course **2406**  
-**Worksheets in scope:** Article Review and Problem Statement, Phase 3 Worksheet (elevator speech), Phase 4 Worksheet (Operationalization Exploration)
+**Worksheets in scope:** Article Review and Problem Statement, Phase 3 Worksheet (gap → research question), Phase 4 Worksheet (Operationalization Exploration)
 
 ## Problem
 
@@ -12,7 +12,7 @@ Canvas holds three high-stakes capstone worksheets (200 + 100 + 200 pts). Method
 - continuity from article review through literature review into Phase 3 and Phase 4,
 - quick links to chapters and Canvas resources while they work.
 
-Phase 3 thinking (topic, gap, research direction) already happens during **Part 1** while students write the literature review. The Phase 3 Canvas worksheet should **not** duplicate IV/DV/hypothesis work; it should capture an **elevator speech** summarizing the lit review and gap.
+Phase 3 and Phase 4 **instructions live on Canvas assignment descriptions** (assignments **44903** and **44935**), not on the wiki pages `/pages/phase-3-worksheet` and `/pages/phase-4-worksheet` (those are empty shells). Field schemas are synced from Canvas via Playwright (`scripts/fetch-canvas-rm-assignment-instructions.mjs`).
 
 The platform already has Concept Review, the sampling mini-lab, `CANVAS_METHOD_PATHS`, path tabs, and the Data Analysis Helper — but nothing connects them to the student's own study notes.
 
@@ -21,7 +21,7 @@ The platform already has Concept Review, the sampling mini-lab, `CANVAS_METHOD_P
 1. **Capstone Study Plan** — one persisted notebook with sections that match the semester arc.
 2. **Guide, don't decide** — checklists and resource links; no auto-grading of thinking, no path recommendations, no generated prose.
 3. **Export for Canvas** — copy/paste text matching worksheet sections; PDFs still attach in Canvas.
-4. **Canvas template sync** — Playwright scrape of Canvas 2406 keeps field labels current.
+4. **Canvas template sync** — Playwright scrape of Canvas 2406 **assignment instructions** (and article-review PDF) keeps field labels current; wiki phase pages are not the source of truth.
 
 ## Non-goals
 
@@ -51,7 +51,7 @@ One **`capstone_projects`** record per student. Three Canvas-aligned sections pl
 ```mermaid
 flowchart LR
   A[Topic + article cards<br/>weeks 2–4] --> B[Study focus notes<br/>weeks 5–10 during lit review]
-  B --> C[Phase 3 elevator speech<br/>week 11 export]
+  B --> C[Phase 3 gap to RQ<br/>week 11 export]
   C --> D[Phase 4 pathway + ops<br/>week 11]
 ```
 
@@ -152,57 +152,91 @@ Assignment Help CTAs on `rm-lit-review-draft-1` and `rm-lit-review-final` link h
 
 Links: Ch. 2 (gaps, synthesis), Ch. 11 (APA), Canvas Literature Review Checklist.
 
-#### C. Phase 3 — Elevator speech (`phase-3`)
+#### C. Phase 3 — Gap to research question (`phase-3`)
 
-**Due:** 2026-10-30 · 100 pts · submit with Phase 4
+**Due:** 2026-10-30 · 100 pts · submit with Phase 4  
+**Canvas source:** assignment **44903** (`scripts/canvas-rm-assignment-instructions.json`)  
+**Canonical schema:** `src/data/capstonePhase3Worksheet.js`
 
-**Purpose:** A short spoken summary (~60–90 seconds) of **what the literature shows** and **what gap the student's study will address**. This is the distillation of the completed lit review, not a new research-design worksheet.
+**Objective (from Canvas):** Synthesize findings from the completed literature review, identify research gaps, and draft a specific, measurable research question using operational variables.
 
-| Field | Prompt (guidance only) |
-|-------|------------------------|
-| `whatWeKnow` | In 2–4 sentences: what does prior research agree on about your topic? |
-| `theGap` | In 1–3 sentences: what is still unknown, untested, or contested? |
-| `myStudyPitch` | In 1–3 sentences: how will **your** proposed study address that gap? |
-| `elevatorSpeech` | Combined script (~150–250 words) for read-aloud; student composes |
+**Part A — Gap analysis**
 
-**Sidebar (read-only reminders):** `problemStatement` from article review, `workingGap` from study focus — so they can copy/refine, not start blank.
+| Field id | Canvas prompt |
+|----------|---------------|
+| `currentConsensus` | What do most published articles say about this topic? (one sentence) |
+| `identifiedGap` | What relationship or population has not been studied enough? Be specific. |
 
-**Resource links:** Ch. 2 (synthesis, gaps), Ch. 11 (clear prose). Lit Review Final Assignment Help.
+**Part B — Narrowing the scope**
 
-**Word-count hint only** (not enforced as pass/fail): "Aim for ~150–250 words total; practice reading aloud in about 60–90 seconds."
+| Field id | Canvas prompt |
+|----------|---------------|
+| `targetPopulation` | Who exactly are you studying? (specific, not "people") |
+| `timeFrameContext` | When and where does data collection happen? |
 
-**Export:** formatted block for Canvas Phase 3 worksheet (section headings match Canvas scrape).
+**Part C — Variable selection & definition**
 
-**Explicitly out of scope for Phase 3:** IV/DV tables, hypotheses, feasibility checklists, methodology path choice (those belong in Phase 4 or the methods section).
+| Field id | Canvas prompt |
+|----------|---------------|
+| `independentVariable` | IV: how are you categorizing or manipulating it? |
+| `dependentVariable` | DV: what outcome will change? Must be measurable. |
 
-#### D. Phase 4 — Pathway & operationalization (`phase-4`)
+**Part D — Drafting & refining the question**
 
-**Due:** 2026-10-30 · 200 pts · unlocks method-path guides
+| Field id | Canvas prompt |
+|----------|---------------|
+| `firstDraft` | First draft: "How does [IV] affect [DV] in my population?" |
+| `secondDraft` | Second draft with Part B constraints |
+| `finalResearchQuestion` | Final research question statement |
+| `peerCheckAnswerable` | Optional: answerable within a semester? |
 
-Unchanged role: **new design work** at week 11.
+**Sidebar (read-only reminders):** `problemStatement` from article review, `studyFocus.workingGap` — copy/refine, not start blank.
 
-**Pathway table** — for each `path-1-survey` … `path-4-archival` (from `CANVAS_METHOD_PATHS`):
+**Resource links:** Ch. 2 (gaps, questions), Ch. 4 (variables), Ch. 7 (population).
 
-| Column | Notes |
-|--------|-------|
-| `couldUseThisPath` | yes / no / unsure — student decides |
-| `researchQuestionFit` | How their question would look on this path |
-| `ivDvOrConstructs` | Variables or constructs for this path |
-| `samplingOrAssignment` | |
-| `measurementPlan` | |
-| `feasibilityNote` | |
+**Export:** Parts A–D in Canvas field order for paste into the Phase 3 worksheet.
 
-Each column header links to existing path guide + chapter (`METHOD_PATHS_LIST`, Assignment Help Path 1–4).
+#### D. Phase 4 — Operationalization exploration (`phase-4`)
 
-**Chosen path:** `chosenPathId` — unlocks embedded `DataAnalysisHelper` with `methodPathId` (reuse existing component).
+**Due:** 2026-10-30 · 200 pts · unlocks method-path guides  
+**Canvas source:** assignment **44935** (`scripts/canvas-rm-assignment-instructions.json`)  
+**Canonical schema:** `src/data/capstonePhase4Worksheet.js`  
+**Supplementary wiki:** `/pages/helpful-table` (IV/DV logic table); path guide pages for Path 1–4
 
-**Operationalization table** (Helpful Table) — per construct:
+**Part A — Context recap** (prefill from Phase 3 where noted)
 
-`constructName`, `operationalDefinition`, `scaleOrInstrument`, `measurementLevel`, `reliabilityEvidence`, `validityThreats`, `validityMitigation`
+| Field id | Notes |
+|----------|-------|
+| `broadTopicArea` | e.g., Social Media, Sleep, Parenting |
+| `proposedResearchQuestion` | prefill from `phase3.finalResearchQuestion` |
 
-Seed construct name rows from `myStudyPitch` / study focus **as empty placeholders only** (student fills definitions).
+**Part B — Conceptual definitions** (prefill from Phase 3)
 
-**Export:** pathway table + operationalization for chosen path.
+| Field id | Notes |
+|----------|-------|
+| `ivConceptual` | prefill from `phase3.independentVariable` |
+| `dvConceptual` | prefill from `phase3.dependentVariable` |
+
+**Part C — Four pathways** (student explores each; mark `notViable` if path does not fit)
+
+| Pathway | Canvas label | MM `canvasMethodPathId` | Fields |
+|---------|--------------|-------------------------|--------|
+| Survey | Pathway 1 (Self-Report / Survey) | `path-1-survey` | `validatedScales` |
+| Experimental | Pathway 2: Performance / Experimental Task | `path-3-experimental` | `taskDescription`, `comparisonGroup` |
+| Observation | Pathway 3: Observation / Naturalistic Recording | `path-2-qualitative` | `whatToObserve`, `observationDuration` |
+| Archival | Pathway 4: Archival | `path-4-archival` | `existingDataset` |
+
+Each pathway links to its Canvas path guide page + chapter (`METHOD_PATHS_LIST`).
+
+**Part D — Comparative analysis table**
+
+Rows: feasibility, access, measurement quality, ethics/IRB, optional notes × four pathway columns. MM shows Helpful Table link; student fills cells — no scoring.
+
+**Part E — Final decision**
+
+`chosenPathwayId` — one pathway. Unlocks embedded `DataAnalysisHelper` with matching `methodPathId` (reuse existing component).
+
+**Export:** Parts A–E in Canvas field order.
 
 ---
 
@@ -234,15 +268,25 @@ Seed construct name rows from `myStudyPitch` / study focus **as empty placeholde
     "sourcesToCite": ""
   },
   "phase3": {
-    "whatWeKnow": "",
-    "theGap": "",
-    "myStudyPitch": "",
-    "elevatorSpeech": ""
+    "currentConsensus": "",
+    "identifiedGap": "",
+    "targetPopulation": "",
+    "timeFrameContext": "",
+    "independentVariable": "",
+    "dependentVariable": "",
+    "firstDraft": "",
+    "secondDraft": "",
+    "finalResearchQuestion": "",
+    "peerCheckAnswerable": ""
   },
   "phase4": {
-    "pathwayRows": {},
-    "chosenPathId": "",
-    "operationalizations": []
+    "broadTopicArea": "",
+    "proposedResearchQuestion": "",
+    "ivConceptual": "",
+    "dvConceptual": "",
+    "pathwayResponses": {},
+    "comparisonTable": {},
+    "chosenPathwayId": ""
   }
 }
 ```
@@ -251,7 +295,13 @@ Autosave: debounced PATCH. User-scoped.
 
 ### 2.2 Schema source
 
-`src/data/capstoneArticleReviewWorksheet.js` (article review, from PDF) + `src/data/capstoneWorksheetSchemas.js` (phase 3/4, study focus) + Playwright scrape for drift check
+| File | Source |
+|------|--------|
+| `capstoneArticleReviewWorksheet.js` | Canvas PDF template |
+| `capstonePhase3Worksheet.js` | Canvas assignment 44903 (Playwright) |
+| `capstonePhase4Worksheet.js` | Canvas assignment 44935 (Playwright) |
+| `capstoneWorksheetSchemas.js` | Study focus + `emptyCapstoneProject()` aggregator |
+| `scripts/fetch-canvas-rm-assignment-instructions.mjs` | Drift check for Phase 3/4 assignment text |
 
 ---
 
@@ -259,9 +309,8 @@ Autosave: debounced PATCH. User-scoped.
 
 `src/lib/capstoneValidation.js`:
 
-- `buildExportText(sectionId, project)` — format for Canvas paste
+- `buildExportText(sectionId, project)` — format for Canvas paste (headings from schema `exportLabel`s)
 - `countArticleCards(project)` — factual
-- `elevatorSpeechWordCount(text)` — display hint only
 
 No `lintHypothesisLanguage`, no `checkPhase34Alignment`, no `checkOriginalResearchGate` pass/fail.
 
@@ -276,9 +325,9 @@ src/components/study-plan/
   ArticleCardEditor.vue
   SourceChecklist.vue
   StudyFocusNotes.vue
-  ElevatorSpeechForm.vue
-  PathwayTable.vue
-  OperationalizationTable.vue
+  Phase3WorksheetForm.vue
+  Phase4PathwayExplorer.vue
+  Phase4ComparisonTable.vue
   StudyPlanExportPanel.vue
 src/composables/useCapstoneProject.js
 ```
@@ -295,20 +344,28 @@ Reuse `DataAnalysisHelper` embedded in Phase 4 when path chosen. Reuse `METHOD_P
 | P1 | Sep 4 | Article Review + source checklists + export |
 | P1.5 | Sep 14 | Study focus + lit review Assignment Help links |
 | P2 | Oct 19 | Phase 4 pathway + ops |
-| P2-light | Oct 26 | Phase 3 elevator speech + export |
+| P2-light | Oct 26 | Phase 3 gap-to-RQ worksheet + export |
 
 ---
 
-## 6. Assignment Help copy (Phase 3)
+## 6. Canvas content sources
 
-Phase 3 tips should describe elevator speech, not IV/DV/hypothesis. See `assignmentHelpResearchMethods.js`.
+| Worksheet | Canvas location | Playwright script |
+|-----------|-----------------|-------------------|
+| Article Review | Assignment 44898 + PDF template | PDF archive + assignment scrape |
+| Phase 3 | Assignment **44903** description | `fetch-canvas-rm-assignment-instructions.mjs` |
+| Phase 4 | Assignment **44935** description | same |
+| Helpful Table | Wiki `/pages/helpful-table` | `fetch-canvas-rm-worksheets-playwright.mjs` |
+| Path guides | Wiki `path-1` … `path-4` pages | same |
+
+Wiki pages `/pages/phase-3-worksheet` and `/pages/phase-4-worksheet` are **empty** — do not scrape them for field labels.
 
 ---
 
 ## 7. Success criteria
 
-1. Student completes article cards, study focus notes, elevator speech, and Phase 4 in one Study Plan; exports each section for Canvas.
-2. Phase 3 export is a readable elevator speech, not a methods table.
+1. Student completes article cards, study focus notes, Phase 3 (Parts A–D), and Phase 4 in one Study Plan; exports each section for Canvas.
+2. Phase 3 and Phase 4 field labels match Canvas assignment instructions (Playwright-verified).
 3. Source checklists link to Ch. 2 and library; MM never labels a source invalid.
 4. Phase 4 reuses existing path tabs and Data Analysis Helper.
-5. Playwright scrape documents Canvas Phase 3 field headings (updated for elevator speech if Canvas assignment text changes).
+5. Playwright assignment scrape detects drift when instructor edits Canvas worksheet text.

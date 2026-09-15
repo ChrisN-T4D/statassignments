@@ -10,6 +10,22 @@ export const RESEARCH_METHODS_CLASS = 'research-methods'
 export const CANVAS_RESEARCH_METHODS_COURSE_ID = 2406
 export const CANVAS_RM_GETTING_STARTED_URL =
   'https://nwosu.instructure.com/courses/2406/pages/getting-started-on-methods-market'
+
+/** Graded worksheet assignments — instructions on assignment description (wiki pages may be empty shells). */
+export const CANVAS_RM_ASSIGNMENTS = {
+  articleReview: 'https://nwosu.instructure.com/courses/2406/assignments/44898',
+  phase3: 'https://nwosu.instructure.com/courses/2406/assignments/44903',
+  phase4: 'https://nwosu.instructure.com/courses/2406/assignments/44935'
+}
+
+/** Wiki pages linked from Phase 4 and path guides. */
+export const CANVAS_RM_WIKI_PAGES = {
+  helpfulTable: 'https://nwosu.instructure.com/courses/2406/pages/helpful-table',
+  path1Survey: 'https://nwosu.instructure.com/courses/2406/pages/path-1-survey-methodology',
+  path2Qualitative: 'https://nwosu.instructure.com/courses/2406/pages/path-2-qualitative-interview',
+  path3Experimental: 'https://nwosu.instructure.com/courses/2406/pages/path-3-experimental-design',
+  path4Archival: 'https://nwosu.instructure.com/courses/2406/pages/path-4-archival-data'
+}
 export const PRESSBOOKS_TEXTBOOK_URL = 'https://kpu.pressbooks.pub/psychmethods4e/'
 
 export function conceptReviewPath (moduleId) {

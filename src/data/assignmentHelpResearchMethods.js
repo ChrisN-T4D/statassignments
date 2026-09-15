@@ -133,21 +133,21 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 2',
     moduleTitle: 'Research Question & Methodological Route',
-    phaseLabel: 'Phase 3 & 4 — Elevator speech & methodology path',
+    phaseLabel: 'Phase 3 & 4 — Research question & operationalization',
     assignments: [
       {
         id: 'rm-phase-3-worksheet',
-        name: 'Phase 3 Worksheet (Elevator Speech)',
+        name: 'Phase 3 Worksheet',
         type: 'assignment',
         tips: [
           'Submit together with Phase 4 on the same due date (see Canvas).',
-          'Phase 3 is an elevator speech (~60–90 seconds): summarize what the literature shows, state the gap, and pitch how your study will address it.',
-          'Pull from your completed literature review — this is a spoken distillation, not a new methods table.',
-          'Practice reading aloud: aim for about 150–250 words total.',
-          'Save variables, hypotheses, and design choices for Phase 4 and your methods section.'
+          'Phase 3: synthesize your completed literature review — state consensus, identify the gap, narrow population and context, define IV/DV, and draft a final research question.',
+          'Use your Lit Review Final and article reviews; do not start from scratch.',
+          'Complete Parts A–D on the Canvas assignment: gap analysis, scope, variables, and refined question drafts.',
+          'Your final research question feeds directly into Phase 4 operationalization.'
         ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
-        getHelp: 'Use the Study Plan in Methods Market to draft your elevator speech from your lit review gap. Ch. 2 covers synthesis and gaps; Ch. 11 covers clear prose. Submit with Phase 4 on the date shown in Canvas.'
+        practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-7'],
+        getHelp: 'Open Study Plan in Methods Market (mirrors Canvas Parts A–D). Ch. 2 covers gaps and questions; Ch. 4 covers variables; Ch. 7 for population/sampling language. Submit with Phase 4 on the date shown in Canvas.'
       },
       {
         id: 'rm-phase-4-worksheet',
@@ -155,9 +155,10 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 3 on the same due date.',
-          'Choose your path using chapters you already completed (Ch. 5–7 during lit review weeks) — deepen your path’s chapter as needed.',
-          'Fill the pathway table for all four routes, then operationalize every construct for your chosen path.',
-          'Use the Helpful Table page in Canvas alongside Ch. 4 (measurement, reliability, validity).'
+          'Recap your topic and research question from Phase 3; define IV and DV conceptually (Part B).',
+          'Explore all four pathways in Part C (survey, experimental task, observation, archival) — mark a path “not viable” if it does not fit.',
+          'Complete the Part D comparison table, then choose ONE pathway in Part E.',
+          'Use the Helpful Table wiki page in Canvas and the Path 1–4 guides; Ch. 4 for measurement.'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
         getHelp: 'Same due date as Phase 3 in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
