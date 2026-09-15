@@ -5,7 +5,7 @@ const PAD = 8
 /**
  * @param {import('vue').Ref<HTMLElement|null>} rootRef
  * @param {import('vue').ComputedRef<Array>} steps
- * @param {{ beforeStep?: (step: object) => void|Promise<void> }} options
+ * @param {{ beforeStep?: (step: object) => void|Promise<void>, onComplete?: () => void }} options
  */
 export function useSpotlightTour (rootRef, steps, options = {}) {
   const active = ref(false)
@@ -99,9 +99,11 @@ export function useSpotlightTour (rootRef, steps, options = {}) {
   }
 
   function end () {
+    if (!active.value) return
     active.value = false
     highlight.value = { ...highlight.value, visible: false }
     document.body.classList.remove('spotlight-tour-active')
+    options.onComplete?.()
   }
 
   function onResize () {

@@ -6,15 +6,15 @@
     <p class="tour-hint">Explains each elevator speech part and how to use your Lit Review Outline as a starting point.</p>
 
     <SpotlightTour
-      :active="tour.active"
-      :step-index="tour.stepIndex"
-      :step-count="tour.stepCount"
-      :current-step="tour.currentStep"
-      :highlight="tour.highlight"
-      :popover="tour.popover"
+      :active="active"
+      :step-index="stepIndex"
+      :step-count="stepCount"
+      :current-step="currentStep"
+      :highlight="highlight"
+      :popover="popover"
       aria-label="Phase 3 guided tour"
-      @next="tour.next"
-      @prev="tour.prev"
+      @next="next"
+      @prev="prev"
       @end="onTourEnd"
     />
   </div>
@@ -31,7 +31,32 @@ const props = defineProps({
 })
 
 const completed = ref(false)
-const tour = useSpotlightTour(computed(() => props.rootEl), computed(() => PHASE3_TOUR_STEPS), {})
+
+function markTourCompleted () {
+  completed.value = true
+  try {
+    localStorage.setItem(PHASE3_TOUR_STORAGE_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+const {
+  active,
+  stepIndex,
+  stepCount,
+  currentStep,
+  highlight,
+  popover,
+  start,
+  next,
+  prev,
+  end
+} = useSpotlightTour(
+  computed(() => props.rootEl),
+  computed(() => PHASE3_TOUR_STEPS),
+  { onComplete: markTourCompleted }
+)
 
 onMounted(() => {
   try {
@@ -42,17 +67,11 @@ onMounted(() => {
 })
 
 function startTour () {
-  tour.start(0)
+  start(0)
 }
 
 function onTourEnd () {
-  tour.end()
-  completed.value = true
-  try {
-    localStorage.setItem(PHASE3_TOUR_STORAGE_KEY, '1')
-  } catch {
-    /* ignore */
-  }
+  end()
 }
 </script>
 

@@ -45,6 +45,14 @@
           </div>
         </div>
       </div>
+
+      <div v-else class="spotlight-popover placement-center" :style="fallbackPopoverStyle">
+        <h3 class="popover-title">Tour unavailable</h3>
+        <p class="popover-body">This step could not be loaded. You can close the tour and try again.</p>
+        <div class="popover-actions">
+          <button type="button" class="btn-primary" @click="end">Close tour</button>
+        </div>
+      </div>
     </div>
   </Teleport>
 </template>
@@ -63,6 +71,13 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['next', 'prev', 'end'])
+
+const fallbackPopoverStyle = computed(() => ({
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: `${Math.min(400, window.innerWidth - 32)}px`
+}))
 
 const popoverStyle = computed(() => {
   const p = props.popover
@@ -88,10 +103,17 @@ const popoverStyle = computed(() => {
   }
 })
 
-function next () { emit('next') }
+function next () {
+  if (props.stepIndex >= props.stepCount - 1) {
+    emit('end')
+    return
+  }
+  emit('next')
+}
+
 function prev () { emit('prev') }
 function end () { emit('end') }
-function onBackdropClick () { /* keep focus on tour */ }
+function onBackdropClick () { emit('end') }
 </script>
 
 <style>

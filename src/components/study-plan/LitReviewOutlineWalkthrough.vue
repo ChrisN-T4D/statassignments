@@ -6,15 +6,15 @@
     <p class="tour-hint">Framework first, then theme buckets, gap, and compiled outline for Draft 1.</p>
 
     <SpotlightTour
-      :active="tour.active"
-      :step-index="tour.stepIndex"
-      :step-count="tour.stepCount"
-      :current-step="tour.currentStep"
-      :highlight="tour.highlight"
-      :popover="tour.popover"
+      :active="active"
+      :step-index="stepIndex"
+      :step-count="stepCount"
+      :current-step="currentStep"
+      :highlight="highlight"
+      :popover="popover"
       aria-label="Lit Review Outline guided tour"
-      @next="tour.next"
-      @prev="tour.prev"
+      @next="next"
+      @prev="prev"
       @end="onTourEnd"
     />
   </div>
@@ -36,10 +36,30 @@ const props = defineProps({
 const completed = ref(false)
 const steps = computed(() => LIT_REVIEW_OUTLINE_TOUR_STEPS)
 
-const tour = useSpotlightTour(
+function markTourCompleted () {
+  completed.value = true
+  try {
+    localStorage.setItem(LIT_REVIEW_OUTLINE_TOUR_STORAGE_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+const {
+  active,
+  stepIndex,
+  stepCount,
+  currentStep,
+  highlight,
+  popover,
+  start,
+  next,
+  prev,
+  end
+} = useSpotlightTour(
   computed(() => props.rootEl),
   steps,
-  {}
+  { onComplete: markTourCompleted }
 )
 
 onMounted(() => {
@@ -51,17 +71,11 @@ onMounted(() => {
 })
 
 function startTour () {
-  tour.start(0)
+  start(0)
 }
 
 function onTourEnd () {
-  tour.end()
-  completed.value = true
-  try {
-    localStorage.setItem(LIT_REVIEW_OUTLINE_TOUR_STORAGE_KEY, '1')
-  } catch {
-    /* ignore */
-  }
+  end()
 }
 </script>
 

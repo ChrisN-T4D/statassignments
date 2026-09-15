@@ -6,15 +6,15 @@
     <p class="tour-hint">Highlights each part of the worksheet and explains why it matters, including when to narrow or widen your topic.</p>
 
     <SpotlightTour
-      :active="tour.active"
-      :step-index="tour.stepIndex"
-      :step-count="tour.stepCount"
-      :current-step="tour.currentStep"
-      :highlight="tour.highlight"
-      :popover="tour.popover"
+      :active="active"
+      :step-index="stepIndex"
+      :step-count="stepCount"
+      :current-step="currentStep"
+      :highlight="highlight"
+      :popover="popover"
       aria-label="Article review guided tour"
-      @next="tour.next"
-      @prev="tour.prev"
+      @next="next"
+      @prev="prev"
       @end="onTourEnd"
     />
   </div>
@@ -37,13 +37,34 @@ const props = defineProps({
 const completed = ref(false)
 const steps = computed(() => ARTICLE_REVIEW_TOUR_STEPS)
 
-const tour = useSpotlightTour(
+function markTourCompleted () {
+  completed.value = true
+  try {
+    localStorage.setItem(ARTICLE_REVIEW_TOUR_STORAGE_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+const {
+  active,
+  stepIndex,
+  stepCount,
+  currentStep,
+  highlight,
+  popover,
+  start,
+  next,
+  prev,
+  end
+} = useSpotlightTour(
   computed(() => props.rootEl),
   steps,
   {
     beforeStep: async (step) => {
       if (props.beforeStep) await props.beforeStep(step)
-    }
+    },
+    onComplete: markTourCompleted
   }
 )
 
@@ -56,17 +77,11 @@ onMounted(() => {
 })
 
 function startTour () {
-  tour.start(0)
+  start(0)
 }
 
 function onTourEnd () {
-  tour.end()
-  completed.value = true
-  try {
-    localStorage.setItem(ARTICLE_REVIEW_TOUR_STORAGE_KEY, '1')
-  } catch {
-    /* ignore */
-  }
+  end()
 }
 </script>
 
