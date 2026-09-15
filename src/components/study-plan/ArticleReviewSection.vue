@@ -7,6 +7,8 @@
     </p>
     <p class="progress-chip">{{ progressLabel }}</p>
 
+    <PeerReviewReference />
+
     <section class="worksheet-block">
       <h2 class="block-title">Header</h2>
       <SchemaField
@@ -42,22 +44,10 @@
           :model-value="card[field.id]"
           @update:model-value="setCardField(index, field.id, $event)"
         />
-        <div class="self-check">
-          <h3 class="self-check-title">Source self-check (Methods Market only)</h3>
-          <p class="self-check-note">These checkboxes guide your evaluation — Methods Market does not grade them.</p>
-          <label
-            v-for="item in SOURCE_SELF_CHECK_ITEMS"
-            :key="item.id"
-            class="check-row"
-          >
-            <input
-              type="checkbox"
-              :checked="card.sourceSelfCheck?.[item.id]"
-              @change="setSelfCheck(index, item.id, $event.target.checked)"
-            />
-            <span>{{ item.label }}</span>
-          </label>
-        </div>
+        <SourceSelfCheckPanel
+          :model-value="card.sourceSelfCheck ?? {}"
+          @update:model-value="setSelfCheckObject(index, $event)"
+        />
       </div>
     </section>
 
@@ -98,12 +88,13 @@ import {
   ARTICLE_REVIEW_PROBLEM_STATEMENT,
   ARTICLE_REVIEW_RQ_HYPOTHESIS,
   ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
-  ARTICLE_REVIEW_MIN_ARTICLES,
-  SOURCE_SELF_CHECK_ITEMS
+  ARTICLE_REVIEW_MIN_ARTICLES
 } from '../../data/capstoneArticleReviewWorksheet.js'
 import { CANVAS_RM_ASSIGNMENTS } from '../../data/researchMethodsCanvasLinks.js'
 import { countArticleCards } from '../../lib/capstoneValidation.js'
 import SchemaField from './SchemaField.vue'
+import PeerReviewReference from './PeerReviewReference.vue'
+import SourceSelfCheckPanel from './SourceSelfCheckPanel.vue'
 import StudyPlanExportPanel from './StudyPlanExportPanel.vue'
 
 const props = defineProps({
@@ -136,12 +127,9 @@ function setCardField (index, fieldId, value) {
   emitUpdate({ ...articleReview.value, articleCards: cards })
 }
 
-function setSelfCheck (index, checkId, checked) {
+function setSelfCheckObject (index, sourceSelfCheck) {
   const cards = [...articleReview.value.articleCards]
-  cards[index] = {
-    ...cards[index],
-    sourceSelfCheck: { ...cards[index].sourceSelfCheck, [checkId]: checked }
-  }
+  cards[index] = { ...cards[index], sourceSelfCheck }
   emitUpdate({ ...articleReview.value, articleCards: cards })
 }
 
@@ -238,36 +226,4 @@ function cardStatus (card) {
   border-top: 1px solid var(--border);
 }
 
-.self-check {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed var(--border);
-}
-
-.self-check-title {
-  font-size: 0.95rem;
-  margin: 0 0 0.35rem;
-}
-
-.self-check-note {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 0 0 0.75rem;
-}
-
-.check-row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  line-height: 1.4;
-}
-
-.check-row input {
-  margin-top: 0.2rem;
-}
 </style>

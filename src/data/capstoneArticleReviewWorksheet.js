@@ -125,33 +125,93 @@ export const ARTICLE_CARD_FIELDS = [
   }
 ]
 
-/** Self-check only — not on Canvas template; guides peer-reviewed / original-research evaluation. */
+/**
+ * Self-check only — not on Canvas template; guides searching and peer-review evaluation.
+ * MM shows lookFor prompts; student checks boxes after looking — no pass/fail.
+ */
 export const SOURCE_SELF_CHECK_ITEMS = [
   {
     id: 'foundInLibraryDatabase',
     label: 'I found this article through a library database (e.g., PsycINFO).',
     helpTopicId: 'rm-chapter-2',
-    helpNote: 'Ch. 2 covers searching and evaluating sources.'
+    helpNote: 'Start in your university library databases, not the open web alone.',
+    lookFor: [
+      'I searched PsycINFO, Academic Search Complete, or another library database',
+      'I can name which database I used',
+      'I did not rely on Google or a random .com page as my only source'
+    ]
   },
   {
     id: 'scholarlyJournal',
     label: 'It appears in a scholarly, peer-reviewed journal (not a magazine, blog, or textbook chapter).',
     helpTopicId: 'rm-chapter-2',
-    helpNote: 'Check journal name, volume/issue, and whether the journal is peer-reviewed.'
+    helpNote:
+      'Peer review means experts evaluated the manuscript before publication. It does not mean the study is correct.',
+    lookFor: [
+      'The PDF shows a journal name (not a news site, magazine, or blog)',
+      'Volume and issue numbers appear (e.g., Vol. 42, No. 3)',
+      'Authors list university or research affiliations',
+      'A DOI or stable journal URL is present',
+      'If unsure whether the journal is peer-reviewed, I checked with a librarian or instructor'
+    ]
   },
   {
     id: 'originalEmpiricalStudy',
     label: 'It reports an original empirical study (Method and Results with data — not only a review or meta-analysis).',
     helpTopicId: 'rm-chapter-2',
-    helpNote: 'Review articles summarize others; your cards should be primary studies.'
+    helpNote: 'Your article cards should be primary studies you read, not summaries of other people\'s work.',
+    lookFor: [
+      'The PDF has a Method (or Methods) section describing participants and procedure',
+      'The PDF has a Results section with data (not just opinions)',
+      'It is not a literature review, meta-analysis, book chapter, or editorial',
+      'I can describe what the researchers actually did in my own words'
+    ]
   },
   {
     id: 'pdfSaved',
     label: 'I saved the PDF and have the complete APA reference ready.',
     helpTopicId: 'rm-chapter-11',
-    helpNote: 'You will attach PDFs in Canvas and reuse references in your literature review.'
+    helpNote: 'You will attach PDFs in Canvas and reuse references in your literature review.',
+    lookFor: [
+      'I downloaded the full-text PDF (not just the abstract page)',
+      'My APA reference includes authors, year, title, journal, volume, issue, and pages or DOI',
+      'I can attach this PDF when I submit the Canvas assignment'
+    ]
   }
 ]
+
+/** Always-visible reference — guide only, not graded. */
+export const PEER_REVIEW_REFERENCE = {
+  title: 'What counts as peer-reviewed?',
+  intro:
+    'Use this while you evaluate each source. Methods Market does not decide for you — you look, then you check the boxes below on each article card.',
+  usuallyPeerReviewed: [
+    'Journal of ___ Psychology (or similar scholarly journal)',
+    'Volume + issue + page range or DOI',
+    'Method and Results sections with original data',
+    'Authors with university affiliations'
+  ],
+  usuallyNot: [
+    'News sites, blogs, Wikipedia, or general .com pages',
+    'Magazine or newspaper articles (Psychology Today, etc.)',
+    'Textbook chapters or encyclopedia entries',
+    'Opinion pieces with no Method section'
+  ],
+  reminder:
+    'Predatory journals exist. When in doubt, ask a librarian or your instructor before you spend time on the article.'
+}
+
+/** Where to look inside the PDF — shown on each article card. */
+export const PDF_SNIFF_TEST = {
+  title: 'Where to look in the PDF',
+  items: [
+    'Title page or header → journal name?',
+    'First pages → abstract describes original data collection?',
+    'Method section → participants, measures, design?',
+    'Results section → statistics or data findings?',
+    'Reference list → one citation you could follow next (citation chaining)'
+  ]
+}
 
 /** After all article cards — still part of Article Review assignment. */
 export const ARTICLE_REVIEW_PROBLEM_STATEMENT = {
