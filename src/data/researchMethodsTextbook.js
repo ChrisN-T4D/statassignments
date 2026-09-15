@@ -306,15 +306,15 @@ export const CANVAS_COURSE_PARTS = [
     label: 'Part 1',
     title: 'Introduction & literature review',
     description:
-      'Start with Ch. 1 (why we do science), then Ch. 2 for topic choice, article reviews, and the literature review.',
+      'Course intro, Phase 1 topic choice and article reviews, then Phase 2 literature review — same sequence as Canvas Part 1.',
     moduleIds: ['rm-module-1', 'rm-module-2']
   },
   {
     id: 'part-2',
     label: 'Part 2',
-    title: 'Question, design & methods',
+    title: 'Research question & methodological route',
     description:
-      'Research question, methodology path, and methods write-up — use the chapters that match your design.',
+      'Phase 3 elevator speech and Phase 4 operationalization, methods write-up, and methodology path guides — Canvas Part 2.',
     moduleIds: [
       'rm-module-4',
       'rm-module-5',
@@ -331,7 +331,7 @@ export const CANVAS_COURSE_PARTS = [
     id: 'part-3',
     label: 'Part 3',
     title: 'Ethics, training & IRB',
-    description: 'Human Research Training and IRB submission (Pressbooks Ch. 3).',
+    description: 'Human Research Training lessons and IRB submission — Canvas Part 3.',
     moduleIds: ['rm-module-3']
   },
   {
@@ -339,7 +339,7 @@ export const CANVAS_COURSE_PARTS = [
     label: 'Analysis',
     title: 'Statistics & data analysis by path',
     description:
-      'Choose your methodology path (Survey, Qualitative, Experimental, or Archival) — then read Ch. 12–13 and use the analysis tool matched to your design.',
+      'After Phase 4 path choice — Ch. 12–13 reading and path-matched analysis steps.',
     moduleIds: ['rm-module-data-by-path']
   }
 ]

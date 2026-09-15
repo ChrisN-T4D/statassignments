@@ -127,7 +127,35 @@
             :aria-labelledby="`part-tab-${activePartGroup.id}`"
           >
             <p v-if="activePartGroup.description" class="module-part-desc">{{ activePartGroup.description }}</p>
-            <div class="module-list">
+            <template v-if="activePartGroup.phases?.length">
+              <div
+                v-for="phase in activePartGroup.phases"
+                :key="phase.id"
+                class="nav-phase"
+              >
+                <h3 class="nav-phase-label">{{ phase.label }}</h3>
+                <div class="module-list">
+                  <button
+                    v-for="mod in phase.items"
+                    :key="mod.id"
+                    class="module-btn"
+                    :class="{
+                      active: selectedModuleId === mod.id,
+                      'study-plan-nav': mod.isStudyPlanSection,
+                      'assignment-help-nav': mod.isAssignmentHelpLink
+                    }"
+                    :style="{ '--module-color': mod.color }"
+                    @click="selectNavItem(mod)"
+                  >
+                    <span class="module-icon">{{ mod.icon }}</span>
+                    <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
+                    <span class="module-title">{{ getNavItemLabel(mod) }}</span>
+                    <span v-if="mod.navBadge" class="module-nav-badge">{{ mod.navBadge }}</span>
+                  </button>
+                </div>
+              </div>
+            </template>
+            <div v-else class="module-list">
               <button
                 v-for="mod in activePartGroup.modules"
                 :key="mod.id"
@@ -644,7 +672,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
@@ -657,6 +685,7 @@ import {
   classHasDataAnalysisTool
 } from '../data/modules'
 import { groupModulesByCanvasPart, METHOD_PATHS_LIST, getMethodPathById } from '../data/researchMethodsTextbook'
+import { groupResearchMethodsCourseNav, findPartForNavItemId } from '../data/researchMethodsCourseNav.js'
 import { isPsychMethodsCourse } from '../data/psychMethodsCourses'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
@@ -674,6 +703,7 @@ import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLink
 import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
+const router = useRouter()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated, user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
@@ -827,6 +857,9 @@ const benchmarkBatchUrl = computed(() => {
 const psychMethodsModuleGroups = computed(() => {
   if (!isPsychMethodsClass.value) return []
   const slug = currentClass.value?.slug || classId.value
+  if (slug === 'research-methods') {
+    return groupResearchMethodsCourseNav(contentModules.value)
+  }
   return groupModulesByCanvasPart(contentModules.value, slug)
 })
 
@@ -838,6 +871,10 @@ const activePartGroup = computed(() => {
 
 function partIdForModule(moduleId) {
   if (!moduleId) return null
+  if (isResearchMethodsClass.value) {
+    const fromNav = findPartForNavItemId(moduleId)
+    if (fromNav) return fromNav
+  }
   for (const part of psychMethodsModuleGroups.value) {
     if (part.modules.some((m) => m.id === moduleId)) return part.id
   }
@@ -859,7 +896,28 @@ function selectPart(partId) {
   const part = psychMethodsModuleGroups.value.find((p) => p.id === partId)
   if (!part?.modules?.length) return
   const moduleInPart = part.modules.some((m) => m.id === selectedModuleId.value)
-  if (!moduleInPart) selectModule(part.modules[0].id)
+  if (!moduleInPart) {
+    const first = part.modules[0]
+    if (first?.isStudyPlanSection || first?.isAssignmentHelpLink) return
+    selectModule(first.id)
+  }
+}
+
+function getNavItemLabel(mod) {
+  if (mod.isStudyPlanSection || mod.isAssignmentHelpLink) return mod.shortTitle || mod.title
+  return getModuleDisplayShortTitle(mod)
+}
+
+function selectNavItem(mod) {
+  if (mod.isStudyPlanSection) {
+    router.push(`/class/${classId.value}/study-plan/${mod.studyPlanSectionId}`)
+    return
+  }
+  if (mod.isAssignmentHelpLink) {
+    router.push(`/class/${classId.value}/assignment-help/${mod.assignmentHelpId}`)
+    return
+  }
+  selectModule(mod.id)
 }
 
 const selectedModule = computed(() => {
@@ -1650,6 +1708,39 @@ watch(selectedModuleId, id => {
   color: var(--text-secondary);
   max-width: 42rem;
   line-height: 1.5;
+}
+
+.nav-phase {
+  margin-bottom: 1.25rem;
+}
+
+.nav-phase:last-child {
+  margin-bottom: 0;
+}
+
+.nav-phase-label {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.module-nav-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--module-color, var(--primary)) 18%, transparent);
+  color: var(--module-color, var(--primary));
+}
+
+.module-btn.study-plan-nav,
+.module-btn.assignment-help-nav {
+  border-style: dashed;
 }
 
 .module-canvas-part-label {
