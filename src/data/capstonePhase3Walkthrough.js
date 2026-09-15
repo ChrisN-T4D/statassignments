@@ -10,7 +10,7 @@ export const PHASE3_TOUR_STEPS = [
     target: 'tour-p3-intro',
     title: 'Distill your lit review into a speech',
     body:
-      'Phase 3 is ~60–90 seconds read aloud: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas. IV/DV and methods belong in Phase 4.',
+      'Phase 3 is a 1–2 minute spiel (at most) about your research: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas. IV/DV and methods belong in Phase 4.',
     beforeShow: null
   },
   {
@@ -54,9 +54,9 @@ export const PHASE3_TOUR_STEPS = [
     target: 'tour-p3-speech',
     title: 'Full elevator speech',
     body:
-      'Combine the three parts into one script (~150–250 words). Practice reading aloud in about 60–90 seconds.',
-    narrow: 'Over 300 words? Cut repetition between sections.',
-    widen: 'Under 120 words? Add one concrete example from the literature.',
+      'Combine the three parts into one script (~130–300 words). Practice as a 1–2 minute spiel about your research when read aloud.',
+    narrow: 'Over 350 words? Cut repetition — keep it under 2 minutes.',
+    widen: 'Under 130 words? Add one concrete example from the literature.',
     beforeShow: null
   },
   {

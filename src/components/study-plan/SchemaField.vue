@@ -32,7 +32,9 @@
     />
     <p v-if="wordCount != null" class="word-count-hint">
       {{ wordCount }} words
-      <span v-if="wordCountHint"> (aim for ~{{ wordCountHint.min }}–{{ wordCountHint.max }})</span>
+      <span v-if="wordCountHint">
+        (aim for ~{{ wordCountHint.min }}–{{ wordCountHint.max }} words<template v-if="wordCountHint.readAloudLabel">; {{ wordCountHint.readAloudLabel }}</template>)
+      </span>
     </p>
   </div>
 </template>

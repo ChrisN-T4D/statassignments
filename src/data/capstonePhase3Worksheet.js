@@ -11,18 +11,22 @@ export const PHASE3_META = {
   assignmentUrl: 'https://nwosu.instructure.com/courses/2406/assignments/44903',
   title: 'Phase 3 — Elevator Speech',
   objective:
-    'Distill your completed literature review into a short spoken summary of what the field knows, what gap your study addresses, and how your proposed study fits.'
+    'Prepare a 1–2 minute spiel (at most) about your research: what the field knows, what gap your study addresses, and how your proposed study fits.'
 }
 
 /** Display-only hint; not enforced as pass/fail. */
-export const ELEVATOR_SPEECH_WORD_COUNT_HINT = { min: 150, max: 250, readAloudSeconds: '60–90' }
+export const ELEVATOR_SPEECH_WORD_COUNT_HINT = {
+  min: 130,
+  max: 300,
+  readAloudLabel: '1–2 minute spiel (at most)'
+}
 
 export const PHASE3_PARTS = [
   {
     id: 'elevator-speech',
     title: 'Elevator Speech',
     instruction:
-      'Summarize your lit review in about 60–90 seconds when read aloud. IV/DV tables and methodology path choice belong in Phase 4.',
+      'Your goal is a 1–2 minute spiel about your research when read aloud. IV/DV tables and methodology path choice belong in Phase 4.',
     fields: [
       {
         id: 'whatWeKnow',
@@ -58,7 +62,7 @@ export const PHASE3_PARTS = [
         required: true,
         multiline: true,
         helpTopicId: 'rm-chapter-11',
-        helpNote: `Aim for ~${ELEVATOR_SPEECH_WORD_COUNT_HINT.min}–${ELEVATOR_SPEECH_WORD_COUNT_HINT.max} words; practice reading aloud in about ${ELEVATOR_SPEECH_WORD_COUNT_HINT.readAloudSeconds} seconds.`,
+        helpNote: `Aim for ~${ELEVATOR_SPEECH_WORD_COUNT_HINT.min}–${ELEVATOR_SPEECH_WORD_COUNT_HINT.max} words — a ${ELEVATOR_SPEECH_WORD_COUNT_HINT.readAloudLabel} about your research when read aloud.`,
         wordCountHint: true
       }
     ]

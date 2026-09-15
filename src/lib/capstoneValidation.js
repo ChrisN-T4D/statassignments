@@ -40,7 +40,7 @@ export function countPhase3Progress (project) {
   const keys = ['whatWeKnow', 'theGap', 'myStudyPitch', 'elevatorSpeech']
   const filled = keys.filter((k) => (p3[k] ?? '').trim()).length
   const words = elevatorSpeechWordCount(p3.elevatorSpeech)
-  return { filled, total: keys.length, words, ready: filled === keys.length && words >= 120 }
+  return { filled, total: keys.length, words, ready: filled === keys.length && words >= 130 }
 }
 
 export function countPhase4Progress (project) {
