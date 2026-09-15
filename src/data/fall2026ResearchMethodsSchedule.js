@@ -135,7 +135,7 @@ const WEEKLY_SCHEDULE_RAW = [
   {
     week: 11,
     dates: 'Oct 26–30',
-    focus: 'Phase 3 & 4 — question, hypothesis & methodology path',
+    focus: 'Phase 3 & 4 — elevator speech & methodology path',
     chapterNumber: 10,
     chapterGoal: 'Single-subject designs — choose and justify your group’s methodology path.',
     due: ['Phase 3 & 4 Worksheets (Oct 30)', 'HRT Lessons 1–3 (Oct 26–30)']
@@ -293,7 +293,7 @@ export const CANVAS_ASSIGNMENT_TITLES = {
   'rm-article-review': 'Article Review and Problem Statement',
   'rm-lit-review-draft-1': 'Literature Review Draft 1',
   'rm-lit-review-final': 'Literature Review Final / References Section',
-  'rm-phase-3-worksheet': 'Phase 3 Worksheet',
+  'rm-phase-3-worksheet': 'Phase 3 Worksheet (Elevator Speech)',
   'rm-phase-4-worksheet': 'Phase 4 Worksheet',
   'rm-methods-section': 'Methods Section (Includes all appendices and literature review)',
   'rm-hrt-lesson-1': 'Human Research Training - Lesson 1',

@@ -106,7 +106,8 @@ export const assignmentHelpResearchMethods = [
           'While you draft, work through Ch. 6 and Ch. 7 in Methods Market when Canvas assigns them (one full chapter at a time).',
           'Include a working References list in APA 7 format; use Ch. 11 when Canvas assigns APA/style reading.',
           'When summarizing each study, name the design using vocabulary from the chapters you have completed.',
-          'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.'
+          'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.',
+          'Jot working gap and theme notes in Study Plan (Methods Market) as you draft — they feed your Phase 3 elevator speech later.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
         getHelp: 'Check Canvas for the due date. Bring an outline to office hours before you submit. Draft 1 is for feedback, not a polished final.'
@@ -131,21 +132,21 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 2',
     moduleTitle: 'Research Question & Methodological Route',
-    phaseLabel: 'Phase 3 & 4 — Question, hypothesis & methodology path',
+    phaseLabel: 'Phase 3 & 4 — Elevator speech & methodology path',
     assignments: [
       {
         id: 'rm-phase-3-worksheet',
-        name: 'Phase 3 Worksheet',
+        name: 'Phase 3 Worksheet (Elevator Speech)',
         type: 'assignment',
         tips: [
-          'Submit together with Phase 4 on the same due date (see Canvas) — your research question and methodology path must align.',
-          'Complete Ch. 10 when Canvas assigns it, then apply Ch. 4–9 from earlier weeks to your own study.',
-          'State variables clearly: what you measure (DV) and what you compare or manipulate (IV or predictor).',
-          'Write hypotheses that match your design — causal language only for experiments; association language for correlational/survey work.',
-          'Check feasibility: can you recruit these participants and run this procedure this semester?'
+          'Submit together with Phase 4 on the same due date (see Canvas).',
+          'Phase 3 is an elevator speech (~60–90 seconds): summarize what the literature shows, state the gap, and pitch how your study will address it.',
+          'Pull from your completed literature review — this is a spoken distillation, not a new methods table.',
+          'Practice reading aloud: aim for about 150–250 words total.',
+          'Save variables, hypotheses, and design choices for Phase 4 and your methods section.'
         ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-4'],
-        getHelp: 'Ch. 2 covers moving from topic to testable question; Ch. 4 covers operationalizing constructs. Submit with Phase 4 on the date shown in Canvas.'
+        practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
+        getHelp: 'Use the Study Plan in Methods Market to draft your elevator speech from your lit review gap. Ch. 2 covers synthesis and gaps; Ch. 11 covers clear prose. Submit with Phase 4 on the date shown in Canvas.'
       },
       {
         id: 'rm-phase-4-worksheet',
