@@ -126,7 +126,7 @@ export const PHASE4_PARTS = [
         exportLabel: 'Proposed Research Question:',
         required: true,
         multiline: true,
-        prefillFrom: 'studyFocus.workingResearchQuestion'
+        prefillFrom: 'litReviewOutline.gapAndTransition.workingResearchQuestion'
       }
     ]
   },

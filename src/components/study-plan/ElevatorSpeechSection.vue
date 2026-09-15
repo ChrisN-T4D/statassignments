@@ -12,7 +12,7 @@
         <p class="reminder-text">{{ problemDraft }}</p>
       </div>
       <div v-if="workingGap" class="reminder-block">
-        <h3>Working gap (Study Focus)</h3>
+        <h3>Working gap (Lit Review Outline)</h3>
         <p class="reminder-text">{{ workingGap }}</p>
       </div>
     </aside>
@@ -64,7 +64,9 @@ const phase3 = computed(() => props.project.phase3 ?? {})
 const problemDraft = computed(() =>
   props.project.articleReview?.problemStatement?.problemStatementDraft?.trim() || ''
 )
-const workingGap = computed(() => props.project.studyFocus?.workingGap?.trim() || '')
+const workingGap = computed(() =>
+  props.project.litReviewOutline?.gapAndTransition?.gapStatement?.trim() || ''
+)
 const hasSidebarReminders = computed(() => problemDraft.value || workingGap.value)
 
 function wordCount (text) {

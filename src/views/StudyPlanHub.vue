@@ -47,7 +47,7 @@
 <script setup>
 import { useCapstoneProject } from '../composables/useCapstoneProject'
 import { STUDY_PLAN_SECTIONS } from '../data/capstoneWorksheetSchemas.js'
-import { countArticleCards, countStudyFocusFields, elevatorSpeechWordCount } from '../lib/capstoneValidation.js'
+import { countArticleCards, countLitReviewOutlineProgressForProject, elevatorSpeechWordCount } from '../lib/capstoneValidation.js'
 
 const props = defineProps({
   classId: { type: String, required: true }
@@ -62,8 +62,10 @@ function sectionProgress (sectionId) {
       return `${complete}/${minRequired} complete · ${total} cards`
     }
     case 'study-focus': {
-      const { filled, total } = countStudyFocusFields(project.value)
-      return filled ? `${filled}/${total} note fields filled` : 'Lit review working notes'
+      const p = countLitReviewOutlineProgressForProject(project.value)
+      if (!p.frameworkNamed) return 'Framework not started'
+      if (p.readyHint) return 'Outline ready to export'
+      return `Framework · ${p.themesStarted}/${p.themesTotal} themes`
     }
     case 'phase-3': {
       const p3 = project.value.phase3 ?? {}

@@ -110,7 +110,7 @@ export const assignmentHelpResearchMethods = [
           'Include a working References list in APA 7 format; use Ch. 11 when Canvas assigns APA/style reading.',
           'When summarizing each study, name the design using vocabulary from the chapters you have completed.',
           'End Draft 1 with a preliminary gap statement — your instructor feedback should sharpen it for the Final.',
-          'Open Study Plan → Study Focus and use the guided tour. Jot working gap and theme notes as you draft — they feed Phase 3 and Phase 4.'
+          'Open Study Plan → Lit Review Outline. Name your organizing framework, fill theme buckets, and export the compiled outline for Draft 1.'
         ],
         practiceLinks: ['rm-chapter-6', 'rm-chapter-7'],
         studyPlanSection: 'study-focus',
@@ -146,7 +146,7 @@ export const assignmentHelpResearchMethods = [
         tips: [
           'Submit together with Phase 4 on the same due date (see Canvas).',
           'Phase 3 is an elevator speech: distill your completed lit review into what the field knows, the gap, and how your study fits (~60–90 seconds read aloud).',
-          'Use your Lit Review Final, study focus notes, and article reviews; do not start from scratch.',
+          'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
           'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~150–250 words).',
           'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
         ],

@@ -27,7 +27,7 @@
         class="prefill-btn"
         @click="prefillResearchQuestion"
       >
-        Copy working research question from Study Focus
+        Copy working research question from Lit Review Outline
       </button>
     </section>
 
@@ -169,7 +169,7 @@ const chosenPathway = computed(() =>
 )
 
 const canPrefillRq = computed(() => {
-  const working = props.project.studyFocus?.workingResearchQuestion?.trim()
+  const working = props.project.litReviewOutline?.gapAndTransition?.workingResearchQuestion?.trim()
   const current = phase4.value.proposedResearchQuestion?.trim()
   return working && !current
 })
@@ -217,7 +217,7 @@ function setChosenPathway (pathwayId) {
 }
 
 function prefillResearchQuestion () {
-  const value = getProjectValue(props.project, 'studyFocus.workingResearchQuestion')
+  const value = getProjectValue(props.project, 'litReviewOutline.gapAndTransition.workingResearchQuestion')
   if (value) emitPhase4({ proposedResearchQuestion: value })
 }
 

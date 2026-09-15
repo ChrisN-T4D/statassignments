@@ -3,7 +3,7 @@
     <button type="button" class="tour-start-btn" @click="startTour">
       {{ completed ? 'Replay guided tour' : 'Start guided tour' }}
     </button>
-    <p class="tour-hint">Highlights each Study Focus field and explains how lit-review notes feed Phase 3 and Phase 4.</p>
+    <p class="tour-hint">Framework first, then theme buckets, gap, and compiled outline for Draft 1.</p>
 
     <SpotlightTour
       :active="tour.active"
@@ -12,7 +12,7 @@
       :current-step="tour.currentStep"
       :highlight="tour.highlight"
       :popover="tour.popover"
-      aria-label="Study Focus guided tour"
+      aria-label="Lit Review Outline guided tour"
       @next="tour.next"
       @prev="tour.prev"
       @end="onTourEnd"
@@ -21,11 +21,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
-  STUDY_FOCUS_TOUR_STEPS,
-  STUDY_FOCUS_TOUR_STORAGE_KEY
-} from '../../data/capstoneStudyFocusWalkthrough.js'
+  LIT_REVIEW_OUTLINE_TOUR_STEPS,
+  LIT_REVIEW_OUTLINE_TOUR_STORAGE_KEY
+} from '../../data/capstoneLitReviewOutlineWalkthrough.js'
 import { useSpotlightTour } from '../../composables/useSpotlightTour.js'
 import SpotlightTour from './SpotlightTour.vue'
 
@@ -34,7 +34,7 @@ const props = defineProps({
 })
 
 const completed = ref(false)
-const steps = computed(() => STUDY_FOCUS_TOUR_STEPS)
+const steps = computed(() => LIT_REVIEW_OUTLINE_TOUR_STEPS)
 
 const tour = useSpotlightTour(
   computed(() => props.rootEl),
@@ -44,7 +44,7 @@ const tour = useSpotlightTour(
 
 onMounted(() => {
   try {
-    completed.value = localStorage.getItem(STUDY_FOCUS_TOUR_STORAGE_KEY) === '1'
+    completed.value = localStorage.getItem(LIT_REVIEW_OUTLINE_TOUR_STORAGE_KEY) === '1'
   } catch {
     completed.value = false
   }
@@ -58,7 +58,7 @@ function onTourEnd () {
   tour.end()
   completed.value = true
   try {
-    localStorage.setItem(STUDY_FOCUS_TOUR_STORAGE_KEY, '1')
+    localStorage.setItem(LIT_REVIEW_OUTLINE_TOUR_STORAGE_KEY, '1')
   } catch {
     /* ignore */
   }

@@ -27,7 +27,7 @@ import { computed } from 'vue'
 import { useCapstoneProject } from '../composables/useCapstoneProject'
 import { getStudyPlanSection } from '../data/capstoneWorksheetSchemas.js'
 import ArticleReviewSection from '../components/study-plan/ArticleReviewSection.vue'
-import StudyFocusSection from '../components/study-plan/StudyFocusSection.vue'
+import LitReviewOutlineSection from '../components/study-plan/LitReviewOutlineSection.vue'
 import ElevatorSpeechSection from '../components/study-plan/ElevatorSpeechSection.vue'
 import Phase4Section from '../components/study-plan/Phase4Section.vue'
 
@@ -45,7 +45,7 @@ const sectionComponent = computed(() => {
     case 'article-review':
       return ArticleReviewSection
     case 'study-focus':
-      return StudyFocusSection
+      return LitReviewOutlineSection
     case 'phase-3':
       return ElevatorSpeechSection
     case 'phase-4':

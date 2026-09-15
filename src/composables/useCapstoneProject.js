@@ -1,6 +1,7 @@
 import { ref, watch, computed } from 'vue'
 import { useAuth } from './useAuth.js'
 import { emptyCapstoneProject } from '../data/capstoneWorksheetSchemas.js'
+import { migrateStudyFocusToLitReviewOutline } from '../data/capstoneLitReviewOutlineWorksheet.js'
 
 const STORAGE_PREFIX = 'study-plan-capstone'
 const SAVE_DEBOUNCE_MS = 600
@@ -21,13 +22,18 @@ function loadFromStorage (key) {
     const raw = localStorage.getItem(key)
     if (raw) {
       const parsed = JSON.parse(raw)
-      projectsByKey.value[key] = { ...emptyCapstoneProject(), ...parsed }
+      projectsByKey.value[key] = migrateStudyFocusToLitReviewOutline({
+        ...emptyCapstoneProject(),
+        ...parsed
+      })
     }
   } catch (err) {
     console.warn('Unable to load study plan draft:', err)
   }
   if (!projectsByKey.value[key]) {
-    projectsByKey.value[key] = emptyCapstoneProject()
+    projectsByKey.value[key] = migrateStudyFocusToLitReviewOutline(emptyCapstoneProject())
+  } else {
+    projectsByKey.value[key] = migrateStudyFocusToLitReviewOutline(projectsByKey.value[key])
   }
   loadedKeys.add(key)
 }

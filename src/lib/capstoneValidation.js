@@ -17,7 +17,10 @@ import {
   PHASE4_PATHWAYS,
   PHASE4_COMPARISON_CRITERIA
 } from '../data/capstonePhase4Worksheet.js'
-import { STUDY_FOCUS_FIELDS } from '../data/capstoneWorksheetSchemas.js'
+import {
+  compileLitReviewOutline,
+  countLitReviewOutlineProgress
+} from '../data/capstoneLitReviewOutlineWorksheet.js'
 
 function sectionHeader (title) {
   return `\n${title}\n${'='.repeat(title.length)}\n`
@@ -28,10 +31,8 @@ function fieldBlock (exportLabel, value) {
   return `${exportLabel}\n${text || '(not filled in)'}\n`
 }
 
-export function countStudyFocusFields (project) {
-  const sf = project?.studyFocus ?? {}
-  const filled = STUDY_FOCUS_FIELDS.filter((f) => (sf[f.id] ?? '').trim()).length
-  return { filled, total: STUDY_FOCUS_FIELDS.length }
+export function countLitReviewOutlineProgressForProject (project) {
+  return countLitReviewOutlineProgress(project?.litReviewOutline)
 }
 
 export function countArticleCards (project) {
@@ -60,7 +61,7 @@ export function buildExportText (sectionId, project) {
     case 'article-review':
       return buildArticleReviewExport(project)
     case 'study-focus':
-      return buildStudyFocusExport(project)
+      return buildLitReviewOutlineExport(project)
     case 'phase-3':
       return buildPhase3Export(project)
     case 'phase-4':
@@ -104,13 +105,9 @@ function buildArticleReviewExport (project) {
   return lines.join('\n').trim()
 }
 
-function buildStudyFocusExport (project) {
-  const sf = project.studyFocus ?? {}
-  const lines = [sectionHeader('Study Focus Notes')]
-  for (const field of STUDY_FOCUS_FIELDS) {
-    lines.push(fieldBlock(field.exportLabel, sf[field.id]))
-  }
-  return lines.join('\n').trim()
+function buildLitReviewOutlineExport (project) {
+  const compiled = compileLitReviewOutline(project.litReviewOutline, { forExport: true })
+  return sectionHeader('Lit Review Outline').trim() + '\n\n' + compiled
 }
 
 function buildPhase3Export (project) {
@@ -165,4 +162,4 @@ function buildPhase4Export (project) {
   return lines.join('\n').trim()
 }
 
-export { elevatorSpeechWordCount }
+export { elevatorSpeechWordCount, compileLitReviewOutline }
