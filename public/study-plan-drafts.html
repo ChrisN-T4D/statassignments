@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Plan Drafts — Methods Market Preview</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #9ca3af;
+      --primary: #e63946;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .banner {
+      background: #1a1208;
+      border-bottom: 1px solid #3d2e10;
+      color: #fbbf24;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .wrap { max-width: 52rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; }
+    .intro { color: var(--muted); margin-bottom: 1.5rem; }
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    nav.tabs button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    nav.tabs button.active {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .grid { display: grid; gap: 1rem; }
+    @media (min-width: 640px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+    .chip {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    label { display: block; font-weight: 600; margin: 0.75rem 0 0.35rem; font-size: 0.9rem; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.35rem; }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: #0f0f0f;
+      color: var(--text);
+      font: inherit;
+    }
+    textarea { min-height: 4rem; resize: vertical; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { border: 1px solid var(--border); padding: 0.4rem; }
+    a { color: var(--primary); }
+    h2 { font-size: 1.15rem; margin: 0 0 0.75rem; }
+    h3 { font-size: 1rem; margin: 1rem 0 0.5rem; }
+    h4 { font-size: 0.9rem; margin: 0.75rem 0 0.35rem; color: var(--primary); }
+    .ref-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .ref-columns { display: grid; gap: 1rem; margin: 1rem 0; }
+    @media (min-width: 640px) { .ref-columns { grid-template-columns: 1fr 1fr; } }
+    .ref-columns ul { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: var(--muted); }
+    .ref-columns li { margin-bottom: 0.35rem; }
+    .ref-reminder { font-size: 0.85rem; color: var(--muted); font-style: italic; margin: 0; }
+    .self-check-block {
+      margin: 1rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .self-check-block:last-of-type { border-bottom: none; padding-bottom: 0; }
+    .check-main { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 600; font-size: 0.95rem; }
+    .check-main input { width: auto; margin-top: 0.25rem; flex-shrink: 0; }
+    .look-for { margin: 0.35rem 0 0 1.5rem; padding-left: 1.1rem; font-size: 0.85rem; color: var(--muted); }
+    .look-for li { margin-bottom: 0.35rem; }
+    .pdf-sniff { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .pdf-sniff h4 { color: var(--muted); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="banner">UI draft preview — static mock for layout review. Interactive app at /class/research-methods/study-plan (requires sign-in).</div>
+  <div class="wrap">
+    <h1>Study Plan — Draft Preview</h1>
+    <p class="intro">Capstone draft workspace for PSYC 4223. Methods Market holds notes; Canvas is graded.</p>
+
+    <nav class="tabs" id="tabs">
+      <button type="button" class="active" data-panel="hub">Hub</button>
+      <button type="button" data-panel="article">Article Review</button>
+      <button type="button" data-panel="focus">Study Focus</button>
+      <button type="button" data-panel="phase3">Phase 3</button>
+      <button type="button" data-panel="phase4">Phase 4</button>
+    </nav>
+
+    <section id="hub" class="panel active">
+      <label>Project topic</label>
+      <input placeholder="e.g., Social media use and sleep quality in undergraduates" />
+      <div class="grid two" style="margin-top:1.25rem">
+        <div class="card">
+          <h2>Article Review</h2>
+          <p class="hint">Eight article cards, problem statement, early RQ.</p>
+          <span class="chip">0/8 article cards started</span>
+        </div>
+        <div class="card">
+          <h2>Study Focus</h2>
+          <p class="hint">Lit review notes weeks 5–10.</p>
+          <span class="chip">Optional lit review notes</span>
+        </div>
+        <div class="card">
+          <h2>Phase 3</h2>
+          <p class="hint">Elevator speech: what we know, gap, pitch.</p>
+          <span class="chip">Elevator speech not started</span>
+        </div>
+        <div class="card">
+          <h2>Phase 4</h2>
+          <p class="hint">Compare four pathways; choose one.</p>
+          <span class="chip">Not started</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="article" class="panel">
+      <div class="ref-box">
+        <h2>What counts as peer-reviewed?</h2>
+        <p class="hint">Use this while you evaluate each source. Methods Market does not decide for you — you look, then you check the boxes on each article card.</p>
+        <div class="ref-columns">
+          <div>
+            <h4>Usually peer-reviewed</h4>
+            <ul>
+              <li>Journal of ___ Psychology (or similar scholarly journal)</li>
+              <li>Volume + issue + page range or DOI</li>
+              <li>Method and Results sections with original data</li>
+              <li>Authors with university affiliations</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Usually not acceptable for this assignment</h4>
+            <ul>
+              <li>News sites, blogs, Wikipedia, or general .com pages</li>
+              <li>Magazine or newspaper articles (Psychology Today, etc.)</li>
+              <li>Textbook chapters or encyclopedia entries</li>
+              <li>Opinion pieces with no Method section</li>
+            </ul>
+          </div>
+        </div>
+        <p class="ref-reminder">Predatory journals exist. When in doubt, ask a librarian or your instructor before you spend time on the article.</p>
+      </div>
+
+      <div class="card">
+        <h2>Article 1 <span class="chip">In progress</span></h2>
+        <label>Complete reference (APA)</label>
+        <p class="hint">Use Ch. 11 for APA 7. Verify the source in your library database before you cite it.</p>
+        <textarea rows="2"></textarea>
+        <label>Researchers' "what" question</label>
+        <p class="hint">Summarize in your own words. Do not copy from the article abstract.</p>
+        <textarea rows="2"></textarea>
+        <label>Researchers' "why" question</label>
+        <p class="hint">What gap or rationale did the authors give in the introduction?</p>
+        <textarea rows="2"></textarea>
+        <label>Participants / subjects</label>
+        <textarea rows="2"></textarea>
+        <label>Methodology overview</label>
+        <p class="hint">Name design type in plain language. Include measures and instruments.</p>
+        <textarea rows="2"></textarea>
+        <label>Results / discussion / conclusion</label>
+        <textarea rows="2"></textarea>
+        <label>Strengths</label>
+        <textarea rows="2"></textarea>
+        <label>Weaknesses</label>
+        <textarea rows="2"></textarea>
+        <label>Connection to your proposal</label>
+        <textarea rows="2"></textarea>
+
+        <h3>Source self-check (Methods Market only)</h3>
+        <p class="hint">Look at your PDF, then check each box you can honestly confirm. Methods Market does not grade these.</p>
+
+        <div class="self-check-block">
+          <label class="check-main"><input type="checkbox" /> <span>I found this article through a library database (e.g., PsycINFO).</span></label>
+          <p class="hint" style="margin-left:1.5rem">Start in your university library databases, not the open web alone.</p>
+          <ul class="look-for">
+            <li>I searched PsycINFO, Academic Search Complete, or another library database</li>
+            <li>I can name which database I used</li>
+            <li>I did not rely on Google or a random .com page as my only source</li>
+          </ul>
+        </div>
+
+        <div class="self-check-block">
+          <label class="check-main"><input type="checkbox" /> <span>It appears in a scholarly, peer-reviewed journal (not a magazine, blog, or textbook chapter).</span></label>
+          <p class="hint" style="margin-left:1.5rem">Peer review means experts evaluated the manuscript before publication. It does not mean the study is correct.</p>
+          <ul class="look-for">
+            <li>The PDF shows a journal name (not a news site, magazine, or blog)</li>
+            <li>Volume and issue numbers appear (e.g., Vol. 42, No. 3)</li>
+            <li>Authors list university or research affiliations</li>
+            <li>A DOI or stable journal URL is present</li>
+            <li>If unsure whether the journal is peer-reviewed, I checked with a librarian or instructor</li>
+          </ul>
+        </div>
+
+        <div class="self-check-block">
+          <label class="check-main"><input type="checkbox" /> <span>It reports an original empirical study (Method and Results with data — not only a review or meta-analysis).</span></label>
+          <p class="hint" style="margin-left:1.5rem">Your article cards should be primary studies you read, not summaries of other people's work.</p>
+          <ul class="look-for">
+            <li>The PDF has a Method (or Methods) section describing participants and procedure</li>
+            <li>The PDF has a Results section with data (not just opinions)</li>
+            <li>It is not a literature review, meta-analysis, book chapter, or editorial</li>
+            <li>I can describe what the researchers actually did in my own words</li>
+          </ul>
+        </div>
+
+        <div class="self-check-block">
+          <label class="check-main"><input type="checkbox" /> <span>I saved the PDF and have the complete APA reference ready.</span></label>
+          <p class="hint" style="margin-left:1.5rem">You will attach PDFs in Canvas and reuse references in your literature review.</p>
+          <ul class="look-for">
+            <li>I downloaded the full-text PDF (not just the abstract page)</li>
+            <li>My APA reference includes authors, year, title, journal, volume, issue, and pages or DOI</li>
+            <li>I can attach this PDF when I submit the Canvas assignment</li>
+          </ul>
+        </div>
+
+        <div class="pdf-sniff">
+          <h4>Where to look in the PDF</h4>
+          <ul class="look-for" style="margin-left:0">
+            <li>Title page or header → journal name?</li>
+            <li>First pages → abstract describes original data collection?</li>
+            <li>Method section → participants, measures, design?</li>
+            <li>Results section → statistics or data findings?</li>
+            <li>Reference list → one citation you could follow next (citation chaining)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card"><h2>Articles 2–8</h2><p class="hint">Collapsed cards — expand to edit. Each includes the same source self-check scaffold.</p></div>
+
+      <div class="card">
+        <h2>Problem Statement</h2>
+        <p class="hint">Based on your literature review: what we know, what we don't know (the gap), and what we want to know.</p>
+        <label>What we know</label><textarea></textarea>
+        <label>What we don't know (the gap)</label><textarea></textarea>
+        <label>What we want to know</label><textarea></textarea>
+        <label>Problem statement (combined)</label>
+        <p class="hint">Example structure: Although [what we know], [gap], which is concerning because [why it matters]. This study addresses this problem by [brief preview].</p>
+        <textarea rows="3"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>Research Question(s) and Hypothesis(es)</h2>
+        <label>Research question(s)</label><textarea></textarea>
+        <label>Hypothesis(es)</label>
+        <p class="hint">You will refine these after your full literature review.</p>
+        <textarea></textarea>
+      </div>
+    </section>
+
+    <section id="focus" class="panel">
+      <div class="card">
+        <label>Working gap</label><p class="hint">What is still unknown? Update as you read.</p><textarea></textarea>
+        <label>Working research question</label><textarea></textarea>
+        <label>Lit review themes</label><textarea></textarea>
+        <label>Sources to cite</label><textarea></textarea>
+      </div>
+    </section>
+
+    <section id="phase3" class="panel">
+      <div class="card">
+        <h2>Phase 3 — Elevator Speech</h2>
+        <p class="hint">~60–90 seconds read aloud. IV/DV belongs in Phase 4.</p>
+        <label>What we know</label><textarea></textarea>
+        <label>The gap</label><textarea></textarea>
+        <label>My study pitch</label><textarea></textarea>
+        <label>Full elevator speech</label><textarea rows="5"></textarea>
+        <p class="hint">0 words (aim for ~150–250)</p>
+      </div>
+    </section>
+
+    <section id="phase4" class="panel">
+      <div class="card">
+        <h2>Part A — Context recap</h2>
+        <label>Broad topic area</label><input />
+        <label>Proposed research question</label><textarea></textarea>
+      </div>
+      <div class="card">
+        <h2>Part C — Four pathways</h2>
+        <h3>Pathway 1 (Survey)</h3>
+        <label>What validated scales?</label><textarea rows="2"></textarea>
+        <h3>Pathway 2 (Experimental)</h3>
+        <label>Task and comparison group</label><textarea rows="2"></textarea>
+      </div>
+      <div class="card">
+        <h2>Part D — Comparison table</h2>
+        <table>
+          <tr><th>Criterion</th><th>Survey</th><th>Experimental</th><th>Observation</th><th>Archival</th></tr>
+          <tr><td>Feasibility</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Access</td><td></td><td></td><td></td><td></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Part E — Choose one pathway</h2>
+        <p class="hint"><input type="radio" name="path" /> Survey &nbsp; <input type="radio" name="path" /> Experimental &nbsp; <input type="radio" name="path" /> Observation &nbsp; <input type="radio" name="path" /> Archival</p>
+      </div>
+    </section>
+  </div>
+  <script>
+    document.getElementById('tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-panel]');
+      if (!btn) return;
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  </script>
+</body>
+</html>
