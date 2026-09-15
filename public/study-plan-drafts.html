@@ -698,6 +698,17 @@
       if (btn.dataset.panel === 'focus' && typeof refreshLroReminders === 'function') {
         refreshLroReminders();
       }
+      if (btn.dataset.panel === 'phase3' && typeof refreshP3Views === 'function') {
+        refreshP3Reminders();
+        refreshP3Views();
+      }
+      if (btn.dataset.panel === 'phase4' && typeof refreshP4Views === 'function') {
+        refreshP4Reminders();
+        refreshP4Views();
+        renderP4Pathways();
+        renderP4Comparison();
+        renderP4Choices();
+      }
     });
 
     // Search term builder mock (demo interactivity)
@@ -1547,6 +1558,16 @@
     let saveP3Timer = null;
     let saveP4Timer = null;
 
+    function setText (id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function setValue (id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+
     function loadP3 () {
       try { const raw = localStorage.getItem(P3_STORAGE_KEY); if (raw) return { ...emptyP3(), ...JSON.parse(raw) }; } catch (_) {}
       return emptyP3();
@@ -1653,9 +1674,9 @@
       const filled = keys.filter((k) => (p3State[k] || '').trim()).length;
       const words = p3WordCount(p3State.elevatorSpeech);
       const label = filled ? `${filled}/4 parts · ${words} words` : 'Elevator speech not started';
-      document.getElementById('p3-progress')?.textContent = label;
-      document.getElementById('hub-phase3-progress')?.textContent = label;
-      document.getElementById('p3-word-count')?.textContent = `${words} words (aim for ~150–250)`;
+      setText('p3-progress', label);
+      setText('hub-phase3-progress', label);
+      setText('p3-word-count', `${words} words (aim for ~150–250)`);
     }
 
     function updateP4Progress () {
@@ -1669,8 +1690,8 @@
       let label = 'Not started';
       if (p4State.chosenPathwayId) label = 'Pathway chosen';
       else if (recap || paths) label = `A–B ${recap}/4 · ${paths}/4 paths`;
-      document.getElementById('p4-progress')?.textContent = label;
-      document.getElementById('hub-phase4-progress')?.textContent = label;
+      setText('p4-progress', label);
+      setText('hub-phase4-progress', label);
     }
 
     function renderP4Pathways () {
@@ -1714,7 +1735,7 @@
 
     function refreshP3Views () {
       updateP3Progress();
-      document.getElementById('p3-export-preview')?.value = buildP3Export();
+      setValue('p3-export-preview', buildP3Export());
       refreshP3Reminders();
       refreshP4Reminders();
       const prefill = document.getElementById('p3-prefill-row');
@@ -1730,7 +1751,7 @@
 
     function refreshP4Views () {
       updateP4Progress();
-      document.getElementById('p4-export-preview')?.value = buildP4Export();
+      setValue('p4-export-preview', buildP4Export());
       refreshP4Reminders();
       const prefill = document.getElementById('p4-prefill-row');
       if (prefill) {
@@ -1745,7 +1766,7 @@
       if (saveP3Timer) clearTimeout(saveP3Timer);
       saveP3Timer = setTimeout(() => {
         localStorage.setItem(P3_STORAGE_KEY, JSON.stringify(p3State));
-        document.getElementById('p3-save-status')?.textContent = 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        setText('p3-save-status', 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
       }, 400);
     }
 
@@ -1753,7 +1774,7 @@
       if (saveP4Timer) clearTimeout(saveP4Timer);
       saveP4Timer = setTimeout(() => {
         localStorage.setItem(P4_STORAGE_KEY, JSON.stringify(p4State));
-        document.getElementById('p4-save-status')?.textContent = 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        setText('p4-save-status', 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
       }, 400);
     }
 
@@ -1924,13 +1945,6 @@
       { target: 'tour-p4-part-e', title: 'Part E', body: 'Choose one data collection strategy.' },
       { target: 'tour-p4-export', title: 'Export', body: 'Copy full worksheet for Canvas.' }
     ], 'spotlight-ring-p4', 'spotlight-popover-p4', 'spotlight-tour-p4', 'study-plan-drafts-p4-tour-done', 'start-p4-tour-btn');
-
-    document.getElementById('tabs').addEventListener('click', (e) => {
-      const btn = e.target.closest('button[data-panel]');
-      if (!btn) return;
-      if (btn.dataset.panel === 'phase3') { refreshP3Reminders(); refreshP3Views(); }
-      if (btn.dataset.panel === 'phase4') { refreshP4Reminders(); refreshP4Views(); renderP4Pathways(); renderP4Comparison(); renderP4Choices(); }
-    });
 
     const TOUR_STEPS = [
       { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
