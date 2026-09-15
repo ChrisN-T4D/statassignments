@@ -12,7 +12,7 @@ export const PHASE4_CANVAS = {
   helpfulTableUrl: 'https://nwosu.instructure.com/courses/2406/pages/helpful-table',
   title: 'Operationalization Exploration',
   intro:
-    'Use this sheet to compare different ways you could collect data for your one Research Question. Choose ONE pathway by the end of Phase 4.'
+    'Use this sheet to compare different ways you could collect data for your one Research Question. Define IV and DV conceptually and operationally, then choose ONE pathway by the end of Phase 4.'
 }
 
 /** Part C pathways on the worksheet (labels from Canvas assignment). */
@@ -132,23 +132,57 @@ export const PHASE4_PARTS = [
   },
   {
     id: 'part-b-conceptual-definitions',
-    title: 'Part B: Define Your Variables using the Conceptual Definition',
+    title: 'Part B: Conceptual Definitions',
+    instruction:
+      'Conceptual definitions describe what your IV and DV mean in theory — the abstract constructs as your literature defines them.',
     fields: [
       {
         id: 'ivConceptual',
-        label: 'Independent Variable (IV)',
+        label: 'Independent Variable (IV) — conceptual',
         exportLabel: 'Independent Variable (IV): (Define based on Lit Review)',
         required: true,
         multiline: true,
-        helpTopicId: 'rm-chapter-4'
+        helpTopicId: 'rm-chapter-4',
+        helpNote:
+          'In plain language: what construct or factor do you think causes or predicts change in the outcome? Ground this in how your sources define the IV.'
       },
       {
         id: 'dvConceptual',
-        label: 'Dependent Variable (DV)',
+        label: 'Dependent Variable (DV) — conceptual',
         exportLabel: 'Dependent Variable (DV): (Define based on Lit Review)',
         required: true,
         multiline: true,
-        helpTopicId: 'rm-chapter-4'
+        helpTopicId: 'rm-chapter-4',
+        helpNote:
+          'What outcome or behavior are you trying to explain? Describe the construct — not the survey item or task score yet.'
+      }
+    ]
+  },
+  {
+    id: 'part-b-operational-definitions',
+    title: 'Part B (continued): Operational Definitions',
+    instruction:
+      'Operational definitions specify how you would measure or manipulate each variable in a real study — concrete enough that another researcher could replicate your procedure.',
+    fields: [
+      {
+        id: 'ivOperational',
+        label: 'Independent Variable (IV) — operational',
+        exportLabel: 'Independent Variable (IV): (Operational definition)',
+        required: true,
+        multiline: true,
+        helpTopicId: 'rm-chapter-4',
+        helpNote:
+          'How would you manipulate or categorize the IV? Name conditions, exposure levels, grouping rules, or the survey/score that represents the IV in your study.'
+      },
+      {
+        id: 'dvOperational',
+        label: 'Dependent Variable (DV) — operational',
+        exportLabel: 'Dependent Variable (DV): (Operational definition)',
+        required: true,
+        multiline: true,
+        helpTopicId: 'rm-chapter-4',
+        helpNote:
+          'How would you score or record the DV? Name the scale, task outcome, observation code, or dataset variable — including units or scoring rules when you know them.'
       }
     ]
   }

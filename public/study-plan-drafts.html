@@ -633,7 +633,7 @@
     <section id="phase4" class="panel">
       <div class="tour-launcher">
         <button type="button" class="tour-start-btn" id="start-p4-tour-btn">Start guided tour</button>
-        <p class="hint" style="margin:0.55rem 0 0">Parts A–E: recap, IV/DV, four pathways, comparison, final choice.</p>
+        <p class="hint" style="margin:0.55rem 0 0">Parts A–E: recap, conceptual + operational IV/DV, four pathways, comparison, final choice.</p>
       </div>
       <div id="spotlight-tour-p4" role="dialog" aria-modal="true" aria-label="Phase 4 guided tour">
         <div class="spotlight-backdrop"></div>
@@ -657,12 +657,21 @@
         <label for="p4-proposedResearchQuestion">Proposed research question</label>
         <textarea id="p4-proposedResearchQuestion" rows="2" data-p4-top="proposedResearchQuestion"></textarea>
       </div>
-      <div class="card" data-tour="tour-p4-part-b">
-        <h2>Part B — Conceptual IV and DV</h2>
-        <label for="p4-ivConceptual">Independent variable (IV)</label>
+      <div class="card" data-tour="tour-p4-part-b-conceptual">
+        <h2>Part B — Conceptual definitions</h2>
+        <p class="hint">What your IV and DV mean as constructs in your literature — not scales or tasks yet.</p>
+        <label for="p4-ivConceptual">Independent variable (IV) — conceptual</label>
         <textarea id="p4-ivConceptual" rows="2" data-p4-top="ivConceptual"></textarea>
-        <label for="p4-dvConceptual">Dependent variable (DV)</label>
+        <label for="p4-dvConceptual">Dependent variable (DV) — conceptual</label>
         <textarea id="p4-dvConceptual" rows="2" data-p4-top="dvConceptual"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p4-part-b-operational">
+        <h2>Part B (continued) — Operational definitions</h2>
+        <p class="hint">How you would manipulate or measure each variable in a real study — specific enough to replicate.</p>
+        <label for="p4-ivOperational">Independent variable (IV) — operational</label>
+        <textarea id="p4-ivOperational" rows="2" data-p4-top="ivOperational"></textarea>
+        <label for="p4-dvOperational">Dependent variable (DV) — operational</label>
+        <textarea id="p4-dvOperational" rows="2" data-p4-top="dvOperational"></textarea>
       </div>
       <div class="card" data-tour="tour-p4-part-c">
         <h2>Part C — Four pathways</h2>
@@ -1420,14 +1429,14 @@
     initLitReviewOutline();
 
     const LRO_TOUR_STEPS = [
-      { target: 'tour-lro-intro', title: 'Root your lit review in a framework', body: 'Organize weeks 5–10 around one organizing theory — not article summaries. Export feeds Draft 1 and Phase 3/4.' },
-      { target: 'tour-lro-reminders', title: 'Start from Article Review', body: 'Problem statement and early RQ from week 4 are starting points — refine as you read more.' },
-      { target: 'tour-lro-framework', title: 'Name your organizing framework', body: 'What big theory routes your review? Explain the mechanism connecting IV and DV.', narrow: 'Multiple theories? Pick one primary lens.', widen: 'Mechanism vague? Name the pathway.' },
-      { target: 'tour-lro-reference', title: 'Framework ideas (browse only)', body: 'Common frameworks by construct area. MM never picks one for you.' },
-      { target: 'tour-lro-themes', title: 'Theme buckets', body: 'Synthesis sections under your framework. Link article numbers manually.', narrow: 'One paragraph per article? Group by finding.', widen: 'One theme only? Need more sources.' },
-      { target: 'tour-lro-gap', title: 'Gap and transition', body: 'State what is unknown, bridge to your study. Working RQ copies to Phase 4.' },
-      { target: 'tour-lro-preview', title: 'Compiled outline preview', body: 'Live assembly of your framework, themes, and gap — your words only.' },
-      { target: 'tour-lro-export', title: 'Export for Draft 1', body: 'Copy or PDF. Paste into Word and expand bullets into prose.' }
+      { target: 'tour-lro-intro', title: 'Organize the lit review you are writing', body: 'Structure weeks 5–10 around one organizing framework — not a stack of article summaries. Export feeds Lit Review Draft 1, Phase 3, and Phase 4.' },
+      { target: 'tour-lro-reminders', title: 'Carry forward from Article Review', body: 'Your week-4 problem statement and early RQ are starting points. Refine them as you read beyond your original article cards.' },
+      { target: 'tour-lro-framework', title: 'Name your organizing framework', body: 'Choose one theory that routes your review. Explain the mechanism linking IV and DV. Browse reference ideas — MM never picks for you.', narrow: 'Three theories listed? Pick one primary lens.', widen: 'Mechanism vague? Name the pathway (e.g., stress → sleep → mood).' },
+      { target: 'tour-lro-reference', title: 'Framework ideas (browse only)', body: 'Common frameworks by construct area. Use a name only if it fits — or use your own from class or sources.' },
+      { target: 'tour-lro-themes', title: 'Theme buckets — synthesis sections', body: 'Each bucket becomes an outline section. Bullet agreements, disagreements, and link article numbers. Group by finding, not one paragraph per article.', narrow: 'One paragraph per article? Merge cards under shared themes.', widen: 'Only one theme? You may need more sources.' },
+      { target: 'tour-lro-gap', title: 'Gap, transition, and working RQ', body: 'State what is still unknown, bridge to your study. Working RQ copies to Phase 4 — write it specific enough to guide IV/DV definitions.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after more reading? Revisit search or framework.' },
+      { target: 'tour-lro-preview', title: 'Compiled outline preview', body: 'Live preview of framework, themes, and gap — your words only. Use as the skeleton before expanding bullets into prose in Word.' },
+      { target: 'tour-lro-export', title: 'Export for Draft 1', body: 'Copy or PDF, paste into your draft, expand into paragraphs. Themes and gap also feed Phase 3 — refine for speech, do not paste bullets verbatim.' }
     ];
 
     let lroTourIndex = 0;
@@ -1547,7 +1556,7 @@
 
     function emptyP4 () {
       return {
-        broadTopicArea: '', proposedResearchQuestion: '', ivConceptual: '', dvConceptual: '',
+        broadTopicArea: '', proposedResearchQuestion: '', ivConceptual: '', ivOperational: '', dvConceptual: '', dvOperational: '',
         pathwayResponses: emptyP4Pathways(), comparisonTable: emptyP4Comparison(), chosenPathwayId: ''
       };
     }
@@ -1648,8 +1657,10 @@
       const lines = ['Phase 4 — Operationalization', '='.repeat(28), '',
         'Broad Topic Area:\n' + (p4State.broadTopicArea || '(not filled in)'),
         '\nProposed Research Question:\n' + (p4State.proposedResearchQuestion || '(not filled in)'),
-        '\nIV:\n' + (p4State.ivConceptual || '(not filled in)'),
-        '\nDV:\n' + (p4State.dvConceptual || '(not filled in)')];
+        '\nIndependent Variable (IV): (Define based on Lit Review)\n' + (p4State.ivConceptual || '(not filled in)'),
+        '\nIndependent Variable (IV): (Operational definition)\n' + (p4State.ivOperational || '(not filled in)'),
+        '\nDependent Variable (DV): (Define based on Lit Review)\n' + (p4State.dvConceptual || '(not filled in)'),
+        '\nDependent Variable (DV): (Operational definition)\n' + (p4State.dvOperational || '(not filled in)')];
       P4_PATHWAY_DEFS.forEach((p) => {
         lines.push('\n' + p.label);
         const r = p4State.pathwayResponses[p.id] || {};
@@ -1679,7 +1690,7 @@
     }
 
     function updateP4Progress () {
-      const top = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'dvConceptual'];
+      const top = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'ivOperational', 'dvConceptual', 'dvOperational'];
       const recap = top.filter((k) => (p4State[k] || '').trim()).length;
       let paths = 0;
       P4_PATHWAY_DEFS.forEach((p) => {
@@ -1688,7 +1699,7 @@
       });
       let label = 'Not started';
       if (p4State.chosenPathwayId) label = 'Pathway chosen';
-      else if (recap || paths) label = `A–B ${recap}/4 · ${paths}/4 paths`;
+      else if (recap || paths) label = `A–B ${recap}/6 · ${paths}/4 paths`;
       setText('p4-progress', label);
       setText('hub-phase4-progress', label);
     }
@@ -1925,36 +1936,37 @@
     }
 
     makeTour('p3', [
-      { target: 'tour-p3-intro', title: 'Spiel about your research', body: 'Phase 3 is a 1–2 minute spiel about your research. Submit with Phase 4.' },
-      { target: 'tour-p3-reminders', title: 'From your outline', body: 'Framework, themes, gap, and transition are starting points.' },
-      { target: 'tour-p3-what-we-know', title: 'What we know', body: 'Synthesis from theme buckets — not a list of articles.', narrow: 'One study only? Name a pattern.', widen: 'Too broad? Focus on gap-relevant findings.' },
-      { target: 'tour-p3-gap', title: 'The gap', body: 'What is still unknown or contested?' },
-      { target: 'tour-p3-pitch', title: 'My study pitch', body: 'How your study addresses the gap — no methods yet.' },
-      { target: 'tour-p3-speech', title: 'Full script', body: 'Combine parts (~130–300 words). Practice as a 1–2 minute spiel about your research.' },
-      { target: 'tour-p3-export', title: 'Export', body: 'Copy for Canvas Phase 3 worksheet.' }
+      { target: 'tour-p3-intro', title: 'Distill your lit review into a speech', body: 'Phase 3 is a 1–2 minute spiel about your research: what the field knows, the gap, and how your study fits. Methods belong in Phase 4. Submit with Phase 4 in Canvas.' },
+      { target: 'tour-p3-reminders', title: 'Start from your Lit Review Outline', body: 'Framework, themes, gap, and transition are raw material — rewrite into spoken sentences a listener could follow.' },
+      { target: 'tour-p3-what-we-know', title: 'What we know', body: 'In 2–4 sentences: what does prior research agree on? Synthesis across studies, not a list of articles.', narrow: 'One study only? Name a pattern several sources support.', widen: 'Covers everything? Keep findings that set up your gap.' },
+      { target: 'tour-p3-gap', title: 'The gap', body: 'In 1–3 sentences: what is still unknown or contested? Match your outline gap, but sharper for a listener.', narrow: 'Whole topic area? Name one IV, DV, and population.', widen: 'No clear gap? Return to outline or read more.' },
+      { target: 'tour-p3-pitch', title: 'My study pitch', body: 'In 1–3 sentences: how your proposed study addresses the gap. No surveys, tasks, or stats yet.' },
+      { target: 'tour-p3-speech', title: 'Full elevator speech', body: 'Combine parts (~130–300 words). Read aloud and time yourself — aim for 1–2 minutes of clear spoken summary.', narrow: 'Over 2 minutes? Cut repetition.', widen: 'Under 130 words? Add one literature example.' },
+      { target: 'tour-p3-export', title: 'Export for Canvas', body: 'Copy formatted text for the Phase 3 worksheet. Submit together with Phase 4.' }
     ], 'spotlight-ring-p3', 'spotlight-popover-p3', 'spotlight-tour-p3', 'study-plan-drafts-p3-tour-done', 'start-p3-tour-btn');
 
     makeTour('p4', [
-      { target: 'tour-p4-intro', title: 'Compare four paths', body: 'Survey, experimental, observation, archival — choose ONE.' },
-      { target: 'tour-p4-reminders', title: 'From Phase 3', body: 'Elevator speech and working RQ guide IV/DV and pathway choice.' },
-      { target: 'tour-p4-part-a', title: 'Part A', body: 'Broad topic and proposed research question.' },
-      { target: 'tour-p4-part-b', title: 'Part B', body: 'Conceptual IV and DV from your lit review.' },
-      { target: 'tour-p4-part-c', title: 'Part C', body: 'Explore each pathway; mark not viable honestly.' },
-      { target: 'tour-p4-part-d', title: 'Part D', body: 'Compare feasibility, access, measurement, ethics.' },
-      { target: 'tour-p4-part-e', title: 'Part E', body: 'Choose one data collection strategy.' },
-      { target: 'tour-p4-export', title: 'Export', body: 'Copy full worksheet for Canvas.' }
+      { target: 'tour-p4-intro', title: 'Turn your RQ into a study plan', body: 'Define IV and DV conceptually and operationally, explore four data-collection paths, compare them, and choose ONE. Submit with Phase 3 in Canvas.' },
+      { target: 'tour-p4-reminders', title: 'Build on Phase 3 and outline', body: 'Elevator speech and working RQ keep you aligned with your gap — use them as starting points, not copy-paste answers.' },
+      { target: 'tour-p4-part-a', title: 'Part A — Recap topic and question', body: 'Broad topic area and proposed research question. Every pathway below must answer this same question.', narrow: 'RQ vague? Name IV, DV, population before Part B.', widen: 'Three relationships in one RQ? Pick one for this semester.' },
+      { target: 'tour-p4-part-b-conceptual', title: 'Part B — Conceptual IV and DV', body: 'Define constructs as your literature describes them — the ideas behind your variables, not measures yet.', narrow: 'Sounds like a scale name? Step back to the construct.', widen: 'One vague word each? Add how sources define each construct.' },
+      { target: 'tour-p4-part-b-operational', title: 'Part B — Operational IV and DV', body: 'Specify how you would manipulate or measure each variable — scales, tasks, conditions, observation codes, or dataset fields.', narrow: 'Still abstract? Name the exact measure or manipulation.', widen: 'Full methods here? Save pathway details for Part C.' },
+      { target: 'tour-p4-part-c', title: 'Part C — Four pathways', body: 'Sketch how your IV and DV would work under survey, experimental, observation, and archival methods. Mark not viable paths honestly.' },
+      { target: 'tour-p4-part-d', title: 'Part D — Comparison table', body: 'Compare feasibility, access, measurement quality, and ethics across viable paths. Use the Canvas Helpful Table as reference.' },
+      { target: 'tour-p4-part-e', title: 'Part E — Choose one pathway', body: 'Commit to one data-collection strategy for your methods section this semester.' },
+      { target: 'tour-p4-export', title: 'Export for Canvas', body: 'Copy full worksheet text (conceptual and operational definitions included) for the Phase 4 assignment.' }
     ], 'spotlight-ring-p4', 'spotlight-popover-p4', 'spotlight-tour-p4', 'study-plan-drafts-p4-tour-done', 'start-p4-tour-btn');
 
     const TOUR_STEPS = [
-      { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
-      { target: 'tour-search-log', title: 'Log what you tried', body: 'Record database, query, and what happened. Link rows to article numbers.', before: null },
-      { target: 'tour-peer-review', title: 'Learn what counts as a source', body: 'Before you summarize, verify peer-reviewed original research. You look, then you decide.', before: null },
-      { target: 'tour-jump-nav', title: 'Article cards (6 minimum for Canvas)', body: 'Each number is one article. Green means complete. Add unlimited cards — export includes all with content.', before: null },
-      { target: 'tour-article-card', title: 'Article cards = research notes', body: 'Summarize what/why, participants, method, results, strengths, weaknesses, and connection to your project.', narrow: 'Articles feel unrelated? Narrow to a shared population or construct.', widen: 'Every summary identical? Try an adjacent construct.', before: 'open-first' },
-      { target: 'tour-source-check', title: 'Look at the PDF, then check', body: 'Verify database source, journal type, Method/Results, and saved PDF before you write paragraphs.', before: 'open-first' },
-      { target: 'tour-problem', title: 'Synthesize a problem statement', body: 'Combine patterns from your cards into what we know, the gap, and what we want to know.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after six articles? Return to search.', before: 'close-cards' },
-      { target: 'tour-rq', title: 'Draft a testable direction', body: 'Early RQ and hypothesis — revise after Phase 2.', narrow: 'Three constructs in one RQ? Pick one relationship.', widen: 'No population in RQ? Add who from your cards.', before: 'close-cards' },
-      { target: 'tour-export', title: 'Export for Canvas', body: 'Copy or download PDF. Attach article PDFs separately in Canvas.', before: 'close-cards' }
+      { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, population, and context. Copy the Boolean preview into PsycINFO. Hit counts tell you whether to add terms (too many results) or broaden (too few).', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
+      { target: 'tour-search-log', title: 'Log what you tried', body: 'Record database, query, and what happened. Link rows to article numbers so you remember which search found each source.', before: null },
+      { target: 'tour-peer-review', title: 'Learn what counts as a source', body: 'Confirm peer-reviewed empirical research with Method and Results — not news or review-only articles. You open the PDF and decide for each card.', before: null },
+      { target: 'tour-jump-nav', title: 'Article cards (6 minimum for Canvas)', body: 'Each number is one source. Green means all required fields filled. Jump between cards to compare patterns and notice when to narrow or widen your topic.', before: null },
+      { target: 'tour-article-card', title: 'Article cards = reusable research notes', body: 'Summarize what/why, participants, method, results, strengths, weaknesses, and connection to your project — in your own words for reuse in the lit review.', narrow: 'Articles feel unrelated? Narrow to a shared population or construct.', widen: 'Every summary identical? Try an adjacent construct.', before: 'open-first' },
+      { target: 'tour-source-check', title: 'Look at the PDF, then check', body: 'Not graded — reminds you to verify database source, journal type, Method/Results, and saved PDF before you write paragraphs.', before: 'open-first' },
+      { target: 'tour-problem', title: 'Synthesize a problem statement', body: 'Combine patterns from cards into what we know, the gap, and what we want to know. This draft feeds your Lit Review Outline and elevator speech.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after six articles? Return to search.', before: 'close-cards' },
+      { target: 'tour-rq', title: 'Draft a testable direction', body: 'Early RQ and hypothesis — revise after the lit review draft. Conceptual and operational definitions wait until Phase 4.', narrow: 'Three constructs in one RQ? Pick one relationship.', widen: 'No population in RQ? Add who from your cards.', before: 'close-cards' },
+      { target: 'tour-export', title: 'Export for Canvas', body: 'Copy or download PDF for Article Review. Attach each article PDF separately in Canvas.', before: 'close-cards' }
     ];
 
     let tourIndex = 0;

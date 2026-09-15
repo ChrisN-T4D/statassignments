@@ -15,7 +15,7 @@
 
     <aside v-if="hasReminders" class="sidebar-reminders" data-tour="tour-p4-reminders">
       <h2 class="sidebar-title">From Phase 3 and your outline</h2>
-      <p class="reminders-note">Use your elevator speech and outline as starting points for IV/DV and pathway choices.</p>
+      <p class="reminders-note">Use your elevator speech and outline as starting points for conceptual and operational IV/DV definitions and pathway choices.</p>
       <div v-if="p3WhatWeKnow" class="reminder-block">
         <h3>What we know (Phase 3)</h3>
         <p class="reminder-text">{{ p3WhatWeKnow }}</p>
@@ -44,9 +44,10 @@
       v-for="part in PHASE4_PARTS"
       :key="part.id"
       class="worksheet-block"
-      :data-tour="part.id === 'part-a-context' ? 'tour-p4-part-a' : 'tour-p4-part-b'"
+      :data-tour="tourTargetForPart(part.id)"
     >
       <h2 class="block-title">{{ part.title }}</h2>
+      <p v-if="part.instruction" class="block-intro">{{ part.instruction }}</p>
       <SchemaField
         v-for="field in part.fields"
         :key="field.id"
@@ -237,6 +238,15 @@ const canPrefillTopic = computed(() => {
   const current = phase4.value.broadTopicArea?.trim()
   return topic && !current
 })
+
+function tourTargetForPart (partId) {
+  const map = {
+    'part-a-context': 'tour-p4-part-a',
+    'part-b-conceptual-definitions': 'tour-p4-part-b-conceptual',
+    'part-b-operational-definitions': 'tour-p4-part-b-operational'
+  }
+  return map[partId] ?? null
+}
 
 function emitPhase4 (patch) {
   emit('update', { phase4: { ...phase4.value, ...patch } })

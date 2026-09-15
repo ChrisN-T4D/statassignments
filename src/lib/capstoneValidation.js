@@ -45,7 +45,14 @@ export function countPhase3Progress (project) {
 
 export function countPhase4Progress (project) {
   const p4 = project?.phase4 ?? {}
-  const topFields = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'dvConceptual']
+  const topFields = [
+    'broadTopicArea',
+    'proposedResearchQuestion',
+    'ivConceptual',
+    'ivOperational',
+    'dvConceptual',
+    'dvOperational'
+  ]
   const recapFilled = topFields.filter((k) => (p4[k] ?? '').trim()).length
   const pathways = p4.pathwayResponses ?? {}
   let pathsExplored = 0

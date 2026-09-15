@@ -161,7 +161,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Submit together with Phase 3 on the same due date.',
-          'Recap your topic and research question from your lit review; define IV and DV conceptually (Part B).',
+          'Recap your topic and research question (Part A); define IV and DV conceptually and operationally (Part B).',
           'Explore all four pathways in Part C (survey, experimental task, observation, archival) — mark a path “not viable” if it does not fit.',
           'Complete the Part D comparison table, then choose ONE pathway in Part E.',
           'Mark pathways “not viable” when they truly do not fit — that is good thinking, not failure.',
