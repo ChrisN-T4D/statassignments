@@ -9,7 +9,8 @@
 
 - [ ] Semester **2026FA** active in Methods Market; roster imported; student keys distributed  
 - [ ] **Add page to Getting Started module** (see below — page exists but students won't see it until linked)  
-- [ ] Deploy latest Methods Market build to Railway (onboarding panel on class home)  
+- [ ] Deploy latest Methods Market build to Railway (Study Plan + onboarding on class home)  
+- [ ] Sync Canvas assignment descriptions to Study Plan: `npm run sync:canvas-rm:apply` (requires `CANVAS_TOKEN`)  
 
 ### Add the Canvas page to the Getting Started module
 
