@@ -25,7 +25,8 @@
 
 | File | Responsibility |
 |------|----------------|
-| `src/data/capstoneWorksheetSchemas.js` | Fields, enums, export labels |
+| `src/data/capstoneArticleReviewWorksheet.js` | Article review fields from Canvas PDF |
+| `src/data/capstoneWorksheetSchemas.js` | Phase 3/4, study focus, export labels |
 | `src/lib/capstoneValidation.js` | `buildExportText`, `elevatorSpeechWordCount` only |
 | `src/lib/capstoneValidation.test.js` | Export + word count tests |
 | `src/composables/useCapstoneProject.js` | Load/save/autosave |
@@ -51,7 +52,7 @@
 - `buildExportText('article-review' | 'study-focus' | 'phase-3' | 'phase-4', project)`
 - `elevatorSpeechWordCount(text) => number`
 
-- [ ] **Step 1:** Implement schemas per spec §2.1 (article card with `sourceChecklist` booleans, not gates).
+- [ ] **Step 1:** Use `capstoneArticleReviewWorksheet.js` for article review; implement `capstoneWorksheetSchemas.js` for study focus, phase 3, phase 4.
 - [ ] **Step 2:** Implement `buildExportText` for phase-3 with headings: What we know / The gap / My study / Full elevator speech.
 - [ ] **Step 3:** Vitest: export includes all phase3 fields; word count on sample text.
 - [ ] **Step 4:** `npm run test:unit` passes.
@@ -88,12 +89,14 @@ Same as prior plan: Alembic `006`, model, permissions, `test_capstone_projects.p
 
 ### Task 5: Article Review section (P1)
 
-**Components:** `ArticleCardEditor.vue`, `SourceChecklist.vue`, `StudyPlanExportPanel.vue`
+**Components:** `ArticleCardEditor.vue`, `SourceSelfCheck.vue`, `ProblemStatementForm.vue`, `RqHypothesisForm.vue`, `StudyPlanExportPanel.vue`
 
-- [ ] Card fields + per-card source checklist with resource links (Ch. 2).
-- [ ] Problem statement field (blank + prompt only).
-- [ ] Factual card count display.
-- [ ] Export annotated bib + problem statement.
+- [ ] Header: name + proposed project title.
+- [ ] Eight article slots using `ARTICLE_CARD_FIELDS` from `capstoneArticleReviewWorksheet.js` (what/why/participants/methodology/results/strengths/weaknesses/connection + optional comments).
+- [ ] Per-card source self-check (MM-only) with Ch. 2 / Ch. 11 links.
+- [ ] Problem statement: four fields matching worksheet (what we know / don’t know / want to know / combined).
+- [ ] Research questions + hypotheses (early draft fields on same assignment).
+- [ ] Export full worksheet in Canvas field order for paste.
 - [ ] Commit `feat: article review study plan section`.
 
 ---

@@ -80,32 +80,60 @@ Unsigned users: localStorage draft; sign-in to persist.
 
 #### A. Article Review (`article-review`)
 
-**Due:** 2026-09-11 · 200 pts · 6–8 original-research articles
+**Due:** 2026-09-11 · 200 pts · **8 article slots** on Canvas template (complete at least **6**; instructor may expect more)
 
-**Per-article card:**
+**Canonical schema:** `src/data/capstoneArticleReviewWorksheet.js` (from Canvas `article_review` PDF).
+
+**Header**
+
+| Field | Canvas label |
+|-------|----------------|
+| `studentName` | Name |
+| `proposedProjectTitle` | Proposed title for your project |
+
+**Per article (×8)** — every field required except optional comments; complete sentences, no in-template citations (reference box covers it):
+
+| Field id | Canvas prompt (abbrev.) |
+|----------|-------------------------|
+| `apaReference` | Complete reference (APA) |
+| `researcherWhatQuestion` | Researchers’ “what” question (their RQ and focus) |
+| `researcherWhyQuestion` | Researchers’ “why” question (gap / reason for study) |
+| `participantsSummary` | Subjects/participants, demographics, sampling, N |
+| `methodologyOverview` | Measures, instruments, design overview |
+| `resultsSummary` | Results / discussion / conclusion |
+| `strengths` | Strengths of the research and design |
+| `weaknesses` | Weaknesses of the research and design |
+| `connectionToProposal` | How this article helps your proposal / background |
+| `otherComments` | Optional notes |
+
+Each field shows a **resource link** (Ch. 2, 4, 5, 7, or 11) — MM does not score or rewrite answers.
+
+**Source self-check** (MM-only, per card — not on Canvas template):
+
+- Found in library database → Ch. 2
+- Scholarly peer-reviewed journal → Ch. 2
+- Original empirical study (Method + Results) → Ch. 2
+- PDF saved; APA reference ready → Ch. 11
+
+**Problem Statement** (end of Article Review assignment — after all article cards):
+
+| Field | Component |
+|-------|-----------|
+| `whatWeKnow` | What the readings showed |
+| `whatWeDontKnow` | The gap |
+| `whatWeWantToKnow` | How your research might fill it |
+| `problemStatementDraft` | Combined problem statement (student writes; example structure shown as help text only) |
+
+**Research Question(s) and Hypothesis(es)** (same assignment, last page of worksheet):
 
 | Field | Notes |
 |-------|-------|
-| `apaReference` | Student enters; optional DOI for their own lookup |
-| `participants` | N, population, recruitment |
-| `designType` | enum + link to relevant chapter (Ch. 5/6/7) |
-| `measures` | Instruments/scales |
-| `keyFindings` | Their summary |
-| `relevanceNote` | How it relates to their topic |
-| `sourceChecklist` | Self-check boxes (see below) |
+| `researchQuestions` | Early draft; refine during lit review weeks |
+| `hypotheses` | Early draft; refine when path is chosen in Phase 4 |
 
-**Source evaluation checklist** (per card — student attests, MM does not judge):
+**Coverage (factual only):** “N of 8 articles with required fields started.”
 
-- □ Found through library database (PsycINFO, etc.) → link Ch. 2 + library help
-- □ Appears in a scholarly journal → what to look for (volume, issue, peer review)
-- □ Has Method and Results with original data → not a review/meta chapter
-- □ PDF saved; APA reference ready → Ch. 11
-
-**Problem statement** — single text field + prompt ("What problem does your reading point toward?") + link Ch. 2. No auto-fill from cards.
-
-**Coverage (factual only):** card count, design labels used.
-
-**Export:** annotated bibliography block + problem statement.
+**Export:** Full worksheet order — header, Article 1…8 blocks, Problem Statement, RQ/Hypothesis — for paste into Canvas/Word.
 
 #### B. Study focus (`study-focus`)
 
@@ -186,8 +214,19 @@ Seed construct name rows from `myStudyPitch` / study focus **as empty placeholde
 {
   "topic": "",
   "searchTerms": [],
-  "articleCards": [],
-  "problemStatement": "",
+  "articleReview": {
+    "studentName": "",
+    "proposedProjectTitle": "",
+    "articleCards": [ /* 8 slots, ArticleCard */ ],
+    "problemStatement": {
+      "whatWeKnow": "",
+      "whatWeDontKnow": "",
+      "whatWeWantToKnow": "",
+      "problemStatementDraft": ""
+    },
+    "researchQuestions": "",
+    "hypotheses": ""
+  },
   "studyFocus": {
     "workingGap": "",
     "workingResearchQuestion": "",
@@ -212,7 +251,7 @@ Autosave: debounced PATCH. User-scoped.
 
 ### 2.2 Schema source
 
-`src/data/capstoneWorksheetSchemas.js` + Playwright scrape → `scripts/canvas-rm-worksheet-fields.json`
+`src/data/capstoneArticleReviewWorksheet.js` (article review, from PDF) + `src/data/capstoneWorksheetSchemas.js` (phase 3/4, study focus) + Playwright scrape for drift check
 
 ---
 

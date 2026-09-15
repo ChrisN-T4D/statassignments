@@ -82,13 +82,14 @@ export const assignmentHelpResearchMethods = [
         name: 'Article Review and Problem Statement',
         type: 'assignment',
         tips: [
-          'For each article, note the design type and how variables were measured — use the Pressbooks chapter Canvas links for that assignment.',
-          'Complete 6–8 peer-reviewed, original-research article reviews using the template — treat each like an annotated-bibliography note card.',
-          'For each article: participants, design, measures, key findings, and how it supports your emerging problem statement.',
-          'Attach a PDF for every article you review; keep APA-style reference info consistent for the later References section.'
+          'The Canvas template has eight article blocks — complete at least six peer-reviewed, original-research articles (every required blank filled).',
+          'For each article: APA reference, the authors’ “what” and “why” questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal.',
+          'Write in complete sentences; summarize — do not copy and paste from the article.',
+          'After all article cards: draft your Problem Statement (what we know, gap, what we want to know) and preliminary research question(s) and hypothesis(es).',
+          'Attach a PDF for every article in Canvas; use Study Plan in Methods Market to draft and export before you submit.'
         ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-5'],
-        getHelp: 'Not sure if a paper is “original research”? Look for Method and Results sections. Use Ch. 2 on evaluating evidence and literature searching.'
+        practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-11'],
+        getHelp: 'Use Ch. 2 to evaluate sources and gaps; Ch. 4 for methodology vocabulary; Ch. 11 for APA references. Study Plan mirrors the worksheet field order.'
       }
     ]
   },
