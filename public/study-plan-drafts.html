@@ -230,6 +230,22 @@
     .card-status-label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
     .card-status-label.complete { color: #86efac; }
     #save-status { margin-top: 0.5rem; font-size: 0.78rem; color: var(--muted); }
+    .walkthrough { margin-bottom: 1.25rem; border: 1px solid var(--border); border-radius: 0.75rem; background: rgba(255,255,255,0.02); overflow: hidden; }
+    .walkthrough-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border: none; background: transparent; color: var(--text); cursor: pointer; text-align: left; font-size: 1.05rem; font-weight: 600; }
+    .walkthrough-toggle span:last-child { font-size: 0.85rem; color: var(--primary); font-weight: 400; }
+    .walkthrough-body { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
+    .walkthrough-step { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+    .walkthrough-step:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .step-title { font-size: 0.95rem; margin: 0 0 0.5rem; color: var(--primary); }
+    .step-p { font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.5rem; }
+    .adjust-grid { display: grid; gap: 0.65rem; margin-top: 0.65rem; }
+    @media (min-width: 640px) { .adjust-grid { grid-template-columns: 1fr 1fr; } }
+    .adjust-box { padding: 0.75rem; border-radius: 0.5rem; font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
+    .adjust-box.narrow { background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.25); }
+    .adjust-box.widen { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); }
+    .adjust-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.35rem; }
+    .narrow .adjust-label { color: #fca5a5; }
+    .widen .adjust-label { color: #93c5fd; }
   </style>
 </head>
 <body>
@@ -274,6 +290,59 @@
     </section>
 
     <section id="article" class="panel">
+      <div class="walkthrough" id="article-walkthrough">
+        <button type="button" class="walkthrough-toggle" id="walkthrough-toggle" aria-expanded="true">
+          <span>How this worksheet helps you think</span>
+          <span id="walkthrough-toggle-label">Hide guide</span>
+        </button>
+        <div class="walkthrough-body" id="walkthrough-body">
+          <p class="step-p" style="margin-top:1rem">The article review is not busywork. Each section trains a skill researchers use every week: finding literature, reading critically, and deciding whether your topic is too broad, too narrow, or ready for a problem statement.</p>
+
+          <article class="walkthrough-step">
+            <h3 class="step-title">1. Search terms & search log</h3>
+            <p class="step-p"><strong>Why it matters:</strong> Researchers rarely find six good articles on the first try. You build a search string, run it, learn from the hit count, and adjust.</p>
+            <div class="adjust-grid">
+              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Too many hits? Add a population, a specific construct, or a PsycINFO index term.</p></div>
+              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Too few hits? Drop the strictest term, add synonyms (OR), or follow a citation from one good article.</p></div>
+            </div>
+          </article>
+
+          <article class="walkthrough-step">
+            <h3 class="step-title">2. Article cards</h3>
+            <p class="step-p"><strong>Why it matters:</strong> Each card is a reusable note. “What” and “why” train you to spot the authors’ question and gap; strengths and weaknesses teach critique, not summary.</p>
+            <div class="adjust-grid">
+              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Articles feel unrelated? Your topic may still be too broad — find a shared population or construct.</p></div>
+              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Every article nearly identical? Try a neighboring construct or different population.</p></div>
+            </div>
+          </article>
+
+          <article class="walkthrough-step">
+            <h3 class="step-title">3. Source self-check</h3>
+            <p class="step-p"><strong>Why it matters:</strong> Not everything in a database is peer-reviewed original research. Look at the PDF before you invest time summarizing.</p>
+          </article>
+
+          <article class="walkthrough-step">
+            <h3 class="step-title">4. Problem statement</h3>
+            <p class="step-p"><strong>Why it matters:</strong> After several cards, patterns appear. “What we know / gap / what we want to know” forces synthesis — not copying one abstract.</p>
+            <div class="adjust-grid">
+              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Gap sounds like “everything about social media”? Name one IV, one DV, and one population you could study this semester.</p></div>
+              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Cannot find a gap after six articles? Return to the search log — you may need more or different reading.</p></div>
+            </div>
+          </article>
+
+          <article class="walkthrough-step">
+            <h3 class="step-title">5. Early research question & hypothesis</h3>
+            <p class="step-p"><strong>Why it matters:</strong> Practice stating a testable direction now; you will revise after the full literature review. Design details belong in Phase 4.</p>
+            <div class="adjust-grid">
+              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>RQ lists three constructs? Pick the relationship you care about most.</p></div>
+              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>RQ is vague? Add who and what context from your article cards.</p></div>
+            </div>
+          </article>
+
+          <p class="step-p" style="font-style:italic;margin-top:1rem">Export or download your draft when ready for Canvas. Attach article PDFs separately.</p>
+        </div>
+      </div>
+
       <div class="card search-builder">
         <h2>Search term builder <span class="draft-badge">UI mock</span></h2>
         <p class="hint">Build Boolean strings for PsycINFO and other library databases. Add synonyms for each part of your topic, then copy the preview into your database. Methods Market does not run searches for you.</p>
@@ -852,6 +921,24 @@
     }
 
     initArticleCards();
+
+    document.getElementById('walkthrough-toggle')?.addEventListener('click', () => {
+      const body = document.getElementById('walkthrough-body');
+      const label = document.getElementById('walkthrough-toggle-label');
+      const btn = document.getElementById('walkthrough-toggle');
+      const open = body.style.display !== 'none';
+      body.style.display = open ? 'none' : 'block';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      label.textContent = open ? 'Show guide' : 'Hide guide';
+      try { localStorage.setItem('study-plan-drafts-walkthrough', open ? '0' : '1'); } catch (_) {}
+    });
+    try {
+      if (localStorage.getItem('study-plan-drafts-walkthrough') === '0') {
+        document.getElementById('walkthrough-body').style.display = 'none';
+        document.getElementById('walkthrough-toggle').setAttribute('aria-expanded', 'false');
+        document.getElementById('walkthrough-toggle-label').textContent = 'Show guide';
+      }
+    } catch (_) {}
   </script>
 </body>
 </html>

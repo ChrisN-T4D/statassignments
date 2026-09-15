@@ -82,6 +82,7 @@ export const assignmentHelpResearchMethods = [
         name: 'Article Review and Problem Statement',
         type: 'assignment',
         tips: [
+          'Open Study Plan and read “How this worksheet helps you think” — it explains why each section exists and when to narrow or widen your topic.',
           'The Canvas template has eight article blocks — complete 6–8 peer-reviewed, original-research articles (every required blank filled on each article you submit).',
           'For each article: APA reference, the authors’ “what” and “why” questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal.',
           'Write in complete sentences; summarize — do not copy and paste from the article.',

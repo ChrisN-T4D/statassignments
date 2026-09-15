@@ -1,5 +1,7 @@
 <template>
   <div class="article-review-section">
+    <ArticleReviewWalkthrough />
+
     <p class="section-intro">
       Capture notes for each article in your own words. Canvas expects
       <strong>{{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }}</strong> peer-reviewed reviews; this workspace has
@@ -114,6 +116,7 @@ import {
 import { CANVAS_RM_ASSIGNMENTS } from '../../data/researchMethodsCanvasLinks.js'
 import { countArticleCards } from '../../lib/capstoneValidation.js'
 import SchemaField from './SchemaField.vue'
+import ArticleReviewWalkthrough from './ArticleReviewWalkthrough.vue'
 import PeerReviewReference from './PeerReviewReference.vue'
 import SourceSelfCheckPanel from './SourceSelfCheckPanel.vue'
 import StudyPlanExportPanel from './StudyPlanExportPanel.vue'
