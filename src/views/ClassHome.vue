@@ -78,11 +78,19 @@
             Pick a <strong>part</strong> tab, then a <strong>chapter</strong> → <strong>Topics</strong> to read → <strong>Concept Review</strong> to practice.
           </li>
           <li>
+            Draft capstone worksheets in
+            <router-link :to="`/class/${classId}/study-plan`">Study Plan</router-link>
+            (article reviews, lit review outline, Phase 3 elevator speech, Phase 4 operationalization), then export and submit in Canvas.
+          </li>
+          <li>
             Stuck on a Canvas assignment?
             <router-link :to="`/class/${classId}/assignment-help`">Open Assignment Help</router-link>.
           </li>
         </ol>
         <div class="rm-getting-started-links">
+          <router-link :to="`/class/${classId}/study-plan`" class="rm-quick-link rm-quick-link-primary">
+            Open Study Plan →
+          </router-link>
           <a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
             Canvas setup guide ↗
           </a>
@@ -1890,6 +1898,13 @@ watch(selectedModuleId, id => {
   gap: 0.75rem;
 }
 
+.rm-getting-started-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+}
+
 .rm-quick-link {
   font-size: 0.875rem;
   color: var(--primary);
@@ -1897,8 +1912,26 @@ watch(selectedModuleId, id => {
   font-weight: 500;
 }
 
+.rm-quick-link-primary {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--primary);
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.rm-quick-link-primary:hover {
+  text-decoration: none;
+  filter: brightness(1.08);
+}
+
 .rm-quick-link:hover {
   text-decoration: underline;
+}
+
+.rm-quick-link-primary:hover {
+  text-decoration: none;
 }
 
 /* Learning Objectives */

@@ -297,7 +297,7 @@ export function getAssignmentHelp (classId) {
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
+    return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Capstone worksheets (article review, lit review outline, Phase 3 elevator speech, Phase 4 operational IV/DV) live in Study Plan — open it from the course home or the assignment detail page. Due dates and points are always in Canvas — not here.'
   }
   return 'Match your Canvas assignment below for Methods Market Concept Review and Software Practice links, plus tips for other weekly work. Due dates and points are always in Canvas — not here.'
 }

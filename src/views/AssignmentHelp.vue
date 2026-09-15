@@ -6,6 +6,17 @@
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="help-title">Assignment Help</h1>
         <p class="help-intro">{{ helpIntro }}</p>
+        <div v-if="classId === 'research-methods'" class="study-plan-banner">
+          <div>
+            <h2 class="study-plan-banner-title">Capstone worksheets → Study Plan</h2>
+            <p class="study-plan-banner-desc">
+              Article review, lit review outline, Phase 3 elevator speech, and Phase 4 operational IV/DV are drafted in Study Plan, then exported to Canvas.
+            </p>
+          </div>
+          <router-link :to="`/class/${classId}/study-plan`" class="study-plan-banner-btn">
+            Open Study Plan →
+          </router-link>
+        </div>
       </div>
 
       <div class="help-modules">
@@ -102,6 +113,49 @@ function typeLabel (type) {
   margin: 0;
   max-width: 42rem;
   line-height: 1.6;
+}
+
+.study-plan-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--primary);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
+}
+
+.study-plan-banner-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.study-plan-banner-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 36rem;
+  line-height: 1.5;
+}
+
+.study-plan-banner-btn {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.study-plan-banner-btn:hover {
+  filter: brightness(1.08);
 }
 
 .help-modules {
