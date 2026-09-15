@@ -1,8 +1,8 @@
 <template>
-  <div class="article-review-section">
-    <ArticleReviewWalkthrough />
+  <div ref="sectionRoot" class="article-review-section">
+    <ArticleReviewWalkthrough :root-el="sectionRoot" :before-step="onTourBeforeStep" />
 
-    <p class="section-intro">
+    <p class="section-intro" data-tour="tour-intro">
       Capture notes for each article in your own words. Canvas expects
       <strong>{{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }}</strong> peer-reviewed reviews; this workspace has
       {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }} numbered slots — complete at least
@@ -13,7 +13,7 @@
     <p v-if="activeArticleNumber != null" class="editing-banner">
       Editing Article {{ activeArticleNumber }} of {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }}
     </p>
-    <nav class="article-jump" aria-label="Jump to article card">
+    <nav class="article-jump" data-tour="tour-jump-nav" aria-label="Jump to article card">
       <button
         v-for="(card, index) in articleReview.articleCards"
         :key="card.id"
@@ -26,9 +26,11 @@
       </button>
     </nav>
 
-    <PeerReviewReference />
+    <div data-tour="tour-peer-review">
+      <PeerReviewReference />
+    </div>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-header">
       <h2 class="block-title">Header</h2>
       <SchemaField
         v-for="field in ARTICLE_REVIEW_HEADER_FIELDS"
@@ -44,6 +46,7 @@
       v-for="(card, index) in articleReview.articleCards"
       :key="card.id"
       class="worksheet-block article-card"
+      :data-tour="index === 0 ? 'tour-article-card' : undefined"
     >
       <button
         type="button"
@@ -66,14 +69,16 @@
           :model-value="card[field.id]"
           @update:model-value="setCardField(index, field.id, $event)"
         />
-        <SourceSelfCheckPanel
-          :model-value="card.sourceSelfCheck ?? {}"
-          @update:model-value="setSelfCheckObject(index, $event)"
-        />
+        <div :data-tour="index === 0 ? 'tour-source-check' : undefined">
+          <SourceSelfCheckPanel
+            :model-value="card.sourceSelfCheck ?? {}"
+            @update:model-value="setSelfCheckObject(index, $event)"
+          />
+        </div>
       </div>
     </section>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-problem">
       <h2 class="block-title">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.sectionTitle }}</h2>
       <p class="block-intro">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.intro }}</p>
       <SchemaField
@@ -86,7 +91,7 @@
       />
     </section>
 
-    <section class="worksheet-block">
+    <section class="worksheet-block" data-tour="tour-rq">
       <h2 class="block-title">{{ ARTICLE_REVIEW_RQ_HYPOTHESIS.sectionTitle }}</h2>
       <SchemaField
         v-for="field in ARTICLE_REVIEW_RQ_HYPOTHESIS.fields"
@@ -98,7 +103,9 @@
       />
     </section>
 
-    <StudyPlanExportPanel section-id="article-review" :project="project" />
+    <div data-tour="tour-export">
+      <StudyPlanExportPanel section-id="article-review" :project="project" />
+    </div>
   </div>
 </template>
 
@@ -128,6 +135,7 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 
 const canvasUrl = CANVAS_RM_ASSIGNMENTS.articleReview
+const sectionRoot = ref(null)
 const openCards = ref([true, false, false, false, false, false, false, false])
 
 const articleReview = computed(() => props.project.articleReview ?? {})
@@ -175,6 +183,15 @@ function setRqField (id, value) {
 
 function openCard (index) {
   openCards.value = openCards.value.map((_, i) => i === index)
+}
+
+async function onTourBeforeStep (step) {
+  if (step.beforeShow === 'open-first-card') {
+    openCard(0)
+  } else if (step.beforeShow === 'close-cards') {
+    openCards.value = openCards.value.map(() => false)
+  }
+  await new Promise((r) => setTimeout(r, 50))
 }
 
 function toggleCard (index) {

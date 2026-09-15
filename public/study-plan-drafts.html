@@ -246,6 +246,18 @@
     .adjust-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.35rem; }
     .narrow .adjust-label { color: #fca5a5; }
     .widen .adjust-label { color: #93c5fd; }
+    .tour-launcher { margin-bottom: 1.25rem; padding: 1rem 1.15rem; border: 1px dashed var(--border); border-radius: 0.75rem; background: rgba(230,57,70,0.05); }
+    .tour-start-btn { padding: 0.55rem 1rem; border: 1px solid var(--primary); border-radius: 0.5rem; background: var(--primary); color: #fff; font-size: 0.92rem; font-weight: 600; cursor: pointer; }
+    #spotlight-tour { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
+    #spotlight-tour.active { display: block; }
+    .spotlight-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); pointer-events: auto; }
+    .spotlight-ring { position: fixed; z-index: 10001; border: 2px solid var(--primary); border-radius: 0.65rem; box-shadow: 0 0 0 2px rgba(230,57,70,0.35), 0 0 24px rgba(230,57,70,0.25); pointer-events: none; transition: top 0.25s, left 0.25s, width 0.25s, height 0.25s; }
+    .spotlight-popover { position: fixed; z-index: 10002; pointer-events: auto; background: var(--card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.15rem 1.25rem; box-shadow: 0 12px 40px rgba(0,0,0,0.45); max-width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; }
+    .spotlight-popover .popover-step { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--primary); margin: 0 0 0.35rem; }
+    .spotlight-popover h3 { font-size: 1.05rem; margin: 0 0 0.5rem; }
+    .spotlight-popover .popover-body { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.75rem; }
+    .spotlight-popover .popover-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
+    body.tour-active { overflow: hidden; }
   </style>
 </head>
 <body>
@@ -290,60 +302,18 @@
     </section>
 
     <section id="article" class="panel">
-      <div class="walkthrough" id="article-walkthrough">
-        <button type="button" class="walkthrough-toggle" id="walkthrough-toggle" aria-expanded="true">
-          <span>How this worksheet helps you think</span>
-          <span id="walkthrough-toggle-label">Hide guide</span>
-        </button>
-        <div class="walkthrough-body" id="walkthrough-body">
-          <p class="step-p" style="margin-top:1rem">The article review is not busywork. Each section trains a skill researchers use every week: finding literature, reading critically, and deciding whether your topic is too broad, too narrow, or ready for a problem statement.</p>
-
-          <article class="walkthrough-step">
-            <h3 class="step-title">1. Search terms & search log</h3>
-            <p class="step-p"><strong>Why it matters:</strong> Researchers rarely find six good articles on the first try. You build a search string, run it, learn from the hit count, and adjust.</p>
-            <div class="adjust-grid">
-              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Too many hits? Add a population, a specific construct, or a PsycINFO index term.</p></div>
-              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Too few hits? Drop the strictest term, add synonyms (OR), or follow a citation from one good article.</p></div>
-            </div>
-          </article>
-
-          <article class="walkthrough-step">
-            <h3 class="step-title">2. Article cards</h3>
-            <p class="step-p"><strong>Why it matters:</strong> Each card is a reusable note. “What” and “why” train you to spot the authors’ question and gap; strengths and weaknesses teach critique, not summary.</p>
-            <div class="adjust-grid">
-              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Articles feel unrelated? Your topic may still be too broad — find a shared population or construct.</p></div>
-              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Every article nearly identical? Try a neighboring construct or different population.</p></div>
-            </div>
-          </article>
-
-          <article class="walkthrough-step">
-            <h3 class="step-title">3. Source self-check</h3>
-            <p class="step-p"><strong>Why it matters:</strong> Not everything in a database is peer-reviewed original research. Look at the PDF before you invest time summarizing.</p>
-          </article>
-
-          <article class="walkthrough-step">
-            <h3 class="step-title">4. Problem statement</h3>
-            <p class="step-p"><strong>Why it matters:</strong> After several cards, patterns appear. “What we know / gap / what we want to know” forces synthesis — not copying one abstract.</p>
-            <div class="adjust-grid">
-              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>Gap sounds like “everything about social media”? Name one IV, one DV, and one population you could study this semester.</p></div>
-              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>Cannot find a gap after six articles? Return to the search log — you may need more or different reading.</p></div>
-            </div>
-          </article>
-
-          <article class="walkthrough-step">
-            <h3 class="step-title">5. Early research question & hypothesis</h3>
-            <p class="step-p"><strong>Why it matters:</strong> Practice stating a testable direction now; you will revise after the full literature review. Design details belong in Phase 4.</p>
-            <div class="adjust-grid">
-              <div class="adjust-box narrow"><h4 class="adjust-label">When to narrow</h4><p>RQ lists three constructs? Pick the relationship you care about most.</p></div>
-              <div class="adjust-box widen"><h4 class="adjust-label">When to widen</h4><p>RQ is vague? Add who and what context from your article cards.</p></div>
-            </div>
-          </article>
-
-          <p class="step-p" style="font-style:italic;margin-top:1rem">Export or download your draft when ready for Canvas. Attach article PDFs separately.</p>
-        </div>
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Highlights each part of the worksheet and explains why it matters — including when to narrow or widen your topic.</p>
       </div>
 
-      <div class="card search-builder">
+      <div id="spotlight-tour" role="dialog" aria-modal="true" aria-label="Article review guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover" hidden></div>
+      </div>
+
+      <div class="card search-builder" data-tour="tour-search-builder">
         <h2>Search term builder <span class="draft-badge">UI mock</span></h2>
         <p class="hint">Build Boolean strings for PsycINFO and other library databases. Add synonyms for each part of your topic, then copy the preview into your database. Methods Market does not run searches for you.</p>
 
@@ -401,7 +371,7 @@
         <p class="hint" style="margin-top:0.85rem">Ch. 2 tip: if you get too many hits, open the PsycINFO thesaurus for <strong>index terms</strong> (e.g., “Human Sex Differences” instead of “gender”). Combine a broad term with a narrower one. Try citation chaining from one good article’s reference list.</p>
       </div>
 
-      <div class="card">
+      <div class="card" data-tour="tour-search-log">
         <h2>Search log <span class="draft-badge">UI mock</span></h2>
         <p class="hint">Record each search attempt so you remember what worked. Link rows to article cards when you find a keeper.</p>
         <table class="search-log-table">
@@ -434,7 +404,7 @@
         <button type="button" class="btn-secondary" id="add-log-row" style="margin-top:0.75rem">+ Log a search</button>
       </div>
 
-      <div class="ref-box">
+      <div class="ref-box" data-tour="tour-peer-review">
         <h2>What counts as peer-reviewed?</h2>
         <p class="hint">Use this while you evaluate each source. Methods Market does not decide for you — you look, then you check the boxes on each article card.</p>
         <div class="ref-columns">
@@ -465,12 +435,12 @@
         <p class="hint">Canvas expects <strong>6–8</strong> peer-reviewed article reviews. Methods Market gives you <strong>8 numbered slots</strong> on the same template — complete at least 6 for Canvas. Each card saves in this browser as you type.</p>
         <p class="progress-chip" id="article-progress">0 complete · 0/8 started · Canvas expects 6–8</p>
         <p class="editing-banner" id="editing-banner">Editing Article 1 of 8</p>
-        <nav class="article-jump" id="article-jump" aria-label="Jump to article"></nav>
+        <nav class="article-jump" id="article-jump" data-tour="tour-jump-nav" aria-label="Jump to article"></nav>
         <div id="article-cards"></div>
         <p id="save-status"></p>
       </div>
 
-      <div class="card">
+      <div class="card" data-tour="tour-export">
         <h2>Export for Canvas</h2>
         <p class="hint">Download a PDF of your article cards (and problem statement if filled) to keep offline or paste from the text preview. Attach article PDFs separately in Canvas.</p>
         <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
@@ -481,7 +451,7 @@
         <p id="export-status" class="hint" style="margin-top:0.5rem"></p>
       </div>
 
-      <div class="card">
+      <div class="card" data-tour="tour-problem">
         <h2>Problem Statement</h2>
         <p class="hint">Based on your literature review: what we know, what we don't know (the gap), and what we want to know.</p>
         <label>What we know</label><textarea></textarea>
@@ -492,7 +462,7 @@
         <textarea rows="3"></textarea>
       </div>
 
-      <div class="card">
+      <div class="card" data-tour="tour-rq">
         <h2>Research Question(s) and Hypothesis(es)</h2>
         <label>Research question(s)</label><textarea></textarea>
         <label>Hypothesis(es)</label>
@@ -763,16 +733,19 @@
         const checksHtml = SELF_CHECK.map(([key, label]) =>
           `<label class="check-main"><input type="checkbox" data-card="${index}" data-check="${key}" ${card.sourceSelfCheck?.[key] ? 'checked' : ''} /> <span>${label}</span></label>`
         ).join('');
-        return `<article class="article-card-item${index === articleState.openIndex ? ' open' : ''}" data-index="${index}">
+        const tourAttr = index === 0 ? ' data-tour="tour-article-card"' : '';
+        return `<article class="article-card-item${index === articleState.openIndex ? ' open' : ''}" data-index="${index}"${tourAttr}>
           <button type="button" class="article-card-toggle" data-toggle="${index}">
             <span><div class="card-title">Article ${index + 1}</div><div class="card-ref">${escHtml(cardRefSnippet(card))}</div></span>
             <span class="card-status-label${cardStatus(card) === 'Complete' ? ' complete' : ''}">${cardStatus(card)}</span>
           </button>
           <div class="article-card-body">
             ${fieldsHtml}
+            <div${index === 0 ? ' data-tour="tour-source-check"' : ''}>
             <h3>Source self-check (Methods Market only)</h3>
             <p class="hint">Look at your PDF, then check each box you can honestly confirm.</p>
             ${checksHtml}
+            </div>
           </div>
         </article>`;
       }).join('');
@@ -922,23 +895,103 @@
 
     initArticleCards();
 
-    document.getElementById('walkthrough-toggle')?.addEventListener('click', () => {
-      const body = document.getElementById('walkthrough-body');
-      const label = document.getElementById('walkthrough-toggle-label');
-      const btn = document.getElementById('walkthrough-toggle');
-      const open = body.style.display !== 'none';
-      body.style.display = open ? 'none' : 'block';
-      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-      label.textContent = open ? 'Show guide' : 'Hide guide';
-      try { localStorage.setItem('study-plan-drafts-walkthrough', open ? '0' : '1'); } catch (_) {}
-    });
+    const TOUR_STEPS = [
+      { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
+      { target: 'tour-search-log', title: 'Log what you tried', body: 'Record database, query, and what happened. Link rows to article numbers.', before: null },
+      { target: 'tour-peer-review', title: 'Learn what counts as a source', body: 'Before you summarize, verify peer-reviewed original research. You look, then you decide.', before: null },
+      { target: 'tour-jump-nav', title: 'Eight slots, 6–8 for Canvas', body: 'Each number is one article. Green means complete. Jump between cards to spot patterns.', before: null },
+      { target: 'tour-article-card', title: 'Article cards = research notes', body: 'Summarize what/why, participants, method, results, strengths, weaknesses, and connection to your project.', narrow: 'Articles feel unrelated? Narrow to a shared population or construct.', widen: 'Every summary identical? Try an adjacent construct.', before: 'open-first' },
+      { target: 'tour-source-check', title: 'Look at the PDF, then check', body: 'Verify database source, journal type, Method/Results, and saved PDF before you write paragraphs.', before: 'open-first' },
+      { target: 'tour-problem', title: 'Synthesize a problem statement', body: 'Combine patterns from your cards into what we know, the gap, and what we want to know.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after six articles? Return to search.', before: 'close-cards' },
+      { target: 'tour-rq', title: 'Draft a testable direction', body: 'Early RQ and hypothesis — revise after Phase 2.', narrow: 'Three constructs in one RQ? Pick one relationship.', widen: 'No population in RQ? Add who from your cards.', before: 'close-cards' },
+      { target: 'tour-export', title: 'Export for Canvas', body: 'Copy or download PDF. Attach article PDFs separately in Canvas.', before: 'close-cards' }
+    ];
+
+    let tourIndex = 0;
+
+    function tourEl (id) {
+      return document.querySelector(`[data-tour="${id}"]`);
+    }
+
+    async function layoutTourStep () {
+      const step = TOUR_STEPS[tourIndex];
+      if (step.before === 'open-first') openArticle(0);
+      if (step.before === 'close-cards') {
+        articleState.openIndex = -1;
+        renderArticleCards();
+      }
+      await new Promise((r) => setTimeout(r, step.before ? 320 : 80));
+
+      const el = tourEl(step.target);
+      const ring = document.getElementById('spotlight-ring');
+      const pop = document.getElementById('spotlight-popover');
+      if (!el) {
+        ring.hidden = true;
+        pop.innerHTML = `<p class="popover-step">${tourIndex + 1} of ${TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="tour-skip">Skip</button><button type="button" class="btn-copy" id="tour-next">${tourIndex >= TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div>`;
+        pop.hidden = false;
+        pop.style.top = '80px'; pop.style.left = '50%'; pop.style.transform = 'translateX(-50%)';
+        bindTourButtons();
+        return;
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise((r) => setTimeout(r, 280));
+      const rect = el.getBoundingClientRect();
+      const pad = 8;
+      ring.style.top = (rect.top - pad) + 'px';
+      ring.style.left = (rect.left - pad) + 'px';
+      ring.style.width = (rect.width + pad * 2) + 'px';
+      ring.style.height = (rect.height + pad * 2) + 'px';
+      ring.hidden = false;
+
+      const adjustHtml = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+      pop.innerHTML = `<p class="popover-step">${tourIndex + 1} of ${TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adjustHtml}<div class="popover-actions"><button type="button" class="btn-secondary" id="tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="tour-back"${tourIndex === 0 ? ' disabled' : ''}>Back</button><button type="button" class="btn-copy" id="tour-next">${tourIndex >= TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div></div>`;
+      pop.hidden = false;
+      const popW = Math.min(380, window.innerWidth - 32);
+      let popTop = rect.bottom + 16;
+      if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+      pop.style.transform = 'none';
+      pop.style.top = popTop + 'px';
+      pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px';
+      pop.style.width = popW + 'px';
+      bindTourButtons();
+    }
+
+    function bindTourButtons () {
+      document.getElementById('tour-skip')?.addEventListener('click', endTour);
+      document.getElementById('tour-back')?.addEventListener('click', () => { if (tourIndex > 0) { tourIndex--; layoutTourStep(); } });
+      document.getElementById('tour-next')?.addEventListener('click', () => {
+        if (tourIndex >= TOUR_STEPS.length - 1) endTour();
+        else { tourIndex++; layoutTourStep(); }
+      });
+    }
+
+    function startTour () {
+      tourIndex = 0;
+      document.getElementById('spotlight-tour').classList.add('active');
+      document.body.classList.add('tour-active');
+      layoutTourStep();
+    }
+
+    function endTour () {
+      document.getElementById('spotlight-tour').classList.remove('active');
+      document.body.classList.remove('tour-active');
+      document.getElementById('spotlight-ring').hidden = true;
+      document.getElementById('spotlight-popover').hidden = true;
+      try { localStorage.setItem('study-plan-drafts-tour-done', '1'); } catch (_) {}
+      const btn = document.getElementById('start-tour-btn');
+      if (btn) btn.textContent = 'Replay guided tour';
+    }
+
+    document.getElementById('start-tour-btn')?.addEventListener('click', startTour);
     try {
-      if (localStorage.getItem('study-plan-drafts-walkthrough') === '0') {
-        document.getElementById('walkthrough-body').style.display = 'none';
-        document.getElementById('walkthrough-toggle').setAttribute('aria-expanded', 'false');
-        document.getElementById('walkthrough-toggle-label').textContent = 'Show guide';
+      if (localStorage.getItem('study-plan-drafts-tour-done') === '1') {
+        document.getElementById('start-tour-btn').textContent = 'Replay guided tour';
       }
     } catch (_) {}
+    window.addEventListener('keydown', (e) => {
+      if (!document.getElementById('spotlight-tour').classList.contains('active')) return;
+      if (e.key === 'Escape') endTour();
+    });
   </script>
 </body>
 </html>

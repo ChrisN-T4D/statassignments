@@ -1,67 +1,114 @@
 /**
- * Pedagogical walkthrough for Article Review — guide only, no topic scoring.
- * Explains why each worksheet section exists and when to narrow vs widen focus.
+ * Interactive spotlight tour for Article Review — guide only, no topic scoring.
  */
 
-export const ARTICLE_REVIEW_WALKTHROUGH = {
-  title: 'How this worksheet helps you think',
-  intro:
-    'The article review is not busywork. Each section trains a skill researchers use every week: finding literature, reading critically, and deciding whether your topic is too broad, too narrow, or ready for a problem statement. Methods Market does not pick your topic for you — it shows you what to look at.',
-  steps: [
-    {
-      id: 'search',
-      title: '1. Search terms & search log',
-      why:
-        'Researchers rarely find six good articles on the first try. You build a search string, run it, learn from the hit count, and adjust. The log keeps you from repeating dead ends.',
-      narrow:
-        'Too many hits (hundreds or thousands)? Add a population, a specific construct, or a PsycINFO index term. Combine a broad term with a narrower one.',
-      widen:
-        'Too few hits (zero or single digits)? Drop the strictest term, add synonyms (OR), or follow a citation from one good article’s reference list.',
-      tiesTo: 'Search term builder and search log at the top of this section.'
-    },
-    {
-      id: 'cards',
-      title: '2. Article cards (what, why, how, so what)',
-      why:
-        'Each card is a reusable note — like an annotated bibliography entry. The authors’ “what” and “why” train you to spot their research question and gap. Method and results build vocabulary for your own design later. Strengths and weaknesses teach you to critique, not just summarize.',
-      narrow:
-        'Articles feel unrelated to each other? Your topic may still be too broad. Look for a shared population, construct, or context across cards before you write the problem statement.',
-      widen:
-        'Every article is almost identical? You may be too narrow — try one article on a neighboring construct or a different population to see what the field compares.',
-      tiesTo: 'One numbered card per article (6–8 completed for Canvas).'
-    },
-    {
-      id: 'source-check',
-      title: '3. Source self-check',
-      why:
-        'Not everything in a database is peer-reviewed original research. This checklist asks you to look at the PDF — journal name, Method section, Results — before you invest time summarizing. That habit protects your literature review and your grade.',
-      narrow: null,
-      widen: null,
-      tiesTo: 'Peer-review reference and checkboxes on each article card (Methods Market only — not graded separately).'
-    },
-    {
-      id: 'problem',
-      title: '4. Problem statement',
-      why:
-        'After several cards, patterns appear: what the field agrees on, what is still unknown, and what your study might address. Writing “what we know / gap / what we want to know” forces you to synthesize — not copy one abstract.',
-      narrow:
-        'Your gap sounds like “everything about social media”? Name one IV, one DV, and one population you could actually study this semester.',
-      widen:
-        'You cannot find a gap after six articles? You may need more reading, a different angle, or a construct adjacent to your first search — return to the search log instead of forcing a problem statement.',
-      tiesTo: 'Problem statement fields after your article cards.'
-    },
-    {
-      id: 'rq',
-      title: '5. Early research question & hypothesis',
-      why:
-        'Canvas asks for a preliminary RQ and hypothesis now so you practice stating a testable direction before the full literature review. Expect to revise wording after Phase 2 — design details belong in Phase 4.',
-      narrow:
-        'If your RQ lists three constructs at once, pick the relationship you care about most for this project.',
-      widen:
-        'If your RQ is vague (“Does X affect Y?” with no population), add who and in what context from your article cards.',
-      tiesTo: 'Research question and hypothesis fields at the end of this assignment.'
-    }
-  ],
-  closing:
-    'Export or download your draft when you are ready to paste into Canvas. Keep your article PDFs — Methods Market stores your notes, not the source files.'
-}
+export const ARTICLE_REVIEW_TOUR_STORAGE_KEY = 'study-plan-article-tour-completed'
+
+/** @typedef {{ id: string, target: string, title: string, body: string, narrow?: string|null, widen?: string|null, beforeShow?: string|null }} TourStep */
+
+/** @type {TourStep[]} — Vue app (search builder not in app yet; static preview adds search steps) */
+export const ARTICLE_REVIEW_TOUR_STEPS = [
+  {
+    id: 'intro',
+    target: 'tour-intro',
+    title: 'Why this assignment exists',
+    body:
+      'You are building a research notebook, not filling blanks for a grade. Each section below trains a skill: search, read critically, evaluate sources, and decide if your topic is too broad or too narrow.',
+    beforeShow: null
+  },
+  {
+    id: 'peer-review',
+    target: 'tour-peer-review',
+    title: 'Learn what counts as a source',
+    body:
+      'Before you summarize, you need the right kind of article. This reference shows what peer-reviewed empirical research looks like — you look, then you decide on each card.',
+    beforeShow: null
+  },
+  {
+    id: 'jump-nav',
+    target: 'tour-jump-nav',
+    title: 'Eight slots, 6–8 for Canvas',
+    body:
+      'Each number is one article. Green means all required fields are filled. Use these buttons to jump between articles you are comparing — patterns across cards tell you whether to narrow or widen your topic.',
+    beforeShow: null
+  },
+  {
+    id: 'header',
+    target: 'tour-header',
+    title: 'Name your research focus',
+    body:
+      'Your proposed project title should reflect a narrow focus (one population, construct, or context). If you cannot state it in one clear line, your topic may still be too broad.',
+    narrow: 'Title sounds like a whole field (“mental health”)? Add who and what relationship you study.',
+    widen: 'Title locks you into one tiny sample with no literature? Broaden the construct slightly and search again.',
+    beforeShow: null
+  },
+  {
+    id: 'article-card',
+    target: 'tour-article-card',
+    title: 'Article cards = reusable research notes',
+    body:
+      'Summarize in your own words: the authors’ what and why questions, participants, method, results, strengths, weaknesses, and how it connects to your project. You will cite these again in your literature review.',
+    narrow: 'Articles on this card feel unrelated? Narrow to a shared population or construct.',
+    widen: 'Every summary sounds the same? Widen — try an adjacent construct or comparison group.',
+    beforeShow: 'open-first-card'
+  },
+  {
+    id: 'source-check',
+    target: 'tour-source-check',
+    title: 'Look at the PDF, then check',
+    body:
+      'Methods Market does not grade these boxes. They remind you to verify database source, journal type, Method/Results sections, and that you saved the PDF before you write paragraphs.',
+    beforeShow: 'open-first-card'
+  },
+  {
+    id: 'problem',
+    target: 'tour-problem',
+    title: 'Synthesize into a problem statement',
+    body:
+      'After 6–8 cards, themes emerge. “What we know,” “the gap,” and “what we want to know” force you to combine articles — not copy one abstract.',
+    narrow: 'Gap covers “everything about” your topic? Name one IV, DV, and population for this semester.',
+    widen: 'No gap after six articles? Return to search — you may need different reading, not a forced statement.',
+    beforeShow: 'close-cards'
+  },
+  {
+    id: 'rq',
+    target: 'tour-rq',
+    title: 'Draft a testable direction',
+    body:
+      'Canvas asks for an early research question and hypothesis. Expect to revise after Phase 2; operational details wait until Phase 4.',
+    narrow: 'Three constructs in one RQ? Pick the one relationship that matters most now.',
+    widen: 'RQ has no population or context? Pull “who” from your article cards.',
+    beforeShow: 'close-cards'
+  },
+  {
+    id: 'export',
+    target: 'tour-export',
+    title: 'Export when ready for Canvas',
+    body:
+      'Copy text or download a PDF of your draft. Attach each article PDF separately in Canvas — Methods Market stores your notes, not the source files.',
+    beforeShow: 'close-cards'
+  }
+]
+
+/** Static preview includes search builder steps at the top */
+export const ARTICLE_REVIEW_TOUR_STEPS_STATIC = [
+  {
+    id: 'search-builder',
+    target: 'tour-search-builder',
+    title: 'Build search strings iteratively',
+    body:
+      'Add synonyms for each part of your topic (IV, DV, population). Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.',
+    narrow: 'Thousands of hits? Add population, context, or a PsycINFO index term.',
+    widen: 'Zero hits? Drop the strictest term or add OR synonyms.',
+    beforeShow: null
+  },
+  {
+    id: 'search-log',
+    target: 'tour-search-log',
+    title: 'Log what you tried',
+    body:
+      'Record database, query, and what happened. Link rows to article numbers so you remember which search found each source.',
+    beforeShow: null
+  },
+  ...ARTICLE_REVIEW_TOUR_STEPS.slice(1)
+]
