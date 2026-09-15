@@ -2,7 +2,7 @@
   <div class="study-plan-section-page">
     <div class="container" v-if="sectionMeta">
       <div class="section-header">
-        <router-link :to="`/class/${classId}/study-plan`" class="back-link">← Study Plan</router-link>
+        <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="section-title">{{ sectionMeta.title }}</h1>
         <p class="section-due">{{ sectionMeta.dueNote }}</p>
       </div>
