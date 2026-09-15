@@ -1,76 +1,127 @@
 <template>
-  <Teleport to="body">
-    <div v-if="active" class="spotlight-tour" role="dialog" aria-modal="true" :aria-label="ariaLabel">
-      <div class="spotlight-backdrop" @click="onBackdropClick" />
+  <div class="tour-launcher" :class="`variant-${variant}`">
+    <button type="button" class="tour-start-btn" @click="startTour">
+      {{ completed ? 'Replay guided tour' : 'Start guided tour' }}
+    </button>
+    <p v-if="hint" class="tour-hint">{{ hint }}</p>
 
+    <Teleport to="body">
       <div
-        v-if="highlight.visible"
-        class="spotlight-ring"
-        :style="{
-          top: `${highlight.top}px`,
-          left: `${highlight.left}px`,
-          width: `${highlight.width}px`,
-          height: `${highlight.height}px`
-        }"
-      />
-
-      <div
-        v-if="currentStep"
-        class="spotlight-popover"
-        :class="`placement-${popover.placement}`"
-        :style="popoverStyle"
+        v-if="active"
+        class="spotlight-tour"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="ariaLabel"
       >
-        <p class="popover-step">{{ stepIndex + 1 }} of {{ stepCount }}</p>
-        <h3 class="popover-title">{{ currentStep.title }}</h3>
-        <p class="popover-body">{{ currentStep.body }}</p>
+        <div class="spotlight-backdrop" @click="onTourEnd" />
 
-        <div v-if="currentStep.narrow || currentStep.widen" class="popover-adjust">
-          <div v-if="currentStep.narrow" class="adjust narrow">
-            <span class="adjust-label">Narrow when</span>
-            <p>{{ currentStep.narrow }}</p>
+        <div
+          v-if="highlight.visible"
+          class="spotlight-ring"
+          :style="{
+            top: `${highlight.top}px`,
+            left: `${highlight.left}px`,
+            width: `${highlight.width}px`,
+            height: `${highlight.height}px`
+          }"
+        />
+
+        <div
+          v-if="currentStep"
+          class="spotlight-popover"
+          :class="`placement-${popover.placement}`"
+          :style="popoverStyle"
+        >
+          <p class="popover-step">{{ stepIndex + 1 }} of {{ stepCount }}</p>
+          <h3 class="popover-title">{{ currentStep.title }}</h3>
+          <p class="popover-body">{{ currentStep.body }}</p>
+
+          <div v-if="currentStep.narrow || currentStep.widen" class="popover-adjust">
+            <div v-if="currentStep.narrow" class="adjust narrow">
+              <span class="adjust-label">Narrow when</span>
+              <p>{{ currentStep.narrow }}</p>
+            </div>
+            <div v-if="currentStep.widen" class="adjust widen">
+              <span class="adjust-label">Widen when</span>
+              <p>{{ currentStep.widen }}</p>
+            </div>
           </div>
-          <div v-if="currentStep.widen" class="adjust widen">
-            <span class="adjust-label">Widen when</span>
-            <p>{{ currentStep.widen }}</p>
+
+          <div class="popover-actions">
+            <button type="button" class="btn-ghost" @click="onTourEnd">Skip tour</button>
+            <div class="nav-buttons">
+              <button type="button" class="btn-secondary" :disabled="stepIndex === 0" @click="prev">Back</button>
+              <button type="button" class="btn-primary" @click="onNext">
+                {{ stepIndex >= stepCount - 1 ? 'Finish' : 'Next' }}
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="popover-actions">
-          <button type="button" class="btn-ghost" @click="end">Skip tour</button>
-          <div class="nav-buttons">
-            <button type="button" class="btn-secondary" :disabled="stepIndex === 0" @click="prev">Back</button>
-            <button type="button" class="btn-primary" @click="next">
-              {{ stepIndex >= stepCount - 1 ? 'Finish' : 'Next' }}
-            </button>
+        <div v-else class="spotlight-popover placement-center" :style="fallbackPopoverStyle">
+          <h3 class="popover-title">Tour unavailable</h3>
+          <p class="popover-body">This step could not be loaded. You can close the tour and try again.</p>
+          <div class="popover-actions">
+            <button type="button" class="btn-primary" @click="onTourEnd">Close tour</button>
           </div>
         </div>
       </div>
-
-      <div v-else class="spotlight-popover placement-center" :style="fallbackPopoverStyle">
-        <h3 class="popover-title">Tour unavailable</h3>
-        <p class="popover-body">This step could not be loaded. You can close the tour and try again.</p>
-        <div class="popover-actions">
-          <button type="button" class="btn-primary" @click="end">Close tour</button>
-        </div>
-      </div>
-    </div>
-  </Teleport>
+    </Teleport>
+  </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useSpotlightTour } from '../../composables/useSpotlightTour.js'
 
 const props = defineProps({
-  active: { type: Boolean, required: true },
-  stepIndex: { type: Number, required: true },
-  stepCount: { type: Number, required: true },
-  currentStep: { type: Object, default: null },
-  highlight: { type: Object, required: true },
-  popover: { type: Object, required: true },
-  ariaLabel: { type: String, default: 'Guided tour' }
+  rootEl: { type: Object, default: null },
+  steps: { type: Array, required: true },
+  storageKey: { type: String, default: '' },
+  ariaLabel: { type: String, default: 'Guided tour' },
+  hint: { type: String, default: '' },
+  variant: {
+    type: String,
+    default: 'primary',
+    validator: (value) => ['primary', 'blue'].includes(value)
+  },
+  beforeStep: { type: Function, default: null }
 })
 
-const emit = defineEmits(['next', 'prev', 'end'])
+const completed = ref(false)
+const stepsRef = computed(() => props.steps)
+
+function markTourCompleted () {
+  completed.value = true
+  if (!props.storageKey) return
+  try {
+    localStorage.setItem(props.storageKey, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+const {
+  active,
+  stepIndex,
+  stepCount,
+  currentStep,
+  highlight,
+  popover,
+  start,
+  next,
+  prev,
+  end
+} = useSpotlightTour(
+  computed(() => props.rootEl),
+  stepsRef,
+  {
+    beforeStep: async (step) => {
+      if (props.beforeStep) await props.beforeStep(step)
+    },
+    onComplete: markTourCompleted
+  }
+)
 
 const fallbackPopoverStyle = computed(() => ({
   top: '50%',
@@ -80,7 +131,7 @@ const fallbackPopoverStyle = computed(() => ({
 }))
 
 const popoverStyle = computed(() => {
-  const p = props.popover
+  const p = popover.value
   if (p.placement === 'center') {
     return {
       top: `${p.top}px`,
@@ -103,17 +154,30 @@ const popoverStyle = computed(() => {
   }
 })
 
-function next () {
-  if (props.stepIndex >= props.stepCount - 1) {
-    emit('end')
-    return
+onMounted(() => {
+  if (!props.storageKey) return
+  try {
+    completed.value = localStorage.getItem(props.storageKey) === '1'
+  } catch {
+    completed.value = false
   }
-  emit('next')
+})
+
+function startTour () {
+  start(0)
 }
 
-function prev () { emit('prev') }
-function end () { emit('end') }
-function onBackdropClick () { emit('end') }
+function onTourEnd () {
+  end()
+}
+
+function onNext () {
+  if (stepIndex.value >= stepCount.value - 1) {
+    onTourEnd()
+    return
+  }
+  next()
+}
 </script>
 
 <style>
@@ -123,6 +187,52 @@ body.spotlight-tour-active {
 </style>
 
 <style scoped>
+.tour-launcher {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.75rem;
+}
+
+.tour-launcher.variant-primary {
+  background: rgba(230, 57, 70, 0.05);
+}
+
+.tour-launcher.variant-blue {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.tour-start-btn {
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.variant-primary .tour-start-btn {
+  border: 1px solid var(--primary);
+  background: var(--primary);
+}
+
+.variant-blue .tour-start-btn {
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+}
+
+.tour-start-btn:hover {
+  filter: brightness(1.08);
+}
+
+.tour-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0.55rem 0 0;
+  line-height: 1.45;
+}
+
 .spotlight-tour {
   position: fixed;
   inset: 0;
