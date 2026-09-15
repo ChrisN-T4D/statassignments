@@ -24,7 +24,8 @@ export const ARTICLE_REVIEW_HEADER_FIELDS = [
 ]
 
 /**
- * One card per article. Canvas template has 8 slots; submit 6–8 completed reviews.
+ * One card per article. Canvas expects 6–8 completed reviews (minimum 6).
+ * Methods Market starts with 8 cards; students may add unlimited cards — export includes every card with content.
  * @type {Array<{ id: string, label: string, exportLabel: string, required: boolean, multiline?: boolean, helpTopicId?: string, helpNote?: string }>}
  */
 export const ARTICLE_CARD_FIELDS = [
@@ -278,10 +279,13 @@ export const ARTICLE_REVIEW_RQ_HYPOTHESIS = {
   ]
 }
 
+/** Blocks on the Canvas Word/PDF template (not a Methods Market limit). */
 export const ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT = 8
-/** Minimum peer-reviewed articles required for Canvas submission (same as Canvas assignment text). */
+/** Default empty cards when a project is first created. */
+export const ARTICLE_REVIEW_INITIAL_CARD_COUNT = 8
+/** Minimum complete cards for Canvas submission. */
 export const ARTICLE_REVIEW_MIN_ARTICLES = 6
-/** Human-readable range shown in UI — matches Canvas assignment wording. */
+/** Canvas assignment wording for submit range. */
 export const ARTICLE_REVIEW_CANVAS_RANGE_LABEL = '6–8'
 
 export function emptyArticleCard () {
@@ -310,7 +314,7 @@ export function emptyArticleReviewSection () {
   return {
     studentName: '',
     proposedProjectTitle: '',
-    articleCards: Array.from({ length: ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }, () => emptyArticleCard()),
+    articleCards: Array.from({ length: ARTICLE_REVIEW_INITIAL_CARD_COUNT }, () => emptyArticleCard()),
     problemStatement: {
       whatWeKnow: '',
       whatWeDontKnow: '',

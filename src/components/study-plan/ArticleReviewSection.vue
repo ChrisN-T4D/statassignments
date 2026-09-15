@@ -3,15 +3,15 @@
     <ArticleReviewWalkthrough :root-el="sectionRoot" :before-step="onTourBeforeStep" />
 
     <p class="section-intro" data-tour="tour-intro">
-      Capture notes for each article in your own words. Canvas expects
-      <strong>{{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }}</strong> peer-reviewed reviews; this workspace has
-      {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }} numbered slots — complete at least
-      {{ ARTICLE_REVIEW_MIN_ARTICLES }} before you submit.
+      Capture notes for each article in your own words. Canvas expects at least
+      <strong>{{ ARTICLE_REVIEW_MIN_ARTICLES }}</strong> completed reviews (up to
+      {{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }} on the template). Add as many article cards as you need here —
+      every card with content is included when you export.
       <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
     </p>
     <p class="progress-chip">{{ progressLabel }}</p>
     <p v-if="activeArticleNumber != null" class="editing-banner">
-      Editing Article {{ activeArticleNumber }} of {{ ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT }}
+      Editing Article {{ activeArticleNumber }} of {{ cardCount }}
     </p>
     <nav class="article-jump" data-tour="tour-jump-nav" aria-label="Jump to article card">
       <button
@@ -78,6 +78,13 @@
       </div>
     </section>
 
+    <div class="add-card-row">
+      <button type="button" class="btn-add-card" @click="addArticleCard">
+        + Add article card
+      </button>
+      <span class="add-card-hint">{{ cardCount }} cards · export includes all with content</span>
+    </div>
+
     <section class="worksheet-block" data-tour="tour-problem">
       <h2 class="block-title">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.sectionTitle }}</h2>
       <p class="block-intro">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.intro }}</p>
@@ -110,15 +117,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   ARTICLE_REVIEW_HEADER_FIELDS,
   ARTICLE_CARD_FIELDS,
   ARTICLE_REVIEW_PROBLEM_STATEMENT,
   ARTICLE_REVIEW_RQ_HYPOTHESIS,
-  ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
   ARTICLE_REVIEW_MIN_ARTICLES,
-  ARTICLE_REVIEW_CANVAS_RANGE_LABEL
+  ARTICLE_REVIEW_CANVAS_RANGE_LABEL,
+  emptyArticleCard
 } from '../../data/capstoneArticleReviewWorksheet.js'
 import { CANVAS_RM_ASSIGNMENTS } from '../../data/researchMethodsCanvasLinks.js'
 import { countArticleCards } from '../../lib/capstoneValidation.js'
@@ -136,19 +143,22 @@ const emit = defineEmits(['update'])
 
 const canvasUrl = CANVAS_RM_ASSIGNMENTS.articleReview
 const sectionRoot = ref(null)
-const openCards = ref([true, false, false, false, false, false, false, false])
+const openCards = ref([true])
 
 const articleReview = computed(() => props.project.articleReview ?? {})
+const cardCount = computed(() => articleReview.value.articleCards?.length ?? 0)
 
 const progressLabel = computed(() => {
-  const { started, complete, total, rangeLabel } = countArticleCards(props.project)
-  return `${complete} complete · ${started}/${total} started · Canvas expects ${rangeLabel}`
+  const { complete, total, minRequired } = countArticleCards(props.project)
+  return `${complete}/${minRequired} complete · ${total} cards`
 })
 
 const activeArticleNumber = computed(() => {
   const idx = openCards.value.findIndex(Boolean)
   return idx >= 0 ? idx + 1 : null
 })
+
+watch(cardCount, (n) => ensureOpenCards(n), { immediate: true })
 
 function emitUpdate (articleReview) {
   emit('update', { articleReview })
@@ -181,8 +191,25 @@ function setRqField (id, value) {
   emitUpdate({ ...articleReview.value, [id]: value })
 }
 
+function ensureOpenCards (length) {
+  while (openCards.value.length < length) {
+    openCards.value.push(false)
+  }
+  if (openCards.value.length > length) {
+    openCards.value = openCards.value.slice(0, length)
+  }
+}
+
 function openCard (index) {
+  ensureOpenCards(cardCount.value)
   openCards.value = openCards.value.map((_, i) => i === index)
+}
+
+function addArticleCard () {
+  const cards = [...articleReview.value.articleCards, emptyArticleCard()]
+  ensureOpenCards(cards.length)
+  openCards.value = openCards.value.map((_, i) => i === cards.length - 1)
+  emitUpdate({ ...articleReview.value, articleCards: cards })
 }
 
 async function onTourBeforeStep (step) {
@@ -335,6 +362,35 @@ function cardStatus (card) {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
+}
+
+.add-card-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.btn-add-card {
+  padding: 0.5rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-add-card:hover {
+  border-color: var(--primary);
+  background: rgba(230, 57, 70, 0.06);
+}
+
+.add-card-hint {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
 }
 
 </style>

@@ -27,9 +27,9 @@ export const ARTICLE_REVIEW_TOUR_STEPS = [
   {
     id: 'jump-nav',
     target: 'tour-jump-nav',
-    title: 'Eight slots, 6–8 for Canvas',
+    title: 'Your article cards (6 minimum for Canvas)',
     body:
-      'Each number is one article. Green means all required fields are filled. Use these buttons to jump between articles you are comparing — patterns across cards tell you whether to narrow or widen your topic.',
+      'Each number is one article. Green means all required fields are filled. Add more cards anytime — export includes every card with content. Use jump buttons to compare patterns and decide whether to narrow or widen your topic.',
     beforeShow: null
   },
   {

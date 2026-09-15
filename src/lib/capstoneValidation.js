@@ -43,7 +43,7 @@ export function countArticleCards (project) {
   return {
     started,
     complete,
-    total: ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT,
+    total: cards.length,
     minRequired: ARTICLE_REVIEW_MIN_ARTICLES,
     rangeLabel: ARTICLE_REVIEW_CANVAS_RANGE_LABEL
   }
@@ -74,13 +74,14 @@ function buildArticleReviewExport (project) {
   }
 
   const cards = ar.articleCards ?? []
-  for (let i = 0; i < ARTICLE_REVIEW_TEMPLATE_ARTICLE_COUNT; i++) {
-    const card = cards[i] ?? {}
+  cards.forEach((card, i) => {
+    const hasContent = ARTICLE_CARD_FIELDS.some((f) => (card[f.id] ?? '').trim())
+    if (!hasContent) return
     lines.push(sectionHeader(`Article ${i + 1}`))
     for (const field of ARTICLE_CARD_FIELDS) {
       lines.push(fieldBlock(field.exportLabel, card[field.id]))
     }
-  }
+  })
 
   lines.push(sectionHeader(ARTICLE_REVIEW_PROBLEM_STATEMENT.sectionTitle))
   if (ARTICLE_REVIEW_PROBLEM_STATEMENT.intro) {

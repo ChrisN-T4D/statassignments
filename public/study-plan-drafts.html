@@ -280,8 +280,8 @@
       <div class="grid two" style="margin-top:1.25rem">
         <div class="card">
           <h2>Article Review</h2>
-          <p class="hint">8 numbered slots · Canvas expects 6–8 completed reviews.</p>
-          <span class="chip" id="hub-article-progress">0/6–8 complete</span>
+          <p class="hint">Minimum 6 complete for Canvas · add unlimited cards in MM.</p>
+          <span class="chip" id="hub-article-progress">0/6 complete</span>
         </div>
         <div class="card">
           <h2>Study Focus</h2>
@@ -432,11 +432,15 @@
 
       <div class="card" id="articles-workspace">
         <h2>Article cards</h2>
-        <p class="hint">Canvas expects <strong>6–8</strong> peer-reviewed article reviews. Methods Market gives you <strong>8 numbered slots</strong> on the same template — complete at least 6 for Canvas. Each card saves in this browser as you type.</p>
-        <p class="progress-chip" id="article-progress">0 complete · 0/8 started · Canvas expects 6–8</p>
+        <p class="hint">Canvas requires at least <strong>6</strong> completed reviews (6–8 on the template). Add as many article cards as you need — export includes every card with content. Each card saves in this browser as you type.</p>
+        <p class="progress-chip" id="article-progress">0/6 complete · 8 cards</p>
         <p class="editing-banner" id="editing-banner">Editing Article 1 of 8</p>
         <nav class="article-jump" id="article-jump" data-tour="tour-jump-nav" aria-label="Jump to article"></nav>
         <div id="article-cards"></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem;margin-top:0.75rem">
+          <button type="button" class="btn-secondary" id="add-article-card">+ Add article card</button>
+          <span class="hint" id="add-card-hint" style="margin:0">8 cards · export includes all with content</span>
+        </div>
         <p id="save-status"></p>
       </div>
 
@@ -596,6 +600,8 @@
         setTimeout(() => { document.getElementById('copy-status').textContent = ''; }, 2000);
       });
 
+      document.getElementById('add-article-card')?.addEventListener('click', addArticleCard);
+
       document.getElementById('add-log-row').addEventListener('click', () => {
         const tbody = document.getElementById('search-log-body');
         const tr = document.createElement('tr');
@@ -611,10 +617,9 @@
 
     initSearchBuilder();
 
-    // Article cards — 8 slots, localStorage autosave, collapsible
-    const ARTICLE_COUNT = 8;
+    // Article cards — unlimited, localStorage autosave, collapsible
     const CANVAS_MIN = 6;
-    const CANVAS_RANGE = '6–8';
+    const INITIAL_CARD_COUNT = 8;
     const CARD_STORAGE_KEY = 'study-plan-drafts-article-cards-v1';
     const TEXT_FIELDS = [
       ['apaReference', 'Complete reference (APA)', 2, 'Use Ch. 11 for APA 7. Verify in your library database.'],
@@ -648,13 +653,17 @@
         const raw = localStorage.getItem(CARD_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
+          const saved = parsed.cards ?? [];
+          const cards = saved.length
+            ? saved.map((c) => ({ ...emptyCard(), ...c }))
+            : Array.from({ length: INITIAL_CARD_COUNT }, emptyCard);
           return {
-            cards: Array.from({ length: ARTICLE_COUNT }, (_, i) => ({ ...emptyCard(), ...(parsed.cards?.[i] ?? {}) })),
+            cards,
             openIndex: typeof parsed.openIndex === 'number' ? parsed.openIndex : 0
           };
         }
       } catch (_) { /* ignore */ }
-      return { cards: Array.from({ length: ARTICLE_COUNT }, emptyCard), openIndex: 0 };
+      return { cards: Array.from({ length: INITIAL_CARD_COUNT }, emptyCard), openIndex: 0 };
     }
 
     let articleState = loadArticleState();
@@ -699,14 +708,17 @@
     }
 
     function updateProgressUI () {
-      const { started, complete } = countCards();
+      const { complete } = countCards();
+      const total = articleState.cards.length;
       document.getElementById('article-progress').textContent =
-        `${complete} complete · ${started}/${ARTICLE_COUNT} started · Canvas expects ${CANVAS_RANGE}`;
+        `${complete}/${CANVAS_MIN} complete · ${total} cards`;
       const hub = document.getElementById('hub-article-progress');
-      if (hub) hub.textContent = `${complete}/${CANVAS_RANGE} complete`;
+      if (hub) hub.textContent = `${complete}/${CANVAS_MIN} complete`;
+      const hint = document.getElementById('add-card-hint');
+      if (hint) hint.textContent = `${total} cards · export includes all with content`;
       const idx = articleState.openIndex;
       document.getElementById('editing-banner').textContent =
-        idx >= 0 ? `Editing Article ${idx + 1} of ${ARTICLE_COUNT}` : 'Select an article card to edit';
+        idx >= 0 ? `Editing Article ${idx + 1} of ${total}` : 'Select an article card to edit';
       document.querySelectorAll('.jump-btn').forEach((btn, i) => {
         btn.classList.toggle('active', i === idx);
         btn.classList.toggle('complete', cardStatus(articleState.cards[i]) === 'Complete');
@@ -766,6 +778,15 @@
       updateProgressUI();
       persistCards();
       document.getElementById('articles-workspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function addArticleCard () {
+      articleState.cards.push(emptyCard());
+      articleState.openIndex = articleState.cards.length - 1;
+      renderArticleCards();
+      updateProgressUI();
+      refreshExportPreview();
+      persistCards();
     }
 
     const FIELD_LABELS = Object.fromEntries(TEXT_FIELDS.map(([k, label]) => [k, label]));
@@ -899,7 +920,7 @@
       { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, and population. Copy the Boolean preview into PsycINFO. Hit counts teach you whether to add or remove terms.', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
       { target: 'tour-search-log', title: 'Log what you tried', body: 'Record database, query, and what happened. Link rows to article numbers.', before: null },
       { target: 'tour-peer-review', title: 'Learn what counts as a source', body: 'Before you summarize, verify peer-reviewed original research. You look, then you decide.', before: null },
-      { target: 'tour-jump-nav', title: 'Eight slots, 6–8 for Canvas', body: 'Each number is one article. Green means complete. Jump between cards to spot patterns.', before: null },
+      { target: 'tour-jump-nav', title: 'Article cards (6 minimum for Canvas)', body: 'Each number is one article. Green means complete. Add unlimited cards — export includes all with content.', before: null },
       { target: 'tour-article-card', title: 'Article cards = research notes', body: 'Summarize what/why, participants, method, results, strengths, weaknesses, and connection to your project.', narrow: 'Articles feel unrelated? Narrow to a shared population or construct.', widen: 'Every summary identical? Try an adjacent construct.', before: 'open-first' },
       { target: 'tour-source-check', title: 'Look at the PDF, then check', body: 'Verify database source, journal type, Method/Results, and saved PDF before you write paragraphs.', before: 'open-first' },
       { target: 'tour-problem', title: 'Synthesize a problem statement', body: 'Combine patterns from your cards into what we know, the gap, and what we want to know.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after six articles? Return to search.', before: 'close-cards' },

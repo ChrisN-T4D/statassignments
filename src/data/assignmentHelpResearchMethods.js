@@ -83,7 +83,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Open Study Plan and click “Start guided tour” — it highlights each section and explains why it exists and when to narrow or widen your topic.',
-          'The Canvas template has eight article blocks — complete 6–8 peer-reviewed, original-research articles (every required blank filled on each article you submit).',
+          'Canvas requires at least 6 completed peer-reviewed article reviews (6–8 on the template). In Study Plan you can add unlimited cards — export includes every card with content.',
           'For each article: APA reference, the authors’ “what” and “why” questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal.',
           'Write in complete sentences; summarize — do not copy and paste from the article.',
           'After all article cards: draft your Problem Statement (what we know, gap, what we want to know) and preliminary research question(s) and hypothesis(es).',
