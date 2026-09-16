@@ -158,3 +158,88 @@ def test_end_rejects_join(client, instructor_headers):
     assert client.post(f"/api/live-labs/{code}/end", headers=instructor_headers).status_code == 200
     j = client.post(f"/api/live-labs/{code}/join", json={"display_name": "Late"})
     assert j.status_code == 400
+
+
+def test_classroom_smoke_coin_flow(client, instructor_headers):
+    """End-to-end classroom path: create → join×2 → vote → apply → unlock → contribute → reset → end."""
+    code = client.post(
+        "/api/live-labs",
+        json={"lab_type": "coin", "class_id": "statistics"},
+        headers=instructor_headers,
+    ).json()["code"]
+    tok_a = client.post(f"/api/live-labs/{code}/join", json={"display_name": "A"}).json()["guest_token"]
+    tok_b = client.post(f"/api/live-labs/{code}/join", json={"display_name": "B"}).json()["guest_token"]
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/set-phase",
+            json={"phase": "voting"},
+            headers=instructor_headers,
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/vote",
+            json={"guest_token": tok_a, "setting_key": "n_flips", "value": 20},
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/vote",
+            json={"guest_token": tok_b, "setting_key": "n_flips", "value": 20},
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/apply-settings",
+            json={"from_tallies": True},
+            headers=instructor_headers,
+        ).status_code
+        == 200
+    )
+    st = client.get(f"/api/live-labs/{code}/state").json()
+    assert st["applied_settings"]["n_flips"] == 20
+    assert st["participant_count"] == 2
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/set-locks",
+            json={"contribute_locked": False},
+            headers=instructor_headers,
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/set-phase",
+            json={"phase": "contributing"},
+            headers=instructor_headers,
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/contribute",
+            json={"guest_token": tok_a, "payload": {"flips": [1, 0, 1]}},
+        ).status_code
+        == 200
+    )
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/contribute",
+            json={"guest_token": tok_b, "payload": {"flips": [0, 1]}},
+        ).status_code
+        == 200
+    )
+    st2 = client.get(f"/api/live-labs/{code}/state").json()
+    assert st2["contributions_aggregate"]["n"] == 5
+    assert abs(st2["contributions_aggregate"]["proportion_heads"] - (3 / 5)) < 1e-9
+    round1 = st2["current_round_id"]
+    assert client.post(f"/api/live-labs/{code}/reset", headers=instructor_headers).status_code == 200
+    st3 = client.get(f"/api/live-labs/{code}/state").json()
+    assert st3["current_round_id"] != round1
+    assert st3["contributions_aggregate"]["n"] == 0
+    assert client.post(f"/api/live-labs/{code}/end", headers=instructor_headers).status_code == 200
+    late = client.post(f"/api/live-labs/{code}/join", json={"display_name": "Late"})
+    assert late.status_code == 400
