@@ -39,6 +39,9 @@ class SyncASGIClient:
     def get(self, url, **kwargs):
         return self._loop.run_until_complete(self._client.get(url, **kwargs))
 
+    def patch(self, url, **kwargs):
+        return self._loop.run_until_complete(self._client.patch(url, **kwargs))
+
     def close(self):
         self._loop.run_until_complete(self._client.aclose())
         self._loop.close()
