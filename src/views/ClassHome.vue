@@ -303,28 +303,28 @@
             v-else-if="selectedModuleId === STATS_M4 && activeContentTab === 'lab-central-tendency'"
             class="tab-panel"
           >
-            <CentralTendencyLab mode="host" class-id="statistics" />
+            <CentralTendencyLab mode="solo" class-id="statistics" />
           </div>
 
           <div
             v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-coin'"
             class="tab-panel"
           >
-            <CoinFlipLab mode="host" class-id="statistics" />
+            <CoinFlipLab mode="solo" class-id="statistics" />
           </div>
 
           <div
             v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-marbles'"
             class="tab-panel"
           >
-            <MarblesLab mode="host" class-id="statistics" />
+            <MarblesLab mode="solo" class-id="statistics" />
           </div>
 
           <div
             v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-clt'"
             class="tab-panel"
           >
-            <CentralLimitLab mode="host" class-id="statistics" />
+            <CentralLimitLab mode="solo" class-id="statistics" />
           </div>
 
           <!-- Topics Tab -->

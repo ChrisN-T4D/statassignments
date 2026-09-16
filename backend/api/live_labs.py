@@ -3,11 +3,12 @@ import json
 import secrets
 import time
 from collections import Counter, defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from db.auth import get_current_user
@@ -26,6 +27,7 @@ router = APIRouter(prefix="/api/live-labs", tags=["live-labs"])
 
 CODE_CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 CODE_LEN = 6
+IDLE_TIMEOUT = timedelta(hours=2)
 
 VALID_PHASES = frozenset({"lobby", "voting", "contributing", "revealing"})
 
@@ -84,12 +86,28 @@ def _generate_unique_code(db: Session) -> str:
         code = "".join(secrets.choice(CODE_CHARSET) for _ in range(CODE_LEN))
         existing = (
             db.query(LiveLabSession)
-            .filter(LiveLabSession.code == code, LiveLabSession.status == "open")
+            .filter(LiveLabSession.code == code)
             .first()
         )
         if not existing:
             return code
     raise HTTPException(status_code=500, detail="Could not allocate a unique lab code.")
+
+
+def _maybe_expire_idle(db: Session, session: LiveLabSession) -> bool:
+    """End open sessions idle longer than IDLE_TIMEOUT. Returns True if ended now."""
+    if session.status != "open":
+        return False
+    last = session.last_activity_at
+    if last is None:
+        return False
+    if datetime.utcnow() - last <= IDLE_TIMEOUT:
+        return False
+    session.status = "ended"
+    session.last_activity_at = datetime.utcnow()
+    db.commit()
+    db.refresh(session)
+    return True
 
 
 def _require_host(user: User) -> None:
@@ -285,6 +303,105 @@ def _settings_from_tallies(tallies: dict[str, list[dict[str, Any]]], base: dict[
     return applied
 
 
+def _validate_contribute_payload(session: LiveLabSession, payload: Any) -> None:
+    """Reject empty/malformed payloads and enforce per-lab size caps."""
+    if not isinstance(payload, dict):
+        raise HTTPException(status_code=400, detail="payload must be an object.")
+
+    lab_type = session.lab_type
+    settings = session.applied_settings if isinstance(session.applied_settings, dict) else {}
+
+    if lab_type == "coin":
+        flips = payload.get("flips")
+        if not isinstance(flips, list) or len(flips) < 1:
+            raise HTTPException(
+                status_code=400,
+                detail="payload.flips must be a non-empty list.",
+            )
+        if len(flips) > 20:
+            raise HTTPException(
+                status_code=400,
+                detail="payload.flips length must be ≤ 20.",
+            )
+        for x in flips:
+            try:
+                v = int(x)
+            except (TypeError, ValueError):
+                raise HTTPException(
+                    status_code=400,
+                    detail="payload.flips entries must be 0 or 1.",
+                ) from None
+            if v not in (0, 1):
+                raise HTTPException(
+                    status_code=400,
+                    detail="payload.flips entries must be 0 or 1.",
+                )
+        return
+
+    if lab_type == "marbles":
+        colors = payload.get("colors")
+        if not isinstance(colors, list) or len(colors) < 1:
+            raise HTTPException(
+                status_code=400,
+                detail="payload.colors must be a non-empty list (one draw).",
+            )
+        max_n = int(settings.get("n") or 10)
+        if len(colors) > max(max_n, 20):
+            raise HTTPException(
+                status_code=400,
+                detail=f"payload.colors length must be ≤ {max(max_n, 20)}.",
+            )
+        for c in colors:
+            if not isinstance(c, str) or not c.strip():
+                raise HTTPException(
+                    status_code=400,
+                    detail="payload.colors entries must be non-empty strings.",
+                )
+        return
+
+    if lab_type == "central-tendency":
+        if "score" not in payload:
+            raise HTTPException(
+                status_code=400,
+                detail="payload.score is required.",
+            )
+        try:
+            float(payload["score"])
+        except (TypeError, ValueError):
+            raise HTTPException(
+                status_code=400,
+                detail="payload.score must be a number.",
+            ) from None
+        return
+
+    if lab_type == "clt":
+        means = payload.get("means")
+        max_means = int(settings.get("samples_per_contrib") or 1)
+        if max_means < 1:
+            max_means = 1
+        if not isinstance(means, list) or len(means) < 1:
+            raise HTTPException(
+                status_code=400,
+                detail="payload.means must be a non-empty list.",
+            )
+        if len(means) > max_means:
+            raise HTTPException(
+                status_code=400,
+                detail=f"payload.means length must be ≤ {max_means}.",
+            )
+        for x in means:
+            try:
+                float(x)
+            except (TypeError, ValueError):
+                raise HTTPException(
+                    status_code=400,
+                    detail="payload.means entries must be numbers.",
+                ) from None
+        return
+
+    raise HTTPException(status_code=400, detail=f"Unknown lab_type: {lab_type}")
+
+
 def _check_contribute_rate_limit(
     db: Session,
     session: LiveLabSession,
@@ -369,22 +486,36 @@ def create_live_lab(
         raise HTTPException(status_code=400, detail="class_id is required.")
 
     now = datetime.utcnow()
-    session = LiveLabSession(
-        code=_generate_unique_code(db),
-        lab_type=lab_type,
-        host_user_id=user.id,
-        class_id=class_id,
-        status="open",
-        phase="lobby",
-        applied_settings=copy.deepcopy(LAB_DEFAULTS[lab_type]),
-        vote_locked=False,
-        contribute_locked=True,
-        current_round_id=_new_id(),
-        last_activity_at=now,
-    )
-    db.add(session)
-    db.commit()
-    db.refresh(session)
+    session = None
+    last_error: Optional[Exception] = None
+    for _ in range(5):
+        try:
+            session = LiveLabSession(
+                code=_generate_unique_code(db),
+                lab_type=lab_type,
+                host_user_id=user.id,
+                class_id=class_id,
+                status="open",
+                phase="lobby",
+                applied_settings=copy.deepcopy(LAB_DEFAULTS[lab_type]),
+                vote_locked=False,
+                contribute_locked=True,
+                current_round_id=_new_id(),
+                last_activity_at=now,
+            )
+            db.add(session)
+            db.commit()
+            db.refresh(session)
+            break
+        except IntegrityError as exc:
+            db.rollback()
+            last_error = exc
+            session = None
+    if session is None:
+        raise HTTPException(
+            status_code=500,
+            detail="Could not allocate a unique lab code.",
+        ) from last_error
     return {"code": session.code, "session": _session_payload(session)}
 
 
@@ -401,7 +532,15 @@ def join_live_lab(
             detail="display_name must be 1–40 characters after trimming.",
         )
 
-    session = _get_open_session(db, code)
+    session = _get_session_by_code(db, code)
+    expired = _maybe_expire_idle(db, session)
+    if session.status != "open":
+        if expired:
+            raise HTTPException(
+                status_code=410,
+                detail="Live lab session expired due to inactivity.",
+            )
+        raise HTTPException(status_code=400, detail="Live lab is not open.")
     now = datetime.utcnow()
     participant = LiveLabParticipant(
         session_id=session.id,
@@ -428,8 +567,9 @@ def get_live_lab_state(
     db: Session = Depends(get_db),
 ):
     session = _get_session_by_code(db, code)
+    _maybe_expire_idle(db, session)
 
-    if guest_token:
+    if guest_token and session.status == "open":
         participant = (
             db.query(LiveLabParticipant)
             .filter(
@@ -510,6 +650,7 @@ def contribute_live_lab(
         raise HTTPException(status_code=400, detail="guest_token is required.")
 
     participant = _get_participant(db, session, guest_token)
+    _validate_contribute_payload(session, body.payload)
     _check_contribute_rate_limit(db, session, participant, body.payload)
 
     now = datetime.utcnow()

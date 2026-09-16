@@ -225,6 +225,7 @@
 <script setup>
 import { computed, onUnmounted, reactive, ref, watch } from 'vue'
 import { liveLabApi } from '../../lib/liveLabApi.js'
+import { useAuth } from '../../composables/useAuth'
 import LiveLabHostChrome from './LiveLabHostChrome.vue'
 
 const COLORS = ['red', 'blue', 'green']
@@ -261,9 +262,13 @@ const internalCode = ref('')
 const internalState = ref(null)
 let pollTimer = null
 
-const isSolo = computed(() => props.mode === 'solo')
-const isHost = computed(() => props.mode === 'host')
+const { user } = useAuth()
 const isStudent = computed(() => props.mode === 'student')
+const canStartLive = computed(() => {
+  const role = user.value?.role
+  return role === 'instructor' || role === 'admin'
+})
+const isHost = computed(() => canStartLive.value && !isStudent.value)
 
 const effectiveState = computed(() => props.liveState || internalState.value)
 const sessionCode = computed(
@@ -272,6 +277,8 @@ const sessionCode = computed(
 const hostActive = computed(
   () => Boolean(sessionCode.value) && effectiveState.value?.status !== 'ended'
 )
+/** Solo UI when not in an active live session (and not student phone view). */
+const isSolo = computed(() => !isStudent.value && !hostActive.value)
 
 const phase = computed(() => effectiveState.value?.phase || 'lobby')
 const voteLocked = computed(() => Boolean(effectiveState.value?.vote_locked))

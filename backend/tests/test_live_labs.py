@@ -160,6 +160,50 @@ def test_end_rejects_join(client, instructor_headers):
     assert j.status_code == 400
 
 
+def test_empty_contribute_rejected(client, instructor_headers):
+    code = client.post(
+        "/api/live-labs",
+        json={"lab_type": "coin", "class_id": "statistics"},
+        headers=instructor_headers,
+    ).json()["code"]
+    tok = client.post(f"/api/live-labs/{code}/join", json={"display_name": "A"}).json()["guest_token"]
+    assert (
+        client.post(
+            f"/api/live-labs/{code}/set-locks",
+            json={"contribute_locked": False},
+            headers=instructor_headers,
+        ).status_code
+        == 200
+    )
+    for payload in ({}, {"flips": []}, {"flips": "nope"}, None):
+        r = client.post(
+            f"/api/live-labs/{code}/contribute",
+            json={"guest_token": tok, "payload": payload},
+        )
+        assert r.status_code == 400, f"expected 400 for payload={payload!r}, got {r.status_code}"
+
+
+def test_idle_session_expires_on_join(client, instructor_headers, db_session):
+    from datetime import datetime, timedelta
+
+    from db.models import LiveLabSession
+
+    code = client.post(
+        "/api/live-labs",
+        json={"lab_type": "coin", "class_id": "statistics"},
+        headers=instructor_headers,
+    ).json()["code"]
+    session = db_session.query(LiveLabSession).filter(LiveLabSession.code == code).one()
+    session.last_activity_at = datetime.utcnow() - timedelta(hours=3)
+    db_session.commit()
+
+    j = client.post(f"/api/live-labs/{code}/join", json={"display_name": "Late"})
+    assert j.status_code == 410
+    st = client.get(f"/api/live-labs/{code}/state")
+    assert st.status_code == 200
+    assert st.json()["status"] == "ended"
+
+
 def test_classroom_smoke_coin_flow(client, instructor_headers):
     """End-to-end classroom path: create → join×2 → vote → apply → unlock → contribute → reset → end."""
     code = client.post(
