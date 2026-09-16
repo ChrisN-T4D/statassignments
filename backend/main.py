@@ -16,6 +16,7 @@ from pathlib import Path
 
 from api.auth_register import router as auth_register_router
 from api.collections import router as collections_router
+from api.live_labs import router as live_labs_router
 from db.bkt_store import hydrate_bkt_model, load_bkt_state, persist_bkt_prototype, persist_bkt_state
 from db.database import SessionLocal
 from db.event_log import insert_learning_event
@@ -319,6 +320,7 @@ def _run_migrations():
 
 app.include_router(collections_router)
 app.include_router(auth_register_router)
+app.include_router(live_labs_router)
 
 
 @app.on_event("startup")

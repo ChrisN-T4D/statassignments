@@ -22,6 +22,7 @@ from db.database import Base, get_db
 from db.models import Class, Roster, Semester, User
 from api.collections import router as collections_router
 from api.auth_register import router as auth_register_router
+from api.live_labs import router as live_labs_router
 
 
 class SyncASGIClient:
@@ -66,6 +67,16 @@ def db_session():
         )
     )
     session.add(
+        Class(
+            id="statistics",
+            name="Statistics",
+            short_name="Stats",
+            slug="statistics",
+            is_active=True,
+            order=2,
+        )
+    )
+    session.add(
         Semester(
             id="sem1",
             code="2026FA",
@@ -103,6 +114,7 @@ def client(db_session):
     app = FastAPI()
     app.include_router(collections_router)
     app.include_router(auth_register_router)
+    app.include_router(live_labs_router)
     app.dependency_overrides[get_db] = _get_db
     test_client = SyncASGIClient(app)
     try:
@@ -124,4 +136,20 @@ def admin_headers(db_session):
     db_session.commit()
     db_session.refresh(admin)
     token = create_access_token(admin.id, admin.email, admin.role)
+    return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+def instructor_headers(db_session):
+    instructor = User(
+        email="instructor@example.com",
+        password_hash=hash_password("instrpass1"),
+        name="Instructor",
+        role="instructor",
+        verified=True,
+    )
+    db_session.add(instructor)
+    db_session.commit()
+    db_session.refresh(instructor)
+    token = create_access_token(instructor.id, instructor.email, instructor.role)
     return {"Authorization": f"Bearer {token}"}
