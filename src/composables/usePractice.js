@@ -479,10 +479,20 @@ export function usePractice() {
     return currentProblem.value
   }
 
-  async function submitAnswer(problemId, answer, isCorrect, difficulty = 'medium', timeData = null, confidenceData = null, sequenceData = null) {
+  async function submitAnswer(
+    problemId,
+    answer,
+    isCorrect,
+    difficulty = 'medium',
+    timeData = null,
+    confidenceData = null,
+    sequenceData = null,
+    attemptMeta = null
+  ) {
     if (!user.value) return { data: null, error: 'Not authenticated' }
 
     try {
+      const meta = { source: 'concept_review', answer, ...attemptMeta }
       // Update BKT for all objectives associated with this question
       // Use difficulty-adjusted parameters (IRT-based tuning) and time data
       const objectives = getObjectivesForQuestion(problemId)
@@ -495,7 +505,7 @@ export function usePractice() {
           confidenceData,
           sequenceData,
           problemId,
-          { source: 'concept_review', answer }
+          meta
         )
 
         // Determine confidence level based on answer changes and deliberation time

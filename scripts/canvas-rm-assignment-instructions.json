@@ -1,0 +1,30 @@
+{
+  "courseId": 2406,
+  "fetchedAt": "2026-09-15T18:12:06.481Z",
+  "assignments": [
+    {
+      "id": "44898",
+      "href": "https://nwosu.instructure.com/courses/2406/assignments/44898",
+      "title": "Article Review and Problem Statement",
+      "text": "Draft your article reviews and problem statement in Methods Market Study Plan, then export and submit here with a PDF attachment for every article.\n\nOpen Article Review (Study Plan)\nLinks to an external site.\n · Study Plan hub\nLinks to an external site.\n · Assignment Help\nLinks to an external site.\n\nRequirements: Complete at least 6 peer-reviewed, original research article reviews (6–8 on the template). For each article include APA reference, the authors' research questions, participants, methodology, results, strengths, weaknesses, and how it connects to your proposal. Write in complete sentences; summarize, do not copy from the article.\n\nAfter all article cards, draft your Problem Statement (what we know, gap, what we want to know) and preliminary research question(s) and hypothesis(es).\n\nClick Start guided tour in Study Plan for field-by-field guidance. Due dates and points are only in Canvas.",
+      "htmlLen": 4661,
+      "textLen": 909
+    },
+    {
+      "id": "44903",
+      "href": "https://nwosu.instructure.com/courses/2406/assignments/44903",
+      "title": "Phase 3: Elevator Speech",
+      "text": "Phase 3: Elevator Speech — prepare a 1–2 minute spiel about your research: what the field knows, what gap your study addresses, and how your proposed study fits. Submit together with Phase 4 on the same due date.\n\nOpen Phase 3 in Study Plan\nLinks to an external site.\n · Lit Review Outline\nLinks to an external site.\n · Phase 4\nLinks to an external site.\n\nObjective: Synthesize your lit review into spoken prose. IV/DV definitions and methodology path choice belong in Phase 4, not Phase 3.\n\nDraft four parts in Study Plan:\n\nWhat we know — 2–4 sentences on what prior research agrees on\nThe gap — 1–3 sentences on what is still unknown or contested\nMy study pitch — 1–3 sentences on how your study fits the gap\nFull elevator speech — combined script (~130–300 words, about 1–2 minutes read aloud)\n\nUse copy buttons to pull theme notes, gap, and transition from your Lit Review Outline, then refine into spoken prose. Export from Study Plan and submit with Phase 4.",
+      "htmlLen": 4821,
+      "textLen": 964
+    },
+    {
+      "id": "44935",
+      "href": "https://nwosu.instructure.com/courses/2406/assignments/44935",
+      "title": "Phase 4 Worksheet (Operationalization Exploration)",
+      "text": "Phase 4: Operationalization Exploration — compare four data-collection pathways and choose one by the end of Phase 4. Submit together with Phase 3 on the same due date.\n\nOpen Phase 4 in Study Plan\nLinks to an external site.\n · Phase 3\nLinks to an external site.\n · Helpful Table (IV/DV logic)\n\nPart A: Recap broad topic area and proposed research question from your lit review.\n\nPart B — Conceptual definitions: Define IV and DV in theory (constructs as your literature defines them).\n\nPart B (continued) — Operational definitions: Specify how you would measure or manipulate each variable in a real study (conditions, scales, tasks, dataset variables).\n\nPart C: Explore all four pathways (survey, experimental task, observation, archival). Mark a path not viable when it truly does not fit.\n\nPart D: Complete the comparison table (feasibility, access, measurement quality, ethics/IRB).\n\nPart E: Choose one pathway. That choice unlocks the matching method-path guide in Canvas.\n\nSee Path 1–4 wiki pages and Ch. 4 (Measurement) in Methods Market. Export from Study Plan and submit with Phase 3.",
+      "htmlLen": 3813,
+      "textLen": 1093
+    }
+  ]
+}

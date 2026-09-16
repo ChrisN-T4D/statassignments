@@ -9,6 +9,7 @@ Research methods modules, statistics support, and software how-tos for psycholog
 - **Progress Tracking** - Complete topic and practice tracking
 - **Instructor Analytics** - CSV exports and roster management
 - **Two Course Tracks** - Statistics (PSYC 4213) and Research Methods (PSYC 4223)
+- **Multi-Level Learning** - Scaffolding across Bloom's taxonomy (Concept Review/BKT for foundational mastery; Study Plan for analyze/evaluate/create capstone work)
 
 ## Quick Start
 
@@ -46,6 +47,7 @@ statassignments/
 
 ## Documentation
 
+- **[Methodology](docs/METHODOLOGY.md)** - Educational theory, content sources, BKT implementation, and technical architecture
 - **[Full Setup Guide](docs/README-FULL.md)** - Complete setup instructions
 - **[Setup Guide](docs/SETUP.md)** - Detailed configuration steps
 - **[Troubleshooting](docs/QUICK-FIX.md)** - Common issues and fixes

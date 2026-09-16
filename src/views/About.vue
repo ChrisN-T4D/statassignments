@@ -29,6 +29,14 @@
             <h4>How is my progress tracked?</h4>
             <p>When you sign in, the platform uses Bayesian Knowledge Tracing to estimate your mastery of each learning objective. You can view your progress on your Profile page.</p>
           </div>
+          <div class="faq-item">
+            <h4>Something broken or confusing?</h4>
+            <p>
+              Signed-in students can
+              <router-link to="/report-issue">report an issue</router-link>
+              from the menu or profile page. We link the report to your account and save page context to help us fix problems faster.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -46,7 +54,48 @@
         </div>
 
         <div class="theory-card">
+          <h3>Bloom's Taxonomy — Learning at Every Level</h3>
+          <p>
+            Research methods and statistics are not just memorization. Methods Market is organized around
+            <strong>Bloom's revised taxonomy</strong> — a pyramid of thinking skills from basic recall up
+            through evaluating and creating original work. Different parts of the platform scaffold
+            different levels:
+          </p>
+          <ul class="bloom-levels">
+            <li>
+              <strong>Remember &amp; Understand</strong> — chapter reading and Concept Review (definitions,
+              explanations, immediate feedback)
+            </li>
+            <li>
+              <strong>Apply</strong> — Software Practice and lab simulations (use concepts in guided scenarios)
+            </li>
+            <li>
+              <strong>Analyze</strong> — Study Plan article reviews and lit review outlines (break down research,
+              organize themes)
+            </li>
+            <li>
+              <strong>Evaluate</strong> — strengths/weaknesses notes, source checklists, Phase 4 pathway
+              comparisons (judge quality and tradeoffs)
+            </li>
+            <li>
+              <strong>Create</strong> — gap statements, elevator speeches, and operationalization choices
+              (synthesize your own project)
+            </li>
+          </ul>
+          <p>
+            The platform uses <strong>automated tracking</strong> (Concept Review and BKT) for the foundation
+            levels and <strong>structured workspaces</strong> (Study Plan) for higher-level work that you
+            export and submit in Canvas, where your instructor evaluates the quality of your thinking.
+          </p>
+        </div>
+
+        <div class="theory-card">
           <h3>Bayesian Knowledge Tracing (BKT)</h3>
+          <p class="bkt-scope-note">
+            BKT primarily tracks <strong>Remember through Apply</strong> — whether you have mastered the
+            concepts behind Concept Review and software exercises. It does not grade the quality of your
+            capstone drafts; that is assessed on your exported Study Plan work in Canvas.
+          </p>
           <p>
             At the core of our system is <strong>Bayesian Knowledge Tracing</strong>, a probabilistic
             cognitive model originally developed at Carnegie Mellon University for intelligent tutoring systems.

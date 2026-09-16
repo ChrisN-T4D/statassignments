@@ -135,7 +135,7 @@ const WEEKLY_SCHEDULE_RAW = [
   {
     week: 11,
     dates: 'Oct 26–30',
-    focus: 'Phase 3 & 4 — question, hypothesis & methodology path',
+    focus: 'Phase 3 & 4 — research question & operationalization',
     chapterNumber: 10,
     chapterGoal: 'Single-subject designs — choose and justify your group’s methodology path.',
     due: ['Phase 3 & 4 Worksheets (Oct 30)', 'HRT Lessons 1–3 (Oct 26–30)']

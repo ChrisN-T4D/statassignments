@@ -59,6 +59,7 @@
             <option value="software_lesson_metrics">Software Lesson Metrics</option>
             <option value="user_progress">User Progress</option>
             <option value="topic_readings">Topic Readings</option>
+            <option value="feedback_reports">Feedback Reports</option>
           </select>
         </div>
 
@@ -88,6 +89,11 @@
         <div v-else-if="selectedCollection && collectionData.length === 0" class="empty-state">
           No data found in {{ selectedCollection }}
         </div>
+      </div>
+
+      <!-- Student feedback -->
+      <div v-if="activeTab === 'feedback'" class="content-section">
+        <AdminFeedbackPanel />
       </div>
 
       <!-- Class Mastery -->
@@ -491,6 +497,7 @@ import { getContentModulesByClass, getAllTopics } from '../data/modules'
 import StudentProgressViewer from '../components/StudentProgressViewer.vue'
 import ClassMasteryPanel from '../components/ClassMasteryPanel.vue'
 import ResetUserPasswordModal from '../components/ResetUserPasswordModal.vue'
+import AdminFeedbackPanel from '../components/AdminFeedbackPanel.vue'
 import { useClassMasteryAnalytics } from '../composables/useClassMasteryAnalytics'
 import { useInstructorAnalytics } from '../composables/useInstructorAnalytics'
 
@@ -507,6 +514,7 @@ const {
 // Tab state
 const tabs = [
   { id: 'datasets', label: 'Datasets' },
+  { id: 'feedback', label: 'Student feedback' },
   { id: 'class-mastery', label: 'Class Mastery' },
   { id: 'progress', label: 'Student Progress' },
   { id: 'bkt', label: 'BKT Analytics' },

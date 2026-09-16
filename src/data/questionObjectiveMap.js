@@ -67,7 +67,7 @@ export const questionObjectiveMap = {
   'stats-m3-q4': ['M3-O2'],
   'stats-m3-q5': ['M3-O2', 'M3-O3'],
   'stats-m3-q6': ['M3-O4'],
-  'stats-m3-q7': ['M3-O4', 'M3-O5'],
+  'stats-m3-q7': ['M3-O4'],
   'stats-m3-q8': ['M3-O4'],
   'stats-m3-q9': ['M3-O4'],
   'stats-m3-q10': ['M3-O4'],
@@ -76,6 +76,9 @@ export const questionObjectiveMap = {
   'stats-m3-q13': ['M3-O2'],
   'stats-m3-q14': ['M3-O3'],
   'stats-m3-q15': ['M3-O1'],
+  'stats-m3-q16': ['M3-O5'],
+  'stats-m3-q17': ['M3-O5'],
+  'stats-m3-q18': ['M3-O5'],
 
   // ============================================================
   // Module 4: Descriptive Statistics

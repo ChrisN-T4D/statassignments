@@ -1,22 +1,92 @@
 <template>
-  <div class="benchmark-practice">
+  <div class="benchmark-practice" :class="{ 'printing-packet': printFocus === 'packet' }">
     <div class="container">
       <template v-if="config">
         <!-- Back -->
         <router-link :to="backUrl" class="back-link">← Assignment Help: {{ config.title }}</router-link>
 
+        <div v-if="benchmarkStudyGuide && !started && !finished" class="study-guide-row print-hide">
+          <a :href="benchmarkStudyGuide.pdfPath" class="btn-secondary" download>
+            Download {{ benchmarkStudyGuide.label }} (PDF)
+          </a>
+        </div>
+
+        <div v-if="!started && !finished" class="cr-mode-bar print-hide">
+          <p v-if="isOfflinePrimary">
+            Offline primary: print the packet, work without internet, then enter all answers at once for scored feedback.
+          </p>
+          <p v-else>
+            Online primary: take the practice test here, or print a packet if you want paper practice first.
+          </p>
+          <div class="cr-mode-actions">
+            <button type="button" class="btn-secondary" @click="openPrintPacket">Print packet</button>
+            <button
+              v-if="canEnterPacketAnswers"
+              type="button"
+              class="btn-primary"
+              @click="startBatchEntry"
+            >
+              Enter answers
+            </button>
+          </div>
+        </div>
+
+        <div v-if="showPrintPacket" class="print-packet-wrap">
+          <div class="print-hide packet-toolbar">
+            <button type="button" class="btn-primary" @click="printPacket">Print / Save PDF</button>
+            <button type="button" class="btn-secondary" @click="showPrintPacket = false">Close packet</button>
+          </div>
+          <ConceptReviewPrintPacket
+            :questions="packetQuestions"
+            :module-label="packetLabel"
+          />
+        </div>
+
+        <div v-if="canEnterPacketAnswers && batchMode" class="batch-entry print-hide">
+          <h2>Enter answers</h2>
+          <p>Submit once. You will see your score, strengths, weaknesses, and review links.</p>
+          <form @submit.prevent="submitBatch">
+            <fieldset v-for="(q, index) in packetQuestions" :key="q.id" class="batch-q">
+              <legend>{{ index + 1 }}. {{ q.question }}</legend>
+              <template v-if="q.type === 'multiple_choice' || q.type === 'true_false'">
+                <label v-for="opt in batchOptions(q)" :key="opt.id">
+                  <input type="radio" :name="q.id" :value="opt.id" v-model="batchAnswers[q.id]" />
+                  {{ opt.text }}
+                </label>
+              </template>
+              <template v-else-if="q.type === 'multiple_select'">
+                <label v-for="opt in q.options" :key="opt.id">
+                  <input type="checkbox" :value="opt.id" v-model="batchMulti[q.id]" />
+                  {{ opt.text }}
+                </label>
+              </template>
+            </fieldset>
+            <button type="submit" class="btn-primary">Submit all answers</button>
+          </form>
+        </div>
+
         <!-- Intro (before start) -->
-        <div v-if="!started && !finished" class="intro">
+        <div v-if="!started && !finished && !showPrintPacket && !batchMode" class="intro">
           <h1>{{ config.title }}</h1>
           <p>{{ displaySubtitle }}</p>
-          <p>You’ll get {{ QUESTIONS_COUNT }} questions. Questions will target areas we detect you might need help on. We’ll tell you which concepts continue to be a struggle so you can go back and review them.</p>
+          <p class="intro-proctor-note" v-if="benchmarkGuidance">
+            {{ benchmarkGuidance.proctorNote }}
+          </p>
+          <p class="intro-retake-note" v-if="benchmarkGuidance">
+            {{ benchmarkGuidance.retakeNote }}
+          </p>
+          <p>You’ll get {{ questionCount }} questions. Questions will target areas we detect you might need help on. Each answer updates your mastery model so later practice stays fresh. At the end you’ll see strengths, weaknesses, and review links.</p>
+          <p v-if="priorAttempts.length" class="prior-attempts">
+            Past practice on this benchmark:
+            <span v-for="(a, i) in priorAttempts.slice(0, 5)" :key="i" class="prior-score">{{ a.score }}/{{ a.total }}</span>
+          </p>
           <button type="button" class="btn-primary" :disabled="loading" @click="start">
             {{ loading ? 'Loading…' : 'Start practice test' }}
           </button>
         </div>
 
         <!-- Question -->
-        <div v-else-if="started && !finished && currentQuestion" class="question-card">
+        <div v-else-if="started && !finished && currentQuestion && !batchMode" class="question-card">
           <div class="progress">
             Question {{ currentIndex + 1 }} of {{ questions.length }}
           </div>
@@ -99,8 +169,60 @@
         <div v-else-if="finished" class="results">
           <h1>Practice test complete</h1>
           <p class="score">You got {{ score }} out of {{ questions.length }} correct.</p>
+          <p v-if="bktSaved" class="bkt-note">Your answers were saved to your mastery profile for smarter question selection next time.</p>
 
-          <section v-if="Object.keys(conceptsToReview).length > 0" class="concepts-section">
+          <section v-if="moduleStrengths.length" class="summary-section strengths-section">
+            <h2>Strengths on this attempt</h2>
+            <p>You answered every question correctly in these areas:</p>
+            <ul class="summary-list">
+              <li v-for="item in moduleStrengths" :key="item.moduleId" class="summary-item strength-item">
+                <span class="summary-label">{{ item.label }}</span>
+                <span class="summary-stat">{{ item.correct }}/{{ item.total }} correct</span>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="moduleWeaknesses.length" class="summary-section weaknesses-section">
+            <h2>Focus areas next</h2>
+            <p>Review these modules before your proctored benchmark:</p>
+            <ul class="concepts-list">
+              <li v-for="item in moduleWeaknesses" :key="item.moduleId" class="concept-item">
+                <span class="concept-label">{{ item.label }}</span>
+                <span class="summary-stat">{{ item.correct }}/{{ item.total }} correct on this test</span>
+                <div class="review-links">
+                  <span v-if="item.topicIds?.length" class="review-group">
+                    <span class="review-group-label">Topics:</span>
+                    <router-link
+                      v-for="topicId in item.topicIds"
+                      :key="topicId"
+                      :to="`/topic/${topicId}`"
+                      class="topic-link"
+                    >
+                      {{ formatTopicId(topicId) }}
+                    </router-link>
+                  </span>
+                  <span v-if="item.classModuleId" class="review-group">
+                    <router-link
+                      :to="`/class/${classId}?module=${item.classModuleId}`"
+                      class="topic-link"
+                    >
+                      Concept Review for this module
+                    </router-link>
+                  </span>
+                  <span v-if="item.hasSoftware" class="review-group">
+                    <router-link
+                      :to="`/class/${classId}/software?module=${item.classModuleId}`"
+                      class="topic-link"
+                    >
+                      Software practice
+                    </router-link>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <section v-if="Object.keys(conceptsToReview).length > 0 && moduleWeaknesses.length === 0" class="concepts-section">
             <h2>Concepts you may want to review</h2>
             <p>Based on the questions you missed, use these links to review content:</p>
             <ul class="concepts-list">
@@ -139,7 +261,9 @@
             </ul>
           </section>
 
-          <p v-else class="all-correct">You answered every question correctly. Keep reviewing the Topics to stay sharp.</p>
+          <p v-if="moduleStrengths.length && !moduleWeaknesses.length" class="all-correct">
+            Strong work — you missed nothing grouped by module on this attempt. Keep reviewing Topics to stay sharp for the proctored exam.
+          </p>
 
           <div class="results-actions">
             <button type="button" class="btn-secondary" @click="restart">Try again</button>
@@ -157,13 +281,29 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
-import { getBenchmarkPracticeConfig } from '../data/conceptQuestions'
+import { getBenchmarkPracticeConfig, getBenchmarkPacketQuestions } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
-import { useBKT } from '../composables/useBKT'
+import { updateBKT, useBKT } from '../composables/useBKT'
+import { usePractice } from '../composables/usePractice'
+import { useProfile } from '../composables/useProfile'
+import { useAccessMode } from '../composables/useAccessMode'
+import { getObjectivesForQuestion } from '../data/questionObjectiveMap.js'
+import {
+  getStatisticsBenchmarkLink,
+  getBenchmarkCardGuidance,
+  getBenchmarkStudyGuide
+} from '../data/statisticsCanvasLinks.js'
+import {
+  loadBenchmarkAttemptHistory,
+  saveBenchmarkAttempt,
+  summarizeBenchmarkByModule
+} from '../lib/benchmarkPracticeStore.js'
+import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
+import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const route = useRoute()
 const classId = computed(() => route.params.classId)
@@ -173,10 +313,21 @@ const displaySubtitle = computed(() =>
   applySoftwareLabelsToText(config.value?.subtitle || '', preferredSoftware.value || 'jamovi')
 )
 const backUrl = computed(() => config.value ? `/class/${classId.value}/assignment-help/${benchmarkSlug.value}` : `/class/${classId.value}/assignment-help`)
+const questionCount = computed(() => getStatisticsBenchmarkLink(benchmarkSlug.value)?.questionCount ?? 15)
+const benchmarkGuidance = computed(() =>
+  benchmarkSlug.value ? getBenchmarkCardGuidance(benchmarkSlug.value) : null
+)
+const benchmarkStudyGuide = computed(() =>
+  benchmarkSlug.value ? getBenchmarkStudyGuide(benchmarkSlug.value) : null
+)
+const packetLabel = computed(() => `${config.value?.title || 'Benchmark practice'} (print packet)`)
+const packetSeed = computed(() => `${studentKey.value || 'guest'}:${benchmarkSlug.value}:packet`)
 
-const QUESTIONS_COUNT = 15
+const { isOfflinePrimary, canEnterPacketAnswers, ensureLoaded } = useAccessMode()
+
 const rawQuestions = ref([])
 const questions = ref([])
+const packetQuestions = ref([])
 const started = ref(false)
 const finished = ref(false)
 const currentIndex = ref(0)
@@ -186,8 +337,19 @@ const showResult = ref(false)
 const lastCorrect = ref(false)
 const answers = ref([])
 const loading = ref(false)
+const bktSaved = ref(false)
+const moduleStrengths = ref([])
+const moduleWeaknesses = ref([])
+const priorAttempts = ref([])
+const showPrintPacket = ref(false)
+const batchMode = ref(false)
+const batchAnswers = ref({})
+const batchMulti = ref({})
+const printFocus = ref(null)
 
 const { getAllBKTStates } = useBKT()
+const { submitAnswer } = usePractice()
+const { studentKey } = useProfile()
 
 const currentQuestion = computed(() => questions.value[currentIndex.value] || null)
 const isLastQuestion = computed(() => currentIndex.value === questions.value.length - 1)
@@ -213,6 +375,127 @@ const conceptsToReview = computed(() => {
   })
   return list
 })
+
+onMounted(async () => {
+  await ensureLoaded()
+  if (benchmarkSlug.value) {
+    priorAttempts.value = loadBenchmarkAttemptHistory(studentKey.value, benchmarkSlug.value)
+  }
+  loadPacketQuestions()
+  window.addEventListener('afterprint', afterPrint)
+  if (route.query.print === '1') {
+    showPrintPacket.value = true
+  }
+  if (route.query.batch === '1' && canEnterPacketAnswers.value) {
+    startBatchEntry()
+  }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('afterprint', afterPrint)
+})
+
+watch(
+  () => [benchmarkSlug.value, studentKey.value, preferredSoftware.value],
+  () => loadPacketQuestions()
+)
+
+watch(
+  () => [route.query.print, route.query.batch],
+  () => {
+    showPrintPacket.value = route.query.print === '1'
+    if (route.query.batch === '1' && canEnterPacketAnswers.value) {
+      startBatchEntry()
+    } else if (route.query.batch !== '1') {
+      batchMode.value = false
+    }
+  }
+)
+
+function loadPacketQuestions() {
+  if (!config.value || !benchmarkSlug.value) {
+    packetQuestions.value = []
+    return
+  }
+  const sw = preferredSoftware.value || 'jamovi'
+  const qs = getBenchmarkPacketQuestions(
+    benchmarkSlug.value,
+    packetSeed.value,
+    questionCount.value
+  )
+  packetQuestions.value = qs.map((q) => prepareConceptQuestionForSoftware(q, sw))
+}
+
+function batchOptions(q) {
+  if (q.type === 'true_false') {
+    return [
+      { id: 'true', text: 'True' },
+      { id: 'false', text: 'False' }
+    ]
+  }
+  return q.options || []
+}
+
+function afterPrint() {
+  printFocus.value = null
+}
+
+function printPacket() {
+  printFocus.value = 'packet'
+  nextTick(() => window.print())
+}
+
+function openPrintPacket() {
+  loadPacketQuestions()
+  showPrintPacket.value = true
+}
+
+function startBatchEntry() {
+  loadPacketQuestions()
+  showPrintPacket.value = false
+  batchMode.value = true
+  const multi = {}
+  for (const q of packetQuestions.value) {
+    if (q.type === 'multiple_select') multi[q.id] = []
+  }
+  batchMulti.value = multi
+  batchAnswers.value = {}
+}
+
+async function submitBatch() {
+  if (!config.value || packetQuestions.value.length === 0) return
+  loading.value = true
+  bktSaved.value = false
+  answers.value = []
+  try {
+    for (const q of packetQuestions.value) {
+      let answer
+      if (q.type === 'multiple_select') {
+        answer = batchMulti.value[q.id] || []
+      } else {
+        answer = batchAnswers.value[q.id]
+      }
+      const scored = scoreConceptAnswer(
+        q,
+        q.type === 'true_false' ? (answer === 'true' || answer === true) : answer
+      )
+      answers.value.push({ correct: scored.correct, moduleId: q.moduleId, questionId: q.id })
+      await persistBenchmarkAnswer(q, scored.correct)
+    }
+    rawQuestions.value = packetQuestions.value
+    questions.value = packetQuestions.value.map((q) => convertQuestion(q)).filter(Boolean)
+    batchMode.value = false
+    started.value = true
+    await finishBenchmark()
+    finished.value = true
+  } finally {
+    loading.value = false
+  }
+}
+
+function applyLabel(text) {
+  return applySoftwareLabelsToText(text, preferredSoftware.value || 'jamovi')
+}
 
 function convertQuestion(q) {
   if (!q) return null
@@ -266,9 +549,9 @@ async function start() {
   try {
     const states = await getAllBKTStates()
     const masteryByModule = masteryByModuleFromBKT(states)
-    rawQuestions.value = config.value.getQuestionsWeighted(masteryByModule, QUESTIONS_COUNT)
+    rawQuestions.value = config.value.getQuestionsWeighted(masteryByModule, questionCount.value)
     if (rawQuestions.value.length === 0) {
-      rawQuestions.value = config.value.getQuestions(QUESTIONS_COUNT)
+      rawQuestions.value = config.value.getQuestions(questionCount.value)
     }
     questions.value = rawQuestions.value
       .map(q => convertQuestion(q))
@@ -304,7 +587,49 @@ function submitMultiSelect() {
   checkAndRecord()
 }
 
-function checkAndRecord() {
+function answerTextForRecord(q) {
+  if (!q) return ''
+  if (q.question_type === 'multiple_select') {
+    return [...selectedAnswers.value].sort().join('; ')
+  }
+  return selectedAnswer.value || ''
+}
+
+async function persistBenchmarkAnswer(rawQ, isCorrect) {
+  if (!rawQ?.id) return
+  const difficulty = rawQ.difficulty || 'medium'
+  const answerText = answerTextForRecord(convertQuestion(rawQ))
+  const meta = {
+    source: 'benchmark_practice',
+    answer: answerText,
+    module_id: rawQ.moduleId,
+    class_id: classId.value,
+    benchmark_slug: benchmarkSlug.value
+  }
+
+  const { error } = await submitAnswer(rawQ.id, answerText, isCorrect, difficulty, null, null, null, meta)
+  if (!error) {
+    bktSaved.value = true
+    return
+  }
+
+  const objectives = getObjectivesForQuestion(rawQ.id)
+  for (const objectiveId of objectives) {
+    await updateBKT(
+      objectiveId,
+      isCorrect,
+      difficulty,
+      null,
+      null,
+      null,
+      rawQ.id,
+      meta
+    ).catch(() => {})
+  }
+  if (objectives.length) bktSaved.value = true
+}
+
+async function checkAndRecord() {
   const q = currentQuestion.value
   if (!q) return
   let correct = false
@@ -317,24 +642,50 @@ function checkAndRecord() {
     correct = selectedAnswer.value === q.correct_answer
   }
   lastCorrect.value = correct
-  answers.value.push({ correct, moduleId: q.moduleId })
+  answers.value.push({ correct, moduleId: q.moduleId, questionId: q.id })
   showResult.value = true
+  const rawQ = rawQuestions.value[currentIndex.value]
+  await persistBenchmarkAnswer(rawQ, correct)
 }
 
-function next() {
+async function finishBenchmark() {
+  if (!config.value) return
+  const summary = summarizeBenchmarkByModule(
+    answers.value,
+    questions.value,
+    (mid) => config.value.getConceptLabel(mid),
+    applyLabel
+  )
+  moduleStrengths.value = summary.strengths
+  moduleWeaknesses.value = summary.weaknesses
+
+  saveBenchmarkAttempt(studentKey.value, {
+    slug: benchmarkSlug.value,
+    score: score.value,
+    total: questions.value.length,
+    moduleResults: summary.moduleResults,
+    questionIds: questions.value.map((q) => q.id)
+  })
+  priorAttempts.value = loadBenchmarkAttemptHistory(studentKey.value, benchmarkSlug.value)
+}
+
+async function next() {
   if (!isLastQuestion.value) {
     currentIndex.value++
     showResult.value = false
     selectedAnswer.value = null
     selectedAnswers.value = []
   } else {
+    await finishBenchmark()
     finished.value = true
   }
 }
 
 async function restart() {
-  await start()
+  moduleStrengths.value = []
+  moduleWeaknesses.value = []
   finished.value = false
+  await start()
 }
 
 function formatTopicId(id) {
@@ -374,6 +725,33 @@ function formatTopicId(id) {
   color: var(--text-secondary);
   margin: 0 0 0.5rem 0;
   line-height: 1.5;
+}
+
+.intro-proctor-note,
+.intro-retake-note {
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, #f59e0b 12%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+}
+
+.intro-proctor-note {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
+}
+
+.prior-attempts {
+  font-size: 0.9rem;
+}
+
+.prior-score {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.15rem 0.45rem;
+  background: var(--bg-elevated);
+  border-radius: 0.35rem;
+  font-weight: 600;
 }
 
 .intro .btn-primary {
@@ -477,7 +855,70 @@ function formatTopicId(id) {
 .score {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.75rem 0;
+}
+
+.bkt-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 1.25rem 0;
+}
+
+.summary-section {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.strengths-section {
+  background: color-mix(in srgb, var(--success) 8%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--success) 30%, var(--border));
+}
+
+.weaknesses-section {
+  background: var(--tip-bg);
+  border: 1px solid var(--border);
+}
+
+.summary-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.summary-section > p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.summary-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.summary-stat {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .concepts-section {
@@ -603,5 +1044,68 @@ function formatTopicId(id) {
 
 .not-found p {
   color: var(--text-secondary);
+}
+
+.study-guide-row {
+  margin-bottom: 1rem;
+}
+
+.study-guide-row .btn-secondary {
+  text-decoration: none;
+}
+
+.cr-mode-bar {
+  max-width: 36rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.cr-mode-bar p {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.cr-mode-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.batch-entry {
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
+
+.batch-q {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.batch-q label {
+  display: block;
+  margin: 0.35rem 0;
+}
+
+.packet-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media print {
+  .printing-packet .container > :not(.print-packet-wrap) {
+    display: none !important;
+  }
+
+  .print-packet-wrap {
+    display: block !important;
+  }
 }
 </style>

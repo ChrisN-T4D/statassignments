@@ -50,7 +50,7 @@ export function scoreConceptAnswer(question, answer) {
 }
 
 /** Deterministic shuffle so reprinting a packet keeps the same bank order. */
-function seededShuffle(items, seedStr) {
+export function seededShuffle(items, seedStr) {
   const a = [...items]
   let s = 0
   for (let i = 0; i < seedStr.length; i++) {

@@ -18,6 +18,7 @@ import {
   rmModule12Questions,
   rmModule13Questions
 } from './conceptQuestionsRm/index.js'
+import { seededShuffle } from '../lib/conceptReviewScoring.js'
 
 /*
 Question Types:
@@ -1003,6 +1004,60 @@ export const statsModule3Questions = [
       incorrect: 'Recordings document your process so you can review your work, complete assignments, and show instructors exactly what you did.'
     },
     difficulty: 'hard'
+  },
+  {
+    id: 'stats-m3-q16',
+    moduleId: 'stats-module-3',
+    type: 'multiple_choice',
+    question: 'In jamovi, what is the main purpose of creating a z-score computed variable?',
+    options: [
+      { id: 'a', text: 'To delete outliers from the dataset' },
+      { id: 'b', text: 'To express each case\'s value in standard deviation units from the mean' },
+      { id: 'c', text: 'To change nominal variables into text' },
+      { id: 'd', text: 'To replace missing values with zero' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Z-scores rescale values so you can compare scores from different scales using standard deviation units.',
+      incorrect: 'A z-score computed variable standardizes values (mean 0, SD 1) for each case—it does not delete data or fix missing values.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m3-q17',
+    moduleId: 'stats-module-3',
+    type: 'multiple_choice',
+    question: 'In jamovi\'s computed variables dialog, what does MEAN(var1, var2, var3) create for each row?',
+    options: [
+      { id: 'a', text: 'The largest value among the three variables' },
+      { id: 'b', text: 'The average of the three variables for that case' },
+      { id: 'c', text: 'A count of how many variables are missing' },
+      { id: 'd', text: 'A copy of only the first variable' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'MEAN() computes the row-wise average across the listed variables—useful for sum-scores or composite means.',
+      incorrect: 'MEAN(var1, var2, var3) returns the average of those variables for each participant (row).'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m3-q18',
+    moduleId: 'stats-module-3',
+    type: 'multiple_select',
+    question: 'Which are appropriate uses of computed variables in jamovi? (Select all that apply)',
+    options: [
+      { id: 'a', text: 'Creating a total or mean score from several survey items' },
+      { id: 'b', text: 'Applying a formula transform such as a log or z-score' },
+      { id: 'c', text: 'Skipping measurement-level checks because formulas fix everything' },
+      { id: 'd', text: 'Replacing the need to import or save data files' }
+    ],
+    correct: ['a', 'b'],
+    feedback: {
+      correct: 'Computed variables are for new values from formulas—composite scores and transforms—not for bypassing data hygiene.',
+      incorrect: 'Use computed variables for composites and transforms. You still need appropriate measurement levels and a saved data workflow.'
+    },
+    difficulty: 'medium'
   }
 ]
 
@@ -3136,6 +3191,36 @@ export function getBenchmark1QuestionsWeighted(masteryByModule, totalCount = 15)
   }
 
   return chosen.sort(() => Math.random() - 0.5)
+}
+
+/**
+ * Deterministic benchmark question set for offline print packets (same questions on reprint).
+ * @param {string[]} modules
+ * @param {string[]} questionTypes
+ * @param {number} totalCount
+ * @param {string} seed
+ */
+function getBenchmarkQuestionsSeeded(modules, questionTypes, totalCount, seed) {
+  const perModule = Math.max(1, Math.floor(totalCount / modules.length))
+  const questions = []
+  for (const moduleId of modules) {
+    const pool = getQuestionsByModule(moduleId).filter((q) => questionTypes.includes(q.type))
+    const shuffled = seededShuffle(pool, `${seed}:${moduleId}`)
+    questions.push(...shuffled.slice(0, perModule))
+  }
+  return seededShuffle(questions, `${seed}:mix`).slice(0, totalCount)
+}
+
+/** Offline print packet: fixed question set per student + benchmark slug. */
+export function getBenchmarkPacketQuestions(slug, seed, totalCount) {
+  const configs = {
+    'benchmark-1': [BENCHMARK1_MODULES, BENCHMARK1_QUESTION_TYPES],
+    'benchmark-2': [BENCHMARK2_MODULES, BENCHMARK2_QUESTION_TYPES],
+    'final-benchmark': [FINAL_MODULES, FINAL_QUESTION_TYPES]
+  }
+  const cfg = configs[slug]
+  if (!cfg) return []
+  return getBenchmarkQuestionsSeeded(cfg[0], cfg[1], totalCount, seed)
 }
 
 export function getConceptLabelForModule(moduleId) {

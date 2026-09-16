@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Plan Drafts: Methods Market Preview</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #9ca3af;
+      --primary: #e63946;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .banner {
+      background: #1a1208;
+      border-bottom: 1px solid #3d2e10;
+      color: #fbbf24;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .wrap { max-width: 52rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; }
+    .intro { color: var(--muted); margin-bottom: 1.5rem; }
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    nav.tabs button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    nav.tabs button.active {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .grid { display: grid; gap: 1rem; }
+    @media (min-width: 640px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+    .chip {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    label { display: block; font-weight: 600; margin: 0.75rem 0 0.35rem; font-size: 0.9rem; }
+    .hint { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.35rem; }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: #0f0f0f;
+      color: var(--text);
+      font: inherit;
+    }
+    textarea { min-height: 4rem; resize: vertical; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { border: 1px solid var(--border); padding: 0.4rem; }
+    a { color: var(--primary); }
+    h2 { font-size: 1.15rem; margin: 0 0 0.75rem; }
+    h3 { font-size: 1rem; margin: 1rem 0 0.5rem; }
+    h4 { font-size: 0.9rem; margin: 0.75rem 0 0.35rem; color: var(--primary); }
+    .ref-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .ref-columns { display: grid; gap: 1rem; margin: 1rem 0; }
+    @media (min-width: 640px) { .ref-columns { grid-template-columns: 1fr 1fr; } }
+    .ref-columns ul { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: var(--muted); }
+    .ref-columns li { margin-bottom: 0.35rem; }
+    .ref-reminder { font-size: 0.85rem; color: var(--muted); font-style: italic; margin: 0; }
+    .self-check-block {
+      margin: 1rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .self-check-block:last-of-type { border-bottom: none; padding-bottom: 0; }
+    .check-main { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 600; font-size: 0.95rem; }
+    .check-main input { width: auto; margin-top: 0.25rem; flex-shrink: 0; }
+    .look-for { margin: 0.35rem 0 0 1.5rem; padding-left: 1.1rem; font-size: 0.85rem; color: var(--muted); }
+    .look-for li { margin-bottom: 0.35rem; }
+    .pdf-sniff { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .pdf-sniff h4 { color: var(--muted); font-weight: 600; }
+    .draft-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.25rem;
+      background: #1a1208;
+      color: #fbbf24;
+      border: 1px solid #3d2e10;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .search-builder { margin-bottom: 1.25rem; }
+    .builder-grid { display: grid; gap: 0.75rem; }
+    @media (min-width: 640px) { .builder-grid { grid-template-columns: 1fr 1fr; } }
+    .concept-slot {
+      padding: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: #0f0f0f;
+    }
+    .concept-slot.optional { opacity: 0.92; }
+    .slot-label { font-size: 0.8rem; font-weight: 600; margin: 0 0 0.35rem; }
+    .slot-hint { font-size: 0.75rem; color: var(--muted); margin: 0 0 0.5rem; }
+    .slot-row { display: flex; gap: 0.4rem; }
+    .slot-row input { flex: 1; padding: 0.45rem 0.6rem; font-size: 0.85rem; }
+    .slot-row button, .btn-secondary, .btn-copy {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.45rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .btn-copy { border-color: var(--primary); color: var(--primary); }
+    .term-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; min-height: 1.5rem; }
+    .term-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(230, 57, 70, 0.12);
+      border: 1px solid rgba(230, 57, 70, 0.35);
+      color: #fca5a5;
+    }
+    .term-chip button {
+      border: none;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .query-preview {
+      margin-top: 1rem;
+      padding: 0.85rem;
+      border-radius: 0.5rem;
+      background: #0a0a0a;
+      border: 1px dashed var(--border);
+    }
+    .query-preview-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+    .query-string {
+      font-family: ui-monospace, monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #d1d5db;
+      word-break: break-word;
+    }
+    .query-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.65rem; align-items: center; }
+    .and-join {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0.15rem 0;
+    }
+    .search-log-table input, .search-log-table select {
+      width: 100%;
+      padding: 0.35rem 0.45rem;
+      font-size: 0.78rem;
+    }
+    .search-log-table td { vertical-align: top; }
+    .log-empty { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+    .editing-banner { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin: 0.5rem 0; }
+    .article-jump { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0 1rem; }
+    .jump-btn {
+      width: 2rem; height: 2rem; border-radius: 0.45rem; border: 1px solid var(--border);
+      background: var(--card); color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .jump-btn.active { border-color: var(--primary); color: var(--primary); }
+    .jump-btn.complete { background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.4); }
+    .article-card-item { margin-bottom: 0.65rem; border: 1px solid var(--border); border-radius: 0.65rem; overflow: hidden; }
+    .article-card-item.open { border-color: rgba(230, 57, 70, 0.45); }
+    .article-card-toggle {
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 1rem; border: none; background: var(--card); color: var(--text); cursor: pointer; text-align: left;
+    }
+    .article-card-toggle .card-title { font-weight: 600; font-size: 0.95rem; }
+    .article-card-toggle .card-ref { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 34rem; }
+    .article-card-body { display: none; padding: 0 1rem 1rem; border-top: 1px solid var(--border); background: #101010; }
+    .article-card-item.open .article-card-body { display: block; }
+    .card-status-label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+    .card-status-label.complete { color: #86efac; }
+    #save-status { margin-top: 0.5rem; font-size: 0.78rem; color: var(--muted); }
+    .walkthrough { margin-bottom: 1.25rem; border: 1px solid var(--border); border-radius: 0.75rem; background: rgba(255,255,255,0.02); overflow: hidden; }
+    .walkthrough-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border: none; background: transparent; color: var(--text); cursor: pointer; text-align: left; font-size: 1.05rem; font-weight: 600; }
+    .walkthrough-toggle span:last-child { font-size: 0.85rem; color: var(--primary); font-weight: 400; }
+    .walkthrough-body { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
+    .walkthrough-step { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+    .walkthrough-step:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .step-title { font-size: 0.95rem; margin: 0 0 0.5rem; color: var(--primary); }
+    .step-p { font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.5rem; }
+    .adjust-grid { display: grid; gap: 0.65rem; margin-top: 0.65rem; }
+    @media (min-width: 640px) { .adjust-grid { grid-template-columns: 1fr 1fr; } }
+    .adjust-box { padding: 0.75rem; border-radius: 0.5rem; font-size: 0.85rem; line-height: 1.45; color: var(--muted); }
+    .adjust-box.narrow { background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.25); }
+    .adjust-box.widen { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); }
+    .adjust-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.35rem; }
+    .narrow .adjust-label { color: #fca5a5; }
+    .widen .adjust-label { color: #93c5fd; }
+    .tour-launcher { margin-bottom: 1.25rem; padding: 1rem 1.15rem; border: 1px dashed var(--border); border-radius: 0.75rem; background: rgba(230,57,70,0.05); }
+    .progress-chip { display: inline-block; font-size: 0.85rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); margin: 0.5rem 0 0; }
+    .arc-flow { font-size: 0.88rem; color: var(--muted); margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border-radius: 0.45rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+    .reminders-panel { margin-bottom: 1.25rem; padding: 1.15rem 1.25rem; border: 1px solid var(--border); border-radius: 0.75rem; background: rgba(59,130,246,0.06); }
+    .reminders-panel.empty { background: rgba(255,255,255,0.02); }
+    .reminders-title { font-size: 1.05rem; margin: 0 0 0.35rem; }
+    .reminder-block { margin-bottom: 0.85rem; }
+    .reminder-block h3 { font-size: 0.85rem; margin: 0 0 0.25rem; color: var(--primary); }
+    .reminder-text { font-size: 0.88rem; color: var(--muted); line-height: 1.45; margin: 0; white-space: pre-wrap; }
+    .reminder-link { font-size: 0.88rem; color: var(--primary); text-decoration: none; }
+    .reminder-link:hover { text-decoration: underline; }
+    .feeds-forward { margin-bottom: 1.25rem; padding: 1.15rem 1.25rem; border: 1px dashed var(--border); border-radius: 0.75rem; }
+    .feeds-list { margin: 0 0 0.75rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    #spotlight-tour-lro, #spotlight-tour-p3, #spotlight-tour-p4 { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
+    #spotlight-tour-lro.active, #spotlight-tour-p3.active, #spotlight-tour-p4.active { display: block; pointer-events: auto; }
+    .preview-text { margin: 0; padding: 1rem; border-radius: 0.5rem; background: rgba(0,0,0,0.25); font-family: ui-monospace, monospace; font-size: 0.78rem; line-height: 1.55; white-space: pre-wrap; color: var(--muted); max-height: 20rem; overflow-y: auto; }
+    .theme-bucket-static { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
+    .theme-bucket-static:last-child { border-bottom: none; }
+    .tour-start-btn { padding: 0.55rem 1rem; border: 1px solid var(--primary); border-radius: 0.5rem; background: var(--primary); color: #fff; font-size: 0.92rem; font-weight: 600; cursor: pointer; }
+    #spotlight-tour { position: fixed; inset: 0; z-index: 10000; display: none; pointer-events: none; }
+    #spotlight-tour.active { display: block; }
+    .spotlight-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.62); pointer-events: auto; }
+    .spotlight-ring { position: fixed; z-index: 10001; border: 2px solid var(--primary); border-radius: 0.65rem; box-shadow: 0 0 0 2px rgba(230,57,70,0.35), 0 0 24px rgba(230,57,70,0.25); pointer-events: none; transition: top 0.25s, left 0.25s, width 0.25s, height 0.25s; }
+    .spotlight-popover { position: fixed; z-index: 10002; pointer-events: auto; background: var(--card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.15rem 1.25rem; box-shadow: 0 12px 40px rgba(0,0,0,0.45); max-width: min(380px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; }
+    .spotlight-popover .popover-step { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--primary); margin: 0 0 0.35rem; }
+    .spotlight-popover h3 { font-size: 1.05rem; margin: 0 0 0.5rem; }
+    .spotlight-popover .popover-body { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.75rem; }
+    .spotlight-popover .popover-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
+    body.tour-active { overflow: hidden; }
+  </style>
+</head>
+<body>
+  <div class="banner">UI draft preview, static mock for layout review. Article Review and Lit Review Outline tabs include guided tours, local autosave, and export. Full interactive app: /class/research-methods/study-plan (requires sign-in).</div>
+  <div class="wrap">
+    <h1>Study Plan: Draft Preview</h1>
+    <p class="intro">Capstone draft workspace for PSYC 4223. Methods Market holds notes; Canvas is graded.</p>
+
+    <nav class="tabs" id="tabs">
+      <button type="button" class="active" data-panel="hub">Hub</button>
+      <button type="button" data-panel="article">Article Review</button>
+      <button type="button" data-panel="focus">Lit Review Outline</button>
+      <button type="button" data-panel="phase3">Phase 3</button>
+      <button type="button" data-panel="phase4">Phase 4</button>
+    </nav>
+
+    <section id="hub" class="panel active">
+      <label>Project topic</label>
+      <input placeholder="e.g., Social media use and sleep quality in undergraduates" />
+      <div class="grid two" style="margin-top:1.25rem">
+        <div class="card">
+          <h2>Article Review</h2>
+          <p class="hint">Minimum 6 complete for Canvas · add unlimited cards in MM.</p>
+          <span class="chip" id="hub-article-progress">0/6 complete</span>
+        </div>
+        <div class="card">
+          <h2>Lit Review Outline</h2>
+          <p class="hint">Framework, theme buckets, compiled outline.</p>
+          <span class="chip" id="hub-focus-progress">Framework not started</span>
+        </div>
+        <div class="card">
+          <h2>Phase 3</h2>
+          <p class="hint">Elevator speech: what we know, gap, pitch.</p>
+          <span class="chip" id="hub-phase3-progress">Elevator speech not started</span>
+        </div>
+        <div class="card">
+          <h2>Phase 4</h2>
+          <p class="hint">Compare four pathways; choose one.</p>
+          <span class="chip" id="hub-phase4-progress">Not started</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="article" class="panel">
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Highlights each part of the worksheet and explains why it matters, including when to narrow or widen your topic.</p>
+      </div>
+
+      <div id="spotlight-tour" role="dialog" aria-modal="true" aria-label="Article review guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover" hidden></div>
+      </div>
+
+      <div class="card search-builder" data-tour="tour-search-builder">
+        <h2>Search term builder <span class="draft-badge">UI mock</span></h2>
+        <p class="hint">Build Boolean strings for PsycINFO and other library databases. Add synonyms for each part of your topic, then copy the preview into your database. Methods Market does not run searches for you.</p>
+
+        <div class="builder-grid">
+          <div class="concept-slot" data-slot="iv">
+            <p class="slot-label">IV / predictor construct</p>
+            <p class="slot-hint">What you manipulate or compare (e.g., social media use)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., social media" data-input="iv" />
+              <button type="button" data-add="iv">Add</button>
+            </div>
+            <div class="term-chips" id="chips-iv"></div>
+          </div>
+          <div class="concept-slot" data-slot="dv">
+            <p class="slot-label">DV / outcome construct</p>
+            <p class="slot-hint">What you measure (e.g., sleep quality)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., sleep quality" data-input="dv" />
+              <button type="button" data-add="dv">Add</button>
+            </div>
+            <div class="term-chips" id="chips-dv"></div>
+          </div>
+        </div>
+        <p class="and-join">AND</p>
+        <div class="builder-grid">
+          <div class="concept-slot" data-slot="pop">
+            <p class="slot-label">Population</p>
+            <p class="slot-hint">Who you study (e.g., college students)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., undergraduates" data-input="pop" />
+              <button type="button" data-add="pop">Add</button>
+            </div>
+            <div class="term-chips" id="chips-pop"></div>
+          </div>
+          <div class="concept-slot optional" data-slot="ctx">
+            <p class="slot-label">Context <span class="chip">optional</span></p>
+            <p class="slot-hint">Setting or qualifier (e.g., United States, smartphone)</p>
+            <div class="slot-row">
+              <input type="text" placeholder="e.g., smartphone" data-input="ctx" />
+              <button type="button" data-add="ctx">Add</button>
+            </div>
+            <div class="term-chips" id="chips-ctx"></div>
+          </div>
+        </div>
+
+        <div class="query-preview">
+          <p class="query-preview-label">Preview: copy into PsycINFO</p>
+          <p class="query-string" id="query-preview">Add at least one term above to build a query.</p>
+          <div class="query-actions">
+            <button type="button" class="btn-copy" id="copy-query">Copy query</button>
+            <span class="hint" id="copy-status" style="margin:0"></span>
+          </div>
+        </div>
+
+        <p class="hint" style="margin-top:0.85rem">Ch. 2 tip: if you get too many hits, open the PsycINFO thesaurus for <strong>index terms</strong> (e.g., “Human Sex Differences” instead of “gender”). Combine a broad term with a narrower one. Try citation chaining from one good article’s reference list.</p>
+      </div>
+
+      <div class="card" data-tour="tour-search-log">
+        <h2>Search log <span class="draft-badge">UI mock</span></h2>
+        <p class="hint">Record each search attempt so you remember what worked. Link rows to article cards when you find a keeper.</p>
+        <table class="search-log-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Database</th>
+              <th>Query used</th>
+              <th>What happened?</th>
+              <th>Article #</th>
+            </tr>
+          </thead>
+          <tbody id="search-log-body">
+            <tr>
+              <td>9/10</td>
+              <td>PsycINFO</td>
+              <td><code style="font-size:0.75rem">social media AND sleep AND college</code></td>
+              <td>2,400 hits, too broad; added "smartphone" and index term</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>9/11</td>
+              <td>PsycINFO</td>
+              <td><code style="font-size:0.75rem">("social media" OR "screen time") AND (sleep OR insomnia) AND (college OR undergraduate)</code></td>
+              <td>47 hits, skimmed abstracts; saved 3 PDFs</td>
+              <td>1, 2, 3</td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn-secondary" id="add-log-row" style="margin-top:0.75rem">+ Log a search</button>
+      </div>
+
+      <div class="ref-box" data-tour="tour-peer-review">
+        <h2>What counts as peer-reviewed?</h2>
+        <p class="hint">Use this while you evaluate each source. Methods Market does not decide for you. You look, then you check the boxes on each article card.</p>
+        <div class="ref-columns">
+          <div>
+            <h4>Usually peer-reviewed</h4>
+            <ul>
+              <li>Journal of ___ Psychology (or similar scholarly journal)</li>
+              <li>Volume + issue + page range or DOI</li>
+              <li>Method and Results sections with original data</li>
+              <li>Authors with university affiliations</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Usually not acceptable for this assignment</h4>
+            <ul>
+              <li>News sites, blogs, Wikipedia, or general .com pages</li>
+              <li>Magazine or newspaper articles (Psychology Today, etc.)</li>
+              <li>Textbook chapters or encyclopedia entries</li>
+              <li>Opinion pieces with no Method section</li>
+            </ul>
+          </div>
+        </div>
+        <p class="ref-reminder">Predatory journals exist. When in doubt, ask a librarian or your instructor before you spend time on the article.</p>
+      </div>
+
+      <div class="card" id="articles-workspace">
+        <h2>Article cards</h2>
+        <p class="hint">Canvas requires at least <strong>6</strong> completed reviews (6–8 on the template). Add as many article cards as you need, export includes every card with content. Each card saves in this browser as you type.</p>
+        <p class="progress-chip" id="article-progress">0/6 complete · 8 cards</p>
+        <p class="editing-banner" id="editing-banner">Editing Article 1 of 8</p>
+        <nav class="article-jump" id="article-jump" data-tour="tour-jump-nav" aria-label="Jump to article"></nav>
+        <div id="article-cards"></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem;margin-top:0.75rem">
+          <button type="button" class="btn-secondary" id="add-article-card">+ Add article card</button>
+          <span class="hint" id="add-card-hint" style="margin:0">8 cards · export includes all with content</span>
+        </div>
+        <p id="save-status"></p>
+      </div>
+
+      <div class="card" data-tour="tour-export">
+        <h2>Export for Canvas</h2>
+        <p class="hint">Download a PDF of your article cards (and problem statement if filled) to keep offline or paste from the text preview. Attach article PDFs separately in Canvas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-article-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-article-pdf">Download PDF</button>
+        </div>
+        <textarea id="article-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="export-status" class="hint" style="margin-top:0.5rem"></p>
+      </div>
+
+      <div class="card" data-tour="tour-problem">
+        <h2>Problem Statement</h2>
+        <p class="hint">Based on your literature review: what we know, what we don't know (the gap), and what we want to know.</p>
+        <label>What we know</label><textarea></textarea>
+        <label>What we don't know (the gap)</label><textarea></textarea>
+        <label>What we want to know</label><textarea></textarea>
+        <label>Problem statement (combined)</label>
+        <p class="hint">Example structure: Although [what we know], [gap], which is concerning because [why it matters]. This study addresses this problem by [brief preview].</p>
+        <textarea id="ar-problem-draft" rows="3"></textarea>
+      </div>
+
+      <div class="card" data-tour="tour-rq">
+        <h2>Research Question(s) and Hypothesis(es)</h2>
+        <label>Research question(s)</label><textarea id="ar-research-questions"></textarea>
+        <label>Hypothesis(es)</label>
+        <p class="hint">You will refine these after your full literature review.</p>
+        <textarea></textarea>
+      </div>
+    </section>
+
+    <section id="focus" class="panel">
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-lro-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Framework first, then theme buckets, gap, and compiled outline for Draft 1.</p>
+      </div>
+
+      <div id="spotlight-tour-lro" role="dialog" aria-modal="true" aria-label="Lit Review Outline guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-lro" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-lro" hidden></div>
+      </div>
+
+      <div class="card" data-tour="tour-lro-intro">
+        <p class="hint" style="margin-top:0">Use this <strong>literature review outline compiler</strong> while drafting (weeks 5–10). It is <strong>not a Canvas submission</strong>. Root your review in one organizing framework, sort evidence into theme buckets, and export for Draft 1.</p>
+        <p class="arc-flow">Article Review (week 4) → <strong>Lit Review Outline</strong> (lit review weeks) → Phase 3 &amp; 4 (week 11)</p>
+        <span class="progress-chip" id="lro-progress">Framework not started</span>
+      </div>
+
+      <aside class="reminders-panel empty" id="lro-reminders" data-tour="tour-lro-reminders">
+        <h2 class="reminders-title">From your Article Review</h2>
+        <div id="lro-reminders-body"></div>
+      </aside>
+
+      <div class="card" data-tour="tour-lro-framework">
+        <h2>Organizing framework</h2>
+        <p class="hint">Name the theory or model that routes your literature review.</p>
+        <label for="lro-theoryName">Theory or model name</label>
+        <input id="lro-theoryName" type="text" data-lro-fw="theoryName" placeholder="e.g., Self-Determination Theory" />
+        <label for="lro-mechanism">Mechanism</label>
+        <p class="hint">How does this framework connect your IV and DV?</p>
+        <textarea id="lro-mechanism" rows="3" data-lro-fw="mechanismExplanation"></textarea>
+        <label for="lro-why">Why this framework?</label>
+        <textarea id="lro-why" rows="2" data-lro-fw="whyThisFramework"></textarea>
+        <label for="lro-alt">Alternative considered (optional)</label>
+        <textarea id="lro-alt" rows="2" data-lro-fw="alternativeConsidered"></textarea>
+      </div>
+
+      <details class="card" data-tour="tour-lro-reference" style="margin-bottom:1rem">
+        <summary style="cursor:pointer;font-weight:600">Framework ideas (browse only)</summary>
+        <p class="hint">Methods Market does not recommend a framework for your topic.</p>
+        <p class="hint"><strong>Social:</strong> Social Learning Theory, Social Comparison Theory, Attachment Theory</p>
+        <p class="hint"><strong>Motivation:</strong> Self-Determination Theory, Expectancy-Value Theory, Goal-Setting Theory</p>
+        <p class="hint"><strong>Stress/health:</strong> Transactional Model of Stress, Biopsychosocial Model</p>
+        <p class="hint"><strong>Cognitive:</strong> Cognitive Load Theory, Dual-Process Theory, Schema Theory</p>
+        <p class="hint"><a href="/topic/rm-chapter-2">Ch. 2: gaps and synthesis →</a></p>
+      </details>
+
+      <div class="card" data-tour="tour-lro-themes">
+        <h2>Theme buckets</h2>
+        <p class="hint">Synthesis sections under your framework. Link article card numbers manually.</p>
+        <div id="lro-theme-buckets"></div>
+        <button type="button" class="btn-secondary" id="lro-add-theme">+ Add theme</button>
+      </div>
+
+      <div class="card" data-tour="tour-lro-gap">
+        <h2>Gap &amp; transition</h2>
+        <label for="lro-gap">Working gap</label>
+        <textarea id="lro-gap" rows="3" data-lro-gap="gapStatement"></textarea>
+        <label for="lro-transition">Transition to your study</label>
+        <textarea id="lro-transition" rows="2" data-lro-gap="transitionToStudy"></textarea>
+        <label for="lro-rq">Working research question</label>
+        <textarea id="lro-rq" rows="2" data-lro-gap="workingResearchQuestion"></textarea>
+      </div>
+
+      <div class="card compiled-preview" data-tour="tour-lro-preview">
+        <h2>Compiled outline preview</h2>
+        <pre id="lro-preview" class="preview-text"></pre>
+      </div>
+
+      <div class="resource-links">
+        <a href="/topic/rm-chapter-2">Ch. 2: gaps and synthesis</a>
+        <a href="/topic/rm-chapter-11">Ch. 11: APA and clear prose</a>
+      </div>
+
+      <div class="card" data-tour="tour-lro-export">
+        <h2>Export lit review outline</h2>
+        <p class="hint">Copy or download for Lit Review Draft 1, paste into Word and expand bullets into prose.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-lro-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-lro-pdf">Download PDF</button>
+        </div>
+        <textarea id="lro-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="lro-export-status" class="hint" style="margin-top:0.5rem"></p>
+        <p id="lro-save-status" class="hint" style="margin-top:0.35rem"></p>
+      </div>
+    </section>
+
+    <section id="phase3" class="panel">
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-p3-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Prepare a 1–2 minute spiel about your research.</p>
+      </div>
+      <div id="spotlight-tour-p3" role="dialog" aria-modal="true" aria-label="Phase 3 guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-p3" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-p3" hidden></div>
+      </div>
+      <div class="card" data-tour="tour-p3-intro">
+        <p class="hint" style="margin-top:0">Distill your completed literature review: what the field knows, the gap, and how your study fits. Submit with Phase 4 in Canvas.</p>
+        <p class="arc-flow">Lit Review Outline → <strong>Phase 3</strong> + Phase 4 (week 11)</p>
+        <span class="progress-chip" id="p3-progress">Elevator speech not started</span>
+      </div>
+      <aside class="reminders-panel empty" id="p3-reminders" data-tour="tour-p3-reminders">
+        <h2 class="reminders-title">From your Lit Review Outline</h2>
+        <div id="p3-reminders-body"></div>
+      </aside>
+      <div class="card" data-tour="tour-p3-what-we-know">
+        <h2>Elevator speech parts</h2>
+        <div id="p3-prefill-row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem"></div>
+        <label for="p3-whatWeKnow">What we know</label>
+        <p class="hint">In 2–4 sentences: what does prior research agree on?</p>
+        <textarea id="p3-whatWeKnow" rows="3" data-p3-field="whatWeKnow"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-gap">
+        <label for="p3-theGap">The gap</label>
+        <textarea id="p3-theGap" rows="3" data-p3-field="theGap"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-pitch">
+        <label for="p3-myStudyPitch">My study pitch</label>
+        <textarea id="p3-myStudyPitch" rows="3" data-p3-field="myStudyPitch"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p3-speech">
+        <label for="p3-elevatorSpeech">Full elevator speech</label>
+        <textarea id="p3-elevatorSpeech" rows="6" data-p3-field="elevatorSpeech"></textarea>
+        <p class="hint" id="p3-word-count">0 words (aim for ~130–300; 1–2 minute spiel)</p>
+      </div>
+      <div class="card" data-tour="tour-p3-export">
+        <h2>Export Phase 3</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-p3-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-p3-pdf">Download PDF</button>
+        </div>
+        <textarea id="p3-export-preview" rows="8" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="p3-save-status" class="hint" style="margin-top:0.35rem"></p>
+      </div>
+    </section>
+
+    <section id="phase4" class="panel">
+      <div class="tour-launcher">
+        <button type="button" class="tour-start-btn" id="start-p4-tour-btn">Start guided tour</button>
+        <p class="hint" style="margin:0.55rem 0 0">Parts A–E: recap, conceptual + operational IV/DV, four pathways, comparison, final choice.</p>
+      </div>
+      <div id="spotlight-tour-p4" role="dialog" aria-modal="true" aria-label="Phase 4 guided tour">
+        <div class="spotlight-backdrop"></div>
+        <div class="spotlight-ring" id="spotlight-ring-p4" hidden></div>
+        <div class="spotlight-popover" id="spotlight-popover-p4" hidden></div>
+      </div>
+      <div class="card" data-tour="tour-p4-intro">
+        <p class="hint" style="margin-top:0">Compare four ways to collect data for your research question. Choose ONE pathway. Submit with Phase 3 in Canvas.</p>
+        <p class="arc-flow">Phase 3 + <strong>Phase 4 operationalization</strong> (week 11)</p>
+        <span class="progress-chip" id="p4-progress">Not started</span>
+      </div>
+      <aside class="reminders-panel empty" id="p4-reminders" data-tour="tour-p4-reminders">
+        <h2 class="reminders-title">From Phase 3 and your outline</h2>
+        <div id="p4-reminders-body"></div>
+      </aside>
+      <div class="card" data-tour="tour-p4-part-a">
+        <h2>Part A: Context recap</h2>
+        <div id="p4-prefill-row" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem"></div>
+        <label for="p4-broadTopicArea">Broad topic area</label>
+        <input id="p4-broadTopicArea" type="text" data-p4-top="broadTopicArea" />
+        <label for="p4-proposedResearchQuestion">Proposed research question</label>
+        <textarea id="p4-proposedResearchQuestion" rows="2" data-p4-top="proposedResearchQuestion"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p4-part-b-conceptual">
+        <h2>Part B: Conceptual definitions</h2>
+        <p class="hint">What your IV and DV mean as constructs in your literature, not scales or tasks yet.</p>
+        <label for="p4-ivConceptual">Independent variable (IV), conceptual</label>
+        <textarea id="p4-ivConceptual" rows="2" data-p4-top="ivConceptual"></textarea>
+        <label for="p4-dvConceptual">Dependent variable (DV), conceptual</label>
+        <textarea id="p4-dvConceptual" rows="2" data-p4-top="dvConceptual"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p4-part-b-operational">
+        <h2>Part B (continued): Operational definitions</h2>
+        <p class="hint">How you would manipulate or measure each variable in a real study, specific enough to replicate.</p>
+        <label for="p4-ivOperational">Independent variable (IV), operational</label>
+        <textarea id="p4-ivOperational" rows="2" data-p4-top="ivOperational"></textarea>
+        <label for="p4-dvOperational">Dependent variable (DV), operational</label>
+        <textarea id="p4-dvOperational" rows="2" data-p4-top="dvOperational"></textarea>
+      </div>
+      <div class="card" data-tour="tour-p4-part-c">
+        <h2>Part C: Four pathways</h2>
+        <div id="p4-pathways"></div>
+      </div>
+      <div class="card" data-tour="tour-p4-part-d">
+        <h2>Part D: Comparison table</h2>
+        <div id="p4-comparison-wrap" style="overflow-x:auto"></div>
+      </div>
+      <div class="card" data-tour="tour-p4-part-e">
+        <h2>Part E: Choose one pathway</h2>
+        <div id="p4-choices"></div>
+      </div>
+      <div class="card" data-tour="tour-p4-export">
+        <h2>Export Phase 4</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem">
+          <button type="button" class="btn-secondary" id="copy-p4-export">Copy export text</button>
+          <button type="button" class="btn-copy" id="download-p4-pdf">Download PDF</button>
+        </div>
+        <textarea id="p4-export-preview" rows="10" readonly style="font-family:ui-monospace,monospace;font-size:0.78rem"></textarea>
+        <p id="p4-save-status" class="hint" style="margin-top:0.35rem"></p>
+      </div>
+    </section>
+  </div>
+  <script>
+    document.getElementById('tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-panel]');
+      if (!btn) return;
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+      if (btn.dataset.panel === 'focus' && typeof refreshLroReminders === 'function') {
+        refreshLroReminders();
+      }
+      if (btn.dataset.panel === 'phase3' && typeof refreshP3Views === 'function') {
+        refreshP3Reminders();
+        refreshP3Views();
+      }
+      if (btn.dataset.panel === 'phase4' && typeof refreshP4Views === 'function') {
+        refreshP4Reminders();
+        refreshP4Views();
+        renderP4Pathways();
+        renderP4Comparison();
+        renderP4Choices();
+      }
+    });
+
+    // Search term builder mock (demo interactivity)
+    const slotTerms = { iv: ['social media', 'screen time'], dv: ['sleep', 'insomnia'], pop: ['college students', 'undergraduates'], ctx: [] };
+    const slotLabels = { iv: 'IV', dv: 'DV', pop: 'Population', ctx: 'Context' };
+
+    function quoteTerm (t) {
+      return t.includes(' ') ? `"${t}"` : t;
+    }
+
+    function renderChips (slot) {
+      const el = document.getElementById('chips-' + slot);
+      el.innerHTML = slotTerms[slot].map((term, i) =>
+        `<span class="term-chip">${term}<button type="button" data-remove="${slot}" data-index="${i}" aria-label="Remove">×</button></span>`
+      ).join('');
+    }
+
+    function buildQuery () {
+      const groups = ['iv', 'dv', 'pop', 'ctx']
+        .map((slot) => {
+          if (!slotTerms[slot].length) return null;
+          const inner = slotTerms[slot].map(quoteTerm).join(' OR ');
+          return slotTerms[slot].length > 1 ? `(${inner})` : inner;
+        })
+        .filter(Boolean);
+      const preview = document.getElementById('query-preview');
+      preview.textContent = groups.length
+        ? groups.join(' AND ')
+        : 'Add at least one term above to build a query.';
+    }
+
+    function initSearchBuilder () {
+      ['iv', 'dv', 'pop', 'ctx'].forEach((slot) => {
+        renderChips(slot);
+        document.querySelector(`[data-add="${slot}"]`).addEventListener('click', () => {
+          const input = document.querySelector(`[data-input="${slot}"]`);
+          const val = input.value.trim();
+          if (!val || slotTerms[slot].includes(val)) return;
+          slotTerms[slot].push(val);
+          input.value = '';
+          renderChips(slot);
+          buildQuery();
+        });
+        document.querySelector(`[data-input="${slot}"]`).addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            document.querySelector(`[data-add="${slot}"]`).click();
+          }
+        });
+      });
+      buildQuery();
+
+      document.getElementById('chips-iv').closest('.search-builder').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-remove]');
+        if (!btn) return;
+        const slot = btn.dataset.remove;
+        slotTerms[slot].splice(Number(btn.dataset.index), 1);
+        renderChips(slot);
+        buildQuery();
+      });
+
+      document.getElementById('copy-query').addEventListener('click', async () => {
+        const text = document.getElementById('query-preview').textContent;
+        if (text.startsWith('Add at least')) return;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('copy-status').textContent = 'Copied!';
+        setTimeout(() => { document.getElementById('copy-status').textContent = ''; }, 2000);
+      });
+
+      document.getElementById('add-article-card')?.addEventListener('click', addArticleCard);
+
+      document.getElementById('add-log-row').addEventListener('click', () => {
+        const tbody = document.getElementById('search-log-body');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" placeholder="9/15" /></td>
+          <td><select><option>PsycINFO</option><option>Academic Search Complete</option><option>Google Scholar</option><option>Other</option></select></td>
+          <td><input type="text" placeholder="Paste query from builder" /></td>
+          <td><input type="text" placeholder="Too many hits? Found a good one?" /></td>
+          <td><input type="text" placeholder="e.g., 4" style="max-width:4rem" /></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    initSearchBuilder();
+
+    // Article cards: unlimited, localStorage autosave, collapsible
+    const CANVAS_MIN = 6;
+    const INITIAL_CARD_COUNT = 8;
+    const CARD_STORAGE_KEY = 'study-plan-drafts-article-cards-v1';
+    const TEXT_FIELDS = [
+      ['apaReference', 'Complete reference (APA)', 2, 'Use Ch. 11 for APA 7. Verify in your library database.'],
+      ['researcherWhatQuestion', 'Researchers\' "what" question', 2, 'Summarize in your own words; do not copy the abstract.'],
+      ['researcherWhyQuestion', 'Researchers\' "why" question', 2, 'What gap or rationale did the authors give?'],
+      ['participantsSummary', 'Participants / subjects', 2, ''],
+      ['methodologyOverview', 'Methodology overview', 2, 'Name design type; include measures and instruments.'],
+      ['resultsSummary', 'Results / discussion / conclusion', 2, ''],
+      ['strengths', 'Strengths', 2, ''],
+      ['weaknesses', 'Weaknesses', 2, ''],
+      ['connectionToProposal', 'Connection to your proposal', 2, '']
+    ];
+    const SELF_CHECK = [
+      ['foundInLibraryDatabase', 'I found this article through a library database (e.g., PsycINFO).'],
+      ['scholarlyJournal', 'It appears in a scholarly, peer-reviewed journal.'],
+      ['originalEmpiricalStudy', 'It reports an original empirical study (Method and Results with data).'],
+      ['pdfSaved', 'I saved the PDF and have the complete APA reference ready.']
+    ];
+
+    function emptyCard () {
+      return {
+        apaReference: '', researcherWhatQuestion: '', researcherWhyQuestion: '',
+        participantsSummary: '', methodologyOverview: '', resultsSummary: '',
+        strengths: '', weaknesses: '', connectionToProposal: '',
+        sourceSelfCheck: { foundInLibraryDatabase: false, scholarlyJournal: false, originalEmpiricalStudy: false, pdfSaved: false }
+      };
+    }
+
+    function loadArticleState () {
+      try {
+        const raw = localStorage.getItem(CARD_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const saved = parsed.cards ?? [];
+          const cards = saved.length
+            ? saved.map((c) => ({ ...emptyCard(), ...c }))
+            : Array.from({ length: INITIAL_CARD_COUNT }, emptyCard);
+          return {
+            cards,
+            openIndex: typeof parsed.openIndex === 'number' ? parsed.openIndex : 0
+          };
+        }
+      } catch (_) { /* ignore */ }
+      return { cards: Array.from({ length: INITIAL_CARD_COUNT }, emptyCard), openIndex: 0 };
+    }
+
+    let articleState = loadArticleState();
+    let saveCardsTimer = null;
+
+    // Article Review meta (problem draft + early RQ): must init before updateProgressUI → refreshLroReminders
+    const ARTICLE_META_KEY = 'study-plan-drafts-article-meta-v1';
+    let articleMeta = { problemStatementDraft: '', researchQuestions: '' };
+    let saveMetaTimer = null;
+
+    function loadArticleMeta () {
+      try {
+        const raw = localStorage.getItem(ARTICLE_META_KEY);
+        if (raw) return { ...articleMeta, ...JSON.parse(raw) };
+      } catch (_) { /* ignore */ }
+      return { ...articleMeta };
+    }
+
+    function persistArticleMeta () {
+      if (saveMetaTimer) clearTimeout(saveMetaTimer);
+      saveMetaTimer = setTimeout(() => {
+        localStorage.setItem(ARTICLE_META_KEY, JSON.stringify(articleMeta));
+        refreshLroReminders();
+      }, 400);
+    }
+
+    function initArticleMeta () {
+      articleMeta = loadArticleMeta();
+      const problemEl = document.getElementById('ar-problem-draft');
+      const rqEl = document.getElementById('ar-research-questions');
+      if (problemEl) {
+        problemEl.value = articleMeta.problemStatementDraft ?? '';
+        problemEl.addEventListener('input', () => {
+          articleMeta.problemStatementDraft = problemEl.value;
+          persistArticleMeta();
+        });
+      }
+      if (rqEl) {
+        rqEl.value = articleMeta.researchQuestions ?? '';
+        rqEl.addEventListener('input', () => {
+          articleMeta.researchQuestions = rqEl.value;
+          persistArticleMeta();
+        });
+      }
+    }
+
+    function cardStatus (card) {
+      const required = TEXT_FIELDS.map(([k]) => k);
+      const filled = required.filter((k) => (card[k] ?? '').trim()).length;
+      if (filled === 0) return 'Not started';
+      if (filled < required.length) return 'In progress';
+      return 'Complete';
+    }
+
+    function cardRefSnippet (card) {
+      const ref = (card.apaReference ?? '').trim();
+      if (!ref) return '';
+      const line = ref.split('\n')[0].trim();
+      return line.length > 72 ? line.slice(0, 69) + '…' : line;
+    }
+
+    function countCards () {
+      let started = 0, complete = 0;
+      articleState.cards.forEach((c) => {
+        const s = cardStatus(c);
+        if (s !== 'Not started') started++;
+        if (s === 'Complete') complete++;
+      });
+      return { started, complete };
+    }
+
+    function persistCards () {
+      if (saveCardsTimer) clearTimeout(saveCardsTimer);
+      saveCardsTimer = setTimeout(() => {
+        localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({
+          cards: articleState.cards,
+          openIndex: articleState.openIndex,
+          lastSavedAt: new Date().toISOString()
+        }));
+        const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        document.getElementById('save-status').textContent = 'Saved locally at ' + t;
+      }, 400);
+    }
+
+    function updateProgressUI () {
+      const { complete } = countCards();
+      const total = articleState.cards.length;
+      document.getElementById('article-progress').textContent =
+        `${complete}/${CANVAS_MIN} complete · ${total} cards`;
+      const hub = document.getElementById('hub-article-progress');
+      if (hub) hub.textContent = `${complete}/${CANVAS_MIN} complete`;
+      if (typeof refreshLroReminders === 'function') refreshLroReminders();
+      const hint = document.getElementById('add-card-hint');
+      if (hint) hint.textContent = `${total} cards · export includes all with content`;
+      const idx = articleState.openIndex;
+      document.getElementById('editing-banner').textContent =
+        idx >= 0 ? `Editing Article ${idx + 1} of ${total}` : 'Select an article card to edit';
+      document.querySelectorAll('.jump-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+        btn.classList.toggle('complete', cardStatus(articleState.cards[i]) === 'Complete');
+      });
+      document.querySelectorAll('.article-card-item').forEach((el, i) => {
+        el.classList.toggle('open', i === idx);
+        const statusEl = el.querySelector('.card-status-label');
+        const st = cardStatus(articleState.cards[i]);
+        statusEl.textContent = st;
+        statusEl.classList.toggle('complete', st === 'Complete');
+        const refEl = el.querySelector('.card-ref');
+        const snippet = cardRefSnippet(articleState.cards[i]);
+        refEl.textContent = snippet;
+        refEl.style.display = snippet ? 'block' : 'none';
+      });
+    }
+
+    function renderArticleCards () {
+      const container = document.getElementById('article-cards');
+      container.innerHTML = articleState.cards.map((card, index) => {
+        const fieldsHtml = TEXT_FIELDS.map(([key, label, rows, hint]) =>
+          `<label>${label}</label>${hint ? `<p class="hint">${hint}</p>` : ''}<textarea rows="${rows}" data-card="${index}" data-field="${key}">${escHtml(card[key] ?? '')}</textarea>`
+        ).join('');
+        const checksHtml = SELF_CHECK.map(([key, label]) =>
+          `<label class="check-main"><input type="checkbox" data-card="${index}" data-check="${key}" ${card.sourceSelfCheck?.[key] ? 'checked' : ''} /> <span>${label}</span></label>`
+        ).join('');
+        const tourAttr = index === 0 ? ' data-tour="tour-article-card"' : '';
+        return `<article class="article-card-item${index === articleState.openIndex ? ' open' : ''}" data-index="${index}"${tourAttr}>
+          <button type="button" class="article-card-toggle" data-toggle="${index}">
+            <span><div class="card-title">Article ${index + 1}</div><div class="card-ref">${escHtml(cardRefSnippet(card))}</div></span>
+            <span class="card-status-label${cardStatus(card) === 'Complete' ? ' complete' : ''}">${cardStatus(card)}</span>
+          </button>
+          <div class="article-card-body">
+            ${fieldsHtml}
+            <div${index === 0 ? ' data-tour="tour-source-check"' : ''}>
+            <h3>Source self-check (Methods Market only)</h3>
+            <p class="hint">Look at your PDF, then check each box you can honestly confirm.</p>
+            ${checksHtml}
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+
+      const jump = document.getElementById('article-jump');
+      jump.innerHTML = articleState.cards.map((_, i) =>
+        `<button type="button" class="jump-btn${i === articleState.openIndex ? ' active' : ''}${cardStatus(articleState.cards[i]) === 'Complete' ? ' complete' : ''}" data-jump="${i}">${i + 1}</button>`
+      ).join('');
+    }
+
+    function escHtml (s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function openArticle (index) {
+      articleState.openIndex = index;
+      renderArticleCards();
+      updateProgressUI();
+      persistCards();
+      document.getElementById('articles-workspace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function addArticleCard () {
+      articleState.cards.push(emptyCard());
+      articleState.openIndex = articleState.cards.length - 1;
+      renderArticleCards();
+      updateProgressUI();
+      refreshExportPreview();
+      persistCards();
+    }
+
+    const FIELD_LABELS = Object.fromEntries(TEXT_FIELDS.map(([k, label]) => [k, label]));
+
+    function buildStaticExportText () {
+      const lines = ['Article Review and Problem Statement', '='.repeat(36), ''];
+      articleState.cards.forEach((card, i) => {
+        const hasContent = TEXT_FIELDS.some(([k]) => (card[k] ?? '').trim());
+        if (!hasContent) return;
+        lines.push(`Article ${i + 1}`, '='.repeat(10 + String(i + 1).length), '');
+        TEXT_FIELDS.forEach(([key]) => {
+          const val = (card[key] ?? '').trim();
+          lines.push(FIELD_LABELS[key], val || '(not filled in)', '');
+        });
+      });
+      return lines.join('\n').trim() || '';
+    }
+
+    function refreshExportPreview () {
+      const ta = document.getElementById('article-export-preview');
+      if (ta) ta.value = buildStaticExportText();
+    }
+
+    async function downloadStaticPdf () {
+      const body = buildStaticExportText();
+      const status = document.getElementById('export-status');
+      if (!body) {
+        status.textContent = 'Add content to at least one article card first.';
+        return;
+      }
+      status.textContent = 'Building PDF…';
+      try {
+        const { PDFDocument, StandardFonts, rgb } = await import('https://esm.sh/pdf-lib@1.17.1');
+        const doc = await PDFDocument.create();
+        const font = await doc.embedFont(StandardFonts.Helvetica);
+        const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+        const margin = 54, pageW = 612, pageH = 792, contentW = pageW - margin * 2;
+        let page = doc.addPage([pageW, pageH]);
+        let y = pageH - margin;
+        const sanitize = (t) => String(t).replace(/[^\x00-\xFF]/g, '?');
+        const wrap = (text, f, size) => {
+          const words = sanitize(text).split(/\s+/).filter(Boolean);
+          const out = []; let line = '';
+          for (const w of words) {
+            const test = line ? line + ' ' + w : w;
+            if (f.widthOfTextAtSize(test, size) > contentW) { if (line) out.push(line); line = w; }
+            else line = test;
+          }
+          if (line) out.push(line);
+          return out.length ? out : [''];
+        };
+        const drawWrap = (text, size, bold) => {
+          const f = bold ? fontBold : font;
+          for (const ln of wrap(text, f, size)) {
+            if (y < margin + 20) { page = doc.addPage([pageW, pageH]); y = pageH - margin; }
+            page.drawText(ln, { x: margin, y, size, font: f, color: rgb(0.12, 0.12, 0.12) });
+            y -= size + 4;
+          }
+        };
+        const exportLines = body.split('\n');
+        for (let i = 0; i < exportLines.length; i++) {
+          const line = exportLines[i];
+          const next = (exportLines[i + 1] ?? '').trim();
+          if (/^=+$/.test(line.trim())) continue;
+          if (/^=+$/.test(next)) { y -= 6; drawWrap(line.trim(), 12, true); i++; continue; }
+          if (!line.trim()) { y -= 8; continue; }
+          drawWrap(line.trim(), 10, false);
+        }
+        const bytes = await doc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'article-review-draft-' + new Date().toISOString().slice(0, 10) + '.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        status.textContent = 'PDF downloaded.';
+      } catch (err) {
+        status.textContent = 'PDF download failed, try Copy export text instead.';
+      }
+    }
+
+    function initArticleCards () {
+      renderArticleCards();
+      updateProgressUI();
+      refreshExportPreview();
+
+      document.getElementById('articles-workspace').addEventListener('click', (e) => {
+        const jump = e.target.closest('[data-jump]');
+        if (jump) { openArticle(Number(jump.dataset.jump)); return; }
+        const toggle = e.target.closest('[data-toggle]');
+        if (toggle) {
+          openArticle(Number(toggle.dataset.toggle));
+        }
+      });
+
+      document.getElementById('articles-workspace').addEventListener('input', (e) => {
+        const ta = e.target.closest('textarea[data-card]');
+        if (ta) {
+          const i = Number(ta.dataset.card);
+          articleState.cards[i][ta.dataset.field] = ta.value;
+          updateProgressUI();
+          refreshExportPreview();
+          persistCards();
+          return;
+        }
+      });
+
+      document.getElementById('articles-workspace').addEventListener('change', (e) => {
+        const cb = e.target.closest('input[type=checkbox][data-check]');
+        if (cb) {
+          const i = Number(cb.dataset.card);
+          articleState.cards[i].sourceSelfCheck[cb.dataset.check] = cb.checked;
+          refreshExportPreview();
+          persistCards();
+        }
+      });
+
+      document.getElementById('copy-article-export')?.addEventListener('click', async () => {
+        const text = buildStaticExportText();
+        if (!text) return;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('export-status').textContent = 'Copied to clipboard.';
+      });
+      document.getElementById('download-article-pdf')?.addEventListener('click', downloadStaticPdf);
+    }
+
+    initArticleMeta();
+    initArticleCards();
+
+    // Lit Review Outline Compiler: localStorage, compile, tour
+    const LRO_STORAGE_KEY = 'study-plan-drafts-lit-review-outline-v1';
+    const LRO_LEGACY_KEY = 'study-plan-drafts-study-focus-v1';
+    const DEFAULT_BUCKETS = [
+      { id: 'b-bg', templateId: 'background', title: 'Background / context', synthesisNotes: '', connectionToFramework: '', linkedArticleNumbers: '' },
+      { id: 'b-t1', templateId: 'theme-1', title: 'Theme 1', synthesisNotes: '', connectionToFramework: '', linkedArticleNumbers: '' },
+      { id: 'b-t2', templateId: 'theme-2', title: 'Theme 2', synthesisNotes: '', connectionToFramework: '', linkedArticleNumbers: '' }
+    ];
+    let lroState = emptyLroState();
+    let saveLroTimer = null;
+    let lroBucketCounter = 0;
+
+    function emptyLroState () {
+      return {
+        organizingFramework: { theoryName: '', mechanismExplanation: '', whyThisFramework: '', alternativeConsidered: '' },
+        themeBuckets: DEFAULT_BUCKETS.map((b) => ({ ...b })),
+        gapAndTransition: { gapStatement: '', transitionToStudy: '', workingResearchQuestion: '' }
+      };
+    }
+
+    function migrateLegacyFocus (parsed) {
+      if (!parsed || parsed.organizingFramework) return parsed;
+      const next = emptyLroState();
+      if (parsed.workingGap) next.gapAndTransition.gapStatement = parsed.workingGap;
+      if (parsed.workingResearchQuestion) next.gapAndTransition.workingResearchQuestion = parsed.workingResearchQuestion;
+      if (parsed.litReviewThemes) {
+        const t = next.themeBuckets.find((b) => b.templateId === 'theme-1') || next.themeBuckets[0];
+        if (t) t.synthesisNotes = parsed.litReviewThemes;
+      }
+      return next;
+    }
+
+    function loadLroState () {
+      try {
+        let raw = localStorage.getItem(LRO_STORAGE_KEY);
+        if (!raw) raw = localStorage.getItem(LRO_LEGACY_KEY);
+        if (raw) return migrateLegacyFocus(JSON.parse(raw));
+      } catch (_) { /* ignore */ }
+      return emptyLroState();
+    }
+
+    function parseArticleNums (raw) {
+      if (!raw) return [];
+      return String(raw).split(/[,;\s]+/).map((s) => parseInt(s.trim(), 10)).filter((n) => Number.isFinite(n) && n > 0);
+    }
+
+    function roman (i) {
+      return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'][i] || String(i + 1);
+    }
+
+    function compileLro (state, forExport) {
+      const empty = forExport ? '(not filled in)' : '';
+      const fw = state.organizingFramework || {};
+      const gap = state.gapAndTransition || {};
+      const lines = ['ORGANIZING FRAMEWORK', '====================', `Theory: ${(fw.theoryName || '').trim() || empty}`, `Mechanism: ${(fw.mechanismExplanation || '').trim() || empty}`, `Why this framework: ${(fw.whyThisFramework || '').trim() || empty}`];
+      if ((fw.alternativeConsidered || '').trim()) lines.push(`Alternative considered: ${fw.alternativeConsidered.trim()}`);
+      lines.push('', 'OUTLINE', '=======', '');
+      (state.themeBuckets || []).forEach((b, i) => {
+        lines.push(`${roman(i)}. ${(b.title || '').trim() || 'Theme ' + (i + 1)}`);
+        const notes = (b.synthesisNotes || '').trim();
+        if (notes) notes.split('\n').forEach((line) => { const t = line.trim(); if (t) lines.push('   ' + (t.startsWith('-') ? t : '- ' + t)); });
+        else if (forExport) lines.push('   (not filled in)');
+        if ((b.connectionToFramework || '').trim()) lines.push('   Framework link: ' + b.connectionToFramework.trim());
+        const linked = parseArticleNums(b.linkedArticleNumbers);
+        if (linked.length) lines.push('   Sources: Articles ' + linked.join(', '));
+        lines.push('');
+      });
+      lines.push('GAP AND TRANSITION', '==================', `Gap: ${(gap.gapStatement || '').trim() || empty}`, `Transition: ${(gap.transitionToStudy || '').trim() || empty}`, `Working RQ: ${(gap.workingResearchQuestion || '').trim() || empty}`);
+      return lines.join('\n').trim();
+    }
+
+    function lroProgress () {
+      const named = Boolean((lroState.organizingFramework.theoryName || '').trim());
+      const themes = (lroState.themeBuckets || []).filter((b) => (b.synthesisNotes || '').trim() || (b.connectionToFramework || '').trim()).length;
+      const total = (lroState.themeBuckets || []).length;
+      const gap = Boolean((lroState.gapAndTransition.gapStatement || '').trim());
+      return { named, themes, total, gap, ready: named && themes >= 2 && gap };
+    }
+
+    function updateLroProgress () {
+      const p = lroProgress();
+      let label = 'Framework not started';
+      if (p.ready) label = 'Outline ready to export';
+      else if (p.named) label = `Framework named · ${p.themes}/${p.total} themes started`;
+      const chip = document.getElementById('lro-progress');
+      if (chip) chip.textContent = label;
+      const hub = document.getElementById('hub-focus-progress');
+      if (hub) hub.textContent = label;
+    }
+
+    function refreshLroReminders () {
+      const panel = document.getElementById('lro-reminders');
+      const body = document.getElementById('lro-reminders-body');
+      if (!panel || !body) return;
+      const problem = (articleMeta.problemStatementDraft ?? '').trim();
+      const rq = (articleMeta.researchQuestions ?? '').trim();
+      const { complete } = countCards();
+      const total = articleState.cards.length;
+      const articleLine = (complete > 0 || total > 0) ? `${complete}/${CANVAS_MIN} article cards complete · ${total} cards total` : '';
+      const hasContext = Boolean(problem || rq || articleLine);
+      panel.classList.toggle('empty', !hasContext);
+      if (!hasContext) {
+        body.innerHTML = '<p class="hint" style="margin:0 0 0.85rem">Complete Article Review first, your problem statement and early RQ will appear here as starting points.</p><a href="#" class="reminder-link" data-goto="article">Go to Article Review →</a>';
+        return;
+      }
+      let html = '<p class="hint" style="margin:0 0 0.85rem">Starting points, refine as you read more than your original article cards.</p>';
+      if (articleLine) html += `<div class="reminder-block"><h3>Article cards</h3><p class="reminder-text">${escHtml(articleLine)}</p></div>`;
+      if (problem) html += `<div class="reminder-block"><h3>Problem statement (draft)</h3><p class="reminder-text">${escHtml(problem)}</p></div>`;
+      if (rq) html += `<div class="reminder-block"><h3>Early research question</h3><p class="reminder-text">${escHtml(rq)}</p></div>`;
+      html += '<a href="#" class="reminder-link" data-goto="article">Open Article Review to update →</a>';
+      body.innerHTML = html;
+    }
+
+    function cardSnippet (num) {
+      const card = articleState.cards[num - 1];
+      if (!card) return null;
+      const ref = (card.apaReference || '').trim();
+      if (!ref) return '(no reference yet)';
+      const line = ref.split('\n')[0].trim();
+      return line.length > 72 ? line.slice(0, 69) + '…' : line;
+    }
+
+    function renderThemeBuckets () {
+      const container = document.getElementById('lro-theme-buckets');
+      if (!container) return;
+      container.innerHTML = lroState.themeBuckets.map((b, i) => {
+        const peeks = parseArticleNums(b.linkedArticleNumbers).map((n) => {
+          const sn = cardSnippet(n);
+          return sn ? `<li>Article ${n}: ${escHtml(sn)}</li>` : `<li class="peek-missing">No card for Article ${n} yet.</li>`;
+        }).join('');
+        return `<div class="theme-bucket-static" data-bucket-index="${i}">
+          <label>Section ${i + 1} title</label>
+          <input type="text" data-bucket-field="title" value="${escHtml(b.title || '')}" />
+          <label>Synthesis notes</label>
+          <textarea rows="3" data-bucket-field="synthesisNotes">${escHtml(b.synthesisNotes || '')}</textarea>
+          <label>How does this theme support your framework?</label>
+          <textarea rows="2" data-bucket-field="connectionToFramework">${escHtml(b.connectionToFramework || '')}</textarea>
+          <label>Linked article numbers</label>
+          <input type="text" data-bucket-field="linkedArticleNumbers" placeholder="e.g. 1, 3, 5" value="${escHtml(b.linkedArticleNumbers || '')}" />
+          ${peeks ? `<ul class="article-peeks">${peeks}</ul>` : ''}
+          ${lroState.themeBuckets.length > 1 ? `<button type="button" class="btn-secondary" data-remove-bucket="${i}" style="margin-top:0.5rem">Remove theme</button>` : ''}
+        </div>`;
+      }).join('');
+    }
+
+    function refreshLroViews () {
+      updateLroProgress();
+      const compiled = compileLro(lroState, false);
+      const preview = document.getElementById('lro-preview');
+      if (preview) preview.textContent = compiled;
+      const exportPreview = document.getElementById('lro-export-preview');
+      if (exportPreview) exportPreview.value = 'Lit Review Outline\n==================\n\n' + compileLro(lroState, true);
+    }
+
+    function persistLro () {
+      if (saveLroTimer) clearTimeout(saveLroTimer);
+      saveLroTimer = setTimeout(() => {
+        localStorage.setItem(LRO_STORAGE_KEY, JSON.stringify({ ...lroState, lastSavedAt: new Date().toISOString() }));
+        const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        const status = document.getElementById('lro-save-status');
+        if (status) status.textContent = 'Saved locally at ' + t;
+      }, 400);
+    }
+
+    function onLroChange () {
+      refreshLroViews();
+      persistLro();
+    }
+
+    async function downloadLroPdf () {
+      const status = document.getElementById('lro-export-status');
+      const text = 'Lit Review Outline\n==================\n\n' + compileLro(lroState, true);
+      status.textContent = 'Building PDF…';
+      try {
+        const { PDFDocument, StandardFonts } = await import('https://esm.sh/pdf-lib@1.17.1');
+        const doc = await PDFDocument.create();
+        const font = await doc.embedFont(StandardFonts.Helvetica);
+        let page = doc.addPage();
+        const margin = 50;
+        let y = page.getHeight() - margin;
+        const lineHeight = 14;
+        const maxWidth = page.getWidth() - margin * 2;
+        const drawWrap = (line, size) => {
+          const words = line.split(' ');
+          let current = '';
+          for (const word of words) {
+            const test = current ? current + ' ' + word : word;
+            if (font.widthOfTextAtSize(test, size) > maxWidth) {
+              if (y < margin + lineHeight) { page = doc.addPage(); y = page.getHeight() - margin; }
+              page.drawText(current, { x: margin, y, size, font });
+              y -= lineHeight;
+              current = word;
+            } else current = test;
+          }
+          if (current) {
+            if (y < margin + lineHeight) { page = doc.addPage(); y = page.getHeight() - margin; }
+            page.drawText(current, { x: margin, y, size, font });
+            y -= lineHeight;
+          }
+        };
+        text.split('\n').forEach((line) => { if (line.trim()) drawWrap(line.trim(), 10); else y -= 8; });
+        const bytes = await doc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lit-review-outline-draft-' + new Date().toISOString().slice(0, 10) + '.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+        status.textContent = 'PDF downloaded.';
+      } catch (err) {
+        status.textContent = 'PDF download failed, try Copy export text instead.';
+      }
+    }
+
+    function initLitReviewOutline () {
+      lroState = loadLroState();
+      document.querySelectorAll('[data-lro-fw]').forEach((el) => {
+        const key = el.dataset.lroFw;
+        el.value = lroState.organizingFramework[key] ?? '';
+        el.addEventListener('input', () => {
+          lroState.organizingFramework[key] = el.value;
+          onLroChange();
+        });
+      });
+      document.querySelectorAll('[data-lro-gap]').forEach((el) => {
+        const key = el.dataset.lroGap;
+        el.value = lroState.gapAndTransition[key] ?? '';
+        el.addEventListener('input', () => {
+          lroState.gapAndTransition[key] = el.value;
+          onLroChange();
+        });
+      });
+      renderThemeBuckets();
+      refreshLroViews();
+      refreshLroReminders();
+
+      document.getElementById('lro-theme-buckets')?.addEventListener('input', (e) => {
+        const wrap = e.target.closest('[data-bucket-index]');
+        if (!wrap) return;
+        const i = Number(wrap.dataset.bucketIndex);
+        const field = e.target.dataset.bucketField;
+        if (!field) return;
+        lroState.themeBuckets[i][field] = e.target.value;
+        if (field === 'linkedArticleNumbers') renderThemeBuckets();
+        onLroChange();
+      });
+
+      document.getElementById('lro-theme-buckets')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-remove-bucket]');
+        if (!btn) return;
+        const i = Number(btn.dataset.removeBucket);
+        if (!confirm('Remove this theme bucket?')) return;
+        lroState.themeBuckets.splice(i, 1);
+        renderThemeBuckets();
+        onLroChange();
+      });
+
+      document.getElementById('lro-add-theme')?.addEventListener('click', () => {
+        lroBucketCounter += 1;
+        lroState.themeBuckets.push({ id: 'b-new-' + lroBucketCounter, templateId: null, title: 'New theme', synthesisNotes: '', connectionToFramework: '', linkedArticleNumbers: '' });
+        renderThemeBuckets();
+        onLroChange();
+      });
+
+      document.getElementById('copy-lro-export')?.addEventListener('click', async () => {
+        const text = document.getElementById('lro-export-preview').value;
+        await navigator.clipboard.writeText(text);
+        document.getElementById('lro-export-status').textContent = 'Copied to clipboard.';
+      });
+      document.getElementById('download-lro-pdf')?.addEventListener('click', downloadLroPdf);
+
+      document.getElementById('focus')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (!link) return;
+        e.preventDefault();
+        document.querySelector(`.tabs button[data-panel="${link.dataset.goto}"]`)?.click();
+      });
+    }
+
+    initLitReviewOutline();
+
+    const LRO_TOUR_STEPS = [
+      { target: 'tour-lro-intro', title: 'Organize the lit review you are writing', body: 'Structure weeks 5–10 around one organizing framework, not a stack of article summaries. Export feeds Lit Review Draft 1, Phase 3, and Phase 4.' },
+      { target: 'tour-lro-reminders', title: 'Carry forward from Article Review', body: 'Your week-4 problem statement and early RQ are starting points. Refine them as you read beyond your original article cards.' },
+      { target: 'tour-lro-framework', title: 'Name your organizing framework', body: 'Choose one theory that routes your review. Explain the mechanism linking IV and DV. Browse reference ideas. MM never picks for you.', narrow: 'Three theories listed? Pick one primary lens.', widen: 'Mechanism vague? Name the pathway (e.g., stress → sleep → mood).' },
+      { target: 'tour-lro-reference', title: 'Framework ideas (browse only)', body: 'Common frameworks by construct area. Use a name only if it fits, or use your own from class or sources.' },
+      { target: 'tour-lro-themes', title: 'Theme buckets: synthesis sections', body: 'Each bucket becomes an outline section. Bullet agreements, disagreements, and link article numbers. Group by finding, not one paragraph per article.', narrow: 'One paragraph per article? Merge cards under shared themes.', widen: 'Only one theme? You may need more sources.' },
+      { target: 'tour-lro-gap', title: 'Gap, transition, and working RQ', body: 'State what is still unknown, bridge to your study. Working RQ copies to Phase 4: write it specific enough to guide IV/DV definitions.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after more reading? Revisit search or framework.' },
+      { target: 'tour-lro-preview', title: 'Compiled outline preview', body: 'Live preview of framework, themes, and gap, your words only. Use as the skeleton before expanding bullets into prose in Word.' },
+      { target: 'tour-lro-export', title: 'Export for Draft 1', body: 'Copy or PDF, paste into your draft, expand into paragraphs. Themes and gap also feed Phase 3: refine for speech, do not paste bullets verbatim.' }
+    ];
+
+    let lroTourIndex = 0;
+
+    function lroTourEl (id) {
+      return document.querySelector(`#focus [data-tour="${id}"]`);
+    }
+
+    async function layoutLroTourStep () {
+      const step = LRO_TOUR_STEPS[lroTourIndex];
+      await new Promise((r) => setTimeout(r, 80));
+      const el = lroTourEl(step.target);
+      const ring = document.getElementById('spotlight-ring-lro');
+      const pop = document.getElementById('spotlight-popover-lro');
+      if (!el) {
+        ring.hidden = true;
+        pop.innerHTML = `<p class="popover-step">${lroTourIndex + 1} of ${LRO_TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="lro-tour-skip">Skip</button><button type="button" class="btn-copy" id="lro-tour-next">${lroTourIndex >= LRO_TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div>`;
+        pop.hidden = false;
+        pop.style.top = '80px'; pop.style.left = '50%'; pop.style.transform = 'translateX(-50%)';
+        bindLroTourButtons();
+        return;
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise((r) => setTimeout(r, 280));
+      const rect = el.getBoundingClientRect();
+      const pad = 8;
+      ring.style.top = (rect.top - pad) + 'px';
+      ring.style.left = (rect.left - pad) + 'px';
+      ring.style.width = (rect.width + pad * 2) + 'px';
+      ring.style.height = (rect.height + pad * 2) + 'px';
+      ring.hidden = false;
+      const adjustHtml = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+      pop.innerHTML = `<p class="popover-step">${lroTourIndex + 1} of ${LRO_TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adjustHtml}<div class="popover-actions"><button type="button" class="btn-secondary" id="lro-tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="lro-tour-back"${lroTourIndex === 0 ? ' disabled' : ''}>Back</button><button type="button" class="btn-copy" id="lro-tour-next">${lroTourIndex >= LRO_TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div></div>`;
+      pop.hidden = false;
+      const popW = Math.min(380, window.innerWidth - 32);
+      let popTop = rect.bottom + 16;
+      if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+      pop.style.transform = 'none';
+      pop.style.top = popTop + 'px';
+      pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px';
+      pop.style.width = popW + 'px';
+      bindLroTourButtons();
+    }
+
+    function bindLroTourButtons () {
+      document.getElementById('lro-tour-skip')?.addEventListener('click', endLroTour);
+      document.getElementById('lro-tour-back')?.addEventListener('click', () => { if (lroTourIndex > 0) { lroTourIndex--; layoutLroTourStep(); } });
+      document.getElementById('lro-tour-next')?.addEventListener('click', () => {
+        if (lroTourIndex >= LRO_TOUR_STEPS.length - 1) endLroTour();
+        else { lroTourIndex++; layoutLroTourStep(); }
+      });
+    }
+
+    function startLroTour () {
+      lroTourIndex = 0;
+      document.getElementById('spotlight-tour-lro').classList.add('active');
+      document.body.classList.add('tour-active');
+      layoutLroTourStep();
+    }
+
+    function endLroTour () {
+      document.getElementById('spotlight-tour-lro').classList.remove('active');
+      document.body.classList.remove('tour-active');
+      document.getElementById('spotlight-ring-lro').hidden = true;
+      document.getElementById('spotlight-popover-lro').hidden = true;
+      try { localStorage.setItem('study-plan-drafts-lro-tour-done', '1'); } catch (_) {}
+      const btn = document.getElementById('start-lro-tour-btn');
+      if (btn) btn.textContent = 'Replay guided tour';
+    }
+
+    document.getElementById('start-lro-tour-btn')?.addEventListener('click', startLroTour);
+    try {
+      if (localStorage.getItem('study-plan-drafts-lro-tour-done') === '1') {
+        document.getElementById('start-lro-tour-btn').textContent = 'Replay guided tour';
+      }
+    } catch (_) {}
+
+
+    // Phase 3 & 4: localStorage, reminders, export, tours
+    const P3_STORAGE_KEY = 'study-plan-drafts-phase3-v1';
+    const P4_STORAGE_KEY = 'study-plan-drafts-phase4-v1';
+    const P4_PATHWAY_DEFS = [
+      { id: 'pathway-1-survey', label: 'Pathway 1 (Survey)', short: 'Survey', fields: [{ id: 'validatedScales', label: 'What validated scales?' }] },
+      { id: 'pathway-2-experimental', label: 'Pathway 2 (Experimental)', short: 'Experimental', fields: [{ id: 'taskDescription', label: 'What task and how long?' }, { id: 'comparisonGroup', label: 'Comparison group' }] },
+      { id: 'pathway-3-observation', label: 'Pathway 3 (Observation)', short: 'Observation', fields: [{ id: 'whatToObserve', label: 'What to observe/record' }, { id: 'observationDuration', label: 'For how long?' }] },
+      { id: 'pathway-4-archival', label: 'Pathway 4 (Archival)', short: 'Archival', fields: [{ id: 'existingDataset', label: 'Existing dataset' }] }
+    ];
+    const P4_CRITERIA = [
+      { id: 'feasibility', label: 'Feasibility this semester' },
+      { id: 'accessToParticipants', label: 'Access to participants / data' },
+      { id: 'measurementQuality', label: 'Measurement quality' },
+      { id: 'ethicsIrB', label: 'Ethics / IRB considerations' },
+      { id: 'notes', label: 'Notes (optional)' }
+    ];
+
+    function emptyP3 () {
+      return { whatWeKnow: '', theGap: '', myStudyPitch: '', elevatorSpeech: '' };
+    }
+
+    function emptyP4Pathways () {
+      const o = {};
+      P4_PATHWAY_DEFS.forEach((p) => {
+        o[p.id] = { notViable: false };
+        p.fields.forEach((f) => { o[p.id][f.id] = ''; });
+      });
+      return o;
+    }
+
+    function emptyP4Comparison () {
+      const rows = {};
+      P4_CRITERIA.forEach((c) => {
+        rows[c.id] = {};
+        P4_PATHWAY_DEFS.forEach((p) => { rows[c.id][p.id] = ''; });
+      });
+      return rows;
+    }
+
+    function emptyP4 () {
+      return {
+        broadTopicArea: '', proposedResearchQuestion: '', ivConceptual: '', ivOperational: '', dvConceptual: '', dvOperational: '',
+        pathwayResponses: emptyP4Pathways(), comparisonTable: emptyP4Comparison(), chosenPathwayId: ''
+      };
+    }
+
+    let p3State = emptyP3();
+    let p4State = emptyP4();
+    let saveP3Timer = null;
+    let saveP4Timer = null;
+
+    function setText (id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function setValue (id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+
+    function loadP3 () {
+      try { const raw = localStorage.getItem(P3_STORAGE_KEY); if (raw) return { ...emptyP3(), ...JSON.parse(raw) }; } catch (_) {}
+      return emptyP3();
+    }
+
+    function loadP4 () {
+      try {
+        const raw = localStorage.getItem(P4_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return { ...emptyP4(), ...parsed, pathwayResponses: { ...emptyP4Pathways(), ...parsed.pathwayResponses }, comparisonTable: { ...emptyP4Comparison(), ...parsed.comparisonTable } };
+        }
+      } catch (_) {}
+      return emptyP4();
+    }
+
+    function p3WordCount (t) {
+      return (t || '').trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function lroThemeSummary () {
+      return (lroState.themeBuckets || []).map((b) => (b.synthesisNotes || '').trim()).filter(Boolean).join('\n\n');
+    }
+
+    function refreshP3Reminders () {
+      const body = document.getElementById('p3-reminders-body');
+      const panel = document.getElementById('p3-reminders');
+      if (!body) return;
+      const fw = (lroState.organizingFramework?.theoryName || '').trim();
+      const themes = lroThemeSummary();
+      const gap = (lroState.gapAndTransition?.gapStatement || '').trim();
+      const trans = (lroState.gapAndTransition?.transitionToStudy || '').trim();
+      const has = fw || themes || gap || trans;
+      panel?.classList.toggle('empty', !has);
+      if (!has) {
+        body.innerHTML = '<p class="hint" style="margin:0 0 0.85rem">Fill your Lit Review Outline first.</p><a href="#" class="reminder-link" data-goto="focus">Go to Lit Review Outline →</a>';
+        return;
+      }
+      let html = '<p class="hint" style="margin:0 0 0.85rem">Starting points, refine into spoken prose.</p>';
+      if (fw) html += `<div class="reminder-block"><h3>Organizing framework</h3><p class="reminder-text">${escHtml(fw)}</p></div>`;
+      if (themes) html += `<div class="reminder-block"><h3>Theme synthesis</h3><p class="reminder-text">${escHtml(themes.slice(0, 400))}${themes.length > 400 ? '…' : ''}</p></div>`;
+      if (gap) html += `<div class="reminder-block"><h3>Working gap</h3><p class="reminder-text">${escHtml(gap)}</p></div>`;
+      if (trans) html += `<div class="reminder-block"><h3>Transition</h3><p class="reminder-text">${escHtml(trans)}</p></div>`;
+      html += '<a href="#" class="reminder-link" data-goto="focus">Open Lit Review Outline →</a>';
+      body.innerHTML = html;
+    }
+
+    function refreshP4Reminders () {
+      const body = document.getElementById('p4-reminders-body');
+      const panel = document.getElementById('p4-reminders');
+      if (!body) return;
+      const wk = (p3State.whatWeKnow || '').trim();
+      const gap = (p3State.theGap || '').trim();
+      const rq = (lroState.gapAndTransition?.workingResearchQuestion || '').trim();
+      const has = wk || gap || rq;
+      panel?.classList.toggle('empty', !has);
+      if (!has) {
+        body.innerHTML = '<p class="hint" style="margin:0 0 0.85rem">Complete Phase 3 and Lit Review Outline first.</p><a href="#" class="reminder-link" data-goto="phase3">Go to Phase 3 →</a>';
+        return;
+      }
+      let html = '';
+      if (wk) html += `<div class="reminder-block"><h3>What we know (Phase 3)</h3><p class="reminder-text">${escHtml(wk)}</p></div>`;
+      if (gap) html += `<div class="reminder-block"><h3>The gap (Phase 3)</h3><p class="reminder-text">${escHtml(gap)}</p></div>`;
+      if (rq) html += `<div class="reminder-block"><h3>Working RQ</h3><p class="reminder-text">${escHtml(rq)}</p></div>`;
+      html += '<a href="#" class="reminder-link" data-goto="phase3">Open Phase 3 →</a>';
+      body.innerHTML = html;
+    }
+
+    function buildP3Export () {
+      const lines = ['Phase 3: Elevator Speech', '='.repeat(24), '',
+        'What we know\n' + ((p3State.whatWeKnow || '').trim() || '(not filled in)'),
+        '\nThe gap\n' + ((p3State.theGap || '').trim() || '(not filled in)'),
+        '\nMy study pitch\n' + ((p3State.myStudyPitch || '').trim() || '(not filled in)'),
+        '\nFull elevator speech\n' + ((p3State.elevatorSpeech || '').trim() || '(not filled in)')];
+      return lines.join('\n');
+    }
+
+    function buildP4Export () {
+      const lines = ['Phase 4: Operationalization', '='.repeat(28), '',
+        'Broad Topic Area:\n' + (p4State.broadTopicArea || '(not filled in)'),
+        '\nProposed Research Question:\n' + (p4State.proposedResearchQuestion || '(not filled in)'),
+        '\nIndependent Variable (IV): (Define based on Lit Review)\n' + (p4State.ivConceptual || '(not filled in)'),
+        '\nIndependent Variable (IV): (Operational definition)\n' + (p4State.ivOperational || '(not filled in)'),
+        '\nDependent Variable (DV): (Define based on Lit Review)\n' + (p4State.dvConceptual || '(not filled in)'),
+        '\nDependent Variable (DV): (Operational definition)\n' + (p4State.dvOperational || '(not filled in)')];
+      P4_PATHWAY_DEFS.forEach((p) => {
+        lines.push('\n' + p.label);
+        const r = p4State.pathwayResponses[p.id] || {};
+        if (r.notViable) { lines.push('(Marked not viable)'); return; }
+        p.fields.forEach((f) => lines.push(f.label + ': ' + ((r[f.id] || '').trim() || '(not filled in)')));
+      });
+      lines.push('\nPart D: Comparative Analysis');
+      P4_CRITERIA.forEach((c) => {
+        lines.push('\n' + c.label);
+        P4_PATHWAY_DEFS.forEach((p) => {
+          lines.push('  ' + p.short + ': ' + ((p4State.comparisonTable[c.id]?.[p.id] || '').trim() || '(not filled in)'));
+        });
+      });
+      const chosen = P4_PATHWAY_DEFS.find((p) => p.id === p4State.chosenPathwayId);
+      lines.push('\nChosen pathway: ' + (chosen?.label || '(not chosen)'));
+      return lines.join('\n');
+    }
+
+    function updateP3Progress () {
+      const keys = ['whatWeKnow', 'theGap', 'myStudyPitch', 'elevatorSpeech'];
+      const filled = keys.filter((k) => (p3State[k] || '').trim()).length;
+      const words = p3WordCount(p3State.elevatorSpeech);
+      const label = filled ? `${filled}/4 parts · ${words} words` : 'Elevator speech not started';
+      setText('p3-progress', label);
+      setText('hub-phase3-progress', label);
+      setText('p3-word-count', `${words} words (aim for ~130–300; 1–2 minute spiel)`);
+    }
+
+    function updateP4Progress () {
+      const top = ['broadTopicArea', 'proposedResearchQuestion', 'ivConceptual', 'ivOperational', 'dvConceptual', 'dvOperational'];
+      const recap = top.filter((k) => (p4State[k] || '').trim()).length;
+      let paths = 0;
+      P4_PATHWAY_DEFS.forEach((p) => {
+        const r = p4State.pathwayResponses[p.id] || {};
+        if (r.notViable || p.fields.some((f) => (r[f.id] || '').trim())) paths++;
+      });
+      let label = 'Not started';
+      if (p4State.chosenPathwayId) label = 'Pathway chosen';
+      else if (recap || paths) label = `A–B ${recap}/6 · ${paths}/4 paths`;
+      setText('p4-progress', label);
+      setText('hub-phase4-progress', label);
+    }
+
+    function renderP4Pathways () {
+      const el = document.getElementById('p4-pathways');
+      if (!el) return;
+      el.innerHTML = P4_PATHWAY_DEFS.map((p) => {
+        const r = p4State.pathwayResponses[p.id] || {};
+        const fields = p.fields.map((f) =>
+          `<label>${f.label}</label><textarea rows="2" data-pathway="${p.id}" data-path-field="${f.id}" ${r.notViable ? 'disabled' : ''}>${escHtml(r[f.id] || '')}</textarea>`
+        ).join('');
+        return `<div class="theme-bucket-static"><h3>${p.label}</h3>
+          <label class="check-main"><input type="checkbox" data-path-not-viable="${p.id}" ${r.notViable ? 'checked' : ''} /> Not viable for my question</label>
+          ${fields}</div>`;
+      }).join('');
+    }
+
+    function renderP4Comparison () {
+      const wrap = document.getElementById('p4-comparison-wrap');
+      if (!wrap) return;
+      let html = '<table class="search-log-table"><thead><tr><th>Criterion</th>';
+      P4_PATHWAY_DEFS.forEach((p) => { html += `<th>${p.short}</th>`; });
+      html += '</tr></thead><tbody>';
+      P4_CRITERIA.forEach((c) => {
+        html += `<tr><th>${c.label}</th>`;
+        P4_PATHWAY_DEFS.forEach((p) => {
+          html += `<td><textarea rows="2" data-crit="${c.id}" data-crit-path="${p.id}">${escHtml(p4State.comparisonTable[c.id]?.[p.id] || '')}</textarea></td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+    }
+
+    function renderP4Choices () {
+      const el = document.getElementById('p4-choices');
+      if (!el) return;
+      el.innerHTML = P4_PATHWAY_DEFS.map((p) =>
+        `<label class="check-main" style="margin-bottom:0.5rem"><input type="radio" name="p4-chosen" value="${p.id}" ${p4State.chosenPathwayId === p.id ? 'checked' : ''} /> ${p.label}</label>`
+      ).join('');
+    }
+
+    function refreshP3Views () {
+      updateP3Progress();
+      setValue('p3-export-preview', buildP3Export());
+      refreshP3Reminders();
+      refreshP4Reminders();
+      const prefill = document.getElementById('p3-prefill-row');
+      if (prefill) {
+        const btns = [];
+        const themes = lroThemeSummary();
+        if (themes && !(p3State.whatWeKnow || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="whatWeKnow">Copy theme notes → What we know</button>');
+        if ((lroState.gapAndTransition?.gapStatement || '').trim() && !(p3State.theGap || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="theGap">Copy outline gap → The gap</button>');
+        if ((lroState.gapAndTransition?.transitionToStudy || '').trim() && !(p3State.myStudyPitch || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p3-prefill="myStudyPitch">Copy transition → My study pitch</button>');
+        prefill.innerHTML = btns.join('');
+      }
+    }
+
+    function refreshP4Views () {
+      updateP4Progress();
+      setValue('p4-export-preview', buildP4Export());
+      refreshP4Reminders();
+      const prefill = document.getElementById('p4-prefill-row');
+      if (prefill) {
+        const btns = [];
+        const rq = (lroState.gapAndTransition?.workingResearchQuestion || '').trim();
+        if (rq && !(p4State.proposedResearchQuestion || '').trim()) btns.push('<button type="button" class="btn-secondary" data-p4-prefill="rq">Copy working RQ</button>');
+        prefill.innerHTML = btns.join('');
+      }
+    }
+
+    function persistP3 () {
+      if (saveP3Timer) clearTimeout(saveP3Timer);
+      saveP3Timer = setTimeout(() => {
+        localStorage.setItem(P3_STORAGE_KEY, JSON.stringify(p3State));
+        setText('p3-save-status', 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+      }, 400);
+    }
+
+    function persistP4 () {
+      if (saveP4Timer) clearTimeout(saveP4Timer);
+      saveP4Timer = setTimeout(() => {
+        localStorage.setItem(P4_STORAGE_KEY, JSON.stringify(p4State));
+        setText('p4-save-status', 'Saved locally at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+      }, 400);
+    }
+
+    function initPhase3 () {
+      p3State = loadP3();
+      document.querySelectorAll('[data-p3-field]').forEach((el) => {
+        el.value = p3State[el.dataset.p3Field] ?? '';
+        el.addEventListener('input', () => {
+          p3State[el.dataset.p3Field] = el.value;
+          refreshP3Views();
+          persistP3();
+        });
+      });
+      refreshP3Views();
+      document.getElementById('phase3')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (link) { e.preventDefault(); document.querySelector(`.tabs button[data-panel="${link.dataset.goto}"]`)?.click(); return; }
+        const pre = e.target.closest('[data-p3-prefill]');
+        if (!pre) return;
+        const field = pre.dataset.p3Prefill;
+        if (field === 'whatWeKnow') p3State.whatWeKnow = lroThemeSummary();
+        if (field === 'theGap') p3State.theGap = lroState.gapAndTransition?.gapStatement || '';
+        if (field === 'myStudyPitch') p3State.myStudyPitch = lroState.gapAndTransition?.transitionToStudy || '';
+        document.querySelectorAll('[data-p3-field]').forEach((el) => { el.value = p3State[el.dataset.p3Field] ?? ''; });
+        refreshP3Views();
+        persistP3();
+      });
+      document.getElementById('copy-p3-export')?.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(buildP3Export());
+      });
+    }
+
+    function initPhase4 () {
+      p4State = loadP4();
+      document.querySelectorAll('[data-p4-top]').forEach((el) => {
+        el.value = p4State[el.dataset.p4Top] ?? '';
+        el.addEventListener('input', () => {
+          p4State[el.dataset.p4Top] = el.value;
+          refreshP4Views();
+          persistP4();
+        });
+      });
+      renderP4Pathways();
+      renderP4Comparison();
+      renderP4Choices();
+      refreshP4Views();
+
+      document.getElementById('p4-pathways')?.addEventListener('input', (e) => {
+        const ta = e.target.closest('[data-path-field]');
+        if (ta) {
+          p4State.pathwayResponses[ta.dataset.pathway][ta.dataset.pathField] = ta.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-pathways')?.addEventListener('change', (e) => {
+        const cb = e.target.closest('[data-path-not-viable]');
+        if (cb) {
+          p4State.pathwayResponses[cb.dataset.pathNotViable].notViable = cb.checked;
+          renderP4Pathways();
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-comparison-wrap')?.addEventListener('input', (e) => {
+        const ta = e.target.closest('[data-crit]');
+        if (ta) {
+          if (!p4State.comparisonTable[ta.dataset.crit]) p4State.comparisonTable[ta.dataset.crit] = {};
+          p4State.comparisonTable[ta.dataset.crit][ta.dataset.critPath] = ta.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('p4-choices')?.addEventListener('change', (e) => {
+        if (e.target.name === 'p4-chosen') {
+          p4State.chosenPathwayId = e.target.value;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('phase4')?.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-goto]');
+        if (link) { e.preventDefault(); document.querySelector(`.tabs button[data-panel="${link.dataset.goto}"]`)?.click(); return; }
+        const pre = e.target.closest('[data-p4-prefill]');
+        if (pre?.dataset.p4Prefill === 'rq') {
+          p4State.proposedResearchQuestion = lroState.gapAndTransition?.workingResearchQuestion || '';
+          document.getElementById('p4-proposedResearchQuestion').value = p4State.proposedResearchQuestion;
+          refreshP4Views();
+          persistP4();
+        }
+      });
+      document.getElementById('copy-p4-export')?.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(buildP4Export());
+      });
+    }
+
+    initPhase3();
+    initPhase4();
+
+    // Patch LRO refresh to update Phase 3/4 reminders
+    const _onLroChangeOrig = onLroChange;
+    onLroChange = function () {
+      _onLroChangeOrig();
+      refreshP3Reminders();
+      refreshP4Reminders();
+      refreshP3Views();
+    };
+
+    function makeTour (prefix, steps, ringId, popId, tourId, storageKey, startBtnId) {
+      let idx = 0;
+      function tourEl (id) { return document.querySelector(`#${prefix === 'p3' ? 'phase3' : 'phase4'} [data-tour="${id}"]`); }
+      async function layout () {
+        const step = steps[idx];
+        await new Promise((r) => setTimeout(r, 80));
+        const el = tourEl(step.target);
+        const ring = document.getElementById(ringId);
+        const pop = document.getElementById(popId);
+        if (!el) { ring.hidden = true; pop.hidden = false; pop.innerHTML = `<p class="popover-step">${idx+1} of ${steps.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="${prefix}-tour-skip">Skip</button><button type="button" class="btn-copy" id="${prefix}-tour-next">${idx >= steps.length-1 ? 'Finish' : 'Next'}</button></div>`; bind(); return; }
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await new Promise((r) => setTimeout(r, 280));
+        const rect = el.getBoundingClientRect();
+        const pad = 8;
+        ring.style.top = (rect.top - pad) + 'px'; ring.style.left = (rect.left - pad) + 'px';
+        ring.style.width = (rect.width + pad * 2) + 'px'; ring.style.height = (rect.height + pad * 2) + 'px';
+        ring.hidden = false;
+        const adj = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+        pop.innerHTML = `<p class="popover-step">${idx+1} of ${steps.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adj}<div class="popover-actions"><button type="button" class="btn-secondary" id="${prefix}-tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="${prefix}-tour-back"${idx===0?' disabled':''}>Back</button><button type="button" class="btn-copy" id="${prefix}-tour-next">${idx >= steps.length-1 ? 'Finish' : 'Next'}</button></div></div>`;
+        pop.hidden = false;
+        const popW = Math.min(380, window.innerWidth - 32);
+        let popTop = rect.bottom + 16;
+        if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+        pop.style.transform = 'none'; pop.style.top = popTop + 'px'; pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px'; pop.style.width = popW + 'px';
+        bind();
+      }
+      function bind () {
+        document.getElementById(`${prefix}-tour-skip`)?.addEventListener('click', end);
+        document.getElementById(`${prefix}-tour-back`)?.addEventListener('click', () => { if (idx > 0) { idx--; layout(); } });
+        document.getElementById(`${prefix}-tour-next`)?.addEventListener('click', () => { if (idx >= steps.length - 1) end(); else { idx++; layout(); } });
+      }
+      function start () { idx = 0; document.getElementById(tourId).classList.add('active'); document.body.classList.add('tour-active'); layout(); }
+      function end () {
+        document.getElementById(tourId).classList.remove('active'); document.body.classList.remove('tour-active');
+        document.getElementById(ringId).hidden = true; document.getElementById(popId).hidden = true;
+        try { localStorage.setItem(storageKey, '1'); } catch (_) {}
+        document.getElementById(startBtnId).textContent = 'Replay guided tour';
+      }
+      document.getElementById(startBtnId)?.addEventListener('click', start);
+      try { if (localStorage.getItem(storageKey) === '1') document.getElementById(startBtnId).textContent = 'Replay guided tour'; } catch (_) {}
+    }
+
+    makeTour('p3', [
+      { target: 'tour-p3-intro', title: 'Distill your lit review into a speech', body: 'Phase 3 is a 1–2 minute spiel about your research: what the field knows, the gap, and how your study fits. Methods belong in Phase 4. Submit with Phase 4 in Canvas.' },
+      { target: 'tour-p3-reminders', title: 'Start from your Lit Review Outline', body: 'Framework, themes, gap, and transition are raw material, rewrite into spoken sentences a listener could follow.' },
+      { target: 'tour-p3-what-we-know', title: 'What we know', body: 'In 2–4 sentences: what does prior research agree on? Synthesis across studies, not a list of articles.', narrow: 'One study only? Name a pattern several sources support.', widen: 'Covers everything? Keep findings that set up your gap.' },
+      { target: 'tour-p3-gap', title: 'The gap', body: 'In 1–3 sentences: what is still unknown or contested? Match your outline gap, but sharper for a listener.', narrow: 'Whole topic area? Name one IV, DV, and population.', widen: 'No clear gap? Return to outline or read more.' },
+      { target: 'tour-p3-pitch', title: 'My study pitch', body: 'In 1–3 sentences: how your proposed study addresses the gap. No surveys, tasks, or stats yet.' },
+      { target: 'tour-p3-speech', title: 'Full elevator speech', body: 'Combine parts (~130–300 words). Read aloud and time yourself, aim for 1–2 minutes of clear spoken summary.', narrow: 'Over 2 minutes? Cut repetition.', widen: 'Under 130 words? Add one literature example.' },
+      { target: 'tour-p3-export', title: 'Export for Canvas', body: 'Copy formatted text for the Phase 3 worksheet. Submit together with Phase 4.' }
+    ], 'spotlight-ring-p3', 'spotlight-popover-p3', 'spotlight-tour-p3', 'study-plan-drafts-p3-tour-done', 'start-p3-tour-btn');
+
+    makeTour('p4', [
+      { target: 'tour-p4-intro', title: 'Turn your RQ into a study plan', body: 'Define IV and DV conceptually and operationally, explore four data-collection paths, compare them, and choose ONE. Submit with Phase 3 in Canvas.' },
+      { target: 'tour-p4-reminders', title: 'Build on Phase 3 and outline', body: 'Elevator speech and working RQ keep you aligned with your gap, use them as starting points, not copy-paste answers.' },
+      { target: 'tour-p4-part-a', title: 'Part A: Recap topic and question', body: 'Broad topic area and proposed research question. Every pathway below must answer this same question.', narrow: 'RQ vague? Name IV, DV, population before Part B.', widen: 'Three relationships in one RQ? Pick one for this semester.' },
+      { target: 'tour-p4-part-b-conceptual', title: 'Part B: Conceptual IV and DV', body: 'Define constructs as your literature describes them, the ideas behind your variables, not measures yet.', narrow: 'Sounds like a scale name? Step back to the construct.', widen: 'One vague word each? Add how sources define each construct.' },
+      { target: 'tour-p4-part-b-operational', title: 'Part B: Operational IV and DV', body: 'Specify how you would manipulate or measure each variable, scales, tasks, conditions, observation codes, or dataset fields.', narrow: 'Still abstract? Name the exact measure or manipulation.', widen: 'Full methods here? Save pathway details for Part C.' },
+      { target: 'tour-p4-part-c', title: 'Part C: Four pathways', body: 'Sketch how your IV and DV would work under survey, experimental, observation, and archival methods. Mark not viable paths honestly.' },
+      { target: 'tour-p4-part-d', title: 'Part D: Comparison table', body: 'Compare feasibility, access, measurement quality, and ethics across viable paths. Use the Canvas Helpful Table as reference.' },
+      { target: 'tour-p4-part-e', title: 'Part E: Choose one pathway', body: 'Commit to one data-collection strategy for your methods section this semester.' },
+      { target: 'tour-p4-export', title: 'Export for Canvas', body: 'Copy full worksheet text (conceptual and operational definitions included) for the Phase 4 assignment.' }
+    ], 'spotlight-ring-p4', 'spotlight-popover-p4', 'spotlight-tour-p4', 'study-plan-drafts-p4-tour-done', 'start-p4-tour-btn');
+
+    const TOUR_STEPS = [
+      { target: 'tour-search-builder', title: 'Build search strings iteratively', body: 'Add synonyms for IV, DV, population, and context. Copy the Boolean preview into PsycINFO. Hit counts tell you whether to add terms (too many results) or broaden (too few).', narrow: 'Thousands of hits? Add population, context, or an index term.', widen: 'Zero hits? Drop the strictest term or add OR synonyms.', before: null },
+      { target: 'tour-search-log', title: 'Log what you tried', body: 'Record database, query, and what happened. Link rows to article numbers so you remember which search found each source.', before: null },
+      { target: 'tour-peer-review', title: 'Learn what counts as a source', body: 'Confirm peer-reviewed empirical research with Method and Results, not news or review-only articles. You open the PDF and decide for each card.', before: null },
+      { target: 'tour-jump-nav', title: 'Article cards (6 minimum for Canvas)', body: 'Each number is one source. Green means all required fields filled. Jump between cards to compare patterns and notice when to narrow or widen your topic.', before: null },
+      { target: 'tour-article-card', title: 'Article cards = reusable research notes', body: 'Summarize what/why, participants, method, results, strengths, weaknesses, and connection to your project, in your own words for reuse in the lit review.', narrow: 'Articles feel unrelated? Narrow to a shared population or construct.', widen: 'Every summary identical? Try an adjacent construct.', before: 'open-first' },
+      { target: 'tour-source-check', title: 'Look at the PDF, then check', body: 'Not graded, reminds you to verify database source, journal type, Method/Results, and saved PDF before you write paragraphs.', before: 'open-first' },
+      { target: 'tour-problem', title: 'Synthesize a problem statement', body: 'Combine patterns from cards into what we know, the gap, and what we want to know. This draft feeds your Lit Review Outline and elevator speech.', narrow: 'Gap covers everything? Name one IV, DV, and population.', widen: 'No gap after six articles? Return to search.', before: 'close-cards' },
+      { target: 'tour-rq', title: 'Draft a testable direction', body: 'Early RQ and hypothesis, revise after the lit review draft. Conceptual and operational definitions wait until Phase 4.', narrow: 'Three constructs in one RQ? Pick one relationship.', widen: 'No population in RQ? Add who from your cards.', before: 'close-cards' },
+      { target: 'tour-export', title: 'Export for Canvas', body: 'Copy or download PDF for Article Review. Attach each article PDF separately in Canvas.', before: 'close-cards' }
+    ];
+
+    let tourIndex = 0;
+
+    function tourEl (id) {
+      return document.querySelector(`[data-tour="${id}"]`);
+    }
+
+    async function layoutTourStep () {
+      const step = TOUR_STEPS[tourIndex];
+      if (step.before === 'open-first') openArticle(0);
+      if (step.before === 'close-cards') {
+        articleState.openIndex = -1;
+        renderArticleCards();
+      }
+      await new Promise((r) => setTimeout(r, step.before ? 320 : 80));
+
+      const el = tourEl(step.target);
+      const ring = document.getElementById('spotlight-ring');
+      const pop = document.getElementById('spotlight-popover');
+      if (!el) {
+        ring.hidden = true;
+        pop.innerHTML = `<p class="popover-step">${tourIndex + 1} of ${TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p><div class="popover-actions"><button type="button" class="btn-secondary" id="tour-skip">Skip</button><button type="button" class="btn-copy" id="tour-next">${tourIndex >= TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div>`;
+        pop.hidden = false;
+        pop.style.top = '80px'; pop.style.left = '50%'; pop.style.transform = 'translateX(-50%)';
+        bindTourButtons();
+        return;
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise((r) => setTimeout(r, 280));
+      const rect = el.getBoundingClientRect();
+      const pad = 8;
+      ring.style.top = (rect.top - pad) + 'px';
+      ring.style.left = (rect.left - pad) + 'px';
+      ring.style.width = (rect.width + pad * 2) + 'px';
+      ring.style.height = (rect.height + pad * 2) + 'px';
+      ring.hidden = false;
+
+      const adjustHtml = (step.narrow || step.widen) ? `<div class="adjust-grid" style="margin:0.5rem 0">${step.narrow ? `<div class="adjust-box narrow"><h4 class="adjust-label">Narrow when</h4><p>${step.narrow}</p></div>` : ''}${step.widen ? `<div class="adjust-box widen"><h4 class="adjust-label">Widen when</h4><p>${step.widen}</p></div>` : ''}</div>` : '';
+      pop.innerHTML = `<p class="popover-step">${tourIndex + 1} of ${TOUR_STEPS.length}</p><h3>${step.title}</h3><p class="popover-body">${step.body}</p>${adjustHtml}<div class="popover-actions"><button type="button" class="btn-secondary" id="tour-skip">Skip tour</button><div style="display:flex;gap:0.5rem"><button type="button" class="btn-secondary" id="tour-back"${tourIndex === 0 ? ' disabled' : ''}>Back</button><button type="button" class="btn-copy" id="tour-next">${tourIndex >= TOUR_STEPS.length - 1 ? 'Finish' : 'Next'}</button></div></div>`;
+      pop.hidden = false;
+      const popW = Math.min(380, window.innerWidth - 32);
+      let popTop = rect.bottom + 16;
+      if (popTop + 260 > window.innerHeight) popTop = Math.max(16, rect.top - 260);
+      pop.style.transform = 'none';
+      pop.style.top = popTop + 'px';
+      pop.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - popW - 16)) + 'px';
+      pop.style.width = popW + 'px';
+      bindTourButtons();
+    }
+
+    function bindTourButtons () {
+      document.getElementById('tour-skip')?.addEventListener('click', endTour);
+      document.getElementById('tour-back')?.addEventListener('click', () => { if (tourIndex > 0) { tourIndex--; layoutTourStep(); } });
+      document.getElementById('tour-next')?.addEventListener('click', () => {
+        if (tourIndex >= TOUR_STEPS.length - 1) endTour();
+        else { tourIndex++; layoutTourStep(); }
+      });
+    }
+
+    function startTour () {
+      tourIndex = 0;
+      document.getElementById('spotlight-tour').classList.add('active');
+      document.body.classList.add('tour-active');
+      layoutTourStep();
+    }
+
+    function endTour () {
+      document.getElementById('spotlight-tour').classList.remove('active');
+      document.body.classList.remove('tour-active');
+      document.getElementById('spotlight-ring').hidden = true;
+      document.getElementById('spotlight-popover').hidden = true;
+      try { localStorage.setItem('study-plan-drafts-tour-done', '1'); } catch (_) {}
+      const btn = document.getElementById('start-tour-btn');
+      if (btn) btn.textContent = 'Replay guided tour';
+    }
+
+    document.getElementById('start-tour-btn')?.addEventListener('click', startTour);
+    try {
+      if (localStorage.getItem('study-plan-drafts-tour-done') === '1') {
+        document.getElementById('start-tour-btn').textContent = 'Replay guided tour';
+      }
+    } catch (_) {}
+    window.addEventListener('keydown', (e) => {
+      if (!document.getElementById('spotlight-tour').classList.contains('active')) return;
+      if (e.key === 'Escape') endTour();
+    });
+  </script>
+</body>
+</html>

@@ -43,7 +43,10 @@ export function markQuestionAnswered(studentKey, moduleId, questionId, allIds, w
   }
   const prevIds = existing.answeredIds || []
   const already = prevIds.includes(questionId)
-  const answeredIds = [...new Set([...prevIds, questionId])]
+  // Only count a question as answered for progression/slip unlock after a correct response.
+  const answeredIds = wasCorrect
+    ? [...new Set([...prevIds, questionId])]
+    : prevIds
   const correctCount = existing.slipFrozen
     ? (existing.correct ?? 0)
     : already

@@ -7,7 +7,7 @@
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
 import { enrichResearchMethodsAssignment, allResearchMethodsConceptReviewAssignments } from './researchMethodsCanvasLinks.js'
-import { methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
+import { benchmarkPracticeAssignment, methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
 
@@ -114,14 +114,14 @@ export const assignmentHelpByModule = [
     moduleTitle: 'Benchmark 1',
     assignments: [
       {
-        id: 'benchmark-1',
+        ...benchmarkPracticeAssignment('benchmark-1'),
         name: 'Benchmark 1 (Test/Quiz)',
-        type: 'benchmark',
         tips: [
-          'Covers Chapters 1–3 (intro, research design, software/data).',
+          ...benchmarkPracticeAssignment('benchmark-1').tips,
           'Review levels of measurement, reliability, validity, and basic Jamovi/data concepts.'
         ],
-        getHelp: 'Review Module 1–3 topics and practice. If you\'re unsure on specific concepts, use the Topics and Software tabs for those modules before the benchmark.'
+        getHelp:
+          'Review Module 1–3 topics and practice. If you\'re unsure on specific concepts, use the Topics and Software tabs for those modules before the graded benchmark.'
       }
     ]
   },
@@ -183,14 +183,14 @@ export const assignmentHelpByModule = [
     moduleTitle: 'Benchmark 2',
     assignments: [
       {
-        id: 'benchmark-2',
+        ...benchmarkPracticeAssignment('benchmark-2'),
         name: 'Benchmark 2 (Test/Quiz)',
-        type: 'benchmark',
         tips: [
-          'Covers Chapters 4–6: descriptives, graphing, visualization, levels of measurement, Jamovi tables/graphs.',
+          ...benchmarkPracticeAssignment('benchmark-2').tips,
           'Use the Benchmark 2 Study Guide in the LMS: central tendency, frequency distributions, distribution shapes, variability, boxplots, levels of measurement, Jamovi applications.'
         ],
-        getHelp: 'Review Modules 4–5 topics and the study guide. Practice choosing the right graph for categorical vs continuous data.'
+        getHelp:
+          'Review Modules 4–5 topics and the study guide. Practice choosing the right graph for categorical vs continuous data before the graded benchmark.'
       }
     ]
   },
@@ -250,10 +250,12 @@ export const assignmentHelpByModule = [
     moduleTitle: 'Final Benchmark',
     assignments: [
       {
+        ...benchmarkPracticeAssignment('final-benchmark'),
         id: 'final-benchmark',
         name: 'Final Benchmark Assignment',
         type: 'final',
         tips: [
+          ...benchmarkPracticeAssignment('final-benchmark').tips,
           'Open note, open book, open resource. Use Final Benchmark Data.csv from Tools (Study_Mode: Solo/Pair/Group; Score).',
           'Follow "What to write": purpose and constructs, variables and scales, design and sampling, data screening, descriptives, visualizations, assumptions, preregistered hypotheses, run analysis in Jamovi, report results and plain-language conclusion, limitations.'
         ],
@@ -295,7 +297,7 @@ export function getAssignmentHelp (classId) {
 /** Intro copy for the assignment-help index page. */
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
-    return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Due dates and points are always in Canvas — not here.'
+    return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Capstone worksheets (article review, lit review outline, Phase 3 elevator speech, Phase 4 operational IV/DV) live in Study Plan — open it from the course home or the assignment detail page. Due dates and points are always in Canvas — not here.'
   }
   return 'Match your Canvas assignment below for Methods Market Concept Review and Software Practice links, plus tips for other weekly work. Due dates and points are always in Canvas — not here.'
 }

@@ -13,17 +13,12 @@
           </p>
           <div class="header-links">
             <template v-if="isResearchMethodsClass">
-              <a
-                :href="CANVAS_RM_GETTING_STARTED_URL"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="assignment-help-link"
-              >
-                Canvas: how to use Methods Market ↗
-              </a>
-              <span class="header-links-sep">·</span>
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
-                Canvas assignments → chapter help
+                Assignment Help
+              </router-link>
+              <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
+                Study Plan
               </router-link>
               <span class="header-links-sep">·</span>
             </template>
@@ -48,42 +43,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Research Methods: student onboarding -->
-      <section
-        v-if="isResearchMethodsClass"
-        id="getting-started"
-        class="rm-getting-started"
-        aria-labelledby="rm-getting-started-title"
-      >
-        <h2 id="rm-getting-started-title">How to use Methods Market in this course</h2>
-        <p class="rm-getting-started-lead">
-          <strong>Canvas</strong> has your capstone deadlines, groups, and graded work.
-          <strong>Methods Market</strong> is where you read chapters and practice concepts.
-        </p>
-        <ol class="rm-getting-started-steps">
-          <li>
-            <router-link to="/auth">Create an account</router-link> or sign in, then
-            <router-link to="/claim">link your student key</router-link> from your instructor (one time).
-          </li>
-          <li>
-            Check <strong>Canvas</strong> for which chapter to read this week
-            (<a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer">full walkthrough ↗</a>).
-          </li>
-          <li>
-            Pick a <strong>part</strong> tab, then a <strong>chapter</strong> → <strong>Topics</strong> to read → <strong>Concept Review</strong> to practice.
-          </li>
-          <li>
-            Stuck on a Canvas assignment?
-            <router-link :to="`/class/${classId}/assignment-help`">Open Assignment Help</router-link>.
-          </li>
-        </ol>
-        <div class="rm-getting-started-links">
-          <a :href="CANVAS_RM_GETTING_STARTED_URL" target="_blank" rel="noopener noreferrer" class="rm-quick-link">
-            Canvas setup guide ↗
-          </a>
-        </div>
-      </section>
 
       <!-- Module Navigation -->
       <div class="module-nav">
@@ -115,7 +74,35 @@
             :aria-labelledby="`part-tab-${activePartGroup.id}`"
           >
             <p v-if="activePartGroup.description" class="module-part-desc">{{ activePartGroup.description }}</p>
-            <div class="module-list">
+            <template v-if="activePartGroup.phases?.length">
+              <div
+                v-for="phase in activePartGroup.phases"
+                :key="phase.id"
+                class="nav-phase"
+              >
+                <h3 class="nav-phase-label">{{ phase.label }}</h3>
+                <div class="module-list">
+                  <button
+                    v-for="mod in phase.items"
+                    :key="mod.id"
+                    class="module-btn"
+                    :class="{
+                      active: selectedModuleId === mod.id,
+                      'study-plan-nav': mod.isStudyPlanSection,
+                      'assignment-help-nav': mod.isAssignmentHelpLink
+                    }"
+                    :style="{ '--module-color': mod.color }"
+                    @click="selectNavItem(mod)"
+                  >
+                    <span class="module-icon">{{ mod.icon }}</span>
+                    <span class="module-number" v-if="mod.number">{{ mod.number }}</span>
+                    <span class="module-title">{{ getNavItemLabel(mod) }}</span>
+                    <span v-if="mod.navBadge" class="module-nav-badge">{{ mod.navBadge }}</span>
+                  </button>
+                </div>
+              </div>
+            </template>
+            <div v-else class="module-list">
               <button
                 v-for="mod in activePartGroup.modules"
                 :key="mod.id"
@@ -137,7 +124,7 @@
             v-for="mod in contentModules"
             :key="mod.id"
             class="module-btn"
-            :class="{ active: selectedModuleId === mod.id }"
+            :class="{ active: selectedModuleId === mod.id, 'benchmark-module': mod.isBenchmark }"
             :style="{ '--module-color': mod.color }"
             @click="selectModule(mod.id)"
           >
@@ -184,7 +171,7 @@
         </div>
 
         <!-- Path data section: Ch. 12–13 + analyze tool by methodology path -->
-        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && moduleProgress.total > 0" class="module-progress">
+        <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && !isBenchmarkModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
             <span>Module progress</span>
             <span>{{ moduleProgress.completed }} / {{ moduleProgress.total }}</span>
@@ -199,8 +186,72 @@
           </div>
         </div>
 
+        <!-- Benchmark review (Statistics milestones between modules) -->
+        <div v-if="isBenchmarkModule" class="benchmark-module-panel">
+          <p class="benchmark-module-intro">
+            Complete Concept Review for Modules {{ selectedModule.coversModulesLabel }} first, then use the
+            formative practice test below before your graded Canvas benchmark.
+          </p>
+          <div v-if="benchmarkStudyGuide" class="benchmark-study-guide">
+            <a
+              :href="benchmarkStudyGuide.pdfPath"
+              class="btn-secondary benchmark-study-guide-btn"
+              download
+            >
+              Download {{ benchmarkStudyGuide.label }} (PDF)
+            </a>
+          </div>
+          <div v-if="isOfflinePrimary" class="benchmark-offline-bar print-hide">
+            <p v-if="benchmarkGuidance" class="benchmark-offline-note">
+              {{ benchmarkGuidance.offlineNote }}
+            </p>
+            <div class="benchmark-offline-actions">
+              <router-link
+                v-if="benchmarkPrintUrl"
+                :to="benchmarkPrintUrl"
+                class="btn-secondary"
+              >
+                Print practice packet
+              </router-link>
+              <router-link
+                v-if="benchmarkBatchUrl"
+                :to="benchmarkBatchUrl"
+                class="btn-primary"
+              >
+                Enter answers
+              </router-link>
+            </div>
+          </div>
+          <router-link
+            v-if="benchmarkPracticeUrl"
+            :to="benchmarkPracticeUrl"
+            class="practice-link-card benchmark-practice-card"
+          >
+            <div class="link-card-icon">
+              <img src="/content-review-icon.png" alt="Benchmark practice" class="link-card-icon-img" />
+            </div>
+            <div class="link-card-content">
+              <h3>Start Benchmark Practice Test</h3>
+              <p v-if="benchmarkGuidance" class="benchmark-card-highlight">
+                {{ benchmarkGuidance.retakeNote }}
+              </p>
+              <p v-if="benchmarkGuidance" class="benchmark-card-highlight benchmark-card-proctor">
+                {{ benchmarkGuidance.proctorNote }}
+              </p>
+              <p>
+                {{ benchmarkQuestionCount }} questions per attempt — weighted toward modules where you still need help.
+                You will get strengths, weaknesses, and review links when you finish.
+              </p>
+            </div>
+            <span class="card-arrow">-></span>
+          </router-link>
+          <router-link v-if="benchmarkHelpUrl" :to="benchmarkHelpUrl" class="benchmark-help-link">
+            Assignment Help (tips and what to review) →
+          </router-link>
+        </div>
+
         <!-- Content Tabs -->
-        <div v-if="!isDataAnalysisModule && showContentTabs" class="content-tabs">
+        <div v-if="!isDataAnalysisModule && !isBenchmarkModule && showContentTabs" class="content-tabs">
           <button
             v-for="tab in effectiveContentTabs"
             :key="tab.id"
@@ -217,7 +268,7 @@
         </div>
 
         <!-- Tab Content -->
-        <div v-if="!isDataAnalysisModule" class="tab-content">
+        <div v-if="!isDataAnalysisModule && !isBenchmarkModule" class="tab-content">
           <!-- Statistics & analysis by methodology path (Ch. 12, 13, analyze tool) -->
           <template v-if="isPathDataSectionModule">
             <div
@@ -596,10 +647,11 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
 import { useAuth } from '../composables/useAuth'
 import { useProfile } from '../composables/useProfile'
+import { useAccessMode } from '../composables/useAccessMode'
 import {
   getModulesByClassId,
   getContentModulesByClass,
@@ -608,6 +660,7 @@ import {
   classHasDataAnalysisTool
 } from '../data/modules'
 import { groupModulesByCanvasPart, METHOD_PATHS_LIST, getMethodPathById } from '../data/researchMethodsTextbook'
+import { groupResearchMethodsCourseNav, findPartForNavItemId } from '../data/researchMethodsCourseNav.js'
 import { isPsychMethodsCourse } from '../data/psychMethodsCourses'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
@@ -625,13 +678,15 @@ import CentralLimitLab from '../components/labs/CentralLimitLab.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
-import { CANVAS_RM_GETTING_STARTED_URL } from '../data/researchMethodsCanvasLinks.js'
+import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
+const router = useRouter()
 const { selectClass, fetchClasses, classes, loading: classesLoading } = useClasses()
 const { isAuthenticated, user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
 const { hasProfile, fetchProfile } = useProfile()
+const { isOfflinePrimary, ensureLoaded: ensureAccessLoaded } = useAccessMode()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
@@ -726,6 +781,7 @@ const activeMethodPaths = computed(() => {
 })
 
 const showContentTabs = computed(() => {
+  if (isBenchmarkModule.value) return false
   if (isDataAnalysisModule.value) return false
   if (isPathDataSectionModule.value && !showMethodPathTabs.value) return false
   return true
@@ -751,15 +807,61 @@ const classModules = computed(() => {
   return getModulesByClassId(slug)
 })
 
-// Filter modules to content modules only
+// Filter modules to content modules only (Statistics includes benchmark milestones in the picker)
 const contentModules = computed(() => {
   const slug = currentClass.value?.slug || classId.value
+  if (slug === 'statistics') {
+    return getModulesByClassId(slug)
+  }
   return getContentModulesByClass(slug)
+})
+
+const isBenchmarkModule = computed(() => !!selectedModule.value?.isBenchmark)
+
+const benchmarkPracticeUrl = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return null
+  return `/class/${classId.value}/assignment-help/${slug}/practice`
+})
+
+const benchmarkHelpUrl = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return null
+  return `/class/${classId.value}/assignment-help/${slug}`
+})
+
+const benchmarkQuestionCount = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  if (!slug) return 15
+  return getStatisticsBenchmarkLink(slug)?.questionCount ?? 15
+})
+
+const benchmarkGuidance = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  return slug ? getBenchmarkCardGuidance(slug) : null
+})
+
+const benchmarkStudyGuide = computed(() => {
+  const slug = selectedModule.value?.benchmarkSlug
+  return slug ? getBenchmarkStudyGuide(slug) : null
+})
+
+const benchmarkPrintUrl = computed(() => {
+  if (!benchmarkPracticeUrl.value) return null
+  return `${benchmarkPracticeUrl.value}?print=1`
+})
+
+const benchmarkBatchUrl = computed(() => {
+  if (!benchmarkPracticeUrl.value) return null
+  return `${benchmarkPracticeUrl.value}?batch=1`
 })
 
 const psychMethodsModuleGroups = computed(() => {
   if (!isPsychMethodsClass.value) return []
   const slug = currentClass.value?.slug || classId.value
+  if (slug === 'research-methods') {
+    return groupResearchMethodsCourseNav(contentModules.value)
+  }
   return groupModulesByCanvasPart(contentModules.value, slug)
 })
 
@@ -771,6 +873,10 @@ const activePartGroup = computed(() => {
 
 function partIdForModule(moduleId) {
   if (!moduleId) return null
+  if (isResearchMethodsClass.value) {
+    const fromNav = findPartForNavItemId(moduleId)
+    if (fromNav) return fromNav
+  }
   for (const part of psychMethodsModuleGroups.value) {
     if (part.modules.some((m) => m.id === moduleId)) return part.id
   }
@@ -792,7 +898,28 @@ function selectPart(partId) {
   const part = psychMethodsModuleGroups.value.find((p) => p.id === partId)
   if (!part?.modules?.length) return
   const moduleInPart = part.modules.some((m) => m.id === selectedModuleId.value)
-  if (!moduleInPart) selectModule(part.modules[0].id)
+  if (!moduleInPart) {
+    const first = part.modules[0]
+    if (first?.isStudyPlanSection || first?.isAssignmentHelpLink) return
+    selectModule(first.id)
+  }
+}
+
+function getNavItemLabel(mod) {
+  if (mod.isStudyPlanSection || mod.isAssignmentHelpLink) return mod.shortTitle || mod.title
+  return getModuleDisplayShortTitle(mod)
+}
+
+function selectNavItem(mod) {
+  if (mod.isStudyPlanSection) {
+    router.push(`/class/${classId.value}/study-plan/${mod.studyPlanSectionId}`)
+    return
+  }
+  if (mod.isAssignmentHelpLink) {
+    router.push(`/class/${classId.value}/assignment-help/${mod.assignmentHelpId}`)
+    return
+  }
+  selectModule(mod.id)
 }
 
 const selectedModule = computed(() => {
@@ -1284,6 +1411,7 @@ onMounted(async () => {
   refreshReadTopics()
   if (isAuthenticated.value) {
     await fetchProfile()
+    await ensureAccessLoaded()
   }
 })
 
@@ -1585,6 +1713,39 @@ watch(selectedModuleId, id => {
   line-height: 1.5;
 }
 
+.nav-phase {
+  margin-bottom: 1.25rem;
+}
+
+.nav-phase:last-child {
+  margin-bottom: 0;
+}
+
+.nav-phase-label {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.module-nav-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--module-color, var(--primary)) 18%, transparent);
+  color: var(--module-color, var(--primary));
+}
+
+.module-btn.study-plan-nav,
+.module-btn.assignment-help-nav {
+  border-style: dashed;
+}
+
 .module-canvas-part-label {
   color: var(--primary);
   font-weight: 600;
@@ -1617,6 +1778,109 @@ watch(selectedModuleId, id => {
 .module-btn.active {
   border-color: var(--module-color, var(--primary));
   background: color-mix(in srgb, var(--module-color, var(--primary)) 15%, var(--bg-card));
+}
+
+.module-btn.benchmark-module {
+  border-style: dashed;
+  font-weight: 600;
+}
+
+.module-btn.benchmark-module .module-title {
+  color: var(--module-color, #f59e0b);
+}
+
+.benchmark-module-panel {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: color-mix(in srgb, #f59e0b 8%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.75rem;
+}
+
+.benchmark-module-intro {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 42rem;
+}
+
+.benchmark-study-guide {
+  margin-bottom: 1rem;
+}
+
+.benchmark-study-guide-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.benchmark-offline-bar {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  max-width: 42rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.benchmark-offline-note {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.benchmark-offline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.benchmark-offline-actions .btn-primary,
+.benchmark-offline-actions .btn-secondary {
+  text-decoration: none;
+}
+
+.benchmark-proctor-note {
+  margin: 0 0 1rem 0;
+  padding: 0.75rem 1rem;
+  max-width: 42rem;
+  line-height: 1.55;
+  background: color-mix(in srgb, #f59e0b 10%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--border));
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+}
+
+.benchmark-card-highlight {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.65rem;
+  line-height: 1.45;
+  font-size: 0.875rem;
+  background: color-mix(in srgb, #f59e0b 10%, var(--bg-elevated));
+  border-left: 3px solid #f59e0b;
+  border-radius: 0.25rem;
+  color: var(--text-primary);
+}
+
+.benchmark-card-proctor {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
+  border-left-color: var(--primary);
+}
+
+.benchmark-practice-card {
+  margin-bottom: 1rem;
+}
+
+.benchmark-help-link {
+  display: inline-block;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.benchmark-help-link:hover {
+  text-decoration: underline;
 }
 
 .module-icon {
@@ -1690,53 +1954,6 @@ watch(selectedModuleId, id => {
 
 .lab-concept-review-card {
   margin-bottom: 1.25rem;
-}
-
-.rm-getting-started {
-  background: color-mix(in srgb, var(--primary) 8%, var(--bg-elevated));
-  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
-  border-radius: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.rm-getting-started h2 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.125rem;
-}
-
-.rm-getting-started-lead {
-  margin: 0 0 0.75rem 0;
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-}
-
-.rm-getting-started-steps {
-  margin: 0 0 1rem 0;
-  padding-left: 1.25rem;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-}
-
-.rm-getting-started-steps li + li {
-  margin-top: 0.35rem;
-}
-
-.rm-getting-started-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.rm-quick-link {
-  font-size: 0.875rem;
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.rm-quick-link:hover {
-  text-decoration: underline;
 }
 
 /* Learning Objectives */
