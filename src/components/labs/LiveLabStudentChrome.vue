@@ -235,6 +235,72 @@ async function castVote(settingKey, value) {
   }
 }
 
+const MARBLE_COLORS = ['red', 'blue', 'green']
+const DEFAULT_MARBLE_URN = { red: 40, blue: 30, green: 30 }
+
+function normalizeMarbleUrn(raw) {
+  const src = raw && typeof raw === 'object' ? raw : DEFAULT_MARBLE_URN
+  const out = {}
+  for (const color of MARBLE_COLORS) {
+    out[color] = Math.max(0, Math.floor(Number(src[color]) || 0))
+  }
+  return out
+}
+
+function drawMarbleColors(urn, n, withReplacement) {
+  const remaining = normalizeMarbleUrn(urn)
+  const colors = []
+  const take = Math.max(0, Math.floor(Number(n) || 0))
+
+  for (let i = 0; i < take; i += 1) {
+    const bag = []
+    for (const color of MARBLE_COLORS) {
+      const count = remaining[color] || 0
+      for (let j = 0; j < count; j += 1) bag.push(color)
+    }
+    if (!bag.length) break
+    const idx = Math.floor(Math.random() * bag.length)
+    const color = bag[idx]
+    colors.push(color)
+    if (!withReplacement) {
+      remaining[color] = Math.max(0, (remaining[color] || 0) - 1)
+    }
+  }
+  return colors
+}
+
+function drawPopulationValue(population) {
+  if (population === 'uniform') return Math.random() * 100
+  if (population === 'bimodal') {
+    return Math.random() < 0.5 ? 20 + Math.random() * 15 : 75 + Math.random() * 15
+  }
+  return Math.pow(Math.random(), 2) * 100
+}
+
+function sampleMeanFromPopulation(population, n) {
+  const size = Math.max(1, Math.floor(Number(n) || 1))
+  let sum = 0
+  for (let i = 0; i < size; i += 1) sum += drawPopulationValue(population)
+  return Number((sum / size).toFixed(2))
+}
+
+function stubCentralTendencyScore(settings) {
+  const shape = settings.shape || 'right-skew'
+  const includeOutliers = settings.include_outliers !== false
+  let score
+  if (shape === 'symmetric') {
+    score = 40 + Math.random() * 60
+  } else if (shape === 'left-skew') {
+    score = 50 + Math.pow(Math.random(), 0.4) * 50
+  } else {
+    score = 40 + Math.pow(Math.random(), 2) * 50
+  }
+  if (includeOutliers && Math.random() < 0.08) {
+    score = Math.random() < 0.5 ? 10 + Math.random() * 15 : 92 + Math.random() * 8
+  }
+  return Math.round(score)
+}
+
 function stubContributePayload() {
   const settings = appliedSettings.value || {}
   switch (labType.value) {
@@ -246,18 +312,19 @@ function stubContributePayload() {
       return { flips }
     }
     case 'marbles': {
+      const urn = settings.urn || DEFAULT_MARBLE_URN
       const n = Number(settings.n) || 5
-      const colors = ['red', 'blue', 'green']
-      return {
-        colors: Array.from({ length: n }, () => colors[Math.floor(Math.random() * colors.length)]),
-      }
+      const withReplacement = settings.with_replacement === true
+      return { colors: drawMarbleColors(urn, n, withReplacement) }
     }
     case 'central-tendency':
-      return { score: Math.round(40 + Math.random() * 60) }
+      return { score: stubCentralTendencyScore(settings) }
     case 'clt': {
+      const population = settings.population || 'skew'
+      const n = Number(settings.n) || 5
       const count = Number(settings.samples_per_contrib) || 1
       return {
-        means: Array.from({ length: count }, () => Number((Math.random() * 100).toFixed(2))),
+        means: Array.from({ length: count }, () => sampleMeanFromPopulation(population, n)),
       }
     }
     default:
