@@ -46,3 +46,6 @@ Thumbs.db
 
 # Local Postgres logical backups (pre-deploy)
 backups/
+
+backend/venv/
+

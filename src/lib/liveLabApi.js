@@ -111,13 +111,10 @@ export const liveLabApi = {
     })
   },
 
-  setLocks(code, { voteLocked, contributeLocked } = {}) {
+  setLocks(code, { vote_locked, contribute_locked } = {}) {
     return liveLabFetch(`/api/live-labs/${encodeCode(code)}/set-locks`, {
       method: 'POST',
-      body: {
-        vote_locked: voteLocked,
-        contribute_locked: contributeLocked,
-      },
+      body: { vote_locked, contribute_locked },
     })
   },
 
