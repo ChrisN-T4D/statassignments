@@ -307,6 +307,77 @@ class BktPrototype(Base, TimestampMixin):
     last_updated: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
+class LiveLabSession(Base, TimestampMixin):
+    __tablename__ = "live_lab_sessions"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    code: Mapped[str] = mapped_column(String(16), unique=True, nullable=False, index=True)
+    lab_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    host_user_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    class_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), default="open", nullable=False, index=True)
+    phase: Mapped[str] = mapped_column(String(16), default="lobby", nullable=False)
+    applied_settings: Mapped[dict | list | None] = mapped_column(JSONB)
+    vote_locked: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    contribute_locked: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    current_round_id: Mapped[str] = mapped_column(String(ID_LEN), nullable=False)
+    ended_at: Mapped[datetime | None] = mapped_column(DateTime)
+    last_activity_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+
+class LiveLabParticipant(Base):
+    __tablename__ = "live_lab_participants"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    session_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("live_lab_sessions.id", ondelete="CASCADE"), nullable=False
+    )
+    display_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    guest_token: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    user_id: Mapped[str | None] = mapped_column(
+        String(ID_LEN), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    last_seen: Mapped[datetime | None] = mapped_column(DateTime)
+
+
+class LiveLabVote(Base):
+    __tablename__ = "live_lab_votes"
+    __table_args__ = (
+        UniqueConstraint(
+            "session_id",
+            "participant_id",
+            "setting_key",
+            name="uq_live_lab_votes_session_participant_key",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    session_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("live_lab_sessions.id", ondelete="CASCADE"), nullable=False
+    )
+    participant_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("live_lab_participants.id", ondelete="CASCADE"), nullable=False
+    )
+    setting_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    value: Mapped[Any] = mapped_column(JSONB, nullable=False)
+
+
+class LiveLabContribution(Base, TimestampMixin):
+    __tablename__ = "live_lab_contributions"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    session_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("live_lab_sessions.id", ondelete="CASCADE"), nullable=False
+    )
+    participant_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("live_lab_participants.id", ondelete="CASCADE"), nullable=False
+    )
+    round_id: Mapped[str] = mapped_column(String(ID_LEN), nullable=False)
+    payload: Mapped[Any] = mapped_column(JSONB, nullable=False)
+
+
 COLLECTION_MODELS: dict[str, type[Base]] = {
     "users": User,
     "classes": Class,
