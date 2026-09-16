@@ -299,6 +299,34 @@
             <ExperimentalSamplingSimulation :embed-tab="labMiniLabEmbedTab" />
           </div>
 
+          <div
+            v-else-if="selectedModuleId === STATS_M4 && activeContentTab === 'lab-central-tendency'"
+            class="tab-panel"
+          >
+            <CentralTendencyLab mode="host" class-id="statistics" />
+          </div>
+
+          <div
+            v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-coin'"
+            class="tab-panel"
+          >
+            <CoinFlipLab mode="host" class-id="statistics" />
+          </div>
+
+          <div
+            v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-marbles'"
+            class="tab-panel"
+          >
+            <MarblesLab mode="host" class-id="statistics" />
+          </div>
+
+          <div
+            v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-clt'"
+            class="tab-panel"
+          >
+            <CentralLimitLab mode="host" class-id="statistics" />
+          </div>
+
           <!-- Topics Tab -->
           <div v-else-if="activeContentTab === 'topics'" class="tab-panel">
             <div v-if="moduleItems.length === 0" class="empty-state">
@@ -590,6 +618,10 @@ import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
 import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
+import CentralTendencyLab from '../components/labs/CentralTendencyLab.vue'
+import CoinFlipLab from '../components/labs/CoinFlipLab.vue'
+import MarblesLab from '../components/labs/MarblesLab.vue'
+import CentralLimitLab from '../components/labs/CentralLimitLab.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
@@ -628,6 +660,18 @@ const showModule8Selector = ref(false)
 const RM_MODULE_LAB_ID = 'rm-module-lab'
 const RM_MODULE_DATA_BY_PATH_ID = 'rm-module-data-by-path'
 const RM_LEGACY_DATA_MODULE_IDS = ['rm-module-12', 'rm-module-13', 'rm-module-analyze-data']
+const STATS_M4 = 'stats-module-4'
+const STATS_M6 = 'stats-module-6'
+const statsM4LabTabs = [{ id: 'lab-central-tendency', label: 'Central tendency', iconSrc: '/topic-icon.png' }]
+const statsM6LabTabs = [
+  { id: 'lab-coin', label: 'Coin flips', iconSrc: '/topic-icon.png' },
+  { id: 'lab-marbles', label: 'Marbles', iconSrc: '/topic-icon.png' },
+  { id: 'lab-clt', label: 'CLT', iconSrc: '/topic-icon.png' },
+]
+const STATS_LAB_TAB_IDS = new Set([
+  ...statsM4LabTabs.map((t) => t.id),
+  ...statsM6LabTabs.map((t) => t.id),
+])
 
 const methodPathList = METHOD_PATHS_LIST
 
@@ -637,7 +681,12 @@ const standardContentTabs = [
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
 
-const VALID_CONTENT_TAB_IDS = new Set(['topics', 'concepts', 'software'])
+const VALID_CONTENT_TAB_IDS = new Set([
+  'topics',
+  'concepts',
+  'software',
+  ...STATS_LAB_TAB_IDS,
+])
 
 const labModuleContentTabs = [
   { id: 'lab-sampling', label: 'Sampling', iconSrc: '/topic-icon.png' },
@@ -654,6 +703,13 @@ const effectiveContentTabs = computed(() => {
   if (selectedModuleId.value === RM_MODULE_LAB_ID) return labModuleContentTabs
   if (selectedModuleId.value === RM_MODULE_DATA_BY_PATH_ID && showMethodPathTabs.value) {
     return methodPathContentTabs
+  }
+  if (selectedModuleId.value === STATS_M4 || selectedModuleId.value === STATS_M6) {
+    const labTabs = selectedModuleId.value === STATS_M4 ? statsM4LabTabs : statsM6LabTabs
+    const topics = standardContentTabs.find((t) => t.id === 'topics')
+    const concepts = standardContentTabs.find((t) => t.id === 'concepts')
+    const software = standardContentTabs.find((t) => t.id === 'software')
+    return [topics, concepts, ...labTabs, software].filter(Boolean)
   }
   return standardContentTabs
 })
@@ -1284,6 +1340,7 @@ watch(selectedModuleId, id => {
   } else if (
     activeContentTab.value === 'lab-sampling' ||
     activeContentTab.value === 'lab-assignment' ||
+    STATS_LAB_TAB_IDS.has(activeContentTab.value) ||
     methodPathList.some((p) => p.id === activeContentTab.value)
   ) {
     activeContentTab.value = 'topics'
