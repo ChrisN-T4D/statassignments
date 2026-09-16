@@ -22,12 +22,14 @@ import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
+import LiveLabJoin from '../views/LiveLabJoin.vue'
 import { classHasDataAnalysisTool } from '../data/modules'
 import { canStudentAccessClassSlug } from '../composables/useClasses'
 
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
+  { path: '/live/:code', component: LiveLabJoin, props: true },
   { path: '/topic/:id', component: TopicView, props: true, meta: { requiresAuth: true } },
   { path: '/auth', component: Auth },
   { path: '/practice', component: Practice, meta: { requiresAuth: true } },
@@ -159,7 +161,7 @@ const router = createRouter({
 const { user: authUser } = useAuth()
 
 router.beforeEach(async (to, from, next) => {
-  // Legacy Canvas links: /practice?module=module-N → class statistics concept review
+  // Legacy Canvas links: /practice?module=module-N â†’ class statistics concept review
   if (to.path === '/practice' && to.query.module && !to.params.classId) {
     const raw = String(to.query.module)
     const statsModule = raw.startsWith('stats-module-')
@@ -229,3 +231,4 @@ router.beforeEach(async (to, from, next) => {
 })
 
 export default router
+
