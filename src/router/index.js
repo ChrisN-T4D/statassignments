@@ -184,6 +184,20 @@ const { user: authUser } = useAuth()
 
 router.beforeEach(async (to, from, next) => {
   if (
+    to.name === 'class-home' &&
+    to.query.module === 'rm-module-lab' &&
+    to.query.tab &&
+    to.query.tab !== 'lab-sampling' &&
+    to.query.tab !== 'lab-assignment'
+  ) {
+    next({
+      path: to.path,
+      query: { ...to.query, tab: 'lab-sampling' },
+    })
+    return
+  }
+
+  if (
     to.name === 'class-practice' &&
     to.params.classId === 'research-methods' &&
     to.query.module === 'rm-module-lab' &&

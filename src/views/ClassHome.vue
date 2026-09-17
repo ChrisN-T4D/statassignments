@@ -258,7 +258,7 @@
             class="content-tab"
             :class="{ active: activeContentTab === tab.id, disabled: tab.id === 'software' && !softwareTabAvailable }"
             :disabled="tab.id === 'software' && !softwareTabAvailable"
-            @click="activeContentTab = tab.id"
+            @click="onContentTabClick(tab.id)"
           >
             <span class="tab-icon" v-if="!tab.iconSrc">{{ tab.icon }}</span>
             <img v-else :src="tab.iconSrc" :alt="tab.label" class="tab-icon-img" />
@@ -328,26 +328,31 @@
           </template>
 
           <template v-else>
-          <!-- Lab module: Sampling / Assignment as main tabs -->
+          <!-- Lab module: sampling sim (default) or assignment panel -->
           <div
-            v-if="selectedModuleId === RM_MODULE_LAB_ID && (activeContentTab === 'lab-sampling' || activeContentTab === 'lab-assignment')"
-            class="tab-panel"
+            v-if="selectedModuleId === RM_MODULE_LAB_ID && activeContentTab === 'lab-assignment'"
+            class="tab-panel rm-lab-panel"
           >
-            <router-link
-              v-if="conceptReviewQuestionCount > 0"
-              :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}`"
-              class="practice-link-card lab-concept-review-card"
-            >
-              <div class="link-card-icon">
-                <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
-              </div>
-              <div class="link-card-content">
-                <h3>Lab Concept Review</h3>
-                <p>Quiz on random assignment, sampling methods, and validity — after the simulations below.</p>
-              </div>
-              <span class="card-arrow">-></span>
-            </router-link>
-            <ExperimentalSamplingSimulation :embed-tab="labMiniLabEmbedTab" />
+            <ExperimentalSamplingSimulation embed-tab="assignment" />
+            <p v-if="conceptReviewQuestionCount > 0" class="lab-review-footer">
+              Finished the simulations?
+              <router-link :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`">
+                Take the Lab Concept Review quiz →
+              </router-link>
+            </p>
+          </div>
+          <div
+            v-else-if="selectedModuleId === RM_MODULE_LAB_ID"
+            class="tab-panel rm-lab-panel"
+          >
+            <SamplingCompareLab intro="rm-embed" />
+            <p v-if="conceptReviewQuestionCount > 0" class="lab-review-footer">
+              After you try the sampling plans above,
+              <router-link :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`">
+                take the Lab Concept Review quiz →
+              </router-link>
+              (Assignment simulation: use the <button type="button" class="inline-tab-link" @click="onContentTabClick('lab-assignment')">Assignment</button> tab.)
+            </p>
           </div>
 
           <div
@@ -391,7 +396,7 @@
               v-if="selectedModuleId === STATS_M6"
               type="button"
               class="practice-link-card sampling-lab-promo"
-              @click="activeContentTab = 'lab-sampling-methods'"
+              @click="onContentTabClick('lab-sampling-methods')"
             >
               <div class="link-card-icon">
                 <img src="/topic-icon.png" alt="Sampling lab" class="link-card-icon-img" />
@@ -461,7 +466,7 @@
               v-if="selectedModuleId === STATS_M6"
               type="button"
               class="practice-link-card sampling-lab-promo"
-              @click="activeContentTab = 'lab-sampling-methods'"
+              @click="onContentTabClick('lab-sampling-methods')"
             >
               <div class="link-card-icon">
                 <img src="/topic-icon.png" alt="Sampling lab" class="link-card-icon-img" />
@@ -473,27 +478,7 @@
               <span class="card-arrow">-></span>
             </button>
             <div
-              v-if="selectedModuleId === RM_MODULE_LAB_ID"
-              class="tab-panel"
-            >
-              <router-link
-                v-if="conceptReviewQuestionCount > 0"
-                :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`"
-                class="practice-link-card lab-concept-review-card"
-              >
-                <div class="link-card-icon">
-                  <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
-                </div>
-                <div class="link-card-content">
-                  <h3>Lab Concept Review</h3>
-                  <p>Quiz on random assignment, sampling methods, and validity — after the simulations below.</p>
-                </div>
-                <span class="card-arrow">-></span>
-              </router-link>
-              <ExperimentalSamplingSimulation embed-tab="sampling" />
-            </div>
-            <div
-              v-else-if="conceptReviewQuestionCount === 0"
+              v-if="conceptReviewQuestionCount === 0 && selectedModuleId !== RM_MODULE_LAB_ID"
               class="empty-state"
             >
               <p>No concept review questions available for this module yet.</p>
@@ -848,10 +833,6 @@ const showContentTabs = computed(() => {
   if (isPathDataSectionModule.value && !showMethodPathTabs.value) return false
   return true
 })
-
-const labMiniLabEmbedTab = computed(() =>
-  activeContentTab.value === 'lab-assignment' ? 'assignment' : 'sampling'
-)
 
 const currentClass = computed(() => {
   const param = classId.value
@@ -1302,6 +1283,26 @@ function getTabCount(tabId) {
   }
 }
 
+function syncRouteQueryFromSelection() {
+  if (!classId.value || !selectedModuleId.value) return
+  let tab = activeContentTab.value
+  if (selectedModuleId.value === RM_MODULE_LAB_ID && !RM_LAB_TAB_IDS.has(tab)) {
+    tab = 'lab-sampling'
+  }
+  const nextQuery = {
+    ...route.query,
+    module: selectedModuleId.value,
+    tab,
+  }
+  if (route.query.module === nextQuery.module && route.query.tab === nextQuery.tab) return
+  router.replace({ path: route.path, query: nextQuery })
+}
+
+function onContentTabClick(tabId) {
+  activeContentTab.value = tabId
+  syncRouteQueryFromSelection()
+}
+
 function selectModule(moduleId) {
   if (RM_LEGACY_DATA_MODULE_IDS.includes(moduleId)) {
     moduleId = RM_MODULE_DATA_BY_PATH_ID
@@ -1324,6 +1325,7 @@ function selectModule(moduleId) {
     showModule8Selector.value = true
   }
   syncActivePartFromModule()
+  syncRouteQueryFromSelection()
 }
 
 function openModule8Selector() {
@@ -1519,6 +1521,10 @@ watch(() => route.query.module, () => {
 
 watch(() => route.query.tab, () => {
   syncContentTabFromQuery()
+})
+
+watch(activeContentTab, () => {
+  syncRouteQueryFromSelection()
 })
 
 watch(() => route.fullPath, () => {
@@ -2031,6 +2037,34 @@ watch(selectedModuleId, id => {
 
 .lab-concept-review-card {
   margin-bottom: 1.25rem;
+}
+
+.rm-lab-panel {
+  min-height: 12rem;
+}
+
+.lab-review-footer {
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border, #e2e8f0);
+  font-size: 0.9rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+
+.lab-review-footer a {
+  font-weight: 600;
+}
+
+.inline-tab-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--primary, #2563eb);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Learning Objectives */
