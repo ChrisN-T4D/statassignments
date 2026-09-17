@@ -11,14 +11,27 @@
       <span>This draw: <strong>x̄ = {{ plan.lastXbar.toFixed(2) }}</strong></span>
       <span :class="deltaClass">Δ from μ: {{ deltaFromMu >= 0 ? '+' : '' }}{{ deltaFromMu.toFixed(2) }}</span>
     </div>
-    <p v-else class="waiting">No sample yet — click “Take another sample”.</p>
-    <p v-if="animating" class="animating">Selecting…</p>
+    <p v-else class="waiting">Click “Take another sample” to run this plan.</p>
+    <SamplingSelectionViz
+      v-if="showViz"
+      :cells="gridCells"
+      :dorm-size="dormSize"
+      :highlight-set="highlightIndices"
+      :skip-set="skipIndices"
+      :pulse-index="pulseIndex"
+      :animating="animating"
+      :method="plan.method"
+      :walk-steps="walkSteps"
+      :rank-map="rankMap"
+      :truncated="gridTruncated"
+    />
     <p class="draw-count">{{ plan.drawCount }} draw{{ plan.drawCount === 1 ? '' : 's' }} so far</p>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import SamplingSelectionViz from './SamplingSelectionViz.vue'
 
 const props = defineProps({
   label: { type: String, required: true },
@@ -28,6 +41,22 @@ const props = defineProps({
   highlightIndices: { type: Set, default: () => new Set() },
   skipIndices: { type: Set, default: () => new Set() },
   animating: { type: Boolean, default: false },
+  pulseIndex: { type: Number, default: null },
+  walkSteps: { type: Array, default: () => [] },
+  gridCells: { type: Array, default: () => [] },
+  gridTruncated: { type: Boolean, default: false },
+  dormSize: { type: Number, default: 0 },
+})
+
+const showViz = computed(() => props.gridCells.length > 0 || props.animating)
+
+const rankMap = computed(() => {
+  if (props.plan.method !== 'purposive') return new Map()
+  const cells = props.gridCells.filter((c) => props.highlightIndices.has(c.rosterIndex))
+  const sorted = [...cells].sort((a, b) => b.score - a.score || a.rosterIndex - b.rosterIndex)
+  const m = new Map()
+  sorted.forEach((c, j) => m.set(c.rosterIndex, j + 1))
+  return m
 })
 
 const deltaFromMu = computed(() =>
@@ -86,13 +115,9 @@ const deltaClass = computed(() => {
 .delta-warn { color: #ca8a04; }
 .delta-bad { color: #dc2626; }
 .waiting,
-.animating,
 .draw-count {
   font-size: 0.85rem;
   margin: 0.25rem 0 0;
   color: var(--text-muted, #64748b);
-}
-.animating {
-  font-style: italic;
 }
 </style>

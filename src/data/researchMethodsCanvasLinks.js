@@ -131,7 +131,7 @@ export const RESEARCH_METHODS_CHAPTER_PRACTICE_LINKS = [
     shortTitle: 'Random assignment & sampling',
     pressbooksUrl: null,
     conceptReview: fullUrl(conceptReviewPath('rm-module-lab')),
-    classHomeConcepts: fullUrl(classHomeTabPath('rm-module-lab', 'concepts')),
+    classHomeConcepts: fullUrl(classHomeTabPath('rm-module-lab', 'lab-sampling')),
     classHomeTopics: fullUrl(classHomeTabPath('rm-module-lab', 'lab-sampling'))
   }
 ]

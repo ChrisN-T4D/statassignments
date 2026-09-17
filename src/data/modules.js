@@ -605,7 +605,7 @@ export const researchMethodsModulesBase = [
     title: 'Lab: Random assignment & sampling',
     shortTitle: 'Lab (Simulation)',
     description:
-      'Hands-on mini-lab (no textbook chapter): random vs non-random assignment to conditions, and SRS vs stratified vs cluster vs convenience sampling. Open Concept Review to run the simulations.',
+      'Hands-on mini-lab (no textbook chapter): random vs non-random assignment to conditions, and SRS vs stratified vs cluster vs convenience sampling. Use the Sampling and Assignment tabs to run the lab.',
     icon: 'LB',
     color: '#0ea5e9',
     topics: ['rm-lab-sampling']

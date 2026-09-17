@@ -124,6 +124,11 @@
           :highlight-indices="highlightA"
           :skip-indices="skipA"
           :animating="animatingA"
+          :pulse-index="pulseA"
+          :walk-steps="walkStepsA"
+          :grid-cells="gridCellsA"
+          :grid-truncated="gridTruncatedA"
+          :dorm-size="dormSize"
         />
         <PlanDrawPanel
           v-if="planB.method !== planA.method || planA.drawCount > 0 || planB.drawCount > 0"
@@ -134,6 +139,11 @@
           :highlight-indices="highlightB"
           :skip-indices="skipB"
           :animating="animatingB"
+          :pulse-index="pulseB"
+          :walk-steps="walkStepsB"
+          :grid-cells="gridCellsB"
+          :grid-truncated="gridTruncatedB"
+          :dorm-size="dormSize"
         />
       </div>
     </section>
@@ -238,8 +248,8 @@ const introText = computed(() => INTRO[props.intro] || INTRO.stats)
 const randomMethods = ['srs', 'strat', 'clust', 'sys', 'stage']
 const nonRandomMethods = ['conv', 'quota', 'purposive']
 
-const SLOW_MS = 50
-const FAST_MS = 10
+const SLOW_MS = 85
+const FAST_MS = 12
 
 const popN = ref(2000)
 const sampleN = ref(40)
@@ -291,6 +301,15 @@ const animatingA = ref(false)
 const animatingB = ref(false)
 const animating = computed(() => animatingA.value || animatingB.value)
 
+const pulseA = ref(null)
+const pulseB = ref(null)
+const walkStepsA = ref([])
+const walkStepsB = ref([])
+const gridCellsA = ref([])
+const gridCellsB = ref([])
+const gridTruncatedA = ref(false)
+const gridTruncatedB = ref(false)
+
 const statsA = computed(() => meanStatsForDraws(planA.value.means, popMean.value))
 const statsB = computed(() => meanStatsForDraws(planB.value.means, popMean.value))
 const totalDraws = computed(() => planA.value.drawCount + planB.value.drawCount)
@@ -317,6 +336,33 @@ function resetPlans() {
   highlightB.value = new Set()
   skipA.value = new Set()
   skipB.value = new Set()
+  pulseA.value = null
+  pulseB.value = null
+  walkStepsA.value = []
+  walkStepsB.value = []
+}
+
+function rebuildPlanGrid(slot) {
+  const isA = slot === 'a'
+  const preview = buildSamplingPopGridForPreview(
+    people.value,
+    isA ? highlightA.value : highlightB.value,
+    new Set(),
+    isA ? skipA.value : skipB.value,
+    new Set()
+  )
+  if (isA) {
+    gridCellsA.value = preview.cells
+    gridTruncatedA.value = preview.truncated
+  } else {
+    gridCellsB.value = preview.cells
+    gridTruncatedB.value = preview.truncated
+  }
+}
+
+function rebuildAllPlanGrids() {
+  rebuildPlanGrid('a')
+  rebuildPlanGrid('b')
 }
 
 function rebuildHistograms() {
@@ -363,6 +409,7 @@ function buildPopulation() {
   resetPlans()
   rebuildHistograms()
   rebuildPopGrid()
+  rebuildAllPlanGrids()
 }
 
 function sleep(ms) {
@@ -374,34 +421,48 @@ async function animateDraw(slot, drawResult, slow) {
   const highlightRef = isA ? highlightA : highlightB
   const skipRef = isA ? skipA : skipB
   const animRef = isA ? animatingA : animatingB
+  const pulseRef = isA ? pulseA : pulseB
+  const walkRef = isA ? walkStepsA : walkStepsB
+  const method = isA ? planA.value.method : planB.value.method
 
   highlightRef.value = new Set()
-  skipRef.value = new Set(drawResult.skippedIndices || [])
+  skipRef.value = new Set()
+  pulseRef.value = null
+  walkRef.value = []
   animRef.value = true
+  rebuildPlanGrid(slot)
 
   const delay = slow && !prefersReducedMotion.value ? SLOW_MS : FAST_MS
 
   for (const step of drawResult.steps || []) {
     if (step.type === 'block') {
       for (const idx of step.rosterIndices) {
-        if (step.action === 'stage-pool') {
-          highlightRef.value = new Set([...highlightRef.value, idx])
-        } else {
-          highlightRef.value = new Set([...highlightRef.value, idx])
+        pulseRef.value = idx
+        highlightRef.value = new Set([...highlightRef.value, idx])
+        rebuildPlanGrid(slot)
+        if (!prefersReducedMotion.value) {
+          await sleep(slow ? delay * 2 : FAST_MS)
         }
       }
-      if (slow && !prefersReducedMotion.value) await sleep(delay * 4)
-      else await sleep(FAST_MS)
       continue
     }
+    pulseRef.value = step.rosterIndex
     if (step.action === 'skip') {
       skipRef.value = new Set([...skipRef.value, step.rosterIndex])
+      if (method === 'quota' || method === 'conv') {
+        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'skip' }]
+      }
     } else {
       highlightRef.value = new Set([...highlightRef.value, step.rosterIndex])
+      if (method === 'quota' || method === 'conv') {
+        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
+      }
     }
+    rebuildPlanGrid(slot)
     if (!prefersReducedMotion.value) await sleep(delay)
   }
 
+  pulseRef.value = null
   animRef.value = false
   rebuildPopGrid()
 }
@@ -438,6 +499,7 @@ async function drawForPlan(slot) {
     highlightB.value = new Set(drawResult.rosterOrder)
     skipB.value = new Set(drawResult.skippedIndices || [])
   }
+  rebuildPlanGrid(slot)
   rebuildHistograms()
 }
 
@@ -467,6 +529,7 @@ async function runBatchFast() {
   }
   rebuildHistograms()
   rebuildPopGrid()
+  rebuildAllPlanGrids()
 }
 
 watch([() => planA.value.method, () => planB.value.method], () => {

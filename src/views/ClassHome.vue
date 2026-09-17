@@ -745,11 +745,14 @@ const standardContentTabs = [
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
 
+const RM_LAB_TAB_IDS = new Set(['lab-sampling', 'lab-assignment'])
+
 const VALID_CONTENT_TAB_IDS = new Set([
   'topics',
   'concepts',
   'software',
   ...STATS_LAB_TAB_IDS,
+  ...RM_LAB_TAB_IDS,
 ])
 
 const labModuleContentTabs = [
@@ -1306,7 +1309,19 @@ function syncSelectedModuleFromQuery() {
 
 function syncContentTabFromQuery() {
   const tab = normalizeRouteValue(route.query.tab)
-  if (!tab || !VALID_CONTENT_TAB_IDS.has(tab)) return
+  if (!tab) return
+
+  if (selectedModuleId.value === RM_MODULE_LAB_ID) {
+    if (RM_LAB_TAB_IDS.has(tab)) {
+      activeContentTab.value = tab
+    } else {
+      // Legacy Canvas links use tab=concepts — open the sampling simulation.
+      activeContentTab.value = 'lab-sampling'
+    }
+    return
+  }
+
+  if (!VALID_CONTENT_TAB_IDS.has(tab)) return
   if (tab === 'software' && !hasSoftwareLessons.value) return
   activeContentTab.value = tab
 }
