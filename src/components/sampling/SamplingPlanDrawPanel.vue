@@ -23,10 +23,8 @@
       :animating="animating"
       :method="plan.method"
       :walk-steps="walkSteps"
-      :rank-map="rankMap"
       :truncated="gridTruncated"
-      :grid-layout="gridLayout"
-      :grid-pos-cols="gridPosCols"
+      :heatmap-bins="heatmapBins"
       :sys-interval="sysInterval"
       :roster-size="rosterSize"
     />
@@ -51,24 +49,15 @@ const props = defineProps({
   walkSteps: { type: Array, default: () => [] },
   gridCells: { type: Array, default: () => [] },
   gridTruncated: { type: Boolean, default: false },
-  gridLayout: { type: String, default: 'list' },
-  gridPosCols: { type: Number, default: 80 },
+  heatmapBins: { type: Array, default: () => [] },
   sysInterval: { type: Number, default: null },
   rosterSize: { type: Number, default: 0 },
   dormSize: { type: Number, default: 0 },
 })
 
-const showViz = computed(() => props.gridCells.length > 0 || props.animating)
-
-const rankMap = computed(() => {
-  if (props.plan.method !== 'purposive') return new Map()
-  const hi = new Set(props.highlightIndices)
-  const cells = props.gridCells.filter((c) => hi.has(c.rosterIndex))
-  const sorted = [...cells].sort((a, b) => b.score - a.score || a.rosterIndex - b.rosterIndex)
-  const m = new Map()
-  sorted.forEach((c, j) => m.set(c.rosterIndex, j + 1))
-  return m
-})
+const showViz = computed(
+  () => props.gridCells.length > 0 || props.heatmapBins.length > 0 || props.animating
+)
 
 const deltaFromMu = computed(() =>
   props.plan.lastXbar != null ? props.plan.lastXbar - props.popMean : 0

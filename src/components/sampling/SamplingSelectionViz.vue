@@ -62,36 +62,26 @@
         <span v-if="method === 'quota'"><i class="leg leg-skip" /> Passed over</span>
       </div>
     </div>
-    <div
-      v-if="usePositionGrid"
-      ref="gridEl"
-      class="roster-grid roster-pos-grid"
-      role="img"
-      aria-label="Full roster in list order — selections at true list positions"
-      :style="{ gridTemplateColumns: 'repeat(' + gridPosCols + ', 1fr)' }"
-    >
-      <div
-        v-for="cell in cells"
-        :key="'c' + cell.rosterIndex"
-        :ref="(el) => setCellRef(cell.rosterIndex, el)"
-        class="roster-cell pos-slot"
-        :class="{
-          'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
-          'cell-in': highlightIndices.includes(cell.rosterIndex),
-          'cell-skip': skipIndices.includes(cell.rosterIndex),
-          'cell-pulse': cell.rosterIndex === pulseIndex,
-          'cell-retry': cell.rosterIndex === pulseIndex && pickLabel.toLowerCase().includes('redraw'),
-        }"
-        :style="{ background: posSlotBg(cell) }"
-        :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
-      >
-        <span v-if="rankMap.has(cell.rosterIndex)" class="rank-chip">
-          #{{ rankMap.get(cell.rosterIndex) }}
-        </span>
+    <div v-if="useHeatmap" ref="heatmapEl" class="roster-heatmap-wrap">
+      <p class="heatmap-caption">{{ heatmapCaption }}</p>
+      <div class="roster-heatmap" role="img" aria-label="Full roster segments in list order">
+        <div
+          v-for="bin in heatmapBins"
+          :key="'hb' + bin.b"
+          class="heatmap-bin"
+          :class="{
+            'bin-in': bin.inSample,
+            'bin-skip': bin.skipped,
+            'bin-pulse': bin.isPulse,
+          }"
+          :style="{ background: scoreColor(bin.avgScore) }"
+          :title="bin.title"
+        />
       </div>
+      <p class="grid-note">Left = list row 1, right = row {{ rosterSize }}. Blue top = sample includes someone in that segment.</p>
     </div>
     <div
-      v-else
+      v-else-if="cells.length"
       ref="gridEl"
       class="roster-grid"
       role="img"
@@ -112,9 +102,6 @@
         :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
       />
     </div>
-    <p v-if="usePositionGrid" class="grid-note">
-      Full roster (list order, left→right then next row). Blue rings = in sample at that list row.
-    </p>
     <p v-else-if="truncated" class="grid-note">Prefix of roster plus selected rows; full N used in draws.</p>
   </div>
 </template>
@@ -133,50 +120,28 @@ const props = defineProps({
   animating: { type: Boolean, default: false },
   method: { type: String, default: 'srs' },
   walkSteps: { type: Array, default: () => [] },
-  rankMap: { type: Map, default: () => new Map() },
   truncated: { type: Boolean, default: false },
-  gridLayout: { type: String, default: 'list' },
-  gridPosCols: { type: Number, default: 80 },
+  heatmapBins: { type: Array, default: () => [] },
   sysInterval: { type: Number, default: null },
   rosterSize: { type: Number, default: 0 },
 })
 
 const walkSteps = computed(() => props.walkSteps.slice(-72))
-const usePositionGrid = computed(() => props.gridLayout === 'position')
-
-const cellByIndex = computed(() => {
-  const m = new Map()
-  for (const c of props.cells) m.set(c.rosterIndex, c)
-  return m
-})
+const useHeatmap = computed(() => !isListWalkMethod(props.method) && props.heatmapBins.length > 0)
 
 const rosterMapMarks = computed(() => {
   if (isListWalkMethod(props.method)) return []
   const byIdx = new Map()
   for (const step of props.walkSteps) {
     if (step.action === 'retry') {
-      byIdx.set(step.rosterIndex, {
-        rosterIndex: step.rosterIndex,
-        action: 'retry',
-        stratum: cellByIndex.value.get(step.rosterIndex)?.stratum,
-      })
+      byIdx.set(step.rosterIndex, { rosterIndex: step.rosterIndex, action: 'retry' })
     }
   }
   for (const idx of props.skipIndices) {
-    if (!byIdx.has(idx)) {
-      byIdx.set(idx, {
-        rosterIndex: idx,
-        action: 'skip',
-        stratum: cellByIndex.value.get(idx)?.stratum,
-      })
-    }
+    if (!byIdx.has(idx)) byIdx.set(idx, { rosterIndex: idx, action: 'skip' })
   }
   for (const idx of props.highlightIndices) {
-    byIdx.set(idx, {
-      rosterIndex: idx,
-      action: 'in',
-      stratum: cellByIndex.value.get(idx)?.stratum,
-    })
+    byIdx.set(idx, { rosterIndex: idx, action: 'in' })
   }
   return [...byIdx.values()].sort((a, b) => a.rosterIndex - b.rosterIndex)
 })
@@ -208,10 +173,18 @@ const walkCaption = computed(() => {
 
 const rosterMapCaption = computed(() => {
   if (props.method === 'sys') return 'Systematic: evenly spaced rows on the registrar list (after random start)'
-  if (props.method === 'strat') return 'Stratified: random rows within each class year (colored by year)'
-  if (props.method === 'clust' || props.method === 'stage') return 'Cluster: whole dorms / stage-2 picks spread on list'
-  if (props.method === 'purposive') return 'Purposive: highest scorers — can sit anywhere on the list'
-  return 'SRS: each dot is one randomly chosen roster row (scattered on the list)'
+  if (props.method === 'strat') return 'Stratified: random rows within each class year'
+  if (props.method === 'clust' || props.method === 'stage') return 'Cluster: selected halls / stage-2 picks on the list'
+  if (props.method === 'purposive') return 'Purposive: highest scorers — spread wherever they sit on the list'
+  return 'SRS: each dot is one randomly chosen roster row'
+})
+
+const heatmapCaption = computed(() => {
+  if (props.method === 'sys') return 'Systematic sample segments (even spacing along the list)'
+  if (props.method === 'strat') return 'Stratified sample — picks scattered within each class-year slice'
+  if (props.method === 'purposive') return 'Purposive sample — high-score students at their list positions'
+  if (props.method === 'clust' || props.method === 'stage') return 'Cluster sample — whole dorm blocks on the list'
+  return 'Simple random sample — picks scattered along the full registrar list'
 })
 
 function rosterPct(idx) {
@@ -219,22 +192,14 @@ function rosterPct(idx) {
   return `${(idx / (props.rosterSize - 1)) * 100}%`
 }
 
-function posSlotBg(cell) {
-  if (props.highlightIndices.includes(cell.rosterIndex)) return scoreColor(cell.score)
-  return `color-mix(in srgb, ${scoreColor(cell.score)} 22%, #eef2f7)`
-}
-
 function mapMarkTitle(mark) {
   const row = mark.rosterIndex + 1
   if (mark.action === 'retry') return `Row #${row} — duplicate draw, not in sample`
   if (mark.action === 'skip') return `Row #${row} — passed over`
-  if (mark.action === 'pool') return `Row #${row} — in stage-1 pool`
-  if (mark.stratum != null && props.method === 'strat') {
-    return `Row #${row} — in sample (class year ${mark.stratum + 1})`
-  }
   return `Row #${row} — in sample`
 }
 
+const heatmapEl = ref(null)
 const gridEl = ref(null)
 const cellRefs = ref({})
 
@@ -247,8 +212,26 @@ watch(
   async (idx) => {
     if (idx == null || !props.animating) return
     await nextTick()
+    if (useHeatmap.value && heatmapEl.value) {
+      const binIdx = props.heatmapBins.findIndex((b) => idx >= b.lo && idx <= b.hi)
+      if (binIdx >= 0) {
+        const el = heatmapEl.value.querySelectorAll('.heatmap-bin')[binIdx]
+        el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+      }
+      return
+    }
     const el = cellRefs.value[idx]
     el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+  }
+)
+
+watch(
+  () => props.animating,
+  async (on) => {
+    if (on) return
+    await nextTick()
+    if (heatmapEl.value) heatmapEl.value.scrollLeft = 0
+    if (gridEl.value) gridEl.value.scrollTop = 0
   }
 )
 </script>
@@ -268,10 +251,12 @@ watch(
   50% { opacity: 0.65; }
 }
 .roster-map-wrap,
-.walk-strip-wrap {
+.walk-strip-wrap,
+.roster-heatmap-wrap {
   margin-bottom: 0.65rem;
 }
-.walk-caption {
+.walk-caption,
+.heatmap-caption {
   font-size: 0.78rem;
   color: var(--text-muted, #64748b);
   margin: 0 0 0.35rem;
@@ -321,16 +306,8 @@ watch(
   opacity: 0.9;
   z-index: 1;
 }
-.roster-map-mark.mark-skip {
-  background: #94a3b8;
-  opacity: 0.55;
-}
-.roster-map-mark.mark-retry {
-  background: #ef4444;
-  width: 7px;
-  height: 7px;
-  margin-left: -3.5px;
-}
+.roster-map-mark.mark-skip { background: #94a3b8; opacity: 0.55; }
+.roster-map-mark.mark-retry { background: #ef4444; width: 7px; height: 7px; margin-left: -3.5px; }
 .roster-map-mark.mark-strat-0 { background: #3b82f6; }
 .roster-map-mark.mark-strat-1 { background: #6366f1; }
 .roster-map-mark.mark-strat-2 { background: #8b5cf6; }
@@ -341,7 +318,36 @@ watch(
   margin-left: -6.5px;
   box-shadow: 0 0 0 2px #f59e0b;
   z-index: 2;
+}
+.roster-heatmap {
+  display: flex;
+  width: 100%;
+  height: 52px;
+  gap: 1px;
+  overflow-x: auto;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  padding: 2px;
+  background: #fff;
+}
+.heatmap-bin {
+  flex: 1 1 0;
+  min-width: 3px;
+  border-radius: 1px;
+  opacity: 0.88;
+  box-sizing: border-box;
+}
+.heatmap-bin.bin-in {
+  box-shadow: inset 0 -4px 0 #2563eb;
   opacity: 1;
+}
+.heatmap-bin.bin-skip {
+  box-shadow: inset 0 -4px 0 #94a3b8;
+}
+.heatmap-bin.bin-pulse {
+  outline: 2px solid #f59e0b;
+  outline-offset: -1px;
+  z-index: 1;
 }
 .walk-strip {
   display: flex;
@@ -361,13 +367,7 @@ watch(
 }
 .walk-tile.walk-in { background: #2563eb; }
 .walk-tile.walk-skip {
-  background: repeating-linear-gradient(
-    -45deg,
-    #94a3b8,
-    #94a3b8 1px,
-    #e2e8f0 1px,
-    #e2e8f0 2px
-  );
+  background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, #e2e8f0 1px, #e2e8f0 2px);
 }
 .walk-tile.walk-pulse {
   box-shadow: 0 0 0 2px #f59e0b;
@@ -395,75 +395,26 @@ watch(
   background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, #e2e8f0 1px, #e2e8f0 2px);
 }
 .roster-grid {
-  padding: 4px;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: 6px;
-  background: #fff;
-}
-.roster-pos-grid {
-  display: grid;
-  gap: 1px;
-  max-height: 200px;
-  overflow: auto;
-}
-.roster-grid:not(.roster-pos-grid) {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
   max-height: 140px;
   overflow: auto;
-}
-.pos-slot {
-  width: 100%;
-  aspect-ratio: 1;
-  min-width: 0;
-  min-height: 0;
+  padding: 4px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  background: #fff;
 }
 .roster-cell {
-  border-radius: 1px;
-  position: relative;
-}
-.roster-grid:not(.roster-pos-grid) .roster-cell {
   width: 16px;
   height: 16px;
   border-radius: 2px;
+  position: relative;
 }
-.roster-cell.dorm-start {
-  outline: 1px solid rgba(0, 0, 0, 0.2);
-}
-.roster-cell.cell-in {
-  box-shadow: 0 0 0 1.5px #2563eb;
-  z-index: 1;
-}
-.roster-cell.cell-skip {
-  opacity: 0.45;
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.35) 2px,
-    rgba(0, 0, 0, 0.35) 4px
-  ) !important;
-}
-.roster-cell.cell-pulse {
-  box-shadow: 0 0 0 2px #f59e0b;
-  z-index: 2;
-  transform: scale(1.35);
-}
-.roster-cell.cell-retry {
-  box-shadow: 0 0 0 2px #ef4444;
-}
-.rank-chip {
-  position: absolute;
-  inset: 0;
-  font-size: 6px;
-  font-weight: 700;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 0 0 2px #000;
-}
+.roster-cell.dorm-start { outline: 1px solid rgba(0, 0, 0, 0.25); }
+.roster-cell.cell-in { box-shadow: 0 0 0 2px #2563eb; z-index: 1; }
+.roster-cell.cell-skip { opacity: 0.45; }
+.roster-cell.cell-pulse { box-shadow: 0 0 0 3px #f59e0b; z-index: 2; transform: scale(1.2); }
 .grid-note {
   font-size: 0.75rem;
   color: var(--text-muted, #64748b);

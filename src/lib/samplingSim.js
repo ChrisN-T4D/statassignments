@@ -580,6 +580,56 @@ export function buildRosterPositionGrid(
   }
 }
 
+/** Binned roster strip — each bin’s horizontal position matches its segment of the list (1…N). */
+export function buildRosterHeatmapBins(
+  lastPeople,
+  highlightSet,
+  skipSet,
+  pulseIndex = null,
+  binCount = 120
+) {
+  const N = lastPeople.length
+  if (!N) return []
+
+  const hi = new Set()
+  const sk = new Set()
+  addValidRosterIndices(highlightSet, N, hi)
+  addValidRosterIndices(skipSet, N, sk)
+
+  const bins = []
+  for (let b = 0; b < binCount; b++) {
+    const lo = Math.floor((b * N) / binCount)
+    const hiRoster = Math.min(N - 1, Math.floor(((b + 1) * N) / binCount) - 1)
+    let scoreSum = 0
+    let n = 0
+    let inCount = 0
+    let skipCount = 0
+    for (let i = lo; i <= hiRoster; i++) {
+      scoreSum += lastPeople[i].score
+      n++
+      if (hi.has(i)) inCount++
+      if (sk.has(i)) skipCount++
+    }
+    bins.push({
+      b,
+      lo,
+      hi: hiRoster,
+      avgScore: n ? scoreSum / n : 0,
+      inSample: inCount > 0,
+      inCount,
+      skipped: skipCount > 0,
+      skipCount,
+      isPulse:
+        pulseIndex != null &&
+        Number.isFinite(pulseIndex) &&
+        pulseIndex >= lo &&
+        pulseIndex <= hiRoster,
+      title: `List rows ${lo + 1}–${hiRoster + 1}${inCount ? ` · ${inCount} in sample` : ''}`,
+    })
+  }
+  return bins
+}
+
 function samplingPopGridCells(lastPeople, sortedIndices) {
   return sortedIndices.map((rosterIdx) => {
     const p = lastPeople[rosterIdx]

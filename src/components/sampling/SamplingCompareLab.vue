@@ -89,28 +89,21 @@
       </div>
       <details class="roster-details">
         <summary>Roster grid (compact)</summary>
-        <div
-          class="roster-grid roster-pos-grid"
-          role="img"
-          :aria-label="'Full roster — list order left to right, top to bottom'"
-          :style="{ gridTemplateColumns: 'repeat(' + popGridPosCols + ', 1fr)' }"
-        >
+        <div class="roster-heatmap pop-heatmap" role="img" aria-label="Full roster by list position">
           <div
-            v-for="cell in popGridCells"
-            :key="'pg' + cell.rosterIndex"
-            class="roster-cell pos-slot"
+            v-for="bin in popHeatmapBins"
+            :key="'ph' + bin.b"
+            class="heatmap-bin"
             :class="{
-              'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
-              'cell-in-a': highlightListA.includes(cell.rosterIndex),
-              'cell-in-b': highlightListB.includes(cell.rosterIndex),
-              'cell-skip': skipListA.includes(cell.rosterIndex) || skipListB.includes(cell.rosterIndex),
-              'cell-pulse': cell.rosterIndex === pulseA || cell.rosterIndex === pulseB,
+              'bin-in-a': bin.inA,
+              'bin-in-b': bin.inB,
+              'bin-pulse': bin.isPulse,
             }"
-            :style="{ background: popSlotBg(cell) }"
-            :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
+            :style="{ background: scoreColor(bin.avgScore) }"
+            :title="bin.title"
           />
         </div>
-        <p class="grid-note">Full roster (N = {{ popNDisplay }}): row 1 is top-left; selections appear at their list position.</p>
+        <p class="grid-note">Full list (N = {{ popNDisplay }}): left = row 1, right = row N. Blue/orange borders = sample picks at that list segment.</p>
       </details>
     </section>
 
@@ -131,8 +124,7 @@
           :walk-steps="walkStepsA"
           :grid-cells="gridCellsA"
           :grid-truncated="gridTruncatedA"
-          :grid-layout="gridLayoutA"
-          :grid-pos-cols="gridPosColsA"
+          :heatmap-bins="gridHeatmapA"
           :sys-interval="sysIntervalA"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
@@ -151,8 +143,7 @@
           :walk-steps="walkStepsB"
           :grid-cells="gridCellsB"
           :grid-truncated="gridTruncatedB"
-          :grid-layout="gridLayoutB"
-          :grid-pos-cols="gridPosColsB"
+          :heatmap-bins="gridHeatmapB"
           :sys-interval="sysIntervalB"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
@@ -232,7 +223,7 @@ import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
   buildSamplingPopGridForPreview,
-  buildRosterPositionGrid,
+  buildRosterHeatmapBins,
   clusterKForSample,
   isListWalkMethod,
   usesRosterPositionGrid,
@@ -290,8 +281,7 @@ const muLineX = ref(0)
 const histLo = ref(0)
 const histHi = ref(100)
 
-const popGridCells = ref([])
-const popGridPosCols = ref(80)
+const popHeatmapBins = ref([])
 
 function emptyPlan(method) {
   return {
@@ -330,10 +320,8 @@ const gridCellsA = ref([])
 const gridCellsB = ref([])
 const gridTruncatedA = ref(false)
 const gridTruncatedB = ref(false)
-const gridLayoutA = ref('list')
-const gridLayoutB = ref('list')
-const gridPosColsA = ref(80)
-const gridPosColsB = ref(80)
+const gridHeatmapA = ref([])
+const gridHeatmapB = ref([])
 const sysIntervalA = ref(null)
 const sysIntervalB = ref(null)
 
@@ -380,35 +368,44 @@ function rebuildPlanGrid(slot) {
   const highlightSet = isA ? highlightA.value : highlightB.value
   const skipSet = isA ? skipA.value : skipB.value
 
-  const preview = usesRosterPositionGrid(method)
-    ? buildRosterPositionGrid(people.value, highlightSet, skipSet, pulseExtra)
-    : buildSamplingPopGridForPreview(
-        people.value,
-        highlightSet,
-        new Set(),
-        skipSet,
-        new Set(),
-        pulseExtra
-      )
+  if (usesRosterPositionGrid(method)) {
+    const bins = buildRosterHeatmapBins(
+      people.value,
+      highlightSet,
+      skipSet,
+      pulse,
+      120
+    )
+    if (isA) {
+      gridCellsA.value = []
+      gridHeatmapA.value = bins
+      gridTruncatedA.value = false
+    } else {
+      gridCellsB.value = []
+      gridHeatmapB.value = bins
+      gridTruncatedB.value = false
+    }
+    return
+  }
+
+  const preview = buildSamplingPopGridForPreview(
+    people.value,
+    highlightSet,
+    new Set(),
+    skipSet,
+    new Set(),
+    pulseExtra
+  )
 
   if (isA) {
     gridCellsA.value = preview.cells
+    gridHeatmapA.value = []
     gridTruncatedA.value = preview.truncated
-    gridLayoutA.value = preview.mode === 'position' ? 'position' : 'list'
-    gridPosColsA.value = preview.cols ?? 80
   } else {
     gridCellsB.value = preview.cells
+    gridHeatmapB.value = []
     gridTruncatedB.value = preview.truncated
-    gridLayoutB.value = preview.mode === 'position' ? 'position' : 'list'
-    gridPosColsB.value = preview.cols ?? 80
   }
-}
-
-function popSlotBg(cell) {
-  const inA = highlightListA.value.includes(cell.rosterIndex)
-  const inB = highlightListB.value.includes(cell.rosterIndex)
-  if (inA || inB) return scoreColor(cell.score)
-  return `color-mix(in srgb, ${scoreColor(cell.score)} 28%, #eef2f7)`
 }
 
 function rebuildAllPlanGrids() {
@@ -434,19 +431,28 @@ function rebuildHistograms() {
 }
 
 function rebuildPopGrid() {
-  const pulseExtra = new Set()
-  if (pulseA.value != null && Number.isFinite(pulseA.value)) pulseExtra.add(pulseA.value)
-  if (pulseB.value != null && Number.isFinite(pulseB.value)) pulseExtra.add(pulseB.value)
-  const combinedHi = new Set([...highlightA.value, ...highlightB.value])
-  const combinedSkip = new Set([...skipA.value, ...skipB.value])
-  const preview = buildRosterPositionGrid(
+  const pulse =
+    pulseA.value != null && Number.isFinite(pulseA.value)
+      ? pulseA.value
+      : pulseB.value != null && Number.isFinite(pulseB.value)
+        ? pulseB.value
+        : null
+  const bins = buildRosterHeatmapBins(
     people.value,
-    combinedHi,
-    combinedSkip,
-    pulseExtra.size ? pulseExtra : null
+    new Set([...highlightA.value, ...highlightB.value]),
+    new Set([...skipA.value, ...skipB.value]),
+    pulse,
+    120
   )
-  popGridCells.value = preview.cells
-  popGridPosCols.value = preview.cols
+  popHeatmapBins.value = bins.map((bin) => {
+    let inA = 0
+    let inB = 0
+    for (let i = bin.lo; i <= bin.hi; i++) {
+      if (highlightA.value.has(i)) inA++
+      if (highlightB.value.has(i)) inB++
+    }
+    return { ...bin, inA: inA > 0, inB: inB > 0, title: bin.title + (inA ? ' · Plan A' : '') + (inB ? ' · Plan B' : '') }
+  })
 }
 
 function buildPopulation() {
@@ -768,17 +774,38 @@ watch([() => planA.value.method, () => planB.value.method], () => {
 .roster-grid {
   margin-top: 0.5rem;
 }
-.roster-pos-grid {
-  display: grid;
-  gap: 1px;
-  max-height: 180px;
-  overflow: auto;
-}
-.roster-pos-grid .pos-slot {
+.roster-heatmap {
+  display: flex;
   width: 100%;
-  aspect-ratio: 1;
-  min-width: 0;
+  height: 48px;
+  gap: 1px;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  padding: 2px;
+  background: #fff;
+}
+.pop-heatmap .heatmap-bin {
+  flex: 1 1 0;
+  min-width: 3px;
   border-radius: 1px;
+  opacity: 0.88;
+}
+.pop-heatmap .heatmap-bin.bin-in-a {
+  box-shadow: inset 0 -4px 0 #2563eb;
+  opacity: 1;
+}
+.pop-heatmap .heatmap-bin.bin-in-b {
+  box-shadow: inset 0 -4px 0 #f97316;
+  opacity: 1;
+}
+.pop-heatmap .heatmap-bin.bin-in-a.bin-in-b {
+  box-shadow: inset 0 -4px 0 #2563eb, inset 0 4px 0 #f97316;
+}
+.pop-heatmap .heatmap-bin.bin-pulse {
+  outline: 2px solid #f59e0b;
+  outline-offset: -1px;
 }
 .roster-cell {
   border-radius: 2px;
