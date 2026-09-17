@@ -461,12 +461,14 @@ export function buildSamplingPopGridForPreview(
   leftSet,
   rightSet,
   quotaSkipLeft,
-  quotaSkipRight
+  quotaSkipRight,
+  extraIndices = null
 ) {
   const N = lastPeople.length
   if (!N) return { cells: [], truncated: false }
 
   const addValid = (s, target) => {
+    if (!s) return
     for (const idx of s) {
       if (typeof idx === 'number' && Number.isFinite(idx) && idx >= 0 && idx < N) target.add(idx)
     }
@@ -479,6 +481,7 @@ export function buildSamplingPopGridForPreview(
   addValid(rightSet, ix)
   addValid(quotaSkipLeft, ix)
   addValid(quotaSkipRight, ix)
+  addValid(extraIndices, ix)
 
   let sorted = [...ix].sort((a, b) => a - b)
 
@@ -488,6 +491,7 @@ export function buildSamplingPopGridForPreview(
     addValid(rightSet, must)
     addValid(quotaSkipLeft, must)
     addValid(quotaSkipRight, must)
+    addValid(extraIndices, must)
     let mustArr = [...must].sort((a, b) => a - b)
     if (mustArr.length > SAMPLING_POP_PREVIEW_HARD_CAP) {
       mustArr = mustArr.slice(0, SAMPLING_POP_PREVIEW_HARD_CAP)

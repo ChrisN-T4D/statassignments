@@ -47,7 +47,15 @@ export const CANVAS_RM_WIKI_PAGES = {
 export const PRESSBOOKS_TEXTBOOK_URL = 'https://kpu.pressbooks.pub/psychmethods4e/'
 
 export function conceptReviewPath (moduleId) {
+  if (moduleId === 'rm-module-lab') {
+    return `/class/${RESEARCH_METHODS_CLASS}/practice?module=${moduleId}&review=1`
+  }
   return `/class/${RESEARCH_METHODS_CLASS}/practice?module=${moduleId}`
+}
+
+/** Interactive sampling / assignment simulations (not the concept-review quiz). */
+export function labSimulationPath (moduleId = 'rm-module-lab') {
+  return classHomeTabPath(moduleId, 'lab-sampling')
 }
 
 export function classHomeTabPath (moduleId, tab) {
@@ -131,6 +139,7 @@ export const RESEARCH_METHODS_CHAPTER_PRACTICE_LINKS = [
     shortTitle: 'Random assignment & sampling',
     pressbooksUrl: null,
     conceptReview: fullUrl(conceptReviewPath('rm-module-lab')),
+    simulationLab: fullUrl(labSimulationPath('rm-module-lab')),
     classHomeConcepts: fullUrl(classHomeTabPath('rm-module-lab', 'lab-sampling')),
     classHomeTopics: fullUrl(classHomeTabPath('rm-module-lab', 'lab-sampling'))
   }

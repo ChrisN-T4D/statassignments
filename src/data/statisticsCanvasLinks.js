@@ -128,6 +128,10 @@ export function classHomeTabPath (moduleNum, tab) {
   return `/class/statistics?module=stats-module-${moduleNum}&tab=${tab}`
 }
 
+export function samplingMethodsLabPath (moduleNum = 6) {
+  return classHomeTabPath(moduleNum, 'lab-sampling-methods')
+}
+
 /** Modules 3–8 include software practice lessons; 1–2 are concept review only. */
 export function moduleHasSoftwarePractice (moduleNum) {
   return moduleNum >= 3 && moduleNum <= 8
@@ -180,6 +184,7 @@ export const STATISTICS_MODULE_PRACTICE_LINKS = Array.from({ length: 8 }, (_, i)
   return {
     moduleNumber: n,
     conceptReview: fullUrl(conceptReviewPath(n)),
-    softwarePractice: moduleHasSoftwarePractice(n) ? fullUrl(softwarePracticePath(n)) : null
+    softwarePractice: moduleHasSoftwarePractice(n) ? fullUrl(softwarePracticePath(n)) : null,
+    samplingMethodsLab: n === 6 ? fullUrl(samplingMethodsLabPath(6)) : null,
   }
 })

@@ -215,7 +215,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
@@ -248,7 +248,7 @@ const introText = computed(() => INTRO[props.intro] || INTRO.stats)
 const randomMethods = ['srs', 'strat', 'clust', 'sys', 'stage']
 const nonRandomMethods = ['conv', 'quota', 'purposive']
 
-const SLOW_MS = 85
+const SLOW_MS = 120
 const FAST_MS = 12
 
 const popN = ref(2000)
@@ -344,12 +344,16 @@ function resetPlans() {
 
 function rebuildPlanGrid(slot) {
   const isA = slot === 'a'
+  const pulse = isA ? pulseA.value : pulseB.value
+  const pulseExtra =
+    pulse != null && Number.isFinite(pulse) ? new Set([pulse]) : null
   const preview = buildSamplingPopGridForPreview(
     people.value,
     isA ? highlightA.value : highlightB.value,
     new Set(),
     isA ? skipA.value : skipB.value,
-    new Set()
+    new Set(),
+    pulseExtra
   )
   if (isA) {
     gridCellsA.value = preview.cells
@@ -459,6 +463,7 @@ async function animateDraw(slot, drawResult, slow) {
       }
     }
     rebuildPlanGrid(slot)
+    await nextTick()
     if (!prefersReducedMotion.value) await sleep(delay)
   }
 
@@ -505,7 +510,8 @@ async function drawForPlan(slot) {
 
 async function takeAnotherSample() {
   if (!populationBuilt.value || animating.value) return
-  await Promise.all([drawForPlan('a'), drawForPlan('b')])
+  await drawForPlan('a')
+  await drawForPlan('b')
 }
 
 async function runBatchFast() {

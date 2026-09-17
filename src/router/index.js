@@ -183,6 +183,20 @@ const router = createRouter({
 const { user: authUser } = useAuth()
 
 router.beforeEach(async (to, from, next) => {
+  if (
+    to.name === 'class-practice' &&
+    to.params.classId === 'research-methods' &&
+    to.query.module === 'rm-module-lab' &&
+    !to.query.review &&
+    to.query.print !== '1'
+  ) {
+    next({
+      path: '/class/research-methods',
+      query: { module: 'rm-module-lab', tab: 'lab-sampling' },
+    })
+    return
+  }
+
   // Legacy Canvas links: /practice?module=module-N â†’ class statistics concept review
   if (to.path === '/practice' && to.query.module && !to.params.classId) {
     const raw = String(to.query.module)

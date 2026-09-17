@@ -387,6 +387,21 @@
 
           <!-- Topics Tab -->
           <div v-else-if="activeContentTab === 'topics'" class="tab-panel">
+            <button
+              v-if="selectedModuleId === STATS_M6"
+              type="button"
+              class="practice-link-card sampling-lab-promo"
+              @click="activeContentTab = 'lab-sampling-methods'"
+            >
+              <div class="link-card-icon">
+                <img src="/topic-icon.png" alt="Sampling lab" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Sampling methods interactive lab</h3>
+                <p>Compare SRS, stratified, cluster, and convenience sampling — watch each draw select from the roster step by step.</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </button>
             <div v-if="moduleItems.length === 0" class="empty-state">
               <p>No topics available for this module yet.</p>
             </div>
@@ -442,8 +457,43 @@
 
           <!-- Concept Review Tab -->
           <div v-else-if="activeContentTab === 'concepts'" class="tab-panel">
+            <button
+              v-if="selectedModuleId === STATS_M6"
+              type="button"
+              class="practice-link-card sampling-lab-promo"
+              @click="activeContentTab = 'lab-sampling-methods'"
+            >
+              <div class="link-card-icon">
+                <img src="/topic-icon.png" alt="Sampling lab" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Sampling methods interactive lab</h3>
+                <p>Step-by-step animation shows how each sampling plan picks people from the roster.</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </button>
             <div
-              v-if="conceptReviewQuestionCount === 0 && selectedModuleId !== RM_MODULE_LAB_ID"
+              v-if="selectedModuleId === RM_MODULE_LAB_ID"
+              class="tab-panel"
+            >
+              <router-link
+                v-if="conceptReviewQuestionCount > 0"
+                :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`"
+                class="practice-link-card lab-concept-review-card"
+              >
+                <div class="link-card-icon">
+                  <img src="/content-review-icon.png" alt="Content review" class="link-card-icon-img" />
+                </div>
+                <div class="link-card-content">
+                  <h3>Lab Concept Review</h3>
+                  <p>Quiz on random assignment, sampling methods, and validity — after the simulations below.</p>
+                </div>
+                <span class="card-arrow">-></span>
+              </router-link>
+              <ExperimentalSamplingSimulation embed-tab="sampling" />
+            </div>
+            <div
+              v-else-if="conceptReviewQuestionCount === 0"
               class="empty-state"
             >
               <p>No concept review questions available for this module yet.</p>
@@ -1259,6 +1309,8 @@ function selectModule(moduleId) {
   selectedModuleId.value = moduleId
   if (moduleId === RM_MODULE_LAB_ID) {
     activeContentTab.value = 'lab-sampling'
+  } else if (moduleId === STATS_M6) {
+    activeContentTab.value = 'lab-sampling-methods'
   } else if (moduleId === RM_MODULE_DATA_BY_PATH_ID) {
     const mod = contentModules.value.find(m => m.id === moduleId)
     activeContentTab.value =
@@ -1461,6 +1513,7 @@ watch(contentModules, () => {
 
 watch(() => route.query.module, () => {
   syncSelectedModuleFromQuery()
+  syncContentTabFromQuery()
   refreshReadTopics()
 })
 
@@ -2235,6 +2288,20 @@ watch(selectedModuleId, id => {
   border-color: var(--primary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
+}
+
+button.practice-link-card {
+  width: 100%;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.sampling-lab-promo {
+  border-color: #93c5fd;
+  background: #eff6ff;
 }
 
 .link-card-icon {

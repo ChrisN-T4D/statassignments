@@ -26,10 +26,11 @@
         <span v-if="method === 'quota'"><i class="leg leg-skip" /> Passed over</span>
       </div>
     </div>
-    <div class="roster-grid" role="img" aria-label="Roster selection preview">
+    <div ref="gridEl" class="roster-grid" role="img" aria-label="Roster selection preview">
       <div
         v-for="cell in cells"
         :key="'c' + cell.rosterIndex"
+        :ref="(el) => setCellRef(cell.rosterIndex, el)"
         class="roster-cell"
         :class="{
           'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
@@ -50,7 +51,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { scoreColor } from '../../lib/samplingSim.js'
 
 const props = defineProps({
@@ -67,6 +68,23 @@ const props = defineProps({
 })
 
 const walkSteps = computed(() => props.walkSteps.slice(-72))
+
+const gridEl = ref(null)
+const cellRefs = ref({})
+
+function setCellRef(rosterIndex, el) {
+  if (el) cellRefs.value[rosterIndex] = el
+}
+
+watch(
+  () => props.pulseIndex,
+  async (idx) => {
+    if (idx == null || !props.animating) return
+    await nextTick()
+    const el = cellRefs.value[idx]
+    el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+  }
+)
 </script>
 
 <style scoped>
