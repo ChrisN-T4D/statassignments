@@ -525,6 +525,61 @@ export function isListWalkMethod(method) {
   return method === 'quota' || method === 'conv'
 }
 
+/** Full-roster grid columns — cell (row,col) maps to roster row (row * cols + col + 1). */
+export const ROSTER_POS_COLS = 80
+
+export function usesRosterPositionGrid(method) {
+  return !isListWalkMethod(method)
+}
+
+/**
+ * One slot per roster row, laid out in list order (left→right, top→bottom).
+ * Selected rows appear at their true list position — not appended after a prefix block.
+ */
+export function buildRosterPositionGrid(
+  lastPeople,
+  highlightSet,
+  skipSet,
+  extraIndices = null,
+  cols = ROSTER_POS_COLS
+) {
+  const N = lastPeople.length
+  if (!N) return { cells: [], cols, rows: 0, mode: 'position', truncated: false }
+
+  const hi = new Set()
+  const sk = new Set()
+  const extra = new Set()
+  addValidRosterIndices(highlightSet, N, hi)
+  addValidRosterIndices(skipSet, N, sk)
+  addValidRosterIndices(extraIndices, N, extra)
+
+  const cells = []
+  for (let i = 0; i < N; i++) {
+    const p = lastPeople[i]
+    cells.push({
+      rosterIndex: i,
+      pos: i + 1,
+      score: p.score,
+      sex: p.sex ?? '—',
+      age: p.age ?? '—',
+      stratum: typeof p.stratum === 'number' ? p.stratum : 0,
+      cluster: p.cluster,
+      col: i % cols,
+      row: Math.floor(i / cols),
+      inSample: hi.has(i),
+      skipped: sk.has(i),
+      emphasized: extra.has(i),
+    })
+  }
+  return {
+    cells,
+    cols,
+    rows: Math.ceil(N / cols),
+    mode: 'position',
+    truncated: false,
+  }
+}
+
 function samplingPopGridCells(lastPeople, sortedIndices) {
   return sortedIndices.map((rosterIdx) => {
     const p = lastPeople[rosterIdx]

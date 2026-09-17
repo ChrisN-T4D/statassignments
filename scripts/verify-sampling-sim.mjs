@@ -4,7 +4,7 @@ import {
   sampleDrawDetailed,
   meanStatsForDraws,
   clusterKForSample,
-  buildSamplingPopGridWindow,
+  buildRosterPositionGrid,
 } from '../src/lib/samplingSim.js'
 
 let failed = 0
@@ -32,16 +32,21 @@ assert(srsIns.every((s, i) => s.pick === i + 1), 'srs picks in order')
 const notSequential = srsIns.some((s, i) => i > 0 && s.rosterIndex <= srsIns[i - 1].rosterIndex)
 assert(notSequential, 'srs roster picks are not list-order')
 
+const posGrid = buildRosterPositionGrid(people, new Set(srsIns.map((s) => s.rosterIndex)), new Set())
+assert(posGrid.cells.length === people.length, 'position grid has every roster row')
+assert(posGrid.mode === 'position', 'position grid mode')
 const midPick = srsIns[Math.floor(srsIns.length / 2)]
-const win = buildSamplingPopGridWindow(
-  people,
-  midPick.rosterIndex,
-  20,
-  new Set(srsIns.map((s) => s.rosterIndex)),
-  new Set()
-)
-assert(win.cells.some((c) => c.rosterIndex === midPick.rosterIndex), 'grid window centers on pick')
-assert(win.windowLo <= midPick.rosterIndex && win.windowHi >= midPick.rosterIndex, 'window bounds')
+const midCell = posGrid.cells[midPick.rosterIndex]
+assert(midCell.inSample, 'selected row marked in place')
+assert(midCell.col === midPick.rosterIndex % posGrid.cols, 'column matches list position')
+
+const purposive = sampleDrawDetailed('purposive', people, n, k)
+assert(meanPeople(purposive.selected) >= mu - 1, 'purposive tends high')
+const purIdx = purposive.rosterOrder
+const purGrid = buildRosterPositionGrid(people, new Set(purIdx), new Set())
+const inSampleCols = purIdx.map((idx) => purGrid.cells[idx].col)
+const notAllEnd = inSampleCols.some((c) => c < posGrid.cols * 0.5)
+assert(notAllEnd || purIdx.some((idx) => idx < people.length * 0.5), 'purposive picks not only at list end')
 
 const conv = sampleDrawDetailed('conv', people, n, k)
 assert(conv.selected.length === n, 'convenience n')
@@ -50,9 +55,6 @@ assert(conv.steps.length === n, 'convenience steps')
 const quota = sampleDrawDetailed('quota', people, n, k)
 assert(quota.selected.length === n, 'quota n')
 assert(quota.steps.length >= n, 'quota walk has steps')
-
-const purposive = sampleDrawDetailed('purposive', people, n, k)
-assert(meanPeople(purposive.selected) >= mu - 1, 'purposive tends high')
 
 const means = []
 for (let i = 0; i < 50; i++) {

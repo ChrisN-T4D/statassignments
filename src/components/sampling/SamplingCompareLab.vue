@@ -89,27 +89,28 @@
       </div>
       <details class="roster-details">
         <summary>Roster grid (compact)</summary>
-        <div class="roster-grid" role="img" :aria-label="'Roster preview'">
+        <div
+          class="roster-grid roster-pos-grid"
+          role="img"
+          :aria-label="'Full roster — list order left to right, top to bottom'"
+          :style="{ gridTemplateColumns: 'repeat(' + popGridPosCols + ', 1fr)' }"
+        >
           <div
             v-for="cell in popGridCells"
             :key="'pg' + cell.rosterIndex"
-            class="roster-cell"
+            class="roster-cell pos-slot"
             :class="{
               'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
-              'sex-m': cell.sex === 'M',
-              'sex-f': cell.sex === 'F',
               'cell-in-a': highlightListA.includes(cell.rosterIndex),
               'cell-in-b': highlightListB.includes(cell.rosterIndex),
               'cell-skip': skipListA.includes(cell.rosterIndex) || skipListB.includes(cell.rosterIndex),
               'cell-pulse': cell.rosterIndex === pulseA || cell.rosterIndex === pulseB,
             }"
-            :style="{ background: scoreColor(cell.score) }"
+            :style="{ background: popSlotBg(cell) }"
             :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
-          >
-            <span class="cell-age">{{ cell.age }}</span>
-          </div>
+          />
         </div>
-        <p v-if="popGridTruncated" class="grid-note">Showing prefix + last-draw highlights; full N used in all draws.</p>
+        <p class="grid-note">Full roster (N = {{ popNDisplay }}): row 1 is top-left; selections appear at their list position.</p>
       </details>
     </section>
 
@@ -130,7 +131,9 @@
           :walk-steps="walkStepsA"
           :grid-cells="gridCellsA"
           :grid-truncated="gridTruncatedA"
-          :grid-window="gridWindowA"
+          :grid-layout="gridLayoutA"
+          :grid-pos-cols="gridPosColsA"
+          :sys-interval="sysIntervalA"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
         />
@@ -148,7 +151,9 @@
           :walk-steps="walkStepsB"
           :grid-cells="gridCellsB"
           :grid-truncated="gridTruncatedB"
-          :grid-window="gridWindowB"
+          :grid-layout="gridLayoutB"
+          :grid-pos-cols="gridPosColsB"
+          :sys-interval="sysIntervalB"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
         />
@@ -227,9 +232,10 @@ import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
   buildSamplingPopGridForPreview,
-  buildSamplingPopGridWindow,
+  buildRosterPositionGrid,
   clusterKForSample,
   isListWalkMethod,
+  usesRosterPositionGrid,
   generateCampusPopulation,
   meanPeople,
   meanStatsForDraws,
@@ -285,7 +291,7 @@ const histLo = ref(0)
 const histHi = ref(100)
 
 const popGridCells = ref([])
-const popGridTruncated = ref(false)
+const popGridPosCols = ref(80)
 
 function emptyPlan(method) {
   return {
@@ -324,8 +330,12 @@ const gridCellsA = ref([])
 const gridCellsB = ref([])
 const gridTruncatedA = ref(false)
 const gridTruncatedB = ref(false)
-const gridWindowA = ref(null)
-const gridWindowB = ref(null)
+const gridLayoutA = ref('list')
+const gridLayoutB = ref('list')
+const gridPosColsA = ref(80)
+const gridPosColsB = ref(80)
+const sysIntervalA = ref(null)
+const sysIntervalB = ref(null)
 
 const statsA = computed(() => meanStatsForDraws(planA.value.means, popMean.value))
 const statsB = computed(() => meanStatsForDraws(planB.value.means, popMean.value))
@@ -364,24 +374,14 @@ function resetPlans() {
 function rebuildPlanGrid(slot) {
   const isA = slot === 'a'
   const pulse = isA ? pulseA.value : pulseB.value
-  const animating = isA ? animatingA.value : animatingB.value
   const method = isA ? planA.value.method : planB.value.method
   const pulseExtra =
     pulse != null && Number.isFinite(pulse) ? new Set([pulse]) : null
   const highlightSet = isA ? highlightA.value : highlightB.value
   const skipSet = isA ? skipA.value : skipB.value
 
-  const useWindow =
-    animating && SAMPLING_PLAN_META[method]?.random && !isListWalkMethod(method)
-  const preview = useWindow
-    ? buildSamplingPopGridWindow(
-        people.value,
-        pulse ?? 0,
-        45,
-        highlightSet,
-        skipSet,
-        pulseExtra
-      )
+  const preview = usesRosterPositionGrid(method)
+    ? buildRosterPositionGrid(people.value, highlightSet, skipSet, pulseExtra)
     : buildSamplingPopGridForPreview(
         people.value,
         highlightSet,
@@ -391,19 +391,24 @@ function rebuildPlanGrid(slot) {
         pulseExtra
       )
 
-  const windowNote = useWindow
-    ? { lo: preview.windowLo, hi: preview.windowHi, total: people.value.length }
-    : null
-
   if (isA) {
     gridCellsA.value = preview.cells
     gridTruncatedA.value = preview.truncated
-    gridWindowA.value = windowNote
+    gridLayoutA.value = preview.mode === 'position' ? 'position' : 'list'
+    gridPosColsA.value = preview.cols ?? 80
   } else {
     gridCellsB.value = preview.cells
     gridTruncatedB.value = preview.truncated
-    gridWindowB.value = windowNote
+    gridLayoutB.value = preview.mode === 'position' ? 'position' : 'list'
+    gridPosColsB.value = preview.cols ?? 80
   }
+}
+
+function popSlotBg(cell) {
+  const inA = highlightListA.value.includes(cell.rosterIndex)
+  const inB = highlightListB.value.includes(cell.rosterIndex)
+  if (inA || inB) return scoreColor(cell.score)
+  return `color-mix(in srgb, ${scoreColor(cell.score)} 28%, #eef2f7)`
 }
 
 function rebuildAllPlanGrids() {
@@ -432,16 +437,16 @@ function rebuildPopGrid() {
   const pulseExtra = new Set()
   if (pulseA.value != null && Number.isFinite(pulseA.value)) pulseExtra.add(pulseA.value)
   if (pulseB.value != null && Number.isFinite(pulseB.value)) pulseExtra.add(pulseB.value)
-  const preview = buildSamplingPopGridForPreview(
+  const combinedHi = new Set([...highlightA.value, ...highlightB.value])
+  const combinedSkip = new Set([...skipA.value, ...skipB.value])
+  const preview = buildRosterPositionGrid(
     people.value,
-    highlightA.value,
-    highlightB.value,
-    skipA.value,
-    skipB.value,
+    combinedHi,
+    combinedSkip,
     pulseExtra.size ? pulseExtra : null
   )
   popGridCells.value = preview.cells
-  popGridTruncated.value = preview.truncated
+  popGridPosCols.value = preview.cols
 }
 
 function buildPopulation() {
@@ -482,6 +487,8 @@ async function animateDraw(slot, drawResult, slow) {
   pulseRef.value = null
   pickLabelRef.value = ''
   walkRef.value = []
+  if (isA) sysIntervalA.value = null
+  else sysIntervalB.value = null
   animRef.value = true
   rebuildPlanGrid(slot)
   rebuildPopGrid()
@@ -536,6 +543,8 @@ async function animateDraw(slot, drawResult, slow) {
         if (isListWalkMethod(method)) {
           label = `Pick ${step.pick} of ${nTarget}`
         } else if (method === 'sys' && step.sysStart && step.sysInterval) {
+          if (isA) sysIntervalA.value = step.sysInterval
+          else sysIntervalB.value = step.sysInterval
           label = `${rowLabel} · random start, then every ${step.sysInterval}th person (pick ${step.pick} of ${nTarget})`
         } else if (method === 'strat' && step.stratum != null) {
           label = `${rowLabel} · stratum ${step.stratum + 1}, pick ${step.pick} of ${nTarget}`
@@ -757,16 +766,21 @@ watch([() => planA.value.method, () => planB.value.method], () => {
   margin-top: 0.75rem;
 }
 .roster-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  max-height: 160px;
-  overflow: auto;
   margin-top: 0.5rem;
 }
+.roster-pos-grid {
+  display: grid;
+  gap: 1px;
+  max-height: 180px;
+  overflow: auto;
+}
+.roster-pos-grid .pos-slot {
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 1px;
+}
 .roster-cell {
-  width: 14px;
-  height: 14px;
   border-radius: 2px;
   position: relative;
   font-size: 6px;

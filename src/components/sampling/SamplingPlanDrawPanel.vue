@@ -25,7 +25,9 @@
       :walk-steps="walkSteps"
       :rank-map="rankMap"
       :truncated="gridTruncated"
-      :grid-window="gridWindow"
+      :grid-layout="gridLayout"
+      :grid-pos-cols="gridPosCols"
+      :sys-interval="sysInterval"
       :roster-size="rosterSize"
     />
     <p class="draw-count">{{ plan.drawCount }} draw{{ plan.drawCount === 1 ? '' : 's' }} so far</p>
@@ -49,7 +51,9 @@ const props = defineProps({
   walkSteps: { type: Array, default: () => [] },
   gridCells: { type: Array, default: () => [] },
   gridTruncated: { type: Boolean, default: false },
-  gridWindow: { type: Object, default: null },
+  gridLayout: { type: String, default: 'list' },
+  gridPosCols: { type: Number, default: 80 },
+  sysInterval: { type: Number, default: null },
   rosterSize: { type: Number, default: 0 },
   dormSize: { type: Number, default: 0 },
 })
