@@ -358,6 +358,13 @@
           </div>
 
           <div
+            v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-sampling-methods'"
+            class="tab-panel"
+          >
+            <SamplingCompareLab intro="stats" />
+          </div>
+
+          <div
             v-else-if="selectedModuleId === STATS_M6 && activeContentTab === 'lab-coin'"
             class="tab-panel"
           >
@@ -675,6 +682,7 @@ import CentralTendencyLab from '../components/labs/CentralTendencyLab.vue'
 import CoinFlipLab from '../components/labs/CoinFlipLab.vue'
 import MarblesLab from '../components/labs/MarblesLab.vue'
 import CentralLimitLab from '../components/labs/CentralLimitLab.vue'
+import SamplingCompareLab from '../components/sampling/SamplingCompareLab.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
@@ -719,6 +727,7 @@ const STATS_M4 = 'stats-module-4'
 const STATS_M6 = 'stats-module-6'
 const statsM4LabTabs = [{ id: 'lab-central-tendency', label: 'Central tendency', iconSrc: '/topic-icon.png' }]
 const statsM6LabTabs = [
+  { id: 'lab-sampling-methods', label: 'Sampling methods', iconSrc: '/topic-icon.png' },
   { id: 'lab-coin', label: 'Coin flips', iconSrc: '/topic-icon.png' },
   { id: 'lab-marbles', label: 'Marbles', iconSrc: '/topic-icon.png' },
   { id: 'lab-clt', label: 'CLT', iconSrc: '/topic-icon.png' },
