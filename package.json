@@ -27,7 +27,12 @@
     "sync:canvas-rm": "node scripts/sync-canvas-rm-mm-assignments.mjs",
     "sync:canvas-rm:apply": "node scripts/sync-canvas-rm-mm-assignments.mjs --apply",
     "sync:canvas-rm:playwright": "node scripts/sync-canvas-rm-mm-assignments-playwright.mjs",
-    "sync:canvas-rm:playwright:apply": "node scripts/sync-canvas-rm-mm-assignments-playwright.mjs --apply"
+    "sync:canvas-rm:playwright:apply": "node scripts/sync-canvas-rm-mm-assignments-playwright.mjs --apply",
+    "list:canvas-statistics": "node scripts/list-canvas-statistics-assignments.mjs",
+    "sync:canvas-statistics": "node scripts/sync-canvas-statistics-mm-assignments.mjs",
+    "sync:canvas-statistics:apply": "node scripts/sync-canvas-statistics-mm-assignments.mjs --apply",
+    "weight:canvas-statistics": "node scripts/weight-canvas-statistics-inperson.mjs",
+    "weight:canvas-statistics:apply": "node scripts/weight-canvas-statistics-inperson.mjs --apply"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",

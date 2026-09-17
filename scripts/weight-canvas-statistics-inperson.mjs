@@ -1,19 +1,30 @@
 #!/usr/bin/env node
 /**
- * Consolidate PSYC 4213 in-person (2405) assignment groups WITHOUT Canvas group weights.
+ * Consolidate PSYC 4213 Statistics assignment groups WITHOUT Canvas group weights.
  * Keeps Benchmarks / Assignments / Discussions for organization only.
  * Always leaves apply_assignment_group_weights = false.
  *
+ * Default: both online (3177) and in-person (2405). Pass --course=3177 for one shell.
+ *
  * Usage:
- *   $env:CANVAS_TOKEN = 'your-token'
- *   node scripts/weight-canvas-statistics-inperson.mjs          # dry-run
- *   node scripts/weight-canvas-statistics-inperson.mjs --apply
+ *   CANVAS_TOKEN=... node scripts/weight-canvas-statistics-inperson.mjs          # dry-run
+ *   CANVAS_TOKEN=... node scripts/weight-canvas-statistics-inperson.mjs --apply
+ *   CANVAS_TOKEN=... node scripts/weight-canvas-statistics-inperson.mjs --apply --course=3177
  */
 import { canvasApi, canvasListAll, sleep } from './lib/canvasApi.js'
-import { CANVAS_STATISTICS_INPERSON_COURSE_ID } from '../src/data/statisticsCanvasLinks.js'
+import {
+  CANVAS_STATISTICS_ONLINE_COURSE_ID,
+  CANVAS_STATISTICS_INPERSON_COURSE_ID
+} from '../src/data/statisticsCanvasLinks.js'
 
-const COURSE_ID = CANVAS_STATISTICS_INPERSON_COURSE_ID
 const apply = process.argv.includes('--apply')
+const courseArg = process.argv.find((a) => a.startsWith('--course='))
+const courseFilter = courseArg ? Number(courseArg.split('=')[1]) : null
+
+const COURSE_IDS = [
+  CANVAS_STATISTICS_ONLINE_COURSE_ID,
+  CANVAS_STATISTICS_INPERSON_COURSE_ID
+].filter(Boolean).filter((id) => !courseFilter || id === courseFilter)
 
 /** Group names to keep (organizational only; weights stay 0). */
 const GROUP_NAMES = ['Benchmarks', 'Assignments', 'Discussions']
@@ -36,11 +47,11 @@ function classify (assignment) {
   return 'Assignments'
 }
 
-async function ensureGroup (existingByName, name) {
+async function ensureGroup (courseId, existingByName, name) {
   if (existingByName.has(name)) {
     const g = existingByName.get(name)
     if (apply) {
-      await canvasApi('PUT', `/courses/${COURSE_ID}/assignment_groups/${g.id}`, {
+      await canvasApi('PUT', `/courses/${courseId}/assignment_groups/${g.id}`, {
         name,
         group_weight: 0
       })
@@ -52,7 +63,7 @@ async function ensureGroup (existingByName, name) {
     console.log(`[dry-run] create group ${name} weight 0`)
     return null
   }
-  const created = await canvasApi('POST', `/courses/${COURSE_ID}/assignment_groups`, {
+  const created = await canvasApi('POST', `/courses/${courseId}/assignment_groups`, {
     name,
     group_weight: 0
   })
@@ -61,25 +72,20 @@ async function ensureGroup (existingByName, name) {
   return created.id
 }
 
-async function main () {
-  if (!COURSE_ID) {
-    console.error('CANVAS_STATISTICS_INPERSON_COURSE_ID is not set')
-    process.exit(1)
-  }
-
-  const groups = await canvasListAll(`/courses/${COURSE_ID}/assignment_groups`)
+async function weightCourse (courseId) {
+  const groups = await canvasListAll(`/courses/${courseId}/assignment_groups`)
   const byName = new Map(groups.map((g) => [g.name, g]))
-  const assignments = await canvasListAll(`/courses/${COURSE_ID}/assignments`)
+  const assignments = await canvasListAll(`/courses/${courseId}/assignments`)
 
   console.log(
     apply
-      ? `APPLY unweighted groups — course ${COURSE_ID}\n`
-      : `DRY-RUN unweighted groups — course ${COURSE_ID}\n`
+      ? `\nAPPLY unweighted groups — course ${courseId}\n`
+      : `\nDRY-RUN unweighted groups — course ${courseId}\n`
   )
 
   const ids = {}
   for (const name of GROUP_NAMES) {
-    ids[name] = await ensureGroup(byName, name)
+    ids[name] = await ensureGroup(courseId, byName, name)
     await sleep(100)
   }
 
@@ -94,26 +100,26 @@ async function main () {
       continue
     }
     if (a.assignment_group_id === targetId) continue
-    await canvasApi('PUT', `/courses/${COURSE_ID}/assignments/${a.id}`, {
+    await canvasApi('PUT', `/courses/${courseId}/assignments/${a.id}`, {
       assignment: { assignment_group_id: targetId }
     })
     console.log(`moved ${a.id} -> ${cat}: ${a.name}`)
     await sleep(120)
   }
 
-  console.log('\nCounts by category:', moves)
+  console.log('Counts by category:', moves)
 
   if (apply) {
-    await canvasApi('PUT', `/courses/${COURSE_ID}`, {
+    await canvasApi('PUT', `/courses/${courseId}`, {
       course: { apply_assignment_group_weights: false }
     })
     console.log('Ensured apply_assignment_group_weights = false')
 
-    const after = await canvasListAll(`/courses/${COURSE_ID}/assignments`)
+    const after = await canvasListAll(`/courses/${courseId}/assignments`)
     const used = new Set(after.map((a) => a.assignment_group_id))
     const keep = new Set(Object.values(ids))
     const allGroups = await canvasListAll(
-      `/courses/${COURSE_ID}/assignment_groups`
+      `/courses/${courseId}/assignment_groups`
     )
     for (const g of allGroups) {
       if (keep.has(g.id)) continue
@@ -124,7 +130,7 @@ async function main () {
       try {
         await canvasApi(
           'DELETE',
-          `/courses/${COURSE_ID}/assignment_groups/${g.id}`
+          `/courses/${courseId}/assignment_groups/${g.id}`
         )
         console.log('deleted empty group', g.id, g.name)
       } catch (err) {
@@ -132,7 +138,20 @@ async function main () {
       }
       await sleep(80)
     }
-  } else {
+  }
+}
+
+async function main () {
+  if (!COURSE_IDS.length) {
+    console.error('No course IDs configured in statisticsCanvasLinks.js')
+    process.exit(1)
+  }
+
+  for (const courseId of COURSE_IDS) {
+    await weightCourse(courseId)
+  }
+
+  if (!apply) {
     console.log('\nRe-run with --apply to mutate.')
   }
 }

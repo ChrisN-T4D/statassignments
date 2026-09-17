@@ -1,14 +1,15 @@
 #!/usr/bin/node
 /**
  * Create/update PSYC 4213 Methods Market Canvas assignments (Concept Review slip,
- * Software Practice You do recording) on 3177 and 2405.
+ * Software Practice You do recording) on 3177 and 2405. Unpublish legacy jamovi /
+ * "Turn In" assignments and ensure each module links the new MM rows.
  *
  * Usage:
- *   $env:CANVAS_TOKEN = '...'
- *   node scripts/sync-canvas-statistics-mm-assignments.mjs          # dry-run
- *   node scripts/sync-canvas-statistics-mm-assignments.mjs --apply
+ *   CANVAS_TOKEN=... node scripts/sync-canvas-statistics-mm-assignments.mjs          # dry-run
+ *   CANVAS_TOKEN=... node scripts/sync-canvas-statistics-mm-assignments.mjs --apply
+ *   CANVAS_TOKEN=... node scripts/sync-canvas-statistics-mm-assignments.mjs --apply --course=3177
  */
-import { canvasApi, canvasListAll } from './lib/canvasApi.js'
+import { canvasApi, canvasListAll, sleep } from './lib/canvasApi.js'
 import {
   CANVAS_STATISTICS_ONLINE_COURSE_ID,
   CANVAS_STATISTICS_INPERSON_COURSE_ID,
@@ -16,17 +17,24 @@ import {
   conceptReviewPath,
   softwarePracticePath
 } from '../src/data/statisticsCanvasLinks.js'
+import {
+  conceptReviewAssignmentName,
+  softwarePracticeAssignmentName,
+  isLegacySoftwareAssignment,
+  findModuleForNumber,
+  moduleItemLinksAssignment
+} from './lib/canvasStatisticsCleanup.mjs'
 
 const apply = process.argv.includes('--apply')
+const courseArg = process.argv.find((a) => a.startsWith('--course='))
+const courseFilter = courseArg ? Number(courseArg.split('=')[1]) : null
+
 const COURSE_IDS = [
   CANVAS_STATISTICS_ONLINE_COURSE_ID,
   CANVAS_STATISTICS_INPERSON_COURSE_ID
-].filter(Boolean)
+].filter(Boolean).filter((id) => !courseFilter || id === courseFilter)
 
-const JAMOVI_NAME_RE =
-  /jamovi|screen record|video of jamovi|week 8\s*&\s*9|week 11 part|week 12:|week 15 assignment/i
-
-function conceptDescription(n) {
+function conceptDescription (n) {
   const url = fullUrl(conceptReviewPath(n))
   return (
     `<p>Complete <strong>Concept Review</strong> in Methods Market, then upload the <strong>completion slip</strong> here for credit.</p>` +
@@ -36,7 +44,7 @@ function conceptDescription(n) {
   )
 }
 
-function softwareDescription(n) {
+function softwareDescription (n) {
   const url = fullUrl(softwarePracticePath(n))
   return (
     `<p>Complete Software Practice <strong>I do</strong> and <strong>We do</strong> in Methods Market (or the print packet). Record <strong>You do</strong> with Tools (or your phone) and upload the <strong>video</strong> here. You do does not use a slip.</p>` +
@@ -45,18 +53,18 @@ function softwareDescription(n) {
   )
 }
 
-function wantedAssignments() {
+function wantedAssignments () {
   const rows = []
   for (let n = 1; n <= 8; n++) {
     rows.push({
-      name: `Module ${n}: Concept Review (Methods Market)`,
+      name: conceptReviewAssignmentName(n),
       description: conceptDescription(n),
       points: 10
     })
   }
   for (let n = 3; n <= 8; n++) {
     rows.push({
-      name: `Module ${n}: Software Practice (Methods Market)`,
+      name: softwarePracticeAssignmentName(n),
       description: softwareDescription(n),
       points: 20
     })
@@ -64,7 +72,7 @@ function wantedAssignments() {
   return rows
 }
 
-async function ensureGroup(courseId, groups, name) {
+async function ensureGroup (courseId, groups, name) {
   const existing = groups.find((g) => g.name === name)
   if (existing) return existing.id
   if (!apply) {
@@ -77,10 +85,8 @@ async function ensureGroup(courseId, groups, name) {
   return created.id
 }
 
-async function syncCourse(courseId) {
-  console.log(`\n=== Course ${courseId} ${apply ? 'APPLY' : 'DRY-RUN'} ===`)
-  const groups = await canvasListAll(`/courses/${courseId}/assignment_groups`)
-  const assignments = await canvasListAll(`/courses/${courseId}/assignments`)
+async function syncAssignments (courseId, groups) {
+  let assignments = await canvasListAll(`/courses/${courseId}/assignments`)
   const byName = new Map(assignments.map((a) => [a.name, a]))
   const groupId = await ensureGroup(courseId, groups, 'Assignments')
 
@@ -103,6 +109,7 @@ async function syncCourse(courseId) {
       }
       const created = await canvasApi('POST', `/courses/${courseId}/assignments`, body)
       console.log(`created ${created.id} ${created.name}`)
+      byName.set(spec.name, created)
       continue
     }
     if (!apply) {
@@ -113,25 +120,106 @@ async function syncCourse(courseId) {
     console.log(`updated ${existing.id} ${spec.name}`)
   }
 
+  assignments = await canvasListAll(`/courses/${courseId}/assignments`)
+
   for (const a of assignments) {
-    if (!JAMOVI_NAME_RE.test(a.name || '')) continue
-    if (/benchmark|discussion|quiz|concept review|software practice/i.test(a.name || '')) continue
+    if (!isLegacySoftwareAssignment(a.name)) continue
     if (a.published === false) {
       console.log(`already unpublished ${a.id} ${a.name}`)
       continue
     }
     if (!apply) {
-      console.log(`[dry-run] unpublish ${a.id} ${a.name}`)
+      console.log(`[dry-run] unpublish legacy ${a.id} ${a.name}`)
       continue
     }
     await canvasApi('PUT', `/courses/${courseId}/assignments/${a.id}`, {
       assignment: { published: false }
     })
-    console.log(`unpublished ${a.id} ${a.name}`)
+    console.log(`unpublished legacy ${a.id} ${a.name}`)
+    await sleep(80)
+  }
+
+  return canvasListAll(`/courses/${courseId}/assignments`)
+}
+
+async function syncModuleLinks (courseId, assignments) {
+  const modules = await canvasListAll(`/courses/${courseId}/modules`)
+  const byName = new Map(assignments.map((a) => [a.name, a]))
+  const legacyIds = new Set(
+    assignments.filter((a) => isLegacySoftwareAssignment(a.name)).map((a) => a.id)
+  )
+
+  for (let n = 1; n <= 8; n++) {
+    const canvasModule = findModuleForNumber(modules, n)
+    if (!canvasModule) {
+      console.log(`[module ${n}] no Canvas module title match`)
+      continue
+    }
+
+    const items = await canvasListAll(
+      `/courses/${courseId}/modules/${canvasModule.id}/items`
+    )
+
+    const want = [conceptReviewAssignmentName(n)]
+    if (n >= 3) want.push(softwarePracticeAssignmentName(n))
+
+    for (const item of items) {
+      if (item.type !== 'Assignment') continue
+      if (!legacyIds.has(item.content_id)) continue
+      if (!apply) {
+        console.log(`[dry-run] remove legacy module item ${item.id} "${item.title}" from ${canvasModule.name}`)
+        continue
+      }
+      await canvasApi(
+        'DELETE',
+        `/courses/${courseId}/modules/${canvasModule.id}/items/${item.id}`
+      )
+      console.log(`removed legacy module item ${item.id} "${item.title}" from ${canvasModule.name}`)
+      await sleep(80)
+    }
+
+    for (const assignmentName of want) {
+      const assignment = byName.get(assignmentName)
+      if (!assignment) {
+        console.log(`[module ${n}] missing assignment "${assignmentName}" — run with --apply first`)
+        continue
+      }
+      const alreadyLinked = items.some((item) =>
+        moduleItemLinksAssignment(item, assignment.id)
+      )
+      if (alreadyLinked) {
+        console.log(`[module ${n}] already linked ${assignmentName}`)
+        continue
+      }
+      if (!apply) {
+        console.log(`[dry-run] link ${assignmentName} -> ${canvasModule.name}`)
+        continue
+      }
+      await canvasApi('POST', `/courses/${courseId}/modules/${canvasModule.id}/items`, {
+        module_item: {
+          type: 'Assignment',
+          content_id: assignment.id,
+          published: true
+        }
+      })
+      console.log(`linked ${assignmentName} -> ${canvasModule.name}`)
+      await sleep(80)
+    }
   }
 }
 
-async function main() {
+async function syncCourse (courseId) {
+  console.log(`\n=== Course ${courseId} ${apply ? 'APPLY' : 'DRY-RUN'} ===`)
+  const groups = await canvasListAll(`/courses/${courseId}/assignment_groups`)
+  const assignments = await syncAssignments(courseId, groups)
+  await syncModuleLinks(courseId, assignments)
+}
+
+async function main () {
+  if (!COURSE_IDS.length) {
+    console.error('No course IDs configured')
+    process.exit(1)
+  }
   for (const id of COURSE_IDS) {
     await syncCourse(id)
   }

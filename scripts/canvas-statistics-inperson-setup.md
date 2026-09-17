@@ -74,7 +74,19 @@ In-person students still take Benchmarks 1, 2, and the Final in Canvas with **Re
 
 ### Methods Market assignments
 
-No change — same links as online (`scripts/canvas-statistics-practice-links.md`). Both sections use slug `statistics`.
+Same links as online (`scripts/canvas-statistics-practice-links.md`). Both sections use slug `statistics`.
+
+After copy (or anytime either shell drifts), sync MM assignments on **both** courses:
+
+```powershell
+$env:CANVAS_TOKEN = 'your-token'
+npm run sync:canvas-statistics:apply          # 3177 + 2405
+# online only:
+node scripts/sync-canvas-statistics-mm-assignments.mjs --apply --course=3177
+npm run weight:canvas-statistics:apply        # unweighted Benchmarks / Assignments / Discussions
+```
+
+The graded Module 3 software upload is **`Module 3: Software Practice (Methods Market)`** — not a separate “Turn In” assignment. Legacy jamovi screen-record / “Turn In” rows are unpublished and removed from module lists.
 
 ### Discussions
 
