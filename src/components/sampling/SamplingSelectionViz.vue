@@ -1,7 +1,7 @@
 <template>
   <div class="sel-viz">
     <p v-if="animating" class="live-label">
-      {{ pickLabel || 'Selecting now… watch tiles light up' }}
+      {{ pickLabel || 'Selecting now… watch the roster light up' }}
     </p>
     <div v-if="showRosterMap" class="roster-map-wrap">
       <p class="walk-caption">{{ rosterMapCaption }}</p>
@@ -22,7 +22,8 @@
           :key="'rm' + mark.rosterIndex + mark.action"
           class="roster-map-mark"
           :class="{
-            'mark-in': mark.action === 'in' || mark.action === 'pool',
+            'mark-in': mark.action === 'in',
+            'mark-pool': mark.action === 'pool',
             'mark-skip': mark.action === 'skip',
             'mark-retry': mark.action === 'retry',
             'mark-strat-0': mark.stratum === 0,
@@ -37,14 +38,15 @@
       </div>
       <div class="walk-legend">
         <span><i class="leg leg-in" /> In sample</span>
-        <span v-if="method === 'quota'"><i class="leg leg-skip" /> Passed over</span>
-        <span v-if="hasRetries"><i class="leg leg-retry" /> Duplicate draw (SRS)</span>
+        <span v-if="method === 'stage'"><i class="leg leg-pool" /> Stage-1 pool</span>
+        <span v-if="method === 'quota' || skipIndices.length"><i class="leg leg-skip" /> Passed over</span>
+        <span v-if="hasRetries"><i class="leg leg-retry" /> Duplicate draw</span>
         <span v-if="method === 'sys' && sysInterval">Every {{ sysInterval }} rows after random start</span>
       </div>
     </div>
-    <div v-else-if="showListWalkStrip" class="walk-strip-wrap">
+    <div v-if="showListWalkStrip" class="walk-strip-wrap">
       <p class="walk-caption">{{ walkCaption }}</p>
-      <div class="walk-strip" role="img" :aria-label="'Selection walk'">
+      <div class="walk-strip" role="img" :aria-label="'Selection walk order'">
         <div
           v-for="(step, i) in walkSteps"
           :key="'ws' + i"
@@ -57,10 +59,6 @@
           :title="'Row #' + (step.rosterIndex + 1)"
         />
       </div>
-      <div class="walk-legend">
-        <span><i class="leg leg-in" /> In sample</span>
-        <span v-if="method === 'quota'"><i class="leg leg-skip" /> Passed over</span>
-      </div>
     </div>
     <div v-if="useHeatmap" ref="heatmapEl" class="roster-heatmap-wrap">
       <p class="heatmap-caption">{{ heatmapCaption }}</p>
@@ -71,38 +69,16 @@
           class="heatmap-bin"
           :class="{
             'bin-in': bin.inSample,
-            'bin-skip': bin.skipped,
+            'bin-pool': bin.inPool,
+            'bin-skip': bin.skipped && !bin.inSample && !bin.inPool,
             'bin-pulse': bin.isPulse,
           }"
           :style="{ background: scoreColor(bin.avgScore) }"
           :title="bin.title"
         />
       </div>
-      <p class="grid-note">Left = list row 1, right = row {{ rosterSize }}. Blue top = sample includes someone in that segment.</p>
+      <p class="grid-note">{{ heatmapLegend }}</p>
     </div>
-    <div
-      v-else-if="cells.length"
-      ref="gridEl"
-      class="roster-grid"
-      role="img"
-      aria-label="Roster selection preview"
-    >
-      <div
-        v-for="cell in cells"
-        :key="'c' + cell.rosterIndex"
-        :ref="(el) => setCellRef(cell.rosterIndex, el)"
-        class="roster-cell"
-        :class="{
-          'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
-          'cell-in': highlightIndices.includes(cell.rosterIndex),
-          'cell-skip': skipIndices.includes(cell.rosterIndex),
-          'cell-pulse': cell.rosterIndex === pulseIndex,
-        }"
-        :style="{ background: scoreColor(cell.score) }"
-        :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
-      />
-    </div>
-    <p v-else-if="truncated" class="grid-note">Prefix of roster plus selected rows; full N used in draws.</p>
   </div>
 </template>
 
@@ -111,31 +87,31 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { isListWalkMethod, scoreColor } from '../../lib/samplingSim.js'
 
 const props = defineProps({
-  cells: { type: Array, default: () => [] },
-  dormSize: { type: Number, default: 0 },
   highlightIndices: { type: Array, default: () => [] },
   skipIndices: { type: Array, default: () => [] },
+  poolIndices: { type: Array, default: () => [] },
   pulseIndex: { type: Number, default: null },
   pickLabel: { type: String, default: '' },
   animating: { type: Boolean, default: false },
   method: { type: String, default: 'srs' },
   walkSteps: { type: Array, default: () => [] },
-  truncated: { type: Boolean, default: false },
   heatmapBins: { type: Array, default: () => [] },
   sysInterval: { type: Number, default: null },
   rosterSize: { type: Number, default: 0 },
 })
 
 const walkSteps = computed(() => props.walkSteps.slice(-72))
-const useHeatmap = computed(() => !isListWalkMethod(props.method) && props.heatmapBins.length > 0)
+const useHeatmap = computed(() => props.heatmapBins.length > 0)
 
 const rosterMapMarks = computed(() => {
-  if (isListWalkMethod(props.method)) return []
   const byIdx = new Map()
   for (const step of props.walkSteps) {
     if (step.action === 'retry') {
       byIdx.set(step.rosterIndex, { rosterIndex: step.rosterIndex, action: 'retry' })
     }
+  }
+  for (const idx of props.poolIndices) {
+    if (!byIdx.has(idx)) byIdx.set(idx, { rosterIndex: idx, action: 'pool' })
   }
   for (const idx of props.skipIndices) {
     if (!byIdx.has(idx)) byIdx.set(idx, { rosterIndex: idx, action: 'skip' })
@@ -151,7 +127,6 @@ const showListWalkStrip = computed(
 )
 const showRosterMap = computed(
   () =>
-    !isListWalkMethod(props.method) &&
     props.rosterSize > 1 &&
     (rosterMapMarks.value.length > 0 || props.animating)
 )
@@ -167,24 +142,41 @@ const sysTicks = computed(() => {
 })
 
 const walkCaption = computed(() => {
-  if (props.method === 'quota') return 'List walk (in vs passed over)'
-  return 'First n* list positions'
+  if (props.method === 'quota') return 'Walk order: who entered the sample vs was passed over'
+  return 'Walk order: first rows on the registrar list'
 })
 
 const rosterMapCaption = computed(() => {
-  if (props.method === 'sys') return 'Systematic: evenly spaced rows on the registrar list (after random start)'
+  if (props.method === 'conv') return 'Convenience: sample fills from the top of the list'
+  if (props.method === 'quota') return 'Quota: walk the list — blue = in sample, gray = passed over'
+  if (props.method === 'sys') return 'Systematic: evenly spaced rows (after random start)'
   if (props.method === 'strat') return 'Stratified: random rows within each class year'
-  if (props.method === 'clust' || props.method === 'stage') return 'Cluster: selected halls / stage-2 picks on the list'
-  if (props.method === 'purposive') return 'Purposive: highest scorers — spread wherever they sit on the list'
+  if (props.method === 'stage') return 'Multi-stage: light dots = stage-1 pool dorms, blue = final sample'
+  if (props.method === 'clust') return 'Cluster: whole dorms selected at once'
+  if (props.method === 'purposive') return 'Purposive: highest scorers wherever they sit on the list'
   return 'SRS: each dot is one randomly chosen roster row'
 })
 
 const heatmapCaption = computed(() => {
-  if (props.method === 'sys') return 'Systematic sample segments (even spacing along the list)'
-  if (props.method === 'strat') return 'Stratified sample — picks scattered within each class-year slice'
-  if (props.method === 'purposive') return 'Purposive sample — high-score students at their list positions'
-  if (props.method === 'clust' || props.method === 'stage') return 'Cluster sample — whole dorm blocks on the list'
-  return 'Simple random sample — picks scattered along the full registrar list'
+  if (props.method === 'conv') return 'Convenience — sample from the left (top of list)'
+  if (props.method === 'quota') return 'Quota — blue = in sample, gray stripe = passed over'
+  if (props.method === 'sys') return 'Systematic — evenly spaced segments along the list'
+  if (props.method === 'strat') return 'Stratified — picks within each class-year slice'
+  if (props.method === 'stage') return 'Multi-stage — light blue = stage-1 pool, dark blue = final sample'
+  if (props.method === 'clust') return 'Cluster — whole dorm blocks on the list'
+  if (props.method === 'purposive') return 'Purposive — high-score students at their list positions'
+  return 'Simple random sample — picks scattered along the full list'
+})
+
+const heatmapLegend = computed(() => {
+  const base = `Left = list row 1, right = row ${props.rosterSize}.`
+  if (props.method === 'stage') {
+    return `${base} Light blue bottom = stage-1 pool; dark blue = in final sample.`
+  }
+  if (props.method === 'quota') {
+    return `${base} Blue bottom = in sample; gray = passed over (quota full for that class year).`
+  }
+  return `${base} Blue bottom = someone from that segment is in the sample.`
 })
 
 function rosterPct(idx) {
@@ -196,32 +188,22 @@ function mapMarkTitle(mark) {
   const row = mark.rosterIndex + 1
   if (mark.action === 'retry') return `Row #${row} — duplicate draw, not in sample`
   if (mark.action === 'skip') return `Row #${row} — passed over`
+  if (mark.action === 'pool') return `Row #${row} — in stage-1 pool`
   return `Row #${row} — in sample`
 }
 
 const heatmapEl = ref(null)
-const gridEl = ref(null)
-const cellRefs = ref({})
-
-function setCellRef(rosterIndex, el) {
-  if (el) cellRefs.value[rosterIndex] = el
-}
 
 watch(
   () => props.pulseIndex,
   async (idx) => {
-    if (idx == null || !props.animating) return
+    if (idx == null || !props.animating || !heatmapEl.value) return
     await nextTick()
-    if (useHeatmap.value && heatmapEl.value) {
-      const binIdx = props.heatmapBins.findIndex((b) => idx >= b.lo && idx <= b.hi)
-      if (binIdx >= 0) {
-        const el = heatmapEl.value.querySelectorAll('.heatmap-bin')[binIdx]
-        el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
-      }
-      return
+    const binIdx = props.heatmapBins.findIndex((b) => idx >= b.lo && idx <= b.hi)
+    if (binIdx >= 0) {
+      const el = heatmapEl.value.querySelectorAll('.heatmap-bin')[binIdx]
+      el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
     }
-    const el = cellRefs.value[idx]
-    el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
   }
 )
 
@@ -231,7 +213,6 @@ watch(
     if (on) return
     await nextTick()
     if (heatmapEl.value) heatmapEl.value.scrollLeft = 0
-    if (gridEl.value) gridEl.value.scrollTop = 0
   }
 )
 </script>
@@ -291,9 +272,7 @@ watch(
   color: var(--text-muted, #64748b);
   margin-top: 2px;
 }
-.roster-map-end-right {
-  right: 0;
-}
+.roster-map-end-right { right: 0; }
 .roster-map-mark {
   position: absolute;
   top: 50%;
@@ -306,12 +285,9 @@ watch(
   opacity: 0.9;
   z-index: 1;
 }
+.roster-map-mark.mark-pool { background: #93c5fd; }
 .roster-map-mark.mark-skip { background: #94a3b8; opacity: 0.55; }
 .roster-map-mark.mark-retry { background: #ef4444; width: 7px; height: 7px; margin-left: -3.5px; }
-.roster-map-mark.mark-strat-0 { background: #3b82f6; }
-.roster-map-mark.mark-strat-1 { background: #6366f1; }
-.roster-map-mark.mark-strat-2 { background: #8b5cf6; }
-.roster-map-mark.mark-strat-3 { background: #a855f7; }
 .roster-map-mark.mark-pulse {
   width: 13px;
   height: 13px;
@@ -319,45 +295,16 @@ watch(
   box-shadow: 0 0 0 2px #f59e0b;
   z-index: 2;
 }
-.roster-heatmap {
-  display: flex;
-  width: 100%;
-  height: 52px;
-  gap: 1px;
-  overflow-x: auto;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: 6px;
-  padding: 2px;
-  background: #fff;
-}
-.heatmap-bin {
-  flex: 1 1 0;
-  min-width: 3px;
-  border-radius: 1px;
-  opacity: 0.88;
-  box-sizing: border-box;
-}
-.heatmap-bin.bin-in {
-  box-shadow: inset 0 -4px 0 #2563eb;
-  opacity: 1;
-}
-.heatmap-bin.bin-skip {
-  box-shadow: inset 0 -4px 0 #94a3b8;
-}
-.heatmap-bin.bin-pulse {
-  outline: 2px solid #f59e0b;
-  outline-offset: -1px;
-  z-index: 1;
-}
 .walk-strip {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
-  max-height: 48px;
+  max-height: 36px;
   overflow: auto;
   padding: 4px;
   background: var(--bg-subtle, #f1f5f9);
   border-radius: 4px;
+  margin-bottom: 0.35rem;
 }
 .walk-tile {
   width: 10px;
@@ -369,10 +316,7 @@ watch(
 .walk-tile.walk-skip {
   background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, #e2e8f0 1px, #e2e8f0 2px);
 }
-.walk-tile.walk-pulse {
-  box-shadow: 0 0 0 2px #f59e0b;
-  transform: scale(1.15);
-}
+.walk-tile.walk-pulse { box-shadow: 0 0 0 2px #f59e0b; }
 .walk-legend {
   display: flex;
   flex-wrap: wrap;
@@ -390,31 +334,44 @@ watch(
   border-radius: 1px;
 }
 .leg-in { background: #2563eb; }
+.leg-pool { background: #93c5fd; }
 .leg-retry { background: #ef4444; border-radius: 50%; }
 .leg-skip {
   background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, #e2e8f0 1px, #e2e8f0 2px);
 }
-.roster-grid {
+.roster-heatmap {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  max-height: 140px;
-  overflow: auto;
-  padding: 4px;
+  width: 100%;
+  height: 52px;
+  gap: 1px;
+  overflow-x: auto;
   border: 1px solid var(--border, #e2e8f0);
   border-radius: 6px;
+  padding: 2px;
   background: #fff;
 }
-.roster-cell {
-  width: 16px;
-  height: 16px;
-  border-radius: 2px;
-  position: relative;
+.heatmap-bin {
+  flex: 1 1 0;
+  min-width: 3px;
+  border-radius: 1px;
+  opacity: 0.88;
 }
-.roster-cell.dorm-start { outline: 1px solid rgba(0, 0, 0, 0.25); }
-.roster-cell.cell-in { box-shadow: 0 0 0 2px #2563eb; z-index: 1; }
-.roster-cell.cell-skip { opacity: 0.45; }
-.roster-cell.cell-pulse { box-shadow: 0 0 0 3px #f59e0b; z-index: 2; transform: scale(1.2); }
+.heatmap-bin.bin-in {
+  box-shadow: inset 0 -4px 0 #2563eb;
+  opacity: 1;
+}
+.heatmap-bin.bin-pool {
+  box-shadow: inset 0 -4px 0 #93c5fd;
+}
+.heatmap-bin.bin-skip {
+  box-shadow: inset 0 -4px 0 #94a3b8;
+  opacity: 0.75;
+}
+.heatmap-bin.bin-pulse {
+  outline: 2px solid #f59e0b;
+  outline-offset: -1px;
+  z-index: 1;
+}
 .grid-note {
   font-size: 0.75rem;
   color: var(--text-muted, #64748b);

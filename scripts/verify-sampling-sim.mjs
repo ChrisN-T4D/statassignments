@@ -58,6 +58,25 @@ assert(conv.steps.length === n, 'convenience steps')
 const quota = sampleDrawDetailed('quota', people, n, k)
 assert(quota.selected.length === n, 'quota n')
 assert(quota.steps.length >= n, 'quota walk has steps')
+const quotaHeat = buildRosterHeatmapBins(people, new Set(quota.rosterOrder), new Set(quota.skippedIndices || []))
+assert(quotaHeat.length === 120, 'quota heatmap')
+const skipHeat = buildRosterHeatmapBins(people, new Set([0, 1]), new Set([50, 51, 52, 53]))
+assert(skipHeat.some((b) => b.skipped), 'heatmap marks skipped segments')
+
+const convHeat = buildRosterHeatmapBins(people, new Set(conv.rosterOrder), new Set())
+const convLit = convHeat.filter((b) => b.inSample)
+assert(convLit.length > 0 && convLit[0].b <= 2, 'convenience sample from start of list')
+
+const stage = sampleDrawDetailed('stage', people, n, k)
+assert(stage.selected.length === n, 'stage n')
+const poolSteps = stage.steps.filter((s) => s.type === 'block' && s.action === 'stage-pool')
+assert(poolSteps.length > 0, 'stage has pool blocks')
+assert(poolSteps.every((s) => s.clusterId != null), 'stage blocks have clusterId')
+const stage2 = stage.steps.filter((s) => s.stage === 2 && s.action === 'in')
+assert(stage2.length === n, 'stage 2 SRS picks')
+const poolIdx = new Set(poolSteps.flatMap((s) => s.rosterIndices))
+const poolHeat = buildRosterHeatmapBins(people, new Set(), new Set(), null, 120, poolIdx)
+assert(poolHeat.some((b) => b.inPool || b.poolCount > 0), 'stage pool heatmap')
 
 const means = []
 for (let i = 0; i < 50; i++) {

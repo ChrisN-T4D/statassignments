@@ -14,16 +14,14 @@
     <p v-else class="waiting">Click “Take another sample” to run this plan.</p>
     <SamplingSelectionViz
       v-if="showViz"
-      :cells="gridCells"
-      :dorm-size="dormSize"
       :highlight-indices="highlightIndices"
       :skip-indices="skipIndices"
+      :pool-indices="poolIndices"
       :pulse-index="pulseIndex"
       :pick-label="pickLabel"
       :animating="animating"
       :method="plan.method"
       :walk-steps="walkSteps"
-      :truncated="gridTruncated"
       :heatmap-bins="heatmapBins"
       :sys-interval="sysInterval"
       :roster-size="rosterSize"
@@ -43,20 +41,18 @@ const props = defineProps({
   popMean: { type: Number, required: true },
   highlightIndices: { type: Array, default: () => [] },
   skipIndices: { type: Array, default: () => [] },
+  poolIndices: { type: Array, default: () => [] },
   animating: { type: Boolean, default: false },
   pulseIndex: { type: Number, default: null },
   pickLabel: { type: String, default: '' },
   walkSteps: { type: Array, default: () => [] },
-  gridCells: { type: Array, default: () => [] },
-  gridTruncated: { type: Boolean, default: false },
   heatmapBins: { type: Array, default: () => [] },
   sysInterval: { type: Number, default: null },
   rosterSize: { type: Number, default: 0 },
-  dormSize: { type: Number, default: 0 },
 })
 
 const showViz = computed(
-  () => props.gridCells.length > 0 || props.heatmapBins.length > 0 || props.animating
+  () => props.heatmapBins.length > 0 || props.animating
 )
 
 const deltaFromMu = computed(() =>
@@ -92,14 +88,8 @@ const deltaClass = computed(() => {
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
 }
-.badge.rand {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-.badge.norand {
-  background: #ffedd5;
-  color: #c2410c;
-}
+.badge.rand { background: #dbeafe; color: #1d4ed8; }
+.badge.norand { background: #ffedd5; color: #c2410c; }
 .blurb {
   font-size: 0.85rem;
   margin: 0 0 0.5rem;

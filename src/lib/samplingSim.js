@@ -93,6 +93,8 @@ export const SAMPLING_PLAN_META = {
 export const SAMPLING_POP_GRID_MAX = 200
 export const SAMPLING_POP_PREVIEW_HARD_CAP = 420
 
+export const STRATUM_NAMES = ['Freshman', 'Sophomore', 'Junior', 'Senior']
+
 export function mean(arr) {
   if (!arr?.length) return 0
   return arr.reduce((s, x) => s + x, 0) / arr.length
@@ -324,10 +326,17 @@ export function sampleQuotaDetailed(people, n) {
     if (got[s] < alloc[s]) {
       out.push(p)
       got[s]++
-      steps.push({ rosterIndex: p.rosterIndex, action: 'in' })
+      steps.push({
+        rosterIndex: p.rosterIndex,
+        action: 'in',
+        pick: out.length,
+        stratum: s,
+        stratumSlot: got[s],
+        stratumTarget: alloc[s],
+      })
     } else {
       skippedIndices.push(p.rosterIndex)
-      steps.push({ rosterIndex: p.rosterIndex, action: 'skip' })
+      steps.push({ rosterIndex: p.rosterIndex, action: 'skip', stratum: s })
     }
   }
   const inSampleByStratum = [0, 0, 0, 0]
@@ -438,6 +447,7 @@ export function sampleDrawDetailed(method, people, nTarget, k) {
       type: 'block',
       rosterIndices: block.rosterIndices,
       action: 'in',
+      clusterId: block.clusterId,
     }))
     return {
       selected,
@@ -464,12 +474,14 @@ export function sampleDrawDetailed(method, people, nTarget, k) {
       type: 'block',
       rosterIndices: block.rosterIndices,
       action: 'stage-pool',
+      clusterId: block.clusterId,
     }))
+    const stage2Steps = stageDraw.steps.map((s) => ({ ...s, stage: 2 }))
     return {
       selected,
       rosterOrder: selected.map((p) => p.rosterIndex),
-      skippedIndices: [],
-      steps: [...blockSteps, ...stageDraw.steps],
+      skippedIndices: stageDraw.skippedIndices || [],
+      steps: [...blockSteps, ...stage2Steps],
       quotaMeta: null,
       convenienceMeta: null,
       clusterBlocks,
@@ -586,15 +598,18 @@ export function buildRosterHeatmapBins(
   highlightSet,
   skipSet,
   pulseIndex = null,
-  binCount = 120
+  binCount = 120,
+  poolSet = null
 ) {
   const N = lastPeople.length
   if (!N) return []
 
   const hi = new Set()
   const sk = new Set()
+  const pool = new Set()
   addValidRosterIndices(highlightSet, N, hi)
   addValidRosterIndices(skipSet, N, sk)
+  addValidRosterIndices(poolSet, N, pool)
 
   const bins = []
   for (let b = 0; b < binCount; b++) {
@@ -604,12 +619,18 @@ export function buildRosterHeatmapBins(
     let n = 0
     let inCount = 0
     let skipCount = 0
+    let poolCount = 0
     for (let i = lo; i <= hiRoster; i++) {
       scoreSum += lastPeople[i].score
       n++
       if (hi.has(i)) inCount++
       if (sk.has(i)) skipCount++
+      if (pool.has(i) && !hi.has(i)) poolCount++
     }
+    const parts = [`List rows ${lo + 1}–${hiRoster + 1}`]
+    if (inCount) parts.push(`${inCount} in sample`)
+    if (poolCount) parts.push(`${poolCount} in stage-1 pool`)
+    if (skipCount) parts.push(`${skipCount} passed over`)
     bins.push({
       b,
       lo,
@@ -617,6 +638,8 @@ export function buildRosterHeatmapBins(
       avgScore: n ? scoreSum / n : 0,
       inSample: inCount > 0,
       inCount,
+      inPool: poolCount > 0,
+      poolCount,
       skipped: skipCount > 0,
       skipCount,
       isPulse:
@@ -624,7 +647,7 @@ export function buildRosterHeatmapBins(
         Number.isFinite(pulseIndex) &&
         pulseIndex >= lo &&
         pulseIndex <= hiRoster,
-      title: `List rows ${lo + 1}–${hiRoster + 1}${inCount ? ` · ${inCount} in sample` : ''}`,
+      title: parts.join(' · '),
     })
   }
   return bins

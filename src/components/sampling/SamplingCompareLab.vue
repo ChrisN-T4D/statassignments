@@ -97,6 +97,8 @@
             :class="{
               'bin-in-a': bin.inA,
               'bin-in-b': bin.inB,
+              'bin-pool': bin.inPool && !bin.inA && !bin.inB,
+              'bin-skip': bin.skipped && !bin.inA && !bin.inB,
               'bin-pulse': bin.isPulse,
             }"
             :style="{ background: scoreColor(bin.avgScore) }"
@@ -122,9 +124,8 @@
           :pulse-index="pulseA"
           :pick-label="pickLabelA"
           :walk-steps="walkStepsA"
-          :grid-cells="gridCellsA"
-          :grid-truncated="gridTruncatedA"
           :heatmap-bins="gridHeatmapA"
+          :pool-indices="poolListA"
           :sys-interval="sysIntervalA"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
@@ -141,9 +142,8 @@
           :pulse-index="pulseB"
           :pick-label="pickLabelB"
           :walk-steps="walkStepsB"
-          :grid-cells="gridCellsB"
-          :grid-truncated="gridTruncatedB"
           :heatmap-bins="gridHeatmapB"
+          :pool-indices="poolListB"
           :sys-interval="sysIntervalB"
           :roster-size="popNDisplay"
           :dorm-size="dormSize"
@@ -222,11 +222,10 @@ import { computed, nextTick, ref, watch } from 'vue'
 import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
-  buildSamplingPopGridForPreview,
   buildRosterHeatmapBins,
   clusterKForSample,
   isListWalkMethod,
-  usesRosterPositionGrid,
+  STRATUM_NAMES,
   generateCampusPopulation,
   meanPeople,
   meanStatsForDraws,
@@ -302,6 +301,8 @@ const highlightA = ref(new Set())
 const highlightB = ref(new Set())
 const skipA = ref(new Set())
 const skipB = ref(new Set())
+const poolA = ref(new Set())
+const poolB = ref(new Set())
 const animatingA = ref(false)
 const animatingB = ref(false)
 const animating = computed(() => animatingA.value || animatingB.value)
@@ -316,6 +317,8 @@ const highlightListA = computed(() => Array.from(highlightA.value))
 const highlightListB = computed(() => Array.from(highlightB.value))
 const skipListA = computed(() => Array.from(skipA.value))
 const skipListB = computed(() => Array.from(skipB.value))
+const poolListA = computed(() => Array.from(poolA.value))
+const poolListB = computed(() => Array.from(poolB.value))
 const gridCellsA = ref([])
 const gridCellsB = ref([])
 const gridTruncatedA = ref(false)
@@ -351,6 +354,8 @@ function resetPlans() {
   highlightB.value = new Set()
   skipA.value = new Set()
   skipB.value = new Set()
+  poolA.value = new Set()
+  poolB.value = new Set()
   pulseA.value = null
   pulseB.value = null
   pickLabelA.value = ''
@@ -362,50 +367,90 @@ function resetPlans() {
 function rebuildPlanGrid(slot) {
   const isA = slot === 'a'
   const pulse = isA ? pulseA.value : pulseB.value
-  const method = isA ? planA.value.method : planB.value.method
-  const pulseExtra =
-    pulse != null && Number.isFinite(pulse) ? new Set([pulse]) : null
   const highlightSet = isA ? highlightA.value : highlightB.value
   const skipSet = isA ? skipA.value : skipB.value
+  const poolSet = isA ? poolA.value : poolB.value
 
-  if (usesRosterPositionGrid(method)) {
-    const bins = buildRosterHeatmapBins(
-      people.value,
-      highlightSet,
-      skipSet,
-      pulse,
-      120
-    )
-    if (isA) {
-      gridCellsA.value = []
-      gridHeatmapA.value = bins
-      gridTruncatedA.value = false
-    } else {
-      gridCellsB.value = []
-      gridHeatmapB.value = bins
-      gridTruncatedB.value = false
-    }
-    return
-  }
-
-  const preview = buildSamplingPopGridForPreview(
+  const bins = buildRosterHeatmapBins(
     people.value,
     highlightSet,
-    new Set(),
     skipSet,
-    new Set(),
-    pulseExtra
+    pulse,
+    120,
+    poolSet
   )
 
   if (isA) {
-    gridCellsA.value = preview.cells
-    gridHeatmapA.value = []
-    gridTruncatedA.value = preview.truncated
+    gridCellsA.value = []
+    gridHeatmapA.value = bins
+    gridTruncatedA.value = false
   } else {
-    gridCellsB.value = preview.cells
-    gridHeatmapB.value = []
-    gridTruncatedB.value = preview.truncated
+    gridCellsB.value = []
+    gridHeatmapB.value = bins
+    gridTruncatedB.value = false
   }
+}
+
+function personAt(rosterIndex) {
+  return people.value[rosterIndex] ?? null
+}
+
+function formatPickLabel(method, step, highlightRef, skipRef, poolRef, nTarget) {
+  const p = personAt(step.rosterIndex)
+  if (!p) return 'Selecting…'
+  const row = step.rosterIndex + 1
+  const score = p.score.toFixed(1)
+  const inCount = highlightRef.value.size
+  const skipCount = skipRef.value.size
+  const poolCount = poolRef.value.size
+
+  if (step.action === 'retry') {
+    return `Row #${row} · score ${score} — already in sample (${inCount} of ${nTarget} chosen), drawing again…`
+  }
+  if (step.action === 'skip') {
+    const year = STRATUM_NAMES[p.stratum] ?? `class year ${p.stratum + 1}`
+    return `Row #${row} · score ${score} · ${year} quota full — passed over (${inCount} of ${nTarget} in sample, ${skipCount} skipped)`
+  }
+  if (method === 'conv') {
+    const pick = step.pick ?? inCount
+    return `Row #${row} · score ${score} · ${pick} of ${nTarget} (walking the list from the top)`
+  }
+  if (method === 'quota') {
+    const year = STRATUM_NAMES[p.stratum] ?? `class year ${p.stratum + 1}`
+    const slotInfo =
+      step.stratumSlot != null && step.stratumTarget != null
+        ? ` · ${year} slot ${step.stratumSlot} of ${step.stratumTarget}`
+        : ` · ${year}`
+    return `Row #${row} · score ${score}${slotInfo} · ${inCount} of ${nTarget} in sample`
+  }
+  if (method === 'stage' && step.stage === 2) {
+    const pick = step.pick ?? inCount
+    return `Stage 2 — Row #${row} · score ${score} · ${pick} of ${nTarget} chosen from pool (${poolCount} in pool)`
+  }
+  if (method === 'sys' && step.sysStart && step.sysInterval) {
+    const pick = step.pick ?? inCount
+    return `Row #${row} · score ${score} · random start, every ${step.sysInterval}th row · ${pick} of ${nTarget} in sample`
+  }
+  if (method === 'strat' && step.stratum != null) {
+    const year = STRATUM_NAMES[step.stratum] ?? `class year ${step.stratum + 1}`
+    const pick = step.pick ?? inCount
+    return `Row #${row} · score ${score} · ${year} · ${pick} of ${nTarget} in sample`
+  }
+  if (method === 'purposive') {
+    const rank = step.rank ?? step.pick ?? inCount
+    return `Row #${row} · score ${score} · rank #${rank} of ${nTarget} highest scores`
+  }
+  const pick = step.pick ?? inCount
+  return `Row #${row} · score ${score} · ${pick} of ${nTarget} in sample (random draw)`
+}
+
+function formatBlockLabel(step, indices, highlightRef, poolRef) {
+  const dorm = step.clusterId != null ? step.clusterId + 1 : '?'
+  const n = indices.length
+  if (step.action === 'stage-pool') {
+    return `Stage 1 — Dorm ${dorm}: ${n} students enter the pool (${poolRef.value.size} in pool so far)`
+  }
+  return `Dorm ${dorm}: all ${n} students selected (${highlightRef.value.size} in sample total)`
 }
 
 function rebuildAllPlanGrids() {
@@ -442,7 +487,8 @@ function rebuildPopGrid() {
     new Set([...highlightA.value, ...highlightB.value]),
     new Set([...skipA.value, ...skipB.value]),
     pulse,
-    120
+    120,
+    new Set([...poolA.value, ...poolB.value])
   )
   popHeatmapBins.value = bins.map((bin) => {
     let inA = 0
@@ -481,6 +527,7 @@ async function animateDraw(slot, drawResult, slow) {
   const isA = slot === 'a'
   const highlightRef = isA ? highlightA : highlightB
   const skipRef = isA ? skipA : skipB
+  const poolRef = isA ? poolA : poolB
   const animRef = isA ? animatingA : animatingB
   const pulseRef = isA ? pulseA : pulseB
   const walkRef = isA ? walkStepsA : walkStepsB
@@ -490,6 +537,7 @@ async function animateDraw(slot, drawResult, slow) {
 
   highlightRef.value = new Set()
   skipRef.value = new Set()
+  poolRef.value = new Set()
   pulseRef.value = null
   pickLabelRef.value = ''
   walkRef.value = []
@@ -503,32 +551,34 @@ async function animateDraw(slot, drawResult, slow) {
 
   for (const step of drawResult.steps || []) {
     if (step.type === 'block') {
-      pickLabelRef.value =
-        step.action === 'stage-pool' ? 'Stage 1: dorm(s) in pool' : 'Whole cluster(s) selected'
-      for (const idx of step.rosterIndices) {
-        pulseRef.value = idx
-        if (step.action !== 'stage-pool') {
-          highlightRef.value = new Set([...highlightRef.value, idx])
+      const indices = step.rosterIndices || []
+      pulseRef.value = indices[0] ?? null
+      if (step.action === 'stage-pool') {
+        poolRef.value = new Set([...poolRef.value, ...indices])
+        pickLabelRef.value = formatBlockLabel(step, indices, highlightRef, poolRef)
+        for (const idx of indices) {
+          walkRef.value = [...walkRef.value, { rosterIndex: idx, action: 'pool' }]
         }
-        walkRef.value = [
-          ...walkRef.value,
-          { rosterIndex: idx, action: step.action === 'stage-pool' ? 'pool' : 'in' },
-        ]
-        rebuildPlanGrid(slot)
-        rebuildPopGrid()
-        if (!prefersReducedMotion.value) {
-          await sleep(slow ? delay * 2 : FAST_MS)
+      } else {
+        highlightRef.value = new Set([...highlightRef.value, ...indices])
+        pickLabelRef.value = formatBlockLabel(step, indices, highlightRef, poolRef)
+        for (const idx of indices) {
+          walkRef.value = [...walkRef.value, { rosterIndex: idx, action: 'in' }]
         }
+      }
+      rebuildPlanGrid(slot)
+      rebuildPopGrid()
+      await nextTick()
+      if (!prefersReducedMotion.value) {
+        await sleep(slow ? delay * 2 : FAST_MS)
       }
       continue
     }
     pulseRef.value = step.rosterIndex
     if (step.action === 'retry') {
       if (!slow) continue
-      pickLabelRef.value = `Row #${step.rosterIndex + 1} already in sample — random redraw…`
-      if (!isListWalkMethod(method)) {
-        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'retry' }]
-      }
+      pickLabelRef.value = formatPickLabel(method, step, highlightRef, skipRef, poolRef, nTarget)
+      walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'retry' }]
       rebuildPlanGrid(slot)
       rebuildPopGrid()
       await nextTick()
@@ -537,30 +587,16 @@ async function animateDraw(slot, drawResult, slow) {
     }
     if (step.action === 'skip') {
       skipRef.value = new Set([...skipRef.value, step.rosterIndex])
-      if (method === 'quota') {
-        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'skip' }]
-      }
+      walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'skip' }]
+      pickLabelRef.value = formatPickLabel(method, step, highlightRef, skipRef, poolRef, nTarget)
     } else {
       highlightRef.value = new Set([...highlightRef.value, step.rosterIndex])
       walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
-      if (step.pick != null) {
-        const rowLabel = `Row #${step.rosterIndex + 1}`
-        let label
-        if (isListWalkMethod(method)) {
-          label = `Pick ${step.pick} of ${nTarget}`
-        } else if (method === 'sys' && step.sysStart && step.sysInterval) {
-          if (isA) sysIntervalA.value = step.sysInterval
-          else sysIntervalB.value = step.sysInterval
-          label = `${rowLabel} · random start, then every ${step.sysInterval}th person (pick ${step.pick} of ${nTarget})`
-        } else if (method === 'strat' && step.stratum != null) {
-          label = `${rowLabel} · stratum ${step.stratum + 1}, pick ${step.pick} of ${nTarget}`
-        } else if (SAMPLING_PLAN_META[method]?.random) {
-          label = `${rowLabel} · random pick ${step.pick} of ${nTarget}`
-        } else {
-          label = `${rowLabel} · pick ${step.pick} of ${nTarget}`
-        }
-        pickLabelRef.value = label
+      if (method === 'sys' && step.sysStart && step.sysInterval) {
+        if (isA) sysIntervalA.value = step.sysInterval
+        else sysIntervalB.value = step.sysInterval
       }
+      pickLabelRef.value = formatPickLabel(method, step, highlightRef, skipRef, poolRef, nTarget)
     }
     rebuildPlanGrid(slot)
     rebuildPopGrid()
@@ -568,9 +604,11 @@ async function animateDraw(slot, drawResult, slow) {
     if (!prefersReducedMotion.value) await sleep(delay)
   }
 
+  poolRef.value = new Set()
   pulseRef.value = null
   pickLabelRef.value = ''
   animRef.value = false
+  rebuildPlanGrid(slot)
   rebuildPopGrid()
 }
 
@@ -802,6 +840,13 @@ watch([() => planA.value.method, () => planB.value.method], () => {
 }
 .pop-heatmap .heatmap-bin.bin-in-a.bin-in-b {
   box-shadow: inset 0 -4px 0 #2563eb, inset 0 4px 0 #f97316;
+}
+.pop-heatmap .heatmap-bin.bin-pool {
+  box-shadow: inset 0 -4px 0 #93c5fd;
+}
+.pop-heatmap .heatmap-bin.bin-skip {
+  box-shadow: inset 0 -4px 0 #94a3b8;
+  opacity: 0.75;
 }
 .pop-heatmap .heatmap-bin.bin-pulse {
   outline: 2px solid #f59e0b;
