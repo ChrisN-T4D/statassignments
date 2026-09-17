@@ -130,6 +130,8 @@
           :walk-steps="walkStepsA"
           :grid-cells="gridCellsA"
           :grid-truncated="gridTruncatedA"
+          :grid-window="gridWindowA"
+          :roster-size="popNDisplay"
           :dorm-size="dormSize"
         />
         <PlanDrawPanel
@@ -146,6 +148,8 @@
           :walk-steps="walkStepsB"
           :grid-cells="gridCellsB"
           :grid-truncated="gridTruncatedB"
+          :grid-window="gridWindowB"
+          :roster-size="popNDisplay"
           :dorm-size="dormSize"
         />
       </div>
@@ -223,7 +227,9 @@ import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
   buildSamplingPopGridForPreview,
+  buildSamplingPopGridWindow,
   clusterKForSample,
+  isListWalkMethod,
   generateCampusPopulation,
   meanPeople,
   meanStatsForDraws,
@@ -318,6 +324,8 @@ const gridCellsA = ref([])
 const gridCellsB = ref([])
 const gridTruncatedA = ref(false)
 const gridTruncatedB = ref(false)
+const gridWindowA = ref(null)
+const gridWindowB = ref(null)
 
 const statsA = computed(() => meanStatsForDraws(planA.value.means, popMean.value))
 const statsB = computed(() => meanStatsForDraws(planB.value.means, popMean.value))
@@ -356,22 +364,45 @@ function resetPlans() {
 function rebuildPlanGrid(slot) {
   const isA = slot === 'a'
   const pulse = isA ? pulseA.value : pulseB.value
+  const animating = isA ? animatingA.value : animatingB.value
+  const method = isA ? planA.value.method : planB.value.method
   const pulseExtra =
     pulse != null && Number.isFinite(pulse) ? new Set([pulse]) : null
-  const preview = buildSamplingPopGridForPreview(
-    people.value,
-    isA ? highlightA.value : highlightB.value,
-    new Set(),
-    isA ? skipA.value : skipB.value,
-    new Set(),
-    pulseExtra
-  )
+  const highlightSet = isA ? highlightA.value : highlightB.value
+  const skipSet = isA ? skipA.value : skipB.value
+
+  const useWindow =
+    animating && SAMPLING_PLAN_META[method]?.random && !isListWalkMethod(method)
+  const preview = useWindow
+    ? buildSamplingPopGridWindow(
+        people.value,
+        pulse ?? 0,
+        45,
+        highlightSet,
+        skipSet,
+        pulseExtra
+      )
+    : buildSamplingPopGridForPreview(
+        people.value,
+        highlightSet,
+        new Set(),
+        skipSet,
+        new Set(),
+        pulseExtra
+      )
+
+  const windowNote = useWindow
+    ? { lo: preview.windowLo, hi: preview.windowHi, total: people.value.length }
+    : null
+
   if (isA) {
     gridCellsA.value = preview.cells
     gridTruncatedA.value = preview.truncated
+    gridWindowA.value = windowNote
   } else {
     gridCellsB.value = preview.cells
     gridTruncatedB.value = preview.truncated
+    gridWindowB.value = windowNote
   }
 }
 
@@ -481,7 +512,10 @@ async function animateDraw(slot, drawResult, slow) {
     pulseRef.value = step.rosterIndex
     if (step.action === 'retry') {
       if (!slow) continue
-      pickLabelRef.value = 'Already in sample — drawing again…'
+      pickLabelRef.value = `Row #${step.rosterIndex + 1} already in sample — random redraw…`
+      if (!isListWalkMethod(method)) {
+        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'retry' }]
+      }
       rebuildPlanGrid(slot)
       rebuildPopGrid()
       await nextTick()
@@ -497,11 +531,18 @@ async function animateDraw(slot, drawResult, slow) {
       highlightRef.value = new Set([...highlightRef.value, step.rosterIndex])
       walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
       if (step.pick != null) {
-        let label = `Pick ${step.pick} of ${nTarget}`
-        if (step.sysStart && step.sysInterval) {
-          label += ` · random start, then every ${step.sysInterval}th person`
-        } else if (step.stratum != null) {
-          label += ` · stratum ${step.stratum + 1}`
+        const rowLabel = `Row #${step.rosterIndex + 1}`
+        let label
+        if (isListWalkMethod(method)) {
+          label = `Pick ${step.pick} of ${nTarget}`
+        } else if (method === 'sys' && step.sysStart && step.sysInterval) {
+          label = `${rowLabel} · random start, then every ${step.sysInterval}th person (pick ${step.pick} of ${nTarget})`
+        } else if (method === 'strat' && step.stratum != null) {
+          label = `${rowLabel} · stratum ${step.stratum + 1}, pick ${step.pick} of ${nTarget}`
+        } else if (SAMPLING_PLAN_META[method]?.random) {
+          label = `${rowLabel} · random pick ${step.pick} of ${nTarget}`
+        } else {
+          label = `${rowLabel} · pick ${step.pick} of ${nTarget}`
         }
         pickLabelRef.value = label
       }

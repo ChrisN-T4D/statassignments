@@ -4,6 +4,7 @@ import {
   sampleDrawDetailed,
   meanStatsForDraws,
   clusterKForSample,
+  buildSamplingPopGridWindow,
 } from '../src/lib/samplingSim.js'
 
 let failed = 0
@@ -28,6 +29,19 @@ assert(srs.selected.length === n, 'srs n')
 const srsIns = srs.steps.filter((s) => s.action === 'in')
 assert(srsIns.length === n, 'srs in-steps count')
 assert(srsIns.every((s, i) => s.pick === i + 1), 'srs picks in order')
+const notSequential = srsIns.some((s, i) => i > 0 && s.rosterIndex <= srsIns[i - 1].rosterIndex)
+assert(notSequential, 'srs roster picks are not list-order')
+
+const midPick = srsIns[Math.floor(srsIns.length / 2)]
+const win = buildSamplingPopGridWindow(
+  people,
+  midPick.rosterIndex,
+  20,
+  new Set(srsIns.map((s) => s.rosterIndex)),
+  new Set()
+)
+assert(win.cells.some((c) => c.rosterIndex === midPick.rosterIndex), 'grid window centers on pick')
+assert(win.windowLo <= midPick.rosterIndex && win.windowHi >= midPick.rosterIndex, 'window bounds')
 
 const conv = sampleDrawDetailed('conv', people, n, k)
 assert(conv.selected.length === n, 'convenience n')

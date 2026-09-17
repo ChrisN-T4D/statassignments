@@ -3,7 +3,32 @@
     <p v-if="animating" class="live-label">
       {{ pickLabel || 'Selecting now… watch tiles light up' }}
     </p>
-    <div v-if="walkSteps.length" class="walk-strip-wrap">
+    <div v-if="showRosterMap" class="roster-map-wrap">
+      <p class="walk-caption">{{ rosterMapCaption }}</p>
+      <div class="roster-map" role="img" :aria-label="'Pick positions on full roster'">
+        <div class="roster-map-track">
+          <span class="roster-map-end">1</span>
+          <span class="roster-map-end roster-map-end-right">{{ rosterSize }}</span>
+        </div>
+        <div
+          v-for="(step, i) in mapSteps"
+          :key="'rm' + i"
+          class="roster-map-mark"
+          :class="{
+            'mark-in': step.action === 'in' || step.action === 'pool',
+            'mark-retry': step.action === 'retry',
+            'mark-pulse': step.rosterIndex === pulseIndex,
+          }"
+          :style="{ left: rosterPct(step.rosterIndex) }"
+          :title="mapMarkTitle(step)"
+        />
+      </div>
+      <div class="walk-legend">
+        <span><i class="leg leg-in" /> In sample</span>
+        <span v-if="hasRetries"><i class="leg leg-retry" /> Duplicate draw (SRS)</span>
+      </div>
+    </div>
+    <div v-else-if="showListWalkStrip" class="walk-strip-wrap">
       <p class="walk-caption">{{ walkCaption }}</p>
       <div class="walk-strip" role="img" :aria-label="'Selection walk'">
         <div
@@ -13,7 +38,6 @@
           :class="{
             'walk-in': step.action === 'in',
             'walk-skip': step.action === 'skip',
-            'walk-pool': step.action === 'pool',
             'walk-pulse': step.rosterIndex === pulseIndex,
           }"
           :title="'Row #' + (step.rosterIndex + 1)"
@@ -35,7 +59,7 @@
           'cell-in': highlightIndices.includes(cell.rosterIndex),
           'cell-skip': skipIndices.includes(cell.rosterIndex),
           'cell-pulse': cell.rosterIndex === pulseIndex,
-          'cell-retry': cell.rosterIndex === pulseIndex && pickLabel.toLowerCase().includes('again'),
+          'cell-retry': cell.rosterIndex === pulseIndex && pickLabel.toLowerCase().includes('redraw'),
         }"
         :style="{ background: scoreColor(cell.score) }"
         :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
@@ -45,13 +69,14 @@
         </span>
       </div>
     </div>
-    <p v-if="truncated" class="grid-note">Prefix of roster plus selected rows; full N used in draws.</p>
+    <p v-if="gridWindowNote" class="grid-note">{{ gridWindowNote }}</p>
+    <p v-else-if="truncated" class="grid-note">Prefix of roster plus selected rows; full N used in draws.</p>
   </div>
 </template>
 
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
-import { scoreColor } from '../../lib/samplingSim.js'
+import { isListWalkMethod, scoreColor } from '../../lib/samplingSim.js'
 
 const props = defineProps({
   cells: { type: Array, default: () => [] },
@@ -65,17 +90,51 @@ const props = defineProps({
   walkSteps: { type: Array, default: () => [] },
   rankMap: { type: Map, default: () => new Map() },
   truncated: { type: Boolean, default: false },
+  gridWindow: { type: Object, default: null },
+  rosterSize: { type: Number, default: 0 },
 })
 
 const walkSteps = computed(() => props.walkSteps.slice(-72))
+const mapSteps = computed(() => props.walkSteps.slice(-80))
+
+const showListWalkStrip = computed(
+  () => isListWalkMethod(props.method) && walkSteps.value.length > 0
+)
+const showRosterMap = computed(
+  () => !isListWalkMethod(props.method) && mapSteps.value.length > 0 && props.rosterSize > 1
+)
+const hasRetries = computed(() => mapSteps.value.some((s) => s.action === 'retry'))
 
 const walkCaption = computed(() => {
   if (props.method === 'quota') return 'List walk (in vs passed over)'
-  if (props.method === 'conv') return 'First n* list positions'
-  if (props.method === 'purposive') return 'Top scores selected (rank order)'
-  if (props.method === 'clust' || props.method === 'stage') return 'Cluster members entering sample'
-  return 'Sample building up (selection order)'
+  return 'First n* list positions'
 })
+
+const rosterMapCaption = computed(() => {
+  if (props.method === 'sys') return 'Systematic: random start, then every k-th roster row (positions on full list)'
+  if (props.method === 'strat') return 'Stratified: random picks within each class year (positions on full list)'
+  if (props.method === 'clust' || props.method === 'stage') return 'Cluster sample: roster positions of selected halls / picks'
+  if (props.method === 'purposive') return 'Purposive: highest scores (positions on full list)'
+  return 'Simple random sample: each pick jumps to a random roster row'
+})
+
+const gridWindowNote = computed(() => {
+  if (!props.gridWindow) return ''
+  const { lo, hi, total } = props.gridWindow
+  return `Zoomed to roster rows ${lo + 1}–${hi + 1} of ${total} (follows current pick; full N used in draws).`
+})
+
+function rosterPct(idx) {
+  if (props.rosterSize <= 1) return '0%'
+  return `${(idx / (props.rosterSize - 1)) * 100}%`
+}
+
+function mapMarkTitle(step) {
+  const row = step.rosterIndex + 1
+  if (step.action === 'retry') return `Row #${row} — duplicate draw, not in sample`
+  if (step.action === 'pool') return `Row #${row} — in stage-1 pool`
+  return `Row #${row} — in sample`
+}
 
 const gridEl = ref(null)
 const cellRefs = ref({})
@@ -109,6 +168,7 @@ watch(
 @keyframes pulse-text {
   50% { opacity: 0.65; }
 }
+.roster-map-wrap,
 .walk-strip-wrap {
   margin-bottom: 0.65rem;
 }
@@ -116,6 +176,58 @@ watch(
   font-size: 0.78rem;
   color: var(--text-muted, #64748b);
   margin: 0 0 0.35rem;
+}
+.roster-map {
+  position: relative;
+  height: 28px;
+  margin: 0 2px;
+}
+.roster-map-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 6px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #e2e8f0, #cbd5e1);
+  border-radius: 3px;
+}
+.roster-map-end {
+  position: absolute;
+  top: 100%;
+  font-size: 0.65rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 2px;
+}
+.roster-map-end-right {
+  right: 0;
+}
+.roster-map-mark {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: #2563eb;
+  opacity: 0.85;
+  z-index: 1;
+}
+.roster-map-mark.mark-retry {
+  background: #ef4444;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  opacity: 0.9;
+}
+.roster-map-mark.mark-pulse {
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  box-shadow: 0 0 0 2px #f59e0b;
+  z-index: 2;
+  opacity: 1;
 }
 .walk-strip {
   display: flex;
@@ -145,15 +257,13 @@ watch(
     #e2e8f0 2px
   );
 }
-.walk-tile.walk-pool {
-  background: #93c5fd;
-}
 .walk-tile.walk-pulse {
   box-shadow: 0 0 0 2px #f59e0b;
   transform: scale(1.15);
 }
 .walk-legend {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   font-size: 0.72rem;
   margin-top: 0.25rem;
@@ -168,6 +278,7 @@ watch(
   border-radius: 1px;
 }
 .leg-in { background: #2563eb; }
+.leg-retry { background: #ef4444; border-radius: 50%; }
 .leg-skip {
   background: repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, #e2e8f0 1px, #e2e8f0 2px);
 }

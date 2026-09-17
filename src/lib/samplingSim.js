@@ -521,6 +521,67 @@ export function meanStatsForDraws(means, popMean) {
   return { meanOfMeans: m, bias: m - popMean, sd: stdev(means), n: means.length }
 }
 
+export function isListWalkMethod(method) {
+  return method === 'quota' || method === 'conv'
+}
+
+function samplingPopGridCells(lastPeople, sortedIndices) {
+  return sortedIndices.map((rosterIdx) => {
+    const p = lastPeople[rosterIdx]
+    return {
+      rosterIndex: rosterIdx,
+      pos: rosterIdx + 1,
+      score: p.score,
+      sex: p.sex ?? '—',
+      age: p.age ?? '—',
+      stratum: typeof p.stratum === 'number' ? p.stratum : 0,
+      cluster: p.cluster,
+    }
+  })
+}
+
+function addValidRosterIndices(s, N, target) {
+  if (!s) return
+  for (const idx of s) {
+    if (typeof idx === 'number' && Number.isFinite(idx) && idx >= 0 && idx < N) target.add(idx)
+  }
+}
+
+/** Sliding window around the current draw — for random-method animation (avoids prefix-only illusion). */
+export function buildSamplingPopGridWindow(
+  lastPeople,
+  centerIndex,
+  windowHalf,
+  highlightSet,
+  skipSet,
+  extraIndices = null
+) {
+  const N = lastPeople.length
+  if (!N) return { cells: [], truncated: false, windowLo: 0, windowHi: 0 }
+
+  const c =
+    centerIndex != null && Number.isFinite(centerIndex)
+      ? Math.max(0, Math.min(N - 1, centerIndex))
+      : 0
+  const half = Math.max(12, windowHalf ?? 45)
+  const lo = Math.max(0, c - half)
+  const hi = Math.min(N - 1, c + half)
+
+  const ix = new Set()
+  for (let i = lo; i <= hi; i++) ix.add(i)
+  addValidRosterIndices(highlightSet, N, ix)
+  addValidRosterIndices(skipSet, N, ix)
+  addValidRosterIndices(extraIndices, N, ix)
+
+  const sorted = [...ix].sort((a, b) => a - b)
+  return {
+    cells: samplingPopGridCells(lastPeople, sorted),
+    truncated: lo > 0 || hi < N - 1,
+    windowLo: lo,
+    windowHi: hi,
+  }
+}
+
 export function buildSamplingPopGridForPreview(
   lastPeople,
   leftSet,
@@ -532,31 +593,24 @@ export function buildSamplingPopGridForPreview(
   const N = lastPeople.length
   if (!N) return { cells: [], truncated: false }
 
-  const addValid = (s, target) => {
-    if (!s) return
-    for (const idx of s) {
-      if (typeof idx === 'number' && Number.isFinite(idx) && idx >= 0 && idx < N) target.add(idx)
-    }
-  }
-
   const prefixLen = Math.min(SAMPLING_POP_GRID_MAX, N)
   const ix = new Set()
   for (let i = 0; i < prefixLen; i++) ix.add(i)
-  addValid(leftSet, ix)
-  addValid(rightSet, ix)
-  addValid(quotaSkipLeft, ix)
-  addValid(quotaSkipRight, ix)
-  addValid(extraIndices, ix)
+  addValidRosterIndices(leftSet, N, ix)
+  addValidRosterIndices(rightSet, N, ix)
+  addValidRosterIndices(quotaSkipLeft, N, ix)
+  addValidRosterIndices(quotaSkipRight, N, ix)
+  addValidRosterIndices(extraIndices, N, ix)
 
   let sorted = [...ix].sort((a, b) => a - b)
 
   if (sorted.length > SAMPLING_POP_PREVIEW_HARD_CAP) {
     const must = new Set()
-    addValid(leftSet, must)
-    addValid(rightSet, must)
-    addValid(quotaSkipLeft, must)
-    addValid(quotaSkipRight, must)
-    addValid(extraIndices, must)
+    addValidRosterIndices(leftSet, N, must)
+    addValidRosterIndices(rightSet, N, must)
+    addValidRosterIndices(quotaSkipLeft, N, must)
+    addValidRosterIndices(quotaSkipRight, N, must)
+    addValidRosterIndices(extraIndices, N, must)
     let mustArr = [...must].sort((a, b) => a - b)
     if (mustArr.length > SAMPLING_POP_PREVIEW_HARD_CAP) {
       mustArr = mustArr.slice(0, SAMPLING_POP_PREVIEW_HARD_CAP)
@@ -575,19 +629,7 @@ export function buildSamplingPopGridForPreview(
   const lastShownRosterIdx = sorted.length ? sorted[sorted.length - 1] : -1
   const truncated = sorted.length < N || lastShownRosterIdx < N - 1
 
-  const cells = sorted.map((rosterIdx) => {
-    const p = lastPeople[rosterIdx]
-    return {
-      rosterIndex: rosterIdx,
-      pos: rosterIdx + 1,
-      score: p.score,
-      sex: p.sex ?? '—',
-      age: p.age ?? '—',
-      stratum: typeof p.stratum === 'number' ? p.stratum : 0,
-      cluster: p.cluster,
-    }
-  })
-  return { cells, truncated }
+  return { cells: samplingPopGridCells(lastPeople, sorted), truncated }
 }
 
 export function histogramRectsForValues(values, lo, hi, nbins, innerW, innerH, pad) {
