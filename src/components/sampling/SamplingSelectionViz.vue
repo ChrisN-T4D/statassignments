@@ -1,6 +1,8 @@
 <template>
   <div class="sel-viz">
-    <p v-if="animating" class="live-label">Selecting now… watch tiles light up</p>
+    <p v-if="animating" class="live-label">
+      {{ pickLabel || 'Selecting now… watch tiles light up' }}
+    </p>
     <div
       v-if="walkSteps.length && (method === 'quota' || method === 'conv')"
       class="walk-strip-wrap"
@@ -34,9 +36,10 @@
         class="roster-cell"
         :class="{
           'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
-          'cell-in': highlightSet.has(cell.rosterIndex),
-          'cell-skip': skipSet.has(cell.rosterIndex),
+          'cell-in': highlightIndices.includes(cell.rosterIndex),
+          'cell-skip': skipIndices.includes(cell.rosterIndex),
           'cell-pulse': cell.rosterIndex === pulseIndex,
+          'cell-retry': cell.rosterIndex === pulseIndex && pickLabel.toLowerCase().includes('again'),
         }"
         :style="{ background: scoreColor(cell.score) }"
         :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
@@ -57,9 +60,10 @@ import { scoreColor } from '../../lib/samplingSim.js'
 const props = defineProps({
   cells: { type: Array, default: () => [] },
   dormSize: { type: Number, default: 0 },
-  highlightSet: { type: Set, default: () => new Set() },
-  skipSet: { type: Set, default: () => new Set() },
+  highlightIndices: { type: Array, default: () => [] },
+  skipIndices: { type: Array, default: () => [] },
   pulseIndex: { type: Number, default: null },
+  pickLabel: { type: String, default: '' },
   animating: { type: Boolean, default: false },
   method: { type: String, default: 'srs' },
   walkSteps: { type: Array, default: () => [] },
@@ -198,6 +202,9 @@ watch(
   box-shadow: 0 0 0 3px #f59e0b;
   z-index: 2;
   transform: scale(1.2);
+}
+.roster-cell.cell-retry {
+  box-shadow: 0 0 0 3px #ef4444;
 }
 .rank-chip {
   position: absolute;

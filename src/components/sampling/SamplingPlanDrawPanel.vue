@@ -16,9 +16,10 @@
       v-if="showViz"
       :cells="gridCells"
       :dorm-size="dormSize"
-      :highlight-set="highlightIndices"
-      :skip-set="skipIndices"
+      :highlight-indices="highlightIndices"
+      :skip-indices="skipIndices"
       :pulse-index="pulseIndex"
+      :pick-label="pickLabel"
       :animating="animating"
       :method="plan.method"
       :walk-steps="walkSteps"
@@ -38,10 +39,11 @@ const props = defineProps({
   plan: { type: Object, required: true },
   meta: { type: Object, required: true },
   popMean: { type: Number, required: true },
-  highlightIndices: { type: Set, default: () => new Set() },
-  skipIndices: { type: Set, default: () => new Set() },
+  highlightIndices: { type: Array, default: () => [] },
+  skipIndices: { type: Array, default: () => [] },
   animating: { type: Boolean, default: false },
   pulseIndex: { type: Number, default: null },
+  pickLabel: { type: String, default: '' },
   walkSteps: { type: Array, default: () => [] },
   gridCells: { type: Array, default: () => [] },
   gridTruncated: { type: Boolean, default: false },
@@ -52,7 +54,8 @@ const showViz = computed(() => props.gridCells.length > 0 || props.animating)
 
 const rankMap = computed(() => {
   if (props.plan.method !== 'purposive') return new Map()
-  const cells = props.gridCells.filter((c) => props.highlightIndices.has(c.rosterIndex))
+  const hi = new Set(props.highlightIndices)
+  const cells = props.gridCells.filter((c) => hi.has(c.rosterIndex))
   const sorted = [...cells].sort((a, b) => b.score - a.score || a.rosterIndex - b.rosterIndex)
   const m = new Map()
   sorted.forEach((c, j) => m.set(c.rosterIndex, j + 1))

@@ -121,10 +121,11 @@
           :plan="planA"
           :meta="SAMPLING_PLAN_META[planA.method]"
           :pop-mean="popMean"
-          :highlight-indices="highlightA"
-          :skip-indices="skipA"
+          :highlight-indices="highlightListA"
+          :skip-indices="skipListA"
           :animating="animatingA"
           :pulse-index="pulseA"
+          :pick-label="pickLabelA"
           :walk-steps="walkStepsA"
           :grid-cells="gridCellsA"
           :grid-truncated="gridTruncatedA"
@@ -136,10 +137,11 @@
           :plan="planB"
           :meta="SAMPLING_PLAN_META[planB.method]"
           :pop-mean="popMean"
-          :highlight-indices="highlightB"
-          :skip-indices="skipB"
+          :highlight-indices="highlightListB"
+          :skip-indices="skipListB"
           :animating="animatingB"
           :pulse-index="pulseB"
+          :pick-label="pickLabelB"
           :walk-steps="walkStepsB"
           :grid-cells="gridCellsB"
           :grid-truncated="gridTruncatedB"
@@ -303,8 +305,14 @@ const animating = computed(() => animatingA.value || animatingB.value)
 
 const pulseA = ref(null)
 const pulseB = ref(null)
+const pickLabelA = ref('')
+const pickLabelB = ref('')
 const walkStepsA = ref([])
 const walkStepsB = ref([])
+const highlightListA = computed(() => Array.from(highlightA.value))
+const highlightListB = computed(() => Array.from(highlightB.value))
+const skipListA = computed(() => Array.from(skipA.value))
+const skipListB = computed(() => Array.from(skipB.value))
 const gridCellsA = ref([])
 const gridCellsB = ref([])
 const gridTruncatedA = ref(false)
@@ -338,6 +346,8 @@ function resetPlans() {
   skipB.value = new Set()
   pulseA.value = null
   pulseB.value = null
+  pickLabelA.value = ''
+  pickLabelB.value = ''
   walkStepsA.value = []
   walkStepsB.value = []
 }
@@ -427,11 +437,14 @@ async function animateDraw(slot, drawResult, slow) {
   const animRef = isA ? animatingA : animatingB
   const pulseRef = isA ? pulseA : pulseB
   const walkRef = isA ? walkStepsA : walkStepsB
+  const pickLabelRef = isA ? pickLabelA : pickLabelB
   const method = isA ? planA.value.method : planB.value.method
+  const nTarget = Math.min(clampSampleN(), people.value.length)
 
   highlightRef.value = new Set()
   skipRef.value = new Set()
   pulseRef.value = null
+  pickLabelRef.value = ''
   walkRef.value = []
   animRef.value = true
   rebuildPlanGrid(slot)
@@ -440,6 +453,7 @@ async function animateDraw(slot, drawResult, slow) {
 
   for (const step of drawResult.steps || []) {
     if (step.type === 'block') {
+      pickLabelRef.value = 'Whole cluster(s) selected'
       for (const idx of step.rosterIndices) {
         pulseRef.value = idx
         highlightRef.value = new Set([...highlightRef.value, idx])
@@ -451,6 +465,14 @@ async function animateDraw(slot, drawResult, slow) {
       continue
     }
     pulseRef.value = step.rosterIndex
+    if (step.action === 'retry') {
+      if (!slow) continue
+      pickLabelRef.value = 'Already in sample — drawing again…'
+      rebuildPlanGrid(slot)
+      await nextTick()
+      if (!prefersReducedMotion.value) await sleep(Math.max(40, delay * 0.6))
+      continue
+    }
     if (step.action === 'skip') {
       skipRef.value = new Set([...skipRef.value, step.rosterIndex])
       if (method === 'quota' || method === 'conv') {
@@ -461,6 +483,15 @@ async function animateDraw(slot, drawResult, slow) {
       if (method === 'quota' || method === 'conv') {
         walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
       }
+      if (step.pick != null) {
+        let label = `Pick ${step.pick} of ${nTarget}`
+        if (step.sysStart && step.sysInterval) {
+          label += ` · random start, then every ${step.sysInterval}th person`
+        } else if (step.stratum != null) {
+          label += ` · stratum ${step.stratum + 1}`
+        }
+        pickLabelRef.value = label
+      }
     }
     rebuildPlanGrid(slot)
     await nextTick()
@@ -468,6 +499,7 @@ async function animateDraw(slot, drawResult, slow) {
   }
 
   pulseRef.value = null
+  pickLabelRef.value = ''
   animRef.value = false
   rebuildPopGrid()
 }

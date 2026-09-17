@@ -23,6 +23,12 @@ assert(mu > 0, 'population mean')
 const n = 40
 const k = clusterKForSample(n, m)
 
+const srs = sampleDrawDetailed('srs', people, n, k)
+assert(srs.selected.length === n, 'srs n')
+const srsIns = srs.steps.filter((s) => s.action === 'in')
+assert(srsIns.length === n, 'srs in-steps count')
+assert(srsIns.every((s, i) => s.pick === i + 1), 'srs picks in order')
+
 const conv = sampleDrawDetailed('conv', people, n, k)
 assert(conv.selected.length === n, 'convenience n')
 assert(conv.steps.length === n, 'convenience steps')

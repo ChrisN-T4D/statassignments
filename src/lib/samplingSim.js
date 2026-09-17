@@ -185,22 +185,62 @@ function sampleSRSIndices(N, n) {
 }
 
 export function sampleSRSFromPeople(people, n) {
-  const idx = sampleSRSIndices(people.length, n)
-  return idx.map((i) => people[i])
+  return sampleSRSDetailed(people, n).selected
+}
+
+/** SRS with step-by-step animation (random draws until n* distinct people). */
+export function sampleSRSDetailed(people, n) {
+  const N = people.length
+  const target = Math.min(n, N)
+  const selected = []
+  const selectedSet = new Set()
+  const steps = []
+
+  while (selected.length < target) {
+    const idx = Math.floor(Math.random() * N)
+    if (selectedSet.has(idx)) {
+      steps.push({ rosterIndex: idx, action: 'retry' })
+    } else {
+      selectedSet.add(idx)
+      selected.push(people[idx])
+      steps.push({ rosterIndex: idx, action: 'in', pick: selected.length })
+    }
+  }
+
+  return {
+    selected,
+    rosterOrder: selected.map((p) => p.rosterIndex),
+    skippedIndices: [],
+    steps,
+  }
 }
 
 export function sampleStratified(people, n) {
+  return sampleStratifiedDetailed(people, n).selected
+}
+
+/** Stratified sample with stratum-by-stratum animation steps. */
+export function sampleStratifiedDetailed(people, n) {
   const byS = Array.from({ length: N_STRATA }, () => [])
   for (const p of people) byS[p.stratum].push(p)
   const counts = byS.map((a) => a.length)
   const alloc = allocateProportional(counts, n)
   const out = []
+  const steps = []
   for (let s = 0; s < N_STRATA; s++) {
     const pool = [...byS[s]]
     shuffleInPlace(pool)
-    out.push(...pool.slice(0, alloc[s]))
+    for (const p of pool.slice(0, alloc[s])) {
+      out.push(p)
+      steps.push({ rosterIndex: p.rosterIndex, action: 'in', pick: out.length, stratum: s })
+    }
   }
-  return out
+  return {
+    selected: out,
+    rosterOrder: out.map((p) => p.rosterIndex),
+    skippedIndices: [],
+    steps,
+  }
 }
 
 export function sampleCluster(people, k) {
@@ -215,15 +255,48 @@ export function sampleConvenience(people, n) {
 }
 
 export function sampleSystematic(people, n) {
+  return sampleSystematicDetailed(people, n).selected
+}
+
+/** Systematic sample: random start, then every k-th roster position. */
+export function sampleSystematicDetailed(people, n) {
   const N = people.length
-  if (n >= N) return [...people]
-  const step = Math.floor(N / n)
-  if (step < 1) return sampleSRSFromPeople(people, n)
-  const maxStart = N - 1 - (n - 1) * step
+  if (n >= N) {
+    const steps = people.map((p, i) => ({
+      rosterIndex: p.rosterIndex,
+      action: 'in',
+      pick: i + 1,
+    }))
+    return {
+      selected: [...people],
+      rosterOrder: people.map((p) => p.rosterIndex),
+      skippedIndices: [],
+      steps,
+    }
+  }
+  const interval = Math.floor(N / n)
+  if (interval < 1) return sampleSRSDetailed(people, n)
+  const maxStart = N - 1 - (n - 1) * interval
   const start = maxStart >= 0 ? Math.floor(Math.random() * (maxStart + 1)) : 0
   const out = []
-  for (let i = 0; i < n; i++) out.push(people[start + i * step])
-  return out
+  const steps = []
+  for (let i = 0; i < n; i++) {
+    const p = people[start + i * interval]
+    out.push(p)
+    steps.push({
+      rosterIndex: p.rosterIndex,
+      action: 'in',
+      pick: i + 1,
+      sysStart: i === 0,
+      sysInterval: interval,
+    })
+  }
+  return {
+    selected: out,
+    rosterOrder: out.map((p) => p.rosterIndex),
+    skippedIndices: [],
+    steps,
+  }
 }
 
 export function sampleMultistage(people, k, n) {
@@ -339,7 +412,7 @@ export function sampleDrawDetailed(method, people, nTarget, k) {
     const selected = sampleConvenience(people, nTarget)
     const steps = []
     for (let i = 0; i < Math.min(nTarget, people.length); i++) {
-      steps.push({ rosterIndex: i, action: 'in' })
+      steps.push({ rosterIndex: i, action: 'in', pick: i + 1 })
     }
     return {
       selected,
@@ -385,21 +458,18 @@ export function sampleDrawDetailed(method, people, nTarget, k) {
       clusterId,
       rosterIndices: people.filter((p) => p.cluster === clusterId).map((p) => p.rosterIndex),
     }))
-    const selected = sampleSRSFromPeople(pool, Math.min(nTarget, pool.length))
+    const stageDraw = sampleSRSDetailed(pool, Math.min(nTarget, pool.length))
+    const selected = stageDraw.selected
     const blockSteps = clusterBlocks.map((block) => ({
       type: 'block',
       rosterIndices: block.rosterIndices,
       action: 'stage-pool',
     }))
-    const pickSteps = shuffle(selected.map((p) => p.rosterIndex)).map((rosterIndex) => ({
-      rosterIndex,
-      action: 'in',
-    }))
     return {
       selected,
       rosterOrder: selected.map((p) => p.rosterIndex),
       skippedIndices: [],
-      steps: [...blockSteps, ...pickSteps],
+      steps: [...blockSteps, ...stageDraw.steps],
       quotaMeta: null,
       convenienceMeta: null,
       clusterBlocks,
@@ -425,25 +495,20 @@ export function sampleDrawDetailed(method, people, nTarget, k) {
     }
   }
 
-  let selected
+  let detail
   if (method === 'strat') {
-    selected = sampleStratified(people, nTarget)
+    detail = sampleStratifiedDetailed(people, nTarget)
   } else if (method === 'sys') {
-    selected = sampleSystematic(people, nTarget)
+    detail = sampleSystematicDetailed(people, nTarget)
   } else {
-    selected = sampleSRSFromPeople(people, nTarget)
+    detail = sampleSRSDetailed(people, nTarget)
   }
 
-  const steps = shuffle(selected.map((p) => p.rosterIndex)).map((rosterIndex) => ({
-    rosterIndex,
-    action: 'in',
-  }))
-
   return {
-    selected,
-    rosterOrder: selected.map((p) => p.rosterIndex),
-    skippedIndices: [],
-    steps,
+    selected: detail.selected,
+    rosterOrder: detail.rosterOrder,
+    skippedIndices: detail.skippedIndices,
+    steps: detail.steps,
     quotaMeta: null,
     convenienceMeta: null,
     clusterBlocks: null,
