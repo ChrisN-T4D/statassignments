@@ -98,9 +98,10 @@
               'dorm-start': dormSize > 0 && cell.rosterIndex % dormSize === 0,
               'sex-m': cell.sex === 'M',
               'sex-f': cell.sex === 'F',
-              'cell-in-a': highlightA.has(cell.rosterIndex),
-              'cell-in-b': highlightB.has(cell.rosterIndex),
-              'cell-skip': skipA.has(cell.rosterIndex) || skipB.has(cell.rosterIndex),
+              'cell-in-a': highlightListA.includes(cell.rosterIndex),
+              'cell-in-b': highlightListB.includes(cell.rosterIndex),
+              'cell-skip': skipListA.includes(cell.rosterIndex) || skipListB.includes(cell.rosterIndex),
+              'cell-pulse': cell.rosterIndex === pulseA || cell.rosterIndex === pulseB,
             }"
             :style="{ background: scoreColor(cell.score) }"
             :title="'#' + cell.pos + ', score ' + cell.score.toFixed(1)"
@@ -397,12 +398,16 @@ function rebuildHistograms() {
 }
 
 function rebuildPopGrid() {
+  const pulseExtra = new Set()
+  if (pulseA.value != null && Number.isFinite(pulseA.value)) pulseExtra.add(pulseA.value)
+  if (pulseB.value != null && Number.isFinite(pulseB.value)) pulseExtra.add(pulseB.value)
   const preview = buildSamplingPopGridForPreview(
     people.value,
     highlightA.value,
     highlightB.value,
     skipA.value,
-    skipB.value
+    skipB.value,
+    pulseExtra.size ? pulseExtra : null
   )
   popGridCells.value = preview.cells
   popGridTruncated.value = preview.truncated
@@ -448,16 +453,25 @@ async function animateDraw(slot, drawResult, slow) {
   walkRef.value = []
   animRef.value = true
   rebuildPlanGrid(slot)
+  rebuildPopGrid()
 
   const delay = slow && !prefersReducedMotion.value ? SLOW_MS : FAST_MS
 
   for (const step of drawResult.steps || []) {
     if (step.type === 'block') {
-      pickLabelRef.value = 'Whole cluster(s) selected'
+      pickLabelRef.value =
+        step.action === 'stage-pool' ? 'Stage 1: dorm(s) in pool' : 'Whole cluster(s) selected'
       for (const idx of step.rosterIndices) {
         pulseRef.value = idx
-        highlightRef.value = new Set([...highlightRef.value, idx])
+        if (step.action !== 'stage-pool') {
+          highlightRef.value = new Set([...highlightRef.value, idx])
+        }
+        walkRef.value = [
+          ...walkRef.value,
+          { rosterIndex: idx, action: step.action === 'stage-pool' ? 'pool' : 'in' },
+        ]
         rebuildPlanGrid(slot)
+        rebuildPopGrid()
         if (!prefersReducedMotion.value) {
           await sleep(slow ? delay * 2 : FAST_MS)
         }
@@ -469,20 +483,19 @@ async function animateDraw(slot, drawResult, slow) {
       if (!slow) continue
       pickLabelRef.value = 'Already in sample — drawing again…'
       rebuildPlanGrid(slot)
+      rebuildPopGrid()
       await nextTick()
       if (!prefersReducedMotion.value) await sleep(Math.max(40, delay * 0.6))
       continue
     }
     if (step.action === 'skip') {
       skipRef.value = new Set([...skipRef.value, step.rosterIndex])
-      if (method === 'quota' || method === 'conv') {
+      if (method === 'quota') {
         walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'skip' }]
       }
     } else {
       highlightRef.value = new Set([...highlightRef.value, step.rosterIndex])
-      if (method === 'quota' || method === 'conv') {
-        walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
-      }
+      walkRef.value = [...walkRef.value, { rosterIndex: step.rosterIndex, action: 'in' }]
       if (step.pick != null) {
         let label = `Pick ${step.pick} of ${nTarget}`
         if (step.sysStart && step.sysInterval) {
@@ -494,6 +507,7 @@ async function animateDraw(slot, drawResult, slow) {
       }
     }
     rebuildPlanGrid(slot)
+    rebuildPopGrid()
     await nextTick()
     if (!prefersReducedMotion.value) await sleep(delay)
   }
@@ -733,6 +747,11 @@ watch([() => planA.value.method, () => planB.value.method], () => {
     rgba(0, 0, 0, 0.35) 2px,
     rgba(0, 0, 0, 0.35) 4px
   ) !important;
+}
+.roster-cell.cell-pulse {
+  box-shadow: 0 0 0 2px #f59e0b;
+  z-index: 2;
+  transform: scale(1.15);
 }
 .cell-age {
   position: absolute;

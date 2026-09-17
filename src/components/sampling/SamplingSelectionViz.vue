@@ -3,13 +3,8 @@
     <p v-if="animating" class="live-label">
       {{ pickLabel || 'Selecting now… watch tiles light up' }}
     </p>
-    <div
-      v-if="walkSteps.length && (method === 'quota' || method === 'conv')"
-      class="walk-strip-wrap"
-    >
-      <p class="walk-caption">
-        {{ method === 'quota' ? 'List walk (in vs passed over)' : 'First n* list positions' }}
-      </p>
+    <div v-if="walkSteps.length" class="walk-strip-wrap">
+      <p class="walk-caption">{{ walkCaption }}</p>
       <div class="walk-strip" role="img" :aria-label="'Selection walk'">
         <div
           v-for="(step, i) in walkSteps"
@@ -18,6 +13,7 @@
           :class="{
             'walk-in': step.action === 'in',
             'walk-skip': step.action === 'skip',
+            'walk-pool': step.action === 'pool',
             'walk-pulse': step.rosterIndex === pulseIndex,
           }"
           :title="'Row #' + (step.rosterIndex + 1)"
@@ -72,6 +68,14 @@ const props = defineProps({
 })
 
 const walkSteps = computed(() => props.walkSteps.slice(-72))
+
+const walkCaption = computed(() => {
+  if (props.method === 'quota') return 'List walk (in vs passed over)'
+  if (props.method === 'conv') return 'First n* list positions'
+  if (props.method === 'purposive') return 'Top scores selected (rank order)'
+  if (props.method === 'clust' || props.method === 'stage') return 'Cluster members entering sample'
+  return 'Sample building up (selection order)'
+})
 
 const gridEl = ref(null)
 const cellRefs = ref({})
@@ -140,6 +144,9 @@ watch(
     #e2e8f0 1px,
     #e2e8f0 2px
   );
+}
+.walk-tile.walk-pool {
+  background: #93c5fd;
 }
 .walk-tile.walk-pulse {
   box-shadow: 0 0 0 2px #f59e0b;
