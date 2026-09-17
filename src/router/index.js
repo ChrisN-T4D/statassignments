@@ -188,11 +188,12 @@ router.beforeEach(async (to, from, next) => {
     to.query.module === 'rm-module-lab' &&
     to.query.tab &&
     to.query.tab !== 'lab-sampling' &&
-    to.query.tab !== 'lab-assignment'
+    to.query.tab !== 'lab-concept-review'
   ) {
+    const tab = to.query.tab === 'concepts' ? 'lab-concept-review' : 'lab-sampling'
     next({
       path: to.path,
-      query: { ...to.query, tab: 'lab-sampling' },
+      query: { ...to.query, tab },
     })
     return
   }
@@ -200,13 +201,13 @@ router.beforeEach(async (to, from, next) => {
   if (
     to.name === 'class-practice' &&
     to.params.classId === 'research-methods' &&
-    to.query.module === 'rm-module-lab' &&
-    !to.query.review &&
-    to.query.print !== '1'
+    to.query.module === 'rm-module-lab'
   ) {
+    const tab =
+      to.query.review || to.query.print === '1' ? 'lab-concept-review' : 'lab-sampling'
     next({
       path: '/class/research-methods',
-      query: { module: 'rm-module-lab', tab: 'lab-sampling' },
+      query: { module: 'rm-module-lab', tab },
     })
     return
   }

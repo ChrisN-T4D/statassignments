@@ -328,30 +328,31 @@
           </template>
 
           <template v-else>
-          <!-- Lab module: sampling sim (default) or assignment panel -->
+          <!-- Lab module: sampling sim, concept review quiz, or default sampling -->
           <div
-            v-if="selectedModuleId === RM_MODULE_LAB_ID && activeContentTab === 'lab-assignment'"
+            v-if="selectedModuleId === RM_MODULE_LAB_ID && activeContentTab === 'lab-concept-review'"
             class="tab-panel rm-lab-panel"
           >
-            <ExperimentalSamplingSimulation embed-tab="assignment" />
-            <p v-if="conceptReviewQuestionCount > 0" class="lab-review-footer">
-              Finished the simulations?
-              <router-link :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`">
-                Take the Lab Concept Review quiz →
-              </router-link>
-            </p>
+            <Practice
+              embedded
+              :embed-module-id="RM_MODULE_LAB_ID"
+              :embed-class-id="classId"
+            />
           </div>
           <div
             v-else-if="selectedModuleId === RM_MODULE_LAB_ID"
             class="tab-panel rm-lab-panel"
           >
             <SamplingCompareLab intro="rm-embed" />
+            <details v-if="conceptReviewQuestionCount > 0" class="rm-lab-assignment-extra">
+              <summary>Assignment simulation (sleep workshop vs control)</summary>
+              <ExperimentalSamplingSimulation embed-tab="assignment" />
+            </details>
             <p v-if="conceptReviewQuestionCount > 0" class="lab-review-footer">
-              After you try the sampling plans above,
-              <router-link :to="`/class/${classId}/practice?module=${RM_MODULE_LAB_ID}&review=1`">
-                take the Lab Concept Review quiz →
-              </router-link>
-              (Assignment simulation: use the <button type="button" class="inline-tab-link" @click="onContentTabClick('lab-assignment')">Assignment</button> tab.)
+              Ready for the quiz?
+              <button type="button" class="inline-tab-link" @click="onContentTabClick('lab-concept-review')">
+                Open Lab Concept Review →
+              </button>
             </p>
           </div>
 
@@ -713,6 +714,7 @@ import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
 import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
+import Practice from './Practice.vue'
 import CentralTendencyLab from '../components/labs/CentralTendencyLab.vue'
 import CoinFlipLab from '../components/labs/CoinFlipLab.vue'
 import MarblesLab from '../components/labs/MarblesLab.vue'
@@ -780,7 +782,7 @@ const standardContentTabs = [
   { id: 'software', label: 'Software Practice', iconSrc: '/software-practice-icon.png' }
 ]
 
-const RM_LAB_TAB_IDS = new Set(['lab-sampling', 'lab-assignment'])
+const RM_LAB_TAB_IDS = new Set(['lab-sampling', 'lab-concept-review'])
 
 const VALID_CONTENT_TAB_IDS = new Set([
   'topics',
@@ -792,7 +794,7 @@ const VALID_CONTENT_TAB_IDS = new Set([
 
 const labModuleContentTabs = [
   { id: 'lab-sampling', label: 'Sampling', iconSrc: '/topic-icon.png' },
-  { id: 'lab-assignment', label: 'Assignment', iconSrc: '/content-review-icon.png' }
+  { id: 'lab-concept-review', label: 'Concept Review', iconSrc: '/content-review-icon.png' },
 ]
 
 const methodPathContentTabs = methodPathList.map((path) => ({
@@ -1278,6 +1280,8 @@ function getTabCount(tabId) {
       return conceptReviewQuestionCount.value > 0 ? 1 : 0
     case 'software':
       return filteredModuleLessons.value.length + todoExercises.value.length
+    case 'lab-concept-review':
+      return conceptReviewQuestionCount.value > 0 ? 1 : 0
     default:
       return 0
   }
@@ -1368,8 +1372,9 @@ function syncContentTabFromQuery() {
   if (selectedModuleId.value === RM_MODULE_LAB_ID) {
     if (RM_LAB_TAB_IDS.has(tab)) {
       activeContentTab.value = tab
+    } else if (tab === 'concepts') {
+      activeContentTab.value = 'lab-concept-review'
     } else {
-      // Legacy Canvas links use tab=concepts — open the sampling simulation.
       activeContentTab.value = 'lab-sampling'
     }
     return
@@ -1534,7 +1539,7 @@ watch(() => route.fullPath, () => {
 watch(selectedModuleId, id => {
   if (!id) return
   if (id === RM_MODULE_LAB_ID) {
-    if (activeContentTab.value !== 'lab-sampling' && activeContentTab.value !== 'lab-assignment') {
+    if (activeContentTab.value !== 'lab-sampling' && activeContentTab.value !== 'lab-concept-review') {
       activeContentTab.value = 'lab-sampling'
     }
   } else if (id === RM_MODULE_DATA_BY_PATH_ID) {
@@ -1550,7 +1555,7 @@ watch(selectedModuleId, id => {
     }
   } else if (
     activeContentTab.value === 'lab-sampling' ||
-    activeContentTab.value === 'lab-assignment' ||
+    activeContentTab.value === 'lab-concept-review' ||
     STATS_LAB_TAB_IDS.has(activeContentTab.value) ||
     methodPathList.some((p) => p.id === activeContentTab.value)
   ) {
@@ -2065,6 +2070,20 @@ watch(selectedModuleId, id => {
   color: var(--primary, #2563eb);
   cursor: pointer;
   text-decoration: underline;
+}
+
+.rm-lab-assignment-extra {
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 0.5rem;
+  background: var(--bg-subtle, #f8fafc);
+}
+
+.rm-lab-assignment-extra summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 /* Learning Objectives */

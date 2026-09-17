@@ -1,7 +1,14 @@
 <template>
-  <div class="practice-page" :class="{ 'printing-packet': printFocus === 'packet', 'printing-slip': printFocus === 'slip' }">
+  <div
+    class="practice-page"
+    :class="{
+      embedded,
+      'printing-packet': printFocus === 'packet',
+      'printing-slip': printFocus === 'slip',
+    }"
+  >
     <div class="container">
-      <div class="page-header">
+      <div v-if="!embedded" class="page-header">
         <h1>Practice Problems</h1>
         <p>Test your understanding with interactive practice questions.</p>
         <div v-if="isStatisticsPractice && !isOfflinePrimary && unlockEligible.length" class="mastery-progress">
@@ -14,7 +21,12 @@
         </div>
       </div>
 
-      <div v-if="isStatisticsPractice" class="cr-mode-bar print-hide">
+      <div v-else-if="embedded" class="page-header page-header-embedded">
+        <h2>Lab Concept Review</h2>
+        <p>Quiz on random assignment, sampling methods, and validity — after the simulations.</p>
+      </div>
+
+      <div v-if="isStatisticsPractice && !embedded" class="cr-mode-bar print-hide">
         <p v-if="isOfflinePrimary">
           Offline primary: print the packet, work without internet, then enter all answers at once for a Canvas slip.
         </p>
@@ -350,6 +362,13 @@ import {
 import CompletionSlip from '../components/CompletionSlip.vue'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
+const props = defineProps({
+  /** When embedded in Class Home lab tab, module comes from prop instead of route. */
+  embedModuleId: { type: String, default: null },
+  embedClassId: { type: String, default: null },
+  embedded: { type: Boolean, default: false },
+})
+
 const route = useRoute()
 const { isAuthenticated, user } = useAuth()
 const {
@@ -438,7 +457,12 @@ function normalizeRouteValue(value) {
   return value || null
 }
 
+function getActiveClassId() {
+  return props.embedClassId || route.params.classId
+}
+
 function getActiveModuleId() {
+  if (props.embedModuleId) return props.embedModuleId
   return normalizeRouteValue(route.query.module)
 }
 
@@ -459,7 +483,7 @@ function toStatsModuleId(value) {
 
 const isStatisticsPractice = computed(() => {
   const moduleId = getSelectedTopicId()
-  const classId = route.params.classId
+  const classId = getActiveClassId()
   if (classId === 'research-methods' && String(moduleId || '').startsWith('rm-module-')) {
     return true
   }
@@ -1062,7 +1086,7 @@ onUnmounted(() => {
   window.removeEventListener('afterprint', afterPrint)
 })
 
-watch(() => [route.query.module, route.params.topicId], async () => {
+watch(() => [props.embedModuleId, route.query.module, route.params.topicId], async () => {
   selectedTopic.value = getSelectedTopicId()
   batchMode.value = false
   batchResults.value = []
@@ -1616,6 +1640,26 @@ watch(currentProblem, async (problem) => {
   border-radius: 0.5rem;
   cursor: pointer;
 }
+.practice-page.embedded {
+  padding: 0;
+}
+
+.practice-page.embedded .container {
+  max-width: none;
+  padding: 0;
+}
+
+.page-header-embedded h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.125rem;
+}
+
+.page-header-embedded p {
+  margin: 0 0 1rem;
+  color: var(--text-muted, #64748b);
+  font-size: 0.9rem;
+}
+
 @media print {
   .print-hide,
   .login-prompt,
