@@ -672,7 +672,7 @@ async function checkAndRecord() {
     const expected = Array.isArray(q.correct_answer) ? q.correct_answer : []
     correct =
       expected.length === selectedAnswers.value.length &&
-      expected.every((v, i) => v === selectedAnswers.value[i])
+      expected.every((v) => selectedAnswers.value.includes(v))
   } else {
     correct = selectedAnswer.value === q.correct_answer
   }
