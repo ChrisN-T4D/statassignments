@@ -33,7 +33,8 @@
     "sync:canvas-statistics:apply": "node scripts/sync-canvas-statistics-mm-assignments.mjs --apply",
     "weight:canvas-statistics": "node scripts/weight-canvas-statistics-inperson.mjs",
     "weight:canvas-statistics:apply": "node scripts/weight-canvas-statistics-inperson.mjs --apply",
-    "verify:benchmark-practice": "node scripts/verify-benchmark-practice-sample.mjs"
+    "verify:benchmark-practice": "node scripts/verify-benchmark-practice-sample.mjs",
+    "verify:module-progress": "node scripts/verify-module-progress.mjs"
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",

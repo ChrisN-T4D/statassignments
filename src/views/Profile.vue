@@ -287,10 +287,8 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { getContentModulesByClass, getTopicsForModule, getAllTopics } from '../data/modules.js'
-import { getLessonsByModule } from '../data/softwareLessons.js'
-import { getQuestionsByModule } from '../data/conceptQuestions.js'
-import { statisticsExercises } from '../data/statisticsPractices.js'
+import { getContentModulesByClass, getAllTopics } from '../data/modules.js'
+import { computeModuleProgress } from '../lib/moduleProgress.js'
 import { software } from '../data/topics.js'
 import { getObjectivesByModule } from '../data/objectives.js'
 import { useAuth } from '../composables/useAuth'
@@ -387,41 +385,14 @@ const userInitials = computed(() => {
 })
 
 function getModuleProgress(module) {
-  const moduleTopics = getTopicsForModule(module.id)
-  const totalTopicsCount = moduleTopics.length
-  const completedSet = getCompletedConceptReviewIds()
-  const readCount = moduleTopics.filter(topic => readTopicIds.value.has(topic.id)).length
-  const contentReviewComplete = completedSet.has(module.id)
-  const moduleLessons = getLessonsByModule(module.id)
-  const completedLessonsSet = getCompletedSoftwareLessonIds()
-  const preferredLessons = preferredSoftware.value
-    ? moduleLessons.filter((lesson) => lesson.software === preferredSoftware.value)
-    : moduleLessons
-  const unifiedLesson = preferredLessons[0] || null
-  const lessonsForProgress = unifiedLesson ? [unifiedLesson] : preferredLessons
-  const totalLessons = lessonsForProgress.length
-  const completedLessons = lessonsForProgress.filter((lesson) =>
-    completedLessonsSet.has(lesson.id)
-  ).length
-  const practiceModuleId = toPracticeModuleId(module.id)
-  const todoExercises = statisticsExercises.filter(ex =>
-    (ex.software_type === preferredSoftware.value || ex.software_type === 'conceptual') &&
-    ex.module === practiceModuleId &&
-    ex.exercise_type !== 'menu_navigation'
-  )
-  const completedExercisesSet = getCompletedSoftwareExerciseIds()
-  const todoCompleted = !unifiedLesson && todoExercises.length > 0 && todoExercises.every((ex, index) => {
-    const order = ex.order ?? index
-    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
-    return completedExercisesSet.has(id)
+  return computeModuleProgress({
+    moduleId: module.id,
+    preferredSoftware: preferredSoftware.value,
+    readTopicIds: readTopicIds.value,
+    completedConceptReviewIds: getCompletedConceptReviewIds(),
+    completedSoftwareLessonIds: getCompletedSoftwareLessonIds(),
+    completedSoftwareExerciseIds: getCompletedSoftwareExerciseIds()
   })
-  const totalTodo = !unifiedLesson && todoExercises.length > 0 ? 1 : 0
-  const completedTodo = todoCompleted ? 1 : 0
-  const hasConceptReview = getQuestionsByModule(module.id).length > 0
-  const total = totalTopicsCount + (hasConceptReview ? 1 : 0) + totalLessons + totalTodo
-  const completed = readCount + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0
-  return { total, completed, percent }
 }
 
 function refreshReadTopics() {
@@ -470,12 +441,6 @@ function getCompletedSoftwareExerciseIds() {
     console.warn('Unable to read completed software exercises:', err)
     return new Set()
   }
-}
-
-function toPracticeModuleId(value) {
-  if (!value) return null
-  if (value.startsWith('stats-module-')) return value.replace('stats-module-', 'module-')
-  return value
 }
 
 function getSoftwareName(softwareId) {

@@ -711,6 +711,7 @@ import { groupResearchMethodsCourseNav, findPartForNavItemId } from '../data/res
 import { isPsychMethodsCourse } from '../data/psychMethodsCourses'
 import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
+import { computeModuleProgress, pickSoftwareLessonForProgress } from '../lib/moduleProgress.js'
 import { getLessonsByModule } from '../data/softwareLessons'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
@@ -1156,16 +1157,6 @@ function getCompletedSoftwareExerciseIds() {
   }
 }
 
-const todoCompleted = computed(() => {
-  if (todoExercises.value.length === 0) return false
-  const completedSet = getCompletedSoftwareExerciseIds()
-  return todoExercises.value.every((ex, index) => {
-    const order = ex.order ?? index
-    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
-    return completedSet.has(id)
-  })
-})
-
 const readTopicIds = ref(new Set())
 
 function getReadTopicIds() {
@@ -1218,6 +1209,7 @@ const moduleProgress = computed(() => {
       totalTopics: 0,
       openedTopics: 0,
       contentReviewComplete: false,
+      hasConceptReview: false,
       totalLessons: 0,
       completedLessons: 0,
       totalTodo: 0,
@@ -1225,60 +1217,20 @@ const moduleProgress = computed(() => {
     }
   }
 
-  // For Module 8, use selected topics if customization is active
-  let topicsToCount = moduleTopics.value
+  let selectedTopicIds = null
   if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
-    topicsToCount = moduleTopics.value.filter(topic =>
-      module8Prefs.isTopicSelected(topic.id)
-    )
+    selectedTopicIds = module8Prefs.selectedTopics.value
   }
 
-  const totalTopics = topicsToCount.length
-  const openedTopics = topicsToCount.filter(topic => readTopicIds.value.has(topic.id)).length
-  const completedSet = getCompletedConceptReviewIds()
-  const contentReviewComplete = selectedModuleId.value
-    ? completedSet.has(selectedModuleId.value)
-    : false
-  const completedLessonsSet = getCompletedSoftwareLessonIds()
-  // Prefer the unified per-software lesson (what the Software Practice tab shows).
-  // Counting every filteredModuleLessons row double-counts Excel extras; counting
-  // legacy statisticsExercises You-Dos pads the bar with items students never see
-  // when moduleLesson exists (Apply lives inside the lesson phases).
-  const useUnifiedLesson = Boolean(moduleLesson.value)
-  const lessonsForProgress = useUnifiedLesson
-    ? [moduleLesson.value]
-    : filteredModuleLessons.value
-  const totalLessons = lessonsForProgress.length
-  const completedLessons = lessonsForProgress.filter((lesson) =>
-    completedLessonsSet.has(lesson.id)
-  ).length
-
-  let totalTodo = 0
-  let completedTodo = 0
-  if (!useUnifiedLesson && todoExercises.value.length > 0) {
-    // Legacy Software Practice exercises only when there is no unified lesson UI.
-    totalTodo = 1
-    completedTodo = todoCompleted.value ? 1 : 0
-  }
-
-  const hasConceptReviewContent = conceptReviewQuestionCount.value > 0
-  const total = totalTopics + (hasConceptReviewContent ? 1 : 0) + totalLessons + totalTodo
-  const completed = openedTopics + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
-  const percent = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0
-
-  return {
-    total,
-    completed,
-    percent,
-    totalTopics,
-    openedTopics,
-    contentReviewComplete,
-    hasConceptReview: hasConceptReviewContent,
-    totalLessons,
-    completedLessons,
-    totalTodo,
-    completedTodo
-  }
+  return computeModuleProgress({
+    moduleId: selectedModuleId.value,
+    preferredSoftware: preferredSoftware.value,
+    readTopicIds: readTopicIds.value,
+    completedConceptReviewIds: getCompletedConceptReviewIds(),
+    completedSoftwareLessonIds: getCompletedSoftwareLessonIds(),
+    completedSoftwareExerciseIds: getCompletedSoftwareExerciseIds(),
+    selectedTopicIds
+  })
 })
 
 // Get count for each tab
@@ -1296,8 +1248,14 @@ function getTabCount(tabId) {
       return topicsCount
     case 'concepts':
       return conceptReviewQuestionCount.value > 0 ? 1 : 0
-    case 'software':
-      return filteredModuleLessons.value.length + todoExercises.value.length
+    case 'software': {
+      const lesson = pickSoftwareLessonForProgress(
+        selectedModuleId.value,
+        preferredSoftware.value
+      )
+      if (lesson) return 1
+      return filteredModuleLessons.value.length + (todoExercises.value.length > 0 ? 1 : 0)
+    }
     case 'lab-concept-review':
       return conceptReviewQuestionCount.value > 0 ? 1 : 0
     default:

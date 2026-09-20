@@ -984,6 +984,12 @@ export const topicsByModule = {
       title: 'Variable Types and Measurement Levels',
       description: 'Setting measurement levels and data types correctly.',
       icon: 'T'
+    },
+    {
+      id: 'screen-recording-tutorial',
+      title: 'Screen Recording for Assignments',
+      description: 'Capture and submit a short screen recording of your software work.',
+      icon: 'T'
     }
   ],
   'stats-module-4': [
