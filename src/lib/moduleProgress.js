@@ -56,7 +56,9 @@ export function todoExercisesForModule (moduleId, preferredSoftware) {
  * @param {Iterable<string>|Set<string>} [opts.completedConceptReviewIds]
  * @param {Iterable<string>|Set<string>} [opts.completedSoftwareLessonIds]
  * @param {Iterable<string>|Set<string>} [opts.completedSoftwareExerciseIds]
- * @param {Iterable<string>|Set<string>|null} [opts.selectedTopicIds] Module 8 topic filter; null/empty = all
+ * @param {Iterable<string>|Set<string>|null|undefined} [opts.selectedTopicIds]
+ *   null/undefined = count all topics.
+ *   Set (may be empty) = count only those ids (Module 8 student selection).
  */
 export function computeModuleProgress ({
   moduleId,
@@ -77,8 +79,11 @@ export function computeModuleProgress ({
   const exerciseSet = toSet(completedSoftwareExerciseIds)
 
   let topics = getTopicsForModule(moduleId) || []
-  if (selectedTopicIds && selectedTopicIds.size > 0) {
-    topics = topics.filter((topic) => selectedTopicIds.has(topic.id))
+  // null/undefined = full bank (non–Module 8, or Module 8 “skip / study all”).
+  // A Set (including empty) = only those topic ids count toward progress.
+  if (selectedTopicIds != null) {
+    const scope = toSet(selectedTopicIds)
+    topics = topics.filter((topic) => scope.has(topic.id))
   }
 
   const totalTopics = topics.length

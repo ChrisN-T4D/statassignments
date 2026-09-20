@@ -1218,8 +1218,16 @@ const moduleProgress = computed(() => {
   }
 
   let selectedTopicIds = null
-  if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
-    selectedTopicIds = module8Prefs.selectedTopics.value
+  if (selectedModuleId.value === 'stats-module-8') {
+    // Until they finish the selector, do not count the full 25-topic bank.
+    // Skip (empty selection + completed) still means “study all”.
+    if (!module8Prefs.hasCompletedSelection.value) {
+      selectedTopicIds = new Set()
+    } else if (module8Prefs.selectedTopics.value.size > 0) {
+      selectedTopicIds = module8Prefs.selectedTopics.value
+    } else {
+      selectedTopicIds = null
+    }
   }
 
   return computeModuleProgress({
@@ -1237,10 +1245,14 @@ const moduleProgress = computed(() => {
 function getTabCount(tabId) {
   // For Module 8, use selected topics count if customization is active
   let topicsCount = moduleTopics.value.length
-  if (selectedModuleId.value === 'stats-module-8' && module8Prefs.selectedTopics.value.size > 0) {
-    topicsCount = moduleTopics.value.filter(topic =>
-      module8Prefs.isTopicSelected(topic.id)
-    ).length
+  if (selectedModuleId.value === 'stats-module-8') {
+    if (!module8Prefs.hasCompletedSelection.value) {
+      topicsCount = 0
+    } else if (module8Prefs.selectedTopics.value.size > 0) {
+      topicsCount = moduleTopics.value.filter((topic) =>
+        module8Prefs.isTopicSelected(topic.id)
+      ).length
+    }
   }
 
   switch (tabId) {

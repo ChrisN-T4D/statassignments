@@ -17,6 +17,7 @@ const expectedByModule = {
   'stats-module-5': { jamovi: 11 },
   'stats-module-6': { jamovi: 12 },
   'stats-module-7': { jamovi: 5 },
+  // Module 8 full bank only when selection is skipped (null scope); see tests below for selection
   'stats-module-8': { jamovi: 27 }
 }
 
@@ -60,5 +61,28 @@ assert(m3Done.percent === 100, `m3 done percent ${m3Done.percent}`)
 
 // Legacy You-Do padding must not apply when a unified lesson exists.
 assert(m3Done.totalTodo === 0, 'm3 should not count legacy todos in denominator')
+
+// Module 8: before selection → 0 topics (CR + software only = 2)
+const m8Before = computeModuleProgress({
+  moduleId: 'stats-module-8',
+  preferredSoftware: 'jamovi',
+  selectedTopicIds: new Set()
+})
+assert(m8Before.totalTopics === 0, `m8 before selection topics ${m8Before.totalTopics}`)
+assert(m8Before.total === 2, `m8 before selection total ${m8Before.total}`)
+
+// Module 8: three selected topics → 3 + CR + lesson = 5
+const m8Pick = ['chi-square-independence', 'independent-t-test', 'correlation']
+const m8Selected = computeModuleProgress({
+  moduleId: 'stats-module-8',
+  preferredSoftware: 'jamovi',
+  selectedTopicIds: new Set(m8Pick),
+  readTopicIds: m8Pick,
+  completedConceptReviewIds: ['stats-module-8'],
+  completedSoftwareLessonIds: ['jamovi-module-8-unified']
+})
+assert(m8Selected.totalTopics === 3, `m8 selected topics ${m8Selected.totalTopics}`)
+assert(m8Selected.total === 5, `m8 selected total ${m8Selected.total}`)
+assert(m8Selected.completed === 5, `m8 selected completed ${m8Selected.completed}`)
 
 console.log('verify-module-progress: ok')

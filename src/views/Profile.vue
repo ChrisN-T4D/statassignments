@@ -295,6 +295,7 @@ import { useAuth } from '../composables/useAuth'
 import { usePractice } from '../composables/usePractice'
 import { useBKT } from '../composables/useBKT'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
+import { useModule8Preferences } from '../composables/useModule8Preferences.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { useAccessMode } from '../composables/useAccessMode.js'
 import ChangePasswordCard from '../components/ChangePasswordCard.vue'
@@ -319,6 +320,7 @@ const totalTopics = computed(() => getAllTopics().length)
 const readTopicIds = ref(new Set())
 const readTopicsCount = computed(() => readTopicIds.value.size)
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
+const module8Prefs = useModule8Preferences()
 const expandedModules = ref(new Set())
 const masteryData = ref({})
 const bktStates = ref({})
@@ -385,13 +387,24 @@ const userInitials = computed(() => {
 })
 
 function getModuleProgress(module) {
+  let selectedTopicIds = null
+  if (module.id === 'stats-module-8') {
+    if (!module8Prefs.hasCompletedSelection.value) {
+      selectedTopicIds = new Set()
+    } else if (module8Prefs.selectedTopics.value.size > 0) {
+      selectedTopicIds = module8Prefs.selectedTopics.value
+    } else {
+      selectedTopicIds = null
+    }
+  }
   return computeModuleProgress({
     moduleId: module.id,
     preferredSoftware: preferredSoftware.value,
     readTopicIds: readTopicIds.value,
     completedConceptReviewIds: getCompletedConceptReviewIds(),
     completedSoftwareLessonIds: getCompletedSoftwareLessonIds(),
-    completedSoftwareExerciseIds: getCompletedSoftwareExerciseIds()
+    completedSoftwareExerciseIds: getCompletedSoftwareExerciseIds(),
+    selectedTopicIds
   })
 }
 
