@@ -168,6 +168,16 @@
         }
       },
       {
+        "name": "source",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "benchmark_slug",
+        "type": "text",
+        "required": false
+      },
+      {
         "name": "active_time_seconds",
         "type": "number",
         "required": false

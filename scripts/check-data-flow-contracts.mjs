@@ -60,6 +60,8 @@ async function main() {
       'answer',
       'is_correct',
       'difficulty',
+      'source',
+      'benchmark_slug',
       'active_time_seconds',
       'total_time_seconds',
       'time_maxed_out',

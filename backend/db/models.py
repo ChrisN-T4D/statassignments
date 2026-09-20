@@ -203,6 +203,8 @@ class PracticeAttempt(Base, TimestampMixin):
     answer: Mapped[str] = mapped_column(Text, nullable=False)
     is_correct: Mapped[bool] = mapped_column(Boolean, nullable=False)
     difficulty: Mapped[str | None] = mapped_column(String(32))
+    source: Mapped[str | None] = mapped_column(String(64))
+    benchmark_slug: Mapped[str | None] = mapped_column(String(64))
     active_time_seconds: Mapped[int | None] = mapped_column(Integer)
     total_time_seconds: Mapped[int | None] = mapped_column(Integer)
     time_maxed_out: Mapped[bool | None] = mapped_column(Boolean)

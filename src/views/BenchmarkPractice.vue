@@ -283,13 +283,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
-import { getBenchmarkPracticeConfig, getBenchmarkPacketQuestions } from '../data/conceptQuestions'
+import { getBenchmarkPracticeConfig, getBenchmarkPacketQuestions, getQuestionsByModule } from '../data/conceptQuestions'
 import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftware.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { updateBKT, useBKT } from '../composables/useBKT'
 import { usePractice } from '../composables/usePractice'
 import { useProfile } from '../composables/useProfile'
+import { useAuth } from '../composables/useAuth'
 import { useAccessMode } from '../composables/useAccessMode'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap.js'
 import {
@@ -302,7 +303,10 @@ import {
   saveBenchmarkAttempt,
   summarizeBenchmarkByModule
 } from '../lib/benchmarkPracticeStore.js'
+import { sampleBenchmarkQuestions, classifyAttemptSeen } from '../lib/benchmarkPracticeSample.js'
+import { shuffleMcOptions } from '../lib/shuffleQuestionOptions.js'
 import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
+import { pb } from '../lib/pocketbase'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const route = useRoute()
@@ -350,6 +354,7 @@ const printFocus = ref(null)
 const { getAllBKTStates } = useBKT()
 const { submitAnswer } = usePractice()
 const { studentKey } = useProfile()
+const { isAuthenticated, user } = useAuth()
 
 const currentQuestion = computed(() => questions.value[currentIndex.value] || null)
 const isLastQuestion = computed(() => currentIndex.value === questions.value.length - 1)
@@ -504,11 +509,11 @@ function convertQuestion(q) {
   let options = []
   let correct_answer = ''
   if (q.type === 'multiple_choice') {
-    options = q.options.map(opt => opt.text)
+    options = shuffleMcOptions(q.options.map(opt => opt.text))
     const correctOpt = q.options.find(opt => opt.id === q.correct)
     correct_answer = correctOpt?.text || ''
   } else if (q.type === 'multiple_select') {
-    options = q.options.map(opt => opt.text)
+    options = shuffleMcOptions(q.options.map(opt => opt.text))
     correct_answer = q.options.filter(opt => q.correct.includes(opt.id)).map(opt => opt.text)
   } else if (q.type === 'true_false') {
     options = ['True', 'False']
@@ -549,7 +554,37 @@ async function start() {
   try {
     const states = await getAllBKTStates()
     const masteryByModule = masteryByModuleFromBKT(states)
-    rawQuestions.value = config.value.getQuestionsWeighted(masteryByModule, questionCount.value)
+    const bankQuestions = (config.value.modules || []).flatMap(
+      (mid) => getQuestionsByModule(mid) || []
+    )
+    const bankIds = new Set(bankQuestions.map((q) => q.id))
+    const practiceSeenIds = []
+    const conceptReviewSeenIds = []
+
+    if (isAuthenticated.value && user.value?.id) {
+      try {
+        const attempts = await pb.collection('practice_attempts').getFullList({
+          filter: `user = "${user.value.id}"`
+        })
+        for (const attempt of attempts) {
+          if (!bankIds.has(attempt.problem)) continue
+          const kind = classifyAttemptSeen(attempt, benchmarkSlug.value)
+          if (kind === 'practice') practiceSeenIds.push(attempt.problem)
+          else if (kind === 'concept_review') conceptReviewSeenIds.push(attempt.problem)
+        }
+      } catch (err) {
+        console.warn('benchmark practice history fetch failed', err)
+      }
+    }
+
+    rawQuestions.value = sampleBenchmarkQuestions({
+      modules: config.value.modules,
+      bankQuestions,
+      masteryByModule,
+      totalCount: questionCount.value,
+      practiceSeenIds,
+      conceptReviewSeenIds
+    })
     if (rawQuestions.value.length === 0) {
       rawQuestions.value = config.value.getQuestions(questionCount.value)
     }

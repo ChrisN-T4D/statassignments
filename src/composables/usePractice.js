@@ -550,6 +550,8 @@ export function usePractice() {
         is_correct: isCorrect,
         difficulty: normalizeDifficulty(difficulty) // easy | medium | hard for PB select
       }
+      if (meta?.source) attemptData.source = meta.source
+      if (meta?.benchmark_slug) attemptData.benchmark_slug = meta.benchmark_slug
 
       // Add time data if available
       if (timeData) {
