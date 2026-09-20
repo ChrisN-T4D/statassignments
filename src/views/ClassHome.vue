@@ -181,8 +181,12 @@
           </div>
           <div class="module-progress-meta">
             <span>Topics read: {{ moduleProgress.openedTopics }} / {{ moduleProgress.totalTopics }}</span>
-            <span>Content review: {{ moduleProgress.contentReviewComplete ? 1 : 0 }} / {{ moduleProgress.totalTopics > 0 ? 1 : 0 }}</span>
-            <span>Learn: {{ moduleProgress.completedLessons }} / {{ moduleProgress.totalLessons }}</span>
+            <span v-if="moduleProgress.hasConceptReview">
+              Content review: {{ moduleProgress.contentReviewComplete ? 1 : 0 }} / 1
+            </span>
+            <span v-if="moduleProgress.totalLessons + moduleProgress.totalTodo > 0">
+              Software practice: {{ moduleProgress.completedLessons + moduleProgress.completedTodo }} / {{ moduleProgress.totalLessons + moduleProgress.totalTodo }}
+            </span>
           </div>
         </div>
 
@@ -1236,14 +1240,27 @@ const moduleProgress = computed(() => {
     ? completedSet.has(selectedModuleId.value)
     : false
   const completedLessonsSet = getCompletedSoftwareLessonIds()
-  const totalLessons = filteredModuleLessons.value.length
-  const completedLessons = filteredModuleLessons.value.filter(lesson => completedLessonsSet.has(lesson.id)).length
-  const totalTodo = todoExercises.value.length
-  const completedTodo = todoExercises.value.filter((ex, index) => {
-    const order = ex.order ?? index
-    const id = [ex.software_type, ex.module, ex.topic, order, ex.title].join('|')
-    return completedSet.has(id)
-  }).length
+  // Prefer the unified per-software lesson (what the Software Practice tab shows).
+  // Counting every filteredModuleLessons row double-counts Excel extras; counting
+  // legacy statisticsExercises You-Dos pads the bar with items students never see
+  // when moduleLesson exists (Apply lives inside the lesson phases).
+  const useUnifiedLesson = Boolean(moduleLesson.value)
+  const lessonsForProgress = useUnifiedLesson
+    ? [moduleLesson.value]
+    : filteredModuleLessons.value
+  const totalLessons = lessonsForProgress.length
+  const completedLessons = lessonsForProgress.filter((lesson) =>
+    completedLessonsSet.has(lesson.id)
+  ).length
+
+  let totalTodo = 0
+  let completedTodo = 0
+  if (!useUnifiedLesson && todoExercises.value.length > 0) {
+    // Legacy Software Practice exercises only when there is no unified lesson UI.
+    totalTodo = 1
+    completedTodo = todoCompleted.value ? 1 : 0
+  }
+
   const hasConceptReviewContent = conceptReviewQuestionCount.value > 0
   const total = totalTopics + (hasConceptReviewContent ? 1 : 0) + totalLessons + totalTodo
   const completed = openedTopics + (contentReviewComplete ? 1 : 0) + completedLessons + completedTodo
@@ -1256,6 +1273,7 @@ const moduleProgress = computed(() => {
     totalTopics,
     openedTopics,
     contentReviewComplete,
+    hasConceptReview: hasConceptReviewContent,
     totalLessons,
     completedLessons,
     totalTodo,
