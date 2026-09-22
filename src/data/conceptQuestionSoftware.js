@@ -1,7 +1,11 @@
+import { toRaw } from 'vue'
 import { SOFTWARE_DISPLAY } from './softwareObjectiveLabels.js'
 
 function cloneQuestion(q) {
-  return structuredClone(q)
+  // Vue wraps objects stored in refs/reactive() in a Proxy, and
+  // structuredClone() throws DataCloneError on Proxies. Unwrap to the raw
+  // target first (no-op for plain module data).
+  return structuredClone(toRaw(q))
 }
 
 /**
