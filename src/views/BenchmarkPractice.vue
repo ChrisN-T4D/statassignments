@@ -563,8 +563,14 @@ async function start() {
 
     if (isAuthenticated.value && user.value?.id) {
       try {
+        // History window: only recent attempts affect the draw. Bounding by
+        // date keeps this fetch small even for heavy Concept Review users
+        // (unbounded getFullList here is O(total attempts ever answered)).
+        const since = new Date()
+        since.setDate(since.getDate() - 180)
+        const sinceIso = since.toISOString().replace('T', ' ').slice(0, 19)
         const attempts = await pb.collection('practice_attempts').getFullList({
-          filter: `user = "${user.value.id}"`
+          filter: `user = "${user.value.id}" && created >= "${sinceIso}"`
         })
         for (const attempt of attempts) {
           if (!bankIds.has(attempt.problem)) continue
