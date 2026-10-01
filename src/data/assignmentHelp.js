@@ -140,11 +140,11 @@ export const assignmentHelpByModule = [
           'Interpret SD in your own words in a note. For z = 2.5, calculate raw score with X = mean + 2.5×SD (show your work). Export .omv and submit.'
         ],
         formulas: [
-          { name: 'Deviation score (each value minus mean)', formula: 'Height - VMEAN(Height)', note: 'VMEAN = mean of that single column. Use your column name instead of Height.' },
-          { name: 'Squared deviation score', formula: '(Height - VMEAN(Height))^2', note: 'Use ^2 in Jamovi. Same column name as above.' },
-          { name: 'Z-score', formula: 'Z = (X - mean) / SD', note: 'In Jamovi Compute: (Height - VMEAN(Height)) / VSTDEV(Height). VMEAN/VSTDEV = one column; MEAN(A,B) = mean of several variables per row.' },
-          { name: 'Sum of squared deviations (SS)', formula: 'SS = Σ(X - mean)²', note: 'Sum all squared deviation scores. In Jamovi use VSUM on the squared-deviation column (one column).' },
-          { name: 'Raw score from z (e.g. z = 2.5)', formula: 'X = mean + z × SD', note: 'Example: X = mean + 2.5 × SD. Get mean and SD from Descriptives (or VMEAN/VSTDEV); show your work.' }
+          { name: 'Deviation score (each value minus mean)', formula: 'd = X - M', note: 'Jamovi: Data → Compute. Enter `Height - VMEAN(Height)` (replace Height with your column name).' },
+          { name: 'Squared deviation score', formula: 'd² = (X - M)²', note: 'Jamovi: Data → Compute. Enter `(Height - VMEAN(Height))^2` using the same column name.' },
+          { name: 'Z-score', formula: 'z = (X - M) / SD', note: 'Jamovi: Data → Compute. Enter `(Height - VMEAN(Height)) / VSTDEV(Height)`.' },
+          { name: 'Sum of squared deviations (SS)', formula: 'SS = Σ(X - M)²', note: 'Jamovi: first create the squared-deviation column above, then use `VSUM(squared_deviation)` in a computed result or Descriptives → Statistics → Sum on that column.' },
+          { name: 'Raw score from z (e.g. z = 2.5)', formula: 'X = M + z × SD', note: 'Jamovi: read M and SD from Exploration → Descriptives, then compute `M + 2.5 * SD` with those values. Show your substitution and work.' }
         ],
         practiceLinks: ['central-tendency', 'variability', 'standard-scores'],
         getHelp: 'Topics for this module (central tendency, variability, standard scores) align with this assignment. Stuck on z-scores or SS? Review those topics or ask in office hours.'
