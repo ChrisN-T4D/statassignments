@@ -150,9 +150,11 @@ export function conceptReviewAssignment (moduleNum) {
     ],
     gradedInCanvas: true,
     tips: [
-      'Sign in to Methods Market with your course profile so practice attempts are tracked.',
-      'Work Concept Review until each learning objective is mastered (at least two items per objective). Offline-primary students print the packet, enter answers once, then save the slip.',
-      'When you finish, print or save the completion slip and upload it to this Canvas assignment for credit.'
+      'Sign in and link your student key before starting so practice is tracked.',
+      'Work each learning objective until you master it (two correct in a row per objective).',
+      'Read the feedback on every wrong answer — it points to the specific concept to review.',
+      'Use the Topics tab for this module if you keep missing the same type of question.',
+      'When finished, print or save the completion slip and upload it to Canvas for credit.'
     ],
     getHelp:
       'Open the link below, complete Concept Review for this module, then print or save the completion slip and upload it to Canvas. Use Assignment Help for other weekly work, or post in the module discussion / office hours if you are stuck on specific items.'
@@ -172,9 +174,12 @@ export function softwarePracticeAssignment (moduleNum) {
     ],
     gradedInCanvas: true,
     tips: [
-      'Set your preferred statistical software in Methods Market (Jamovi, SPSS, R, Excel, or Stata) before you start.',
-      'Complete Learn (I do) and Practice (We do). For Apply (You do), record with Tools and upload the video to Canvas.',
-      'The You do recording is the Canvas deliverable. There is no slip for Software Practice.'
+      'Set your preferred statistical software in Profile before starting (Jamovi, SPSS, R, Excel, or Stata).',
+      'Watch each Learn (I do) example completely before trying the Practice (We do) step.',
+      'For Apply (You do), record the entire process with the Tools video recorder or your phone.',
+      'Narrate what you\'re doing and why at each step — show your thinking, not just clicks.',
+      'If you make a mistake, explain how you found and fixed it — that\'s good learning.',
+      'Upload the You do video to Canvas for credit; there is no completion slip for Software Practice.'
     ],
     getHelp:
       'Open Software Practice for this module. Finish I do and We do, record You do (Tools or phone), then upload the video to the Canvas Software Practice assignment.'

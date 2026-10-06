@@ -36,7 +36,18 @@ export const assignmentHelpByModule = [
     moduleNumber: 1,
     moduleTitle: 'Introductions and Why Learn Stats',
     assignments: [
-      ...methodsMarketPracticeAssignments(1),
+      { ...methodsMarketPracticeAssignments(1)[0], tips: [
+        'Sign in and link your student key first so practice is tracked.',
+        'Work each learning objective until you get two items correct in a row.',
+        'Use the feedback on wrong answers — it tells you which concept to review.',
+        'When finished, print or save the completion slip for Canvas.'
+      ] },
+      { ...methodsMarketPracticeAssignments(1)[1], tips: [
+        'Watch the Learn (I do) examples carefully before trying Practice (We do).',
+        'Use the Tools tab to find the Practice video recording feature.',
+        'Record your Apply (You do) step-by-step — narrate what you\'re doing and why.',
+        'Upload the video to Canvas for credit; there is no completion slip for Software Practice.'
+      ] },
       {
         id: 'm1-intro-videos',
         name: 'Introduction Videos',
