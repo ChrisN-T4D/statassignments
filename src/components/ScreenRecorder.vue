@@ -36,7 +36,7 @@
             <button
               @click="startRecording"
               class="btn-record"
-              :disabled="isProcessing"
+              :disabled="isStarting || isProcessing || saveFailed || !!recordedBlob"
             >
               <span class="btn-icon">⏺</span>
               Start Recording
@@ -205,11 +205,21 @@
         </div>
       </template>
 
+      <p v-if="isRecording || isPaused" class="tool-hint" role="status">
+        {{ storageOnDisk ? 'Recording is being stored temporarily on this device. Download it when finished.' : 'Temporary storage is unavailable. Recording will stop at the memory limit so you can save it.' }}
+        Keep this page open and your computer awake.
+      </p>
+
       <!-- Processing State -->
       <div v-if="isProcessing" class="processing-status">
         <span class="spinner"></span>
         Processing your recording...
       </div>
+
+      <button v-if="saveFailed" @click="handleRecordingStop" :disabled="isProcessing" class="btn-download">
+        Retry preparing download
+      </button>
+      <button v-if="saveFailed" @click="discardRecording" :disabled="isProcessing" class="btn-discard">Discard and record again</button>
 
       <!-- Recorded Video Preview -->
       <div v-if="recordedVideoUrl && !isRecording" class="video-preview">
@@ -263,6 +273,7 @@
       >
         <div class="download-prompt-card">
           <h2 id="download-prompt-title">Save your recording</h2>
+          <p v-if="error" role="alert">{{ error }}</p>
           <p class="download-prompt-lead">
             Your video is ready. Download it now — Methods Market does not keep a copy after you leave this page.
           </p>
@@ -295,6 +306,7 @@
 
 <script setup>
 import { ref, computed, onUnmounted, watch, nextTick } from 'vue'
+import { createRecordingBuffer } from '../utils/recordingBuffer.js'
 import PopOutButton from './PopOutButton.vue'
 import {
   getSupportedRecorderMimeType,
@@ -346,6 +358,15 @@ const props = defineProps({
 const emit = defineEmits(['recording-complete', 'upload-complete', 'active-change'])
 
 // Recording state
+const isStarting = ref(false)
+const storageOnDisk = ref(false)
+const saveFailed = ref(false)
+let recordingBuffer = null
+let stopRequested = false
+let finalizing = false
+let flushInterval = null
+let unmounted = false
+const compositeVideos = []
 const isRecording = ref(false)
 const isPaused = ref(false)
 const isProcessing = ref(false)
@@ -366,7 +387,6 @@ const cameraPreview = ref(null)
 // Media objects
 const mediaRecorder = ref(null)
 const mediaStream = ref(null)
-const recordedChunks = ref([])
 const recordedVideoUrl = ref(null)
 const recordedBlob = ref(null)
 const activeMimeType = ref('')
@@ -501,6 +521,7 @@ async function combineAudioStreams(screenStream, microphoneStream) {
 
 function prepareVideoElement(stream) {
   const video = document.createElement('video')
+  compositeVideos.push(video)
   video.srcObject = stream
   video.muted = true
   video.playsInline = true
@@ -541,8 +562,11 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
   })
 
   const trackSettings = screenStream.getVideoTracks()[0]?.getSettings?.() || {}
-  canvas.width = screenVideo.videoWidth || trackSettings.width || 1280
-  canvas.height = screenVideo.videoHeight || trackSettings.height || 720
+  const width = screenVideo.videoWidth || trackSettings.width || 1280
+  const height = screenVideo.videoHeight || trackSettings.height || 720
+  const scale = Math.min(1, 1920 / width, 1080 / height)
+  canvas.width = Math.round(width * scale)
+  canvas.height = Math.round(height * scale)
 
   compositeCanvas.value = canvas
   compositeContext.value = ctx
@@ -553,7 +577,11 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
   const bubbleX = canvas.width - bubbleWidth - bubblePadding
   const bubbleY = canvas.height - bubbleHeight - bubblePadding
 
-  function drawFrame() {
+  let lastFrame = -Infinity
+  function drawFrame(now = 0) {
+    compositeAnimationFrame.value = requestAnimationFrame(drawFrame)
+    if (now - lastFrame < 1000 / 15) return
+    lastFrame = now
     ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height)
 
     if (cameraVideo.readyState >= 2) {
@@ -589,12 +617,10 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
       ctx.closePath()
       ctx.stroke()
     }
-
-    compositeAnimationFrame.value = requestAnimationFrame(drawFrame)
   }
 
   drawFrame()
-  return canvas.captureStream(30)
+  return canvas.captureStream(15)
 }
 
 async function requestScreenStream() {
@@ -651,12 +677,21 @@ function startMediaRecorder(recorder) {
   try {
     recorder.start(RECORDER_TIMESLICE_MS)
   } catch (_) {
+    if (typeof recorder.requestData !== 'function') throw new Error('This browser cannot safely record long sessions.')
     recorder.start()
+    flushInterval = setInterval(() => {
+      if (recorder.state === 'recording') {
+        try { recorder.requestData() } catch (_) { stopRecording() }
+      }
+    }, RECORDER_TIMESLICE_MS)
   }
 }
 
 // Start recording
 async function startRecording() {
+  if (isStarting.value || isRecording.value || isPaused.value || isProcessing.value || recordedBlob.value || saveFailed.value) return
+  isStarting.value = true
+  stopRequested = false
   try {
     error.value = null
 
@@ -666,7 +701,25 @@ async function startRecording() {
     }
 
     const screenStream = await requestScreenStream()
+    if (unmounted) {
+      screenStream.getTracks().forEach(track => track.stop())
+      return
+    }
     sourceScreenStream.value = screenStream
+    recordingBuffer = await createRecordingBuffer({
+      onPressure(reason) {
+        error.value = reason === 'storage'
+          ? 'Device storage could not keep up or is full. Recording stopped so you can download the video captured so far.'
+          : 'Recording reached the temporary memory limit. Download the video captured so far, then start a new recording.'
+        stopRecording()
+      }
+    })
+    storageOnDisk.value = recordingBuffer.usesDisk
+    if (unmounted) {
+      await recordingBuffer.dispose()
+      cleanupCaptureStreams()
+      return
+    }
 
     let videoStream = screenStream
 
@@ -695,7 +748,6 @@ async function startRecording() {
     }
 
     mediaStream.value = finalStream
-    recordedChunks.value = []
     activeMimeType.value = getSupportedRecorderMimeType()
 
     mediaRecorder.value = createMediaRecorder(finalStream, activeMimeType.value)
@@ -705,13 +757,13 @@ async function startRecording() {
 
     mediaRecorder.value.ondataavailable = (event) => {
       if (event.data && event.data.size > 0) {
-        recordedChunks.value.push(event.data)
+        recordingBuffer.append(event.data)
       }
     }
 
     mediaRecorder.value.onerror = (event) => {
       console.error('MediaRecorder error:', event)
-      error.value = 'Recording failed in this browser. Try Chrome or Edge, or turn off the camera overlay and retry.'
+      error.value = 'The browser interrupted recording. Download the video captured so far. Try turning off the camera overlay for your next recording.'
       stopRecording()
     }
 
@@ -722,20 +774,28 @@ async function startRecording() {
     if (screenTrack) {
       screenTrack.addEventListener('ended', () => {
         if (isRecording.value || isPaused.value) {
+          error.value = 'Screen sharing ended. Download the video captured so far.'
           stopRecording()
         }
       })
     }
 
+    if (unmounted) {
+      cleanupCaptureStreams()
+      await recordingBuffer.dispose()
+      return
+    }
     startMediaRecorder(mediaRecorder.value)
     isRecording.value = true
     isPaused.value = false
 
-    startTime.value = Date.now()
+    elapsedTime.value = 0
     startTimer()
   } catch (err) {
     console.error('Error starting recording:', err)
     cleanupCaptureStreams()
+    await recordingBuffer?.dispose().catch(() => {})
+    recordingBuffer = null
     if (err.name === 'NotAllowedError' || err.name === 'AbortError') {
       error.value = 'Permission denied or cancelled. Please allow screen recording to continue.'
     } else if (err.name === 'NotSupportedError' || err.name === 'NotFoundError') {
@@ -744,6 +804,8 @@ async function startRecording() {
     } else {
       error.value = `Failed to start recording: ${err.message || err.name || 'Unknown error'}`
     }
+  } finally {
+    isStarting.value = false
   }
 }
 
@@ -775,6 +837,8 @@ function resumeRecording() {
 }
 
 function cleanupCaptureStreams() {
+  clearInterval(flushInterval)
+  flushInterval = null
   if (compositeAnimationFrame.value) {
     cancelAnimationFrame(compositeAnimationFrame.value)
     compositeAnimationFrame.value = null
@@ -802,76 +866,94 @@ function cleanupCaptureStreams() {
     mixAudioContext.value = null
   }
 
+  mediaStream.value = null
+  for (const video of compositeVideos.splice(0)) {
+    video.pause()
+    video.srcObject = null
+  }
+  if (compositeCanvas.value) {
+    compositeCanvas.value.width = 0
+    compositeCanvas.value.height = 0
+  }
   compositeCanvas.value = null
   compositeContext.value = null
 }
 
-// Stop recording
+// Only finalize in onstop: the browser delivers the final chunk before it.
 function stopRecording() {
-  if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
-    try {
-      // Request final chunk before stop (supported in Chromium; ignored elsewhere)
-      if (typeof mediaRecorder.value.requestData === 'function') {
-        mediaRecorder.value.requestData()
-      }
-      mediaRecorder.value.stop()
-    } catch (err) {
-      console.warn('Error stopping MediaRecorder:', err)
-      handleRecordingStop()
-    }
-  } else if (recordedChunks.value.length > 0 && !recordedBlob.value) {
-    handleRecordingStop()
-  }
-
+  if (stopRequested) return
+  stopRequested = true
+  isProcessing.value = true
+  stopTimer()
   isRecording.value = false
   isPaused.value = false
-  stopTimer()
-
-  // Stop capture tracks after recorder stops so the final chunk is flushed
-  setTimeout(() => {
-    cleanupCaptureStreams()
-  }, 250)
+  if (mediaRecorder.value?.state !== 'inactive') {
+    try {
+      mediaRecorder.value?.stop()
+    } catch (err) {
+      error.value = `Unable to stop recording: ${err.message}`
+      cleanupCaptureStreams()
+      // Ending all capture tracks also causes the recorder to flush and stop.
+    }
+  }
 }
 
-// Handle recording stop
-function handleRecordingStop() {
+async function handleRecordingStop() {
+  if (unmounted || recordedBlob.value || finalizing) return
+  finalizing = true
+  if (!stopRequested && !error.value) {
+    error.value = 'The browser stopped recording unexpectedly. Download the video captured so far.'
+  }
+  stopRequested = true
   isProcessing.value = true
+  saveFailed.value = false
+  stopTimer()
+  isRecording.value = false
+  isPaused.value = false
+  cleanupCaptureStreams()
+  // Release input devices and decoders, not just the mixed destination track.
+  for (const stream of [micStream.value, cameraStream.value]) {
+    stream?.getTracks().forEach(track => track.stop())
+  }
+  micStream.value = null
+  cameraStream.value = null
+  micEnabled.value = false
+  cameraEnabled.value = false
 
-  const mime = activeMimeType.value || getSupportedRecorderMimeType() || 'video/webm'
-  const blob = new Blob(recordedChunks.value, { type: mime })
-
-  recordedBlob.value = blob
-  recordedVideoUrl.value = URL.createObjectURL(blob)
-  hasDownloaded.value = false
-  frozenDownloadName.value = `${props.filename}-${new Date().toISOString().slice(0, 10)}.${fileExtensionForMime(mime)}`
-  showDownloadPrompt.value = true
-
-  isProcessing.value = false
-
-  emit('recording-complete', {
-    blob,
-    url: recordedVideoUrl.value,
-    duration: elapsedTime.value,
-    size: blob.size,
-    mimeType: mime
-  })
-
-  // Best-effort auto-download. Many browsers revoke the Stop click's user gesture
-  // by the time MediaRecorder fires onstop, so the modal is the reliable path.
-  nextTick(() => {
-    try {
-      downloadRecording({ auto: true })
-    } catch (_) {
-      /* modal still shown */
-    }
-  })
+  try {
+    const mime = activeMimeType.value || 'video/webm'
+    const blob = await recordingBuffer.finish(mime)
+    if (unmounted) return
+    if (!blob.size) throw new Error('The browser did not capture any video.')
+    recordedBlob.value = blob
+    recordedVideoUrl.value = URL.createObjectURL(blob)
+    hasDownloaded.value = false
+    frozenDownloadName.value = `${props.filename}-${new Date().toISOString().slice(0, 10)}.${fileExtensionForMime(mime)}`
+    showDownloadPrompt.value = true
+    emit('recording-complete', {
+      blob,
+      url: recordedVideoUrl.value,
+      duration: elapsedTime.value,
+      size: blob.size,
+      mimeType: mime
+    })
+    nextTick(() => {
+      if (!unmounted) downloadRecording({ auto: true })
+    })
+  } catch (err) {
+    saveFailed.value = true
+    error.value = `Could not prepare your video: ${err.message}. Keep this page open and retry.`
+  } finally {
+    finalizing = false
+    isProcessing.value = false
+  }
 }
 
 // Download recording
 function downloadRecording(options = {}) {
   if (!recordedBlob.value) return
 
-  const url = URL.createObjectURL(recordedBlob.value)
+  const url = recordedVideoUrl.value
   const a = document.createElement('a')
   a.style.display = 'none'
   a.href = url
@@ -886,8 +968,7 @@ function downloadRecording(options = {}) {
 
   setTimeout(() => {
     document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }, 100)
+  }, 1000)
 }
 
 function dismissDownloadPrompt() {
@@ -930,31 +1011,45 @@ async function uploadRecording() {
 }
 
 // Discard recording
-function discardRecording() {
+async function discardRecording() {
+  if (isProcessing.value || isUploading.value) return
+  isProcessing.value = true
   if (recordedVideoUrl.value) {
     URL.revokeObjectURL(recordedVideoUrl.value)
   }
 
   recordedVideoUrl.value = null
   recordedBlob.value = null
-  recordedChunks.value = []
   activeMimeType.value = ''
   showDownloadPrompt.value = false
   hasDownloaded.value = false
   frozenDownloadName.value = ''
   elapsedTime.value = 0
+  saveFailed.value = false
   error.value = null
+  try {
+    await recordingBuffer?.dispose()
+  } catch (_) {
+    error.value = 'The temporary recording could not be removed from browser storage.'
+  } finally {
+    recordingBuffer = null
+    mediaRecorder.value = null
+    isProcessing.value = false
+  }
 }
 
 // Timer functions
 function startTimer() {
+  stopTimer()
+  startTime.value = Date.now() - elapsedTime.value
   timerInterval.value = setInterval(() => {
     elapsedTime.value = Date.now() - startTime.value
-  }, 100)
+  }, 1000)
 }
 
 function stopTimer() {
   if (timerInterval.value) {
+    elapsedTime.value = Date.now() - startTime.value
     clearInterval(timerInterval.value)
     timerInterval.value = null
   }
@@ -972,25 +1067,38 @@ watch(cameraStream, async (newStream) => {
 
 // Let parent keep UI mounted while recording / preview is active
 watch(
-  [isRecording, isPaused, recordedVideoUrl],
-  ([recording, paused, previewUrl]) => {
-    emit('active-change', Boolean(recording || paused || previewUrl))
+  [isStarting, isRecording, isPaused, isProcessing, saveFailed, recordedVideoUrl],
+  (states) => {
+    emit('active-change', states.some(Boolean))
   },
   { immediate: true }
 )
 
+function warnBeforeLeaving(event) {
+  if (isStarting.value || isRecording.value || isPaused.value || isProcessing.value || saveFailed.value || (recordedBlob.value && !hasDownloaded.value)) {
+    event.preventDefault()
+    event.returnValue = ''
+  }
+}
+window.addEventListener('beforeunload', warnBeforeLeaving)
+
 // Cleanup on unmount
 onUnmounted(() => {
+  unmounted = true
+  window.removeEventListener('beforeunload', warnBeforeLeaving)
   stopTimer()
 
-  if (mediaRecorder.value && mediaRecorder.value.state !== 'inactive') {
-    try {
-      mediaRecorder.value.onstop = null
-      mediaRecorder.value.stop()
-    } catch (_) {}
+  if (mediaRecorder.value) {
+    mediaRecorder.value.onstop = null
+    mediaRecorder.value.ondataavailable = null
+    mediaRecorder.value.onerror = null
+    if (mediaRecorder.value.state !== 'inactive') {
+      try { mediaRecorder.value.stop() } catch (_) {}
+    }
   }
 
   cleanupCaptureStreams()
+  void recordingBuffer?.dispose().catch(() => {})
 
   if (micStream.value) {
     micStream.value.getTracks().forEach((track) => track.stop())

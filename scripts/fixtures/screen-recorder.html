@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="app"></div><script type="module">
+import { createApp } from 'vue'
+import ScreenRecorder from '/src/components/ScreenRecorder.vue'
+const canvas = document.createElement('canvas')
+canvas.width = 640; canvas.height = 360
+const context = canvas.getContext('2d')
+setInterval(() => { context.fillStyle = `hsl(${Date.now() % 360},50%,50%)`; context.fillRect(0,0,640,360) }, 60)
+navigator.mediaDevices.getDisplayMedia = async () => {
+  window.capture = canvas.captureStream(15)
+  return window.capture
+}
+window.app = createApp(ScreenRecorder)
+window.vm = window.app.mount('#app')
+</script></body></html>
