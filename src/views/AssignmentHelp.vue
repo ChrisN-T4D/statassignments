@@ -46,7 +46,7 @@
           </ul>
 
           <p v-if="block.noDiscussion" class="no-discussion-note">
-            This module has no discussion board in the LMS; use tips and office hours if you need help.
+            This module has no discussion activity; use tips and office hours if you need help.
           </p>
         </section>
       </div>

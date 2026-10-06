@@ -135,7 +135,7 @@ export const ASSIGNMENT_HELP_BY_SOFTWARE = {
         'For two numeric variables: means/SDs; for one variable: `hist()` or `ggplot` bar.',
         'Turn in: paragraph + screenshot of console/plots or Quarto/HTML output.'
       ],
-      getHelp: 'Module 3 R lessons + dplyr/summary. Post in discussion if paths or packages fail.'
+      getHelp: 'Module 3 R lessons + dplyr/summary. Ask during in-class discussion or email instructor if paths or packages fail.'
     },
     excel: {
       tips: [

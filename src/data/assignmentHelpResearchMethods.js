@@ -46,7 +46,7 @@ export const assignmentHelpResearchMethods = [
           'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in Phase 4: it determines which Pressbooks chapters matter most later.'
         ],
         practiceLinks: ['rm-chapter-1'],
-        getHelp: 'Questions about course structure? Use the Course Discussion Board in Canvas or office hours.'
+        getHelp: 'Questions about course structure? Ask during in-class discussion or come to office hours.'
       },
       {
         id: 'rm-choose-groups',
