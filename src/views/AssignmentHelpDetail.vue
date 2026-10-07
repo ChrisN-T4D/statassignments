@@ -59,7 +59,7 @@
           </p>
         </div>
 
-        <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
+        <!-- Concept Review / Software Practice: open the Methods Market activity -->
         <div v-else-if="assignment.methodsMarketPath" class="practice-test-cta">
           <router-link :to="assignment.methodsMarketPath" class="practice-test-link">
             {{ methodsMarketLinkText }} →
@@ -194,8 +194,8 @@ const benchmarkPrintUrl = computed(() => `${practiceTestUrl.value}?print=1`)
 const benchmarkBatchUrl = computed(() => `${practiceTestUrl.value}?batch=1`)
 const practiceTestLinkText = computed(() => {
   if (props.assignmentId === 'benchmark-1') return 'Take a practice test (Chapters 1–3)'
-  if (props.assignmentId === 'benchmark-2') return 'Take a practice test (Chapters 4–6)'
-  if (props.assignmentId === 'final-benchmark') return 'Take a practice test (Chapters 7–8)'
+  if (props.assignmentId === 'benchmark-2') return 'Take a practice test (Modules 4–5)'
+  if (props.assignmentId === 'final-benchmark') return 'Take a practice test (Modules 6–8)'
   return 'Take a practice test'
 })
 

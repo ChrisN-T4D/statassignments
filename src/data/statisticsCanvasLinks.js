@@ -157,7 +157,7 @@ export function conceptReviewAssignment (moduleNum) {
       'When finished, print or save the completion slip and upload it to Canvas for credit.'
     ],
     getHelp:
-      'Open the link below, complete Concept Review for this module, then print or save the completion slip and upload it to Canvas. Use Assignment Help for other weekly work, or post in the module discussion / office hours if you are stuck on specific items.'
+      'Open the link below, complete Concept Review for this module, then print or save the completion slip and upload it to Canvas. Use Assignment Help for other weekly work, or ask during in-class discussion / office hours if you are stuck on specific items.'
   }
 }
 
