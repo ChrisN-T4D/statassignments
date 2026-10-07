@@ -34,13 +34,20 @@
           </h2>
 
           <ul class="assignment-links">
-            <li v-for="a in block.assignments" :key="a.id">
+            <li v-for="a in block.assignments" :key="a.id" class="assignment-row">
               <router-link
                 :to="`/class/${classId}/assignment-help/${a.id}`"
                 class="assignment-link"
               >
                 <span class="assignment-link-name">{{ a.name }}</span>
                 <span class="assignment-link-type" :class="a.type">{{ typeLabel(a.type) }}</span>
+              </router-link>
+              <router-link
+                v-if="a.studyPlanSection"
+                :to="`/class/${classId}/study-plan/${a.studyPlanSection}`"
+                class="study-plan-inline-link"
+              >
+                Open Study Plan →
               </router-link>
             </li>
           </ul>
@@ -197,7 +204,15 @@ function typeLabel (type) {
   gap: 0.5rem;
 }
 
+.assignment-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
 .assignment-link {
+  flex: 1 1 28rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -213,6 +228,23 @@ function typeLabel (type) {
 .assignment-link:hover {
   border-color: var(--primary);
   background: var(--bg-hover, rgba(0, 0, 0, 0.02));
+}
+
+.study-plan-inline-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.study-plan-inline-link:hover {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
 }
 
 .assignment-link-name {
