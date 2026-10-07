@@ -385,6 +385,20 @@
             v-else-if="selectedModuleId === RM_MODULE_LAB_ID"
             class="tab-panel rm-lab-panel"
           >
+            <details class="rm-lab-walkthrough" open>
+              <summary>Design decision walkthrough: from question to study plan</summary>
+              <p>Before you run the lab, make four decisions for one proposed study:</p>
+              <ol>
+                <li><strong>Population:</strong> name who you want your conclusion to describe.</li>
+                <li><strong>Sampling:</strong> choose how people enter the study and identify one likely source of coverage or nonresponse bias.</li>
+                <li><strong>Assignment:</strong> if there is an intervention, choose how participants enter conditions and explain what random assignment protects.</li>
+                <li><strong>Claim boundary:</strong> write one sentence saying whether your design supports a causal claim, a generalization, both, or neither.</li>
+              </ol>
+              <p class="rm-lab-walkthrough-checkpoint">
+                Checkpoint: run both tabs, then revise one decision after seeing how the roster or baseline balance changes.
+                <router-link to="/class/research-methods/assignment-help/rm-phase-4-worksheet">Open Phase 4 worksheet →</router-link>
+              </p>
+            </details>
             <SamplingCompareLab intro="rm-embed" />
             <details v-if="conceptReviewQuestionCount > 0" class="rm-lab-assignment-extra">
               <summary>Assignment simulation (sleep workshop vs control)</summary>
