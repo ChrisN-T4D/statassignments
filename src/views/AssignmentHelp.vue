@@ -17,6 +17,18 @@
             Open Study Plan →
           </router-link>
         </div>
+        <details v-if="classId === 'research-methods'" class="research-aid-panel">
+          <summary>Reference self-check before you submit</summary>
+          <p>Use this quick audit for article reviews, literature reviews, and methods papers:</p>
+          <ul>
+            <li>Every paraphrase, quotation, or borrowed idea has an author–year citation.</li>
+            <li>Every in-text citation appears in References, and every reference is cited in the paper.</li>
+            <li>Each reference has enough information for a reader to find the source, preferably a DOI or stable URL.</li>
+            <li>Authors, year, title, journal/book, volume, issue, pages, and italics follow APA 7 conventions.</li>
+            <li>Claims describe what the source found; they do not overstate correlation as causation.</li>
+          </ul>
+          <router-link to="/topic/rm-chapter-11" class="research-aid-link">Review Chapter 11: APA and clear prose →</router-link>
+        </details>
       </div>
 
       <div class="help-modules">
@@ -163,6 +175,36 @@ function typeLabel (type) {
 
 .study-plan-banner-btn:hover {
   filter: brightness(1.08);
+}
+
+.research-aid-panel {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.research-aid-panel summary {
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.research-aid-panel p {
+  margin: 0.75rem 0 0.35rem;
+}
+
+.research-aid-panel ul {
+  margin: 0.35rem 0 0.75rem 1.2rem;
+  padding: 0;
+}
+
+.research-aid-link {
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .help-modules {
