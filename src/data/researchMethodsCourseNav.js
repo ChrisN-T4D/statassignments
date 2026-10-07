@@ -73,6 +73,7 @@ export const RESEARCH_METHODS_PARTS = [
           { kind: 'chapter', moduleId: 'rm-module-6' },
           { kind: 'chapter', moduleId: 'rm-module-7' },
           { kind: 'chapter', moduleId: 'rm-module-9' },
+          { kind: 'chapter', moduleId: 'rm-module-10' },
           { kind: 'chapter', moduleId: 'rm-module-11' },
           { kind: 'chapter', moduleId: 'rm-module-lab' }
         ]
@@ -129,7 +130,11 @@ export const RESEARCH_METHODS_PARTS = [
       {
         id: 'analysis',
         label: 'Analysis by methodology path',
-        items: [{ kind: 'chapter', moduleId: 'rm-module-data-by-path' }]
+        items: [
+          { kind: 'chapter', moduleId: 'rm-module-12' },
+          { kind: 'chapter', moduleId: 'rm-module-13' },
+          { kind: 'chapter', moduleId: 'rm-module-data-by-path' }
+        ]
       }
     ]
   }
