@@ -143,6 +143,12 @@ export function conceptReviewAssignment (moduleNum) {
     name: `Module ${moduleNum}: Concept Review (Methods Market)`,
     type: 'concept-review',
     methodsMarketPath: conceptReviewPath(moduleNum),
+    completionChecklist: [
+      'Concept Review finished for this module in Methods Market (each learning objective mastered, or the question bank completed).',
+      'Completion slip saved (Print / Save PDF — it shows your student key, module, and score).',
+      'Slip uploaded to this Canvas assignment.'
+    ],
+    gradedInCanvas: true,
     tips: [
       'Sign in to Methods Market with your course profile so practice attempts are tracked.',
       'Work Concept Review until each learning objective is mastered (at least two items per objective). Offline-primary students print the packet, enter answers once, then save the slip.',
@@ -159,6 +165,12 @@ export function softwarePracticeAssignment (moduleNum) {
     name: `Module ${moduleNum}: Software Practice (Methods Market)`,
     type: 'software-practice',
     methodsMarketPath: softwarePracticePath(moduleNum),
+    completionChecklist: [
+      'Learn (I do) and Practice (We do) sections finished in Methods Market (or the print packet).',
+      'Apply (You do) recorded with Tools (or your phone).',
+      'Video uploaded to this Canvas assignment (.webm from Tools or .mp4 from a phone). No slip for Software Practice.'
+    ],
+    gradedInCanvas: true,
     tips: [
       'Set your preferred statistical software in Methods Market (Jamovi, SPSS, R, Excel, or Stata) before you start.',
       'Complete Learn (I do) and Practice (We do). For Apply (You do), record with Tools and upload the video to Canvas.',
