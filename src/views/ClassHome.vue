@@ -184,6 +184,30 @@
           </ul>
         </div>
 
+        <!-- Objective practice/assessment summary (QM: connect objectives to activities/assessments) -->
+        <div v-if="objectivePracticeSummary.show" class="objective-practice-summary print-hide">
+          <h4>Practice &amp; assessment for these objectives</h4>
+          <ul>
+            <li v-if="objectivePracticeSummary.questionCount > 0">
+              <button type="button" class="inline-tab-link" @click="onContentTabClick('concepts')">Concept Review</button>
+              &mdash; {{ objectivePracticeSummary.questionCount }} practice question{{ objectivePracticeSummary.questionCount === 1 ? '' : 's' }}
+              covering {{ objectivePracticeSummary.mappedObjectives }} of {{ objectivePracticeSummary.conceptObjectives }} objectives
+            </li>
+            <li v-if="objectivePracticeSummary.softwareObjectives > 0">
+              <button type="button" class="inline-tab-link" @click="onContentTabClick('software')">Software Practice</button>
+              &mdash; guided lesson steps for software skills
+            </li>
+            <li v-if="objectivePracticeSummary.unmappedObjectives > 0" class="objective-map-gap">
+              {{ objectivePracticeSummary.unmappedObjectives }} objective{{ objectivePracticeSummary.unmappedObjectives === 1 ? '' : 's' }}
+              not yet covered by practice questions &mdash; graded Canvas work still applies
+            </li>
+            <li>
+              Graded work (benchmarks, points, due dates) lives in
+              <a :href="CANVAS_HOME_URL" target="_blank" rel="noopener">Canvas</a>.
+            </li>
+          </ul>
+        </div>
+
         <!-- Path data section: Ch. 12–13 + analyze tool by methodology path -->
         <div v-if="!isPathDataSectionModule && !isDataAnalysisModule && !isBenchmarkModule && moduleProgress.total > 0" class="module-progress">
           <div class="module-progress-header">
@@ -745,6 +769,8 @@ import SamplingCompareLab from '../components/sampling/SamplingCompareLab.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
+import { objectives } from '../data/objectives'
+import { questionObjectiveMap } from '../data/questionObjectiveMap'
 import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
@@ -1216,6 +1242,31 @@ function getCompletedSoftwareLessonIds() {
     return new Set()
   }
 }
+
+// Compact objective-to-activity/assessment summary for the selected module (QM SRS 2.1-2.5)
+// Data-driven only: objectives from objectives.js, question coverage from questionObjectiveMap.
+const objectivePracticeSummary = computed(() => {
+  const mid = selectedModuleId.value
+  if (!mid) return { show: false }
+  const modObjectives = objectives.filter((o) => o.moduleId === mid)
+  if (!modObjectives.length) return { show: false }
+  const counts = {}
+  for (const qids of Object.values(questionObjectiveMap)) {
+    for (const oid of qids) counts[oid] = (counts[oid] || 0) + 1
+  }
+  const content = modObjectives.filter((o) => o.objectiveType === 'content')
+  const software = modObjectives.filter((o) => o.objectiveType === 'software')
+  const mapped = content.filter((o) => counts[o.objectiveId])
+  const questionCount = content.reduce((sum, o) => sum + (counts[o.objectiveId] || 0), 0)
+  return {
+    show: true,
+    conceptObjectives: content.length,
+    mappedObjectives: mapped.length,
+    unmappedObjectives: content.length - mapped.length,
+    softwareObjectives: software.length,
+    questionCount
+  }
+})
 
 const moduleProgress = computed(() => {
   if (selectedModuleId.value === RM_MODULE_LAB_ID) {
@@ -2089,6 +2140,29 @@ watch(selectedModuleId, id => {
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+/* Objective practice/assessment summary */
+.objective-practice-summary {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-secondary, #f6f7fb);
+  border-radius: 8px;
+}
+.objective-practice-summary h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+.objective-practice-summary ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.objective-practice-summary li {
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+}
+.objective-map-gap {
+  color: #8a6d1a;
 }
 
 /* Learning Objectives */
