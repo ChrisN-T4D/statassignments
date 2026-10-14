@@ -293,7 +293,7 @@
         </div>
 
         <!-- Result -->
-        <div v-if="showResult" class="result-section">
+        <div v-if="showResult" class="result-section" role="status" aria-live="polite">
           <div class="result" :class="{ correct: isCorrect, incorrect: !isCorrect }">
             <h3>{{ isCorrect ? 'Correct!' : 'Incorrect' }}</h3>
             <p v-if="!isCorrect">

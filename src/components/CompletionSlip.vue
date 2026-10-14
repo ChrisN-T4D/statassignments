@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="completion-slip">
+  <div v-if="visible" class="completion-slip" role="status" aria-live="polite">
     <div class="slip-card" id="mm-completion-slip">
       <h3>PSYC 4213 · Methods Market completion slip</h3>
       <p class="slip-status">Status: Completed</p>

@@ -79,8 +79,8 @@
         <div class="bucket-header">
           <label :for="`bucket-title-${bucket.id}`" class="bucket-label">Section {{ index + 1 }}</label>
           <div class="bucket-actions">
-            <button type="button" class="icon-btn" :disabled="index === 0" title="Move up" @click="moveBucket(index, -1)">↑</button>
-            <button type="button" class="icon-btn" :disabled="index >= outline.themeBuckets.length - 1" title="Move down" @click="moveBucket(index, 1)">↓</button>
+            <button type="button" class="icon-btn" :disabled="index === 0" title="Move up" aria-label="Move bucket up" @click="moveBucket(index, -1)">↑</button>
+            <button type="button" class="icon-btn" :disabled="index >= outline.themeBuckets.length - 1" title="Move down" aria-label="Move bucket down" @click="moveBucket(index, 1)">↓</button>
             <button
               v-if="outline.themeBuckets.length > 1"
               type="button"

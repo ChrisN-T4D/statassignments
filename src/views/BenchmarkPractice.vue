@@ -89,7 +89,7 @@
         </div>
 
         <!-- Question -->
-        <div v-else-if="started && !finished && currentQuestion && !batchMode" class="question-card">
+        <div v-else-if="started && !finished && currentQuestion && !batchMode" class="question-card" role="group" aria-label="Practice question">
           <div class="progress">
             Question {{ currentIndex + 1 }} of {{ questions.length }}
           </div>
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Results -->
-        <div v-else-if="finished" class="results">
+        <div v-else-if="finished" class="results" role="status" aria-live="polite">
           <h1>Practice test complete</h1>
           <p class="score">You got {{ score }} out of {{ questions.length }} correct.</p>
           <p v-if="bktSaved" class="bkt-note">Your answers were saved to your mastery profile for smarter question selection next time.</p>
