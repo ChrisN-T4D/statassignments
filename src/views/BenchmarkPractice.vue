@@ -18,6 +18,9 @@
           <p v-else>
             Online primary: take the practice test here, or print a packet if you want paper practice first.
           </p>
+          <p class="benchmark-handoff-note">
+            This practice test is formative — it prepares you for the graded benchmark, but it is not the graded benchmark itself and nothing is uploaded from here. Your graded benchmark, its points, and its due date live in Canvas (see the module's benchmark assignment there).
+          </p>
           <div class="cr-mode-actions">
             <button type="button" class="btn-secondary" @click="openPrintPacket">Print packet</button>
             <button
@@ -1093,6 +1096,12 @@ function formatTopicId(id) {
 
 .study-guide-row .btn-secondary {
   text-decoration: none;
+}
+
+.benchmark-handoff-note {
+  font-size: 0.85rem;
+  color: #5a6474;
+  margin: 0.4rem 0 0;
 }
 
 .cr-mode-bar {
