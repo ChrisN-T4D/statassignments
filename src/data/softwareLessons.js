@@ -29,16 +29,21 @@ import { module4DescriptiveLessonsOther } from './softwareLessons_module4_descri
 import { module5UnifiedLessons } from './softwareLessons_module5_unified.js'
 import { module5UnifiedLessonsOther } from './softwareLessons_module5_unified_other.js'
 import { module6UnifiedLessons } from './softwareLessons_module6_unified.js'
+import { module6SpssLessons } from './softwareLessons_module6_spss.js'
 import { module6LessonsOther } from './softwareLessons_module6_other.js'
 import { module7LessonsOther } from './softwareLessons_module7_other.js'
 import { module7UnifiedLessons } from './softwareLessons_module7_unified.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
 import { module8UnifiedLessonsOther } from './softwareLessons_module8_unified_other.js'
+import { module8SpssLessons } from './softwareLessons_module8_spss.js'
 import { excelGuidesLessons } from './softwareLessons_excel_guides.js'
 
 export const softwareLessons = [
   // ============ STATISTICS MODULE 3: Software Basics (Unified Lessons) ============
   ...module3UnifiedLessons,
+
+  ...module6SpssLessons,
+  ...module8SpssLessons,
 
   // ============ Excel Guides (Stats Made Easy style) ============
   ...excelGuidesLessons,
