@@ -6,15 +6,15 @@ const STORAGE_KEY = 'preferredSoftware'
 function readFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return 'jamovi'
-    return software.find(sw => sw.id === raw)?.id || 'jamovi'
+    if (!raw) return 'spss'
+    return software.find(sw => sw.id === raw)?.id || 'spss'
   } catch {
-    return 'jamovi'
+    return 'spss'
   }
 }
 
 export const preferredSoftware = ref(
-  typeof window !== 'undefined' ? readFromStorage() : 'jamovi'
+  typeof window !== 'undefined' ? readFromStorage() : 'spss'
 )
 
 if (typeof window !== 'undefined') {
