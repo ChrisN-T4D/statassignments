@@ -216,7 +216,7 @@ const { selectedClass, fetchClasses } = useClasses()
 const module8Prefs = useModule8Preferences()
 
 // State
-const selectedSoftware = ref('jamovi')
+const selectedSoftware = ref('spss')
 const selectedModule = ref(null)
 const progress = ref({ completed: 0, total: 0, exercises: [] })
 const currentExercise = ref(null)
