@@ -11,6 +11,11 @@
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
             Methods Market is for chapter reading, concept review, and assignment help only.
           </p>
+          <p v-else-if="!isResearchMethodsClass" class="class-canvas-note">
+            <strong>Start here:</strong> choose a module below, read the <strong>Topics</strong> lesson, then complete
+            <strong>Concept Review</strong> and <strong>Software Practice</strong>.
+            Due dates, points, and graded work live in <strong>Canvas</strong>.
+          </p>
           <div class="header-links">
             <template v-if="isResearchMethodsClass">
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
@@ -26,6 +31,15 @@
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
                 Stuck on an assignment? Get help →
               </router-link>
+              <span class="header-links-sep">·</span>
+              <a
+                :href="CANVAS_HOME_URL"
+                target="_blank"
+                rel="noopener"
+                class="assignment-help-link"
+              >
+                Return to Canvas ↗
+              </a>
               <span class="header-links-sep">·</span>
             </template>
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
@@ -693,6 +707,9 @@
 </template>
 
 <script setup>
+
+// Canvas homepage (not a specific course id: serves all semesters/classes)
+const CANVAS_HOME_URL = 'https://nwosu.instructure.com/'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
