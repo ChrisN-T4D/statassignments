@@ -16,6 +16,34 @@ import {
 
 export const statisticsModules = [
   {
+    id: 'stats-module-0',
+    classId: 'statistics',
+    number: 0,
+    title: 'Math Refresher',
+    shortTitle: 'Refresher',
+    description: 'Optional warm-up: the algebra and graph-reading skills statistics builds on.',
+    icon: 'M0',
+    color: '#a78bfa',
+    topics: [
+      'order-of-operations',
+      'solving-for-a-variable',
+      'fractions-and-decimals',
+      'exponents-and-square-roots',
+      'summation-notation',
+      'reading-graphs'
+    ],
+    textbookChapters: [],
+    learningObjectives: [
+      'Apply the order of operations (PEMDAS) to multi-step expressions',
+      'Solve a linear equation for a variable',
+      'Work comfortably with fractions, decimals, and percentages',
+      'Evaluate exponents and square roots',
+      'Read summation notation (Sigma) and compute a simple sum',
+      'Read common graphs: axes, scales, points, and bars'
+    ],
+    hasSoftwarePractice: false
+  },
+  {
     id: 'stats-module-1',
     classId: 'statistics',
     number: 1,
