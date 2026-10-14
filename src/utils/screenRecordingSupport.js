@@ -15,10 +15,10 @@ export function getSupportedRecorderMimeType(isTypeSupported = defaultIsTypeSupp
   // WebM first: Chrome/Edge advertise video/mp4 now, but that muxer freezes
   // video while audio continues. Safari does not support WebM recording.
   const types = [
-    'video/webm;codecs=vp9,opus',
     'video/webm;codecs=vp8,opus',
-    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp9,opus',
     'video/webm;codecs=vp8',
+    'video/webm;codecs=vp9',
     'video/webm',
     'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
     'video/mp4;codecs=avc1.42E01E',
@@ -49,26 +49,21 @@ export function isMp4MimeType(mimeType = '') {
 }
 
 /**
- * Constraint attempts from most compatible → more specific.
+ * Prefer modest capture settings for long homework sessions; retry unconstrained.
  * Avoid hard-requiring displaySurface/monitor (fails on many laptops / Safari).
  * Retry without system audio when audio constraints are rejected.
  */
 export function getDisplayMediaConstraintAttempts() {
+  const video = {
+    width: { ideal: 1920, max: 1920 },
+    height: { ideal: 1080, max: 1080 },
+    frameRate: { ideal: 15, max: 15 }
+  }
   return [
+    { video, audio: true },
+    { video, audio: false },
     { video: true, audio: true },
-    { video: true, audio: false },
-    {
-      video: {
-        frameRate: { ideal: 30, max: 30 }
-      },
-      audio: true
-    },
-    {
-      video: {
-        frameRate: { ideal: 30, max: 30 }
-      },
-      audio: false
-    }
+    { video: true, audio: false }
   ]
 }
 

@@ -46,7 +46,7 @@ function assert(cond, msg) {
       t === 'video/webm;codecs=vp8,opus' ||
       t === 'video/webm'
   )
-  assert(mime.includes('webm'), 'Chrome-with-mp4 still prefers webm over mp4')
+  assert(mime === 'video/webm;codecs=vp8,opus', 'Chrome prefers lower-cost VP8 over VP9 and MP4')
   assert(!isMp4MimeType(mime), 'Chrome-with-mp4 result is not mp4')
   assert(RECORDER_TIMESLICE_MS === 1000, 'timeslice constant stays 1000ms for MP4 keyframe sync')
 }
@@ -69,6 +69,9 @@ function assert(cond, msg) {
 // Pass 5: constraint attempts never hard-require monitor surface
 {
   const attempts = getDisplayMediaConstraintAttempts()
+  assert(attempts[0].video.frameRate.max === 15, 'default capture capped at 15 fps')
+  assert(attempts[0].video.width.max === 1920, 'default capture capped at 1080p width')
+  assert(attempts.some(c => c.video === true), 'unconstrained fallback retained')
   assert(attempts.length >= 2, 'at least video+audio and video-only attempts')
   assert(
     attempts.every((c) => c.video !== undefined),
