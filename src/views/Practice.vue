@@ -19,6 +19,9 @@
           <span class="mastery-label">Mastery progress</span>
           <span class="mastery-value">{{ masteryIndex + (currentProblem ? 1 : 0) }} / {{ masteryTotal }}</span>
         </div>
+        <p class="formative-note print-hide">
+          Practice progress estimates your understanding — it is not a Canvas grade. Grading and points are set by your instructor in Canvas.
+        </p>
       </div>
 
       <div v-else-if="embedded" class="page-header page-header-embedded">
@@ -290,11 +293,14 @@
         </div>
 
         <!-- Result -->
-        <div v-if="showResult" class="result-section">
+        <div v-if="showResult" class="result-section" role="status" aria-live="polite">
           <div class="result" :class="{ correct: isCorrect, incorrect: !isCorrect }">
             <h3>{{ isCorrect ? 'Correct!' : 'Incorrect' }}</h3>
             <p v-if="!isCorrect">
               The correct answer is: <strong>{{ currentProblem.correct_answer }}</strong>
+            </p>
+            <p v-if="!isCorrect && currentProblem.topic_id" class="result-next-step">
+              Next step: review this topic in the module's Topics tab, then try again.
             </p>
           </div>
           <div v-if="currentProblem.explanation" class="explanation">
@@ -1149,6 +1155,16 @@ watch(currentProblem, async (problem) => {
   align-items: center;
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.formative-note {
+  font-size: 0.85rem;
+  color: #5a6474;
+  margin: 0.25rem 0 0;
+}
+.result-next-step {
+  font-size: 0.9rem;
+  margin: 0.4rem 0 0;
 }
 
 .mastery-label {

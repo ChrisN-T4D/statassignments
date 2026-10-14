@@ -11,6 +11,11 @@
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
             Methods Market is for chapter reading, concept review, and assignment help only.
           </p>
+          <p v-else-if="!isResearchMethodsClass" class="class-canvas-note">
+            <strong>Start here:</strong> choose a module below, read the <strong>Topics</strong> lesson, then complete
+            <strong>Concept Review</strong> and <strong>Software Practice</strong>.
+            Due dates, points, and graded work live in <strong>Canvas</strong>.
+          </p>
           <div class="header-links">
             <template v-if="isResearchMethodsClass">
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
@@ -26,6 +31,15 @@
               <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
                 Stuck on an assignment? Get help →
               </router-link>
+              <span class="header-links-sep">·</span>
+              <a
+                :href="CANVAS_HOME_URL"
+                target="_blank"
+                rel="noopener"
+                class="assignment-help-link"
+              >
+                Return to Canvas ↗
+              </a>
               <span class="header-links-sep">·</span>
             </template>
             <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
@@ -166,6 +180,30 @@
           <ul>
             <li v-for="(obj, idx) in selectedModule.learningObjectives" :key="idx">
               {{ replaceJamoviLabel(obj, selectedModule.id) }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Objective practice/assessment summary (QM: connect objectives to activities/assessments) -->
+        <div v-if="objectivePracticeSummary.show" class="objective-practice-summary print-hide">
+          <h4>Practice &amp; assessment for these objectives</h4>
+          <ul>
+            <li v-if="objectivePracticeSummary.questionCount > 0">
+              <button type="button" class="inline-tab-link" @click="onContentTabClick('concepts')">Concept Review</button>
+              &mdash; {{ objectivePracticeSummary.questionCount }} practice question{{ objectivePracticeSummary.questionCount === 1 ? '' : 's' }}
+              covering {{ objectivePracticeSummary.mappedObjectives }} of {{ objectivePracticeSummary.conceptObjectives }} objectives
+            </li>
+            <li v-if="objectivePracticeSummary.softwareObjectives > 0">
+              <button type="button" class="inline-tab-link" @click="onContentTabClick('software')">Software Practice</button>
+              &mdash; guided lesson steps for software skills
+            </li>
+            <li v-if="objectivePracticeSummary.unmappedObjectives > 0" class="objective-map-gap">
+              {{ objectivePracticeSummary.unmappedObjectives }} objective{{ objectivePracticeSummary.unmappedObjectives === 1 ? '' : 's' }}
+              not yet covered by practice questions &mdash; graded Canvas work still applies
+            </li>
+            <li>
+              Graded work (benchmarks, points, due dates) lives in
+              <a :href="CANVAS_HOME_URL" target="_blank" rel="noopener">Canvas</a>.
             </li>
           </ul>
         </div>
@@ -693,6 +731,9 @@
 </template>
 
 <script setup>
+
+// Canvas homepage (not a specific course id: serves all semesters/classes)
+const CANVAS_HOME_URL = 'https://nwosu.instructure.com/'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useClasses } from '../composables/useClasses'
@@ -728,6 +769,8 @@ import SamplingCompareLab from '../components/sampling/SamplingCompareLab.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import { getQuestionsByModule } from '../data/conceptQuestions'
+import { objectives } from '../data/objectives'
+import { questionObjectiveMap } from '../data/questionObjectiveMap'
 import { getStatisticsBenchmarkLink, getBenchmarkCardGuidance, getBenchmarkStudyGuide } from '../data/statisticsCanvasLinks.js'
 
 const route = useRoute()
@@ -1199,6 +1242,31 @@ function getCompletedSoftwareLessonIds() {
     return new Set()
   }
 }
+
+// Compact objective-to-activity/assessment summary for the selected module (QM SRS 2.1-2.5)
+// Data-driven only: objectives from objectives.js, question coverage from questionObjectiveMap.
+const objectivePracticeSummary = computed(() => {
+  const mid = selectedModuleId.value
+  if (!mid) return { show: false }
+  const modObjectives = objectives.filter((o) => o.moduleId === mid)
+  if (!modObjectives.length) return { show: false }
+  const counts = {}
+  for (const qids of Object.values(questionObjectiveMap)) {
+    for (const oid of qids) counts[oid] = (counts[oid] || 0) + 1
+  }
+  const content = modObjectives.filter((o) => o.objectiveType === 'content')
+  const software = modObjectives.filter((o) => o.objectiveType === 'software')
+  const mapped = content.filter((o) => counts[o.objectiveId])
+  const questionCount = content.reduce((sum, o) => sum + (counts[o.objectiveId] || 0), 0)
+  return {
+    show: true,
+    conceptObjectives: content.length,
+    mappedObjectives: mapped.length,
+    unmappedObjectives: content.length - mapped.length,
+    softwareObjectives: software.length,
+    questionCount
+  }
+})
 
 const moduleProgress = computed(() => {
   if (selectedModuleId.value === RM_MODULE_LAB_ID) {
@@ -2072,6 +2140,29 @@ watch(selectedModuleId, id => {
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+/* Objective practice/assessment summary */
+.objective-practice-summary {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-secondary, #f6f7fb);
+  border-radius: 8px;
+}
+.objective-practice-summary h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+.objective-practice-summary ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.objective-practice-summary li {
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+}
+.objective-map-gap {
+  color: #8a6d1a;
 }
 
 /* Learning Objectives */

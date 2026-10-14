@@ -69,6 +69,15 @@
 
         <!-- Single assignment card content -->
         <article class="assignment-card">
+          <div v-if="assignment.completionChecklist?.length" class="section">
+            <h2 class="section-title">What a complete submission includes</h2>
+            <ul class="tips-list">
+              <li v-for="(item, i) in assignment.completionChecklist" :key="'cc-' + i">{{ item }}</li>
+            </ul>
+            <p class="section-desc">
+              Methods Market shows practice progress only. Grading, points, and due dates are set by your instructor in Canvas.
+            </p>
+          </div>
           <div v-if="assignment.tips?.length" class="section">
             <h2 class="section-title">Tips</h2>
             <ul class="tips-list">
