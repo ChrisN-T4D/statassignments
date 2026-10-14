@@ -30,6 +30,24 @@
             <p>When you sign in, the platform uses Bayesian Knowledge Tracing to estimate your mastery of each learning objective. You can view your progress on your Profile page.</p>
           </div>
           <div class="faq-item">
+            <h4>What software do I need, and how do I get it?</h4>
+            <p>
+              Software Practice supports jamovi, SPSS, R, Excel, and Stata — your course page shows which
+              tracks your class uses, and you can set your preferred software in your profile. jamovi and R
+              are free downloads from their official websites (jamovi.org, r-project.org). For licensed
+              software such as SPSS, check your university's software or IT services page for access options.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Where do I find course policies, due dates, and support?</h4>
+            <p>
+              Your official course information — syllabus, due dates, grading, instructor contact,
+              accessibility accommodations, and technical help — lives in your course's Canvas site
+              (nwosu.instructure.com). Methods Market holds practice and learning materials only;
+              it never sets grades or due dates.
+            </p>
+          </div>
+          <div class="faq-item">
             <h4>Something broken or confusing?</h4>
             <p>
               Signed-in students can
