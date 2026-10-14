@@ -140,6 +140,12 @@ export const module7UnifiedLessons = [
                     title: 'Read the output',
                     description:
                       'Report <strong>t</strong>, <strong>df</strong>, <strong>p</strong>, and the sample mean. If <strong>p &lt; .05</strong>, reject H₀; if <strong>p ≥ .05</strong>, fail to reject H₀. Cohen\'s d describes size of the difference, not just significance.'
+                  },
+                  {
+                    step: 6,
+                    title: 'Write it up: APA-style results statement',
+                    description:
+                      'Psychology journals use APA format to report results in one standard sentence. Run this exact analysis on <strong>bmi_and_exercise.csv</strong> and you will get: n = 250, M = 29.8, SD = 8.24, t(249) = 9.23, p &lt; .001, d = 0.58. Written up in APA style:<br><br><em>Participants\' mean BMI (M = 29.8, SD = 8.24) was significantly higher than the reference value of 25, t(249) = 9.23, p &lt; .001, d = 0.58.</em><br><br><strong>Pieces of the sentence:</strong><ul><li><strong>M and SD</strong> — descriptive statistics for your sample, in parentheses after naming it</li><li><strong>t(249) = 9.23</strong> — the test statistic with degrees of freedom in parentheses (jamovi prints df next to t)</li><li><strong>p &lt; .001</strong> — APA drops the leading zero for p; when jamovi shows p at .000, report "p &lt; .001", never "p = .000"</li><li><strong>d = 0.58</strong> — effect size: how big the difference is, judged on the ~0.2 small / ~0.5 medium / ~0.8 large benchmarks</li></ul>'
                   }
                 ]
               }
