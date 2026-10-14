@@ -3,6 +3,56 @@
 // classId + moduleId keep Statistics M1 and Research Methods M1 from colliding.
 
 export const objectives = [
+  // Module 0: Math Refresher (optional warm-up)
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O1',
+    objective: 'Apply the order of operations (PEMDAS) to evaluate multi-step arithmetic and algebraic expressions.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O2',
+    objective: 'Solve a linear equation for a single variable and check the solution by substitution.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O3',
+    objective: 'Convert among fractions, decimals, and percentages, and compute a percentage of a quantity.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O4',
+    objective: 'Evaluate expressions with exponents and square roots, including the square root of a sum.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O5',
+    objective: 'Read summation (Sigma) notation and compute a sum over a small set of values.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O6',
+    objective: 'Read common graphs (bar charts, histograms, line plots): identify axes, scales, and what a point or bar represents.'
+  },
+
   // Module 1: Why Learn Statistics
   {
     classId: 'statistics',
