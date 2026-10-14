@@ -2295,12 +2295,12 @@ export const modules5to8SoftwarePracticeParallels = [
     is_active: true,
     submission: 'Screenshot, console output, or brief write-up as appropriate for your package.'
   },
-// --- m7-cohens-d-onesample ---
+// --- m8-cohens-d-onesample (moved from module-7: textbook covers Cohen's d in ch. 11) ---
   {
-    module: 'module-7',
+    module: 'module-8',
     topic: 'effect-size',
-    practiceObjectiveKey: 'm7-cohens-d-onesample',
-    order: 10,
+    practiceObjectiveKey: 'm8-cohens-d-onesample',
+    order: 19,
     software_type: 'r',
     title: "Cohen's d one-sample (R)",
     description: "Effect size for mean vs μ0.",
@@ -2308,13 +2308,14 @@ export const modules5to8SoftwarePracticeParallels = [
     hint: "sd uses sample n-1.",
     exercise_type: 'instructional',
     is_active: true,
-    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.'
+    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.',
+    chapter: 'chapter-11'
   },
   {
-    module: 'module-7',
+    module: 'module-8',
     topic: 'effect-size',
-    practiceObjectiveKey: 'm7-cohens-d-onesample',
-    order: 10,
+    practiceObjectiveKey: 'm8-cohens-d-onesample',
+    order: 19,
     software_type: 'spss',
     title: "Cohen's d (SPSS)",
     description: "Options > Effect sizes.",
@@ -2322,13 +2323,14 @@ export const modules5to8SoftwarePracticeParallels = [
     hint: "Match jamovi d.",
     exercise_type: 'instructional',
     is_active: true,
-    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.'
+    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.',
+    chapter: 'chapter-11'
   },
   {
-    module: 'module-7',
+    module: 'module-8',
     topic: 'effect-size',
-    practiceObjectiveKey: 'm7-cohens-d-onesample',
-    order: 10,
+    practiceObjectiveKey: 'm8-cohens-d-onesample',
+    order: 19,
     software_type: 'excel',
     title: "Cohen's d (Excel)",
     description: "Manual (M-μ0)/s.",
@@ -2336,13 +2338,14 @@ export const modules5to8SoftwarePracticeParallels = [
     hint: "Document formula.",
     exercise_type: 'instructional',
     is_active: true,
-    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.'
+    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.',
+    chapter: 'chapter-11'
   },
   {
-    module: 'module-7',
+    module: 'module-8',
     topic: 'effect-size',
-    practiceObjectiveKey: 'm7-cohens-d-onesample',
-    order: 10,
+    practiceObjectiveKey: 'm8-cohens-d-onesample',
+    order: 19,
     software_type: 'stata',
     title: "Cohen's d (Stata)",
     description: "esize, cohensd.",
@@ -2350,7 +2353,8 @@ export const modules5to8SoftwarePracticeParallels = [
     hint: "ssc install esize if needed.",
     exercise_type: 'instructional',
     is_active: true,
-    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.'
+    submission: 'Screenshot, console output, or brief write-up as appropriate for your package.',
+    chapter: 'chapter-11'
   },
 // --- m7-apa-results-onesample ---
   {

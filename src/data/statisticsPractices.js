@@ -1565,9 +1565,10 @@ export const statisticsExercises = [
     is_active: true
   },
   {
-    module: 'module-7',
+    module: 'module-8',
     topic: 'effect-size',
-    practiceObjectiveKey: 'm7-cohens-d-onesample',
+    chapter: 'chapter-11',
+    practiceObjectiveKey: 'm8-cohens-d-onesample',
     title: 'Calculate and Report Cohen\'s d',
     phase: 'practice',
     description: 'Find effect size in Jamovi output and interpret its magnitude',
@@ -1577,7 +1578,7 @@ export const statisticsExercises = [
     hint: 'In the one-sample t-test options panel, check "Effect size" under Additional Statistics.',
     expected_output: 'Cohen\'s d appears in the output table',
     submission: 'Screenshot showing Cohen\'s d and a sentence classifying the effect size magnitude',
-    order: 10,
+    order: 19,
     is_active: true
   },
   {
