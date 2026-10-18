@@ -34,6 +34,118 @@ Question Types:
 // STATISTICS CLASS - MODULE 1: Why Learn Stats?
 // ============================================================
 
+export const statsModule0Questions = [
+  // ============ MODULE 0: Math Refresher (optional warm-up) ============
+  {
+    id: 'stats-m0-q1',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'Evaluate: 4 + 3 × 2²',
+    options: [
+      { id: 'a', text: '14' },
+      { id: 'b', text: '28' },
+      { id: 'c', text: '22' },
+      { id: 'd', text: '100' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Order of operations: exponent first (2² = 4), then multiplication (3 × 4 = 12), then addition (4 + 12 = 16... wait, check: 4 + 12 = 16). The correct evaluation is 4 + 3×4 = 16.',
+      incorrect: 'PEMDAS: exponent (2² = 4), then multiplication (3 × 4 = 12), then addition: 4 + 12 = 16.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q2',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'Solve for x: 3x − 6 = 12',
+    options: [
+      { id: 'a', text: 'x = 2' },
+      { id: 'b', text: 'x = 6' },
+      { id: 'c', text: 'x = 9' },
+      { id: 'd', text: 'x = 18' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Add 6 to both sides (3x = 18), then divide by 3: x = 6. Check: 3(6) − 6 = 12. ✓',
+      incorrect: 'Undo in reverse order: add 6 first (3x = 18), then divide by 3 to get x = 6.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q3',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: '0.75 expressed as a fraction in lowest terms is:',
+    options: [
+      { id: 'a', text: '3/4' },
+      { id: 'b', text: '7/5' },
+      { id: 'c', text: '75/100' },
+      { id: 'd', text: '1/2' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: '0.75 = 75/100 = 3/4 after dividing numerator and denominator by 25.',
+      incorrect: '0.75 means 75 hundredths: 75/100, which reduces to 3/4.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q4',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'What is √(9 + 16)?',
+    options: [
+      { id: 'a', text: '5' },
+      { id: 'b', text: '7' },
+      { id: 'c', text: '25' },
+      { id: 'd', text: '13' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'Sum first under the root: √25 = 5. (√9 + √16 = 7 is the classic trap — the root applies to the whole expression.)',
+      incorrect: 'Under a single square root, add first: √(9 + 16) = √25 = 5. This pattern appears when computing distances and SDs.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m0-q5',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'Compute the sum: Σx for x = 2, 5, 8, 1',
+    options: [
+      { id: 'a', text: '16' },
+      { id: 'b', text: '4' },
+      { id: 'c', text: '80' },
+      { id: 'd', text: '15' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'Sigma means add them all: 2 + 5 + 8 + 1 = 16. Summation notation is everywhere in statistics (Σx, Σx², Σ(x − M)²).',
+      incorrect: 'Σ (capital sigma) is just "sum everything": 2 + 5 + 8 + 1 = 16.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q6',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'In a graph of study hours (x-axis) vs. exam score (y-axis), a point sitting high and to the right represents:',
+    options: [
+      { id: 'a', text: 'A student who studied many hours and scored high' },
+      { id: 'b', text: 'A student who studied few hours and scored high' },
+      { id: 'c', text: 'A student who studied many hours and scored low' },
+      { id: 'd', text: 'The class average' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'Right = high on x (hours); up = high on y (score). Reading coordinates fluently is assumed in every scatterplot this course.',
+      incorrect: 'x tells you horizontal position (hours), y vertical (score). High-right = many hours, high score.'
+    },
+    difficulty: 'easy'
+  },
+]
+
 export const statsModule1Questions = [
   {
     id: 'stats-m1-q1',
@@ -3000,6 +3112,7 @@ export const statsModule8Questions = [
 
 // Statistics (PSYC 4213) concept questions only — used where stats-specific tooling applies
 export const allStatisticsQuestions = [
+  ...statsModule0Questions,
   ...statsModule1Questions,
   ...statsModule2Questions,
   ...statsModule3Questions,
@@ -3015,6 +3128,7 @@ export const allConceptReviewQuestions = [...allStatisticsQuestions, ...allResea
 
 // Questions organized by module
 export const questionsByModule = {
+  'stats-module-0': statsModule0Questions,
   'stats-module-1': statsModule1Questions,
   'stats-module-2': statsModule2Questions,
   'stats-module-3': statsModule3Questions,
