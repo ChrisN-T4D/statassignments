@@ -506,7 +506,43 @@ export const statsModule1Questions = [
       incorrect: 'Chapter 1’s lesson is to ask whether department-level patterns match the overall average.'
     },
     difficulty: 'hard'
-  }
+  },
+  {
+    id: 'stats-m1-q22',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'An argument has premises that are obviously false, yet the conclusion follows logically from them. What can we say about the argument?',
+    options: [
+      { id: 'a', text: 'It is deductively valid, even though nothing in the argument is actually true' },
+      { id: 'b', text: 'It is invalid, because valid arguments require true premises' },
+      { id: 'c', text: 'It is valid only if the conclusion happens to be true' },
+      { id: 'd', text: 'It is neither valid nor invalid until the premises are verified' }
+    ],
+    correct: 'a',
+    feedback: {
+      correct: 'Validity is a property of logical structure: if the premises were true, the conclusion would have to follow. False premises do not make an argument invalid.',
+      incorrect: 'Validity does not depend on the actual truth of the premises or the conclusion. An argument can be valid with false premises; it would just be unsound.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m1-q23',
+    moduleId: 'stats-module-1',
+    type: 'multiple_choice',
+    question: 'A classmate says: "The conclusion of that study is believable, so the reasoning must be valid." What is wrong with this reasoning?',
+    options: [
+      { id: 'a', text: 'Nothing; believable conclusions are the definition of validity' },
+      { id: 'b', text: 'Validity concerns whether the conclusion follows from the premises, not whether it is believable or true' },
+      { id: 'c', text: 'Believability only matters for inductive arguments' },
+      { id: 'd', text: 'A believable conclusion guarantees the premises are true' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'This is the classic confusion of validity with truth or plausibility. A valid argument guarantees the conclusion only IF the premises are true.',
+      incorrect: 'Believability is about plausibility in the real world. Validity is about logical form: does the conclusion follow from the premises?'
+    },
+    difficulty: 'medium'
+  },
 ]
 
 // ============================================================
@@ -844,7 +880,37 @@ export const statsModule2Questions = [
       incorrect: 'This is false. The recorded value is the measurement; the construct is the thing being measured.'
     },
     difficulty: 'easy'
-  }
+  },
+  {
+    id: 'stats-m2-q20',
+    moduleId: 'stats-module-2',
+    type: 'multiple_choice',
+    question: 'In a study, the theoretical construct is "working memory capacity" and the researcher records a digit-span score of 7. What is the 7 an example of?',
+    options: [
+      { id: 'a', text: 'The construct itself' },
+      { id: 'b', text: 'An observed measurement of the construct' },
+      { id: 'c', text: 'The operational definition' },
+      { id: 'd', text: 'A confounding variable' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'The recorded number is an observed measurement. Working memory capacity is the construct; the digit-span score is how it is measured.',
+      incorrect: 'The construct is the theoretical attribute (working memory capacity). The number recorded is a measurement of that construct, not the construct itself.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m2-q21',
+    moduleId: 'stats-module-2',
+    type: 'true_false',
+    question: 'Two different measures of the same psychological construct can produce different numbers for the same person, because each measure is an imperfect observation of the construct.',
+    correct: true,
+    feedback: {
+      correct: 'Each measurement operationalizes the construct imperfectly, so different measures of the same construct can give different observed values.',
+      incorrect: 'This is true. A measurement is an imperfect observation of a construct; changing the measure can change the recorded value without changing the person.'
+    },
+    difficulty: 'medium'
+  },
 ]
 
 // ============================================================
@@ -2010,7 +2076,37 @@ export const statsModule5Questions = [
       incorrect: 'Use filters to analyze subsets, exclude outliers, and compare results. Filters are temporary and don\'t permanently delete data.'
     },
     difficulty: 'medium'
-  }
+  },
+  {
+    id: 'stats-m5-q31',
+    moduleId: 'stats-module-5',
+    type: 'multiple_choice',
+    question: 'A researcher wants to see how many students chose each favorite color, and separately wants to check whether favorite color differs by year in school. Which display fits each question?',
+    options: [
+      { id: 'a', text: 'Frequency table for both questions' },
+      { id: 'b', text: 'Frequency table for the color counts; contingency table for color by year in school' },
+      { id: 'c', text: 'Contingency table for the color counts; frequency table for color by year in school' },
+      { id: 'd', text: 'A histogram for both questions' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'A frequency table counts one categorical variable at a time; a contingency table cross-tabulates two categorical variables to show their relationship.',
+      incorrect: 'Two categorical variables together (color and year) call for a contingency table. Counts of a single variable call for a frequency table.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m5-q32',
+    moduleId: 'stats-module-5',
+    type: 'true_false',
+    question: 'To examine whether smoking status (yes/no) is related to coffee intake level (low/medium/high), you would build a contingency table rather than a simple frequency table of smoking alone.',
+    correct: true,
+    feedback: {
+      correct: 'A contingency table cross-tabulates smoking status with coffee intake, showing the counts for each combination — exactly what the relationship question needs.',
+      incorrect: 'This is true. One variable alone cannot show a relationship; a contingency table displays counts for each combination of the two categorical variables.'
+    },
+    difficulty: 'medium'
+  },
 ]
 
 // ============================================================

@@ -134,7 +134,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Calculate Deviation Scores | Open your personality dataset (Extraversion, Agreeableness, etc.). Create a computed variable that calculates how far each person's Extraversion score deviates from the mean: Extraversion - VMEAN(Extraversion). | Correct! Deviation scores for Extraversion show how far each value is from the mean. The sum of this column is zero. |
+| Jamovi | Calculate Deviation Scores | Open personality_data.csv from Tools (Extraversion, Agreeableness, etc.). Create a computed variable that calculates how far each person's Extraversion score deviates from the mean: extraversion − VMEAN(extraversion) (match casing in the Tools file). | Correct! Deviation scores for Extraversion show how far each value is from the mean. The sum of this column is zero. |
 | R | Deviation scores (Extraversion − mean) | With your personality data loaded, add a variable `dev_ex` = Extraversion minus its mean. Example: `data <- data %>% dplyr::mutate(dev_ex = Extraversion - mean(Extraversion, na.rm = TRUE))` or base R: `data$dev_ex <- data$Extraversion - mean(data$Extraversion, na.rm = TRUE)`. Run `head()` and confirm the new column. | Script snippet or screenshot showing the new column and head(data). |
 | SPSS | Deviation scores in SPSS (Compute) | Transform > Compute Variable. Target: DEV_EX. Numeric expression: Extraversion - MEAN(Extraversion). (If your variable name differs, substitute it.) Run Descriptives on DEV_EX and note the mean is ~0. | Screenshot of Compute dialog or output showing DEV_EX. |
 | Excel | Deviation scores in Excel | Suppose Extraversion is in column B (B2:B101). In C2 use =B2-AVERAGE($B$2:$B$101) and fill down. Verify the average of column C is ~0. | Screenshot showing formula and a few rows. |
@@ -148,7 +148,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Test for Normality | Using your personality dataset, check whether Extraversion (or Neuroticism) is normally distributed. Find the Shapiro-Wilk normality test in Jamovi (Exploration > Descriptives > Statistics). | Correct! p > .05 suggests the distribution is not significantly different from normal. |
+| Jamovi | Test for Normality | Using personality_data.csv from Tools, check whether Extraversion (or Neuroticism) is normally distributed. Find the Shapiro-Wilk normality test in Jamovi (Exploration > Descriptives > Statistics). | Correct! p > .05 suggests the distribution is not significantly different from normal. |
 | R | Normality check in R (Shapiro–Wilk) | `shapiro.test(data$Extraversion)` on a reasonable N (Shapiro is often used for n roughly 3–5000). Interpret the p-value. | Output of shapiro.test. |
 | SPSS | Normality check in SPSS | Analyze > Descriptive Statistics > Explore. Add Extraversion. Under Plots check Normality plots with tests, or use Shapiro–Wilk from Descriptives if available in your version. | Screenshot of tests output. |
 | Excel | Normality assessment in Excel | Build a histogram for Extraversion. If available, use Descriptive Statistics with skewness/kurtosis. Note: Excel has no built-in Shapiro–Wilk; focus on visual + skewness for this task. | Screenshot of histogram or descriptive stats. |
@@ -162,7 +162,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Report Descriptives for One Variable | Using your personality dataset, run Exploration > Descriptives for Extraversion (or Agreeableness). Write a short summary of mean, median, SD, and min/max. | Screenshot of Descriptives output for the personality variable and a short write-up. |
+| Jamovi | Report Descriptives for One Variable | Using personality_data.csv from Tools, run Exploration > Descriptives for Extraversion (or Agreeableness). Write a short summary of mean, median, SD, and min/max. | Screenshot of Descriptives output for the personality variable and a short write-up. |
 | R | Report descriptives in R | `summary()` plus `sd(..., na.rm=TRUE)` or `psych::describe()` / `skimr::skim()` for a compact table. Write 1–2 sentences. | Output + short write-up. |
 | SPSS | Report descriptives in SPSS | Analyze > Descriptive Statistics > Descriptives. Request mean, median, std deviation, min, max. Summarize in prose. | Table screenshot + 1–2 sentences. |
 | Excel | Report descriptives in Excel | Below your data (or in a summary block), compute all five statistics for the Extraversion column. | Screenshot of cells with formulas/results + brief interpretation. |
@@ -176,7 +176,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Evaluate Skew and Outliers | Using your personality dataset, run Descriptives for Extraversion (or another scale). Use skewness and kurtosis (and an optional plot) to assess whether the distribution is skewed or has outliers. Justify when reporting median and IQR would be more appropriate than mean and SD. | Descriptives output screenshot and a short justification (2-3 sentences). |
+| Jamovi | Evaluate Skew and Outliers | Using personality_data.csv from Tools, run Descriptives for Extraversion (or another scale). Use skewness and kurtosis (and an optional plot) to assess whether the distribution is skewed or has outliers. Justify when reporting median and IQR would be more appropriate than mean and SD. | Descriptives output screenshot and a short justification (2-3 sentences). |
 | R | Skew and reporting in R | `moments::skewness` or `e1071::skewness` on Extraversion; optional ggplot histogram. Write 2–3 sentences on whether mean/SD or median/IQR is more appropriate. | Plot/stat + short justification. |
 | SPSS | Skew and reporting in SPSS | Request skewness and histogram. Argue for mean/SD vs median/IQR in 2–3 sentences. | Output + justification. |
 | Excel | Skew and reporting in Excel | =SKEW(range) for Extraversion. Build histogram. Justify mean/SD vs median/IQR. | Screenshot + short paragraph. |
@@ -190,7 +190,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Descriptives Split by Group | Using your personality dataset, run Descriptives for Extraversion (or Agreeableness) and use Split by with a grouping variable (e.g. gender, or a recoded category). Identify which group has higher center and larger spread. | Output screenshot and 2-3 sentences comparing groups. |
+| Jamovi | Descriptives Split by Group | Using personality_data.csv from Tools, run Descriptives for Extraversion (or Agreeableness) and use Split by with a grouping variable (e.g. gender, or a recoded category). Identify which group has higher center and larger spread. | Output screenshot and 2-3 sentences comparing groups. |
 | R | Descriptives by group in R | `aggregate(Extraversion ~ Group, data, FUN = mean)` or `dplyr::group_by(Group) %>% summarize(...)` for mean and SD by group. | Output table + 2–3 sentence comparison. |
 | SPSS | Descriptives by group in SPSS | Use Data > Split File > Compare groups, then Descriptives for Extraversion; or Explore with factor list for groups. | Output screenshot + comparison sentences. |
 | Excel | Descriptives by group in Excel | For each group code, compute mean (and optionally SD) of Extraversion. PivotTable: rows = group, values = Average of Extraversion. | Screenshot + brief comparison. |
@@ -204,7 +204,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create and Inspect Z-Scores | Using your personality dataset, create a z-score version of Extraversion (via Descriptives or Compute). Identify any cases with \|z\| >= 2 (or your chosen cutoff). | Screenshot showing the z-score column and any identified extreme rows. |
+| Jamovi | Create and Inspect Z-Scores | Using personality_data.csv from Tools, create a z-score version of Extraversion (via Descriptives or Compute). Identify any cases with \|z\| >= 2 (or your chosen cutoff). | Screenshot showing the z-score column and any identified extreme rows. |
 | R | Inspect z-scores in R | After creating z scores, `which(abs(z_ex) >= 2)` or filter rows. Note case numbers or row ids. | Code/output listing flagged cases. |
 | SPSS | Inspect z-scores in SPSS | Create z-scores (prior task). In Data View, sort descending on Z column or use Select Cases IF abs(ZExtraversion) >= 2. | Screenshot showing extreme z rows. |
 | Excel | Inspect z-scores in Excel | Highlight cells where ABS(z_column) >= 2. | Screenshot with highlighted rows. |
@@ -218,7 +218,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Calculate Z-Scores in Jamovi | Using your personality dataset, convert Extraversion (or another scale variable) to z-scores. Find how to create z-scores in Jamovi (Exploration > Descriptives). | Correct! In Descriptives, check "Z-scores" to add a standardized version of Extraversion to the dataset. |
+| Jamovi | Calculate Z-Scores in Jamovi | Using personality_data.csv from Tools, convert Extraversion (or another scale variable) to z-scores. Find how to create z-scores in Jamovi (Exploration > Descriptives). | Correct! In Descriptives, check "Z-scores" to add a standardized version of Extraversion to the dataset. |
 | R | Z-scores in R | Create `z_ex <- scale(data$Extraversion)` or add to tibble with mutate(z_ex = as.numeric(scale(Extraversion))). Inspect with head(). | Screenshot or output showing z-scores. |
 | SPSS | Z-scores in SPSS | Analyze > Descriptive Statistics > Descriptives. Add Extraversion. Check “Save standardized values as variables.” Run and find ZExtraversion (or similar) in Data View. | Screenshot of Descriptives dialog or Data View with z column. |
 | Excel | Z-scores in Excel | If Extraversion is in B2:B101, in C2 enter =STANDARDIZE(B2,AVERAGE($B$2:$B$101),STDEV.S($B$2:$B$101)) and fill down. | Screenshot with formula and values. |
@@ -232,7 +232,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Absolute Deviation from Mean BMI | Using your BMI dataset, create a variable for absolute deviation from mean BMI: ABS(BMI - VMEAN(BMI)). This measures how far each person is from the average, regardless of direction. | Screenshot of the formula and the resulting column. |
+| Jamovi | Absolute Deviation from Mean BMI | Using bmi_and_exercise.csv from Tools, create a variable for absolute deviation from mean BMI: ABS(BMI - VMEAN(BMI)). This measures how far each person is from the average, regardless of direction. | Screenshot of the formula and the resulting column. |
 | R | Absolute deviation (R) | `mutate(ad = abs(BMI - mean(BMI, na.rm=TRUE)))`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Absolute deviation (SPSS) | Compute AD = ABS(BMI - MEAN(BMI)). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Absolute deviation (Excel) | =ABS(B2-$C$1) where C1 holds mean, or inline AVERAGE. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -246,7 +246,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Add a New Variable | Using your BMI dataset, find where in Jamovi to add a new computed variable (e.g. for a transformation of BMI or exercise). | Correct! Data > Add > Computed Variable lets you create new variables. For one column use VMEAN, VSTDEV, VSUM; for several variables per row use MEAN(A,B,C) or SUM(A,B,C). |
+| Jamovi | Add a New Variable | Using bmi_and_exercise.csv from Tools, find where in Jamovi to add a new computed variable (e.g. for a transformation of BMI or exercise). | Correct! Data > Add > Computed Variable lets you create new variables. For one column use VMEAN, VSTDEV, VSUM; for several variables per row use MEAN(A,B,C) or SUM(A,B,C). |
 | R | Add a computed column in R | With your BMI (or class) data: `data$newcol <- rowMeans(cbind(Item1, Item2, Item3), na.rm = TRUE)` or dplyr::mutate. Show head(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Compute a new variable in SPSS | Transform > Compute Variable. Target: NEWCOL. Numeric expression: mean of items (e.g. (Item1+Item2+Item3)/3). Run and verify in Data View. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Add a formula column in Excel | If items are in D2:F2, in G2 use =AVERAGE(D2:F2) and fill down. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -260,7 +260,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Bar Chart for Frequencies | Using your BMI dataset, create a bar chart for a categorical variable (e.g. gender if you have it, or a BMI category you create). Find the appropriate menu. | Correct! Add your categorical variable to Descriptives and check "Bar plot" under Plots. |
+| Jamovi | Create a Bar Chart for Frequencies | Using bmi_and_exercise.csv from Tools, first Transform/Compute a BMI category from bmi (e.g. under 25 vs 25+), then create a bar chart for that categorical variable. Find the appropriate menu. | Correct! Add your categorical variable to Descriptives and check "Bar plot" under Plots. |
 | R | Bar chart of counts (R) | `barplot(table(data$Gender))` or ggplot2 geom_bar(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Bar chart (SPSS) | Analyze > Descriptive Statistics > Frequencies > Charts > Bar charts. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Column chart (Excel) | Insert bar chart from category counts (PivotTable: rows = category, values = Count). | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -274,7 +274,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Boxplot | Using your BMI dataset, create a boxplot for BMI. If you have a grouping variable (e.g. gender), add it to Split by; otherwise create a boxplot for BMI only. | Correct! Add BMI to Variables, optionally Split by a grouping variable, then check "Box plot" in Plots. |
+| Jamovi | Create a Boxplot | Using bmi_and_exercise.csv from Tools, create a boxplot for bmi. Optionally Split by a BMI category you create with Transform; otherwise boxplot bmi alone. | Correct! Add BMI to Variables, optionally Split by a grouping variable, then check "Box plot" in Plots. |
 | R | Boxplot in R | `boxplot(BMI ~ Gender, data=data)` or ggplot geom_boxplot(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Boxplot in SPSS | Graphs > Chart Builder > Boxplot; drag DV and optional grouping variable. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Boxplot in Excel | Select numeric column (and category if grouped) > Insert > Box and Whisker. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -288,7 +288,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Computed Variable (Centered BMI) | Using your BMI dataset, create a computed variable that centers BMI: BMI - VMEAN(BMI). VMEAN = mean of one column; MEAN(A, B, C) = mean of several variables per row. | Screenshot of the formula and the new centered BMI column. |
+| Jamovi | Create a Computed Variable (Centered BMI) | Using bmi_and_exercise.csv from Tools, create a computed variable that centers BMI: bmi − VMEAN(bmi). Match lowercase column names from Tools. VMEAN = mean of one column; MEAN(A, B, C) = mean of several variables per row. | Screenshot of the formula and the new centered BMI column. |
 | R | Center BMI in R | `mutate(bmi_c = BMI - mean(BMI, na.rm=TRUE))` or `data$bmi_c <- data$BMI - mean(data$BMI, na.rm=TRUE)`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Center BMI in SPSS | Transform > Compute: BMICENT = BMI - MEAN(BMI). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Center BMI in Excel | If BMI is column B: C2 = B2 - AVERAGE($B$2:$B$101). | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -302,7 +302,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Center BMI (or Exercise) Around the Mean | Using your BMI dataset, create a computed variable that centers BMI around its mean: BMI - VMEAN(BMI). Optionally do the same for exercise hours. | Screenshot showing the formula and the centered variable next to BMI. |
+| Jamovi | Center BMI (or Exercise) Around the Mean | Using bmi_and_exercise.csv from Tools, create a computed variable that centers BMI around its mean: BMI - VMEAN(BMI). Optionally do the same for exercise hours. | Screenshot showing the formula and the centered variable next to BMI. |
 | R | Center BMI (R) | Create bmi_c = BMI - mean(BMI); verify mean(bmi_c)≈0. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Center BMI (SPSS) | Compute BMICENT = BMI - MEAN(BMI). Descriptives: mean ~0. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Center BMI (Excel) | New column = BMI cell - AVERAGE($B$2:$B$n). | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -316,7 +316,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Contingency Table with Row and Column Percentages | Using your BMI dataset, create a contingency table (e.g. gender by BMI category). Display it with row percentages, then with column percentages. Explain how the interpretation differs. | Two screenshots (row % and column %) and 3-4 sentences comparing interpretations. |
+| Jamovi | Contingency Table with Row and Column Percentages | Using <strong>bmi_and_exercise.csv</strong> from Tools, create two category variables (e.g. from bmi and exercise_per_week), then a contingency table with row percentages, then with column percentages. Explain how the interpretation differs. | Two screenshots (row % and column %) and 3-4 sentences comparing interpretations. |
 | R | Prop.table (R) | `prop.table(table(a,b), margin=1)` vs margin=2; interpret difference. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Crosstabs % (SPSS) | Crosstabs > Cells > Row and Column percentages; screenshot both. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Pivot % (Excel) | PivotTable > Show Values As > % of Row Parent / % of Column. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -330,7 +330,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Contingency Table | Using your BMI dataset, create a contingency table (e.g. gender by BMI category, or two other categorical variables). Use Frequencies > Contingency Tables. | Correct! Frequencies > Contingency Tables creates a crosstab. Add row and column percentages under "Cells" options. |
+| Jamovi | Create a Contingency Table | Using <strong>bmi_and_exercise.csv</strong> from Tools (not personality_data.csv - that file was used in Practice for filters/transforms), Transform/Compute two categorical variables (e.g. bmi under 25 vs 25+, and exercise_per_week Low vs High). Then create a contingency table of those two categories (Frequencies > Contingency Tables). | Correct! Frequencies > Contingency Tables creates a crosstab. Add row and column percentages under "Cells" options. |
 | R | Two-way table (R) | `table(data$rowvar, data$colvar)` or tidyr::pivot_wider after count(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Crosstabs (SPSS) | Analyze > Descriptive Statistics > Crosstabs. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Pivot crosstab (Excel) | PivotTable with two categoricals in Rows/Columns, Values = Count. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -344,7 +344,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Apply a Filter and Compare Descriptives | Using your BMI dataset, create a filter (e.g. BMI >= 25, or exercise > 0). Run Descriptives for BMI with the filter ON and OFF and compare how N, mean, and SD change. | Screenshots of outputs with filter ON and OFF. |
+| Jamovi | Apply a Filter and Compare Descriptives | Using bmi_and_exercise.csv from Tools, create a filter (e.g. BMI >= 25, or exercise > 0). Run Descriptives for BMI with the filter ON and OFF and compare how N, mean, and SD change. | Screenshots of outputs with filter ON and OFF. |
 | R | Subset and summarize in R | `dplyr::filter(BMI >= 25) \|> summarize(m=mean(BMI), s=sd(BMI))` vs full data. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Select cases and descriptives (SPSS) | Data > Select Cases > If (e.g. BMI >= 25). Run Analyze > Descriptives. Repeat with all cases. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Filter and SUBTOTAL in Excel | Turn on Filter; use SUBTOTAL or copy visible cells; compare to full column AVERAGE/STDEV.S. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -358,7 +358,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Complex Logical Expression with AND/OR | Using your BMI dataset, create a filter using AND and/or OR (e.g. BMI >= 25 and exercise < 2, or BMI < 18.5). Run Descriptives with the filter on and briefly explain who is included. | Screenshot of the filter formula and output, plus a brief explanation of the logic. |
+| Jamovi | Complex Logical Expression with AND/OR | Using bmi_and_exercise.csv from Tools, create a filter using AND and/or OR (e.g. BMI >= 25 and exercise < 2, or BMI < 18.5). Run Descriptives with the filter on and briefly explain who is included. | Screenshot of the filter formula and output, plus a brief explanation of the logic. |
 | R | Complex filter (R) | filter((BMI>=25 & exercise<2) \| BMI<18.5); summarize who remains. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Complex select (SPSS) | Select Cases: (BMI >= 25 AND exercise < 2) OR (BMI < 18.5). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Advanced filter (Excel) | Helper column with TRUE/FALSE from AND/OR; filter TRUE. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -372,7 +372,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Filter Data to Extract Subsets | Using your BMI dataset, create a filter (e.g. BMI >= 25, or exercise > 0) and run Descriptives for BMI with the filter on. Compare to when the filter is off. | Screenshot showing the filter and descriptives output with the filter active. |
+| Jamovi | Filter Data to Extract Subsets | Using bmi_and_exercise.csv from Tools, create a filter (e.g. BMI >= 25, or exercise > 0) and run Descriptives for BMI with the filter on. Compare to when the filter is off. | Screenshot showing the filter and descriptives output with the filter active. |
 | R | Filter + summarize (R) | filter(BMI>=25) \|> summarize(mean(BMI), sd(BMI), n=n()). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Select cases + descriptives (SPSS) | Select Cases If BMI>=25; Descriptives on BMI; reset All cases. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Filter + stats (Excel) | Filter rows; AVERAGE visible or helper column. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -386,7 +386,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Frequency Table | Using your BMI dataset, create a frequency table for a categorical variable (e.g. gender if present, or the BMI category variable you created). Use Descriptives and check "Frequency tables". | Correct! In Descriptives, check "Frequency tables" to see counts and percentages for categorical variables. |
+| Jamovi | Create a Frequency Table | Using bmi_and_exercise.csv from Tools, create a frequency table for a BMI category variable you create with Transform (bmi has no gender column). Use Descriptives and check "Frequency tables". | Correct! In Descriptives, check "Frequency tables" to see counts and percentages for categorical variables. |
 | R | Frequency table (R) | `table(data$gender)` or `dplyr::count(data, gender)`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Frequencies (SPSS) | Analyze > Descriptive Statistics > Frequencies. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Pivot counts (Excel) | PivotTable: category in Rows, Count of ID in Values. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -400,7 +400,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Histogram and Interpret Shape | Using your BMI dataset, produce a histogram for BMI in Descriptives > Plots. Describe the shape: symmetric or skewed? Unimodal or bimodal? Note any obvious outliers. | Histogram screenshot and 2-3 sentences describing the distribution shape. |
+| Jamovi | Create a Histogram and Interpret Shape | Using <strong>personality_data.csv</strong> from Tools, produce a histogram for <strong>extraversion</strong> in Descriptives > Plots. Describe the shape: symmetric or skewed? Unimodal or bimodal? Note any obvious outliers. | Histogram screenshot and 2-3 sentences describing the distribution shape. |
 | R | Histogram + interpretation (R) | Plot BMI histogram; write 2–3 sentences: skew, modality, outliers. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Histogram + interpretation (SPSS) | Create histogram via Explore or Chart Builder; attach written interpretation. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Histogram + interpretation (Excel) | Create histogram; comment on shape in 2–3 sentences. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -414,7 +414,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Histogram | Using your BMI and exercise dataset, create a histogram for BMI. Find where to create plots in Jamovi (Exploration > Descriptives > Plots). | Correct! In Descriptives, add BMI to Variables, expand "Plots" and check "Histogram". |
+| Jamovi | Create a Histogram | Using <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv - that file was used in Learn for histograms), create a histogram for <strong>extraversion</strong>. Find where to create plots in Jamovi (Exploration > Descriptives > Plots). | Correct! In Descriptives, add extraversion to Variables, expand "Plots" and check "Histogram". |
 | R | Histogram in R | `hist(data$BMI, main="BMI", col="steelblue")` or ggplot2::geom_histogram(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Histogram in SPSS | Graphs > Chart Builder > Histogram, or Analyze > Descriptive Statistics > Explore > Plots. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Histogram in Excel | Select BMI data > Insert > Statistic Chart > Histogram (Excel 2016+), or build bins with FREQUENCY. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -428,7 +428,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Transform Data with Logical Expressions | Using your BMI dataset, create a computed variable or use Transform with a logical expression to categorize BMI (e.g. BMI >= 25 → "Overweight", else "Not overweight"). | Correct! Use IF() and logical operators, or Transform with recode conditions, to create categories from BMI. |
+| Jamovi | Transform Data with Logical Expressions | Using bmi_and_exercise.csv from Tools, create a computed variable or use Transform with a logical expression to categorize BMI (e.g. BMI >= 25 → "Overweight", else "Not overweight"). | Correct! Use IF() and logical operators, or Transform with recode conditions, to create categories from BMI. |
 | R | Logical recode (R) | `ifelse(BMI >= 25, "Over", "Not")` or dplyr::case_when. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | IF compute (SPSS) | Transform > Compute: overwt = (BMI >= 1)*1 or use IF(BMI >= 25, 1, 0). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | IF/IFS (Excel) | =IF(B2>=25,"Over","Not over") | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -442,7 +442,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Use Mathematical Functions on BMI | Using your BMI dataset, create a computed variable using a mathematical function (e.g. LOG(BMI), SQRT(BMI), or LN(BMI)) and write 2-3 sentences on when such a transformation is useful (e.g. for skewed distributions). | Screenshot of the formula and a short explanation of when the transformation is appropriate. |
+| Jamovi | Use Mathematical Functions on BMI | Using bmi_and_exercise.csv from Tools, create a computed variable using a mathematical function (e.g. LOG(BMI), SQRT(BMI), or LN(BMI)) and write 2-3 sentences on when such a transformation is useful (e.g. for skewed distributions). | Screenshot of the formula and a short explanation of when the transformation is appropriate. |
 | R | LOG/SQRT transform (R) | Create log_bmi = log(BMI) (natural log); note zeros/negatives invalid. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | LG10/SQRT (SPSS) | Compute with LG10 or SQRT as appropriate; handle zeros. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | LN/SQRT (Excel) | Use LN, LOG, SQRT functions; document skew rationale in 2–3 sentences. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -456,7 +456,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Recode BMI into Weight Categories | Using your BMI dataset, use Data > Transform (Add recode condition) to recode BMI into three categories. Use standard cut points (e.g. under 18.5, 18.5 to 25, 25+) or Low/Normal/High. | Screenshot of the transform rules and the new categorical column. |
+| Jamovi | Recode BMI into Weight Categories | Using bmi_and_exercise.csv from Tools, use Data > Transform (Add recode condition) to recode BMI into three categories. Use standard cut points (e.g. under 18.5, 18.5 to 25, 25+) or Low/Normal/High. | Screenshot of the transform rules and the new categorical column. |
 | R | Recode BMI into categories (R) | `dplyr::case_when(BMI < 18.5 ~ "Under", BMI < 25 ~ "Normal", TRUE ~ "Over")` into a factor column. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Recode BMI (SPSS) | Transform > Recode into Different Variables, or Compute with ranges and string labels. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Recode BMI (Excel) | =IFS(B2<18.5,"Under",B2<25,"Normal",TRUE,"Over") in a new column. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -470,7 +470,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Recode Exercise (or BMI) into Categories | Using your BMI dataset, recode exercise hours (or BMI if you prefer) into 3 categories (e.g. Low/Medium/High) using Data > Transform with Add recode condition or nested IF. | Screenshot of the transform or formula and the new categorical column. |
+| Jamovi | Recode Exercise (or BMI) into Categories | Using bmi_and_exercise.csv from Tools, recode exercise hours (or BMI if you prefer) into 3 categories (e.g. Low/Medium/High) using Data > Transform with Add recode condition or nested IF. | Screenshot of the transform or formula and the new categorical column. |
 | R | Cut exercise into 3 levels (R) | Use case_when on exercise hours with your cutpoints (e.g. <2, <5, else High). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Recode exercise (SPSS) | Transform > Recode into Different Variables with ranges. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Exercise bands (Excel) | IFS for three bands. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -484,7 +484,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Create a Reusable Transform | Using your BMI dataset, create a transformation in Data > Transform (e.g. center with $source - VMEAN($source)) that can be applied to both BMI and exercise. Apply it to at least two variables. | Screenshot showing the transform definition and both variables it was applied to. |
+| Jamovi | Create a Reusable Transform | Using bmi_and_exercise.csv from Tools, create a transformation in Data > Transform (e.g. center with $source - VMEAN($source)) that can be applied to both BMI and exercise. Apply it to at least two variables. | Screenshot showing the transform definition and both variables it was applied to. |
 | R | Center two columns (R) | `mutate(across(c(BMI, exercise), ~ .x - mean(.x, na.rm=TRUE), .names = "{.col}_c"))`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Compute centered copy (SPSS) | Compute BMIC, EXERC with each minus its MEAN(). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Reuse formula pattern (Excel) | Two columns: each minus AVERAGE of that column. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -498,7 +498,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Use Transform with Conditional Rules (BMI) | Using your BMI dataset, use Data > Transform with Add recode condition to create BMI categories (e.g. if $source < 18.5 use "Underweight", if $source < 25 use "Normal", else use "Overweight"). | Screenshot showing the conditional rules in the Transform panel and the new column. |
+| Jamovi | Use Transform with Conditional Rules (BMI) | Using bmi_and_exercise.csv from Tools, use Data > Transform with Add recode condition to create BMI categories (e.g. if $source < 18.5 use "Underweight", if $source < 25 use "Normal", else use "Overweight"). | Screenshot showing the conditional rules in the Transform panel and the new column. |
 | R | WHO BMI bands (R) | case_when(BMI<18.5 ~ "Underweight", BMI<25 ~ "Normal", TRUE ~ "Overweight"). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | WHO BMI bands (SPSS) | Recode or Compute string labels with nested conditions. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | WHO BMI bands (Excel) | =IFS(B2<18.5,"Under",B2<25,"Normal",TRUE,"Over") | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -540,7 +540,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Calculate Confidence Intervals | Calculate a 95% confidence interval for the mean test score. Find where to request confidence intervals. | Correct! In Descriptives, check "Confidence interval for Mean" under Statistics. The default is 95% CI. |
+| Jamovi | Calculate Confidence Intervals | Open <strong>personality_data.csv</strong> from Tools (Apply uses this file; Learn/Practice used bmi_and_exercise.csv). Calculate a 95% confidence interval for the mean of <strong>extraversion</strong> (or age). Find where to request confidence intervals. | Correct! In Descriptives, check "Confidence interval for Mean" under Statistics. The default is 95% CI. |
 | R | CI for mean (R) | `t.test(x)$conf.int` or `mean_cl_boot` in ggplot2; or manual mean ± t*SE. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | CI for mean (SPSS) | Analyze > Descriptive Statistics > Explore or Descriptives; check CI for mean. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | CONFIDENCE (Excel) | Use Descriptive Statistics tool or =AVERAGE±T.INV.2T(0.05,n-1)*STDEV.S/SQRT(n). | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -616,7 +616,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Interpret Confidence Intervals | Calculate a 95% CI for a sample mean and explain what this interval tells us. Include both the correct frequentist interpretation and common misinterpretations. | CI calculation, correct interpretation, and one common misinterpretation to avoid. |
+| Jamovi | Interpret Confidence Intervals | Calculate a 95% CI for the mean of <strong>extraversion</strong> (or age) in <strong>personality_data.csv</strong> and explain what this interval tells us. Include both the correct frequentist interpretation and common misinterpretations. | CI calculation, correct interpretation, and one common misinterpretation to avoid. |
 | R | CI interpretation + calc (R) | Compute 95% CI for a mean; write correct interpretation (repeated sampling). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | CI output (SPSS) | Get CI from t-test or descriptives; write 2–3 sentences avoiding P(μ in interval). | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | CI (Excel) | Build CI with T.INV; interpret in writing. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -644,7 +644,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Find Probabilities Using the Normal Distribution | You need to find the probability of scoring above a certain z-score. Use Jamovi's distribution functions. | Correct! Exploration > Distribution lets you calculate probabilities for normal and other distributions. Enter your z-score to find cumulative probabilities. |
+| Jamovi | Find Probabilities Using the Normal Distribution | Open <strong>personality_data.csv</strong> from Tools if you need a continuous scale for context, or use Analyses → Exploration → Distribution with Mean = 100 and SD = 15 (IQ-style). Find the probability of scoring above a chosen z-score / value. | Correct! Exploration > Distribution lets you calculate probabilities for normal and other distributions. Enter your z-score to find cumulative probabilities. |
 | R | Normal tail probs (R) | `pnorm(1.5)` for Φ(1.5); `1-pnorm(z)` for upper tail; match your z from the exercise. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Normal CDF (SPSS) | Transform > Compute Variable: use CDF.NORMAL(q, mean, sd) for cumulative probability. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | NORM.DIST (Excel) | =NORM.DIST(z,0,1,TRUE) for Φ(z); upper tail = 1 - that. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -710,7 +710,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Write an APA-Style Results Statement | Run a one-sample t-test and write a complete APA-style results sentence including: descriptive statistics, test statistic with df, p-value, and effect size. Example format: "Participants (M = 106.8, SD = 13.4) scored significantly higher than the population mean of 100, t(24) = 2.54, p = .018, d = 0.51." | Screenshot of Jamovi output and one properly formatted APA results sentence |
+| Jamovi | Write an APA-Style Results Statement | Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test on age (or a Big Five scale) and write a complete APA-style results sentence including: descriptive statistics, test statistic with df, p-value, and effect size. Example format: "Participants (M = 106.8, SD = 13.4) scored significantly higher than the population mean of 100, t(24) = 2.54, p = .018, d = 0.51." | Screenshot of Jamovi output and one properly formatted APA results sentence |
 | R | APA one-sample t (R) | Run t.test; write APA: M, SD, t(df), p, d. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | APA one-sample t (SPSS) | Copy SPSS tables; one APA sentence. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | APA one-sample t (Excel) | Compute stats; one APA sentence. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -724,25 +724,11 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Run a Binomial Test (Proportion Test) | You have data on 100 coin flips with 62 heads. Test if this differs significantly from the expected 50% using a binomial test (Proportion Test in Jamovi). | Correct! Analyses > Frequencies > Proportion Test. This tests if your observed proportion (62/100 = 0.62) differs significantly from the test value (0.5). |
+| Jamovi | Run a Binomial Test (Proportion Test) | Open <strong>bmi_and_exercise.csv</strong> from Tools (not personality_data.csv - gender was used in Learn/Practice). Transform <strong>bmi</strong> into a two-level Nominal variable (e.g. under 25 vs 25+), then test whether those proportions differ from 0.5 using Frequencies → 2 Outcomes (Binomial test). | Correct! Analyses > Frequencies > 2 Outcomes runs the binomial test on a two-level variable. Set the test value (often 0.5). |
 | R | binom.test (R) | `binom.test(62,100,p=0.5)` for 62 heads in 100. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Binomial test (SPSS) | Use One-Sample Proportions / Binomial per your SPSS version. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | BINOM.DIST manual (Excel) | Use BINOM.DIST for exact two-tailed p or describe limitation. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Stata | bitesti (Stata) | `bitesti 100 62 0.5` or `prtesti 100 62 0.5`. | Screenshot, console output, or brief write-up as appropriate for your package. |
-
-## `m7-cohens-d-onesample`
-
-- Module: `module-7` | Topic: `effect-size`
-- Present: `jamovi`, `r`, `spss`, `excel`, `stata`
-- Missing: none
-
-| Software | Title | Canonical method/instruction | Verification checkpoint |
-|---|---|---|---|
-| Jamovi | Calculate and Report Cohen's d | Run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen's d value and classify it as small (~0.2), medium (~0.5), or large (~0.8). | Screenshot showing Cohen's d and a sentence classifying the effect size magnitude |
-| R | Cohen's d one-sample (R) | Use `effectsize::cohens_d(x, mu=100)` or manual (mean(x)-mu)/sd(x). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| SPSS | Cohen's d (SPSS) | One-Sample T Test: Options > Effect sizes (Cohen d). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| Excel | Cohen's d (Excel) | Compute d = (AVERAGE-MU)/STDEV.S(range). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| Stata | Cohen's d (Stata) | `esize onewell iq, mu(100)` or manual. | Screenshot, console output, or brief write-up as appropriate for your package. |
 
 ## `m7-compare-alpha-levels`
 
@@ -796,7 +782,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Run a One-Sample T-Test | Test whether your sample's mean IQ differs from the population mean of 100. Find the one-sample t-test. | Correct! Analyses > T-Tests > One Sample T-Test. Enter your test value (100) and add your variable. |
+| Jamovi | Run a One-Sample T-Test | Open <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv - that file was used for the one-sample t in Learn/Practice). Run a one-sample t-test on <strong>age</strong> (or a Big Five scale) vs a sensible Test value (e.g. age vs 0, or extraversion vs 3). | Correct! Analyses > T-Tests > One Sample T-Test. Enter your test value (100) and add your variable. |
 | R | One-sample t (R) | `t.test(iq, mu=100)`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | One-sample t (SPSS) | Analyze > Compare Means > One-Sample T Test; test value 100. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | T.TEST one-sample (Excel) | =T.TEST(A2:A26,100,1,1) one-tailed example—adjust tails to match exercise. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -840,7 +826,7 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 
 | Software | Title | Canonical method/instruction | Verification checkpoint |
 |---|---|---|---|
-| Jamovi | Robustness to an Outlier Filter | Run a one-sample t-test, then re-run it after applying a filter that removes an outlier. Discuss what changed and what stayed stable. | Two outputs and a short robustness discussion. |
+| Jamovi | Robustness to an Outlier Filter | Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test on age (or a Big Five scale), then re-run it after applying a filter that removes an outlier. Discuss what changed and what stayed stable. | Two outputs and a short robustness discussion. |
 | R | t before/after filter (R) | Run t.test full data; remove extreme row; re-run; compare t and p. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | SPSS | Select cases t (SPSS) | Identify outlier; Select Cases; re-run t-test; reset all cases. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Exclude outlier (Excel) | Re-run T.TEST excluding outlier row. | Screenshot, console output, or brief write-up as appropriate for your package. |
@@ -1293,6 +1279,20 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 | SPSS | Full categorical analysis (SPSS) | SPSS Crosstabs pipeline with full options. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Full categorical analysis (Excel) | Excel hybrid workflow with written assumptions. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Stata | Full categorical analysis (Stata) | Stata tabulate + assoc measures + write-up. | Screenshot, console output, or brief write-up as appropriate for your package. |
+
+## `m8-cohens-d-onesample`
+
+- Module: `module-8` | Chapter: `chapter-11` | Topic: `effect-size`
+- Present: `jamovi`, `r`, `spss`, `excel`, `stata`
+- Missing: none
+
+| Software | Title | Canonical method/instruction | Verification checkpoint |
+|---|---|---|---|
+| Jamovi | Calculate and Report Cohen's d | Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen's d value and classify it as small (~0.2), medium (~0.5), or large (~0.8). | Screenshot showing Cohen's d and a sentence classifying the effect size magnitude |
+| R | Cohen's d one-sample (R) | Use `effectsize::cohens_d(x, mu=100)` or manual (mean(x)-mu)/sd(x). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| SPSS | Cohen's d (SPSS) | One-Sample T Test: Options > Effect sizes (Cohen d). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| Excel | Cohen's d (Excel) | Compute d = (AVERAGE-MU)/STDEV.S(range). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| Stata | Cohen's d (Stata) | `esize onewell iq, mu(100)` or manual. | Screenshot, console output, or brief write-up as appropriate for your package. |
 
 ## `m8-correlation-interpret`
 
