@@ -163,6 +163,18 @@ export const assignmentHelpIntroResearch = [
         getHelp: OFFICE
       },
       {
+        id: 'ir-irb-form-edits',
+        name: 'IRB Form Edits',
+        type: 'assignment',
+        tips: [
+          'Edit the NWOSU IRB application template so it describes your proposed study, using your methods, ethics, and instruments work.',
+          'Use the NWOSU IRB template provided in Canvas; keep its headings and answer every section that applies to your project.',
+          'You will not submit to the IRB in this course, but write as if you will: the same text carries into your thesis or capstone application.'
+        ],
+        practiceLinks: ['rm-chapter-3'],
+        getHelp: OFFICE
+      },
+      {
         id: 'ir-instruments',
         name: 'Instruments/Appendices Draft',
         type: 'assignment',
