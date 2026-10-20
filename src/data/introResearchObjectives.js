@@ -7,15 +7,20 @@
 export const introResearchObjectives = {
   "course": "PSYC 5033 Introduction to Research",
   "programSLOs": {
-    "SLO 8": "Students will analyze, interpret, and implement empirical research as it impacts the counseling / psychology field.",
-    "SLO 9": "Counseling Psychology: students will design research studies. General Psychology: students will author a final thesis or capstone project."
+    "MCP SLO 6": "Master of Counseling Psychology (all tracks), SLO 6: students critique research and apply research and evaluation concepts to inform ethical practice (48-hour non-licensure); critique published research and apply scientific methods to evaluate practice/interventions (LPC); critique research, integrate evidence into practice, and apply basic evaluation/program improvement methods (dual LPC/LADC).",
+    "MGP SLO 2": "Master of General Psychology SLO 2: students evaluate and apply research methods by formulating researchable questions, selecting appropriate designs, and ... (full text on the department page).",
+    "MGP SLO 3": "Master of General Psychology SLO 3: students apply quantitative reasoning by selecting appropriate statistical procedures, analyzing data accurately, and ... (full text on the department page).",
+    "MGP SLO 4": "Master of General Psychology SLO 4: students demonstrate assessment and measurement literacy by explaining reliability/validity, evaluating measurement ... (full text on the department page).",
+    "MGP SLO 6": "Master of General Psychology SLO 6: students demonstrate ethical and professional standards in scholarship and applied settings, including ethical ... (full text on the department page).",
+    "MGP SLO 7": "Master of General Psychology SLO 7: students communicate psychological knowledge effectively in APA-style writing and professional presentations by ... (full text on the department page)."
   },
   "courseObjectives": [
     {
       "id": "CO1",
       "text": "Explain the role of research in psychological and counseling practice, and distinguish basic, applied, and action research from other forms of inquiry.",
       "programSLOs": [
-        "SLO 8"
+        "MCP SLO 6",
+        "MGP SLO 2"
       ],
       "chapters": [
         1
@@ -26,7 +31,8 @@ export const introResearchObjectives = {
       "id": "CO2",
       "text": "Critically evaluate a peer-reviewed research article's purpose, methods, results, and implications.",
       "programSLOs": [
-        "SLO 8"
+        "MCP SLO 6",
+        "MGP SLO 2"
       ],
       "chapters": [
         2
@@ -37,7 +43,7 @@ export const introResearchObjectives = {
       "id": "CO3",
       "text": "Formulate a specific, researchable question and testable hypotheses (or guiding questions) grounded in the literature.",
       "programSLOs": [
-        "SLO 9"
+        "MGP SLO 2"
       ],
       "chapters": [
         2
@@ -48,7 +54,8 @@ export const introResearchObjectives = {
       "id": "CO4",
       "text": "Synthesize scholarly literature to identify a gap that justifies a proposed study.",
       "programSLOs": [
-        "SLO 9"
+        "MGP SLO 2",
+        "MGP SLO 7"
       ],
       "chapters": [
         2
@@ -59,7 +66,9 @@ export const introResearchObjectives = {
       "id": "CO5",
       "text": "Design a quantitative, qualitative, or mixed-methods study, including participants, recruitment, instruments with reliability and validity evidence, and procedures.",
       "programSLOs": [
-        "SLO 9"
+        "MCP SLO 6",
+        "MGP SLO 2",
+        "MGP SLO 4"
       ],
       "chapters": [
         4,
@@ -76,7 +85,8 @@ export const introResearchObjectives = {
       "id": "CO6",
       "text": "Apply ethical principles and IRB standards (risk, confidentiality, informed consent) to a proposed study.",
       "programSLOs": [
-        "SLO 9"
+        "MCP SLO 6",
+        "MGP SLO 6"
       ],
       "chapters": [
         3
@@ -87,7 +97,7 @@ export const introResearchObjectives = {
       "id": "CO7",
       "text": "Plan appropriate analyses for the data a study would collect, and show how the results would be reported in APA style.",
       "programSLOs": [
-        "SLO 9"
+        "MGP SLO 3"
       ],
       "chapters": [
         12,
@@ -99,7 +109,8 @@ export const introResearchObjectives = {
       "id": "CO8",
       "text": "Write and present a complete, defensible research proposal in APA 7th edition style.",
       "programSLOs": [
-        "SLO 9"
+        "MGP SLO 7",
+        "MGP SLO 6"
       ],
       "chapters": [
         11
@@ -601,7 +612,8 @@ export const introResearchObjectives = {
     "13": [
       "CO7"
     ]
-  }
+  },
+  "sloSource": "https://www.nwosu.edu/school-of-professional-studies/psychology/ (checked 2026-10-20; the page text was available to me only in abbreviated form, so confirm full wording before publishing)"
 }
 
 export function getCourseObjectives (classId) {
