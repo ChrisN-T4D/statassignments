@@ -128,7 +128,7 @@ export const objectives = [
     module: 3,
     objectiveType: 'software',
     objectiveId: 'M3-O1',
-    objective: 'Identify the main parts of the jamovi interface and use the basic analysis workflow (select an analysis, set options, view results, remove an analysis).'
+    objective: 'Identify the main parts of the statistical software\'s interface and use the basic analysis workflow (select an analysis, set options, view results, remove an analysis).'
   },
   {
     classId: 'statistics',
@@ -136,7 +136,7 @@ export const objectives = [
     module: 3,
     objectiveType: 'software',
     objectiveId: 'M3-O2',
-    objective: 'Import/open data files in jamovi (e.g., .omv, .csv, and other common formats) and verify key import settings (header row, decimal/separator, quoting, missing values).'
+    objective: 'Import/open data files in the statistical software (e.g., its native format, .csv, and other common formats) and verify key import settings (header row, decimal/separator, quoting, missing values).'
   },
   {
     classId: 'statistics',
@@ -144,7 +144,7 @@ export const objectives = [
     module: 3,
     objectiveType: 'software',
     objectiveId: 'M3-O3',
-    objective: 'Install jamovi add-on modules and save/export work appropriately (export data vs save a jamovi file that includes analyses).'
+    objective: 'Add optional modules or extensions where needed and save/export work appropriately (export data vs save a project file that includes analyses).'
   },
   {
     classId: 'statistics',
@@ -152,7 +152,7 @@ export const objectives = [
     module: 3,
     objectiveType: 'hybrid',
     objectiveId: 'M3-O4',
-    objective: 'Describe how jamovi represents data (rows as cases, columns as variables) and set an appropriate variable level/type (ID, nominal, ordinal, continuous; text/integer/decimal) based on the data and intended analysis.'
+    objective: 'Describe how the software represents data (rows as cases, columns as variables) and set an appropriate variable level/type (ID, nominal, ordinal, continuous; text/integer/decimal) based on the data and intended analysis.'
   },
   {
     classId: 'statistics',
@@ -160,7 +160,7 @@ export const objectives = [
     module: 3,
     objectiveType: 'hybrid',
     objectiveId: 'M3-O5',
-    objective: 'Create computed variables in jamovi (e.g., transformations, z-scores, sum-scores, means) and state an appropriate use-case for each in preparing data for analysis.'
+    objective: 'Create computed variables in the statistical software (e.g., transformations, z-scores, sum-scores, means) and state an appropriate use-case for each in preparing data for analysis.'
   },
 
   // Module 4: Descriptive Statistics
@@ -202,7 +202,7 @@ export const objectives = [
     module: 4,
     objectiveType: 'software',
     objectiveId: 'M4-S1',
-    objective: 'Run descriptives in jamovi and use Compute to create deviation, squared-deviation, or z-score variables.'
+    objective: 'Run descriptives in the statistical software and use Compute to create deviation, squared-deviation, or z-score variables.'
   },
 
   // Module 5: Graphing and Visualization
@@ -236,7 +236,7 @@ export const objectives = [
     module: 5,
     objectiveType: 'hybrid',
     objectiveId: 'M5-O4',
-    objective: 'Use jamovi logical expressions, Compute/Transform, mathematical functions, and filters to recode, subset, and prepare data.'
+    objective: 'Use logical expressions, Compute/Transform, mathematical functions, and filters or case selection to recode, subset, and prepare data.'
   },
   {
     classId: 'statistics',
@@ -244,7 +244,7 @@ export const objectives = [
     module: 5,
     objectiveType: 'software',
     objectiveId: 'M5-S1',
-    objective: 'Create histograms, apply filters, and transform or recode variables in jamovi.'
+    objective: 'Create histograms, apply filters, and transform or recode variables in the statistical software.'
   },
 
   // Module 6: Probability and Sampling
@@ -286,7 +286,7 @@ export const objectives = [
     module: 6,
     objectiveType: 'software',
     objectiveId: 'M6-S1',
-    objective: 'Compute and interpret normal-distribution probabilities in jamovi.'
+    objective: 'Compute and interpret normal-distribution probabilities in the statistical software.'
   },
   {
     classId: 'statistics',
@@ -294,7 +294,7 @@ export const objectives = [
     module: 6,
     objectiveType: 'software',
     objectiveId: 'M6-S2',
-    objective: 'Compute and interpret confidence intervals in jamovi.'
+    objective: 'Compute and interpret confidence intervals in the statistical software.'
   },
 
   // Module 7: Hypothesis Testing
@@ -336,7 +336,7 @@ export const objectives = [
     module: 7,
     objectiveType: 'software',
     objectiveId: 'M7-S1',
-    objective: 'Run and interpret a binomial test in jamovi.'
+    objective: 'Run and interpret a binomial test in the statistical software.'
   },
   {
     classId: 'statistics',
@@ -344,7 +344,7 @@ export const objectives = [
     module: 7,
     objectiveType: 'software',
     objectiveId: 'M7-S2',
-    objective: 'Run and interpret a one-sample t-test in jamovi.'
+    objective: 'Run and interpret a one-sample t-test in the statistical software.'
   },
   {
     classId: 'statistics',
@@ -352,7 +352,7 @@ export const objectives = [
     module: 7,
     objectiveType: 'software',
     objectiveId: 'M7-S3',
-    objective: 'Read jamovi hypothesis-test output and interpret the p-value in context.'
+    objective: 'Read the software\'s hypothesis-test output and interpret the p-value in context.'
   },
 
   // Module 8: Analysis Methods
@@ -394,7 +394,7 @@ export const objectives = [
     module: 8,
     objectiveType: 'software',
     objectiveId: 'M8-S1',
-    objective: 'Run and interpret t-tests, chi-square, correlation, regression, or ANOVA in jamovi.'
+    objective: 'Run and interpret t-tests, chi-square, correlation, regression, or ANOVA in the statistical software.'
   },
 
   // Research Methods Ch 1
