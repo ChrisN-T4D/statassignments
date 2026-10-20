@@ -254,6 +254,12 @@ export const module7UnifiedLessons = [
             question:
               'This jamovi panel is open. What analysis is this, and which menu path opens it?',
             image: '/images/lessons/jamovi/binomial-setup.png',
+            options: [
+              'One Sample T-Test - Analyses → T-Tests',
+              'Proportion Test (2 Outcomes) / binomial - Analyses → Frequencies → 2 Outcomes',
+              'Chi-square goodness-of-fit - Analyses → ANOVA',
+              'Descriptives - Analyses → Exploration'
+            ],
             correct: 1,
             explanation:
               'The panel title is Proportion Test (2 Outcomes). Open it with Analyses → Frequencies → 2 Outcomes.'
