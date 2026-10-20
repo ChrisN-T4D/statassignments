@@ -93,8 +93,8 @@ PERFORMANCE_ASSESSMENT = (
     "Recommended preparation for benchmarks: read the assigned chapters, complete Concept Review "
     "(and Software Practice where assigned), work through Methods Market topics, then use the "
     "formative benchmark practice in Methods Market before the proctored Canvas benchmark. Post "
-    "questions in the module discussion board before emailing. Talking with classmates and attending "
-    "office hours helps organize concepts.\n\n"
+    "questions during in-class discussion or office hours before emailing. Talking with classmates "
+    "and attending office hours helps organize concepts.\n\n"
     "This is an ideas-and-application course. Assessments stress concepts, relationships among "
     "concepts, and application to practical examples — not isolated memorization."
 )
@@ -119,10 +119,10 @@ BENCHMARKS = (
 )
 
 ASSIGNMENTS = (
-    "Your assignments average accounts for 35% of your final grade, weighted as follows within that "
+    "Your assignments average accounts for 50% of your final grade, weighted as follows within that "
     "category: Methods Market Concept Review (Modules 1–8) = 10%; Methods Market Software Practice "
-    "(Modules 3–8, including the You do recording) = 20%; Canvas quizzes "
-    "(e.g., Levels of Measurement, Normality) = 5%.\n\n"
+    "(Modules 3–8, including the You do recording) = 25%; Canvas quizzes "
+    "(e.g., Levels of Measurement, Normality) = 5%; in-class participation and discussion activities = 10%.\n\n"
     "Details and due dates are in each Canvas module. Tips and Methods Market links: "
     "https://methods-market.clneu.com/class/statistics/assignment-help\n\n"
     "Due dates still matter for pacing and feedback. If you need more time, contact me. Late coursework "
@@ -130,18 +130,7 @@ ASSIGNMENTS = (
     "proctored benchmark window) says otherwise. Assignments are checked for plagiarism."
 )
 
-DISCUSSIONS = (
-    "Your discussion average accounts for 15% of your final grade, weighted as follows within that "
-    "category: Module Questions & Discussion (ongoing Q&A each module) = 5%; graded discussion "
-    "prompts (Modules 1, 2, 4, 7, and 8) = 10%.\n\n"
-    "Each module includes a Module Questions & Discussion board for course questions (reading, "
-    "Concept Review, software, assignments). Post here before emailing when possible. Graded prompts "
-    "include AI-comparison exercises and applied examples; follow Canvas instructions for initial "
-    "posts and replies.\n\n"
-    "Due dates still matter for pacing and feedback. If you need more time, contact me. Late discussions "
-    "or responses are accepted without an automatic grade penalty unless a specific item says otherwise. "
-    "Discussion posts are checked for plagiarism."
-)
+
 
 EVALUATION_AND_GRADING = (
     "EVALUATION AND GRADING\n\n"
@@ -150,13 +139,11 @@ EVALUATION_AND_GRADING = (
     "  • Benchmark 1 (Modules 1–3, Ch. 1–3) — 15%\n"
     "  • Benchmark 2 (Modules 4–5, Ch. 4–6) — 15%\n"
     "  • Benchmark 3 / Final Exam (Modules 6–8 only, Ch. 7–13; not a comprehensive final) — 20%\n\n"
-    "Assignments — 35% of final grade\n"
+    "Assignments — 50% of final grade\n"
     "  • Methods Market Concept Review (Modules 1–8) — 10%\n"
-    "  • Methods Market Software Practice (Modules 3–8; You do recording in Canvas) — 20%\n"
-    "  • Canvas quizzes — 5%\n\n"
-    "Discussions — 15% of final grade\n"
-    "  • Module Questions & Discussion (Q&A) — 5%\n"
-    "  • Graded discussion prompts (Modules 1, 2, 4, 7, 8) — 10%\n\n"
+    "  • Methods Market Software Practice (Modules 3–8; You do recording in Canvas) — 25%\n"
+    "  • Canvas quizzes — 5%\n"
+    "  • In-class participation and discussion — 10%\n\n"
     "Final Course Grade:\n"
     "A = 90–100\n"
     "B = 80–89\n"
@@ -258,7 +245,6 @@ def main():
     replace_section_after_header(doc, "Performance Assessment:", PERFORMANCE_ASSESSMENT)
     replace_section_after_header(doc, "Benchmarks:", BENCHMARKS)
     replace_section_after_header(doc, "Assignments:", ASSIGNMENTS)
-    replace_section_after_header(doc, "Discussions:", DISCUSSIONS)
 
     for p in doc.paragraphs:
         if p.text.startswith("Students are responsible for regularly checking both"):

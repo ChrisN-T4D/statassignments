@@ -11,6 +11,10 @@
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
             Methods Market is for chapter reading, concept review, and assignment help only.
           </p>
+          <p v-else-if="isIntroResearchClass" class="class-canvas-note">
+            <strong>Start here:</strong> read the <strong>course objectives</strong>, then open a chapter below, read it, and complete
+            <strong>Concept Review</strong>. Each assignment has its own help page. Due dates, points, rubrics, and exams live in <strong>Canvas</strong>.
+          </p>
           <p v-else-if="!isResearchMethodsClass" class="class-canvas-note">
             <strong>Start here:</strong> choose a module below, read the <strong>Topics</strong> lesson, then complete
             <strong>Concept Review</strong> and <strong>Software Practice</strong>.
@@ -25,6 +29,25 @@
               <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
                 Study Plan
               </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
+            <template v-else-if="isIntroResearchClass">
+              <router-link :to="`/class/${classId}/objectives`" class="assignment-help-link">
+                Course objectives
+              </router-link>
+              <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Assignment Help
+              </router-link>
+              <span class="header-links-sep">·</span>
+              <a
+                :href="CANVAS_HOME_URL"
+                target="_blank"
+                rel="noopener"
+                class="assignment-help-link"
+              >
+                Return to Canvas ↗
+              </a>
               <span class="header-links-sep">·</span>
             </template>
             <template v-else-if="!isPsychMethodsClass">
@@ -385,6 +408,20 @@
             v-else-if="selectedModuleId === RM_MODULE_LAB_ID"
             class="tab-panel rm-lab-panel"
           >
+            <details class="rm-lab-walkthrough" open>
+              <summary>Design decision walkthrough: from question to study plan</summary>
+              <p>Before you run the lab, make four decisions for one proposed study:</p>
+              <ol>
+                <li><strong>Population:</strong> name who you want your conclusion to describe.</li>
+                <li><strong>Sampling:</strong> choose how people enter the study and identify one likely source of coverage or nonresponse bias.</li>
+                <li><strong>Assignment:</strong> if there is an intervention, choose how participants enter conditions and explain what random assignment protects.</li>
+                <li><strong>Claim boundary:</strong> write one sentence saying whether your design supports a causal claim, a generalization, both, or neither.</li>
+              </ol>
+              <p class="rm-lab-walkthrough-checkpoint">
+                Checkpoint: run both tabs, then revise one decision after seeing how the roster or baseline balance changes.
+                <router-link to="/class/research-methods/assignment-help/rm-phase-4-worksheet">Open Phase 4 worksheet →</router-link>
+              </p>
+            </details>
             <SamplingCompareLab intro="rm-embed" />
             <details v-if="conceptReviewQuestionCount > 0" class="rm-lab-assignment-extra">
               <summary>Assignment simulation (sleep workshop vs control)</summary>
@@ -787,6 +824,11 @@ const classId = computed(() => route.params.classId)
 const isResearchMethodsClass = computed(() => {
   const slug = currentClass.value?.slug || classId.value
   return slug === 'research-methods'
+})
+
+const isIntroResearchClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'intro-research'
 })
 
 const isExperimentalClass = computed(() => {

@@ -59,7 +59,7 @@
           </p>
         </div>
 
-        <!-- Concept Review / Software Practice: open the Canvas assignment activity -->
+        <!-- Concept Review / Software Practice: open the Methods Market activity -->
         <div v-else-if="assignment.methodsMarketPath" class="practice-test-cta">
           <router-link :to="assignment.methodsMarketPath" class="practice-test-link">
             {{ methodsMarketLinkText }} →
@@ -76,6 +76,19 @@
             </ul>
             <p class="section-desc">
               Methods Market shows practice progress only. Grading, points, and due dates are set by your instructor in Canvas.
+            </p>
+          </div>
+          <div v-if="objectiveInfo" class="section objectives-section">
+            <h2 class="section-title">Objectives</h2>
+            <p class="section-desc">By completing this you will be able to:</p>
+            <ul class="tips-list">
+              <li v-for="(o, i) in objectiveInfo.objectives" :key="'ob-' + i">{{ o }}</li>
+            </ul>
+            <p class="section-desc">
+              <strong>Supports course objectives:</strong>
+              <template v-for="(c, i) in objectiveInfo.supports" :key="c.id">
+                <router-link :to="`/class/${classId}/objectives#${c.id}`">{{ c.id }} {{ c.short }}</router-link><span v-if="i < objectiveInfo.supports.length - 1">; </span>
+              </template>
             </p>
           </div>
           <div v-if="assignment.tips?.length" class="section">
@@ -134,6 +147,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { getAssignmentById, resolveAssignmentForSoftware } from '../data/assignmentHelp'
+import { getAssignmentObjectives } from '../data/introResearchObjectives'
 import { formatResearchMethodsTopicLabel } from '../data/researchMethodsTextbook'
 import {
   getBenchmarkCardGuidance,
@@ -161,6 +175,7 @@ const assignment = computed(() => {
   return resolveAssignmentForSoftware(r.assignment, preferredSoftware.value)
 })
 const block = computed(() => resolved.value?.block ?? null)
+const objectiveInfo = computed(() => getAssignmentObjectives(props.classId, props.assignmentId))
 
 const formulaIntro = computed(() => {
   const sw = preferredSoftware.value || 'jamovi'
@@ -194,8 +209,8 @@ const benchmarkPrintUrl = computed(() => `${practiceTestUrl.value}?print=1`)
 const benchmarkBatchUrl = computed(() => `${practiceTestUrl.value}?batch=1`)
 const practiceTestLinkText = computed(() => {
   if (props.assignmentId === 'benchmark-1') return 'Take a practice test (Chapters 1–3)'
-  if (props.assignmentId === 'benchmark-2') return 'Take a practice test (Chapters 4–6)'
-  if (props.assignmentId === 'final-benchmark') return 'Take a practice test (Chapters 7–8)'
+  if (props.assignmentId === 'benchmark-2') return 'Take a practice test (Modules 4–5)'
+  if (props.assignmentId === 'final-benchmark') return 'Take a practice test (Modules 6–8)'
   return 'Take a practice test'
 })
 

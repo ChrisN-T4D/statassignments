@@ -6,6 +6,9 @@
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="help-title">Assignment Help</h1>
         <p class="help-intro">{{ helpIntro }}</p>
+        <p v-if="classId === 'intro-research'" class="help-intro objectives-link">
+          <router-link :to="`/class/${classId}/objectives`">See the course objectives and how each assignment supports them →</router-link>
+        </p>
         <div v-if="classId === 'research-methods'" class="study-plan-banner">
           <div>
             <h2 class="study-plan-banner-title">Capstone worksheets → Study Plan</h2>
@@ -17,6 +20,18 @@
             Open Study Plan →
           </router-link>
         </div>
+        <details v-if="classId === 'research-methods'" class="research-aid-panel">
+          <summary>Reference self-check before you submit</summary>
+          <p>Use this quick audit for article reviews, literature reviews, and methods papers:</p>
+          <ul>
+            <li>Every paraphrase, quotation, or borrowed idea has an author–year citation.</li>
+            <li>Every in-text citation appears in References, and every reference is cited in the paper.</li>
+            <li>Each reference has enough information for a reader to find the source, preferably a DOI or stable URL.</li>
+            <li>Authors, year, title, journal/book, volume, issue, pages, and italics follow APA 7 conventions.</li>
+            <li>Claims describe what the source found; they do not overstate correlation as causation.</li>
+          </ul>
+          <router-link to="/topic/rm-chapter-11" class="research-aid-link">Review Chapter 11: APA and clear prose →</router-link>
+        </details>
       </div>
 
       <div class="help-modules">
@@ -34,7 +49,7 @@
           </h2>
 
           <ul class="assignment-links">
-            <li v-for="a in block.assignments" :key="a.id">
+            <li v-for="a in block.assignments" :key="a.id" class="assignment-row">
               <router-link
                 :to="`/class/${classId}/assignment-help/${a.id}`"
                 class="assignment-link"
@@ -42,11 +57,18 @@
                 <span class="assignment-link-name">{{ a.name }}</span>
                 <span class="assignment-link-type" :class="a.type">{{ typeLabel(a.type) }}</span>
               </router-link>
+              <router-link
+                v-if="a.studyPlanSection"
+                :to="`/class/${classId}/study-plan/${a.studyPlanSection}`"
+                class="study-plan-inline-link"
+              >
+                Open Study Plan →
+              </router-link>
             </li>
           </ul>
 
           <p v-if="block.noDiscussion" class="no-discussion-note">
-            This module has no discussion board in the LMS; use tips and office hours if you need help.
+            This module has no discussion activity; use tips and office hours if you need help.
           </p>
         </section>
       </div>
@@ -158,6 +180,36 @@ function typeLabel (type) {
   filter: brightness(1.08);
 }
 
+.research-aid-panel {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.research-aid-panel summary {
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.research-aid-panel p {
+  margin: 0.75rem 0 0.35rem;
+}
+
+.research-aid-panel ul {
+  margin: 0.35rem 0 0.75rem 1.2rem;
+  padding: 0;
+}
+
+.research-aid-link {
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .help-modules {
   display: flex;
   flex-direction: column;
@@ -197,7 +249,15 @@ function typeLabel (type) {
   gap: 0.5rem;
 }
 
+.assignment-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
 .assignment-link {
+  flex: 1 1 28rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -213,6 +273,23 @@ function typeLabel (type) {
 .assignment-link:hover {
   border-color: var(--primary);
   background: var(--bg-hover, rgba(0, 0, 0, 0.02));
+}
+
+.study-plan-inline-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.study-plan-inline-link:hover {
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-card));
 }
 
 .assignment-link-name {

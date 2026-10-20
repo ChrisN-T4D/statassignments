@@ -19,6 +19,30 @@ The only chapter each week is the Jhangiani Pressbooks chapter in Methods Market
 
 No hook / fight / studio. No exit tickets.
 
+## Milestone chain (what students should leave each phase with)
+
+Use this chain when a student asks “what am I supposed to have by the end of
+this week?” The Friday workshop is for producing the named artifact, not for
+introducing another chapter.
+
+| Phase | Weeks | Working artifact | Done means |
+|-------|-------|------------------|------------|
+| Orient + choose | 1–2 | Topic, group, search terms, preliminary research question | The group has one narrow population/construct/context and a feasible direction |
+| Build the evidence base | 3–4 | Article-review cards + problem statement | At least 6 article reviews, a gap statement, and a preliminary RQ/hypothesis |
+| Synthesize | 5–10 | Lit Review Draft 1 → revised final | The draft is organized by themes, uses APA references, names study designs, and ends in a defensible gap |
+| Operationalize | 11 | Phase 3 elevator speech + Phase 4 pathway comparison | The group compares all four paths and chooses one viable methodology with defined IV/DV or equivalent constructs |
+| Write + protect | 12–13 | Methods section + HRT completion + IRB first/final draft | Participants, measures, procedure, analysis plan, consent, risks, and data security agree across documents |
+| Execute + report status | 14–16 | Data-collection/IRB processing log + detailed status plan | The group can state approval status, next action, owner, timeline, and contingency |
+
+### Weekly operating rule
+
+Before Monday, students should open the week’s chapter in Methods Market. By
+Wednesday they should have notes or a draft section connected to the current
+milestone. On Friday, they should leave with a saved/exported artifact or a
+specific blocker and owner. If a Canvas date or template changes, update the
+Friday workshop label and deliverable here; do not create a second competing
+schedule in Methods Market.
+
 ---
 
 ## Day roles

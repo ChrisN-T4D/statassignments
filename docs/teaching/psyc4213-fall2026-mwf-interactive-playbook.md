@@ -1,6 +1,6 @@
 # PSYC 4213 Statistics — M/W/F interactive class playbook
 
-**Fall 2026 · In-person Canvas 2405** (aligned to online 3177)  
+**Fall 2026 · In-person**  
 **Meetings:** Mon / Wed / Fri · **8:00–8:50** (50 min)  
 **Format:** Main classroom + satellite rooms on **one shared Zoom**  
 **Design:** `docs/superpowers/specs/2026-08-06-stats-mwf-interactive-class-playbook-design.md`
@@ -216,7 +216,7 @@ Announce this every time you start pair talk:
 
 **Built-in fixes**
 
-- Week 15 = one meeting: wrap Module 7 + mini fight; keep discussion due dates flexible.  
+- Week 15 = one meeting: wrap Module 7 + mini fight; keep in-class activity due dates flexible.  
 - Module 8 = overview only; depth lives in Methods Market + Benchmark 3.  
 - Benchmark 3 = Modules 6–8 only (Ch. 7–13), not comprehensive.
 
@@ -288,7 +288,7 @@ Solo-Zoomer path for every stub: type the same answer in Mentimeter or chat.
 |-----|------|------|
 | Mon | Oct 5 | Hook: grouped descriptives — “same mean, different story” |
 | Wed | Oct 7 | Concept fight: z-score interpretation MC → vote → revote |
-| Fri | Oct 9 | Studio: jamovi lab + Module 4 discussion kickoff |
+| Fri | Oct 9 | Studio: jamovi lab + Module 4 in-class activity kickoff |
 
 ### Week 9 · Module 5 · Ch. 5–6 · Oct 12–18
 
@@ -342,7 +342,7 @@ Solo-Zoomer path for every stub: type the same answer in Mentimeter or chat.
 
 | Day | Date | Stub |
 |-----|------|------|
-| Mon | Nov 23 | Mini fight (Type I/II or effect size) + discussion kickoff + flexible due reminder |
+| Mon | Nov 23 | Mini fight (Type I/II or effect size) + in-class activity kickoff + flexible due reminder |
 | Wed | Nov 25 | **No class — Thanksgiving** |
 | Fri | Nov 27 | **No class — Thanksgiving** |
 
@@ -401,7 +401,7 @@ Same energy as B1; swap content only.
 | 0–5 | Quick myth or Type I/II poll |
 | 5–20 | Mini-teach patch + Module 7 wrap |
 | 20–35 | Mini concept fight (effect size or error types) |
-| 35–45 | Graded discussion kickoff; **flexible due** reminder (only one meeting this week) |
+| 35–45 | In-class activity kickoff; **flexible due** reminder (only one meeting this week) |
 | 45–50 | Exit: “I will post/draft ___ by ___” |
 
 Wed/Fri: no class (Thanksgiving). Optional Methods Market practice at home.

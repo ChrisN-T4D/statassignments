@@ -6,7 +6,8 @@
 
 import { ASSIGNMENT_HELP_BY_SOFTWARE } from './assignmentHelpSoftwareVariants.js'
 import { assignmentHelpResearchMethods } from './assignmentHelpResearchMethods.js'
-import { enrichResearchMethodsAssignment, allResearchMethodsConceptReviewAssignments } from './researchMethodsCanvasLinks.js'
+import { assignmentHelpIntroResearch } from './assignmentHelpIntroResearch.js'
+import { enrichResearchMethodsAssignment, allResearchMethodsConceptReviewAssignments, topicIdToModuleId } from './researchMethodsCanvasLinks.js'
 import { benchmarkPracticeAssignment, methodsMarketPracticeAssignments } from './statisticsCanvasLinks.js'
 
 const VALID_ASSIGNMENT_SOFTWARE = new Set(['jamovi', 'spss', 'r', 'excel', 'stata'])
@@ -36,7 +37,18 @@ export const assignmentHelpByModule = [
     moduleNumber: 1,
     moduleTitle: 'Introductions and Why Learn Stats',
     assignments: [
-      ...methodsMarketPracticeAssignments(1),
+      { ...methodsMarketPracticeAssignments(1)[0], tips: [
+        'Sign in and link your student key first so practice is tracked.',
+        'Work each learning objective until you get two items correct in a row.',
+        'Use the feedback on wrong answers — it tells you which concept to review.',
+        'When finished, print or save the completion slip for Canvas.'
+      ] },
+      { ...methodsMarketPracticeAssignments(1)[1], tips: [
+        'Watch the Learn (I do) examples carefully before trying Practice (We do).',
+        'Use the Tools tab to find the Practice video recording feature.',
+        'Record your Apply (You do) step-by-step — narrate what you\'re doing and why.',
+        'Upload the video to Canvas for credit; there is no completion slip for Software Practice.'
+      ] },
       {
         id: 'm1-intro-videos',
         name: 'Introduction Videos',
@@ -46,7 +58,7 @@ export const assignmentHelpByModule = [
           'Upload to YouTube/Vimeo and paste the link, or use the LMS "insert/embed media" to upload directly.',
           'Cover: who you are, where you\'re from, program, goals, and something you\'re passionate about.'
         ],
-        getHelp: 'If you have technical trouble (upload, embed, or privacy), post in the Module 1 Discussion Board or email your instructor.'
+        getHelp: 'If you have technical trouble (upload, embed, or privacy), ask during in-class discussion or email your instructor.'
       },
       {
         id: 'm1-discussion',
@@ -57,7 +69,7 @@ export const assignmentHelpByModule = [
           'Paste both responses and label which model gave which answer.',
           'Critique the responses: what do we learn about statistics and about each AI? Then reply to a classmate.'
         ],
-        getHelp: 'Stuck on interpreting AI responses or writing your critique? Reply in the discussion or ask in office hours.'
+        getHelp: 'Stuck on interpreting AI responses or writing your critique? Ask during in-class discussion or come to office hours.'
       }
     ]
   },
@@ -87,7 +99,7 @@ export const assignmentHelpByModule = [
           'Part 3 (Synthesis): State clearly whether you\'d recommend the PSS and why, using reliability and validity evidence.'
         ],
         practiceLinks: ['validity', 'reliability'],
-        getHelp: 'If reliability vs validity is confusing, review the Topics under Research Design and use the Module 2 Discussion (AI prompt on reliability vs validity). Post in the discussion or come to office hours for the PSS questions.'
+        getHelp: 'If reliability vs validity is confusing, review the Topics under Research Design and the Module 2 in-class activity (AI prompt on reliability vs validity). Ask during in-class discussion or come to office hours for the PSS questions.'
       },
       {
         id: 'm2-discussion',
@@ -97,7 +109,7 @@ export const assignmentHelpByModule = [
           'Ask two AI models: "What is the difference between reliability and validity and why are those differences important?"',
           'Summarize each model\'s response, note similarities and differences, then reply to someone about how they examine validity and reliability of AI.'
         ],
-        getHelp: 'Use this discussion to clarify reliability vs validity before the PSS assignment.'
+        getHelp: 'Use the in-class activity to clarify reliability vs validity before the PSS assignment.'
       }
     ]
   },
@@ -166,7 +178,7 @@ export const assignmentHelpByModule = [
         tips: [
           'Share how you see descriptive stats (mean, median, SD, z-scores) in everyday life: written scenario, short audio/video, or small dataset + graph. Then comment on someone else\'s post.'
         ],
-        getHelp: 'Need ideas for "in the wild" examples? Check the discussion for others\' posts or the textbook examples.'
+        getHelp: 'Need ideas for "in the wild" examples? Share in the in-class discussion or check the textbook examples.'
       }
     ]
   },
@@ -216,7 +228,7 @@ export const assignmentHelpByModule = [
           'Scenarios: city vs national sugar intake; proportion walking vs last year; three teaching methods (ANOVA).'
         ],
         practiceLinks: ['hypothesis-testing', 'p-values', 'effect-size'],
-        getHelp: 'Use Module 7 Topics for hypothesis testing and error types. The Module 7 Discussion uses similar AI prompts; check others\' posts for comparison.'
+        getHelp: 'Use Module 7 Topics for hypothesis testing and error types. The Module 7 in-class activity uses similar AI prompts; compare notes with classmates during discussion.'
       },
       {
         id: 'm7-discussion',
@@ -291,6 +303,17 @@ export function getAssignmentHelp (classId) {
       }))
     ]
   }
+  if (classId === 'intro-research') {
+    return assignmentHelpIntroResearch.map((block) => ({
+      ...block,
+      assignments: block.assignments.map((a) => {
+        const moduleId = topicIdToModuleId(a.practiceLinks?.[0])
+        return moduleId
+          ? { ...a, methodsMarketPath: `/class/intro-research/practice?module=${moduleId}` }
+          : a
+      })
+    }))
+  }
   return assignmentHelpByModule
 }
 
@@ -298,6 +321,9 @@ export function getAssignmentHelp (classId) {
 export function getAssignmentHelpIntro (classId) {
   if (classId === 'research-methods') {
     return 'Match your Canvas assignment below for chapter reading, Concept Review links, tips, and where to get help. Capstone worksheets (article review, lit review outline, Phase 3 elevator speech, Phase 4 operational IV/DV) live in Study Plan — open it from the course home or the assignment detail page. Due dates and points are always in Canvas — not here.'
+  }
+  if (classId === 'intro-research') {
+    return 'Match your Canvas assignment below for chapter reading, Concept Review links, and tips for each step of your research proposal. Due dates and points are always in Canvas, not here.'
   }
   return 'Match your Canvas assignment below for Methods Market Concept Review and Software Practice links, plus tips for other weekly work. Due dates and points are always in Canvas — not here.'
 }
