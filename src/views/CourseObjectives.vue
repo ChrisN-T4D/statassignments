@@ -43,19 +43,36 @@
           </div>
         </li>
       </ol>
+
+      <section v-if="programSLOs.length" class="slo-section">
+        <h2 class="slo-title">Program outcomes this course supports</h2>
+        <div v-for="p in programSLOs" :key="p.key" class="slo-card">
+          <h3 class="slo-label">{{ p.program }}, {{ p.label }}</h3>
+          <ul class="slo-texts">
+            <li v-for="(t, i) in p.texts" :key="i">
+              <em v-if="t.track">{{ t.track }}: </em>{{ t.text }}
+            </li>
+          </ul>
+        </div>
+        <p class="slo-source">
+          All program outcomes:
+          <a href="https://www.nwosu.edu/school-of-professional-studies/psychology/" target="_blank" rel="noopener">nwosu.edu psychology program page</a>.
+        </p>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { getCourseObjectives, assignmentsForObjective, weeksForObjective } from '../data/introResearchObjectives'
+import { getCourseObjectives, getProgramOutcomes, assignmentsForObjective, weeksForObjective } from '../data/introResearchObjectives'
 
 const props = defineProps({
   classId: { type: String, required: true }
 })
 
 const objectives = computed(() => getCourseObjectives(props.classId))
+const programSLOs = computed(() => getProgramOutcomes(props.classId))
 const assignmentsFor = (id) => assignmentsForObjective(id)
 const weeksFor = (id) => weeksForObjective(id)
 </script>
@@ -78,4 +95,10 @@ const weeksFor = (id) => weeksForObjective(id)
 .links-list.inline { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .weeks-line { margin: 0; color: var(--text-secondary); }
 .not-found { color: var(--text-secondary); }
+.slo-section { margin-top: 2rem; }
+.slo-title { font-size: 1.2rem; font-weight: 700; margin: 0 0 0.75rem 0; color: var(--text-primary); }
+.slo-card { margin-bottom: 0.75rem; }
+.slo-label { font-size: 0.95rem; font-weight: 600; margin: 0 0 0.25rem 0; color: var(--text-primary); }
+.slo-texts { margin: 0; padding-left: 1.1rem; color: var(--text-secondary); line-height: 1.55; }
+.slo-source { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.75rem; }
 </style>

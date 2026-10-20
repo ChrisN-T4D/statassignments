@@ -7,12 +7,69 @@
 export const introResearchObjectives = {
   "course": "PSYC 5033 Introduction to Research",
   "programSLOs": {
-    "MCP SLO 6": "Master of Counseling Psychology (all tracks), SLO 6: students critique research and apply research and evaluation concepts to inform ethical practice (48-hour non-licensure); critique published research and apply scientific methods to evaluate practice/interventions (LPC); critique research, integrate evidence into practice, and apply basic evaluation/program improvement methods (dual LPC/LADC).",
-    "MGP SLO 2": "Master of General Psychology SLO 2: students evaluate and apply research methods by formulating researchable questions, selecting appropriate designs, and ... (full text on the department page).",
-    "MGP SLO 3": "Master of General Psychology SLO 3: students apply quantitative reasoning by selecting appropriate statistical procedures, analyzing data accurately, and ... (full text on the department page).",
-    "MGP SLO 4": "Master of General Psychology SLO 4: students demonstrate assessment and measurement literacy by explaining reliability/validity, evaluating measurement ... (full text on the department page).",
-    "MGP SLO 6": "Master of General Psychology SLO 6: students demonstrate ethical and professional standards in scholarship and applied settings, including ethical ... (full text on the department page).",
-    "MGP SLO 7": "Master of General Psychology SLO 7: students communicate psychological knowledge effectively in APA-style writing and professional presentations by ... (full text on the department page)."
+    "MCP SLO 6": {
+      "program": "Master of Counseling Psychology (MCP)",
+      "label": "SLO 6 (MPCAC-informed: B.5.f Research Methods)",
+      "texts": [
+        {
+          "track": "48-hour non-licensure",
+          "text": "Students critique research and apply research and evaluation concepts to inform ethical practice and evidence-informed decision-making."
+        },
+        {
+          "track": "LPC licensure",
+          "text": "Students critique published research, apply scientific methods to evaluate practice/interventions, and integrate evidence into clinical decision-making and basic program/practice evaluation."
+        },
+        {
+          "track": "Dual LPC/LADC licensure",
+          "text": "Students critique research, integrate evidence into practice, and apply basic evaluation/program improvement methods."
+        }
+      ]
+    },
+    "MGP SLO 2": {
+      "program": "Master of Science in General Psychology (MGP)",
+      "label": "SLO 2 (MPCAC-informed: B.5.f Research Methods)",
+      "texts": [
+        {
+          "text": "Students evaluate and apply research methods by formulating researchable questions, selecting appropriate designs, and using scientific reasoning to critique and interpret psychological literature."
+        }
+      ]
+    },
+    "MGP SLO 3": {
+      "program": "Master of Science in General Psychology (MGP)",
+      "label": "SLO 3 (MPCAC-informed: B.5.f Research Methods; quantitative emphasis)",
+      "texts": [
+        {
+          "text": "Students apply quantitative reasoning by selecting appropriate statistical procedures, analyzing data accurately, and interpreting findings with attention to assumptions, limitations, and practical meaning."
+        }
+      ]
+    },
+    "MGP SLO 4": {
+      "program": "Master of Science in General Psychology (MGP)",
+      "label": "SLO 4 (MPCAC-informed: B.5.e Methods of Evaluation and Assessment of Individuals)",
+      "texts": [
+        {
+          "text": "Students demonstrate assessment and measurement literacy by explaining reliability/validity, evaluating measurement quality, and selecting appropriate assessment/evaluation approaches for research or applied questions."
+        }
+      ]
+    },
+    "MGP SLO 6": {
+      "program": "Master of Science in General Psychology (MGP)",
+      "label": "SLO 6 (MPCAC-informed: B.5.a Ethical and Professional Standards)",
+      "texts": [
+        {
+          "text": "Students demonstrate ethical and professional standards in scholarship and applied settings, including ethical decision-making, responsible conduct of research, professional communication, and accountability."
+        }
+      ]
+    },
+    "MGP SLO 7": {
+      "program": "Master of Science in General Psychology (MGP)",
+      "label": "SLO 7 (MPCAC-informed: Standard G “Communication” emphasis)",
+      "texts": [
+        {
+          "text": "Students communicate psychological knowledge effectively in APA-style writing and professional presentations by synthesizing research, constructing coherent arguments, and presenting findings clearly to academic and applied audiences."
+        }
+      ]
+    }
   },
   "courseObjectives": [
     {
@@ -613,11 +670,17 @@ export const introResearchObjectives = {
       "CO7"
     ]
   },
-  "sloSource": "https://www.nwosu.edu/school-of-professional-studies/psychology/ (checked 2026-10-20; the page text was available to me only in abbreviated form, so confirm full wording before publishing)"
+  "sloSource": "https://www.nwosu.edu/school-of-professional-studies/psychology/ ; full text pasted by Chris 2026-10-20"
 }
 
 export function getCourseObjectives (classId) {
   return classId === 'intro-research' ? introResearchObjectives.courseObjectives : []
+}
+
+/** Program outcomes (full wording) the course supports, as a list. */
+export function getProgramOutcomes (classId) {
+  if (classId !== 'intro-research') return []
+  return Object.entries(introResearchObjectives.programSLOs).map(([key, v]) => ({ key, ...v }))
 }
 
 /** Objectives for one Assignment Help id (e.g. 'ir-methods-draft'), with the supported course objectives expanded. */
