@@ -202,7 +202,7 @@ import { getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
-import { preferredSoftware, setPreferredSoftware } from '../composables/usePreferredSoftware.js'
+import { preferredSoftware, setPreferredSoftware, defaultSoftware } from '../composables/usePreferredSoftware.js'
 import { getClassDisplayName } from '../utils/classDisplayName'
 import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 
@@ -216,7 +216,7 @@ const { selectedClass, fetchClasses } = useClasses()
 const module8Prefs = useModule8Preferences()
 
 // State
-const selectedSoftware = ref('spss')
+const selectedSoftware = ref(defaultSoftware())
 const selectedModule = ref(null)
 const progress = ref({ completed: 0, total: 0, exercises: [] })
 const currentExercise = ref(null)

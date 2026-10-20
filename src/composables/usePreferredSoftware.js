@@ -3,18 +3,25 @@ import { software } from '../data/topics.js'
 
 const STORAGE_KEY = 'preferredSoftware'
 
+// jamovi is the default until the SPSS content is finished; flip DEFAULT_SOFTWARE to 'spss' then.
+// Students who picked a software themselves keep their choice (localStorage).
+const DEFAULT_SOFTWARE = 'jamovi'
+export function defaultSoftware() {
+  return DEFAULT_SOFTWARE
+}
+
 function readFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return 'spss'
-    return software.find(sw => sw.id === raw)?.id || 'spss'
+    if (!raw) return defaultSoftware()
+    return software.find(sw => sw.id === raw)?.id || defaultSoftware()
   } catch {
-    return 'spss'
+    return defaultSoftware()
   }
 }
 
 export const preferredSoftware = ref(
-  typeof window !== 'undefined' ? readFromStorage() : 'spss'
+  typeof window !== 'undefined' ? readFromStorage() : defaultSoftware()
 )
 
 if (typeof window !== 'undefined') {
