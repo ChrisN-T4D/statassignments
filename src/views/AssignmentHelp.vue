@@ -6,6 +6,9 @@
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="help-title">Assignment Help</h1>
         <p class="help-intro">{{ helpIntro }}</p>
+        <p v-if="classId === 'intro-research'" class="help-intro objectives-link">
+          <router-link :to="`/class/${classId}/objectives`">See the course objectives and how each assignment supports them →</router-link>
+        </p>
         <div v-if="classId === 'research-methods'" class="study-plan-banner">
           <div>
             <h2 class="study-plan-banner-title">Capstone worksheets → Study Plan</h2>

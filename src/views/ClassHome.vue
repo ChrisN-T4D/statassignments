@@ -11,6 +11,10 @@
             Due dates, points, and weekly reading pace live in <strong>Canvas</strong>.
             Methods Market is for chapter reading, concept review, and assignment help only.
           </p>
+          <p v-else-if="isIntroResearchClass" class="class-canvas-note">
+            <strong>Start here:</strong> read the <strong>course objectives</strong>, then open a chapter below, read it, and complete
+            <strong>Concept Review</strong>. Each assignment has its own help page. Due dates, points, rubrics, and exams live in <strong>Canvas</strong>.
+          </p>
           <p v-else-if="!isResearchMethodsClass" class="class-canvas-note">
             <strong>Start here:</strong> choose a module below, read the <strong>Topics</strong> lesson, then complete
             <strong>Concept Review</strong> and <strong>Software Practice</strong>.
@@ -25,6 +29,25 @@
               <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
                 Study Plan
               </router-link>
+              <span class="header-links-sep">·</span>
+            </template>
+            <template v-else-if="isIntroResearchClass">
+              <router-link :to="`/class/${classId}/objectives`" class="assignment-help-link">
+                Course objectives
+              </router-link>
+              <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/assignment-help`" class="assignment-help-link">
+                Assignment Help
+              </router-link>
+              <span class="header-links-sep">·</span>
+              <a
+                :href="CANVAS_HOME_URL"
+                target="_blank"
+                rel="noopener"
+                class="assignment-help-link"
+              >
+                Return to Canvas ↗
+              </a>
               <span class="header-links-sep">·</span>
             </template>
             <template v-else-if="!isPsychMethodsClass">
@@ -801,6 +824,11 @@ const classId = computed(() => route.params.classId)
 const isResearchMethodsClass = computed(() => {
   const slug = currentClass.value?.slug || classId.value
   return slug === 'research-methods'
+})
+
+const isIntroResearchClass = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  return slug === 'intro-research'
 })
 
 const isExperimentalClass = computed(() => {

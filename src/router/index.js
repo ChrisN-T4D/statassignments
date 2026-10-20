@@ -20,6 +20,7 @@ import About from '../views/About.vue'
 import ReportIssue from '../views/ReportIssue.vue'
 import AssignmentHelp from '../views/AssignmentHelp.vue'
 import AssignmentHelpDetail from '../views/AssignmentHelpDetail.vue'
+import CourseObjectives from '../views/CourseObjectives.vue'
 import BenchmarkPractice from '../views/BenchmarkPractice.vue'
 import SoftwareGuidesIndex from '../views/SoftwareGuidesIndex.vue'
 import DataAnalysisHelper from '../views/DataAnalysisHelper.vue'
@@ -43,6 +44,13 @@ const routes = [
     path: '/class/:classId',
     name: 'class-home',
     component: ClassHome,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/class/:classId/objectives',
+    name: 'course-objectives',
+    component: CourseObjectives,
     props: true,
     meta: { requiresAuth: true }
   },
