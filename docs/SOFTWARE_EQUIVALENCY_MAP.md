@@ -730,20 +730,6 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 | Excel | BINOM.DIST manual (Excel) | Use BINOM.DIST for exact two-tailed p or describe limitation. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Stata | bitesti (Stata) | `bitesti 100 62 0.5` or `prtesti 100 62 0.5`. | Screenshot, console output, or brief write-up as appropriate for your package. |
 
-## `m7-cohens-d-onesample`
-
-- Module: `module-7` | Topic: `effect-size`
-- Present: `jamovi`, `r`, `spss`, `excel`, `stata`
-- Missing: none
-
-| Software | Title | Canonical method/instruction | Verification checkpoint |
-|---|---|---|---|
-| Jamovi | Calculate and Report Cohen's d | Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen's d value and classify it as small (~0.2), medium (~0.5), or large (~0.8). | Screenshot showing Cohen's d and a sentence classifying the effect size magnitude |
-| R | Cohen's d one-sample (R) | Use `effectsize::cohens_d(x, mu=100)` or manual (mean(x)-mu)/sd(x). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| SPSS | Cohen's d (SPSS) | One-Sample T Test: Options > Effect sizes (Cohen d). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| Excel | Cohen's d (Excel) | Compute d = (AVERAGE-MU)/STDEV.S(range). | Screenshot, console output, or brief write-up as appropriate for your package. |
-| Stata | Cohen's d (Stata) | `esize onewell iq, mu(100)` or manual. | Screenshot, console output, or brief write-up as appropriate for your package. |
-
 ## `m7-compare-alpha-levels`
 
 - Module: `module-7` | Topic: `p-values`
@@ -1293,6 +1279,20 @@ Task-by-task source of truth keyed by `practiceObjectiveKey`.
 | SPSS | Full categorical analysis (SPSS) | SPSS Crosstabs pipeline with full options. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Excel | Full categorical analysis (Excel) | Excel hybrid workflow with written assumptions. | Screenshot, console output, or brief write-up as appropriate for your package. |
 | Stata | Full categorical analysis (Stata) | Stata tabulate + assoc measures + write-up. | Screenshot, console output, or brief write-up as appropriate for your package. |
+
+## `m8-cohens-d-onesample`
+
+- Module: `module-8` | Chapter: `chapter-11` | Topic: `effect-size`
+- Present: `jamovi`, `r`, `spss`, `excel`, `stata`
+- Missing: none
+
+| Software | Title | Canonical method/instruction | Verification checkpoint |
+|---|---|---|---|
+| Jamovi | Calculate and Report Cohen's d | Using <strong>personality_data.csv</strong> from Tools, run a one-sample t-test. Enable "Effect size" in the options. Report the Cohen's d value and classify it as small (~0.2), medium (~0.5), or large (~0.8). | Screenshot showing Cohen's d and a sentence classifying the effect size magnitude |
+| R | Cohen's d one-sample (R) | Use `effectsize::cohens_d(x, mu=100)` or manual (mean(x)-mu)/sd(x). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| SPSS | Cohen's d (SPSS) | One-Sample T Test: Options > Effect sizes (Cohen d). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| Excel | Cohen's d (Excel) | Compute d = (AVERAGE-MU)/STDEV.S(range). | Screenshot, console output, or brief write-up as appropriate for your package. |
+| Stata | Cohen's d (Stata) | `esize onewell iq, mu(100)` or manual. | Screenshot, console output, or brief write-up as appropriate for your package. |
 
 ## `m8-correlation-interpret`
 

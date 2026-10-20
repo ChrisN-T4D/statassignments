@@ -6,6 +6,7 @@ import {
 } from '../src/lib/conceptReviewSlipStore.js'
 import {
   eligibleObjectives,
+  objectiveBankFullyCorrect,
   onlineReviewComplete,
   pickNextConceptReviewQuestion,
   contentHybridObjectivesMissingItems
@@ -132,7 +133,7 @@ if (unlockOneItem.complete) {
   process.exit(1)
 }
 
-const m1All = Array.from({ length: 21 }, (_, i) => `stats-m1-q${i + 1}`)
+const m1All = Array.from({ length: 23 }, (_, i) => `stats-m1-q${i + 1}`)
 const unlockExhausted = onlineReviewComplete({
   moduleId: 'stats-module-1',
   answeredIds: m1All,
@@ -171,6 +172,48 @@ for (let n = 1; n <= 8; n++) {
 }
 if (missing.length) {
   console.error('content/hybrid objectives missing 2 mapped items', missing)
+  process.exit(1)
+}
+
+// Small-bank fallback: an objective whose mapped items are ALL answered
+// correctly is satisfied even when BKT pL has not reached MASTERY_PL.
+// M1-O3 maps to 4 items (q18, q19, q22, q23): answering all four must
+// complete the objective despite a low pL.
+const fallbackComplete = onlineReviewComplete({
+  moduleId: 'stats-module-1',
+  answeredIds: [...m1FloorIds, 'stats-m1-q22', 'stats-m1-q23'],
+  pLByObjective: { ...m1Mastered, 'M1-O3': 0.4 }
+})
+if (!fallbackComplete.complete || !fallbackComplete.masteryOk) {
+  console.error('small-bank fallback should satisfy fully-corrected objective', fallbackComplete)
+  process.exit(1)
+}
+
+// The fallback requires EVERY mapped item: one unanswered mapped item leaves
+// the objective unsatisfied at low pL, even though q18/q19/q22 are correct.
+const fallbackPartial = onlineReviewComplete({
+  moduleId: 'stats-module-1',
+  answeredIds: [...m1FloorIds, 'stats-m1-q22'],
+  pLByObjective: { ...m1Mastered, 'M1-O3': 0.4 }
+})
+if (fallbackPartial.complete) {
+  console.error('objective with an un-answered mapped item must not use the fallback', fallbackPartial)
+  process.exit(1)
+}
+
+const bankOk = objectiveBankFullyCorrect('M1-O3', [...m1FloorIds, 'stats-m1-q22', 'stats-m1-q23'])
+if (!bankOk) {
+  console.error('objectiveBankFullyCorrect should be true when all mapped items are correct')
+  process.exit(1)
+}
+const bankNotOk = objectiveBankFullyCorrect('M1-O3', ['stats-m1-q18'])
+if (bankNotOk) {
+  console.error('objectiveBankFullyCorrect should be false when a mapped item is unanswered')
+  process.exit(1)
+}
+const bankDefaultScope = objectiveBankFullyCorrect('M5-O3', ['stats-m5-q17', 'stats-m5-q18', 'stats-m5-q31', 'stats-m5-q32'])
+if (!bankDefaultScope) {
+  console.error('objectiveBankFullyCorrect without scope should use the full mapped bank')
   process.exit(1)
 }
 

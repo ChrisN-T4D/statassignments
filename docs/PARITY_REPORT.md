@@ -2,8 +2,8 @@
 
 - Objective keys checked (keyed): **127**
 - Practice parity failures: **0**
-- Concept items with software signals: **19**
-- Concept items with software signals but no patch: **9**
+- Concept items with software signals: **22**
+- Concept items with software signals but no patch: **12**
 
 ## Practice objective parity
 
@@ -62,7 +62,6 @@
 | `m6-sampling-methods` | `module-6` | jamovi | r, spss, excel, stata | jamovi, r, spss, excel, stata | PASS |
 | `m7-apa-results-onesample` | `module-7` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m7-binomial-proportion-test` | `module-7` | jamovi, r, spss, excel, stata | - | - | PASS |
-| `m7-cohens-d-onesample` | `module-7` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m7-compare-alpha-levels` | `module-7` | - | jamovi, r, spss, excel, stata | jamovi, r, spss, excel, stata | PASS |
 | `m7-interpret-p-value-output` | `module-7` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m7-multiple-comparisons` | `module-7` | - | jamovi, r, spss, excel, stata | jamovi, r, spss, excel, stata | PASS |
@@ -106,6 +105,7 @@
 | `m8-chisq-mcnemar-vs-independence` | `module-8` | - | jamovi, r, spss, excel, stata | jamovi, r, spss, excel, stata | PASS |
 | `m8-chisq-standardized-residuals` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m8-chisq-survey-analysis` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
+| `m8-cohens-d-onesample` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m8-correlation-interpret` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m8-correlation-pearson-nav` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
 | `m8-independent-t-report` | `module-8` | jamovi, r, spss, excel, stata | - | - | PASS |
@@ -146,6 +146,9 @@
 - `stats-m3-q13`: Before importing a CSV into jamovi, why should missing values be coded with a placeholder such as 99 or -9999?
 - `stats-m3-q14`: What is the difference between exporting changed data and saving as a jamovi (.omv) file?
 - `stats-m3-q15`: Why is recording your screen while conducting statistical analyses useful?
+- `stats-m3-q16`: In jamovi, what is the main purpose of creating a z-score computed variable?
+- `stats-m3-q17`: In jamovi's computed variables dialog, what does MEAN(var1, var2, var3) create for each row?
+- `stats-m3-q18`: Which are appropriate uses of computed variables in jamovi? (Select all that apply)
 - `stats-m5-q3`: When might you apply a log transform to a variable in jamovi?
 - `stats-m5-q15`: You want to compare distributions across several groups without overwhelming the viewer. What does the module recommend?
 

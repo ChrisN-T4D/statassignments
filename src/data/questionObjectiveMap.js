@@ -32,6 +32,8 @@ export const questionObjectiveMap = {
   'stats-m1-q17': ['M1-O2'],
   'stats-m1-q18': ['M1-O3'],
   'stats-m1-q19': ['M1-O3'],
+  'stats-m1-q22': ['M1-O3'],
+  'stats-m1-q23': ['M1-O3'],
   'stats-m1-q20': ['M1-O4'],
   'stats-m1-q21': ['M1-O4'],
 
@@ -57,6 +59,8 @@ export const questionObjectiveMap = {
   'stats-m2-q17': ['M2-O2', 'M2-O4'],
   'stats-m2-q18': ['M2-O1'],
   'stats-m2-q19': ['M2-O1'],
+  'stats-m2-q20': ['M2-O1'],
+  'stats-m2-q21': ['M2-O1'],
 
   // ============================================================
   // Module 3: Software Basics (Jamovi)
@@ -123,6 +127,8 @@ export const questionObjectiveMap = {
   'stats-m5-q16': ['M5-O2'],
   'stats-m5-q17': ['M5-O3'],
   'stats-m5-q18': ['M5-O3'],
+  'stats-m5-q31': ['M5-O3'],
+  'stats-m5-q32': ['M5-O3'],
   'stats-m5-q19': ['M5-O4'],
   'stats-m5-q20': ['M5-O4'],
   'stats-m5-q21': ['M5-O4'],
