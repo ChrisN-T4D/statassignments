@@ -44,7 +44,7 @@ const FALLBACK_CLASSES = [
     id: 'intro-research',
     name: 'Intro to Research',
     short_name: 'Intro',
-    description: 'Foundational concepts in psychological research and scientific inquiry.',
+    description: 'PSYC 5033: build an individual research proposal, from question and literature review through methods, ethics, and analysis plan.',
     color: '#f59e0b',
     icon: '📚',
     topics: ['descriptive-stats', 'visualizations', 'probability'],
