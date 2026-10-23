@@ -108,6 +108,14 @@
             :state="rmSemesterState"
             @select-week="rmSelectWeek"
           />
+          <button
+            v-if="rmSemesterState === 'during' && rmSelectedWeek !== rmCurrentWeek"
+            type="button"
+            class="rm-sem-today"
+            @click="rmSelectWeek(rmCurrentWeek)"
+          >
+            Jump to this week (week {{ rmCurrentWeek + 1 }})
+          </button>
           <nav class="rm-sem-links" aria-label="Course resources">
             <router-link :to="`/class/${classId}/assignment-help`">Assignment Help</router-link>
             <router-link :to="`/class/${classId}/study-plan`">Study Plan</router-link>
@@ -2032,6 +2040,19 @@ watch(selectedModuleId, id => {
   cursor: pointer;
 }
 .rm-sem-seg button[aria-pressed='true'] { background: var(--primary, #dc2626); color: #fff; }
+.rm-sem-today {
+  margin: 0.5rem 0 0;
+  padding: 0.35rem 0.85rem;
+  border: 2px solid var(--primary, #dc2626);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--primary, #dc2626);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rm-sem-today:hover { background: var(--primary, #dc2626); color: #fff; }
 .rm-sem-seg small { margin-left: 0.375rem; font-size: 0.7rem; opacity: 0.85; }
 
 .rm-sem-links {

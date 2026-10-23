@@ -23,6 +23,18 @@
       </div>
 
       <div v-else class="classes-section">
+        <router-link
+          v-for="c in continueCards"
+          :key="c.slug"
+          :to="c.summary.next?.to || `/class/${c.slug}`"
+          class="continue-card"
+        >
+          <div class="continue-eyebrow">Continue · {{ c.name }} · Week {{ c.summary.weekNumber }}</div>
+          <div class="continue-title">{{ c.summary.title }}</div>
+          <div v-if="c.summary.due" class="continue-due">Due {{ formatDue(c.summary.due.due) }}: {{ c.summary.due.label }}</div>
+          <div v-if="c.summary.next" class="continue-next">Next up: {{ c.summary.next.label }} →</div>
+        </router-link>
+
         <h2>Select Your Course</h2>
         <p class="section-subtitle">Choose your course to access relevant topics and practice exercises.</p>
 
@@ -74,19 +86,47 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
 import { getClassDisplayName } from '../utils/classDisplayName'
+import { getResearchMethodsSchedule, parseScheduleDate } from '../data/researchMethodsSchedule'
+import { continueSummary } from '../lib/continueSummary'
 
 const route = useRoute()
+const router = useRouter()
 const { isAuthenticated, user } = useAuth()
 const { classes, loading, fetchClasses, selectClass } = useClasses()
 
 const isStudent = computed(() => {
   const role = user.value?.role
   return !role || role === 'student'
+})
+
+// A "Continue" card for each course that has a week-by-week schedule running now
+const continueCards = computed(() => {
+  if (!isStudent.value) return []
+  return classes.value.flatMap((cls) => {
+    const slug = cls.slug || cls.id
+    const schedule = getResearchMethodsSchedule(slug)
+    const summary = schedule && continueSummary(schedule, slug)
+    return summary ? [{ slug, name: getClassDisplayName(cls), summary }] : []
+  })
+})
+
+function formatDue(iso) {
+  return parseScheduleDate(iso).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+}
+
+// One course means nothing to pick: go straight to it (?pick=1 keeps the picker)
+watch([loading, classes], () => {
+  if (!isAuthenticated.value || loading.value || !isStudent.value) return
+  if (route.query.notice || route.query.pick) return
+  if (classes.value.length === 1) {
+    const cls = classes.value[0]
+    router.replace(`/class/${cls.slug || cls.id}`)
+  }
 })
 
 onMounted(() => {
@@ -128,6 +168,46 @@ onMounted(() => {
 
 .classes-section {
   margin-bottom: 3rem;
+}
+
+.continue-card {
+  display: block;
+  margin-bottom: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-card);
+  border: 2px solid var(--primary);
+  border-radius: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.continue-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.continue-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.continue-title {
+  margin: 0.25rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.continue-due {
+  color: var(--text-secondary);
+}
+
+.continue-next {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--primary);
 }
 
 .classes-section h2 {

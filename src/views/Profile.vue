@@ -11,7 +11,7 @@
         <div class="page-header">
           <div>
             <h1>Your Progress</h1>
-            <p>Track your learning journey through introductory statistics.</p>
+            <p>Your account, topics completed and practice results across your courses.</p>
           </div>
           <div class="header-actions">
             <router-link v-if="user?.role === 'admin'" to="/admin" class="btn-primary">

@@ -80,7 +80,7 @@ Done when: from any Research Methods page a student can get back to their week a
 
 Done when: changing a due date in one file changes it everywhere.
 
-### Phase 3 - "Today" entry points (S-M)
+### Phase 3 - "Today" entry points (S-M) - DONE 2026-10-23 (code; not yet checked in the browser)
 
 - Home: a signed-in student with **one course goes straight to it** (decided). A student with several courses sees a **Continue** card ("Week 10: Measures draft - due Fri Oct 23, next up: ...") above the course picker.
 - Class page and Menu: a **This week** shortcut that jumps the timeline back to the current week after browsing.

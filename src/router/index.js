@@ -110,13 +110,7 @@ const routes = [
     props: true,
     meta: { requiresAuth: true }
   },
-  {
-    path: '/class/:classId/topics',
-    name: 'class-topics',
-    component: Home, // Reuse Home with class filter for now
-    props: true,
-    meta: { requiresAuth: true }
-  },
+  { path: '/class/:classId/topics', redirect: (to) => ({ path: `/class/${to.params.classId}`, query: to.query }) },
   {
     path: '/class/:classId/practice',
     name: 'class-practice',
