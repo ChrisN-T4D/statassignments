@@ -617,6 +617,7 @@
 import { ref, computed, onMounted } from 'vue'
 import MeanCompareBar from './ExperimentalSamplingSimulationMeanBar.vue'
 import SamplingCompareLab from './sampling/SamplingCompareLab.vue'
+import { sampleSRSIndices } from '../lib/samplingSim.js'
 
 const props = defineProps({
   /** When set (e.g. from Class Home), hide inner tabs and lock to one panel */
@@ -636,6 +637,12 @@ const effectiveLabTab = computed(() => props.embedTab ?? activeConceptLabTab.val
 /** Superpopulation for assignment mini-lab (built first; pool is an SRS sorted by sign-up). */
 const assignmentSuperPopN = ref(10000)
 const assignmentSuperPop = ref([])
+/** Study pool: a simple random sample drawn from the superpopulation for the random-assignment tab. */
+const assignmentPool = ref([])
+/** The pool split two ways (Workshop = a, Control = b) under each assignment rule. */
+const randomGroups = ref({ a: [], b: [] })
+const seqGroups = ref({ a: [], b: [] })
+const blockedGroups = ref({ a: [], b: [] })
 
 /** First N people of superpopulation by sign-up, with W/C maps for three rules (preview below superpopulation stats). */
 const SUPERPOP_VIZ_N = 200

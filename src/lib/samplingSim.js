@@ -178,7 +178,7 @@ export function allocateProportional(counts, n) {
   return base
 }
 
-function sampleSRSIndices(N, n) {
+export function sampleSRSIndices(N, n) {
   const idx = new Set()
   while (idx.size < n) {
     idx.add(Math.floor(Math.random() * N))
