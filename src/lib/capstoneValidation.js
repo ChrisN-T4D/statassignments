@@ -12,6 +12,7 @@ import {
   ARTICLE_REVIEW_CANVAS_RANGE_LABEL
 } from '../data/capstoneArticleReviewWorksheet.js'
 import { PHASE3_PARTS, elevatorSpeechWordCount } from '../data/capstonePhase3Worksheet.js'
+import { MEASURES_PATHWAYS, measuresFieldsForPathway } from '../data/capstoneMeasuresDraftWorksheet.js'
 import {
   PHASE4_PARTS,
   PHASE4_PATHWAYS,
@@ -96,6 +97,8 @@ export function buildExportText (sectionId, project) {
       return buildPhase3Export(project)
     case 'phase-4':
       return buildPhase4Export(project)
+    case 'measures-draft':
+      return buildMeasuresDraftExport(project)
     default:
       return ''
   }
@@ -193,3 +196,50 @@ function buildPhase4Export (project) {
 }
 
 export { elevatorSpeechWordCount, compileLitReviewOutline }
+
+export function countMeasuresDraftProgress (project) {
+  const picked = project?.phase4?.chosenPathwayId ?? ''
+  const chosen = MEASURES_PATHWAYS[picked] ? picked : ''
+  if (!chosen) {
+    return { chosen: false, filled: 0, total: 0, requiredFilled: 0, requiredTotal: 0, ready: false }
+  }
+  const fields = measuresFieldsForPathway(chosen)
+  const draft = project?.measuresDraft ?? {}
+  let filled = 0
+  let requiredTotal = 0
+  let requiredFilled = 0
+  for (const field of fields) {
+    const val = (draft[field.id] ?? '').trim()
+    if (val) {
+      filled++
+      if (field.required) {
+        requiredFilled++
+      }
+    }
+    if (field.required) {
+      requiredTotal++
+    }
+  }
+  const ready = requiredTotal > 0 && requiredFilled === requiredTotal
+  return { chosen: true, filled, total: fields.length, requiredFilled, requiredTotal, ready }
+}
+
+function buildMeasuresDraftExport (project) {
+  const picked = project?.phase4?.chosenPathwayId ?? ''
+  const chosen = MEASURES_PATHWAYS[picked] ? picked : ''
+  const lines = [sectionHeader('Measures Draft')]
+  if (!chosen) {
+    lines.push('(Choose your pathway in Method Choice first.)')
+    return lines.join('\n').trim()
+  }
+  const phase4 = project.phase4 ?? {}
+  const draft = project.measuresDraft ?? {}
+  lines.push(fieldBlock('Pathway chosen:', MEASURES_PATHWAYS[chosen].label))
+  lines.push(fieldBlock('Independent Variable (IV), operational definition:', phase4.ivOperational))
+  lines.push(fieldBlock('Dependent Variable (DV), operational definition:', phase4.dvOperational))
+  lines.push(`\n${MEASURES_PATHWAYS[chosen].heading}\n`)
+  for (const field of measuresFieldsForPathway(chosen)) {
+    lines.push(fieldBlock(field.exportLabel, draft[field.id]))
+  }
+  return lines.join('\n').trim()
+}

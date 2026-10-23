@@ -1,5 +1,5 @@
 /** Summarize a student's progress on a Study Plan section as short text. */
-import { countArticleCards, countLitReviewOutlineProgressForProject, countPhase3Progress, countPhase4Progress } from './capstoneValidation.js'
+import { countArticleCards, countLitReviewOutlineProgressForProject, countPhase3Progress, countPhase4Progress, countMeasuresDraftProgress } from './capstoneValidation.js'
 
 export function studyPlanSectionProgress (project, sectionId) {
   switch (sectionId) {
@@ -25,6 +25,12 @@ export function studyPlanSectionProgress (project, sectionId) {
         return `A–B ${p.recapFilled}/${p.recapTotal} · ${p.pathsExplored}/${p.pathsTotal} paths`
       }
       return 'Not started'
+    }
+    case 'measures-draft': {
+      const p = countMeasuresDraftProgress(project)
+      if (!p.chosen) return 'Choose a pathway in Method Choice first'
+      if (p.ready) return `${p.filled}/${p.total} parts · ready to export`
+      return p.filled ? `${p.filled}/${p.total} parts` : 'Not started'
     }
     default:
       return ''

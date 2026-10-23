@@ -100,7 +100,8 @@ const FALL = {
       start: '2026-10-19',
       title: 'Measures draft',
       items: [
-        { role: 'do', kind: 'task', label: 'Measures draft', due: '2026-10-23' },
+        { role: 'do', kind: 'study-plan', sectionId: 'measures-draft', label: 'Measures draft', due: '2026-10-23', note: 'Build your survey or protocol from the operational definitions you chose in Method Choice.' },
+        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-measures-draft', label: 'Measures draft help' },
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-4', label: 'Revisit Ch. 4 Measurement' }
       ]
     },

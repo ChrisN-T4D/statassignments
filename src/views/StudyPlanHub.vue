@@ -80,7 +80,7 @@ const { project, updateProject, lastSavedAt, isGuestDraft } = useCapstoneProject
 
 /** Sections with their schedule due date (guidance; Canvas is official). */
 const sections = computed(() =>
-  STUDY_PLAN_SECTIONS.map((section) => {
+  STUDY_PLAN_SECTIONS.filter((section) => !section.retired).map((section) => {
     const due = studyPlanDue(section.id)
     return { ...section, due, dueText: formatStudyPlanDue(due) }
   })

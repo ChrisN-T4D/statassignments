@@ -159,18 +159,20 @@ Not yet done: Benchmark practice and the Jamovi/Excel guide index pages do not h
 | 7 | AI peer review arrives | - | - | OK |
 | 8 | Lit review final (+ optional sampling lab) | - | Literature Review Final / References | OK |
 | 9 | **Method choice** (week of Oct 12) | **Method Choice** (compare four pathways, choose one; was Phase 4) | **Method Choice Worksheet (Pathway Comparison)** + four path guides | Fixed |
-| 10 | Measures draft (Oct 23) | none | none | **Open**: no worksheet yet (see below) |
+| 10 | **Measures draft** (Oct 23) | **Measures Draft** (new; builds on Method Choice) | **Measures Draft** (new help page) | Fixed |
 | 11 | IRB first draft | - | IRB First Draft for Feedback; HRT lessons 1-3 | OK |
 | 12 | Methods section | - | Methods Section | OK |
 | 13 | IRB submission | - | IRB Final Draft for IRB | OK (schedule says "submission", help says "final draft"; pick one) |
 | 14 | IRB processing log | - | - | OK |
 | 16 | IRB status update | - | IRB Status Update and Detailed Plan | OK |
 
+**Resolved 2026-10-22 (Chris)**
+1. **Measures Draft (week 10)** now flows from Method Choice: the Study Plan section carries in the chosen pathway and the IV and DV operational definitions, then asks for the survey, protocol, observation plan or data plan that matches the pathway (fields in `capstoneMeasuresDraftWorksheet.js`). Export and progress are wired; the help page is `rm-measures-draft`.
+2. **Elevator Speech** is "not super necessary right now": it is retired (`retired: true`), hidden from the Study Plan hub and the Assignment Help index, and still opens by direct link. The lit review final tip no longer points to it.
+
 **Still open**
-1. **Measures draft (week 10) has no worksheet.** The Method Choice worksheet already contains it: its Part B defines the IV and DV conceptually and operationally. It could be split out into its own Study Plan section due Oct 23.
-2. **Elevator Speech has no week.** Its section and help page still exist (renamed), but the schedule no longer schedules it. Decide whether it joins another week (for example with the final lit review) or retires.
-3. **Study Plan ids** (`phase-3`, `phase-4`) still appear in URLs and saved data. Titles are renamed; the ids are kept so existing links and saved drafts keep working.
-4. **Remaining "Phase N" wording** (about 60 mentions) sits inside the worksheet bodies and walkthroughs (`Phase4Section.vue`, `LitReviewOutlineSection.vue`, `capstonePhase*.js`) and in Canvas-vocabulary labels in `researchMethodsCourseNav.js` and `researchMethodsTextbook.js` (`canvasPhases` keys). They are left alone: some are matching keys, and the worksheets need a content pass with the instructor.
+1. **Study Plan ids** (`phase-3`, `phase-4`) still appear in URLs and saved data. Titles are renamed; the ids are kept so existing links and saved drafts keep working.
+2. **Remaining "Phase N" wording** (about 60 mentions) sits inside the worksheet bodies and walkthroughs (`Phase4Section.vue`, `LitReviewOutlineSection.vue`, `capstonePhase*.js`) and in Canvas-vocabulary labels in `researchMethodsCourseNav.js` and `researchMethodsTextbook.js` (`canvasPhases` keys). They are left alone: some are matching keys, and the worksheets need a content pass with the instructor.
 
 ## Suggested order
 

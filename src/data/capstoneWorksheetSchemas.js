@@ -6,6 +6,7 @@
 import { emptyArticleReviewSection } from './capstoneArticleReviewWorksheet.js'
 import { emptyPhase3 } from './capstonePhase3Worksheet.js'
 import { emptyPhase4 } from './capstonePhase4Worksheet.js'
+import { emptyMeasuresDraft } from './capstoneMeasuresDraftWorksheet.js'
 import { emptyLitReviewOutline } from './capstoneLitReviewOutlineWorksheet.js'
 
 export const STUDY_PLAN_SECTIONS = [
@@ -27,6 +28,7 @@ export const STUDY_PLAN_SECTIONS = [
     id: 'phase-3',
     title: 'Elevator Speech',
     shortTitle: 'Elevator Speech',
+    retired: true, // not used this term; kept so saved drafts and links still open
     description: 'Distill your lit review: what we know, the gap, and your study pitch.',
     submitNote: 'Submit in Canvas.'
   },
@@ -35,6 +37,13 @@ export const STUDY_PLAN_SECTIONS = [
     title: 'Method Choice',
     shortTitle: 'Method Choice',
     description: 'Compare four data-collection pathways and choose one.',
+    submitNote: 'Submit in Canvas.'
+  },
+  {
+    id: 'measures-draft',
+    title: 'Measures Draft',
+    shortTitle: 'Measures Draft',
+    description: 'Turn the operational definitions you chose into the survey or protocol you will use.',
     submitNote: 'Submit in Canvas.'
   }
 ]
@@ -46,7 +55,8 @@ export function emptyCapstoneProject () {
     articleReview: emptyArticleReviewSection(),
     litReviewOutline: emptyLitReviewOutline(),
     phase3: emptyPhase3(),
-    phase4: emptyPhase4()
+    phase4: emptyPhase4(),
+    measuresDraft: emptyMeasuresDraft()
   }
 }
 

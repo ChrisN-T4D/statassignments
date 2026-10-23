@@ -14,7 +14,7 @@
           <div>
             <h2 class="study-plan-banner-title">Capstone worksheets → Study Plan</h2>
             <p class="study-plan-banner-desc">
-              Article review, lit review outline, elevator speech, and method choice are drafted in Study Plan, then exported to Canvas.
+              Article review, lit review outline, method choice, and measures draft are drafted in Study Plan, then exported to Canvas.
             </p>
           </div>
           <router-link :to="`/class/${classId}/study-plan`" class="study-plan-banner-btn">
@@ -50,7 +50,7 @@
           </h2>
 
           <ul class="assignment-links">
-            <li v-for="a in block.assignments" :key="a.id" class="assignment-row">
+            <li v-for="a in block.assignments.filter((item) => !item.retired)" :key="a.id" class="assignment-row">
               <router-link
                 :to="`/class/${classId}/assignment-help/${a.id}`"
                 class="assignment-link"

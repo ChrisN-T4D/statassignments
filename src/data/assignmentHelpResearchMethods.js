@@ -140,7 +140,7 @@ export const assignmentHelpResearchMethods = [
           'Complete the Pressbooks chapters Canvas assigns during revision (often Ch. 11, 8, 3, 9), one full chapter at a time.',
           'In the lit review body, describe prior methods precisely (design, sample, measures), not just findings.',
           'Synthesize themes across studies; do not write one paragraph per article in isolation.',
-          'End with a clear gap your study will address; that gap feeds directly into your elevator speech and method choice worksheets.',
+          'End with a clear gap your study will address; that gap feeds directly into your method choice worksheet.',
           'Use the Literature Review Checklist in Canvas.'
         ],
         practiceLinks: [...CH.litReview, 'rm-chapter-8', 'rm-chapter-3', 'rm-chapter-9'],
@@ -158,6 +158,7 @@ export const assignmentHelpResearchMethods = [
         id: 'rm-phase-3-worksheet',
         name: 'Elevator Speech Worksheet',
         type: 'assignment',
+        retired: true, // not used this term; the page still opens by direct link
         tips: [
           'The elevator speech is a 1–2 minute spiel about your research, what the field knows, the gap, and how your study fits.',
           'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
@@ -183,6 +184,22 @@ export const assignmentHelpResearchMethods = [
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
         studyPlanSection: 'phase-4',
         getHelp: 'Due date is in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
+      },
+      {
+        id: 'rm-measures-draft',
+        name: 'Measures Draft',
+        type: 'assignment',
+        tips: [
+          'Start from your operational definitions and make every item or step trace back to them.',
+          'Use a validated scale where you can and cite the source.',
+          'Write it so another researcher could run your study without asking you questions.',
+          'Check each part against your chosen pathway\'s guide page (Path 1 to 4).',
+          'Keep a list of anything participants must be told for consent, because it will go in your IRB draft.',
+          'Read Chapter 4 on measurement to check your scales and how they are scored.'
+        ],
+        practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
+        studyPlanSection: 'measures-draft',
+        getHelp: 'Stuck turning a definition into an item or a step? Bring your operational definitions to office hours, and use the guide for your chosen pathway. Due date and submission are in Canvas.'
       }
     ]
   },
