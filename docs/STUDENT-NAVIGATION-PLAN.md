@@ -101,7 +101,7 @@ Done when: a student who opens Assignment Help sees their current assignment fir
 
 Decided order for a stuck student: **1. self-serve FAQ / Stuck? page, 2. email the professor, 3. a discussion board where other students can help.** Every page's "Need help?" link opens the ladder with that page's context.
 
-**5a. Stuck? page and professor email (M)**
+**5a. Stuck? page and professor email (M)** - DONE 2026-10-23: `/class/:classId/stuck` (`src/views/Stuck.vue`), mailto to clneu@nwosu.edu built by `src/lib/helpEmail.js`; reached from the week bar's "Need help?", the Assignment Help detail "Still stuck?" link, and the Menu "I'm stuck". Menu "Report issue" is now "Something is broken". Not done: pre-filtered FAQ beyond each assignment's own tips; the 'Ask the class' step waits for 5b.
 - One **Stuck?** page per course, reached from every "Need help?" link. Top to bottom: search/FAQ for this assignment or chapter, then "Still stuck? Email your professor", then "Ask the class" (the board, once it exists).
 - FAQ entries are tied to assignments, chapters and software steps, so the page opens pre-filtered to wherever the student came from (reuse the existing "Stuck? Get help" content on Assignment Help detail pages as the first FAQ entries).
 - The email button is a prefilled `mailto:` carrying course, week, assignment and page so the professor sees the context. No new backend.

@@ -49,7 +49,8 @@
         </router-link>
         <router-link v-if="isAdmin" to="/admin" class="dropdown-item" role="menuitem" @click="close">Admin</router-link>
         <router-link v-if="isInstructor" to="/instructor" class="dropdown-item" role="menuitem" @click="close">Instructor Dashboard</router-link>
-        <router-link v-if="isAuthenticated" to="/report-issue" class="dropdown-item" role="menuitem" @click="close">Report issue</router-link>
+        <router-link v-if="selectedClass" :to="`/class/${selectedClassId}/stuck`" class="dropdown-item" role="menuitem" @click="close">I'm stuck</router-link>
+        <router-link v-if="isAuthenticated" to="/report-issue" class="dropdown-item" role="menuitem" @click="close">Something is broken</router-link>
         <router-link v-if="isAuthenticated" to="/profile" class="dropdown-item" role="menuitem" @click="close">Profile</router-link>
         <template v-if="isAuthenticated">
           <button type="button" class="dropdown-item dropdown-item-action" role="menuitem" @click="handleSignOut">

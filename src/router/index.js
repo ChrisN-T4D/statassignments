@@ -12,6 +12,7 @@ import Profile from '../views/Profile.vue'
 import ClaimProfile from '../views/ClaimProfile.vue'
 import InstructorDashboard from '../views/InstructorDashboard.vue'
 import ClassHome from '../views/ClassHome.vue'
+import Stuck from '../views/Stuck.vue'
 import SoftwareLesson from '../views/SoftwareLesson.vue'
 import BKTTester from '../components/BKTTester.vue'
 import Admin from '../views/Admin.vue'
@@ -51,6 +52,13 @@ const routes = [
     path: '/class/:classId/objectives',
     name: 'course-objectives',
     component: CourseObjectives,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/class/:classId/stuck',
+    name: 'stuck',
+    component: Stuck,
     props: true,
     meta: { requiresAuth: true }
   },

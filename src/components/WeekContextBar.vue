@@ -2,7 +2,7 @@
   <aside v-if="loc" class="wcb" aria-label="Where you are in the course">
     <div class="wcb-top">
       <router-link :to="weekLink" class="wcb-week">← Week {{ loc.weekIndex + 1 }} · {{ week.title }}</router-link>
-      <router-link :to="help.to" class="wcb-help">Need help? {{ help.label }}</router-link>
+      <router-link :to="help" class="wcb-help">Need help?</router-link>
     </div>
 
     <ol class="wcb-steps">
@@ -127,12 +127,15 @@ const next = computed(() => {
   return all[currentIndex.value + 1] || null
 })
 
-/** This week's assignment-help page, unless you are already on it; otherwise the general help page. */
+/** The Stuck? page, opened on this page's assignment (or this week's help page) with the week and where the student was. */
 const help = computed(() => {
-  const item = week.value.items.find((it) => it.kind === 'assignment-help' && !itemMatches(it, props.target))
-  return item
-    ? { to: itemLink(item), label: item.label }
-    : { to: `/class/${props.classSlug}/assignment-help`, label: 'Assignment help' }
+  const own = props.target?.kind === 'assignment-help' ? props.target.id : null
+  const item = week.value.items.find((it) => it.kind === 'assignment-help')
+  const topic = own || item?.assignmentId
+  return {
+    path: `/class/${props.classSlug}/stuck`,
+    query: { ...(topic ? { topic } : {}), from: ref.value, page: route.fullPath }
+  }
 })
 
 function formatDate(iso) {

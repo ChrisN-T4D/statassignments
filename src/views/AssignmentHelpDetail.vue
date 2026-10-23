@@ -133,6 +133,12 @@
           <div class="section get-help-section">
             <h2 class="section-title">Stuck? Get help</h2>
             <p class="get-help-text">{{ assignment.getHelp }}</p>
+            <router-link
+              :to="{ path: `/class/${classId}/stuck`, query: { topic: assignmentId, ...($route.query.from ? { from: $route.query.from } : {}), page: $route.fullPath } }"
+              class="stuck-cta"
+            >
+              Still stuck? Get more help →
+            </router-link>
           </div>
         </article>
       </template>
@@ -538,5 +544,16 @@ function formatTopicId (id) {
 
 .not-found p {
   color: var(--text-secondary);
+}
+.stuck-cta {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stuck-cta:hover {
+  text-decoration: underline;
 }
 </style>
