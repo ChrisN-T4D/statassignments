@@ -146,27 +146,31 @@ Not yet done: Benchmark practice and the Jamovi/Excel guide index pages do not h
 
 ## Fall week-by-week content check (2026-10-22)
 
-"Phase N" is retired vocabulary; the check compares what each week's items are called in the schedule, the Study Plan and Assignment Help.
+"Phase N" is retired vocabulary. Each fall week was compared across the schedule, the Study Plan and Assignment Help. Decisions by Chris are applied; what is left is listed after the table.
 
-| Week | Schedule | Study Plan section | Assignment Help title | Verdict |
+| Week | Schedule | Study Plan section | Assignment Help | Status |
 |---|---|---|---|---|
-| 1 | Syllabus acknowledgment | - | Syllabus Acknowledgement | OK (spelling only) |
-| 2 | Choose groups; help "Phase 1 workshop" | - | How to Choose Groups; Phase 1 Workshop | Drop "Phase 1" from the label and title (what the workshop does: broad interest to a narrow, researchable focus) |
-| 3 | Article Review (Sep 4) | Article Review (6+ articles, problem statement, early research questions) | Article Review and Problem Statement | Name now consistent. Open: is the problem statement due Sep 4 with the articles, or with Theory selection? |
-| 4 | Theory selection (Sep 11) | none | none | Gap: nothing in Methods Market supports this deliverable |
-| 5 | Lit review outline (Sep 18) | Lit Review Outline | none | OK (no help page) |
+| 1 | Syllabus acknowledgment | - | Syllabus Acknowledgement | OK |
+| 2 | Choose groups; Topic workshop | - | How to Choose Groups; **Topic Workshop** (was Phase 1 Workshop) | Fixed |
+| 3 | **Article Review** (Sep 4; was "Article selection") | Article Review, including the problem statement and early research questions | Article Review and Problem Statement | Fixed. Problem statement stays with Article Review |
+| 4 | Theory selection (Sep 11) | - | **Theory Selection** (new help page) | Fixed. Deliverable: a one-page paper on what the student understands about their theory and why it applies to their topic |
+| 5 | Lit review outline (Sep 18) | Lit Review Outline | - | OK |
 | 6 | Lit review draft 1 | - | Literature Review Draft 1 | OK |
-| 7 | AI peer review arrives | - | - | OK (task) |
+| 7 | AI peer review arrives | - | - | OK |
 | 8 | Lit review final (+ optional sampling lab) | - | Literature Review Final / References | OK |
-| 9 | Method choice (Phase 3) | "Phase 3: Elevator Speech" (what we know, the gap, study pitch) | Phase 3 Worksheet + four path guides | **Mismatch**: the label says method choice, but the linked worksheet is the elevator speech |
-| 10 | Measures draft (Phase 4) | "Phase 4: Operationalization" (compare four data-collection pathways, choose one) | Phase 4 Worksheet (Operationalization Exploration) | **Mismatch**: the linked worksheet is the pathway comparison and choice, which is what week 9 is called |
+| 9 | **Method choice** (week of Oct 12) | **Method Choice** (compare four pathways, choose one; was Phase 4) | **Method Choice Worksheet (Pathway Comparison)** + four path guides | Fixed |
+| 10 | Measures draft (Oct 23) | none | none | **Open**: no worksheet yet (see below) |
 | 11 | IRB first draft | - | IRB First Draft for Feedback; HRT lessons 1-3 | OK |
 | 12 | Methods section | - | Methods Section | OK |
 | 13 | IRB submission | - | IRB Final Draft for IRB | OK (schedule says "submission", help says "final draft"; pick one) |
-| 14 | IRB processing log | - | - | OK (task) |
+| 14 | IRB processing log | - | - | OK |
 | 16 | IRB status update | - | IRB Status Update and Detailed Plan | OK |
 
-Weeks 9-10 are the real mismatch: the content of the two worksheets and the names of the two weeks are crossed or incomplete, and one worksheet (the elevator speech) has no clear week.
+**Still open**
+1. **Measures draft (week 10) has no worksheet.** The Method Choice worksheet already contains it: its Part B defines the IV and DV conceptually and operationally. It could be split out into its own Study Plan section due Oct 23.
+2. **Elevator Speech has no week.** Its section and help page still exist (renamed), but the schedule no longer schedules it. Decide whether it joins another week (for example with the final lit review) or retires.
+3. **Study Plan ids** (`phase-3`, `phase-4`) still appear in URLs and saved data. Titles are renamed; the ids are kept so existing links and saved drafts keep working.
+4. **Remaining "Phase N" wording** (about 60 mentions) sits inside the worksheet bodies and walkthroughs (`Phase4Section.vue`, `LitReviewOutlineSection.vue`, `capstonePhase*.js`) and in Canvas-vocabulary labels in `researchMethodsCourseNav.js` and `researchMethodsTextbook.js` (`canvasPhases` keys). They are left alone: some are matching keys, and the worksheets need a content pass with the instructor.
 
 ## Suggested order
 

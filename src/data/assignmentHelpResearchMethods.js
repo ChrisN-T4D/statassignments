@@ -35,7 +35,7 @@ export const assignmentHelpResearchMethods = [
           'Focus on methods of knowing, what makes psychology a science, and goals of science (describe, predict, explain).'
         ],
         practiceLinks: ['rm-chapter-1'],
-        getHelp: 'Open Module 1 in Methods Market (Part 1). Bring one question from Ch. 1 to the Phase 1 workshop or office hours.'
+        getHelp: 'Open Module 1 in Methods Market (Part 1). Bring one question from Ch. 1 to the topic workshop or office hours.'
       },
       {
         id: 'rm-syllabus-ack',
@@ -43,7 +43,7 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Read the full syllabus in Canvas before you acknowledge.',
-          'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in Phase 4: it determines which Pressbooks chapters matter most later.'
+          'Note which methodology path (Survey, Qualitative, Experimental, or Archival) you will choose in your method choice: it determines which Pressbooks chapters matter most later.'
         ],
         practiceLinks: ['rm-chapter-1'],
         getHelp: 'Questions about course structure? Ask during in-class discussion or come to office hours.'
@@ -63,11 +63,11 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 1',
     moduleTitle: 'Introduction & literature review',
-    phaseLabel: 'Phase 1: Choosing a Topic',
+    phaseLabel: 'Choosing a Topic',
     assignments: [
       {
         id: 'rm-phase-1-workshop',
-        name: 'Phase 1 Workshop',
+        name: 'Topic Workshop',
         type: 'assignment',
         tips: [
           'Move from a broad interest to a narrow, researchable focus, one population, one construct, one context.',
@@ -92,13 +92,28 @@ export const assignmentHelpResearchMethods = [
         practiceLinks: ['rm-chapter-2', 'rm-chapter-4', 'rm-chapter-11'],
         studyPlanSection: 'article-review',
         getHelp: 'Use Ch. 2 to evaluate sources and gaps; Ch. 4 for methodology vocabulary; Ch. 11 for APA references. Study Plan mirrors the worksheet field order.'
+      },
+      {
+        id: 'rm-theory-selection',
+        name: 'Theory Selection',
+        type: 'assignment',
+        tips: [
+          'Pick one theory to guide your research rather than listing several competing frameworks.',
+          'Explain the theory in your own words by stating its main idea, naming two or three key concepts, and identifying who proposed it with an APA citation.',
+          'Show why the theory applies by connecting at least one of its concepts to a specific variable and population in your research topic.',
+          'Review the articles you already analyzed to see which theories they used and whether any align with your own topic.',
+          'Keep the paper to one page of complete sentences that clearly communicate your understanding without unnecessary detail.',
+          'Read Chapter 2 on the Scientific Method to refresh your understanding of how theories and hypotheses work in research.'
+        ],
+        practiceLinks: ['rm-chapter-2'],
+        getHelp: 'Unsure whether your theory fits your topic? Bring your theory and your topic to office hours and we will check the fit. Due date and submission are in Canvas.'
       }
     ]
   },
   {
     canvasPart: 'Part 1',
     moduleTitle: 'Introduction & literature review',
-    phaseLabel: 'Phase 2: Literature Review',
+    phaseLabel: 'Literature Review',
     assignments: [
       {
         id: 'rm-lit-review-draft-1',
@@ -125,7 +140,7 @@ export const assignmentHelpResearchMethods = [
           'Complete the Pressbooks chapters Canvas assigns during revision (often Ch. 11, 8, 3, 9), one full chapter at a time.',
           'In the lit review body, describe prior methods precisely (design, sample, measures), not just findings.',
           'Synthesize themes across studies; do not write one paragraph per article in isolation.',
-          'End with a clear gap your study will address; that gap feeds directly into the combined Phase 3 & 4 worksheets.',
+          'End with a clear gap your study will address; that gap feeds directly into your elevator speech and method choice worksheets.',
           'Use the Literature Review Checklist in Canvas.'
         ],
         practiceLinks: [...CH.litReview, 'rm-chapter-8', 'rm-chapter-3', 'rm-chapter-9'],
@@ -137,30 +152,28 @@ export const assignmentHelpResearchMethods = [
   {
     canvasPart: 'Part 2',
     moduleTitle: 'Research Question & Methodological Route',
-    phaseLabel: 'Phase 3 & 4: Research question & operationalization',
+    phaseLabel: 'Research question & method choice',
     assignments: [
       {
         id: 'rm-phase-3-worksheet',
-        name: 'Phase 3 Worksheet',
+        name: 'Elevator Speech Worksheet',
         type: 'assignment',
         tips: [
-          'Submit together with Phase 4 on the same due date (see Canvas).',
-          'Phase 3 is an elevator speech: a 1–2 minute spiel about your research, what the field knows, the gap, and how your study fits.',
+          'The elevator speech is a 1–2 minute spiel about your research, what the field knows, the gap, and how your study fits.',
           'Use your Lit Review Final, Lit Review Outline, and article reviews; do not start from scratch.',
           'Draft four parts in Methods Market: what we know, the gap, my study pitch, then combine into a full script (~130–300 words).',
           'Use copy buttons to pull theme notes, gap, and transition from your Lit Review Outline, then refine into spoken prose.',
-          'IV/DV definition and methodology path choice belong in Phase 4, not Phase 3.'
+          'IV/DV definition and methodology path choice belong in your method choice worksheet, not the elevator speech.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
         studyPlanSection: 'phase-3',
-        getHelp: 'Open Study Plan in Methods Market for the elevator speech template. Ch. 2 covers synthesis and gaps; Ch. 11 for clear prose. Submit with Phase 4 on the date shown in Canvas.'
+        getHelp: 'Open Study Plan in Methods Market for the elevator speech template. Ch. 2 covers synthesis and gaps; Ch. 11 for clear prose. Submit on the date shown in Canvas.'
       },
       {
         id: 'rm-phase-4-worksheet',
-        name: 'Phase 4 Worksheet (Operationalization Exploration)',
+        name: 'Method Choice Worksheet (Pathway Comparison)',
         type: 'assignment',
         tips: [
-          'Submit together with Phase 3 on the same due date.',
           'Recap your topic and research question (Part A); define IV and DV conceptually and operationally (Part B).',
           'Explore all four pathways in Part C (survey, experimental task, observation, archival), mark a path “not viable” if it does not fit.',
           'Complete the Part D comparison table, then choose ONE pathway in Part E.',
@@ -169,7 +182,7 @@ export const assignmentHelpResearchMethods = [
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
         studyPlanSection: 'phase-4',
-        getHelp: 'Same due date as Phase 3 in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
+        getHelp: 'Due date is in Canvas. Unsure which path fits? Compare Path 1–4 pages in Canvas with the matching chapter in Methods Market.'
       }
     ]
   },

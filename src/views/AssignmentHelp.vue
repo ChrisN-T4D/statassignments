@@ -14,7 +14,7 @@
           <div>
             <h2 class="study-plan-banner-title">Capstone worksheets → Study Plan</h2>
             <p class="study-plan-banner-desc">
-              Article review, lit review outline, Phase 3 elevator speech, and Phase 4 operational IV/DV are drafted in Study Plan, then exported to Canvas.
+              Article review, lit review outline, elevator speech, and method choice are drafted in Study Plan, then exported to Canvas.
             </p>
           </div>
           <router-link :to="`/class/${classId}/study-plan`" class="study-plan-banner-btn">

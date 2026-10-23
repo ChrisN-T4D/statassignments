@@ -21,19 +21,19 @@ export const STUDY_PLAN_SECTIONS = [
     title: 'Lit Review Outline',
     shortTitle: 'Lit Review Outline',
     description: 'Organizing framework, theme buckets, and compiled outline for your literature review.',
-    submitNote: 'Not a Canvas submission; feeds Lit Review Draft 1, Phase 3, and Phase 4.'
+    submitNote: 'Not a Canvas submission; feeds your Lit Review Draft 1 and the worksheets after it.'
   },
   {
     id: 'phase-3',
-    title: 'Phase 3: Elevator Speech',
-    shortTitle: 'Phase 3',
+    title: 'Elevator Speech',
+    shortTitle: 'Elevator Speech',
     description: 'Distill your lit review: what we know, the gap, and your study pitch.',
     submitNote: 'Submit in Canvas.'
   },
   {
     id: 'phase-4',
-    title: 'Phase 4: Operationalization',
-    shortTitle: 'Phase 4',
+    title: 'Method Choice',
+    shortTitle: 'Method Choice',
     description: 'Compare four data-collection pathways and choose one.',
     submitNote: 'Submit in Canvas.'
   }

@@ -29,7 +29,7 @@ const FALL = {
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-2' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-choose-groups', label: 'Choose groups', due: '2026-08-28' },
-        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-1-workshop', label: 'Phase 1 workshop' }
+        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-1-workshop', label: 'Topic workshop' }
       ]
     },
     {
@@ -47,7 +47,7 @@ const FALL = {
       note: 'No class Mon (Labor Day)',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-4' },
-        { role: 'do', kind: 'task', label: 'Theory selection', due: '2026-09-11', note: 'Choose the theory your literature review is built on. Chapter 2 covers theories and hypotheses.' }
+        { role: 'do', kind: 'assignment-help', assignmentId: 'rm-theory-selection', label: 'Theory selection', due: '2026-09-11', note: 'A one-page paper: what you understand about your theory and why it applies to what you want to study.' }
       ]
     },
     {
@@ -88,8 +88,8 @@ const FALL = {
       title: 'Method choice',
       note: 'Fall Break Fri',
       items: [
-        { role: 'do', kind: 'study-plan', sectionId: 'phase-3', label: 'Method choice (Phase 3)', dueLabel: 'Week of Oct 12' },
-        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-3-worksheet', label: 'Phase 3 help' },
+        { role: 'do', kind: 'study-plan', sectionId: 'phase-4', label: 'Method choice', dueLabel: 'Week of Oct 12' },
+        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-4-worksheet', label: 'Method choice help' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-path-1-survey', label: 'Path 1: Survey' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-path-2-qualitative', label: 'Path 2: Qualitative' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-path-3-experimental', label: 'Path 3: Experimental' },
@@ -100,8 +100,7 @@ const FALL = {
       start: '2026-10-19',
       title: 'Measures draft',
       items: [
-        { role: 'do', kind: 'study-plan', sectionId: 'phase-4', label: 'Measures draft (Phase 4)', due: '2026-10-23' },
-        { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-4-worksheet', label: 'Phase 4 help' },
+        { role: 'do', kind: 'task', label: 'Measures draft', due: '2026-10-23' },
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-4', label: 'Revisit Ch. 4 Measurement' }
       ]
     },

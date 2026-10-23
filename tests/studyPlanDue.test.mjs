@@ -11,19 +11,31 @@ test('article-review is past with due date', () => {
   assert.equal(info.label, 'Article Review')
 })
 
-test('phase-4 is this-week with formatted due', () => {
+test('phase-4 (Method Choice) is past after its week, labelled by week', () => {
   const info = studyPlanDue('phase-4', today)
-  assert.equal(info.status, 'this-week')
-  assert.equal(info.due, '2026-10-23')
-  assert.equal(formatStudyPlanDue(info), 'Due Fri, Oct 23')
-})
-
-test('phase-3 is past with dueLabel fallback', () => {
-  const info = studyPlanDue('phase-3', today)
   assert.equal(info.status, 'past')
   assert.equal(info.due, null)
   assert.equal(info.dueLabel, 'Week of Oct 12')
   assert.equal(formatStudyPlanDue(info), 'Week of Oct 12')
+})
+
+test('phase-4 (Method Choice) is this-week during the week of Oct 12', () => {
+  const info = studyPlanDue('phase-4', new Date('2026-10-14T12:00:00'))
+  assert.equal(info.status, 'this-week')
+  assert.equal(formatStudyPlanDue(info), 'Week of Oct 12')
+})
+
+test('a dated item formats as a weekday and date', () => {
+  const info = studyPlanDue('study-focus', new Date('2026-09-16T12:00:00'))
+  assert.equal(info.status, 'this-week')
+  assert.equal(info.due, '2026-09-18')
+  assert.equal(formatStudyPlanDue(info), 'Due Fri, Sep 18')
+})
+
+test('phase-3 (Elevator Speech) is not scheduled this semester', () => {
+  const info = studyPlanDue('phase-3', today)
+  assert.equal(info.status, 'none')
+  assert.equal(formatStudyPlanDue(info), '')
 })
 
 test('unknown section returns none and empty format', () => {

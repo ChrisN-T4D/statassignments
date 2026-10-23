@@ -92,7 +92,7 @@
               organize themes)
             </li>
             <li>
-              <strong>Evaluate</strong> — strengths/weaknesses notes, source checklists, Phase 4 pathway
+              <strong>Evaluate</strong> — strengths/weaknesses notes, source checklists, method choice pathway
               comparisons (judge quality and tradeoffs)
             </li>
             <li>

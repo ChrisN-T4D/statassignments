@@ -472,7 +472,7 @@
               </ol>
               <p class="rm-lab-walkthrough-checkpoint">
                 Checkpoint: run both tabs, then revise one decision after seeing how the roster or baseline balance changes.
-                <router-link to="/class/research-methods/assignment-help/rm-phase-4-worksheet">Open Phase 4 worksheet →</router-link>
+                <router-link to="/class/research-methods/assignment-help/rm-phase-4-worksheet">Open Method Choice worksheet →</router-link>
               </p>
             </details>
             <SamplingCompareLab intro="rm-embed" />
