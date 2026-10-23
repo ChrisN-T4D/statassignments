@@ -35,6 +35,24 @@
         </details>
       </div>
 
+      <section v-for="panel in weekPanels" :key="panel.weekNumber" class="week-panel" :class="{ 'week-panel-now': panel.isNow }">
+        <h2 class="week-panel-title">
+          {{ panel.isNow ? 'This week' : 'Next week' }}
+          <span class="week-panel-sub">Week {{ panel.weekNumber }} · {{ panel.title }}</span>
+        </h2>
+        <ul class="assignment-links">
+          <li v-for="it in panel.items" :key="it.key" class="assignment-row">
+            <router-link :to="it.to" class="assignment-link">
+              <span class="assignment-link-name">{{ it.label }}</span>
+              <span v-if="it.due" class="week-panel-due">Due {{ it.due }}</span>
+              <span class="assignment-link-type" :class="it.kind === 'study-plan' ? 'assignment' : 'practice'">
+                {{ it.kind === 'study-plan' ? 'Study Plan' : 'Help' }}
+              </span>
+            </router-link>
+          </li>
+        </ul>
+      </section>
+
       <div class="help-modules">
         <section
           v-for="(block, idx) in helpData"
@@ -49,6 +67,10 @@
             <span v-if="block.phaseLabel" class="phase-label">({{ block.phaseLabel }})</span>
           </h2>
 
+          <component :is="isReviewBlock(block) ? 'details' : 'div'" class="block-body">
+          <summary v-if="isReviewBlock(block)" class="reviews-summary">
+            Show all {{ block.assignments.length }} Concept Reviews
+          </summary>
           <ul class="assignment-links">
             <li v-for="a in block.assignments.filter((item) => !item.retired)" :key="a.id" class="assignment-row">
               <router-link
@@ -67,6 +89,7 @@
               </router-link>
             </li>
           </ul>
+          </component>
 
           <p v-if="block.noDiscussion" class="no-discussion-note">
             This module has no discussion activity; use tips and office hours if you need help.
@@ -81,6 +104,8 @@
 import { computed } from 'vue'
 import { getAssignmentHelp, getAssignmentHelpIntro } from '../data/assignmentHelp'
 import WeekContextBar from '../components/WeekContextBar.vue'
+import { getResearchMethodsSchedule, currentWeekIndex, semesterPhase, weekRef, parseScheduleDate } from '../data/researchMethodsSchedule'
+import { itemLink } from '../lib/continueSummary'
 
 const props = defineProps({
   classId: { type: String, required: true }
@@ -88,6 +113,33 @@ const props = defineProps({
 
 const helpData = computed(() => getAssignmentHelp(props.classId))
 const helpIntro = computed(() => getAssignmentHelpIntro(props.classId))
+
+// This week's and next week's help pages and Study Plan sections, straight from the schedule
+const weekPanels = computed(() => {
+  const schedule = getResearchMethodsSchedule(props.classId)
+  if (!schedule || semesterPhase(schedule) !== 'during') return []
+  const now = currentWeekIndex(schedule)
+  return [now, now + 1].flatMap((i) => {
+    const week = schedule.weeks[i]
+    if (!week) return []
+    const from = weekRef(schedule, i)
+    const items = week.items
+      .filter((it) => it.kind === 'assignment-help' || it.kind === 'study-plan')
+      .map((it) => ({
+        key: `${it.kind}-${it.assignmentId || it.sectionId}`,
+        kind: it.kind,
+        label: it.label,
+        due: it.due ? parseScheduleDate(it.due).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '',
+        to: itemLink(it, props.classId, from)
+      }))
+    return items.length ? [{ weekNumber: i + 1, title: week.title, isNow: i === now, items }] : []
+  })
+})
+
+// The 14 chapter Concept Reviews are reached from each week; keep them folded here
+function isReviewBlock (block) {
+  return props.classId === 'research-methods' && block.assignments.every((a) => a.type === 'concept-review')
+}
 
 function typeLabel (type) {
   const labels = {
@@ -123,6 +175,44 @@ function typeLabel (type) {
 
 .back-link:hover {
   color: var(--primary);
+}
+
+.week-panel {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--bg-card);
+}
+
+.week-panel-now {
+  border: 2px solid var(--primary);
+}
+
+.week-panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.week-panel-sub {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.week-panel-due {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.reviews-summary {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .help-title {

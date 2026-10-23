@@ -89,7 +89,7 @@ Done when: changing a due date in one file changes it everywhere.
 
 Done when: opening the site as a student shows this week's task and next step without a click.
 
-### Phase 4 - Assignment Help organised by week (M)
+### Phase 4 - Assignment Help organised by week (M) - PARTLY DONE 2026-10-23 (This week / Next week panels from the schedule; the 14 Concept Reviews are folded; not yet: week/due on every card, Study Plan started status)
 
 - Assignment Help index: **This week** group at the top (from the schedule), then the rest by week, with the 13 chapter Concept Reviews collapsed under one heading.
 - Each assignment card shows the week, due date, and whether the Study Plan section is started.
