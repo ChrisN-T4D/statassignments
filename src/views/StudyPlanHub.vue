@@ -3,6 +3,7 @@
     <div class="container">
       <div class="hub-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
+        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
         <h1 class="hub-title">Study Plan</h1>
         <p class="hub-intro">
           Your capstone draft workspace for PSYC 4223. Methods Market holds your notes and links to
@@ -53,6 +54,7 @@ import {
   countPhase3Progress,
   countPhase4Progress
 } from '../lib/capstoneValidation.js'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
   classId: { type: String, required: true }

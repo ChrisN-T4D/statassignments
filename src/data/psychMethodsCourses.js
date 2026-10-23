@@ -12,6 +12,8 @@ export const PSYCH_METHODS_COURSES = [
     id: 'experimental',
     label: 'Experimental Design',
     shortLabel: 'Exp',
+    // Folded into the Research Methods tab (fall + spring year view); the slug still resolves for old links.
+    legacy: true,
     description: 'Experimental & quasi-experimental design, factorials, and analyzing group-comparison data.'
   }
 ]

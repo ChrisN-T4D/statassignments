@@ -4,6 +4,7 @@
       <!-- Back + Header -->
       <div class="help-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
+        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
         <h1 class="help-title">Assignment Help</h1>
         <p class="help-intro">{{ helpIntro }}</p>
         <p v-if="classId === 'intro-research'" class="help-intro objectives-link">
@@ -79,6 +80,7 @@
 <script setup>
 import { computed } from 'vue'
 import { getAssignmentHelp, getAssignmentHelpIntro } from '../data/assignmentHelp'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
   classId: { type: String, required: true }

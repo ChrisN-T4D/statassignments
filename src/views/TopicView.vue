@@ -7,6 +7,8 @@
         <span>{{ topic.title }}</span>
       </div>
 
+      <WeekContextBar v-if="rmChapter" :target="{ kind: 'chapter', id: rmChapter }" step="read" />
+
       <div class="page-header">
         <h1>
           <img src="/topic-icon.png" alt="" class="topic-title-icon" />
@@ -59,6 +61,7 @@ import { inferClassId } from '../data/classIds.js'
 import { logLearningEvent } from '../composables/useLearningEvents'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { resolveTopicHtml } from '../content/topics/resolveTopicHtml.js'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -75,6 +78,10 @@ const errorProblemId = ref(null)
 
 const topicId = computed(() => route.params.id)
 const topic = computed(() => topics.find(t => t.id === topicId.value))
+const rmChapter = computed(() => {
+  const m = /^rm-chapter-(\d+)$/.exec(String(topicId.value || ''))
+  return m ? Number(m[1]) : null
+})
 const moduleId = computed(() => topic.value?.moduleId || null)
 const topicClassId = computed(() => inferClassId({ moduleId: moduleId.value, hint: route.params.classId }))
 

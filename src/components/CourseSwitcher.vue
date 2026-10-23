@@ -22,16 +22,17 @@ import { useClasses } from '../composables/useClasses'
 import { PSYCH_METHODS_COURSES, isPsychMethodsCourse } from '../data/psychMethodsCourses'
 
 const route = useRoute()
+const SWITCHABLE_COURSES = PSYCH_METHODS_COURSES.filter((course) => !course.legacy)
 const { isAuthenticated, user } = useAuth()
 const { classes: assignedClasses } = useClasses()
 
 const visibleCourses = computed(() => {
   const role = user.value?.role
   if (role === 'admin' || role === 'instructor') {
-    return PSYCH_METHODS_COURSES
+    return SWITCHABLE_COURSES
   }
   const assigned = assignedClasses.value || []
-  return PSYCH_METHODS_COURSES.filter((course) =>
+  return SWITCHABLE_COURSES.filter((course) =>
     assigned.some((cls) => cls.slug === course.slug || cls.id === course.id || cls.id === course.slug)
   )
 })

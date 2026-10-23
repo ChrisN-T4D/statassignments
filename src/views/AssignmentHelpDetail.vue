@@ -5,6 +5,7 @@
         <!-- Back + Breadcrumb + Header -->
         <div class="help-header">
           <router-link :to="`/class/${classId}/assignment-help`" class="back-link">← Assignment Help</router-link>
+          <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" :target="{ kind: 'assignment-help', id: assignmentId }" />
           <p class="breadcrumb">
             <span v-if="block.canvasPart">{{ block.canvasPart }}</span>
             <span v-else-if="block.moduleNumber">Module {{ block.moduleNumber }}</span>
@@ -156,6 +157,7 @@ import {
 } from '../data/statisticsCanvasLinks.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { useAccessMode } from '../composables/useAccessMode'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
   classId: { type: String, required: true },

@@ -8,6 +8,11 @@
     }"
   >
     <div class="container">
+      <WeekContextBar v-if="!embedded && rmChapter" :target="{ kind: 'chapter', id: rmChapter }" step="review" :class-slug="String(getActiveClassId())" />
+      <nav v-else-if="!embedded" class="practice-nav" aria-label="Page navigation">
+        <button type="button" class="practice-nav-btn" @click="goBack">← Back</button>
+      </nav>
+
       <div v-if="!embedded" class="page-header">
         <h1>Practice Problems</h1>
         <p>Test your understanding with interactive practice questions.</p>
@@ -339,7 +344,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch, computed, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { topics } from '../data/topics.js'
 import { getModuleById } from '../data/modules.js'
 import { usePractice } from '../composables/usePractice'
@@ -366,6 +371,7 @@ import {
   pickNextConceptReviewQuestion
 } from '../lib/conceptReviewUnlock.js'
 import CompletionSlip from '../components/CompletionSlip.vue'
+import WeekContextBar from '../components/WeekContextBar.vue'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const props = defineProps({
@@ -376,6 +382,22 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const router = useRouter()
+
+/** Back to wherever the student came from (the week they were on); the class page if they arrived directly. */
+function goBack() {
+  if (window.history.state?.back) {
+    router.back()
+  } else {
+    router.push(`/class/${getActiveClassId()}`)
+  }
+}
+
+/** Research Methods concept reviews (rm-module-N) get the week path bar. */
+const rmChapter = computed(() => {
+  const m = /^rm-module-(\d+)$/.exec(String(getSelectedTopicId() || ''))
+  return m ? Number(m[1]) : null
+})
 const { isAuthenticated, user } = useAuth()
 const {
   isOfflinePrimary,
@@ -1696,5 +1718,27 @@ watch(currentProblem, async (problem) => {
     color: #111;
     background: #fff;
   }
+}
+
+.practice-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.practice-nav-btn {
+  padding: 0.4rem 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.practice-nav-btn:hover { border-color: var(--primary, #dc2626); }
+@media print {
+  .practice-nav { display: none; }
 }
 </style>

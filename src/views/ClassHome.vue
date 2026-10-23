@@ -2,7 +2,7 @@
   <div class="class-home" v-if="currentClass">
     <div class="container">
       <!-- Class Header -->
-      <div class="class-header" :style="{ '--class-color': currentClass.color }">
+      <div v-if="!rmSchedule" class="class-header" :style="{ '--class-color': currentClass.color }">
         <div class="class-icon-large">{{ currentClass.icon }}</div>
         <div class="class-info">
           <h1>{{ getClassDisplayName(currentClass) }}</h1>
@@ -81,8 +81,61 @@
         </div>
       </div>
 
+      <!-- Semester timeline + week flow (Research Methods sequence) -->
+      <section v-if="rmSchedule" class="rm-semester">
+        <div class="rm-sem-card">
+          <div class="rm-sem-head">
+            <div>
+              <div class="rm-sem-eyebrow">{{ rmSchedule.course }} · {{ rmSchedule.name }}</div>
+              <h2>{{ rmSchedule.title }}</h2>
+            </div>
+            <div class="rm-sem-seg" role="group" aria-label="Semester">
+              <button
+                v-for="sem in rmSemesters"
+                :key="sem.slug"
+                type="button"
+                :aria-pressed="sem.slug === rmSemKey"
+                @click="rmSelectSemester(sem.slug)"
+              >
+                {{ sem.name.split(' ')[0] }}<small>{{ sem.course.replace('PSYC ', '') }}</small>
+              </button>
+            </div>
+          </div>
+          <ResearchMethodsTimeline
+            :schedule="rmSchedule"
+            :selected-week="rmSelectedWeek"
+            :current-week="rmCurrentWeek"
+            :state="rmSemesterState"
+            @select-week="rmSelectWeek"
+          />
+          <nav class="rm-sem-links" aria-label="Course resources">
+            <router-link :to="`/class/${classId}/assignment-help`">Assignment Help</router-link>
+            <router-link :to="`/class/${classId}/study-plan`">Study Plan</router-link>
+            <router-link :to="`/class/${classId}/jamovi-guides`">Jamovi guides</router-link>
+            <router-link :to="`/class/${classId}/excel-guides`">Excel guides</router-link>
+            <router-link
+              v-if="showDataAnalysisNav && !analysisLocked"
+              :to="{ path: `/class/${classId}`, query: { module: RM_MODULE_DATA_BY_PATH_ID } }"
+            >
+              Statistics &amp; analyze data by path
+            </router-link>
+            <span class="rm-sem-canvas">Official due dates and points are in Canvas.</span>
+          </nav>
+        </div>
+        <ResearchMethodsWeekCard
+          :week="rmSchedule.weeks[rmSelectedWeek]"
+          :week-number="rmSelectedWeek + 1"
+          :schedule-slug="rmSchedule.slug"
+          :class-slug="String(classId)"
+          :status="rmWeekStatus"
+          :has-prev="rmHasPrev"
+          :has-next="rmHasNext"
+          @step="rmStepWeek"
+        />
+      </section>
+
       <!-- Module Navigation -->
-      <div class="module-nav">
+      <div v-if="!rmSchedule" class="module-nav">
         <h2 class="section-title">
           {{ isPsychMethodsClass ? 'Course content' : 'Course Modules' }}
         </h2>
@@ -173,7 +226,7 @@
       </div>
 
       <!-- Selected Module Content -->
-      <div v-if="selectedModule" class="module-content">
+      <div v-if="selectedModule && !isAnalysisHidden(selectedModuleId)" class="module-content">
         <div class="module-header" :style="{ '--module-color': selectedModule.color }">
           <div class="module-header-icon">{{ selectedModule.icon }}</div>
           <div class="module-header-info">
@@ -712,6 +765,16 @@
         </div>
       </div>
 
+      <ResearchMethodsAllWeeks
+        v-if="rmSchedule"
+        :schedule="rmSchedule"
+        :selected-week="rmSelectedWeek"
+        :current-week="rmCurrentWeek"
+        :state="rmSemesterState"
+        @select-week="rmSelectWeek"
+        @select-chapter="rmSelectChapter"
+      />
+
       <!-- Progress (if authenticated) -->
       <div v-if="isAuthenticated && hasProfile" class="progress-section">
         <h2>Your Progress</h2>
@@ -797,6 +860,10 @@ import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import Module8Selector from '../components/Module8Selector.vue'
 import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSimulation.vue'
+import ResearchMethodsTimeline from '../components/ResearchMethodsTimeline.vue'
+import ResearchMethodsWeekCard from '../components/ResearchMethodsWeekCard.vue'
+import ResearchMethodsAllWeeks from '../components/ResearchMethodsAllWeeks.vue'
+import { RESEARCH_METHODS_SCHEDULES, currentWeekIndex, semesterPhase, findWeekForModule } from '../data/researchMethodsSchedule'
 import Practice from './Practice.vue'
 import CentralTendencyLab from '../components/labs/CentralTendencyLab.vue'
 import CoinFlipLab from '../components/labs/CoinFlipLab.vue'
@@ -820,6 +887,36 @@ const { isOfflinePrimary, ensureLoaded: ensureAccessLoaded } = useAccessMode()
 const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
+
+// Research Methods sequence: fall (research-methods) and spring (experimental) share one week-by-week flow
+const rmSemesters = Object.values(RESEARCH_METHODS_SCHEDULES)
+const rmSemKey = ref(null)
+const rmSelectedWeek = ref(0)
+// The analysis module only shows in weeks that list an "analysis" item (after data collection), so the timeline controls it
+const weekHasAnalysis = computed(() =>
+  !!rmSchedule.value?.weeks[rmSelectedWeek.value]?.items.some((it) => it.kind === 'analysis')
+)
+const analysisLocked = computed(() => !!rmSchedule.value && !weekHasAnalysis.value)
+const isAnalysisHidden = (moduleId) => analysisLocked.value && moduleId === RM_MODULE_DATA_BY_PATH_ID
+const rmSchedule = computed(() => {
+  const slug = currentClass.value?.slug || classId.value
+  if (!(slug in RESEARCH_METHODS_SCHEDULES)) return null
+  return RESEARCH_METHODS_SCHEDULES[rmSemKey.value || slug]
+})
+const rmCurrentWeek = computed(() => (rmSchedule.value ? currentWeekIndex(rmSchedule.value) : 0))
+const rmSemesterState = computed(() => (rmSchedule.value ? semesterPhase(rmSchedule.value) : 'during'))
+const rmWeekStatus = computed(() => {
+  if (rmSemesterState.value === 'after') return 'past'
+  if (rmSemesterState.value === 'before') return 'future'
+  if (rmSelectedWeek.value === rmCurrentWeek.value) return 'cur'
+  return rmSelectedWeek.value < rmCurrentWeek.value ? 'past' : 'future'
+})
+const rmSemIndex = computed(() => rmSemesters.findIndex((s) => s === rmSchedule.value))
+const rmHasPrev = computed(() => rmSelectedWeek.value > 0 || rmSemIndex.value > 0)
+const rmHasNext = computed(() =>
+  !!rmSchedule.value &&
+  (rmSelectedWeek.value < rmSchedule.value.weeks.length - 1 || rmSemIndex.value < rmSemesters.length - 1)
+)
 
 const isResearchMethodsClass = computed(() => {
   const slug = currentClass.value?.slug || classId.value
@@ -931,6 +1028,69 @@ const currentClass = computed(() => {
   // Try to find by slug first, then by ID
   return classes.value.find(c => c.slug === param || c.id === param) || null
 })
+
+// Show the chapter that belongs to the selected week in the existing module panel
+function rmApplyWeek() {
+  const items = rmSchedule.value?.weeks[rmSelectedWeek.value]?.items || []
+  const chapter = items.find((it) => it.kind === 'chapter' && !isAnalysisHidden(it.moduleId)) || items.find((it) => it.kind === 'analysis')
+  if (chapter && classModules.value.some((m) => m.id === chapter.moduleId)) {
+    selectModule(chapter.moduleId)
+  } else {
+    selectedModuleId.value = null
+  }
+}
+
+function rmSelectWeek(index) {
+  rmSelectedWeek.value = index
+  rmApplyWeek()
+}
+
+function rmSelectSemester(slug) {
+  rmSemKey.value = slug
+  rmSelectedWeek.value = rmSemesterState.value === 'during' ? rmCurrentWeek.value : 0
+  rmApplyWeek()
+}
+
+function rmStepWeek(delta) {
+  const next = rmSelectedWeek.value + delta
+  if (next < 0 && rmSemIndex.value > 0) {
+    rmSemKey.value = rmSemesters[rmSemIndex.value - 1].slug
+    rmSelectedWeek.value = rmSchedule.value.weeks.length - 1
+  } else if (next >= rmSchedule.value.weeks.length && rmSemIndex.value < rmSemesters.length - 1) {
+    rmSemKey.value = rmSemesters[rmSemIndex.value + 1].slug
+    rmSelectedWeek.value = 0
+  } else {
+    rmSelectedWeek.value = Math.max(0, Math.min(rmSchedule.value.weeks.length - 1, next))
+  }
+  rmApplyWeek()
+}
+
+function rmSelectChapter(slug, weekIndex) {
+  rmSemKey.value = slug
+  rmSelectedWeek.value = weekIndex
+  rmApplyWeek()
+  document.querySelector('.rm-semester')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+// Start on the week of ?module= when given, otherwise on this week (spring when ?semester=spring or fall is over)
+function rmInit() {
+  rmSemKey.value = null
+  if (!rmSchedule.value) return
+  const wanted = route.query.semester === 'spring'
+    ? 'experimental'
+    : route.query.semester === 'fall'
+      ? 'research-methods'
+      : rmSemesters.find((sem) => semesterPhase(sem) !== 'after')?.slug
+  rmSemKey.value = wanted || null
+  const queried = route.query.module ? findWeekForModule(rmSchedule.value, String(route.query.module)) : -1
+  const asked = Number(route.query.week) - 1
+  const askedValid = Number.isInteger(asked) && asked >= 0 && asked < rmSchedule.value.weeks.length
+  rmSelectedWeek.value = queried >= 0
+    ? queried
+    : askedValid ? asked : (rmSemesterState.value === 'during' ? rmCurrentWeek.value : 0)
+  if (queried < 0) rmApplyWeek()
+}
+
 
 const showDataAnalysisNav = computed(() =>
   classHasDataAnalysisTool(currentClass.value?.slug || classId.value)
@@ -1588,6 +1748,7 @@ onMounted(async () => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
     syncContentTabFromQuery()
+    rmInit()
   }
   refreshReadTopics()
   if (isAuthenticated.value) {
@@ -1604,6 +1765,7 @@ watch(classId, (newId) => {
     setDefaultModule()
     syncSelectedModuleFromQuery()
     syncContentTabFromQuery()
+    rmInit()
   }
   refreshReadTopics()
 })
@@ -1823,6 +1985,69 @@ watch(selectedModuleId, id => {
 .module-nav {
   margin-bottom: 2rem;
 }
+
+.rm-semester {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.rm-sem-card {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-main);
+}
+.rm-sem-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.875rem;
+}
+.rm-sem-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.rm-sem-head h2 { margin: 0; font-size: 1.25rem; color: var(--text-primary); }
+.rm-sem-seg {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.rm-sem-seg button {
+  padding: 0.375rem 0.875rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.rm-sem-seg button[aria-pressed='true'] { background: var(--primary, #dc2626); color: #fff; }
+.rm-sem-seg small { margin-left: 0.375rem; font-size: 0.7rem; opacity: 0.85; }
+
+.rm-sem-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 1.125rem;
+  margin-top: 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.rm-sem-links a { color: #60a5fa; text-decoration: none; }
+.rm-sem-links a:hover { text-decoration: underline; }
+.rm-sem-canvas { margin-left: auto; color: var(--text-muted); font-size: 0.75rem; }
+
 
 .part-tabs {
   display: flex;

@@ -191,6 +191,17 @@ const router = createRouter({
 const { user: authUser } = useAuth()
 
 router.beforeEach(async (to, from, next) => {
+  // The Experimental tab now lives inside Research Methods (spring half of the year view).
+  if (to.params.classId === 'experimental') {
+    const rest = to.path.replace(/^\/class\/experimental/, '')
+    next({
+      path: `/class/research-methods${rest}`,
+      query: rest ? to.query : { semester: 'spring', ...to.query },
+      hash: to.hash
+    })
+    return
+  }
+
   if (
     to.name === 'class-home' &&
     to.query.module === 'rm-module-lab' &&

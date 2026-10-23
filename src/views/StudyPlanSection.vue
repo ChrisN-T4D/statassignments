@@ -3,6 +3,7 @@
     <div class="container" v-if="sectionMeta">
       <div class="section-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
+        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" :target="{ kind: 'study-plan', id: sectionId }" />
         <h1 class="section-title">{{ sectionMeta.title }}</h1>
         <p class="section-due">{{ sectionMeta.dueNote }}</p>
       </div>
@@ -30,6 +31,7 @@ import ArticleReviewSection from '../components/study-plan/ArticleReviewSection.
 import LitReviewOutlineSection from '../components/study-plan/LitReviewOutlineSection.vue'
 import ElevatorSpeechSection from '../components/study-plan/ElevatorSpeechSection.vue'
 import Phase4Section from '../components/study-plan/Phase4Section.vue'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
   classId: { type: String, required: true },

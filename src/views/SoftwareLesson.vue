@@ -11,6 +11,7 @@
   <div class="lesson-page" :class="{ 'print-packet-open': showPrintPacket }" v-else-if="lesson">
     <div class="container">
       <!-- Lesson Header -->
+      <WeekContextBar v-if="route.params.classId === 'research-methods'" :class-slug="String(route.params.classId)" />
       <div class="lesson-header">
         <router-link :to="backLink" class="back-link">Back</router-link>
         <div class="lesson-meta">
@@ -819,6 +820,7 @@ import QuestionOrdering from '../components/questions/QuestionOrdering.vue'
 import QuestionFillBlank from '../components/questions/QuestionFillBlank.vue'
 import QuestionMatching from '../components/questions/QuestionMatching.vue'
 import QuestionScreenshot from '../components/questions/QuestionScreenshot.vue'
+import WeekContextBar from '../components/WeekContextBar.vue'
 
 // Assignment Tools Component
 // import ScreenRecorder from '../components/ScreenRecorder.vue' // Now using global ResourcesDrawer
