@@ -138,11 +138,35 @@ Decided: these are single-semester classes, so they get a **semester view only**
 
 **Naming mismatches found in Phase 2 (need Chris to confirm which is right):**
 1. Study Plan section `phase-3` is "Phase 3: Elevator Speech" (distill the lit review), but the schedule calls its week "Method choice (Phase 3)", due the week of Oct 12.
-2. Study Plan section `article-review` is the full worksheet (at least 6 articles, PDFs), but the schedule lists "Article selection", due Fri Sep 4.
+2. ~~Article selection vs Article Review~~ Resolved (Chris): the schedule item and milestone are now "Article Review", matching the Study Plan section and Assignment Help.
 3. ~~Phase 3 and Phase 4 both said "Submit with Phase N in Canvas"~~ Resolved (Chris): each item is anchored in the week it is due; the cross-references were removed and both now say "Submit in Canvas."
 
 **Phase 1 status:** `WeekContextBar.vue` (generalised from the reading/review bar) is mounted on chapter reading, Concept Review, Assignment Help index and detail, Study Plan hub and sections, and Research Methods software lessons. Helpers `itemMatches`, `findTargetWeek`, `parseWeekRef`, `weekRef` live in `researchMethodsSchedule.js` with 9 tests in `tests/researchMethodsSchedule.test.mjs` (`node --test tests/researchMethodsSchedule.test.mjs`). The week card adds `?from=` to every link. Old "Back to course" links were kept as a safety net outside the school year.
 Not yet done: Benchmark practice and the Jamovi/Excel guide index pages do not have the bar; the old generic Back links are still shown beside it.
+
+## Fall week-by-week content check (2026-10-22)
+
+"Phase N" is retired vocabulary; the check compares what each week's items are called in the schedule, the Study Plan and Assignment Help.
+
+| Week | Schedule | Study Plan section | Assignment Help title | Verdict |
+|---|---|---|---|---|
+| 1 | Syllabus acknowledgment | - | Syllabus Acknowledgement | OK (spelling only) |
+| 2 | Choose groups; help "Phase 1 workshop" | - | How to Choose Groups; Phase 1 Workshop | Drop "Phase 1" from the label and title (what the workshop does: broad interest to a narrow, researchable focus) |
+| 3 | Article Review (Sep 4) | Article Review (6+ articles, problem statement, early research questions) | Article Review and Problem Statement | Name now consistent. Open: is the problem statement due Sep 4 with the articles, or with Theory selection? |
+| 4 | Theory selection (Sep 11) | none | none | Gap: nothing in Methods Market supports this deliverable |
+| 5 | Lit review outline (Sep 18) | Lit Review Outline | none | OK (no help page) |
+| 6 | Lit review draft 1 | - | Literature Review Draft 1 | OK |
+| 7 | AI peer review arrives | - | - | OK (task) |
+| 8 | Lit review final (+ optional sampling lab) | - | Literature Review Final / References | OK |
+| 9 | Method choice (Phase 3) | "Phase 3: Elevator Speech" (what we know, the gap, study pitch) | Phase 3 Worksheet + four path guides | **Mismatch**: the label says method choice, but the linked worksheet is the elevator speech |
+| 10 | Measures draft (Phase 4) | "Phase 4: Operationalization" (compare four data-collection pathways, choose one) | Phase 4 Worksheet (Operationalization Exploration) | **Mismatch**: the linked worksheet is the pathway comparison and choice, which is what week 9 is called |
+| 11 | IRB first draft | - | IRB First Draft for Feedback; HRT lessons 1-3 | OK |
+| 12 | Methods section | - | Methods Section | OK |
+| 13 | IRB submission | - | IRB Final Draft for IRB | OK (schedule says "submission", help says "final draft"; pick one) |
+| 14 | IRB processing log | - | - | OK (task) |
+| 16 | IRB status update | - | IRB Status Update and Detailed Plan | OK |
+
+Weeks 9-10 are the real mismatch: the content of the two worksheets and the names of the two weeks are crossed or incomplete, and one worksheet (the elevator speech) has no clear week.
 
 ## Suggested order
 

@@ -8,7 +8,7 @@ test('article-review is past with due date', () => {
   const info = studyPlanDue('article-review', today)
   assert.equal(info.status, 'past')
   assert.equal(info.due, '2026-09-04')
-  assert.equal(info.label, 'Article selection')
+  assert.equal(info.label, 'Article Review')
 })
 
 test('phase-4 is this-week with formatted due', () => {

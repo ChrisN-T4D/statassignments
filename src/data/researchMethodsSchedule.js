@@ -37,7 +37,7 @@ const FALL = {
       title: 'Research ethics',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-3' },
-        { role: 'do', kind: 'study-plan', sectionId: 'article-review', label: 'Article selection', due: '2026-09-04' },
+        { role: 'do', kind: 'study-plan', sectionId: 'article-review', label: 'Article Review', due: '2026-09-04' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-article-review', label: 'Article review help' }
       ]
     },
@@ -162,7 +162,7 @@ const FALL = {
   ],
   /** `week` is the 0-based week the badge sits on; `dx` nudges it by a fraction of a week. */
   milestones: [
-    { week: 2, icon: 'search', label: 'Article selection', dateLabel: 'Sep 4' },
+    { week: 2, icon: 'search', label: 'Article Review', dateLabel: 'Sep 4' },
     { week: 3, icon: 'bulb', label: 'Theory selection', dateLabel: 'Sep 11' },
     { week: 5, icon: 'doc', label: 'Lit review draft 1', dateLabel: 'Sep 25' },
     { week: 6, icon: 'ai', label: 'AI peer review back', dateLabel: 'Week of Sep 28' },
