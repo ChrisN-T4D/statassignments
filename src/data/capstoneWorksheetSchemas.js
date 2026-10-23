@@ -28,14 +28,14 @@ export const STUDY_PLAN_SECTIONS = [
     title: 'Phase 3: Elevator Speech',
     shortTitle: 'Phase 3',
     description: 'Distill your lit review: what we know, the gap, and your study pitch.',
-    submitNote: 'Submit with Phase 4 in Canvas.'
+    submitNote: 'Submit in Canvas.'
   },
   {
     id: 'phase-4',
     title: 'Phase 4: Operationalization',
     shortTitle: 'Phase 4',
     description: 'Compare four data-collection pathways and choose one.',
-    submitNote: 'Submit with Phase 3 in Canvas.'
+    submitNote: 'Submit in Canvas.'
   }
 ]
 

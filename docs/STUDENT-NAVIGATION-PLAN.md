@@ -139,7 +139,7 @@ Decided: these are single-semester classes, so they get a **semester view only**
 **Naming mismatches found in Phase 2 (need Chris to confirm which is right):**
 1. Study Plan section `phase-3` is "Phase 3: Elevator Speech" (distill the lit review), but the schedule calls its week "Method choice (Phase 3)", due the week of Oct 12.
 2. Study Plan section `article-review` is the full worksheet (at least 6 articles, PDFs), but the schedule lists "Article selection", due Fri Sep 4.
-3. Phase 3 and Phase 4 both say "Submit with Phase N in Canvas" (same submission), yet the schedule dates them differently (week of Oct 12 vs Fri Oct 23).
+3. ~~Phase 3 and Phase 4 both said "Submit with Phase N in Canvas"~~ Resolved (Chris): each item is anchored in the week it is due; the cross-references were removed and both now say "Submit in Canvas."
 
 **Phase 1 status:** `WeekContextBar.vue` (generalised from the reading/review bar) is mounted on chapter reading, Concept Review, Assignment Help index and detail, Study Plan hub and sections, and Research Methods software lessons. Helpers `itemMatches`, `findTargetWeek`, `parseWeekRef`, `weekRef` live in `researchMethodsSchedule.js` with 9 tests in `tests/researchMethodsSchedule.test.mjs` (`node --test tests/researchMethodsSchedule.test.mjs`). The week card adds `?from=` to every link. Old "Back to course" links were kept as a safety net outside the school year.
 Not yet done: Benchmark practice and the Jamovi/Excel guide index pages do not have the bar; the old generic Back links are still shown beside it.
