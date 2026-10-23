@@ -462,3 +462,40 @@ export function findTargetWeek (target, { from, today = new Date() } = {}) {
   }
   return first
 }
+
+/**
+ * When is a Study Plan section due, according to the schedule?
+ * status: 'this-week' | 'upcoming' | 'past' | 'none' (not scheduled).
+ * Dates are guidance; Canvas has the official due dates.
+ * @returns {{ status: string, due: string|null, dueLabel: string|null, label: string|null, weekIndex: number|null, schedule: object|null }}
+ */
+export function studyPlanDue (sectionId, today = new Date()) {
+  const none = { status: 'none', due: null, dueLabel: null, label: null, weekIndex: null, schedule: null }
+  for (const schedule of Object.values(RESEARCH_METHODS_SCHEDULES)) {
+    const weekIndex = schedule.weeks.findIndex((w) =>
+      w.items.some((it) => it.kind === 'study-plan' && it.sectionId === sectionId)
+    )
+    if (weekIndex < 0) continue
+    const item = schedule.weeks[weekIndex].items.find((it) => it.kind === 'study-plan' && it.sectionId === sectionId)
+    const phase = semesterPhase(schedule, today)
+    let status
+    if (phase === 'after') status = 'past'
+    else if (phase === 'before') status = 'upcoming'
+    else {
+      const current = currentWeekIndex(schedule, today)
+      status = weekIndex === current ? 'this-week' : weekIndex < current ? 'past' : 'upcoming'
+    }
+    return { status, due: item.due ?? null, dueLabel: item.dueLabel ?? null, label: item.label ?? null, weekIndex, schedule }
+  }
+  return none
+}
+
+/** "Due Fri, Oct 23", "Week of Oct 12", or "" when the section is not scheduled. */
+export function formatStudyPlanDue (info) {
+  if (!info) return ''
+  if (info.due) {
+    const day = parseScheduleDate(info.due).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+    return `Due ${day}`
+  }
+  return info.dueLabel || ''
+}

@@ -1,5 +1,6 @@
 /**
  * Study Plan aggregator: section metadata, emptyCapstoneProject().
+ * Due dates are not stored here; they come from researchMethodsSchedule.js (studyPlanDue).
  */
 
 import { emptyArticleReviewSection } from './capstoneArticleReviewWorksheet.js'
@@ -13,28 +14,28 @@ export const STUDY_PLAN_SECTIONS = [
     title: 'Article Review',
     shortTitle: 'Article Review',
     description: 'Unlimited article cards (minimum 6 complete for Canvas), problem statement, and early research questions.',
-    dueNote: 'Due week 4, submit in Canvas with PDF attachments.'
+    submitNote: 'Submit in Canvas with PDF attachments.'
   },
   {
     id: 'study-focus',
     title: 'Lit Review Outline',
     shortTitle: 'Lit Review Outline',
     description: 'Organizing framework, theme buckets, and compiled outline for your literature review.',
-    dueNote: 'Not a Canvas submission, feeds Lit Review Draft 1, Phase 3, and Phase 4.'
+    submitNote: 'Not a Canvas submission; feeds Lit Review Draft 1, Phase 3, and Phase 4.'
   },
   {
     id: 'phase-3',
     title: 'Phase 3: Elevator Speech',
     shortTitle: 'Phase 3',
     description: 'Distill your lit review: what we know, the gap, and your study pitch.',
-    dueNote: 'Due week 11, submit with Phase 4 in Canvas.'
+    submitNote: 'Submit with Phase 4 in Canvas.'
   },
   {
     id: 'phase-4',
     title: 'Phase 4: Operationalization',
     shortTitle: 'Phase 4',
     description: 'Compare four data-collection pathways and choose one.',
-    dueNote: 'Due week 11, submit with Phase 3 in Canvas.'
+    submitNote: 'Submit with Phase 3 in Canvas.'
   }
 ]
 

@@ -4,9 +4,20 @@
       <div class="section-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" :target="{ kind: 'study-plan', id: sectionId }" />
-        <h1 class="section-title">{{ sectionMeta.title }}</h1>
-        <p class="section-due">{{ sectionMeta.dueNote }}</p>
       </div>
+
+      <div class="section-sticky">
+        <div class="section-sticky-main">
+          <h1 class="section-title">{{ sectionMeta.title }}</h1>
+          <span v-if="dueText" class="section-due-chip" :class="{ now: due.status === 'this-week', past: due.status === 'past' }">
+            {{ dueText }}
+          </span>
+        </div>
+        <span v-if="progressText" class="section-progress">{{ progressText }}</span>
+      </div>
+      <p class="section-submit">
+        {{ sectionMeta.submitNote }} Dates follow the course timeline; Canvas has the official due dates.
+      </p>
 
       <component
         :is="sectionComponent"
@@ -32,6 +43,8 @@ import LitReviewOutlineSection from '../components/study-plan/LitReviewOutlineSe
 import ElevatorSpeechSection from '../components/study-plan/ElevatorSpeechSection.vue'
 import Phase4Section from '../components/study-plan/Phase4Section.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
+import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
+import { studyPlanDue, formatStudyPlanDue } from '../data/researchMethodsSchedule.js'
 
 const props = defineProps({
   classId: { type: String, required: true },
@@ -41,6 +54,10 @@ const props = defineProps({
 const { project, updateProject } = useCapstoneProject(props.classId)
 
 const sectionMeta = computed(() => getStudyPlanSection(props.sectionId))
+
+const due = computed(() => studyPlanDue(props.sectionId))
+const dueText = computed(() => formatStudyPlanDue(due.value))
+const progressText = computed(() => studyPlanSectionProgress(project.value, props.sectionId))
 
 const sectionComponent = computed(() => {
   switch (props.sectionId) {
@@ -90,14 +107,61 @@ function onSectionUpdate (patch) {
   color: var(--primary);
 }
 
-.section-title {
-  font-size: 1.5rem;
-  margin: 0 0 0.35rem;
+.section-sticky {
+  position: sticky;
+  top: 4.6rem; /* sits just under the sticky site header */
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  margin: 0 -1rem 0.75rem;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-main);
 }
 
-.section-due {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+.section-sticky-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
   margin: 0;
+}
+
+.section-due-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.section-due-chip.now {
+  border-color: rgba(245, 158, 11, 0.6);
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  font-weight: 600;
+}
+
+.section-due-chip.past {
+  opacity: 0.75;
+}
+
+.section-progress {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.section-submit {
+  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 </style>

@@ -27,33 +27,49 @@
         />
       </div>
 
+      <section v-if="dueThisWeek.length" class="due-now" aria-label="Due this week">
+        <h2 class="due-now-title">Due this week</h2>
+        <router-link
+          v-for="section in dueThisWeek"
+          :key="section.id"
+          :to="`/class/${classId}/study-plan/${section.id}`"
+          class="due-now-link"
+        >
+          <strong>{{ section.shortTitle }}</strong>
+          <span>{{ section.dueText }}</span>
+          <span class="due-now-go">Open →</span>
+        </router-link>
+      </section>
+
       <div class="section-grid">
         <router-link
-          v-for="section in STUDY_PLAN_SECTIONS"
+          v-for="section in sections"
           :key="section.id"
           :to="`/class/${classId}/study-plan/${section.id}`"
           class="section-card"
+          :class="{ 'is-due-now': section.due.status === 'this-week' }"
         >
           <h2 class="section-card-title">{{ section.shortTitle }}</h2>
           <p class="section-card-desc">{{ section.description }}</p>
-          <p class="section-card-due">{{ section.dueNote }}</p>
-          <span class="section-card-progress">{{ sectionProgress(section.id) }}</span>
+          <p class="section-card-due" :class="{ past: section.due.status === 'past' }">
+            <span v-if="section.due.status === 'this-week'" class="due-badge">Due this week</span>
+            <template v-if="section.dueText">{{ section.dueText }} · </template>{{ section.submitNote }}
+          </p>
+          <span class="section-card-progress">{{ studyPlanSectionProgress(project, section.id) }}</span>
           <span class="section-card-cta">Open section →</span>
         </router-link>
       </div>
+      <p class="dates-note">Dates here follow the course timeline. Canvas has the official due dates.</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useCapstoneProject } from '../composables/useCapstoneProject'
 import { STUDY_PLAN_SECTIONS } from '../data/capstoneWorksheetSchemas.js'
-import {
-  countArticleCards,
-  countLitReviewOutlineProgressForProject,
-  countPhase3Progress,
-  countPhase4Progress
-} from '../lib/capstoneValidation.js'
+import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
+import { studyPlanDue, formatStudyPlanDue } from '../data/researchMethodsSchedule.js'
 import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
@@ -62,35 +78,14 @@ const props = defineProps({
 
 const { project, updateProject, lastSavedAt, isGuestDraft } = useCapstoneProject(props.classId)
 
-function sectionProgress (sectionId) {
-  switch (sectionId) {
-    case 'article-review': {
-      const { complete, total, minRequired } = countArticleCards(project.value)
-      return `${complete}/${minRequired} complete · ${total} cards`
-    }
-    case 'study-focus': {
-      const p = countLitReviewOutlineProgressForProject(project.value)
-      if (!p.frameworkNamed) return 'Framework not started'
-      if (p.readyHint) return 'Outline ready to export'
-      return `Framework · ${p.themesStarted}/${p.themesTotal} themes`
-    }
-    case 'phase-3': {
-      const p = countPhase3Progress(project.value)
-      if (p.ready) return `${p.filled}/4 parts · ${p.words} words`
-      return p.filled ? `${p.filled}/4 parts · ${p.words} words` : 'Elevator speech not started'
-    }
-    case 'phase-4': {
-      const p = countPhase4Progress(project.value)
-      if (p.chosen) return 'Pathway chosen'
-      if (p.recapFilled || p.pathsExplored) {
-        return `A–B ${p.recapFilled}/${p.recapTotal} · ${p.pathsExplored}/${p.pathsTotal} paths`
-      }
-      return 'Not started'
-    }
-    default:
-      return ''
-  }
-}
+/** Sections with their schedule due date (guidance; Canvas is official). */
+const sections = computed(() =>
+  STUDY_PLAN_SECTIONS.map((section) => {
+    const due = studyPlanDue(section.id)
+    return { ...section, due, dueText: formatStudyPlanDue(due) }
+  })
+)
+const dueThisWeek = computed(() => sections.value.filter((section) => section.due.status === 'this-week'))
 
 function formatSaved (iso) {
   try {
@@ -225,5 +220,61 @@ function formatSaved (iso) {
   font-size: 0.9rem;
   color: var(--primary);
   font-weight: 600;
+}
+
+.due-now {
+  margin-bottom: 1.25rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.due-now-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #d97706;
+}
+
+.due-now-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.due-now-go {
+  margin-left: auto;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.section-card.is-due-now {
+  border-color: rgba(245, 158, 11, 0.7);
+}
+
+.due-badge {
+  display: inline-block;
+  margin-right: 0.4rem;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.18);
+  color: #d97706;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.section-card-due.past {
+  opacity: 0.75;
+}
+
+.dates-note {
+  margin: 1rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 </style>

@@ -71,7 +71,7 @@ Generalise `RmPathBar` into a `WeekContextBar` that works for any item, not only
 
 Done when: from any Research Methods page a student can get back to their week and see their next step without using the browser Back button.
 
-### Phase 2 - Make the schedule the single source of truth (M)
+### Phase 2 - Make the schedule the single source of truth (M) - DONE 2026-10-22
 
 - Remove the hard-coded `dueNote` strings; render due dates from `researchMethodsSchedule.js`.
 - Study Plan hub: highlight the section(s) due this week, show the due date, show "not started / in progress / done".
@@ -133,6 +133,13 @@ Decided: these are single-semester classes, so they get a **semester view only**
   6. Find the course FAQ and instructor contact.
 - Run it as a non-admin student account (admin views differ).
 - Have two or three real students attempt the six tasks cold and note where they hesitate.
+
+**Phase 2 status:** the hard-coded `dueNote` strings are gone; `capstoneWorksheetSchemas.js` keeps only a `submitNote` (how to submit). Due dates come from `studyPlanDue()` / `formatStudyPlanDue()` in `researchMethodsSchedule.js` (tests in `tests/studyPlanDue.test.mjs`). The Study Plan hub has a "Due this week" banner, highlights those cards and says "Canvas has the official due dates"; each section page has a sticky header with its due date and progress. Progress text moved to `src/lib/studyPlanProgress.js` so both pages share it. Not done: adding the "analyze your data" item to more weeks (add one schedule line per week when wanted).
+
+**Naming mismatches found in Phase 2 (need Chris to confirm which is right):**
+1. Study Plan section `phase-3` is "Phase 3: Elevator Speech" (distill the lit review), but the schedule calls its week "Method choice (Phase 3)", due the week of Oct 12.
+2. Study Plan section `article-review` is the full worksheet (at least 6 articles, PDFs), but the schedule lists "Article selection", due Fri Sep 4.
+3. Phase 3 and Phase 4 both say "Submit with Phase N in Canvas" (same submission), yet the schedule dates them differently (week of Oct 12 vs Fri Oct 23).
 
 **Phase 1 status:** `WeekContextBar.vue` (generalised from the reading/review bar) is mounted on chapter reading, Concept Review, Assignment Help index and detail, Study Plan hub and sections, and Research Methods software lessons. Helpers `itemMatches`, `findTargetWeek`, `parseWeekRef`, `weekRef` live in `researchMethodsSchedule.js` with 9 tests in `tests/researchMethodsSchedule.test.mjs` (`node --test tests/researchMethodsSchedule.test.mjs`). The week card adds `?from=` to every link. Old "Back to course" links were kept as a safety net outside the school year.
 Not yet done: Benchmark practice and the Jamovi/Excel guide index pages do not have the bar; the old generic Back links are still shown beside it.
