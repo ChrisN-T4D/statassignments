@@ -41,3 +41,4 @@ Push/deploy, Canvas import go/no-go, 15% grading reallocation, 5b board moderati
 - `docs/teaching/canvas-prep-rm-fa26/CANVAS-ALIGNMENT-RM.md`: every change Canvas needs to follow MM (live weeks 9-16, then full alignment).
 - `docs/QM-SPRING-2027-STATS-INTRO.md`: Statistics QM pre-review (44 standards), Intro check, pedagogy comparison. Key find: the `.imscc` for 4213 embeds a stale syllabus docx.
 - `scripts/canvas-prep.mjs [rm|stats]` generates objectives alignment + week headers.
+- Review of the Phase 6 diff: OpenCodeReview ran 31 min over 18 files, produced 0 comments, and 2+ groups hit its 30-minute deadline (partial). Treat Phase 6 as covered by my own read-through, 49 tests, build and browser checks, not by the tool. Next time pass --max-tokens or review per directory.
