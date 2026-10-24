@@ -102,3 +102,12 @@ Recommended order of work for Chris: fix the stale syllabus attachment first, be
 ## What I changed in code for this
 
 Statistics and Intro to Research now have the same week-by-week page as Research Methods: timeline, week card with "why this week" and objectives, context bar on reading, practice, software and help pages, chapter library, and the adaptive refresher. Online and in-person Statistics share one schedule. Verified in the dev site as a test student enrolled in both courses. No due dates appear for Statistics because the sections differ; Intro to Research shows the syllabus dates (Canvas stays official).
+
+## Decisions and changes, 2026-10-24
+
+- **S1 to S8 approved by Chris.** The syllabus objectives (docx and Canvas syllabus page) now use them in place of the older six-bullet list.
+- **Learner interaction (5.2, 5.4):** Introductions is the only required interaction; the Methods Market class forum is optional and not graded. Both are stated in the syllabus under Communication and Interaction.
+- **Feedback turnaround:** 7 to 10 days for graded work (Statistics and Intro to Research).
+- **Learner support (7.3):** Academic Services; there are no tutors. The syllabus names Academic Services without a link. Add its URL when known.
+- **Stale syllabus attachment fixed** in `psyc-4213-sp27-draft-fixed-v2.imscc` (also updated: Canvas syllabus page text and the Course Overview "email me first" line). The v1 package is untouched. The standalone docx with the same edits is `durable/syllabus/... - v2 S1-S8.docx`.
+- **To do (Chris):** record the welcome video. **To build:** SPSS Software Practice lessons, deeper and modeled on the weekly assignments.
