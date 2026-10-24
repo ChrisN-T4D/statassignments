@@ -18,6 +18,7 @@ const FALL = {
     {
       start: '2026-08-17',
       title: 'Science of Psychology',
+      why: 'This week you see why psychology counts as a science and how this course is organized, then read and acknowledge the syllabus.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-1' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-syllabus-ack', label: 'Syllabus acknowledgment', due: '2026-08-21' }
@@ -26,6 +27,7 @@ const FALL = {
     {
       start: '2026-08-24',
       title: 'Scientific Method',
+      why: 'You generate ideas and narrow a topic this week, which feeds directly into choosing your group and the topic workshop.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-2' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-choose-groups', label: 'Choose groups', due: '2026-08-28' },
@@ -35,6 +37,7 @@ const FALL = {
     {
       start: '2026-08-31',
       title: 'Research ethics',
+      why: 'Read research ethics now so you can judge the ethics of the studies you review in your Article Review.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-3' },
         { role: 'do', kind: 'study-plan', sectionId: 'article-review', label: 'Article Review', due: '2026-09-04' },
@@ -44,6 +47,7 @@ const FALL = {
     {
       start: '2026-09-07',
       title: 'Psychological measurement',
+      why: 'This week builds the vocabulary for reading Method sections, which you use when you select a theory and review articles.',
       note: 'No class Mon (Labor Day)',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-4' },
@@ -53,6 +57,7 @@ const FALL = {
     {
       start: '2026-09-14',
       title: 'Experimental research',
+      why: 'Learning to tell experimental from non-experimental papers prepares you to outline your literature review.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-5' },
         { role: 'do', kind: 'study-plan', sectionId: 'study-focus', label: 'Lit review outline', due: '2026-09-18' }
@@ -61,6 +66,7 @@ const FALL = {
     {
       start: '2026-09-21',
       title: 'Non-experimental research',
+      why: 'You learn to describe qualitative and observational studies, which you need to write the first draft of your literature review.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-6' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-lit-review-draft-1', label: 'Lit review draft 1', due: '2026-09-25' }
@@ -69,6 +75,7 @@ const FALL = {
     {
       start: '2026-09-28',
       title: 'Survey research',
+      why: 'This week covers survey and sampling choices so you can describe the studies you cite as you revise your literature review.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-7' },
         { role: 'do', kind: 'task', label: 'AI peer review of draft 1 arrives', dueLabel: 'Week of Sep 28', note: 'You receive AI peer review feedback one week after turning in draft 1. Start revising.' }
@@ -77,6 +84,7 @@ const FALL = {
     {
       start: '2026-10-05',
       title: 'Quasi-experimental research',
+      why: 'You learn to label quasi-experimental studies, which you need to finish your literature review synthesis.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-8' },
         { role: 'do', kind: 'lab', moduleId: 'rm-module-lab', label: 'Sampling lab (optional)', note: 'Optional: try random assignment and sampling hands-on before you choose your method next week.' },
@@ -86,6 +94,7 @@ const FALL = {
     {
       start: '2026-10-12',
       title: 'Method choice',
+      why: 'Comparing the four pathways this week prepares you to choose the method your project will use.',
       note: 'Fall Break Fri',
       items: [
         { role: 'do', kind: 'study-plan', sectionId: 'phase-4', label: 'Method choice', dueLabel: 'Week of Oct 12' },
@@ -99,6 +108,7 @@ const FALL = {
     {
       start: '2026-10-19',
       title: 'Measures draft',
+      why: 'You define your variables operationally and build your survey or protocol, which becomes your measures draft.',
       items: [
         { role: 'do', kind: 'study-plan', sectionId: 'measures-draft', label: 'Measures draft', due: '2026-10-23', note: 'Build your survey or protocol from the operational definitions you chose in Method Choice.' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-measures-draft', label: 'Measures draft help' },
@@ -108,6 +118,7 @@ const FALL = {
     {
       start: '2026-10-26',
       title: 'IRB first draft',
+      why: 'This week you draft your IRB application, the document that must be approved before you can collect data.',
       items: [
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-irb-first-draft', label: 'IRB first draft', due: '2026-10-30' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-1', label: 'HRT lesson 1' },
@@ -118,6 +129,7 @@ const FALL = {
     {
       start: '2026-11-02',
       title: 'Methods section',
+      why: 'Writing your Methods section now documents your design, participants, procedures, and measures for the project.',
       items: [
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-methods-section', label: 'Methods section', due: '2026-11-06' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-4', label: 'HRT lesson 4' },
@@ -127,6 +139,7 @@ const FALL = {
     {
       start: '2026-11-09',
       title: 'IRB submission',
+      why: 'You submit your IRB application this week; data collection cannot begin until it is approved.',
       items: [
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-irb-final-draft', label: 'IRB submission', due: '2026-11-13' }
       ]
@@ -134,6 +147,7 @@ const FALL = {
     {
       start: '2026-11-16',
       title: 'IRB processing',
+      why: 'Use this week to track your IRB review status and plan data collection.',
       items: [
         { role: 'do', kind: 'task', label: 'IRB processing log', due: '2026-11-20', note: 'Track approval status, next action, owner, and timeline.' }
       ]
@@ -147,6 +161,7 @@ const FALL = {
     {
       start: '2026-11-30',
       title: 'Status update',
+      why: 'Report your IRB status and your data collection plan, which closes out the fall capstone.',
       items: [
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-irb-status-update', label: 'IRB status update', due: '2026-12-04' }
       ]

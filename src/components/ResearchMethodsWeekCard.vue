@@ -16,6 +16,8 @@
 
     <div v-if="dueNote" class="rm-week-due">{{ dueNote }}</div>
 
+    <p v-if="week.why" class="rm-week-why">{{ week.why }}</p>
+
     <div class="rm-week-items">
       <template v-for="(item, i) in week.items" :key="i">
         <router-link v-if="linkFor(item)" :to="linkFor(item)" class="rm-item" :class="`rm-item-${item.role}`">
@@ -36,12 +38,27 @@
         </router-link>
       </template>
     </div>
+
+    <div v-if="outcomes.shown.length" class="rm-week-outcomes">
+      <h3>By the end of this week you can</h3>
+      <ul>
+        <li v-for="o in outcomes.shown" :key="o.objectiveId">{{ o.objective }}</li>
+      </ul>
+      <details v-if="outcomes.rest.length">
+        <summary>{{ outcomes.rest.length }} more from this week's reading</summary>
+        <ul>
+          <li v-for="o in outcomes.rest" :key="o.objectiveId">{{ o.objective }}</li>
+        </ul>
+      </details>
+    </div>
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { chapterNumber, RESEARCH_METHODS_SCHEDULES, weekRef } from '../data/researchMethodsSchedule'
+import { getObjectivesByModule } from '../data/objectives'
+import { weekObjectives } from '../lib/weekObjectives'
 
 const props = defineProps({
   week: { type: Object, required: true },
@@ -85,6 +102,8 @@ const dueNote = computed(() => {
   const day = parse(item.due).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
   return `Due ${day}: ${item.label}`
 })
+
+const outcomes = computed(() => weekObjectives(props.week, (id) => getObjectivesByModule(id)))
 
 function itemLabel(item) {
   if (item.kind === 'chapter' && !item.label) {
@@ -130,6 +149,12 @@ function reviewLink(item) {
 .rm-week-head h2 { margin: 0.1rem 0 0; font-size: 1.25rem; color: var(--text-primary); }
 .rm-week-range { margin-top: 0.25rem; font-size: 0.8rem; color: var(--text-muted); }
 .rm-week-steppers { display: flex; gap: 0.375rem; }
+.rm-week-why { margin: 0 0 0.875rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+.rm-week-outcomes { margin: 1rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--border); background: var(--bg-secondary, transparent); border-radius: 0 8px 8px 0; }
+.rm-week-outcomes h3 { margin: 0 0 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.rm-week-outcomes ul { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); }
+.rm-week-outcomes details { margin-top: 0.4rem; font-size: 0.85rem; }
+.rm-week-outcomes summary { cursor: pointer; color: var(--text-muted); }
 .rm-week-step {
   padding: 0.3rem 0.75rem;
   border: 2px solid var(--border);

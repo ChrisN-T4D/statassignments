@@ -1045,6 +1045,9 @@ function rmApplyWeek() {
     selectModule(chapter.moduleId)
   } else {
     selectedModuleId.value = null
+    // No chapter this week: drop the old module from the URL so a reload stays on this week
+    const { module: _m, tab: _t, ...rest } = route.query
+    router.replace({ path: route.path, query: { ...rest, week: String(rmSelectedWeek.value + 1), semester: rmSchedule.value?.slug === 'experimental' ? 'spring' : 'fall' } })
   }
 }
 
@@ -1093,9 +1096,13 @@ function rmInit() {
   const queried = route.query.module ? findWeekForModule(rmSchedule.value, String(route.query.module)) : -1
   const asked = Number(route.query.week) - 1
   const askedValid = Number.isInteger(asked) && asked >= 0 && asked < rmSchedule.value.weeks.length
-  rmSelectedWeek.value = queried >= 0
-    ? queried
-    : askedValid ? asked : (rmSemesterState.value === 'during' ? rmCurrentWeek.value : 0)
+  // A chapter appears in more than one week (revisits), so a reload with both ?week= and ?module= must keep the week
+  const askedHasModule = askedValid && (!route.query.module || rmSchedule.value.weeks[asked].items.some((it) => it.moduleId === String(route.query.module)))
+  rmSelectedWeek.value = askedHasModule
+    ? asked
+    : queried >= 0
+      ? queried
+      : askedValid ? asked : (rmSemesterState.value === 'during' ? rmCurrentWeek.value : 0)
   if (queried < 0) rmApplyWeek()
 }
 
@@ -1564,7 +1571,12 @@ function syncRouteQueryFromSelection() {
     module: selectedModuleId.value,
     tab,
   }
-  if (route.query.module === nextQuery.module && route.query.tab === nextQuery.tab) return
+  // Keep the week in the URL so a refresh or bookmark returns to it
+  if (rmSchedule.value) {
+    nextQuery.week = String(rmSelectedWeek.value + 1)
+    nextQuery.semester = rmSchedule.value.slug === 'experimental' ? 'spring' : 'fall'
+  }
+  if (route.query.module === nextQuery.module && route.query.tab === nextQuery.tab && route.query.week === nextQuery.week) return
   router.replace({ path: route.path, query: nextQuery })
 }
 

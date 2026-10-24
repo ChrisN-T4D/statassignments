@@ -175,10 +175,11 @@ export function useClasses() {
   }
 
   // Select a class
-  function selectClass(classId) {
-    const cls = classes.value.find(c => c.id === classId)
+  function selectClass(classIdOrSlug) {
+    // Class pages pass the URL slug, the picker passes the id
+    const cls = classes.value.find(c => c.id === classIdOrSlug || c.slug === classIdOrSlug)
     if (cls?.is_active) {
-      selectedClassId.value = classId
+      selectedClassId.value = cls.id
     }
   }
 

@@ -22,3 +22,11 @@ Push/deploy, Canvas import go/no-go, 15% grading reallocation, 5b board moderati
 
 ## Log
 - A done (guide index + software practice get the bar; Benchmark practice is stats-only, moved into B)
+- D done: `QM-AUDIT-RM-FA26.md` (44 standards: 7 met, 19 partial, 15 not met, 3 cannot judge). Biggest: no measurable/module objectives, template pages still published (one holds a Zoom passcode), Canvas/syllabus vs MM disagree on calendar AND chapter order.
+- E done: `PEDAGOGY-REVIEW.md`, produced UI queue U1-U5.
+- U1+U2 built (objectives block + "why this week" on the week card; `why` text for all 16 fall weeks, drafted by the 27B, I corrected 3 sentences). `src/lib/weekObjectives.js` + 4 tests (27B wrote the tests).
+- C done: `scripts/click-count.cjs` (6 student tasks, runs as the test student). First run found two real bugs, both fixed:
+  1. `selectClass` only matched by id, class pages pass the slug, so a student arriving by slug (the single-course skip) had no class items in the Menu, including "I'm stuck".
+  2. Landing URL carried `?module=rm-module-4`; on reload the page jumped to Week 4 ("Earlier week") instead of this week. Week + semester now live in the URL and win when the module is in that week.
+  After the fixes all 6 tasks pass within budget (0,1,1,1,2,2 clicks).
+- Review pipeline finding: `local-code-review` bundle does NOT work as shipped. `review.sh` fails ("no valid LLM endpoint") because OpenCodeReview wants `OCR_LLM_*` or a config, not `OPENAI_*`; also the container needs git `safe.directory`, and the broker has no `/v1/messages` so the provider must be a custom `openai` protocol one. `ocr llm test` passes with that config. I used a wrapper in the session scratchpad; the fix for the bundle is listed in the morning summary.
