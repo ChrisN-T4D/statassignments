@@ -34,3 +34,10 @@ Push/deploy, Canvas import go/no-go, 15% grading reallocation, 5b board moderati
 - Review: OpenCodeReview ran partial (12 min; 2 groups timed out at 300 s while the broker was busy); only the click-count script got comments (try/finally, env checks, ONLY no-match), all applied. App code got my own read-through instead. `local-code-review/review.sh` fixed (backup `review.sh.bak-20261023`): provider config, safe.directory, REVIEW_REPO, OCR_LLM_TIMEOUT=900. PR-Agent path not tested. No security-scan container exists.
 - Not done, by design: U3 (needs turnaround days), U4 revisit card, Phase 6/5b (need Chris), pushes. Dashboard cards added/updated.
 - U4 done: Quick refresher on the current week card (src/lib/refresher.js + 5 tests, 27B wrote tests). Shows only after the student has attempted objectives; checked in a browser with mocked mastery data. Review of this diff: own read-through (no v-html, static links); OCR run left for the morning.
+
+## 2026-10-24 follow-up (Chris: Canvas follows MM; RM objectives approved; do Statistics and Intro too)
+- Phase 6 built and committed: `statisticsSchedule.js` (online + in-person share one sequence, no due dates because sections differ) and `introResearchSchedule.js` (syllabus dates, chapter-to-week mapping proposed); schedule registry, `scheduleFamily`/`hasSchedule`/`chapterLinks`/`softwareLink`, class page, week card, context bar, chapter library, continue card all class-aware. 49 tests (`tests/courseSchedules.test.mjs` validates both schedules against modules and help pages). Verified as the test student in the dev site; click-count still 6/6 for RM.
+- Fixed a dark-mode white box on the module objectives panel (`--bg-secondary` fallback).
+- `docs/teaching/canvas-prep-rm-fa26/CANVAS-ALIGNMENT-RM.md`: every change Canvas needs to follow MM (live weeks 9-16, then full alignment).
+- `docs/QM-SPRING-2027-STATS-INTRO.md`: Statistics QM pre-review (44 standards), Intro check, pedagogy comparison. Key find: the `.imscc` for 4213 embeds a stale syllabus docx.
+- `scripts/canvas-prep.mjs [rm|stats]` generates objectives alignment + week headers.
