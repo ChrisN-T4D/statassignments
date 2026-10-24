@@ -36,6 +36,14 @@
         </p>
       </section>
 
+      <section class="stuck-step">
+        <h2><span class="step-num">3</span> Ask the class</h2>
+        <p class="stuck-lead">
+          Search what classmates have already asked, or post your own question. Someone may answer today, or later this week.
+        </p>
+        <button type="button" class="stuck-email-btn stuck-board-btn" @click="askClass">Open the class forum</button>
+      </section>
+
       <p class="stuck-broken">
         Something on the website not working?
         <router-link to="/report-issue">Report a problem</router-link>
@@ -52,6 +60,8 @@ import { getAssignmentById } from '../data/assignmentHelp'
 import { getResearchMethodsSchedule, parseWeekRef, findTargetWeek, weekRef } from '../data/researchMethodsSchedule'
 import { itemLink } from '../lib/continueSummary'
 import { buildHelpMailto, PROFESSOR_EMAIL } from '../lib/helpEmail'
+import { boardTagFor } from '../lib/boardFormat'
+import { openBoard } from '../composables/useBoard'
 
 const props = defineProps({
   classId: { type: String, required: true }
@@ -101,6 +111,15 @@ const backTo = computed(() => {
 })
 const backLabel = computed(() => (assignment.value ? topicName.value : 'Back to your week'))
 
+function askClass() {
+  const tag = boardTagFor({
+    topic: assignment.value ? topic.value : '',
+    topicName: topicName.value,
+    weekNumber: place.value ? place.value.weekIndex + 1 : 0
+  })
+  openBoard({ ...tag, search: topicName.value })
+}
+
 const mailto = computed(() => buildHelpMailto({
   course: courseLabel.value,
   week: weekLabel.value,
@@ -124,6 +143,7 @@ const mailto = computed(() => buildHelpMailto({
 .stuck-links a, .stuck-link { color: var(--primary); font-weight: 600; text-decoration: none; }
 .stuck-links a:hover, .stuck-link:hover { text-decoration: underline; }
 .stuck-email-btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 0.5rem; background: var(--primary); color: #fff; font-weight: 600; text-decoration: none; }
+.stuck-board-btn { border: none; font: inherit; font-weight: 600; cursor: pointer; }
 .stuck-fallback { margin: 0.75rem 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .stuck-broken { max-width: 42rem; font-size: 0.9rem; color: var(--text-muted); }
 .stuck-broken a { color: var(--primary); }

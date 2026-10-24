@@ -398,6 +398,86 @@ class LiveLabContribution(Base, TimestampMixin):
     payload: Mapped[Any] = mapped_column(JSONB, nullable=False)
 
 
+class BoardThread(Base, TimestampMixin):
+    """Class forum thread ("Ask the class"). One board per class per semester."""
+
+    __tablename__ = "board_threads"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    class_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("classes.id", ondelete="CASCADE"), nullable=False)
+    semester_id: Mapped[str | None] = mapped_column(String(ID_LEN), ForeignKey("semesters.id", ondelete="SET NULL"))
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    title: Mapped[str] = mapped_column(String(150), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    tag: Mapped[str | None] = mapped_column(String(128))
+    tag_label: Mapped[str | None] = mapped_column(String(160))
+    answer_post_id: Mapped[str | None] = mapped_column(String(ID_LEN))
+    answered: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    hidden: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    last_activity: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+
+    author: Mapped[User] = relationship(foreign_keys=[user_id])
+    posts: Mapped[list["BoardPost"]] = relationship(
+        back_populates="thread", cascade="all, delete-orphan", order_by="BoardPost.created"
+    )
+
+
+class BoardPost(Base, TimestampMixin):
+    __tablename__ = "board_posts"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    thread_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("board_threads.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    hidden: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    thread: Mapped[BoardThread] = relationship(back_populates="posts")
+    author: Mapped[User] = relationship(foreign_keys=[user_id])
+
+
+class BoardHelpful(Base):
+    __tablename__ = "board_helpful"
+    __table_args__ = (UniqueConstraint("post_id", "user_id", name="uq_board_helpful_post_user"),)
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    post_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("board_posts.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
+
+class BoardRead(Base):
+    """A row exists once a user starts or replies to a thread; seen_at drives the unread badge."""
+
+    __tablename__ = "board_reads"
+    __table_args__ = (UniqueConstraint("thread_id", "user_id", name="uq_board_reads_thread_user"),)
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    thread_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("board_threads.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    seen_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+
+
+class BoardReport(Base, TimestampMixin):
+    __tablename__ = "board_reports"
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    class_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("classes.id", ondelete="CASCADE"), nullable=False)
+    thread_id: Mapped[str] = mapped_column(
+        String(ID_LEN), ForeignKey("board_threads.id", ondelete="CASCADE"), nullable=False
+    )
+    post_id: Mapped[str | None] = mapped_column(String(ID_LEN), ForeignKey("board_posts.id", ondelete="CASCADE"))
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    reason: Mapped[str | None] = mapped_column(String(300))
+    resolved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+
 COLLECTION_MODELS: dict[str, type[Base]] = {
     "users": User,
     "classes": Class,
