@@ -21,3 +21,4 @@ Branch: `rm/semester-timeline` (local only; NOTHING is pushed or deployed; push 
 Push/deploy, Canvas import go/no-go, 15% grading reallocation, 5b board moderation, dev-setup files.
 
 ## Log
+- A done (guide index + software practice get the bar; Benchmark practice is stats-only, moved into B)
