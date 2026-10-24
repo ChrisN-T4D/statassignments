@@ -5,6 +5,26 @@ const isOpen = ref(false)
 const prefill = ref({ search: '', tag: '', tagLabel: '' })
 const unread = ref(0)
 
+// Docked = a side column the page makes room for, so students can keep working while it stays open
+const DOCK_KEY = 'board_docked'
+function readDocked() {
+  try {
+    return localStorage.getItem(DOCK_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+const docked = ref(readDocked())
+
+export function setDocked(value) {
+  docked.value = value
+  try {
+    localStorage.setItem(DOCK_KEY, value ? '1' : '0')
+  } catch {
+    // the choice just won't be remembered
+  }
+}
+
 /** Open the "Ask the class" panel, optionally pre-filtered/tagged for where the student came from. */
 export function openBoard({ search = '', tag = '', tagLabel = '' } = {}) {
   prefill.value = { search, tag, tagLabel }
@@ -16,5 +36,5 @@ export function closeBoard() {
 }
 
 export function useBoard() {
-  return { isOpen, prefill, unread, openBoard, closeBoard }
+  return { isOpen, prefill, unread, docked, setDocked, openBoard, closeBoard }
 }

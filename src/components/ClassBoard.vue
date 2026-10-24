@@ -13,12 +13,13 @@
     </button>
 
     <transition name="board-pop">
-      <div v-if="isOpen" class="board-popup" role="dialog" aria-label="Ask the class">
+      <div v-if="isOpen" class="board-popup" :class="{ docked: isDocked }" role="dialog" aria-label="Ask the class">
         <ClassBoardPanel :class-id="classSlug">
           <template #actions>
             <div class="board-popup-actions">
-              <router-link class="board-popup-link" :to="`/class/${classSlug}/board`" @click="closeBoard">Open full page</router-link>
-              <button type="button" class="board-popup-close" aria-label="Close" @click="closeBoard">×</button>
+              <button v-if="canDock" type="button" class="board-popup-link board-dock-btn" @click="setDocked(!docked)">{{ docked ? 'Pop out' : 'Dock to side' }}</button>
+              <router-link class="board-popup-link" :to="`/class/${classSlug}/board`" @click="closeBoard">Full page</router-link>
+              <button type="button" class="board-popup-close" aria-label="Minimize" title="Minimize" @click="closeBoard">×</button>
             </div>
           </template>
         </ClassBoardPanel>
@@ -41,7 +42,7 @@ import { parseWeekRef, findTargetWeek } from '../data/researchMethodsSchedule'
 
 const route = useRoute()
 const { isAuthenticated } = useAuth()
-const { isOpen, unread, openBoard, closeBoard } = useBoard()
+const { isOpen, unread, docked, setDocked, openBoard, closeBoard } = useBoard()
 const { selectedClass } = useClasses()
 
 // The forum follows the class the student is looking at: the URL first, else the picked class
@@ -62,6 +63,17 @@ const context = computed(() => {
   return { ...tag, search: '' }
 })
 
+// Docking needs room beside the page; on narrow screens the panel stays a popup
+const wide = ref(true)
+const canDock = computed(() => wide.value)
+const isDocked = computed(() => docked.value && canDock.value)
+let mq = null
+const onMq = () => { wide.value = mq.matches }
+
+watch([isOpen, isDocked], ([open, dock]) => {
+  document.body.classList.toggle('board-docked', open && dock)
+}, { immediate: true })
+
 let timer = null
 
 async function checkUnread() {
@@ -75,10 +87,17 @@ async function checkUnread() {
 }
 
 onMounted(() => {
+  mq = window.matchMedia('(min-width: 900px)')
+  wide.value = mq.matches
+  mq.addEventListener('change', onMq)
   checkUnread()
   timer = setInterval(checkUnread, 60000)
 })
-onBeforeUnmount(() => clearInterval(timer))
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  mq?.removeEventListener('change', onMq)
+  document.body.classList.remove('board-docked')
+})
 watch(classSlug, () => {
   denied.value = false
   unread.value = 0
@@ -112,7 +131,10 @@ watch(() => route.fullPath, () => {
   box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column;
 }
 .board-popup-actions { display: flex; align-items: center; gap: 0.75rem; }
-.board-popup-link { font-size: 0.8rem; color: var(--text-secondary); }
+.board-popup-link { white-space: nowrap; font-size: 0.8rem; color: var(--text-secondary); }
+.board-dock-btn { background: none; border: none; padding: 0; font-family: inherit; cursor: pointer; text-decoration: underline; }
+.board-dock-btn:hover { color: var(--text-primary); }
+.board-popup.docked { top: 0; right: 0; bottom: 0; width: var(--board-dock-w); height: auto; border-radius: 0; border-width: 0 0 0 1px; box-shadow: none; }
 .board-popup-close { background: none; border: none; color: var(--text-secondary); font-size: 1rem; cursor: pointer; }
 .board-popup-close:hover { color: var(--text-primary); }
 .board-pop-enter-active, .board-pop-leave-active { transition: opacity 0.15s, transform 0.15s; }
@@ -121,4 +143,11 @@ watch(() => route.fullPath, () => {
   .board-popup { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; border: none; }
   .board-launcher-label { display: none; }
 }
+</style>
+
+<style>
+:root { --board-dock-w: 380px; }
+body.board-docked { padding-right: var(--board-dock-w); transition: padding-right 0.15s; }
+/* the Tools tab hugs the right edge; keep it clear of the docked forum */
+body.board-docked .drawer-toggle-btn { right: var(--board-dock-w) !important; }
 </style>

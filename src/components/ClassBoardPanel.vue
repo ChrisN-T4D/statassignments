@@ -360,7 +360,7 @@ watch(() => props.classId, init)
 <style scoped>
 .board { display: flex; flex-direction: column; min-height: 0; height: 100%; color: var(--text-primary); }
 .board-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
-.board-title { margin: 0; font-size: 1.05rem; }
+.board-title { margin: 0; font-size: 1.05rem; line-height: 1.2; }
 .board-course { font-weight: 400; color: var(--text-secondary); font-size: 0.85rem; margin-left: 0.25rem; }
 .board-body { flex: 1; overflow-y: auto; padding: 0.75rem 1rem 1rem; }
 .board-back { background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.25rem 0; font: inherit; }
