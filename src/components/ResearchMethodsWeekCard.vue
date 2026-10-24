@@ -39,6 +39,17 @@
       </template>
     </div>
 
+    <div v-if="refresher.length" class="rm-week-refresher">
+      <h3>Quick refresher</h3>
+      <p>These earlier ideas need another look before you build on them.</p>
+      <ul>
+        <li v-for="o in refresher" :key="o.objectiveId">
+          <router-link :to="refresherLink(o)">{{ o.objective }}</router-link>
+          <small>{{ o.mastery }}% so far</small>
+        </li>
+      </ul>
+    </div>
+
     <div v-if="outcomes.shown.length" class="rm-week-outcomes">
       <h3>By the end of this week you can</h3>
       <ul>
@@ -55,10 +66,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { chapterNumber, RESEARCH_METHODS_SCHEDULES, weekRef } from '../data/researchMethodsSchedule'
 import { getObjectivesByModule } from '../data/objectives'
 import { weekObjectives } from '../lib/weekObjectives'
+import { pickRefresher } from '../lib/refresher'
+import { getAllBKTStates } from '../composables/useBKT'
+import { objectives } from '../data/objectives'
 
 const props = defineProps({
   week: { type: Object, required: true },
@@ -102,6 +116,28 @@ const dueNote = computed(() => {
   const day = parse(item.due).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
   return `Due ${day}: ${item.label}`
 })
+
+// Only the current week, and only for students who have practiced something
+const refresher = ref([])
+watch(
+  () => [props.status, props.weekNumber, props.scheduleSlug],
+  async () => {
+    refresher.value = []
+    const schedule = RESEARCH_METHODS_SCHEDULES[props.scheduleSlug]
+    if (props.status !== 'cur' || !schedule) return
+    try {
+      const states = await getAllBKTStates()
+      refresher.value = pickRefresher(states || {}, schedule.weeks, props.weekNumber - 1, objectives)
+    } catch {
+      refresher.value = []
+    }
+  },
+  { immediate: true }
+)
+
+function refresherLink(o) {
+  return { path: `/class/${props.classSlug}/practice`, query: { module: o.moduleId, ...fromQuery() } }
+}
 
 const outcomes = computed(() => weekObjectives(props.week, (id) => getObjectivesByModule(id)))
 
@@ -150,6 +186,12 @@ function reviewLink(item) {
 .rm-week-range { margin-top: 0.25rem; font-size: 0.8rem; color: var(--text-muted); }
 .rm-week-steppers { display: flex; gap: 0.375rem; }
 .rm-week-why { margin: 0 0 0.875rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+.rm-week-refresher { margin: 1rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--border); border-radius: 0 8px 8px 0; }
+.rm-week-refresher h3 { margin: 0 0 0.25rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.rm-week-refresher p { margin: 0 0 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
+.rm-week-refresher ul { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.5; }
+.rm-week-refresher a { color: var(--text-primary); text-decoration: underline; }
+.rm-week-refresher small { margin-left: 0.5rem; color: var(--text-muted); }
 .rm-week-outcomes { margin: 1rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--border); background: var(--bg-secondary, transparent); border-radius: 0 8px 8px 0; }
 .rm-week-outcomes h3 { margin: 0 0 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 .rm-week-outcomes ul { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); }
