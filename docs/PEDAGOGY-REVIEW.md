@@ -23,9 +23,9 @@ Outcomes are not stated per week, per assignment, or in measurable form (QM 2.1 
 13 Concept Review slips at 10 points each reward uploading a slip. The mastery data is already in MM but Canvas never uses it. Research on testing and retrieval (Roediger and Karpicke) supports low-stakes quizzing, but the benefit comes from retrieval and feedback, which MM supplies; the slip adds friction without adding learning.
 **Fix (needs Chris):** keep as is, or let MM mark completion directly. UI side: show "you have retrieved X of Y objectives from earlier weeks" (see 4).
 
-### 3. Reading is sequenced by capstone need, not by concept dependency, with no explicit link back
-Chapters arrive as 1, 2, 4, 5, 6, 7, 11, 8, 3, 9, 10, 12, 13. That is a defensible just-in-time order, and the schedule's "Focus" line explains why ("use this vocabulary when you read each article's Method section"). But Ethics (Ch. 3) lands in week 9, after students have already chosen topics and read studies, and the explanation exists only in the syllabus table.
-**Fix:** surface that "why this chapter now" sentence on the week card and the reading page (data exists in the Canvas schedule; we need to add it to the MM schedule as `why`). Cheap and high value for transfer.
+### 3. Reading order differs between the two systems, and the reason is not shown
+Canvas and the syllabus sequence chapters 1, 2, 4, 5, 6, 7, 11, 8, 3, 9, 10, 12, 13 (just-in-time for the capstone; Ethics arrives in week 9, after topics are chosen and studies read). MM sequences 1 to 8 in order, with Ethics in week 3, and treats 9 to 13 as spring content. Both are defensible; ethics before students read and critique studies is the stronger order pedagogically (students judge prior studies' ethics while reviewing them, and the IRB deliverables come later anyway). The problem is that students can be told two different things, and the "why this chapter now" sentence exists only in the syllabus table.
+**Fix:** Chris picks one order (recommend MM's) and Canvas follows; add a `why` sentence per week in the MM schedule and show it on the week card and reading page. Cheap and high value for transfer.
 
 ### 4. Little spacing or interleaving
 Each chapter is quizzed once, the week it is read. Spaced and interleaved retrieval (Cepeda; Rohrer) improves retention for exactly this kind of cumulative course (design vocabulary reused in week 9 Method Choice).
@@ -60,7 +60,7 @@ Representation: text-heavy; no video or audio for current term. Action and expre
 | Id | Change | Theory | Needs Chris? |
 |---|---|---|---|
 | U1 | "By the end of this week you can..." objectives on the week card (from objective ids) | Alignment | Wording from approved CLOs; use existing MM objectives meanwhile |
-| U2 | "Why this chapter now" sentence in schedule data, shown on week card and reading page | Transfer, coherence | No (sentences from the syllabus Focus column) |
+| U2 | "Why this chapter now" sentence in schedule data, shown on week card and reading page | Transfer, coherence | No (draft sentences from the syllabus Focus column, adjusted to MM's order) |
 | U3 | "Feedback expected by" on draft items | Feedback timing | Turnaround days (propose 7) |
 | U4 | Revisit card with low-mastery items | Spacing/interleaving | No, but non-trivial; do after U1/U2 |
 | U5 | Week context bar on Benchmark practice (Stats) | Self-regulation | No (belongs to Phase 6) |
