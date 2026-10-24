@@ -35,7 +35,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { chapterNumber, findTargetWeek, itemMatches, weekRef } from '../data/researchMethodsSchedule'
+import { chapterLinks, classSlugForSchedule, findTargetWeek, itemMatches, semesterQuery, softwareLink, weekRef } from '../data/researchMethodsSchedule'
 
 const props = defineProps({
   /**
@@ -51,23 +51,26 @@ const props = defineProps({
 
 const route = useRoute()
 
-const loc = computed(() => findTargetWeek(props.target, { from: route.query.from }))
+const loc = computed(() => findTargetWeek(props.target, { from: route.query.from, classSlug: props.classSlug }))
 const week = computed(() => loc.value.schedule.weeks[loc.value.weekIndex])
+/** The class this week belongs to, whatever page the student is on (an Intro student reading a shared chapter stays in Intro). */
+const klass = computed(() => classSlugForSchedule(loc.value.schedule))
 const ref = computed(() => weekRef(loc.value.schedule, loc.value.weekIndex))
 
 const weekLink = computed(() => ({
-  path: `/class/${props.classSlug}`,
+  path: `/class/${klass.value}`,
   query: {
-    semester: loc.value.schedule.slug === 'experimental' ? 'spring' : 'fall',
+    semester: semesterQuery(loc.value.schedule),
     week: loc.value.weekIndex + 1
   }
 }))
 
 function itemLink(item) {
   const from = { from: ref.value }
-  if (item.kind === 'assignment-help') return { path: `/class/${props.classSlug}/assignment-help/${item.assignmentId}`, query: from }
-  if (item.kind === 'study-plan') return { path: `/class/${props.classSlug}/study-plan/${item.sectionId}`, query: from }
-  if (item.kind === 'lab' || item.kind === 'analysis') return { path: `/class/${props.classSlug}`, query: { module: item.moduleId } }
+  if (item.kind === 'assignment-help') return { path: `/class/${klass.value}/assignment-help/${item.assignmentId}`, query: from }
+  if (item.kind === 'study-plan') return { path: `/class/${klass.value}/study-plan/${item.sectionId}`, query: from }
+  if (item.kind === 'software') return softwareLink(item, { classSlug: klass.value, from: ref.value })
+  if (item.kind === 'lab' || item.kind === 'analysis') return { path: `/class/${klass.value}`, query: { module: item.moduleId } }
   return null
 }
 
@@ -79,21 +82,22 @@ const steps = computed(() => {
   const out = []
   week.value.items.forEach((item) => {
     if (item.kind !== 'chapter') return
-    const n = chapterNumber(item)
+    const links = chapterLinks(loc.value.schedule, item, { classSlug: klass.value, from: ref.value })
+    const n = links.n
     if (!n) return
     const onChapter = props.target?.kind === 'chapter' && props.target.id === n
     out.push({
       key: `read-${n}`,
       role: 'read',
-      label: `Read Ch. ${n}`,
-      to: { path: `/topic/rm-chapter-${n}`, query: { from: ref.value } },
+      label: `Read ${links.name}`,
+      to: links.read,
       current: onChapter && props.step === 'read'
     })
     out.push({
       key: `review-${n}`,
       role: 'review',
       label: 'Concept Review',
-      to: { path: `/class/${props.classSlug}/practice`, query: { module: `rm-module-${n}`, from: ref.value } },
+      to: links.review,
       current: onChapter && props.step === 'review'
     })
   })
@@ -133,7 +137,7 @@ const help = computed(() => {
   const item = week.value.items.find((it) => it.kind === 'assignment-help')
   const topic = own || item?.assignmentId
   return {
-    path: `/class/${props.classSlug}/stuck`,
+    path: `/class/${klass.value}/stuck`,
     query: { ...(topic ? { topic } : {}), from: ref.value, page: route.fullPath }
   }
 })

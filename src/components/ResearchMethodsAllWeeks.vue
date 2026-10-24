@@ -28,7 +28,8 @@
     <details class="rm-more-box">
       <summary>Chapter library</summary>
       <div class="rm-more-in">
-        <p class="rm-lib-note">Chapters 1–8 are fall (PSYC 4223); 9–13 are spring (PSYC 4233). Choosing one jumps to its week.</p>
+        <p v-if="family.length > 1" class="rm-lib-note">Chapters 1–8 are fall (PSYC 4223); 9–13 are spring (PSYC 4233). Choosing one jumps to its week.</p>
+        <p v-else class="rm-lib-note">Choosing one jumps to its week.</p>
         <div class="rm-lib">
           <button
             v-for="c in chapters"
@@ -37,8 +38,8 @@
             class="rm-chip"
             @click="$emit('select-chapter', c.slug, c.weekIndex)"
           >
-            Ch. {{ c.n }} {{ c.title }}
-            <span class="rm-chip-badge">{{ c.course }}</span>
+            {{ unitName }} {{ c.n }} {{ c.title }}
+            <span v-if="family.length > 1" class="rm-chip-badge">{{ c.course }}</span>
           </button>
         </div>
       </div>
@@ -48,7 +49,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { RESEARCH_METHODS_SCHEDULES, chapterNumber } from '../data/researchMethodsSchedule'
+import { chapterNumber, scheduleFamily } from '../data/researchMethodsSchedule'
 
 const props = defineProps({
   schedule: { type: Object, required: true },
@@ -76,10 +77,14 @@ function dueFor(week) {
   return item ? item.label : ''
 }
 
-/** Every chapter once, in chapter order, across both semesters. */
+/** The schedules on this class page (Research Methods has two, the others one). */
+const family = computed(() => scheduleFamily(props.schedule.slug))
+const unitName = computed(() => (props.schedule.reading === 'stats' ? 'Module' : 'Ch.'))
+
+/** Every chapter once, in chapter order, across the class's semesters. */
 const chapters = computed(() => {
   const out = []
-  Object.values(RESEARCH_METHODS_SCHEDULES).forEach((sched) => {
+  family.value.forEach((sched) => {
     sched.weeks.forEach((w, weekIndex) => {
       w.items.forEach((it) => {
         const n = it.kind === 'chapter' ? chapterNumber(it) : null

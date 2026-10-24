@@ -1,13 +1,15 @@
 /**
- * Week-by-week schedule for the Research Methods sequence.
- * research-methods (PSYC 4223, fall) -> experimental (PSYC 4233, spring).
- *
- * Fall covers Pressbooks chapters 1-8; spring covers 9-13. Dates are the Monday of each week.
+ * Week-by-week schedules, keyed by class slug.
+ * Research Methods is a year: research-methods (PSYC 4223, fall) -> experimental (PSYC 4233, spring).
+ * Fall covers Pressbooks chapters 1-8; spring covers 9-13. Statistics and Intro to Research are one semester each
+ * (see statisticsSchedule.js and introResearchSchedule.js). Dates are the Monday of each week.
  * Week item roles: read (chapter), do (the deliverable), help (assignment help page).
  * Dates marked `proposed` are placeholders to confirm with the instructor.
  */
+import { STATISTICS } from './statisticsSchedule.js'
+import { INTRO_RESEARCH } from './introResearchSchedule.js'
 
-/** @typedef {{ role: 'read'|'do'|'help', kind: 'chapter'|'study-plan'|'assignment-help'|'task'|'analysis'|'lab', label?: string, moduleId?: string, sectionId?: string, assignmentId?: string, due?: string, dueLabel?: string, note?: string }} ScheduleItem */
+/** @typedef {{ role: 'read'|'do'|'help', kind: 'chapter'|'study-plan'|'assignment-help'|'task'|'analysis'|'lab'|'software', label?: string, moduleId?: string, sectionId?: string, assignmentId?: string, due?: string, dueLabel?: string, note?: string }} ScheduleItem */
 
 const FALL = {
   slug: 'research-methods',
@@ -344,7 +346,35 @@ const SPRING = {
 
 export const RESEARCH_METHODS_SCHEDULES = {
   'research-methods': FALL,
-  experimental: SPRING
+  experimental: SPRING,
+  statistics: STATISTICS,
+  'intro-research': INTRO_RESEARCH
+}
+
+/** Schedules that share one class page: Research Methods is a year (fall then spring), the others one semester. */
+const FAMILIES = [['research-methods', 'experimental']]
+
+/** Schedules shown together for a class slug, in order, or [] when the class has no schedule. */
+export function scheduleFamily (classSlug) {
+  const members = FAMILIES.find((f) => f.includes(classSlug)) || [classSlug]
+  return members.map((slug) => RESEARCH_METHODS_SCHEDULES[slug]).filter(Boolean)
+}
+
+/** Class page a schedule belongs to (the spring Experimental weeks live on the Research Methods page). */
+export function classSlugForSchedule (schedule) {
+  return schedule.slug === 'experimental' ? 'research-methods' : schedule.slug
+}
+
+/** `?semester=` value for a schedule: only the Research Methods year has two semesters to tell apart. */
+export function semesterQuery (schedule) {
+  if (schedule.slug === 'experimental') return 'spring'
+  if (schedule.slug === 'research-methods') return 'fall'
+  return undefined
+}
+
+/** Does this class have a week-by-week schedule? */
+export function hasSchedule (classSlug) {
+  return scheduleFamily(classSlug).length > 0
 }
 
 export function getResearchMethodsSchedule (classSlug) {
@@ -407,8 +437,41 @@ export function chapterWeeks (schedule) {
 
 /** Chapter number for a chapter item ("rm-module-9" or a "Ch. 12 ..." label), or null. */
 export function chapterNumber (item) {
-  const m = /^rm-module-(\d+)$/.exec(item.moduleId || '') || /^Ch\. (\d+)/.exec(item.label || '')
+  const m = /^(?:rm|stats)-module-(\d+)$/.exec(item.moduleId || '') || /^Ch\. (\d+)/.exec(item.label || '')
   return m ? Number(m[1]) : null
+}
+
+/**
+ * Where a chapter item sends the student, by how the course reads: Research Methods chapters have their own
+ * reading page (`rm`), Statistics modules open on the class page's Topics tab (`stats`).
+ * @param {{ reading?: string, slug: string }} schedule
+ * @param {{ moduleId: string, label?: string }} item
+ * @param {{ classSlug: string, from?: string }} ctx
+ * @returns {{ n: number|null, name: string, read: object|null, review: object|null }}
+ */
+export function chapterLinks (schedule, item, { classSlug, from } = {}) {
+  const n = chapterNumber(item)
+  const fromQuery = from ? { from } : {}
+  if (!n) return { n: null, name: item.label || item.moduleId, read: null, review: null }
+  if (schedule.reading === 'stats') {
+    return {
+      n,
+      name: `Module ${n}`,
+      read: { path: `/class/${classSlug}`, query: { module: item.moduleId, tab: 'topics', ...fromQuery } },
+      review: { path: `/class/${classSlug}/practice`, query: { module: item.moduleId, ...fromQuery } }
+    }
+  }
+  return {
+    n,
+    name: `Ch. ${n}`,
+    read: { path: `/topic/rm-chapter-${n}`, query: fromQuery },
+    review: { path: `/class/${classSlug}/practice`, query: { module: `rm-module-${n}`, ...fromQuery } }
+  }
+}
+
+/** Software Practice page for a stats module item. */
+export function softwareLink (item, { classSlug, from } = {}) {
+  return { path: `/class/${classSlug}/software`, query: { module: item.moduleId, ...(from ? { from } : {}) } }
 }
 
 /** Week reference carried in `?from=` so reading/review pages know which week the student came from. */
@@ -424,10 +487,16 @@ export function parseWeekRef (ref) {
   return { schedule, weekIndex }
 }
 
+/** Schedules to search: the class's own when known, otherwise all (Research Methods first). */
+function candidateSchedules (classSlug) {
+  const own = classSlug ? scheduleFamily(classSlug) : []
+  return own.length ? own : Object.values(RESEARCH_METHODS_SCHEDULES)
+}
+
 /** Week that lists chapter `n`: this week's if it is current, otherwise the first one. */
-export function findChapterWeek (n, today = new Date()) {
+export function findChapterWeek (n, today = new Date(), classSlug = null) {
   let first = null
-  for (const schedule of Object.values(RESEARCH_METHODS_SCHEDULES)) {
+  for (const schedule of candidateSchedules(classSlug)) {
     const current = semesterPhase(schedule, today) === 'during' ? currentWeekIndex(schedule, today) : -1
     for (let i = 0; i < schedule.weeks.length; i++) {
       if (!schedule.weeks[i].items.some((it) => it.kind === 'chapter' && chapterNumber(it) === n)) continue
@@ -458,12 +527,12 @@ export function itemMatches (item, target) {
  * target, then the first week that lists it. With no target, falls back to the current week (or null).
  * @returns {{ schedule: object, weekIndex: number } | null}
  */
-export function findTargetWeek (target, { from, today = new Date() } = {}) {
+export function findTargetWeek (target, { from, today = new Date(), classSlug = null } = {}) {
   const ref = parseWeekRef(from)
   if (ref && (!target || ref.schedule.weeks[ref.weekIndex].items.some((it) => itemMatches(it, target)))) return ref
 
   let first = null
-  for (const schedule of Object.values(RESEARCH_METHODS_SCHEDULES)) {
+  for (const schedule of candidateSchedules(classSlug)) {
     const current = semesterPhase(schedule, today) === 'during' ? currentWeekIndex(schedule, today) : -1
     if (!target) {
       if (current >= 0) return { schedule, weekIndex: current }

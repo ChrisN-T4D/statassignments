@@ -72,7 +72,7 @@ const place = computed(() => {
   if (!schedule) return null
   const ref = parseWeekRef(route.query.from)
   if (ref) return ref
-  const current = findTargetWeek(null)
+  const current = findTargetWeek(null, { classSlug: props.classId })
   return current && current.schedule.slug === schedule.slug ? current : null
 })
 

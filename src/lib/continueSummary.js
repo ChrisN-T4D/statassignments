@@ -1,12 +1,12 @@
-import { currentWeekIndex, semesterPhase, weekRef, chapterNumber } from '../data/researchMethodsSchedule.js'
+import { chapterLinks, currentWeekIndex, semesterPhase, softwareLink, weekRef } from '../data/researchMethodsSchedule.js'
 
 /** Router location for a schedule item, or null when the item has no page (plain tasks). */
-export function itemLink(item, classSlug, from) {
+export function itemLink(item, classSlug, from, schedule = {}) {
   switch (item.kind) {
-    case 'chapter': {
-      const n = chapterNumber(item)
-      return n ? { path: `/topic/rm-chapter-${n}`, query: { from } } : null
-    }
+    case 'chapter':
+      return chapterLinks(schedule, item, { classSlug, from }).read
+    case 'software':
+      return softwareLink(item, { classSlug, from })
     case 'analysis':
     case 'lab':
       return { path: `/class/${classSlug}`, query: { module: item.moduleId } }
@@ -19,9 +19,9 @@ export function itemLink(item, classSlug, from) {
   }
 }
 
-function itemLabel(item) {
+function itemLabel(item, schedule) {
   if (item.label) return item.label
-  return item.kind === 'chapter' ? `Ch. ${chapterNumber(item)}` : ''
+  return item.kind === 'chapter' ? chapterLinks(schedule, item, {}).name : ''
 }
 
 /**
@@ -34,7 +34,7 @@ export function continueSummary(schedule, classSlug, today = new Date()) {
   const week = schedule.weeks[weekIndex]
   const from = weekRef(schedule, weekIndex)
   const dueItem = week.items.find((it) => it.role === 'do' && typeof it.due === 'string')
-  const linked = (role) => week.items.find((it) => it.role === role && itemLink(it, classSlug, from))
+  const linked = (role) => week.items.find((it) => it.role === role && itemLink(it, classSlug, from, schedule))
   const nextItem = linked('do') || linked('read')
   return {
     weekIndex,
@@ -42,6 +42,6 @@ export function continueSummary(schedule, classSlug, today = new Date()) {
     title: week.title,
     from,
     due: dueItem ? { label: dueItem.label, due: dueItem.due } : null,
-    next: nextItem ? { label: itemLabel(nextItem), to: itemLink(nextItem, classSlug, from) } : null
+    next: nextItem ? { label: itemLabel(nextItem, schedule), to: itemLink(nextItem, classSlug, from, schedule) } : null
   }
 }

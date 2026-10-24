@@ -1,7 +1,7 @@
 <template>
   <div class="software-guides-index">
     <div class="container">
-      <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
+      <WeekContextBar v-if="hasSchedule(classId)" :class-slug="String(classId)" />
       <div class="guides-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
         <h1 class="guides-title">{{ pageTitle }}</h1>
@@ -46,6 +46,7 @@
 <script setup>
 import { computed } from 'vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
+import { hasSchedule } from '../data/researchMethodsSchedule'
 import { getGuidesBySoftware } from '../data/softwareGuides'
 
 const props = defineProps({

@@ -65,7 +65,7 @@ function linkFor (slug) {
 
 <style scoped>
 .course-switcher {
-  background: var(--bg-secondary, #f8fafc);
+  background: var(--bg-elevated);
   border-bottom: 1px solid var(--border-color, #e2e8f0);
 }
 

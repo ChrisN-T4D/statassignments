@@ -4,7 +4,7 @@
       <!-- Back + Header -->
       <div class="help-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
-        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
+        <WeekContextBar v-if="hasSchedule(classId)" :class-slug="String(classId)" />
         <h1 class="help-title">Assignment Help</h1>
         <p class="help-intro">{{ helpIntro }}</p>
         <p v-if="classId === 'intro-research'" class="help-intro objectives-link">
@@ -104,7 +104,7 @@
 import { computed } from 'vue'
 import { getAssignmentHelp, getAssignmentHelpIntro } from '../data/assignmentHelp'
 import WeekContextBar from '../components/WeekContextBar.vue'
-import { getResearchMethodsSchedule, currentWeekIndex, semesterPhase, weekRef, parseScheduleDate } from '../data/researchMethodsSchedule'
+import { getResearchMethodsSchedule, hasSchedule, currentWeekIndex, semesterPhase, weekRef, parseScheduleDate } from '../data/researchMethodsSchedule'
 import { itemLink } from '../lib/continueSummary'
 
 const props = defineProps({

@@ -372,6 +372,7 @@ import {
 } from '../lib/conceptReviewUnlock.js'
 import CompletionSlip from '../components/CompletionSlip.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
+import { hasSchedule } from '../data/researchMethodsSchedule'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
 
 const props = defineProps({
@@ -395,7 +396,8 @@ function goBack() {
 
 /** Research Methods concept reviews (rm-module-N) get the week path bar. */
 const rmChapter = computed(() => {
-  const m = /^rm-module-(\d+)$/.exec(String(getSelectedTopicId() || ''))
+  if (!hasSchedule(getActiveClassId())) return null
+  const m = /^(?:rm-|stats-)?module-(\d+)$/.exec(String(getSelectedTopicId() || ''))
   return m ? Number(m[1]) : null
 })
 const { isAuthenticated, user } = useAuth()

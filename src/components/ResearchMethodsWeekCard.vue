@@ -22,11 +22,11 @@
       <template v-for="(item, i) in week.items" :key="i">
         <router-link v-if="linkFor(item)" :to="linkFor(item)" class="rm-item" :class="`rm-item-${item.role}`">
           <span class="rm-item-label">{{ itemLabel(item) }}</span>
-          <span class="rm-item-badge">{{ ROLE_NAME[item.role] }}</span>
+          <span class="rm-item-badge">{{ roleName(item) }}</span>
         </router-link>
         <span v-else class="rm-item rm-item-plain" :class="`rm-item-${item.role}`" :title="item.note">
           <span class="rm-item-label">{{ itemLabel(item) }}</span>
-          <span class="rm-item-badge">{{ ROLE_NAME[item.role] }}</span>
+          <span class="rm-item-badge">{{ roleName(item) }}</span>
         </span>
         <router-link
           v-if="reviewLink(item)"
@@ -67,7 +67,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { chapterNumber, RESEARCH_METHODS_SCHEDULES, weekRef } from '../data/researchMethodsSchedule'
+import { chapterLinks, RESEARCH_METHODS_SCHEDULES, softwareLink, weekRef } from '../data/researchMethodsSchedule'
 import { getObjectivesByModule } from '../data/objectives'
 import { weekObjectives } from '../lib/weekObjectives'
 import { pickRefresher } from '../lib/refresher'
@@ -89,6 +89,15 @@ const props = defineProps({
 defineEmits(['step'])
 
 const ROLE_NAME = { read: 'Chapter', do: 'Do', help: 'Help' }
+
+const schedule = computed(() => RESEARCH_METHODS_SCHEDULES[props.scheduleSlug])
+const readName = computed(() => (schedule.value?.reading === 'stats' ? 'Module' : 'Chapter'))
+function roleName(item) {
+  return item.role === 'read' ? readName.value : ROLE_NAME[item.role]
+}
+function chapter(item) {
+  return chapterLinks(schedule.value || {}, item, { classSlug: props.classSlug, from: fromQuery().from })
+}
 
 const eyebrow = computed(() => {
   if (props.status === 'cur') return 'This week'
@@ -123,11 +132,11 @@ watch(
   () => [props.status, props.weekNumber, props.scheduleSlug],
   async () => {
     refresher.value = []
-    const schedule = RESEARCH_METHODS_SCHEDULES[props.scheduleSlug]
-    if (props.status !== 'cur' || !schedule) return
+    const sched = schedule.value
+    if (props.status !== 'cur' || !sched) return
     try {
       const states = await getAllBKTStates()
-      refresher.value = pickRefresher(states || {}, schedule.weeks, props.weekNumber - 1, objectives)
+      refresher.value = pickRefresher(states || {}, sched.weeks, props.weekNumber - 1, objectives)
     } catch {
       refresher.value = []
     }
@@ -142,24 +151,19 @@ function refresherLink(o) {
 const outcomes = computed(() => weekObjectives(props.week, (id) => getObjectivesByModule(id)))
 
 function itemLabel(item) {
-  if (item.kind === 'chapter' && !item.label) {
-    const n = chapterNumber(item)
-    return n ? `Ch. ${n}` : item.moduleId
-  }
+  if (item.kind === 'chapter' && !item.label) return chapter(item).name
   return item.label || ''
 }
 
 function fromQuery() {
-  const schedule = RESEARCH_METHODS_SCHEDULES[props.scheduleSlug]
-  return schedule ? { from: weekRef(schedule, props.weekNumber - 1) } : {}
+  const sched = schedule.value
+  return sched ? { from: weekRef(sched, props.weekNumber - 1) } : {}
 }
 
-/** Chapter items link straight to the chapter page (Ch. 12-13 included, so the analysis module can stay hidden). */
+/** Chapter items link to the chapter's reading page (Research Methods) or the module on the class page (Statistics). */
 function linkFor(item) {
-  if (item.kind === 'chapter') {
-    const n = chapterNumber(item)
-    return n ? { path: `/topic/rm-chapter-${n}`, query: fromQuery() } : null
-  }
+  if (item.kind === 'chapter') return chapter(item).read
+  if (item.kind === 'software') return softwareLink(item, { classSlug: props.classSlug, from: fromQuery().from })
   if (item.kind === 'analysis' || item.kind === 'lab') return { path: `/class/${props.classSlug}`, query: { module: item.moduleId } }
   if (item.kind === 'assignment-help') return { path: `/class/${props.classSlug}/assignment-help/${item.assignmentId}`, query: fromQuery() }
   if (item.kind === 'study-plan') return { path: `/class/${props.classSlug}/study-plan/${item.sectionId}`, query: fromQuery() }
@@ -168,8 +172,7 @@ function linkFor(item) {
 
 function reviewLink(item) {
   if (item.kind !== 'chapter') return null
-  const n = chapterNumber(item)
-  return n ? { path: `/class/${props.classSlug}/practice`, query: { module: `rm-module-${n}`, ...fromQuery() } } : null
+  return chapter(item).review
 }
 </script>
 

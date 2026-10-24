@@ -41,9 +41,11 @@ const TASKS = [
   await page.fill('input[type=password]', PW)
   await page.click('button[type=submit]')
   await page.waitForURL((u) => !u.pathname.startsWith('/auth'), { timeout: 15000 })
+  // Students with more than one course see the picker first, so every task starts from the class page itself
+  await page.goto(`${BASE}/class/${CLASS}`, { waitUntil: 'networkidle' })
   await page.waitForSelector('.rm-week', { timeout: 15000 })
   const landing = page.url()
-  console.log(`Landing page after login: ${landing.replace(BASE, '')}`)
+  console.log(`Start page: ${landing.replace(BASE, '')}`)
 
   let failed = false
   const selected = TASKS.filter((x) => !process.env.ONLY || String(x.id) === process.env.ONLY)

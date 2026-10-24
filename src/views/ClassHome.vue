@@ -88,8 +88,9 @@
             <div>
               <div class="rm-sem-eyebrow">{{ rmSchedule.course }} · {{ rmSchedule.name }}</div>
               <h2>{{ rmSchedule.title }}</h2>
+              <p v-if="rmSchedule.blurb" class="rm-sem-blurb">{{ rmSchedule.blurb }}</p>
             </div>
-            <div class="rm-sem-seg" role="group" aria-label="Semester">
+            <div v-if="rmSemesters.length > 1" class="rm-sem-seg" role="group" aria-label="Semester">
               <button
                 v-for="sem in rmSemesters"
                 :key="sem.slug"
@@ -117,8 +118,9 @@
             Jump to this week (week {{ rmCurrentWeek + 1 }})
           </button>
           <nav class="rm-sem-links" aria-label="Course resources">
+            <router-link v-if="isIntroResearchClass" :to="`/class/${classId}/objectives`">Course objectives</router-link>
             <router-link :to="`/class/${classId}/assignment-help`">Assignment Help</router-link>
-            <router-link :to="`/class/${classId}/study-plan`">Study Plan</router-link>
+            <router-link v-if="isResearchMethodsClass" :to="`/class/${classId}/study-plan`">Study Plan</router-link>
             <router-link :to="`/class/${classId}/jamovi-guides`">Jamovi guides</router-link>
             <router-link :to="`/class/${classId}/excel-guides`">Excel guides</router-link>
             <router-link
@@ -871,7 +873,7 @@ import ExperimentalSamplingSimulation from '../components/ExperimentalSamplingSi
 import ResearchMethodsTimeline from '../components/ResearchMethodsTimeline.vue'
 import ResearchMethodsWeekCard from '../components/ResearchMethodsWeekCard.vue'
 import ResearchMethodsAllWeeks from '../components/ResearchMethodsAllWeeks.vue'
-import { RESEARCH_METHODS_SCHEDULES, currentWeekIndex, semesterPhase, findWeekForModule } from '../data/researchMethodsSchedule'
+import { currentWeekIndex, semesterPhase, findWeekForModule, scheduleFamily, semesterQuery } from '../data/researchMethodsSchedule'
 import Practice from './Practice.vue'
 import CentralTendencyLab from '../components/labs/CentralTendencyLab.vue'
 import CoinFlipLab from '../components/labs/CoinFlipLab.vue'
@@ -896,8 +898,8 @@ const module8Prefs = useModule8Preferences()
 
 const classId = computed(() => route.params.classId)
 
-// Research Methods sequence: fall (research-methods) and spring (experimental) share one week-by-week flow
-const rmSemesters = Object.values(RESEARCH_METHODS_SCHEDULES)
+// Week-by-week schedule: Research Methods is a year (fall + spring share one flow), the other classes one semester
+const rmSemesters = computed(() => scheduleFamily(currentClass.value?.slug || classId.value))
 const rmSemKey = ref(null)
 const rmSelectedWeek = ref(0)
 // The analysis module only shows in weeks that list an "analysis" item (after data collection), so the timeline controls it
@@ -908,8 +910,9 @@ const analysisLocked = computed(() => !!rmSchedule.value && !weekHasAnalysis.val
 const isAnalysisHidden = (moduleId) => analysisLocked.value && moduleId === RM_MODULE_DATA_BY_PATH_ID
 const rmSchedule = computed(() => {
   const slug = currentClass.value?.slug || classId.value
-  if (!(slug in RESEARCH_METHODS_SCHEDULES)) return null
-  return RESEARCH_METHODS_SCHEDULES[rmSemKey.value || slug]
+  const family = rmSemesters.value
+  if (!family.length) return null
+  return family.find((sem) => sem.slug === (rmSemKey.value || slug)) || family[0]
 })
 const rmCurrentWeek = computed(() => (rmSchedule.value ? currentWeekIndex(rmSchedule.value) : 0))
 const rmSemesterState = computed(() => (rmSchedule.value ? semesterPhase(rmSchedule.value) : 'during'))
@@ -919,11 +922,11 @@ const rmWeekStatus = computed(() => {
   if (rmSelectedWeek.value === rmCurrentWeek.value) return 'cur'
   return rmSelectedWeek.value < rmCurrentWeek.value ? 'past' : 'future'
 })
-const rmSemIndex = computed(() => rmSemesters.findIndex((s) => s === rmSchedule.value))
+const rmSemIndex = computed(() => rmSemesters.value.findIndex((s) => s === rmSchedule.value))
 const rmHasPrev = computed(() => rmSelectedWeek.value > 0 || rmSemIndex.value > 0)
 const rmHasNext = computed(() =>
   !!rmSchedule.value &&
-  (rmSelectedWeek.value < rmSchedule.value.weeks.length - 1 || rmSemIndex.value < rmSemesters.length - 1)
+  (rmSelectedWeek.value < rmSchedule.value.weeks.length - 1 || rmSemIndex.value < rmSemesters.value.length - 1)
 )
 
 const isResearchMethodsClass = computed(() => {
@@ -1047,7 +1050,7 @@ function rmApplyWeek() {
     selectedModuleId.value = null
     // No chapter this week: drop the old module from the URL so a reload stays on this week
     const { module: _m, tab: _t, ...rest } = route.query
-    router.replace({ path: route.path, query: { ...rest, week: String(rmSelectedWeek.value + 1), semester: rmSchedule.value?.slug === 'experimental' ? 'spring' : 'fall' } })
+    router.replace({ path: route.path, query: { ...rest, week: String(rmSelectedWeek.value + 1), semester: semesterQuery(rmSchedule.value) } })
   }
 }
 
@@ -1065,10 +1068,10 @@ function rmSelectSemester(slug) {
 function rmStepWeek(delta) {
   const next = rmSelectedWeek.value + delta
   if (next < 0 && rmSemIndex.value > 0) {
-    rmSemKey.value = rmSemesters[rmSemIndex.value - 1].slug
+    rmSemKey.value = rmSemesters.value[rmSemIndex.value - 1].slug
     rmSelectedWeek.value = rmSchedule.value.weeks.length - 1
-  } else if (next >= rmSchedule.value.weeks.length && rmSemIndex.value < rmSemesters.length - 1) {
-    rmSemKey.value = rmSemesters[rmSemIndex.value + 1].slug
+  } else if (next >= rmSchedule.value.weeks.length && rmSemIndex.value < rmSemesters.value.length - 1) {
+    rmSemKey.value = rmSemesters.value[rmSemIndex.value + 1].slug
     rmSelectedWeek.value = 0
   } else {
     rmSelectedWeek.value = Math.max(0, Math.min(rmSchedule.value.weeks.length - 1, next))
@@ -1087,11 +1090,10 @@ function rmSelectChapter(slug, weekIndex) {
 function rmInit() {
   rmSemKey.value = null
   if (!rmSchedule.value) return
-  const wanted = route.query.semester === 'spring'
-    ? 'experimental'
-    : route.query.semester === 'fall'
-      ? 'research-methods'
-      : rmSemesters.find((sem) => semesterPhase(sem) !== 'after')?.slug
+  const askedSemester = { spring: 'experimental', fall: 'research-methods' }[route.query.semester]
+  const wanted = rmSemesters.value.some((sem) => sem.slug === askedSemester)
+    ? askedSemester
+    : rmSemesters.value.find((sem) => semesterPhase(sem) !== 'after')?.slug
   rmSemKey.value = wanted || null
   const queried = route.query.module ? findWeekForModule(rmSchedule.value, String(route.query.module)) : -1
   const asked = Number(route.query.week) - 1
@@ -1574,7 +1576,7 @@ function syncRouteQueryFromSelection() {
   // Keep the week in the URL so a refresh or bookmark returns to it
   if (rmSchedule.value) {
     nextQuery.week = String(rmSelectedWeek.value + 1)
-    nextQuery.semester = rmSchedule.value.slug === 'experimental' ? 'spring' : 'fall'
+    nextQuery.semester = semesterQuery(rmSchedule.value)
   }
   if (route.query.module === nextQuery.module && route.query.tab === nextQuery.tab && route.query.week === nextQuery.week) return
   router.replace({ path: route.path, query: nextQuery })
@@ -2026,6 +2028,7 @@ watch(selectedModuleId, id => {
   gap: 0.625rem;
   margin-bottom: 0.875rem;
 }
+.rm-sem-blurb { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--text-muted); }
 .rm-sem-eyebrow {
   font-size: 0.8rem;
   font-weight: 600;
@@ -2446,7 +2449,7 @@ watch(selectedModuleId, id => {
 .objective-practice-summary {
   margin-top: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: var(--bg-secondary, #f6f7fb);
+  background: var(--bg-elevated);
   border-radius: 8px;
 }
 .objective-practice-summary h4 {
