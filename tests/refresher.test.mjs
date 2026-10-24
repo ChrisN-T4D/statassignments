@@ -1,5 +1,5 @@
 import { test } from 'node:test'
-import { strictEqual } from 'node:assert'
+import { deepStrictEqual, strictEqual } from 'node:assert'
 import { pickRefresher } from '../src/lib/refresher.js'
 
 const weeks = [
