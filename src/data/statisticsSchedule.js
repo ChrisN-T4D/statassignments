@@ -72,16 +72,16 @@ export const STATISTICS = {
       why: 'Describing a data set (center, spread, shape) is the first step of every analysis you will run.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-4' },
-        { role: 'do', kind: 'software', moduleId: 'stats-module-4', label: 'Module 4 software practice' }
+        { role: 'do', kind: 'software', moduleId: 'stats-module-4', label: 'Module 4 software practice' },
+        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-descriptives', label: 'Descriptive statistics assignment' }
       ]
     },
     {
       start: '2027-03-01',
-      title: 'Describe a data set',
+      title: 'Check normality',
       note: 'First 8 weeks end Mar 6',
-      why: 'Put descriptive statistics to work on a real file and check whether the data look normal.',
+      why: 'Check whether a data set looks normal, because many later tests assume it does.',
       items: [
-        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-descriptives', label: 'Descriptive statistics assignment' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'm4-normality-quiz', label: 'Normality practice' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'm4-discussion', label: 'Module 4 discussion' }
       ]
