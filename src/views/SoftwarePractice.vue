@@ -1,6 +1,7 @@
 <template>
   <div class="software-practice-page">
     <div class="container">
+      <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
       <!-- Header -->
       <div class="page-header">
         <a href="#" @click.prevent="goBack" class="back-link">&larr; Back</a>
@@ -200,6 +201,7 @@ import { topics, software } from '../data/topics.js'
 import { statisticsExercises, statisticsModules } from '../data/statisticsPractices.js'
 import { getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useAuth } from '../composables/useAuth'
+import WeekContextBar from '../components/WeekContextBar.vue'
 import { useClasses } from '../composables/useClasses'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { preferredSoftware, setPreferredSoftware, defaultSoftware } from '../composables/usePreferredSoftware.js'
