@@ -23,7 +23,8 @@ export function saveConceptReviewCompletion(studentKey, moduleId, payload) {
     correct: payload.correct ?? null,
     total: payload.total ?? null,
     completedAt: payload.completedAt || null,
-    slipFrozen: Boolean(payload.slipFrozen)
+    slipFrozen: Boolean(payload.slipFrozen),
+    history: Array.isArray(payload.history) ? payload.history.slice(-300) : []
   }
   try {
     localStorage.setItem(storageKey(studentKey, moduleId), JSON.stringify(record))
@@ -33,7 +34,11 @@ export function saveConceptReviewCompletion(studentKey, moduleId, payload) {
   return record
 }
 
-export function markQuestionAnswered(studentKey, moduleId, questionId, allIds, wasCorrect) {
+/**
+ * @param {{ weak?: boolean, retry?: boolean }} [evidence] warning signs; a weak or retried correct answer still counts
+ *   as answered but does not extend the correct-answer streak (see conceptReviewUnlock.js)
+ */
+export function markQuestionAnswered(studentKey, moduleId, questionId, allIds, wasCorrect, evidence = {}) {
   const existing = loadConceptReviewCompletion(studentKey, moduleId) || {
     answeredIds: [],
     completedAt: null,
@@ -58,7 +63,11 @@ export function markQuestionAnswered(studentKey, moduleId, questionId, allIds, w
     correct: correctCount,
     total: existing.slipFrozen ? existing.total : answeredIds.length,
     completedAt: existing.completedAt,
-    slipFrozen: existing.slipFrozen
+    slipFrozen: existing.slipFrozen,
+    history: [
+      ...(existing.history?.length ? existing.history : (existing.answeredIds || []).map((id) => ({ id, correct: true }))),
+      { id: questionId, correct: Boolean(wasCorrect), weak: Boolean(evidence.weak), retry: Boolean(evidence.retry) }
+    ]
   })
 }
 
@@ -72,6 +81,7 @@ export function freezeSlip(studentKey, moduleId, payload) {
     total: payload.total ?? payload.answeredIds?.length ?? existing?.total ?? 0,
     completedAt: payload.completedAt || existing?.completedAt || new Date().toISOString(),
     slipFrozen: true,
+    history: existing?.history || payload.history || [],
     studentKey,
     moduleId
   })

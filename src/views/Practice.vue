@@ -39,7 +39,7 @@
           Offline primary: print the packet, work without internet, then enter all answers at once for a Canvas slip.
         </p>
         <p v-else>
-          Online primary: answer questions here until each learning objective is mastered (or you finish the bank). Then print the slip and upload it to Canvas.
+          Online primary: answer questions here until each learning objective is mastered. Some questions come back after a miss, so work each one yourself. Then print the slip and upload it to Canvas.
         </p>
         <div class="cr-mode-actions">
           <button type="button" class="btn-secondary" @click="showPrintPacket = true">Print packet</button>
@@ -334,7 +334,7 @@
       </div>
 
       <div v-else-if="!showPrintPacket && !batchMode && !slipVisible" class="empty-state">
-        <p v-if="isStatisticsPractice">Keep going until each objective is mastered, or until the question bank is finished.</p>
+        <p v-if="isStatisticsPractice">Keep going until each objective is mastered.</p>
         <p v-else-if="masteryTotal">You completed this mastery set.</p>
         <p v-else>No practice problems available for this topic yet.</p>
       </div>
@@ -367,9 +367,11 @@ import {
 } from '../lib/conceptReviewSlipStore.js'
 import {
   eligibleObjectives,
+  objectiveSatisfied,
   onlineReviewComplete,
   pickNextConceptReviewQuestion
 } from '../lib/conceptReviewUnlock.js'
+import { conceptEvidence, sourceWithFlags } from '../lib/answerEvidence.js'
 import CompletionSlip from '../components/CompletionSlip.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
 import { hasSchedule } from '../data/researchMethodsSchedule'
@@ -439,6 +441,9 @@ const isSubmitting = ref(false)
 const questionDisplayTime = ref(null)
 const firstSelectionTime = ref(null)
 const answerChanges = ref(0)
+// Time the page spent in the background during the current question (a soft signal, see lib/answerEvidence.js)
+const hiddenMs = ref(0)
+let hiddenSince = null
 
 // Sequence/spacing context tracking
 const lastTopicReadTime = ref(null)
@@ -547,7 +552,10 @@ const unlockEligible = ref([])
 const pLByObjective = ref({})
 
 const unlockMasteredCount = computed(() => {
-  return unlockEligible.value.filter((id) => (pLByObjective.value[id] ?? 0) >= 0.9).length
+  const record = loadConceptReviewCompletion(studentKey.value, statsModuleId.value) || {}
+  return unlockEligible.value.filter((id) =>
+    objectiveSatisfied(id, record.answeredIds || [], moduleQuestions.value.map((q) => q.id), pLByObjective.value, record.history)
+  ).length
 })
 
 const hideOnlineForBatch = computed(() => canEnterPacketAnswers.value && (batchMode.value || batchResults.value.length > 0))
@@ -818,11 +826,21 @@ async function hydrateCompletionFromServer(moduleId) {
     const correctIds = new Set(
       attempts.filter((a) => moduleQIds.has(a.problem) && a.is_correct).map((a) => a.problem)
     )
+    // Rebuild the answer history so the streak rule works on a new device. The source field carries warning flags.
+    const history = attempts
+      .filter((a) => moduleQIds.has(a.problem) && String(a.source || 'concept_review').split('|')[0] === 'concept_review')
+      .map((a) => ({
+        id: a.problem,
+        correct: Boolean(a.is_correct),
+        weak: String(a.source || '').includes('|'),
+        retry: String(a.source || '').includes('retry')
+      }))
     return saveConceptReviewCompletion(studentKey.value, moduleId, {
       answeredIds,
       correct: correctIds.size,
       total: answeredIds.length,
-      slipFrozen: false
+      slipFrozen: false,
+      history
     })
   } catch (err) {
     console.warn('Unable to hydrate Concept Review completion from server:', err)
@@ -861,7 +879,8 @@ async function startOnlineConceptReview() {
   const nextId = pickNextConceptReviewQuestion({
     moduleId: statsModuleId.value,
     answeredIds: saved?.answeredIds || [],
-    pLByObjective: pLByObjective.value
+    pLByObjective: pLByObjective.value,
+    history: saved?.history
   })
   loadQuestionById(nextId)
   await loadObjectivesForCurrentProblem()
@@ -884,7 +903,9 @@ async function loadNextProblem() {
     const nextId = pickNextConceptReviewQuestion({
       moduleId: statsModuleId.value,
       answeredIds: saved?.answeredIds || [],
-      pLByObjective: pLByObjective.value
+      pLByObjective: pLByObjective.value,
+      history: saved?.history,
+      lastAskedId: currentProblem.value?.id || null
     })
     loadQuestionById(nextId)
     await loadObjectivesForCurrentProblem()
@@ -971,6 +992,7 @@ function retryQuestion() {
   questionDisplayTime.value = Date.now()
   firstSelectionTime.value = null
   answerChanges.value = 0
+  hiddenMs.value = 0
   timeTracker.start()
 }
 
@@ -1035,15 +1057,25 @@ async function checkAnswer(answer) {
   isSubmitting.value = false
 
   if (isStatisticsPractice.value && currentProblem.value?.id) {
+    // Warning signs make a correct answer weaker evidence: it still counts as answered, but BKT treats it as an
+    // easy item and it does not extend the correct-answer streak.
+    const evidence = conceptEvidence({
+      seconds: timeData?.activeTimeSeconds ?? Infinity,
+      hiddenSeconds: hiddenMs.value / 1000,
+      questionText: currentProblem.value.question || '',
+      retry: attemptsByProblem.value[currentProblem.value.id] > 1
+    })
+    const discount = evidence.weak && correct
     const saved = markQuestionAnswered(
       studentKey.value,
       statsModuleId.value,
       currentProblem.value.id,
       moduleQuestions.value.map((q) => q.id),
-      correct
+      correct,
+      { weak: evidence.weak, retry: evidence.reasons.includes('retry') }
     )
     if (isAuthenticated.value) {
-      const difficulty = currentProblem.value.difficulty || 'medium'
+      const difficulty = discount ? 'easy' : currentProblem.value.difficulty || 'medium'
       submitAnswer(
         currentProblem.value.id,
         answer,
@@ -1051,7 +1083,8 @@ async function checkAnswer(answer) {
         difficulty,
         timeData,
         confidenceData,
-        sequenceData
+        sequenceData,
+        discount ? { source: sourceWithFlags('concept_review', evidence.reasons), evidence: 'weak' } : null
       )
         .then(() => loadObjectivesForCurrentProblem())
         .then(() => maybeUnlockOnlineSlip(saved))
@@ -1084,7 +1117,8 @@ async function maybeUnlockOnlineSlip(saved) {
   const result = onlineReviewComplete({
     moduleId: statsModuleId.value,
     answeredIds: record.answeredIds || [],
-    pLByObjective: pLByObjective.value
+    pLByObjective: pLByObjective.value,
+    history: record.history
   })
   if (!result.complete) return
   const frozen = freezeSlip(studentKey.value, statsModuleId.value, {
@@ -1097,7 +1131,17 @@ async function maybeUnlockOnlineSlip(saved) {
   showFrozenSlip(frozen)
 }
 
+function onVisibilityChange() {
+  if (document.hidden) {
+    hiddenSince = Date.now()
+  } else if (hiddenSince) {
+    hiddenMs.value += Date.now() - hiddenSince
+    hiddenSince = null
+  }
+}
+
 onMounted(async () => {
+  document.addEventListener('visibilitychange', onVisibilityChange)
   selectedTopic.value = getSelectedTopicId()
   await ensureLoaded()
   await restoreSlipIfComplete()
@@ -1114,6 +1158,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('afterprint', afterPrint)
+  document.removeEventListener('visibilitychange', onVisibilityChange)
 })
 
 watch(() => [props.embedModuleId, route.query.module, route.params.topicId], async () => {
@@ -1151,6 +1196,7 @@ watch(currentProblem, async (problem) => {
   questionDisplayTime.value = Date.now()
   firstSelectionTime.value = null
   answerChanges.value = 0
+  hiddenMs.value = 0
 
   // Load sequence/spacing context
   await loadSequenceContext()

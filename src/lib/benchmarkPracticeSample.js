@@ -11,7 +11,8 @@ export function classifyAttemptSeen (attempt, slug) {
   if (source === 'benchmark_practice' && benchmarkSlug === slug) {
     return 'practice'
   }
-  if (source == null || source === '' || source === 'concept_review') {
+  // Concept Review attempts may carry warning flags after a bar: 'concept_review|too-fast'
+  if (source == null || source === '' || String(source).split('|')[0] === 'concept_review') {
     return 'concept_review'
   }
   return 'other'
