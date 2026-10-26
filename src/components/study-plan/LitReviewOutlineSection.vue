@@ -59,6 +59,9 @@
         :model-value="outline.organizingFramework[field.id]"
         @update:model-value="setFrameworkField(field.id, $event)"
       />
+      <div v-if="isIntro && canPrefillTheory" class="prefill-row">
+        <button type="button" class="prefill-btn" @click="prefillTheory">Copy my chosen theory from Theory Selection</button>
+      </div>
     </section>
 
     <details class="reference-panel" data-tour="tour-lro-reference">
@@ -243,6 +246,27 @@ const phase4Link = computed(() => `/class/${props.classId}/study-plan/phase-4`)
 
 function emitOutline (patch) {
   emit('update', { litReviewOutline: { ...outline.value, ...patch } })
+}
+
+const theorySelection = computed(() => props.project.theorySelection ?? {})
+const canPrefillTheory = computed(() =>
+  Boolean((theorySelection.value.chosenTheory ?? '').trim()) && !(outline.value.organizingFramework?.theoryName ?? '').trim()
+)
+
+/** Fill the empty framework fields from the Theory Selection worksheet: the chosen theory, why it fits, and the candidates set aside. */
+function prefillTheory () {
+  const t = theorySelection.value
+  const chosen = (t.chosenTheory ?? '').trim()
+  const others = [1, 2, 3].map((n) => (t[`c${n}Theory`] ?? '').trim()).filter((name) => name && name !== chosen)
+  const fw = outline.value.organizingFramework ?? {}
+  emitOutline({
+    organizingFramework: {
+      ...fw,
+      theoryName: chosen,
+      whyThisFramework: (fw.whyThisFramework ?? '').trim() ? fw.whyThisFramework : (t.whyItFits ?? ''),
+      alternativeConsidered: (fw.alternativeConsidered ?? '').trim() ? fw.alternativeConsidered : others.join('; ')
+    }
+  })
 }
 
 function setFrameworkField (id, value) {
@@ -600,5 +624,19 @@ function articlePeeksForBucket (bucket) {
 
 .resource-link:hover {
   text-decoration: underline;
+}
+
+.prefill-row {
+  margin: 0.5rem 0 0;
+}
+
+.prefill-btn {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
 }
 </style>

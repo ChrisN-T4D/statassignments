@@ -104,6 +104,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-theory-selection',
         name: 'Theory Selection',
         type: 'assignment',
+        studyPlanSection: 'theory-selection',
         tips: [
           'Name the theories that could frame your topic, based on what you have read so far.',
           'Choose one and say why it fits better than the alternatives.',

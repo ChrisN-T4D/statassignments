@@ -2,7 +2,8 @@
   <div class="measures-draft-section">
     <div class="arc-banner">
       <p class="section-intro">{{ MEASURES_META.objective }}</p>
-      <p class="arc-flow">Method Choice → <strong>Measures Draft</strong> → IRB first draft</p>
+      <p v-if="isIntro" class="arc-flow">Method Choice → <strong>Measures</strong> → Methods Section (week 11)</p>
+      <p v-else class="arc-flow">Method Choice → <strong>Measures Draft</strong> → IRB first draft</p>
       <p class="progress-chip">{{ progressLabel }}</p>
     </div>
 
@@ -57,6 +58,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { studyPlanClass } from '../../data/studyPlanClasses.js'
 import { MEASURES_META, MEASURES_PATHWAYS } from '../../data/capstoneMeasuresDraftWorksheet.js'
 import { countMeasuresDraftProgress } from '../../lib/capstoneValidation.js'
 import SchemaField from './SchemaField.vue'
@@ -69,6 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update'])
 
+const isIntro = computed(() => studyPlanClass(props.classId)?.flow === 'intro')
 const phase4 = computed(() => props.project.phase4 ?? {})
 const draft = computed(() => props.project.measuresDraft ?? {})
 const pathway = computed(() => MEASURES_PATHWAYS[phase4.value.chosenPathwayId] ?? null)

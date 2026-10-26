@@ -1,12 +1,18 @@
 /** Summarize a student's progress on a Study Plan section as short text. */
 import { studyPlanClass } from '../data/studyPlanClasses.js'
-import { countArticleCards, countLitReviewOutlineProgressForProject, countPhase3Progress, countPhase4Progress, countMeasuresDraftProgress } from './capstoneValidation.js'
+import { countTheorySelectionProgress, countArticleCards, countLitReviewOutlineProgressForProject, countPhase3Progress, countPhase4Progress, countMeasuresDraftProgress } from './capstoneValidation.js'
 
 export function studyPlanSectionProgress (project, sectionId, classId = 'research-methods') {
   switch (sectionId) {
     case 'article-review': {
       const { complete, total, minRequired } = countArticleCards(project, studyPlanClass(classId)?.articleMin)
       return `${complete}/${minRequired} complete · ${total} cards`
+    }
+    case 'theory-selection': {
+      const p = countTheorySelectionProgress(project)
+      if (p.ready) return 'Theory chosen and justified'
+      if (p.chosen) return `Chosen · ${p.named}/3 candidates`
+      return p.named ? `${p.named}/3 candidates named` : 'Not started'
     }
     case 'study-focus': {
       const p = countLitReviewOutlineProgressForProject(project)

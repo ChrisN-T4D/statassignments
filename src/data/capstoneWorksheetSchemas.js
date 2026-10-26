@@ -9,6 +9,7 @@ import { emptyPhase4 } from './capstonePhase4Worksheet.js'
 import { emptyMeasuresDraft } from './capstoneMeasuresDraftWorksheet.js'
 import { emptyLitReviewOutline } from './capstoneLitReviewOutlineWorksheet.js'
 import { studyPlanClass } from './studyPlanClasses.js'
+import { emptyTheorySelection } from './capstoneTheorySelectionWorksheet.js'
 
 export const STUDY_PLAN_SECTIONS = [
   {
@@ -17,6 +18,14 @@ export const STUDY_PLAN_SECTIONS = [
     shortTitle: 'Article Review',
     description: 'Unlimited article cards (minimum 6 complete for Canvas), problem statement, and early research questions.',
     submitNote: 'Submit in Canvas with PDF attachments.'
+  },
+  {
+    id: 'theory-selection',
+    title: 'Theory Selection',
+    shortTitle: 'Theory Selection',
+    onlyFor: ['intro-research'],
+    description: 'Name three candidate theories, choose one, and justify the choice. The theory frames your literature review.',
+    submitNote: 'Submit your theory selection in Canvas.'
   },
   {
     id: 'study-focus',
@@ -57,7 +66,8 @@ export function emptyCapstoneProject () {
     litReviewOutline: emptyLitReviewOutline(),
     phase3: emptyPhase3(),
     phase4: emptyPhase4(),
-    measuresDraft: emptyMeasuresDraft()
+    measuresDraft: emptyMeasuresDraft(),
+    theorySelection: emptyTheorySelection()
   }
 }
 
@@ -70,6 +80,7 @@ export function getStudyPlanSection (sectionId, classId = null) {
   const cfg = classId ? studyPlanClass(classId) : null
   if (cfg && cfg.sectionIds && !cfg.sectionIds.includes(sectionId)) return null
   if (!base) return null
+  if (base.onlyFor && classId && !base.onlyFor.includes(classId)) return null
   return { ...base, ...(cfg?.overrides?.[sectionId] ?? {}) }
 }
 
@@ -77,7 +88,7 @@ export function getStudyPlanSection (sectionId, classId = null) {
 export function studyPlanSectionsFor (classId) {
   const cfg = studyPlanClass(classId)
   if (!cfg) return []
-  const ids = cfg.sectionIds ?? STUDY_PLAN_SECTIONS.filter((s) => !s.retired).map((s) => s.id)
+  const ids = cfg.sectionIds ?? STUDY_PLAN_SECTIONS.filter((s) => !s.retired && (!s.onlyFor || s.onlyFor.includes(classId))).map((s) => s.id)
   return ids.map((id) => getStudyPlanSection(id, classId)).filter(Boolean)
 }
 

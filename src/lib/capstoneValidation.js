@@ -18,6 +18,7 @@ import {
   PHASE4_PATHWAYS,
   PHASE4_COMPARISON_CRITERIA
 } from '../data/capstonePhase4Worksheet.js'
+import { CANDIDATE_FIELDS, CHOICE_FIELDS } from '../data/capstoneTheorySelectionWorksheet.js'
 import {
   compileLitReviewOutline,
   countLitReviewOutlineProgress
@@ -91,6 +92,8 @@ export function buildExportText (sectionId, project, classId = null) {
   switch (sectionId) {
     case 'article-review':
       return classId === 'intro-research' ? buildAnnotatedBibliographyExport(project) : buildArticleReviewExport(project)
+    case 'theory-selection':
+      return buildTheorySelectionExport(project)
     case 'study-focus':
       return buildLitReviewOutlineExport(project)
     case 'phase-3':
@@ -150,6 +153,23 @@ function buildArticleReviewExport (project) {
     lines.push(fieldBlock(field.exportLabel, ar[field.id]))
   }
 
+  return lines.join('\n').trim()
+}
+
+export function countTheorySelectionProgress (project) {
+  const t = project?.theorySelection ?? {}
+  const named = [1, 2, 3].filter((n) => (t[`c${n}Theory`] ?? '').trim()).length
+  const chosen = Boolean((t.chosenTheory ?? '').trim())
+  const justified = Boolean((t.whyItFits ?? '').trim())
+  return { named, chosen, justified, ready: named === 3 && chosen && justified }
+}
+
+function buildTheorySelectionExport (project) {
+  const t = project.theorySelection ?? {}
+  const lines = [sectionHeader('Theory Selection')]
+  for (const f of CANDIDATE_FIELDS) lines.push(fieldBlock(f.exportLabel, t[f.id]))
+  lines.push(sectionHeader('My choice'))
+  for (const f of CHOICE_FIELDS) lines.push(fieldBlock(f.exportLabel, t[f.id]))
   return lines.join('\n').trim()
 }
 

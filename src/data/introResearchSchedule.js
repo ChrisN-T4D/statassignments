@@ -51,6 +51,7 @@ export const INTRO_RESEARCH = {
       items: [
         { role: 'do', kind: 'study-plan', sectionId: 'article-review', label: 'Annotated bibliography worksheet', due: '2027-02-07' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-annotated-bibliography', label: 'Annotated bibliography', due: '2027-02-07' },
+        { role: 'do', kind: 'study-plan', sectionId: 'theory-selection', label: 'Theory selection worksheet', due: '2027-02-07' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-theory-selection', label: 'Theory selection', due: '2027-02-07' }
       ]
     },
