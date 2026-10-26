@@ -6,7 +6,8 @@ Paths are on the host; NOVA sees this folder as `/home/node/.openclaw/workspace-
 ## Course packages (.imscc)
 | File | Course | Dates in it | Current? | Notes |
 |---|---|---|---|---|
-| `psyc-4213-sp27-rebuild/psyc-4213-sp27-draft-fixed-v2.imscc` | PSYC 4213 Statistics, SP27 online (Z086) | SP27, old week order (Oct 20 re-date) | **YES, working copy** (Oct 24) | README.md in that folder lists open questions. Needs re-dating to the new week order (Module 1 wk2, Modules 3 and 4 one week). Output of that step goes in the same folder as `-v3`. |
+| `psyc-4213-sp27-rebuild/psyc-4213-sp27-draft-fixed-v3.imscc` | PSYC 4213 Statistics, SP27 **online (Z086)** | SP27, **new week order** | **YES, CURRENT (2026-10-26)** | Built by `redate_v3.py` from v2: Module 1-5 items re-dated (Sun 11:59 PM CT), new **Module 0 - Math Refresher** (page, Math Practice link, completion-slip assignment, 10 pts, in the Quizzes group), syllabus week table rewritten, course code set to the shell's `.2027SP`. Structural checks pass; **not test-imported** (Chris imports). Still open: stale "Week N" assignment titles, docx syllabus table, jamovi in 7 quiz banks, Benchmark quizzes have no questions. |
+| `psyc-4213-sp27-rebuild/psyc-4213-sp27-draft-fixed-v2.imscc` | same | SP27, old week order (Oct 24) | superseded by v3 | keep for rollback |
 | `psyc-4213-sp27-rebuild/psyc-4213-sp27-draft-fixed.imscc`, `-repaired.imscc` | same | older steps | superseded | keep for rollback only |
 | `sp27-online-3861-draft.imscc` | same | FA26 dates, EMPTY modules | **DO NOT USE** | NOVA's original draft with the clean_meta bug |
 | `sp27-work/working.imscc` | same | intermediate | superseded | scratch from the first build |
