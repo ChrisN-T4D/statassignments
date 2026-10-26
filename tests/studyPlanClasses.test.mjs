@@ -8,8 +8,8 @@ import { studyPlanSectionProgress } from '../src/lib/studyPlanProgress.js'
 import { THEORY_MENU } from '../src/data/capstoneTheorySelectionWorksheet.js'
 
 test('Research Methods keeps its sections; Intro to Research gets its own, in order', () => {
-  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'phase-4', 'measures-draft'])
-  assert.deepEqual(studyPlanSectionsFor('intro-research').map((s) => s.id), ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft'])
+  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'])
+  assert.deepEqual(studyPlanSectionsFor('intro-research').map((s) => s.id), ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'])
   assert.deepEqual(studyPlanSectionsFor('statistics'), [])
   assert.equal(hasStudyPlan('intro-research'), true)
   assert.equal(hasStudyPlan('statistics'), false)
@@ -78,4 +78,80 @@ test('theory selection: progress, export, and the menu', () => {
   const out = buildExportText('theory-selection', p, 'intro-research')
   assert.match(out, /Theory Selection/)
   assert.match(out, /The theory I choose\nB/)
+})
+
+import {
+  buildSocialPost, buildFlierScript, buildConsentForm, buildFacilityConsent, postRequirementStatus, usesFacility,
+  irbPacketStatus, recruitmentConsentProgress, emptyRecruitmentConsent, buildRecruitmentConsentExport
+} from '../src/data/capstoneRecruitmentConsentWorksheet.js'
+
+function filledRc () {
+  const p = emptyCapstoneProject()
+  Object.assign(p.recruitmentConsent, {
+    participantsOfInterest: 'Adults 18+ who work in healthcare', whyAppropriate: 'They face the stress I study', facilityUse: 'No',
+    marketingLine: 'Stressed at work? Help us learn what helps.', courseName: 'Research Methods (PSYC 4223)',
+    projectDescription: 'how coping strategies relate to stress in healthcare workers', eligibility: '18 or older and work in healthcare',
+    timeToComplete: '10-minute', surveyLink: 'https://forms.example/abc', researcherEmail: 'me@rangers.nwosu.edu', advisorEmail: 'adv@nwosu.edu',
+    irbApprovalDate: '11-20-2026', researcherName: 'Pat Ranger', advisorName: 'Dr. Neu', consentTopic: 'your work stress and coping', consentBenefit: 'stress and coping at work'
+  })
+  p.recruitmentConsent.channels = { flier: true, social: true }
+  return p
+}
+
+test('social post and flier carry the facts the IRB checks for', () => {
+  const rc = filledRc().recruitmentConsent
+  const post = buildSocialPost(rc)
+  for (const must of ['Northwestern Oklahoma State University', '11-20-2026', 'https://forms.example/abc', 'me@rangers.nwosu.edu', 'adv@nwosu.edu', 'healthcare', '10-minute']) {
+    assert.ok(post.includes(must), `post is missing ${must}`)
+  }
+  const flier = buildFlierScript(rc)
+  assert.ok(flier.includes('Institutional Review Board'))
+  assert.ok(flier.includes('adv@nwosu.edu'))
+  assert.ok(postRequirementStatus(rc).every((r) => r.done))
+  assert.equal(postRequirementStatus(emptyRecruitmentConsent()).filter((r) => r.done).length, 1, 'only the NWOSU statement is automatic')
+  assert.match(buildSocialPost(emptyRecruitmentConsent()), /\[brief description\]/)
+})
+
+test('consent form uses the IRB wording and follows survey mode', () => {
+  const rc = filledRc().recruitmentConsent
+  const online = buildConsentForm(rc)
+  assert.match(online, /Tandy Keenan/)
+  assert.match(online, /You must be 18 years old or older/)
+  assert.match(online, /possibility of tampering from an outside source/)
+  assert.match(online, /By continuing with this survey, I confirm/)
+  const paper = buildConsentForm({ ...rc, consentMode: 'paper' })
+  assert.doesNotMatch(paper, /tampering from an outside source/)
+  assert.match(paper, /Signature:/)
+  assert.match(buildConsentForm({ ...rc, consentRisks: 'Some questions may be upsetting.' }), /Risks: Some questions may be upsetting\./)
+})
+
+test('facility consent appears only when a facility is named', () => {
+  assert.equal(usesFacility({ facilityUse: 'No' }), false)
+  assert.equal(usesFacility({ facilityUse: 'n/a' }), false)
+  assert.equal(usesFacility({ facilityUse: '' }), false)
+  assert.equal(usesFacility({ facilityUse: 'Alva Counseling Center' }), true)
+  const out = buildFacilityConsent({ facilityName: 'Alva Counseling Center', researcherName: 'Pat Ranger', facilityPurpose: 'to study coping' })
+  assert.match(out, /Alva Counseling Center/)
+  assert.match(out, /Pat Ranger/)
+})
+
+test('the IRB packet checklist tracks what is missing', () => {
+  const empty = emptyCapstoneProject()
+  assert.equal(recruitmentConsentProgress(empty).ready, false)
+  const p = filledRc()
+  const ids = irbPacketStatus(p).map((i) => i.id)
+  assert.deepEqual(ids, ['who', 'scripts', 'social', 'consent', 'survey'])
+  assert.equal(irbPacketStatus(p).find((i) => i.id === 'scripts').done, false, 'flier and social scripts not written yet')
+  p.recruitmentConsent.flierScript = 'flier'
+  p.recruitmentConsent.socialPost = 'post'
+  p.recruitmentConsent.socialPlatforms = 'Instagram'
+  p.recruitmentConsent.socialDistribution = 'my account'
+  p.recruitmentConsent.socialLogPlan = 'screenshots'
+  assert.equal(irbPacketStatus(p).find((i) => i.id === 'scripts').done, true)
+  assert.equal(irbPacketStatus(p).find((i) => i.id === 'social').done, true)
+  p.recruitmentConsent.facilityUse = 'A clinic'
+  assert.ok(irbPacketStatus(p).some((i) => i.id === 'facility'))
+  assert.match(buildRecruitmentConsentExport(p), /Appendix C: Facility Consent/)
+  assert.match(buildRecruitmentConsentExport(p), /Appendix A: Informed Consent/)
+  assert.match(buildExportText('recruitment-consent', p), /Participant Recruitment Procedures/)
 })

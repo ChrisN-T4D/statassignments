@@ -10,6 +10,7 @@ import { emptyMeasuresDraft } from './capstoneMeasuresDraftWorksheet.js'
 import { emptyLitReviewOutline } from './capstoneLitReviewOutlineWorksheet.js'
 import { studyPlanClass } from './studyPlanClasses.js'
 import { emptyTheorySelection } from './capstoneTheorySelectionWorksheet.js'
+import { emptyRecruitmentConsent } from './capstoneRecruitmentConsentWorksheet.js'
 
 export const STUDY_PLAN_SECTIONS = [
   {
@@ -55,6 +56,13 @@ export const STUDY_PLAN_SECTIONS = [
     shortTitle: 'Measures Draft',
     description: 'Turn the operational definitions you chose into the survey or protocol you will use.',
     submitNote: 'Submit in Canvas.'
+  },
+  {
+    id: 'recruitment-consent',
+    title: 'Recruitment and Consent',
+    shortTitle: 'Recruitment and Consent',
+    description: 'The pieces the IRB reads besides your survey: recruitment scripts for fliers and social media posts, the informed consent form, a facility consent form if you need one, and your survey checks.',
+    submitNote: 'Feeds your IRB packet and your Methods section.'
   }
 ]
 
@@ -67,7 +75,8 @@ export function emptyCapstoneProject () {
     phase3: emptyPhase3(),
     phase4: emptyPhase4(),
     measuresDraft: emptyMeasuresDraft(),
-    theorySelection: emptyTheorySelection()
+    theorySelection: emptyTheorySelection(),
+    recruitmentConsent: emptyRecruitmentConsent()
   }
 }
 

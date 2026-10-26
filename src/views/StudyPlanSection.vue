@@ -44,6 +44,7 @@ import ElevatorSpeechSection from '../components/study-plan/ElevatorSpeechSectio
 import Phase4Section from '../components/study-plan/Phase4Section.vue'
 import MeasuresDraftSection from '../components/study-plan/MeasuresDraftSection.vue'
 import TheorySelectionSection from '../components/study-plan/TheorySelectionSection.vue'
+import RecruitmentConsentSection from '../components/study-plan/RecruitmentConsentSection.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
 import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
 import { studyPlanDue, formatStudyPlanDue, hasSchedule } from '../data/researchMethodsSchedule.js'
@@ -67,6 +68,8 @@ const sectionComponent = computed(() => {
       return ArticleReviewSection
     case 'theory-selection':
       return TheorySelectionSection
+    case 'recruitment-consent':
+      return RecruitmentConsentSection
     case 'study-focus':
       return LitReviewOutlineSection
     case 'phase-3':

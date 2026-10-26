@@ -38,6 +38,8 @@
         </router-link>
       </section>
 
+      <IrbPacketPanel v-if="showPacket" :project="project" :class-id="classId" />
+
       <div class="section-grid">
         <router-link
           v-for="section in sections"
@@ -69,6 +71,7 @@ import { studyPlanClass } from '../data/studyPlanClasses.js'
 import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
 import { studyPlanDue, formatStudyPlanDue, hasSchedule } from '../data/researchMethodsSchedule.js'
 import WeekContextBar from '../components/WeekContextBar.vue'
+import IrbPacketPanel from '../components/study-plan/IrbPacketPanel.vue'
 
 const props = defineProps({
   classId: { type: String, required: true }
@@ -78,6 +81,7 @@ const { project, updateProject, lastSavedAt, isGuestDraft } = useCapstoneProject
 
 /** Sections with their schedule due date (guidance; Canvas is official). */
 const planConfig = computed(() => studyPlanClass(props.classId))
+const showPacket = computed(() => studyPlanSectionsFor(props.classId).some((s) => s.id === 'recruitment-consent'))
 const sections = computed(() =>
   studyPlanSectionsFor(props.classId).map((section) => {
     const due = studyPlanDue(section.id, new Date(), props.classId)

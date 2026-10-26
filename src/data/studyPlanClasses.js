@@ -9,7 +9,7 @@ export const STUDY_PLAN_CLASSES = {
   'research-methods': {
     course: 'PSYC 4223',
     intro: 'Your capstone draft workspace for PSYC 4223. Methods Market holds your notes and links to chapters; Canvas is where you submit for a grade.',
-    sectionIds: null, // every section that is not retired
+    sectionIds: null, // every section that is not retired and not limited to another class
     articleMin: 6,
     articleRange: '6 to 8',
     canvasLinks: true, // the RM Canvas assignment and wiki-page links exist
@@ -19,7 +19,7 @@ export const STUDY_PLAN_CLASSES = {
   'intro-research': {
     course: 'PSYC 5033',
     intro: 'Your proposal workspace for PSYC 5033. Methods Market holds your notes and links to chapters; Canvas is where you submit for a grade. The pieces build on each other, so work through them in order.',
-    sectionIds: ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft'],
+    sectionIds: ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'],
     articleMin: 5,
     articleRange: '5 to 7',
     canvasLinks: false, // no Canvas assignment URLs for this course yet
@@ -48,6 +48,10 @@ export const STUDY_PLAN_CLASSES = {
         shortTitle: 'Measures',
         description: 'Name the measure or data source for every variable and justify its reliability and validity.',
         submitNote: 'Part of Method Choice and Measures in Canvas.'
+      },
+      'recruitment-consent': {
+        description: 'Even though you will not run the study, write what the IRB would read: recruitment scripts for fliers and social media posts, the informed consent form, a facility consent form if needed, and survey checks. These go in your Methods Section appendices and your Ethics and Consent Plan.',
+        submitNote: 'Feeds your Methods Section appendices and Ethics and Consent Plan.'
       }
     }
   }

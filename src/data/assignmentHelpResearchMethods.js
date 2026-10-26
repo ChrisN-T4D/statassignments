@@ -330,8 +330,10 @@ export const assignmentHelpResearchMethods = [
         id: 'rm-irb-first-draft',
         name: 'IRB First Draft for Feedback',
         type: 'assignment',
+        studyPlanSection: 'recruitment-consent',
         tips: [
           'Use the Itemized Checklist and Research Proposal Template in Canvas.',
+          'The IRB reads everything a participant will see: your survey (with its link), the informed consent form, a facility consent form if you collect outside NWOSU, and the wording of any flier, spoken ask, or social media post. Write them in the Recruitment and Consent worksheet.',
           'Align protocol text with your Methods Section, same participants, procedures, and risks.',
           'Ch. 3 covers IRB purpose and consent; Ch. 11 covers clear scientific writing.'
         ],
@@ -344,7 +346,8 @@ export const assignmentHelpResearchMethods = [
         type: 'assignment',
         tips: [
           'Incorporate instructor feedback from the first draft; double-check consent language matches your procedure.',
-          'Attach all instruments (surveys, interview guides) and evidence of training completion if required.'
+          'Attach all instruments (surveys, interview guides) with the active survey link, the hard copy that matches it word for word, your recruitment scripts, and evidence of training completion if required.',
+          'Email solicitation of students, faculty, or staff is no longer allowed without an exception from the IRB chair; social media needs a protocol (platforms, how you share, how you document).'
         ],
         practiceLinks: CH.irb,
         getHelp: 'This version goes to the IRB, treat it as a formal protocol, not a class essay.'

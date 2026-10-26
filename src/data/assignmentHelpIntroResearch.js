@@ -186,10 +186,12 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-methods-draft',
         name: 'Methods Section',
         type: 'assignment',
+        studyPlanSection: 'recruitment-consent',
         tips: [
           'Describe design, participants, recruitment, and procedures so someone else could carry out your study.',
           'Keep every part consistent with your method choice, measures, and hypotheses.',
-          'Include sample instruments and consent materials in the appendices and say why each fits your question.'
+          'Include sample instruments and consent materials in the appendices and say why each fits your question.',
+          'Write the recruitment wording (spoken ask, flier, social media post), the informed consent form, and a facility consent form if needed in the Recruitment and Consent worksheet.'
         ],
         practiceLinks: ['rm-chapter-3', 'rm-chapter-4', 'rm-chapter-7'],
         getHelp: OFFICE

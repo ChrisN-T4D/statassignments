@@ -116,6 +116,7 @@ export const INTRO_RESEARCH = {
       why: 'Write the methods section and a consent and ethics plan so someone else could carry out your study.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-3' },
+        { role: 'do', kind: 'study-plan', sectionId: 'recruitment-consent', label: 'Recruitment and consent', due: '2027-03-28', note: 'Write what the IRB would read: scripts, consent form, and survey checks.' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-methods-draft', label: 'Methods section', due: '2027-03-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-irb-ethics', label: 'Ethics and consent plan', due: '2027-03-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-ethics-training', label: 'Ethics training certificate', due: '2027-03-28' }

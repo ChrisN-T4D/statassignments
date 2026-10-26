@@ -34,6 +34,17 @@
       <router-link :to="methodChoiceLink" class="reminder-link">Go to Method Choice →</router-link>
     </aside>
 
+    <aside class="survey-callout">
+      <h2 class="callout-title">Building a survey? The IRB reads it, and everything around it.</h2>
+      <ul class="callout-list">
+        <li>Build it in a tool you can share by link (Google Forms, Qualtrics) and keep a hard copy: the IRB needs both, and they must match word for word.</li>
+        <li>The full informed consent comes first. Participants must agree before they can see a question.</li>
+        <li>Cite every published instrument, and say how and why you changed any item.</li>
+        <li>You will also need scripts for any flier or social media post, and a facility consent form if you collect data outside NWOSU.</li>
+      </ul>
+      <router-link :to="`/class/${classId}/study-plan/recruitment-consent`" class="callout-link">Open Recruitment and Consent →</router-link>
+    </aside>
+
     <section v-if="pathway" class="worksheet-block">
       <h2 class="block-title">{{ pathway.heading }}</h2>
       <SchemaField
@@ -92,6 +103,32 @@ function setField (id, value) {
 </script>
 
 <style scoped>
+.survey-callout {
+  margin: 1.5rem 0;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: rgba(245, 158, 11, 0.07);
+}
+
+.callout-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.callout-list {
+  margin: 0 0 0.6rem;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.callout-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .section-intro {
   color: var(--text-secondary);
   line-height: 1.55;

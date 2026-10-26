@@ -19,6 +19,7 @@ import {
   PHASE4_COMPARISON_CRITERIA
 } from '../data/capstonePhase4Worksheet.js'
 import { CANDIDATE_FIELDS, CHOICE_FIELDS } from '../data/capstoneTheorySelectionWorksheet.js'
+import { buildRecruitmentConsentExport } from '../data/capstoneRecruitmentConsentWorksheet.js'
 import {
   compileLitReviewOutline,
   countLitReviewOutlineProgress
@@ -92,6 +93,8 @@ export function buildExportText (sectionId, project, classId = null) {
   switch (sectionId) {
     case 'article-review':
       return classId === 'intro-research' ? buildAnnotatedBibliographyExport(project) : buildArticleReviewExport(project)
+    case 'recruitment-consent':
+      return buildRecruitmentConsentExport(project)
     case 'theory-selection':
       return buildTheorySelectionExport(project)
     case 'study-focus':

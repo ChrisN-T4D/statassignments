@@ -122,6 +122,7 @@ const FALL = {
       title: 'IRB first draft',
       why: 'This week you draft your IRB application, the document that must be approved before you can collect data.',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'recruitment-consent', label: 'Recruitment and consent', due: '2026-10-30', note: 'The IRB reads your survey, consent form, and any flier or post wording. Write them here.' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-irb-first-draft', label: 'IRB first draft', due: '2026-10-30' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-1', label: 'HRT lesson 1' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-2', label: 'HRT lesson 2' },
