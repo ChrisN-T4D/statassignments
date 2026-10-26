@@ -15,18 +15,25 @@ export const STATISTICS = {
   weeks: [
     {
       start: '2027-01-11',
-      title: 'Why learn statistics',
-      why: 'Start here: review the algebra you will use all semester, see why psychologists need statistics, set up Methods Market, and introduce yourself.',
+      title: 'Math refresher',
+      why: 'Start here: review the algebra you will use all semester and set up Methods Market. Math Practice keeps giving you questions until each topic is solid.',
       items: [
-        { role: 'read', kind: 'chapter', moduleId: 'stats-module-0', label: 'Math refresher (algebra)' },
+        { role: 'read', kind: 'chapter', moduleId: 'stats-module-0', label: 'Math refresher (algebra)' }
+      ]
+    },
+    {
+      start: '2027-01-18',
+      title: 'Why learn statistics',
+      note: 'No class Mon (MLK Day)',
+      why: 'See why psychologists need statistics, and introduce yourself to the class.',
+      items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-1' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'm1-discussion', label: 'Module 1 discussion' }
       ]
     },
     {
-      start: '2027-01-18',
+      start: '2027-01-25',
       title: 'Research design and measurement',
-      note: 'No class Mon (MLK Day)',
       why: 'Variables and measurement come first because every later statistic depends on what was measured and how.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-2' },
@@ -34,7 +41,7 @@ export const STATISTICS = {
       ]
     },
     {
-      start: '2027-01-25',
+      start: '2027-02-01',
       title: 'Evaluate a measure',
       why: 'Apply reliability and validity to a real measure before you start working with data.',
       items: [
@@ -43,19 +50,11 @@ export const STATISTICS = {
       ]
     },
     {
-      start: '2027-02-01',
-      title: 'Software basics',
-      why: 'Learn the software now so the next modules can focus on statistics instead of menus.',
+      start: '2027-02-08',
+      title: 'Software and data handling',
+      why: 'Learn the software and practice entering, importing, and saving data, so the next modules can focus on statistics instead of menus.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-3' },
-        { role: 'do', kind: 'software', moduleId: 'stats-module-3', label: 'Module 3 software practice' }
-      ]
-    },
-    {
-      start: '2027-02-08',
-      title: 'Data handling',
-      why: 'Practice entering, importing, and saving data so you can show your work on your own file.',
-      items: [
         { role: 'do', kind: 'software', moduleId: 'stats-module-3', label: 'Module 3 software practice' }
       ]
     },
@@ -70,26 +69,19 @@ export const STATISTICS = {
     {
       start: '2027-02-22',
       title: 'Descriptive statistics',
-      why: 'Describing a data set (center, spread, shape) is the first step of every analysis you will run.',
+      why: 'Describing a data set (center, spread, shape) is the first step of every analysis you will run. Check whether it looks normal, because many later tests assume it does.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-4' },
         { role: 'do', kind: 'software', moduleId: 'stats-module-4', label: 'Module 4 software practice' },
-        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-descriptives', label: 'Descriptive statistics assignment' }
-      ]
-    },
-    {
-      start: '2027-03-01',
-      title: 'Check normality',
-      note: 'First 8 weeks end Mar 6',
-      why: 'Check whether a data set looks normal, because many later tests assume it does.',
-      items: [
+        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-descriptives', label: 'Descriptive statistics assignment' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'm4-normality-quiz', label: 'Normality practice' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'm4-discussion', label: 'Module 4 discussion' }
       ]
     },
     {
-      start: '2027-03-08',
+      start: '2027-03-01',
       title: 'Graphing and visualization',
+      note: 'First 8 weeks end Mar 6',
       why: 'Graphs show what the numbers hide, and you will need both to explain results later.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-5' },
@@ -97,12 +89,18 @@ export const STATISTICS = {
       ]
     },
     {
-      start: '2027-03-15',
-      title: 'Spring break',
-      note: 'Spring break Mar 15-19, no classes',
+      start: '2027-03-08',
+      title: 'Graphing practice',
+      why: 'Finish the graphing software practice before the break so Benchmark 2 is the only thing waiting after it.',
       items: [
         { role: 'do', kind: 'software', moduleId: 'stats-module-5', label: 'Module 5 software practice' }
       ]
+    },
+    {
+      start: '2027-03-15',
+      title: 'Spring break',
+      note: 'Spring break Mar 15-19, no classes',
+      items: []
     },
     {
       start: '2027-03-22',
@@ -168,9 +166,9 @@ export const STATISTICS = {
     }
   ],
   phases: [
-    { label: 'Foundations', from: 0, to: 2 },
-    { label: 'Software', from: 3, to: 4 },
-    { label: 'Descriptives', from: 6, to: 9 },
+    { label: 'Foundations', from: 0, to: 3 },
+    { label: 'Software', from: 4, to: 4 },
+    { label: 'Descriptives', from: 6, to: 8 },
     { label: 'Inference', from: 11, to: 15 },
     { label: 'Final', from: 16, to: 16 }
   ],
