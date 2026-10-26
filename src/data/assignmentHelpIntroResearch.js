@@ -1,6 +1,8 @@
 /**
  * Assignment Help: PSYC 5033 Introduction to Research (Canvas / NWOSU)
- * Individual research-proposal sequence. Chapters come from the shared Pressbooks text
+ * Individual research-proposal sequence, in the Research Methods order: read widely and build the literature review first, then
+ * narrow the question, then design the study. The study is never carried out, so the literature and methods work goes deeper.
+ * No midterm or final exam. Chapters come from the shared Pressbooks text
  * (Research Methods in Psychology, 4th ed.) used by Research Methods.
  * Due dates and points live in Canvas only, not in this file.
  */
@@ -59,9 +61,21 @@ export const assignmentHelpIntroResearch = [
   },
   {
     canvasPart: 'Part 2',
-    moduleTitle: 'Topic, question, and literature',
-    phaseLabel: 'Choose and ground your project',
+    moduleTitle: 'Topic and literature',
+    phaseLabel: 'Read widely, then narrow',
     assignments: [
+      {
+        id: 'ir-interest-statement',
+        name: 'Research Interest Statement',
+        type: 'assignment',
+        tips: [
+          '1-2 pages: your goals, the areas that interest you, and possible directions for your project.',
+          'Pick a topic broad enough to read widely in. You narrow it later, after you have seen the literature.',
+          'It should connect to a topic you can actually find literature on.'
+        ],
+        practiceLinks: ['rm-chapter-2'],
+        getHelp: OFFICE
+      },
       {
         id: 'ir-article-critique',
         name: 'Article Critique',
@@ -75,37 +89,38 @@ export const assignmentHelpIntroResearch = [
         getHelp: OFFICE
       },
       {
-        id: 'ir-interest-statement',
-        name: 'Research Interest Statement',
-        type: 'assignment',
-        tips: [
-          '1-2 pages: your goals, the areas that interest you, and possible directions for your project.',
-          'It is a starting point, not a commitment, but it should connect to a topic you can actually find literature on.'
-        ],
-        practiceLinks: ['rm-chapter-2'],
-        getHelp: OFFICE
-      },
-      {
-        id: 'ir-question-hypotheses',
-        name: 'Research Question and Hypotheses',
-        type: 'assignment',
-        tips: [
-          '1-2 pages: one or more research questions and the hypotheses that go with them.',
-          'Justify each choice with the literature, not intuition.',
-          'A good question is specific and testable; Chapter 2 covers moving from topic to hypothesis.'
-        ],
-        practiceLinks: ['rm-chapter-2'],
-        getHelp: OFFICE
-      },
-      {
         id: 'ir-annotated-bibliography',
         name: 'Annotated Bibliography',
         type: 'assignment',
         tips: [
-          '5-7 scholarly sources. Each annotation summarizes the content, assesses quality, and explains relevance to your project.',
+          '5-7 scholarly sources. Each annotation summarizes the content, assesses quality, and explains relevance to your topic.',
           'Keep your reference list in APA 7 as you go: it becomes your literature review reference list.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
+        getHelp: OFFICE
+      },
+      {
+        id: 'ir-theory-selection',
+        name: 'Theory Selection',
+        type: 'assignment',
+        tips: [
+          'Name the theories that could frame your topic, based on what you have read so far.',
+          'Choose one and say why it fits better than the alternatives.',
+          'The theory you choose shapes your question and your measures later, so give it real thought.'
+        ],
+        practiceLinks: ['rm-chapter-1', 'rm-chapter-2'],
+        getHelp: OFFICE
+      },
+      {
+        id: 'ir-lit-outline',
+        name: 'Literature Review Outline',
+        type: 'assignment',
+        tips: [
+          'Organize your sources by idea, not article by article.',
+          'Under each idea, note where findings agree, where they conflict, and what is missing.',
+          'Use the outline to find the gap before you write the draft.'
+        ],
+        practiceLinks: ['rm-chapter-2'],
         getHelp: OFFICE
       },
       {
@@ -114,8 +129,32 @@ export const assignmentHelpIntroResearch = [
         type: 'assignment',
         tips: [
           '5-7 pages synthesizing at least 10 sources.',
-          'Integrate rather than summarize: organize by idea, show where findings agree or conflict, and name the gap your project fills.',
-          'This draft becomes the literature review section of your final proposal.'
+          'Integrate rather than summarize: organize by idea, show where findings agree or conflict, and name the gap.',
+          'This draft can stay broad. Writing it is how you find out what your question should be.'
+        ],
+        practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
+        getHelp: OFFICE
+      },
+      {
+        id: 'ir-question-hypotheses',
+        name: 'Research Question and Hypotheses',
+        type: 'assignment',
+        tips: [
+          '1-2 pages: one or more research questions and the hypotheses that go with them.',
+          'Write them after your literature review draft: use what you found to narrow a broad topic to a specific, testable question.',
+          'Justify each choice with the literature, not intuition. Chapter 2 covers moving from topic to hypothesis.'
+        ],
+        practiceLinks: ['rm-chapter-2'],
+        getHelp: OFFICE
+      },
+      {
+        id: 'ir-lit-final',
+        name: 'Literature Review Final',
+        type: 'assignment',
+        tips: [
+          'Revise the review around your narrowed question and your chosen theory.',
+          'Cut or shorten what no longer serves the question, and add what it now needs.',
+          'End by stating the gap your study fills and why it matters.'
         ],
         practiceLinks: ['rm-chapter-2', 'rm-chapter-11'],
         getHelp: OFFICE
@@ -124,24 +163,36 @@ export const assignmentHelpIntroResearch = [
   },
   {
     canvasPart: 'Part 3',
-    moduleTitle: 'Methods, ethics, and instruments',
-    phaseLabel: 'Design your study',
+    moduleTitle: 'Methods, ethics, and analysis',
+    phaseLabel: 'Design the study you will not run',
     assignments: [
       {
-        id: 'ir-methods-draft',
-        name: 'Methods Draft',
+        id: 'ir-method-choice',
+        name: 'Method Choice and Measures',
         type: 'assignment',
         tips: [
-          '3-5 pages: design, participants, recruitment, instruments, and procedures.',
-          'Write it so someone else could carry out your study; the IRB reads it this way.',
-          'Match your design to your question: Chapters 4-7 cover measurement, experimental, non-experimental, and survey designs.'
+          'Choose a quantitative, qualitative, or mixed-methods design and defend it against at least one alternative.',
+          'Name a measure or data source for every variable in your hypotheses, and justify its reliability and validity.',
+          'Chapters 4-7 cover measurement and the main designs. Because the study will not be carried out, the reasoning is what counts.'
         ],
         practiceLinks: ['rm-chapter-4', 'rm-chapter-5', 'rm-chapter-6', 'rm-chapter-7'],
         getHelp: OFFICE
       },
       {
+        id: 'ir-methods-draft',
+        name: 'Methods Section',
+        type: 'assignment',
+        tips: [
+          'Describe design, participants, recruitment, and procedures so someone else could carry out your study.',
+          'Keep every part consistent with your method choice, measures, and hypotheses.',
+          'Include sample instruments and consent materials in the appendices and say why each fits your question.'
+        ],
+        practiceLinks: ['rm-chapter-3', 'rm-chapter-4', 'rm-chapter-7'],
+        getHelp: OFFICE
+      },
+      {
         id: 'ir-irb-ethics',
-        name: 'IRB/Ethics Summary',
+        name: 'Ethics and Consent Plan',
         type: 'assignment',
         tips: [
           '2-3 pages on risks, confidentiality, and informed consent in IRB-style language.',
@@ -163,29 +214,6 @@ export const assignmentHelpIntroResearch = [
         getHelp: OFFICE
       },
       {
-        id: 'ir-irb-form-edits',
-        name: 'IRB Form Edits',
-        type: 'assignment',
-        tips: [
-          'Edit the NWOSU IRB application template so it describes your proposed study, using your methods, ethics, and instruments work.',
-          'Use the NWOSU IRB template provided in Canvas; keep its headings and answer every section that applies to your project.',
-          'You will not submit to the IRB in this course, but write as if you will: the same text carries into your thesis or capstone application.'
-        ],
-        practiceLinks: ['rm-chapter-3'],
-        getHelp: OFFICE
-      },
-      {
-        id: 'ir-instruments',
-        name: 'Instruments/Appendices Draft',
-        type: 'assignment',
-        tips: [
-          'Include sample instruments (survey, interview guide, consent form) and justify why each fits your question.',
-          'Chapter 4 covers what makes a measure reliable and valid; Chapter 7 covers survey items.'
-        ],
-        practiceLinks: ['rm-chapter-4', 'rm-chapter-7'],
-        getHelp: OFFICE
-      },
-      {
         id: 'ir-analysis-plan',
         name: 'Analysis Plan',
         type: 'assignment',
@@ -201,21 +229,9 @@ export const assignmentHelpIntroResearch = [
   },
   {
     canvasPart: 'Part 4',
-    moduleTitle: 'Proposal, presentation, and exams',
+    moduleTitle: 'Proposal, peer review, and presentation',
     phaseLabel: 'Put it together',
     assignments: [
-      {
-        id: 'ir-midterm',
-        name: 'Midterm Exam',
-        type: 'assignment',
-        tips: [
-          'Online, timed (90 minutes), proctored: use the Testing Center by appointment or Respondus LockDown Browser with Monitor.',
-          'Covers research design, ethics, APA writing, and applying course concepts.',
-          'Concept Review on the chapters so far is the best practice.'
-        ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-3', 'rm-chapter-4', 'rm-chapter-5'],
-        getHelp: OFFICE
-      },
       {
         id: 'ir-draft-proposal',
         name: 'Draft Proposal',
@@ -223,18 +239,31 @@ export const assignmentHelpIntroResearch = [
         tips: [
           '12-20 pages integrating literature review, methods, ethics, and appendices.',
           'Revise the earlier drafts using the feedback you got instead of pasting them in unchanged.',
-          'Check that your question, hypotheses, design, and analysis plan all point at each other.'
+          'Check that your question, hypotheses, design, measures, and analysis plan all point at each other, and fix any that do not.'
         ],
         practiceLinks: ['rm-chapter-11'],
         getHelp: OFFICE
       },
       {
-        id: 'ir-presentation',
-        name: 'Proposal Presentation',
+        id: 'ir-irb-form-edits',
+        name: 'IRB Form Edits',
         type: 'assignment',
         tips: [
-          'A professional 10-15 minute talk with slides: rationale, literature, methods, and analysis plan.',
-          'Practice out loud and time it; the peer review roundtable is a chance to rehearse.'
+          'Edit the NWOSU IRB application template so it describes your proposed study, using your methods and ethics work.',
+          'Use the NWOSU IRB template provided in Canvas; keep its headings and answer every section that applies to your project.',
+          'You will not submit to the IRB in this course, but write as if you will: the same text carries into your thesis or capstone application.'
+        ],
+        practiceLinks: ['rm-chapter-3'],
+        getHelp: OFFICE
+      },
+      {
+        id: 'ir-peer-review',
+        name: 'Peer Review',
+        type: 'assignment',
+        tips: [
+          'Read a classmate\'s draft proposal and give specific, kind, and useful comments.',
+          'Check the parts against each other: does the design answer the question, and do the measures fit the hypotheses?',
+          'Then use the feedback you receive to mark the weakest sections of your own draft.'
         ],
         practiceLinks: ['rm-chapter-11'],
         getHelp: OFFICE
@@ -252,14 +281,14 @@ export const assignmentHelpIntroResearch = [
         getHelp: OFFICE
       },
       {
-        id: 'ir-final-exam',
-        name: 'Final Exam',
+        id: 'ir-presentation',
+        name: 'Proposal Presentation',
         type: 'assignment',
         tips: [
-          'Online, timed (90 minutes), cumulative, proctored the same way as the midterm.',
-          'Expect case scenarios that ask you to apply research principles.'
+          'A professional 10-15 minute talk with slides: rationale, literature, methods, and analysis plan.',
+          'Practice out loud and time it; presentations start Wed Apr 21.'
         ],
-        practiceLinks: ['rm-chapter-2', 'rm-chapter-3', 'rm-chapter-4', 'rm-chapter-5'],
+        practiceLinks: ['rm-chapter-11'],
         getHelp: OFFICE
       }
     ]

@@ -184,7 +184,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Locate the course policies, schedule, and grading scheme and state what is expected of you.",
         "Identify the academic integrity and AI-use rules that apply to your work."
-      ]
+      ],
+      "kind": "assignment"
     },
     "ir-intro-discussion": {
       "title": "Introduction Discussion",
@@ -194,7 +195,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Describe your professional goals and how research connects to them.",
         "Identify classmates whose interests overlap with yours."
-      ]
+      ],
+      "kind": "assignment"
     },
     "ir-ai-quiz": {
       "title": "AI Quiz: AI Use and Detection Policy",
@@ -204,7 +206,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Distinguish acceptable from unacceptable uses of AI tools in scholarly work.",
         "State the consequences of misusing AI."
-      ]
+      ],
+      "kind": "assignment"
     },
     "ir-apa-quiz": {
       "title": "APA Quiz: APA 7th Edition Formatting",
@@ -214,18 +217,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Apply APA 7th edition citation and paraphrasing rules.",
         "Identify plagiarism and explain how to avoid it."
-      ]
-    },
-    "ir-article-critique": {
-      "title": "Article Critique",
-      "supports": [
-        "CO2",
-        "CO8"
       ],
-      "objectives": [
-        "Evaluate a peer-reviewed article's purpose, methodology, results, and implications.",
-        "Write a clear critique of 2-3 pages in APA 7th edition style."
-      ]
+      "kind": "assignment"
     },
     "ir-interest-statement": {
       "title": "Research Interest Statement",
@@ -236,18 +229,20 @@ export const introResearchObjectives = {
       "objectives": [
         "Connect your professional and academic goals to an area of research.",
         "Identify at least one direction for a project you could carry out."
-      ]
+      ],
+      "kind": "assignment"
     },
-    "ir-question-hypotheses": {
-      "title": "Research Question and Hypotheses",
+    "ir-article-critique": {
+      "title": "Article Critique",
       "supports": [
-        "CO3"
+        "CO2",
+        "CO8"
       ],
       "objectives": [
-        "Distinguish a topic from a researchable problem.",
-        "Write a specific, testable research question with hypotheses or guiding questions.",
-        "Justify your question with current literature."
-      ]
+        "Evaluate a peer-reviewed article's purpose, methodology, results, and implications.",
+        "Write a clear critique of 2-3 pages in APA 7th edition style."
+      ],
+      "kind": "assignment"
     },
     "ir-annotated-bibliography": {
       "title": "Annotated Bibliography",
@@ -259,40 +254,98 @@ export const introResearchObjectives = {
         "Summarize and assess the quality and relevance of 5-7 scholarly sources.",
         "Identify a theoretical framework that fits your question.",
         "Format references in APA 7th edition."
-      ]
+      ],
+      "kind": "assignment"
     },
-    "ir-lit-review-draft": {
-      "title": "Literature Review Draft",
+    "ir-theory-selection": {
+      "title": "Theory Selection",
       "supports": [
         "CO4",
         "CO3"
       ],
       "objectives": [
-        "Synthesize at least 10 sources by theme, not source by source.",
-        "Identify agreements, contradictions, and gaps in the literature.",
-        "Connect the literature to your proposed study."
-      ]
+        "Identify theories that could frame your topic and the literature you have read so far.",
+        "Choose one and justify why it fits better than the alternatives."
+      ],
+      "kind": "assignment"
     },
-    "ir-methods-draft": {
-      "title": "Methods Draft",
+    "ir-lit-outline": {
+      "title": "Literature Review Outline",
+      "supports": [
+        "CO4"
+      ],
+      "objectives": [
+        "Organize your sources into an argument by idea, not article by article.",
+        "Show where findings agree, conflict, or leave a gap."
+      ],
+      "kind": "assignment"
+    },
+    "ir-lit-review-draft": {
+      "title": "Literature Review Draft",
+      "supports": [
+        "CO4"
+      ],
+      "objectives": [
+        "Synthesize at least 10 sources by theme, not source by source.",
+        "Identify agreements, contradictions, and gaps in the literature."
+      ],
+      "kind": "assignment"
+    },
+    "ir-question-hypotheses": {
+      "title": "Research Question and Hypotheses",
+      "supports": [
+        "CO3"
+      ],
+      "objectives": [
+        "Narrow your broad topic to a specific, researchable question, using what your first literature review draft showed.",
+        "Write testable hypotheses (or guiding questions) and justify each with the literature."
+      ],
+      "kind": "assignment"
+    },
+    "ir-lit-final": {
+      "title": "Literature Review Final",
+      "supports": [
+        "CO4",
+        "CO3"
+      ],
+      "objectives": [
+        "Revise your review around your narrowed question and the theory you chose.",
+        "State the gap your study fills and why it matters."
+      ],
+      "kind": "assignment"
+    },
+    "ir-method-choice": {
+      "title": "Method Choice and Measures",
       "supports": [
         "CO5"
       ],
       "objectives": [
-        "Select and justify a quantitative, qualitative, or mixed-methods design for your question.",
-        "Describe participants, recruitment, and procedures in enough detail to replicate the study.",
-        "Justify your instruments with evidence of reliability and validity."
-      ]
+        "Choose a quantitative, qualitative, or mixed-methods design and defend it against at least one alternative.",
+        "Select a measure or data source for each variable and justify its reliability and validity."
+      ],
+      "kind": "assignment"
+    },
+    "ir-methods-draft": {
+      "title": "Methods Section",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        "Describe participants, recruitment, and procedures in enough detail for someone else to carry out the study.",
+        "Keep every part consistent with your chosen design, measures, and hypotheses."
+      ],
+      "kind": "assignment"
     },
     "ir-irb-ethics": {
-      "title": "IRB/Ethics Summary",
+      "title": "Ethics and Consent Plan",
       "supports": [
         "CO6"
       ],
       "objectives": [
         "Identify the risks, confidentiality issues, and consent requirements of your study.",
-        "Describe them in IRB-style language."
-      ]
+        "Write the consent process and protections in IRB-style language, even though the study will not be carried out."
+      ],
+      "kind": "assignment"
     },
     "ir-ethics-training": {
       "title": "Research Ethics Training and Certificate",
@@ -302,29 +355,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Explain the core principles of research ethics (respect for persons, beneficence, justice).",
         "Complete recognized human-subjects ethics training and document it."
-      ]
-    },
-    "ir-irb-form-edits": {
-      "title": "IRB Form Edits",
-      "supports": [
-        "CO6",
-        "CO5"
       ],
-      "objectives": [
-        "Complete the NWOSU IRB application sections for your proposed study.",
-        "Revise the forms in response to feedback."
-      ]
-    },
-    "ir-instruments": {
-      "title": "Instruments/Appendices Draft",
-      "supports": [
-        "CO5",
-        "CO6"
-      ],
-      "objectives": [
-        "Prepare sample instruments (survey, interview guide, consent form) for your study.",
-        "Justify why each instrument fits your question and participants."
-      ]
+      "kind": "assignment"
     },
     "ir-analysis-plan": {
       "title": "Analysis Plan",
@@ -334,22 +366,8 @@ export const introResearchObjectives = {
       "objectives": [
         "Match each hypothesis or guiding question to an appropriate analysis.",
         "Create mock APA-style tables or figures that show how results would be reported."
-      ]
-    },
-    "ir-midterm": {
-      "title": "Midterm Exam",
-      "supports": [
-        "CO1",
-        "CO2",
-        "CO3",
-        "CO5",
-        "CO6",
-        "CO8"
       ],
-      "objectives": [
-        "Apply research design, ethics, and APA writing concepts to new scenarios.",
-        "Show retention of the foundational concepts that support your proposal."
-      ]
+      "kind": "assignment"
     },
     "ir-draft-proposal": {
       "title": "Draft Proposal",
@@ -362,19 +380,33 @@ export const introResearchObjectives = {
         "CO7"
       ],
       "objectives": [
-        "Integrate your literature review, methods, ethics, instruments, and analysis plan into one coherent draft.",
-        "Identify gaps in your proposal and revise using feedback."
-      ]
+        "Integrate your literature review, methods, ethics plan, and analysis plan into one coherent draft.",
+        "Check that your question, hypotheses, design, measures, and analysis all point at each other, and fix gaps."
+      ],
+      "kind": "assignment"
     },
-    "ir-presentation": {
-      "title": "Proposal Presentation",
+    "ir-irb-form-edits": {
+      "title": "IRB Form Edits",
+      "supports": [
+        "CO6",
+        "CO5"
+      ],
+      "objectives": [
+        "Complete the NWOSU IRB application sections for your proposed study.",
+        "Revise the forms in response to feedback."
+      ],
+      "kind": "assignment"
+    },
+    "ir-peer-review": {
+      "title": "Peer Review",
       "supports": [
         "CO8"
       ],
       "objectives": [
-        "Present the rationale, literature, methods, and analysis plan of your proposal clearly in 10-15 minutes.",
-        "Respond to questions about your design choices."
-      ]
+        "Give specific, kind, and useful feedback on a classmate's draft proposal.",
+        "Use the feedback you receive to revise your own proposal."
+      ],
+      "kind": "assignment"
     },
     "ir-final-proposal": {
       "title": "Final Proposal",
@@ -389,23 +421,19 @@ export const introResearchObjectives = {
       "objectives": [
         "Produce a complete, polished APA manuscript for your track (Thesis, Capstone, or Counseling Project).",
         "Show that you applied feedback from your draft."
-      ]
+      ],
+      "kind": "assignment"
     },
-    "ir-final-exam": {
-      "title": "Final Exam",
+    "ir-presentation": {
+      "title": "Proposal Presentation",
       "supports": [
-        "CO1",
-        "CO2",
-        "CO3",
-        "CO4",
-        "CO5",
-        "CO6",
-        "CO7"
+        "CO8"
       ],
       "objectives": [
-        "Apply research principles to case scenarios across the course.",
-        "Show cumulative mastery of research design, ethics, and analysis."
-      ]
+        "Present the rationale, literature, methods, and analysis plan of your proposal clearly in 10-15 minutes.",
+        "Respond to questions about your design choices."
+      ],
+      "kind": "assignment"
     }
   },
   "weeks": {
@@ -426,7 +454,21 @@ export const introResearchObjectives = {
       ]
     },
     "2": {
-      "title": "Article Critique and Research Interest Statement",
+      "title": "Choose a Broad Topic",
+      "supports": [
+        "CO2",
+        "CO8"
+      ],
+      "objectives": [
+        "Name a broad topic area you could stay interested in for a semester.",
+        "Start reading widely in that area."
+      ],
+      "assignments": [
+        "ir-interest-statement"
+      ]
+    },
+    "3": {
+      "title": "Article Critique",
       "supports": [
         "CO2",
         "CO8"
@@ -436,109 +478,114 @@ export const introResearchObjectives = {
         "Apply basic APA 7th edition style."
       ],
       "assignments": [
-        "ir-article-critique",
-        "ir-interest-statement"
-      ]
-    },
-    "3": {
-      "title": "Research Problems, Questions, and Hypotheses",
-      "supports": [
-        "CO3"
-      ],
-      "objectives": [
-        "Distinguish a topic from a researchable problem.",
-        "Write a testable question and hypotheses grounded in literature."
-      ],
-      "assignments": [
-        "ir-question-hypotheses"
+        "ir-article-critique"
       ]
     },
     "4": {
-      "title": "Annotated Bibliography and Theoretical Frameworks",
+      "title": "Annotated Bibliography and Theory",
       "supports": [
         "CO4",
         "CO8"
       ],
       "objectives": [
         "Annotate scholarly sources for quality and relevance.",
-        "Identify theoretical frameworks that fit a research question."
+        "Identify theoretical frameworks that fit your topic."
       ],
       "assignments": [
-        "ir-annotated-bibliography"
+        "ir-annotated-bibliography",
+        "ir-theory-selection"
       ]
     },
     "5": {
-      "title": "Partial Literature Review",
+      "title": "Literature Review Outline",
+      "supports": [
+        "CO4"
+      ],
+      "objectives": [
+        "Organize sources by idea into an argument.",
+        "See where the literature agrees, conflicts, and leaves gaps."
+      ],
+      "assignments": [
+        "ir-lit-outline"
+      ]
+    },
+    "6": {
+      "title": "Literature Review Draft",
       "supports": [
         "CO4"
       ],
       "objectives": [
         "Synthesize sources by theme.",
-        "Identify gaps that justify a study."
+        "Identify gaps that could justify a study."
       ],
       "assignments": [
         "ir-lit-review-draft"
       ]
     },
-    "6": {
-      "title": "Methods Section Draft",
+    "7": {
+      "title": "Narrow the Question",
+      "supports": [
+        "CO3"
+      ],
+      "objectives": [
+        "Distinguish a topic from a researchable problem.",
+        "Write a testable question and hypotheses grounded in what the literature showed."
+      ],
+      "assignments": [
+        "ir-question-hypotheses"
+      ]
+    },
+    "8": {
+      "title": "Literature Review Final",
+      "supports": [
+        "CO4",
+        "CO3"
+      ],
+      "objectives": [
+        "Revise the review around the narrowed question and chosen theory.",
+        "State the gap the study fills."
+      ],
+      "assignments": [
+        "ir-lit-final"
+      ]
+    },
+    "9": {
+      "title": "Method Choice and Measures",
       "supports": [
         "CO5"
       ],
       "objectives": [
-        "Select a research design that fits the question.",
-        "Describe participants, recruitment, instruments, and procedures replicably."
+        "Choose a design that fits the question and defend it against alternatives.",
+        "Select and justify a measure or data source for each variable."
       ],
       "assignments": [
-        "ir-methods-draft"
+        "ir-method-choice"
       ]
     },
-    "7": {
-      "title": "Ethics in Research",
+    "10": {
+      "title": "Spring Break",
+      "supports": [],
+      "objectives": [],
+      "assignments": []
+    },
+    "11": {
+      "title": "Methods and Ethics Plan",
       "supports": [
+        "CO5",
         "CO6"
       ],
       "objectives": [
-        "Explain the Belmont principles and the APA Ethics Code.",
+        "Describe participants, recruitment, and procedures replicably.",
         "Describe risks, confidentiality, and consent in IRB-style language."
       ],
       "assignments": [
+        "ir-methods-draft",
         "ir-irb-ethics",
         "ir-ethics-training"
       ]
     },
-    "8": {
-      "title": "Recruitment, Consent, and Instruments",
-      "supports": [
-        "CO5",
-        "CO6"
-      ],
-      "objectives": [
-        "Prepare recruitment, consent, and instrument materials.",
-        "Justify instruments with reliability and validity evidence."
-      ],
-      "assignments": [
-        "ir-instruments"
-      ]
-    },
-    "9": {
-      "title": "Mid-Term and Proposal Integration",
-      "supports": [
-        "CO1",
-        "CO5",
-        "CO6",
-        "CO8"
-      ],
-      "objectives": [
-        "Demonstrate mastery of design, ethics, and APA concepts.",
-        "Begin merging proposal sections into one study."
-      ],
-      "assignments": [
-        "ir-midterm"
-      ]
-    },
-    "10": {
-      "title": "Data Analysis Planning",
+    "12": {
+      "title": "Analysis Plan",
       "supports": [
         "CO7"
       ],
@@ -550,8 +597,8 @@ export const introResearchObjectives = {
         "ir-analysis-plan"
       ]
     },
-    "11": {
-      "title": "Draft Proposal and Peer Review Workshop",
+    "13": {
+      "title": "Full Draft Proposal",
       "supports": [
         "CO8",
         "CO3",
@@ -562,37 +609,28 @@ export const introResearchObjectives = {
       ],
       "objectives": [
         "Integrate all proposal sections into one coherent draft.",
-        "Give and use peer feedback."
+        "Make the question, hypotheses, design, measures, and analysis consistent with each other."
       ],
       "assignments": [
         "ir-draft-proposal",
         "ir-irb-form-edits"
       ]
     },
-    "12": {
-      "title": "Proposal Writing Clinic",
-      "supports": [
-        "CO8"
-      ],
-      "objectives": [
-        "Revise your proposal using feedback.",
-        "Make measurable progress on weak sections."
-      ],
-      "assignments": []
-    },
-    "13": {
-      "title": "Peer Review Roundtable",
+    "14": {
+      "title": "Peer Review",
       "supports": [
         "CO8"
       ],
       "objectives": [
         "Give and receive structured peer feedback.",
-        "Draft presentation slides for your proposal."
+        "Mark the weakest sections of your draft for revision."
       ],
-      "assignments": []
+      "assignments": [
+        "ir-peer-review"
+      ]
     },
-    "14": {
-      "title": "Final Proposal and Presentation Preparation",
+    "15": {
+      "title": "Revision and Presentation Preparation",
       "supports": [
         "CO8"
       ],
@@ -605,26 +643,16 @@ export const introResearchObjectives = {
         "ir-presentation"
       ]
     },
-    "15": {
-      "title": "Student Presentations and Final Exam",
+    "16": {
+      "title": "Presentations",
       "supports": [
-        "CO8",
-        "CO1",
-        "CO2",
-        "CO3",
-        "CO4",
-        "CO5",
-        "CO6",
-        "CO7"
+        "CO8"
       ],
       "objectives": [
         "Present and defend your proposal.",
-        "Apply research principles to case scenarios across the course."
+        "Respond to questions about your design choices."
       ],
-      "assignments": [
-        "ir-presentation",
-        "ir-final-exam"
-      ]
+      "assignments": []
     }
   },
   "chapters": {
@@ -670,7 +698,305 @@ export const introResearchObjectives = {
       "CO7"
     ]
   },
-  "sloSource": "https://www.nwosu.edu/school-of-professional-studies/psychology/ ; full text pasted by Chris 2026-10-20"
+  "sloSource": "https://www.nwosu.edu/school-of-professional-studies/psychology/ ; full text pasted by Chris 2026-10-20",
+  "code": "PSYC 5033",
+  "term": "SP27",
+  "level": "graduate",
+  "status": "Reorganized 2026-10-26 on the Research Methods flow (read widely, then narrow the question); midterm and final exam removed; peer review added. Objective wording awaiting Chris's review",
+  "activities": {
+    "cr-ch1": {
+      "title": "Chapter 1 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-1",
+      "supports": [
+        "CO1"
+      ],
+      "objectives": [
+        {
+          "id": "RM1-O1",
+          "text": "Distinguish scientific, empirical, and falsifiable claims from common sense and pseudoscience."
+        },
+        {
+          "id": "RM1-O2",
+          "text": "Define theory and hypothesis and explain how theories are revised with evidence."
+        },
+        {
+          "id": "RM1-O3",
+          "text": "Identify confirmation bias and other practices that reduce biased reasoning."
+        },
+        {
+          "id": "RM1-O4",
+          "text": "Distinguish falsifiable scientific claims from unfalsifiable claims and avoid causal overreach from correlation alone."
+        }
+      ]
+    },
+    "cr-ch2": {
+      "title": "Chapter 2 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-2",
+      "supports": [
+        "CO2",
+        "CO3",
+        "CO4"
+      ],
+      "objectives": [
+        {
+          "id": "RM2-O1",
+          "text": "Outline the research process from topic to literature gap and rationale."
+        },
+        {
+          "id": "RM2-O2",
+          "text": "Use peer-reviewed literature (including Discussion sections and reference lists) to develop a project."
+        },
+        {
+          "id": "RM2-O3",
+          "text": "Align a proposal (question, design, measures, feasibility) and distinguish exploratory vs confirmatory work, including preregistration and secondary analysis."
+        }
+      ]
+    },
+    "cr-ch3": {
+      "title": "Chapter 3 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-3",
+      "supports": [
+        "CO6"
+      ],
+      "objectives": [
+        {
+          "id": "RM3-O1",
+          "text": "Apply Belmont principles (respect, beneficence, justice) and IRB review to human-subjects research."
+        },
+        {
+          "id": "RM3-O2",
+          "text": "Explain informed consent, deception, debriefing, and extra protections for vulnerable populations."
+        },
+        {
+          "id": "RM3-O3",
+          "text": "Describe confidentiality, ethical data handling, and how to reduce coercion in recruitment."
+        }
+      ]
+    },
+    "cr-ch4": {
+      "title": "Chapter 4 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-4",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM4-O1",
+          "text": "Define reliability and validity and explain how a measure can be reliable but not valid."
+        },
+        {
+          "id": "RM4-O2",
+          "text": "Classify scales of measurement (nominal, ordinal, interval, ratio) and how Likert-type items are often treated."
+        },
+        {
+          "id": "RM4-O3",
+          "text": "Identify forms of reliability and validity (test–retest, internal consistency, face, criterion, construct) and threats to construct validity."
+        }
+      ]
+    },
+    "cr-ch5": {
+      "title": "Chapter 5 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-5",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM5-O1",
+          "text": "Identify IVs and DVs and distinguish random assignment from random sampling."
+        },
+        {
+          "id": "RM5-O2",
+          "text": "Define internal and external validity, confounds, and common threats to internal validity."
+        },
+        {
+          "id": "RM5-O3",
+          "text": "Compare between- vs within-subjects designs and controls (placebo, demand characteristics, carryover/counterbalancing)."
+        }
+      ]
+    },
+    "cr-ch6": {
+      "title": "Chapter 6 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-6",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM6-O1",
+          "text": "Interpret correlations without inferring causation (directionality and third variables)."
+        },
+        {
+          "id": "RM6-O2",
+          "text": "Describe non-experimental methods (naturalistic and participant observation, qualitative, case study, archival, ethnography, content analysis)."
+        },
+        {
+          "id": "RM6-O3",
+          "text": "Explain cross-sectional designs and when non-experimental work can still have strong external validity."
+        }
+      ]
+    },
+    "cr-ch7": {
+      "title": "Chapter 7 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-7",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM7-O1",
+          "text": "Define sampling frame, probability sampling, coverage error, and nonresponse bias."
+        },
+        {
+          "id": "RM7-O2",
+          "text": "Write and evaluate survey items (double-barreled, open-ended, Likert, branching, order effects)."
+        },
+        {
+          "id": "RM7-O3",
+          "text": "Identify response biases such as social desirability and practices that improve survey measurement quality."
+        }
+      ]
+    },
+    "cr-ch8": {
+      "title": "Chapter 8 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-8",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM8-O1",
+          "text": "Explain why quasi-experiments lack random assignment and compare one-group vs nonequivalent-control designs."
+        },
+        {
+          "id": "RM8-O2",
+          "text": "Describe interrupted time-series, regression discontinuity, difference-in-differences, and propensity-score logic at a conceptual level."
+        },
+        {
+          "id": "RM8-O3",
+          "text": "Identify quasi-experimental threats (including pretest sensitization) and use appropriately cautious causal language."
+        }
+      ]
+    },
+    "cr-ch9": {
+      "title": "Chapter 9 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-9",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM9-O1",
+          "text": "Count factorial conditions and define main effects versus interactions."
+        },
+        {
+          "id": "RM9-O2",
+          "text": "Interpret cell means, simple effects, and disordinal (crossover) interactions."
+        },
+        {
+          "id": "RM9-O3",
+          "text": "Explain why researchers include multiple factors and how random assignment and interaction plots support interpretation."
+        }
+      ]
+    },
+    "cr-ch10": {
+      "title": "Chapter 10 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-10",
+      "supports": [
+        "CO5"
+      ],
+      "objectives": [
+        {
+          "id": "RM10-O1",
+          "text": "Describe single-subject designs (stable baseline, ABA/reversal, multiple baseline, changing-criterion) and their limitations."
+        },
+        {
+          "id": "RM10-O2",
+          "text": "Use visual analysis (level, trend, variability, overlap) and treatment integrity to evaluate single-subject evidence."
+        },
+        {
+          "id": "RM10-O3",
+          "text": "State when single-subject designs are especially useful and how replication strengthens external validity."
+        }
+      ]
+    },
+    "cr-ch11": {
+      "title": "Chapter 11 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-11",
+      "supports": [
+        "CO8"
+      ],
+      "objectives": [
+        {
+          "id": "RM11-O1",
+          "text": "Apply APA student-paper conventions for title page, paraphrase/citation, methods, tables, and figures."
+        },
+        {
+          "id": "RM11-O2",
+          "text": "Write a discussion that connects results to hypotheses and literature, reports effect sizes, notes limitations, and uses open-science practices."
+        },
+        {
+          "id": "RM11-O3",
+          "text": "Plan posters and talks and include stable identifiers (DOI/URL) in references."
+        }
+      ]
+    },
+    "cr-ch12": {
+      "title": "Chapter 12 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-12",
+      "supports": [
+        "CO7"
+      ],
+      "objectives": [
+        {
+          "id": "RM12-O1",
+          "text": "Interpret mean, median, and modality (including bimodality and outlier sensitivity)."
+        },
+        {
+          "id": "RM12-O2",
+          "text": "Interpret variability (range, IQR, SD) and z-scores as standardized scores."
+        },
+        {
+          "id": "RM12-O3",
+          "text": "Choose graphs for categorical vs quantitative data and describe skew without connecting unrelated categories with a line."
+        }
+      ]
+    },
+    "cr-ch13": {
+      "title": "Chapter 13 Concept Review",
+      "kind": "concept-review",
+      "moduleId": "rm-module-13",
+      "supports": [
+        "CO7"
+      ],
+      "objectives": [
+        {
+          "id": "RM13-O1",
+          "text": "State the null hypothesis, Type I error, and what a p-value does and does not mean."
+        },
+        {
+          "id": "RM13-O2",
+          "text": "Interpret power, confidence intervals, one-tailed tests, and “fail to reject” vs proving the null."
+        },
+        {
+          "id": "RM13-O3",
+          "text": "Explain replication, familywise error, practical vs statistical significance, and frequentist vs Bayesian uncertainty."
+        }
+      ]
+    }
+  }
 }
 
 export function getCourseObjectives (classId) {
