@@ -811,6 +811,7 @@ import { statisticsExercises } from '../data/statisticsPractices'
 import { useSoftwareLessonMetrics } from '../composables/useSoftwareLessonMetrics'
 import { getCompletedPhases, setCompletedPhases } from '../composables/useLessonPhaseProgress'
 import { updateBKT } from '../composables/useBKT'
+import { scheduleBadgeSync } from '../composables/useAwards.js'
 import { getSoftwareObjectivesForLesson } from '../data/objectives.js'
 
 // Question Components
@@ -1262,6 +1263,7 @@ async function recordSoftwarePracticeBkt(items, source) {
       }
     }
   }
+  scheduleBadgeSync()
 }
 
 async function submitSelfCheck() {

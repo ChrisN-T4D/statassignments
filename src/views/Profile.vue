@@ -41,11 +41,19 @@
 
         <div v-if="isAuthenticated" class="content-section badge-section">
           <h2>Badges</h2>
-          <p class="section-subtext">Earn a badge for each topic you master, and a larger one when you finish a whole module.</p>
-          <div v-for="set in badgeSets" :key="set.id" class="badge-set">
+          <p class="section-subtext">
+            Earn a silver badge for each topic you master. Earn enough of a module's topics and you get its gold module badge.
+            {{ totalEarned }} topic {{ totalEarned === 1 ? 'badge' : 'badges' }} earned so far.
+          </p>
+          <details v-for="set in badgeSets" :key="set.id" class="badge-set" :open="setProgress(set, awards).earned > 0 || set.id === 'stats-module-0'">
+            <summary>
+              <strong>{{ set.title }}</strong>
+              <span class="badge-set-count">{{ setProgress(set, awards).earned }} / {{ set.topics.length }}</span>
+              <span v-if="setProgress(set, awards).moduleEarned" class="badge-set-gold">Module badge earned</span>
+            </summary>
             <BadgeCase :set="set" :awards="awards" />
-            <router-link :to="set.practicePath" class="btn-secondary">Go to {{ set.title }} practice</router-link>
-          </div>
+            <router-link :to="set.practicePath" class="btn-secondary">Go to {{ set.title }}</router-link>
+          </details>
         </div>
 
         <div class="feedback-card">
@@ -310,12 +318,13 @@ import { useAccessMode } from '../composables/useAccessMode.js'
 import ChangePasswordCard from '../components/ChangePasswordCard.vue'
 import BadgeCase from '../components/BadgeCase.vue'
 import { useAwards } from '../composables/useAwards.js'
-import { BADGE_SETS } from '../data/badges.js'
+import { BADGE_SETS, setProgress } from '../data/badges.js'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
-const { awards, load: loadAwards } = useAwards()
+const { awards, load: loadAwards, sync: syncAwards } = useAwards()
 const badgeSets = BADGE_SETS
+const totalEarned = computed(() => badgeSets.reduce((n, set) => n + setProgress(set, awards.value).earned, 0))
 const {
   isOfflinePrimary,
   hasProfile,
@@ -544,9 +553,10 @@ async function loadData() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   loadData()
-  loadAwards()
+  await loadAwards()
+  await syncAwards()
 })
 
 watch(isAuthenticated, (newVal) => {
@@ -769,7 +779,12 @@ watch(isAuthenticated, (newVal) => {
   transition: width 0.3s;
 }
 
-.badge-set { display: grid; gap: 0.75rem; justify-items: start; margin-top: 0.75rem; }
+.badge-set { border: 1px solid var(--border); border-radius: 12px; padding: 0.6rem 1rem; margin-top: 0.75rem; }
+.badge-set summary { cursor: pointer; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.badge-set[open] summary { margin-bottom: 0.75rem; }
+.badge-set-count { color: var(--text-secondary); font-size: 0.9rem; }
+.badge-set-gold { color: #f2c94c; font-weight: 700; font-size: 0.9rem; }
+.badge-set .btn-secondary { margin-top: 0.75rem; }
 .section-subtext {
   color: var(--text-secondary);
   font-size: 0.875rem;

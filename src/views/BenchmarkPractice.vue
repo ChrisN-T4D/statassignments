@@ -291,6 +291,7 @@ import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftwa
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { updateBKT, useBKT } from '../composables/useBKT'
+import { scheduleBadgeSync } from '../composables/useAwards.js'
 import { usePractice } from '../composables/usePractice'
 import { useProfile } from '../composables/useProfile'
 import { useAuth } from '../composables/useAuth'
@@ -654,6 +655,7 @@ async function persistBenchmarkAnswer(rawQ, isCorrect) {
   const { error } = await submitAnswer(rawQ.id, answerText, isCorrect, difficulty, null, null, null, meta)
   if (!error) {
     bktSaved.value = true
+    scheduleBadgeSync()
     return
   }
 
@@ -671,6 +673,7 @@ async function persistBenchmarkAnswer(rawQ, isCorrect) {
     ).catch(() => {})
   }
   if (objectives.length) bktSaved.value = true
+  scheduleBadgeSync()
 }
 
 async function checkAndRecord() {

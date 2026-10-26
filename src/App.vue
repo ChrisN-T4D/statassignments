@@ -21,6 +21,7 @@
     </main>
 
     <ClassBoard />
+    <BadgeToast />
 
     <!-- Global Resources Drawer (Available on all pages) -->
     <ResourcesDrawer
@@ -37,6 +38,7 @@ import NavMenu from './components/NavMenu.vue'
 import CourseSwitcher from './components/CourseSwitcher.vue'
 import ResourcesDrawer from './components/ResourcesDrawer.vue'
 import ClassBoard from './components/ClassBoard.vue'
+import BadgeToast from './components/BadgeToast.vue'
 </script>
 
 <style scoped>

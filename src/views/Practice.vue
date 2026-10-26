@@ -372,6 +372,7 @@ import {
   pickNextConceptReviewQuestion
 } from '../lib/conceptReviewUnlock.js'
 import { conceptEvidence, sourceWithFlags } from '../lib/answerEvidence.js'
+import { scheduleBadgeSync } from '../composables/useAwards.js'
 import CompletionSlip from '../components/CompletionSlip.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
 import { hasSchedule } from '../data/researchMethodsSchedule'
@@ -1088,6 +1089,7 @@ async function checkAnswer(answer) {
       )
         .then(() => loadObjectivesForCurrentProblem())
         .then(() => maybeUnlockOnlineSlip(saved))
+        .then(() => scheduleBadgeSync())
         .catch((err) => {
           console.error('Error submitting answer:', err)
         })

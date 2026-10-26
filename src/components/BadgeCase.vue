@@ -9,8 +9,8 @@
       </svg>
       <div class="bc-module-text">
         <strong>{{ set.moduleBadge.name }}</strong>
-        <span v-if="moduleTier === 'mastered'">Every {{ set.title }} topic mastered</span>
-        <span v-else>{{ doneCount }} of {{ set.topics.length }} topics mastered</span>
+        <span v-if="moduleTier === 'mastered'">{{ doneCount }} of {{ set.topics.length }} mastered. Module badge earned.</span>
+        <span v-else>{{ doneCount }} of {{ set.topics.length }} mastered. Earn {{ set.moduleBadge.minCount }} for this badge.</span>
       </div>
     </div>
 
@@ -73,16 +73,19 @@ const doneCount = computed(() => topicSlots.value.filter((t) => t.tier === 'mast
 .bc-draw.line { fill: none; stroke: var(--text-secondary, #888); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 .bc-hex.practice .bc-draw { fill: #f1c9a5; }
 .bc-hex.practice .bc-draw.line { fill: none; stroke: #f1c9a5; }
-.bc-hex.mastered .bc-draw { fill: #fff4c7; }
-.bc-hex.mastered .bc-draw.line { fill: none; stroke: #fff4c7; }
+.bc-hex.mastered .bc-draw { fill: #f1f5f9; }
+.bc-hex.mastered .bc-draw.line { fill: none; stroke: #f1f5f9; }
 .bc-hex.locked .bc-shape { stroke-dasharray: 6 5; }
 .bc-hex.locked { opacity: 0.55; }
 .bc-hex.practice .bc-shape { fill: #6b4a2f; stroke: #c98c5a; }
 .bc-hex.practice .bc-inner { stroke: #c98c5a; }
 .bc-hex.practice .bc-glyph { fill: #f1c9a5; }
-.bc-hex.mastered .bc-shape { fill: #8a6a12; stroke: #f2c94c; filter: drop-shadow(0 0 6px rgba(242, 201, 76, 0.45)); }
-.bc-hex.mastered .bc-inner { stroke: #f2c94c; }
-.bc-hex.mastered .bc-glyph { fill: #fff4c7; }
+.bc-hex.mastered .bc-shape { fill: #4a5568; stroke: #cbd5e1; filter: drop-shadow(0 0 5px rgba(203, 213, 225, 0.35)); }
+.bc-hex.mastered .bc-inner { stroke: #cbd5e1; }
+.bc-hex.mastered .bc-glyph { fill: #f1f5f9; }
+.bc-hex.big.mastered .bc-shape { fill: #8a6a12; stroke: #f2c94c; filter: drop-shadow(0 0 8px rgba(242, 201, 76, 0.55)); }
+.bc-hex.big.mastered .bc-inner { stroke: #f2c94c; }
+.bc-hex.big.mastered .bc-glyph, .bc-hex.big.mastered .bc-draw { fill: #fff4c7; }
 .compact .bc-module { gap: 0.6rem; }
 .compact .bc-hex.big { width: 64px; height: 70px; }
 .compact .bc-slots { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.5rem; }
