@@ -1,6 +1,7 @@
 /** Summarize a student's progress on a Study Plan section as short text. */
 import { studyPlanClass } from '../data/studyPlanClasses.js'
 import { recruitmentConsentProgress } from '../data/capstoneRecruitmentConsentWorksheet.js'
+import { guidedProgressLabel, guidedWorksheet } from '../data/guidedWorksheets.js'
 import { countTheorySelectionProgress, countArticleCards, countLitReviewOutlineProgressForProject, countPhase3Progress, countPhase4Progress, countMeasuresDraftProgress } from './capstoneValidation.js'
 
 export function studyPlanSectionProgress (project, sectionId, classId = 'research-methods') {
@@ -46,6 +47,6 @@ export function studyPlanSectionProgress (project, sectionId, classId = 'researc
       return p.filled ? `${p.filled}/${p.total} parts` : 'Not started'
     }
     default:
-      return ''
+      return guidedWorksheet(sectionId) ? guidedProgressLabel(project, sectionId) : ''
   }
 }

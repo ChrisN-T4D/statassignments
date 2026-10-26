@@ -21,6 +21,7 @@
 
       <component
         :is="sectionComponent"
+        v-bind="guidedProps"
         :project="project"
         :class-id="classId"
         @update="onSectionUpdate"
@@ -45,6 +46,8 @@ import Phase4Section from '../components/study-plan/Phase4Section.vue'
 import MeasuresDraftSection from '../components/study-plan/MeasuresDraftSection.vue'
 import TheorySelectionSection from '../components/study-plan/TheorySelectionSection.vue'
 import RecruitmentConsentSection from '../components/study-plan/RecruitmentConsentSection.vue'
+import GuidedWorksheetSection from '../components/study-plan/GuidedWorksheetSection.vue'
+import { guidedWorksheet } from '../data/guidedWorksheets.js'
 import WeekContextBar from '../components/WeekContextBar.vue'
 import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
 import { studyPlanDue, formatStudyPlanDue, hasSchedule } from '../data/researchMethodsSchedule.js'
@@ -79,9 +82,11 @@ const sectionComponent = computed(() => {
     case 'measures-draft':
       return MeasuresDraftSection
     default:
-      return null
+      return guidedWorksheet(props.sectionId) ? GuidedWorksheetSection : null
   }
 })
+
+const guidedProps = computed(() => (guidedWorksheet(props.sectionId) ? { sectionId: props.sectionId } : {}))
 
 function onSectionUpdate (patch) {
   updateProject(patch)

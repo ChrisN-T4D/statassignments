@@ -9,7 +9,7 @@ export const STUDY_PLAN_CLASSES = {
   'research-methods': {
     course: 'PSYC 4223',
     intro: 'Your capstone draft workspace for PSYC 4223. Methods Market holds your notes and links to chapters; Canvas is where you submit for a grade.',
-    sectionIds: null, // every section that is not retired and not limited to another class
+    sectionIds: ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section'],
     articleMin: 6,
     articleRange: '6 to 8',
     canvasLinks: true, // the RM Canvas assignment and wiki-page links exist
@@ -19,7 +19,7 @@ export const STUDY_PLAN_CLASSES = {
   'intro-research': {
     course: 'PSYC 5033',
     intro: 'Your proposal workspace for PSYC 5033. Methods Market holds your notes and links to chapters; Canvas is where you submit for a grade. The pieces build on each other, so work through them in order.',
-    sectionIds: ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'],
+    sectionIds: ['article-review', 'theory-selection', 'study-focus', 'question-hypotheses', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section', 'analysis-plan'],
     articleMin: 5,
     articleRange: '5 to 7',
     canvasLinks: false, // no Canvas assignment URLs for this course yet

@@ -142,6 +142,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-question-hypotheses',
         name: 'Research Question and Hypotheses',
         type: 'assignment',
+        studyPlanSection: 'question-hypotheses',
         tips: [
           '1-2 pages: one or more research questions and the hypotheses that go with them.',
           'Write them after your literature review draft: use what you found to narrow a broad topic to a specific, testable question.',
@@ -186,7 +187,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-methods-draft',
         name: 'Methods Section',
         type: 'assignment',
-        studyPlanSection: 'recruitment-consent',
+        studyPlanSection: 'methods-section',
         tips: [
           'Describe design, participants, recruitment, and procedures so someone else could carry out your study.',
           'Keep every part consistent with your method choice, measures, and hypotheses.',
@@ -200,6 +201,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-irb-ethics',
         name: 'Ethics and Consent Plan',
         type: 'assignment',
+        studyPlanSection: 'ethics-plan',
         tips: [
           '2-3 pages on risks, confidentiality, and informed consent in IRB-style language.',
           'You will not submit to the IRB in this course, but write as if you will.',
@@ -223,6 +225,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-analysis-plan',
         name: 'Analysis Plan',
         type: 'assignment',
+        studyPlanSection: 'analysis-plan',
         tips: [
           '2-3 pages plus mock APA-style tables or figures.',
           'Quantitative: name the statistical test for each hypothesis. Qualitative: explain your coding and analysis strategy.',

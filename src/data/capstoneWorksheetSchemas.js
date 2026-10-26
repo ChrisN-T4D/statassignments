@@ -11,6 +11,7 @@ import { emptyLitReviewOutline } from './capstoneLitReviewOutlineWorksheet.js'
 import { studyPlanClass } from './studyPlanClasses.js'
 import { emptyTheorySelection } from './capstoneTheorySelectionWorksheet.js'
 import { emptyRecruitmentConsent } from './capstoneRecruitmentConsentWorksheet.js'
+import { emptyGuidedAnswers } from './guidedWorksheets.js'
 
 export const STUDY_PLAN_SECTIONS = [
   {
@@ -27,6 +28,14 @@ export const STUDY_PLAN_SECTIONS = [
     onlyFor: ['intro-research'],
     description: 'Name three candidate theories, choose one, and justify the choice. The theory frames your literature review.',
     submitNote: 'Submit your theory selection in Canvas.'
+  },
+  {
+    id: 'question-hypotheses',
+    title: 'Research Question and Hypotheses',
+    shortTitle: 'Question and Hypotheses',
+    onlyFor: ['intro-research'],
+    description: 'Narrow your broad topic to one researchable question, with hypotheses or guiding questions and a reason it matters.',
+    submitNote: 'Submit in Canvas.'
   },
   {
     id: 'study-focus',
@@ -58,6 +67,28 @@ export const STUDY_PLAN_SECTIONS = [
     submitNote: 'Submit in Canvas.'
   },
   {
+    id: 'ethics-plan',
+    title: 'Ethics and Consent Plan',
+    shortTitle: 'Ethics and Consent Plan',
+    description: 'Risks, confidentiality, and informed consent in IRB-style language, with the ethics cases and the questions the NWOSU IRB asks.',
+    submitNote: 'Feeds your IRB application.'
+  },
+  {
+    id: 'methods-section',
+    title: 'Methods Section',
+    shortTitle: 'Methods Section',
+    description: 'Design, participants, recruitment, instruments, and procedures, with the template and sample paragraphs.',
+    submitNote: 'Submit in Canvas.'
+  },
+  {
+    id: 'analysis-plan',
+    title: 'Analysis Plan',
+    shortTitle: 'Analysis Plan',
+    onlyFor: ['intro-research'],
+    description: 'A test for each hypothesis, how you would check assumptions, and a mock APA table of what your results would look like.',
+    submitNote: 'Submit in Canvas.'
+  },
+  {
     id: 'recruitment-consent',
     title: 'Recruitment and Consent',
     shortTitle: 'Recruitment and Consent',
@@ -76,7 +107,8 @@ export function emptyCapstoneProject () {
     phase4: emptyPhase4(),
     measuresDraft: emptyMeasuresDraft(),
     theorySelection: emptyTheorySelection(),
-    recruitmentConsent: emptyRecruitmentConsent()
+    recruitmentConsent: emptyRecruitmentConsent(),
+    ...emptyGuidedAnswers()
   }
 }
 

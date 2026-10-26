@@ -20,6 +20,7 @@ import {
 } from '../data/capstonePhase4Worksheet.js'
 import { CANDIDATE_FIELDS, CHOICE_FIELDS } from '../data/capstoneTheorySelectionWorksheet.js'
 import { buildRecruitmentConsentExport } from '../data/capstoneRecruitmentConsentWorksheet.js'
+import { buildGuidedExport, guidedWorksheet } from '../data/guidedWorksheets.js'
 import {
   compileLitReviewOutline,
   countLitReviewOutlineProgress
@@ -95,6 +96,11 @@ export function buildExportText (sectionId, project, classId = null) {
       return classId === 'intro-research' ? buildAnnotatedBibliographyExport(project) : buildArticleReviewExport(project)
     case 'recruitment-consent':
       return buildRecruitmentConsentExport(project)
+    case 'question-hypotheses':
+    case 'ethics-plan':
+    case 'methods-section':
+    case 'analysis-plan':
+      return guidedWorksheet(sectionId) ? buildGuidedExport(sectionId, project) : ''
     case 'theory-selection':
       return buildTheorySelectionExport(project)
     case 'study-focus':

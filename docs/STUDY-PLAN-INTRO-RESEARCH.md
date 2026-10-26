@@ -13,8 +13,16 @@ Added 2026-10-26. Intro to Research reuses the Research Methods Study Plan works
 | `study-focus` | Lit Review Outline; a button copies the chosen theory into the Organizing framework | Literature Review Outline | 5 |
 | `phase-4` | Method Choice (four pathways), no Phase 3 / elevator speech wording | Method Choice and Measures | 9 |
 | `measures-draft` | Measures | Method Choice and Measures | 9 |
+| `question-hypotheses` (new, guided) | Research Question and Hypotheses: problem, question, hypotheses or guiding questions, rationale; copies the gap and working question from the outline | Research Question and Hypotheses | 7 |
+| `recruitment-consent` (new, both classes) | Recruitment and Consent: scripts for spoken asks, fliers and social posts (with builders), social media protocol, informed consent builder, facility consent builder, survey checks, IRB packet checklist | Methods Section appendices | 11 |
+| `ethics-plan` (new, guided, both classes) | Ethics and Consent Plan: risks, confidentiality, informed consent with the IRB sentence frames, the ethics cases, the questions the IRB asks | Ethics and Consent Plan | 11 |
+| `methods-section` (new, guided, both classes) | Methods Section: design, participants, recruitment, instruments, procedures, with the template and sample paragraphs; copy buttons pull from Recruitment and Consent and Method Choice | Methods Section | 11 |
+| `analysis-plan` (new, guided) | Analysis Plan: hypotheses and variables, a test for each, assumptions, a mock APA table | Analysis Plan | 12 |
 
-Research Methods keeps `article-review`, `study-focus`, `phase-4`, `measures-draft` exactly as before (`theory-selection` has `onlyFor: ['intro-research']`).
+Research Methods keeps `article-review`, `study-focus`, `phase-4`, `measures-draft` exactly as before, and gains `recruitment-consent`, `ethics-plan` and `methods-section` in its IRB and Methods weeks (Fall weeks 11 and 12). `theory-selection`, `question-hypotheses` and `analysis-plan` have `onlyFor: ['intro-research']`.
+
+## Guided worksheets and the IRB packet
+`src/data/guidedWorksheets.js` holds four worksheets as data (blocks of fields, reference panels, copy-from buttons); `GuidedWorksheetSection.vue` draws them all. Reference panels reuse the course's Canvas guides (methods template and sample paragraphs, the IRB/ethics writing guide and sentence frames, the three ethics cases). `capstoneRecruitmentConsentWorksheet.js` is built from the NWOSU IRB Application Template (revised 8-7-2025): its consent and facility-consent builders use the template's wording, the social post builder follows the template's required elements (description, IRB approval date, NWOSU student researcher, link, contacts for researcher and advisor, eligibility), and email solicitation is flagged as no longer allowed. The Study Plan hub shows an IRB packet checklist for any class that has `recruitment-consent`; Measures has a survey callout. If the IRB template changes, update the builders and the `RC_META.source` line.
 
 ## Wiring
 - Router: `study-plan` routes are allowed for any class with a Study Plan (`hasStudyPlan`).
@@ -24,6 +32,5 @@ Research Methods keeps `article-review`, `study-focus`, `phase-4`, `measures-dra
 - Canvas: the 5033 package (`build_5033_v3.py`) links each of those assignments and week pages to the worksheet.
 
 ## Not done
-- Methods Section template, sample paragraphs, ethics cases and the IRB/ethics writing guide are still Canvas pages; they could become guide pages or worksheets later.
 - No Canvas assignment URLs exist for the Spring shell yet, so the Canvas links inside the worksheets are hidden for this class.
 - Tests: `tests/studyPlanClasses.test.mjs`.

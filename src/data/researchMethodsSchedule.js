@@ -123,6 +123,7 @@ const FALL = {
       why: 'This week you draft your IRB application, the document that must be approved before you can collect data.',
       items: [
         { role: 'do', kind: 'study-plan', sectionId: 'recruitment-consent', label: 'Recruitment and consent', due: '2026-10-30', note: 'The IRB reads your survey, consent form, and any flier or post wording. Write them here.' },
+        { role: 'do', kind: 'study-plan', sectionId: 'ethics-plan', label: 'Ethics and consent plan', due: '2026-10-30', note: 'Risks, confidentiality, and informed consent in IRB-style language.' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-irb-first-draft', label: 'IRB first draft', due: '2026-10-30' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-1', label: 'HRT lesson 1' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-2', label: 'HRT lesson 2' },
@@ -134,6 +135,7 @@ const FALL = {
       title: 'Methods section',
       why: 'Writing your Methods section now documents your design, participants, procedures, and measures for the project.',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'methods-section', label: 'Methods section worksheet', due: '2026-11-06' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'rm-methods-section', label: 'Methods section', due: '2026-11-06' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-4', label: 'HRT lesson 4' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-hrt-lesson-5', label: 'HRT lesson 5' }

@@ -78,6 +78,7 @@ export const INTRO_RESEARCH = {
       note: 'No class Wed Feb 24 (working day)',
       why: 'Now that you know the literature, narrow your topic to a researchable question and hypotheses.',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'question-hypotheses', label: 'Question and hypotheses worksheet', due: '2027-02-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-question-hypotheses', label: 'Research question and hypotheses', due: '2027-02-28' }
       ]
     },
@@ -117,7 +118,9 @@ export const INTRO_RESEARCH = {
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-3' },
         { role: 'do', kind: 'study-plan', sectionId: 'recruitment-consent', label: 'Recruitment and consent', due: '2027-03-28', note: 'Write what the IRB would read: scripts, consent form, and survey checks.' },
+        { role: 'do', kind: 'study-plan', sectionId: 'methods-section', label: 'Methods section worksheet', due: '2027-03-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-methods-draft', label: 'Methods section', due: '2027-03-28' },
+        { role: 'do', kind: 'study-plan', sectionId: 'ethics-plan', label: 'Ethics and consent plan worksheet', due: '2027-03-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-irb-ethics', label: 'Ethics and consent plan', due: '2027-03-28' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-ethics-training', label: 'Ethics training certificate', due: '2027-03-28' }
       ]
@@ -129,6 +132,7 @@ export const INTRO_RESEARCH = {
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-12' },
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-13' },
+        { role: 'do', kind: 'study-plan', sectionId: 'analysis-plan', label: 'Analysis plan worksheet', due: '2027-04-04' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-analysis-plan', label: 'Analysis plan', due: '2027-04-04' }
       ]
     },

@@ -211,6 +211,7 @@ export const assignmentHelpResearchMethods = [
         id: 'rm-methods-section',
         name: 'Methods Section (Includes all appendices and literature review)',
         type: 'assignment',
+        studyPlanSection: 'methods-section',
         tips: [
           'Follow the METHODS Template in Canvas; include participants, materials/measures, procedure, and analysis plan.',
           'Match your write-up to your path: surveys → Ch. 4 + 7; experiments → Ch. 4 + 5 (+ 9 if factorial); qualitative/archival → Ch. 6.',

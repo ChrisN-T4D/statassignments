@@ -8,8 +8,8 @@ import { studyPlanSectionProgress } from '../src/lib/studyPlanProgress.js'
 import { THEORY_MENU } from '../src/data/capstoneTheorySelectionWorksheet.js'
 
 test('Research Methods keeps its sections; Intro to Research gets its own, in order', () => {
-  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'])
-  assert.deepEqual(studyPlanSectionsFor('intro-research').map((s) => s.id), ['article-review', 'theory-selection', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent'])
+  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section'])
+  assert.deepEqual(studyPlanSectionsFor('intro-research').map((s) => s.id), ['article-review', 'theory-selection', 'study-focus', 'question-hypotheses', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section', 'analysis-plan'])
   assert.deepEqual(studyPlanSectionsFor('statistics'), [])
   assert.equal(hasStudyPlan('intro-research'), true)
   assert.equal(hasStudyPlan('statistics'), false)
@@ -154,4 +154,55 @@ test('the IRB packet checklist tracks what is missing', () => {
   assert.match(buildRecruitmentConsentExport(p), /Appendix C: Facility Consent/)
   assert.match(buildRecruitmentConsentExport(p), /Appendix A: Informed Consent/)
   assert.match(buildExportText('recruitment-consent', p), /Participant Recruitment Procedures/)
+})
+
+
+import { GUIDED_WORKSHEETS, guidedProgress, guidedProgressLabel, buildGuidedExport, emptyGuidedAnswers } from '../src/data/guidedWorksheets.js'
+
+test('guided worksheets: every field is saved on the project, and every section has a worksheet', () => {
+  const p = emptyCapstoneProject()
+  for (const [id, ws] of Object.entries(GUIDED_WORKSHEETS)) {
+    assert.ok(p[ws.key], `${id} has no saved answers on the project`)
+    const ids = ws.blocks.flatMap((b) => b.fields.map((f) => f.id))
+    assert.equal(new Set(ids).size, ids.length, `${id} has duplicate field ids`)
+    for (const f of ids) assert.equal(p[ws.key][f], '')
+    assert.ok(ws.blocks.some((b) => b.fields.some((f) => f.required)), `${id} has no required field`)
+  }
+  assert.deepEqual(Object.keys(emptyGuidedAnswers()).sort(), ['analysisPlan', 'ethicsPlan', 'methodsSection', 'questionHypotheses'])
+})
+
+test('guided worksheets: progress counts required fields, export lists every field', () => {
+  const p = emptyCapstoneProject()
+  assert.equal(guidedProgressLabel(p, 'methods-section'), 'Not started')
+  p.methodsSection.design = 'A survey design.'
+  assert.match(guidedProgressLabel(p, 'methods-section'), /^1\/5 required parts/)
+  for (const f of ['participants', 'recruitment', 'instruments', 'procedures']) p.methodsSection[f] = 'x'
+  assert.equal(guidedProgress(p, 'methods-section').ready, true)
+  assert.equal(guidedProgressLabel(p, 'methods-section'), 'Required parts done')
+  const out = buildExportText('methods-section', p, 'intro-research')
+  assert.match(out, /Methods Section\n=+/)
+  assert.match(out, /A survey design\./)
+  assert.equal(studyPlanSectionProgress(p, 'methods-section', 'intro-research'), 'Required parts done')
+})
+
+test('guided worksheets: copy-from buttons only fill what is empty', () => {
+  const p = emptyCapstoneProject()
+  const ms = GUIDED_WORKSHEETS['methods-section']
+  const fromRc = ms.prefills.find((x) => x.id === 'fromRecruitment')
+  assert.equal(fromRc.when(p), false)
+  p.recruitmentConsent.participantsOfInterest = 'Adults who work in healthcare.'
+  p.recruitmentConsent.whyAppropriate = 'They face the stress I study.'
+  p.recruitmentConsent.channels = { flier: true, social: true }
+  assert.equal(fromRc.when(p), true)
+  const patch = fromRc.apply(p)
+  assert.match(patch.participants, /healthcare/)
+  assert.match(patch.recruitment, /printed fliers, social media posts/)
+  p.methodsSection.participants = 'Already written.'
+  assert.equal(fromRc.apply(p).participants, undefined, 'does not overwrite')
+  const qh = GUIDED_WORKSHEETS['question-hypotheses'].prefills[0]
+  p.litReviewOutline.gapAndTransition.workingResearchQuestion = 'Does X relate to Y?'
+  assert.equal(qh.apply(p).researchQuestion, 'Does X relate to Y?')
+  const ap = GUIDED_WORKSHEETS['analysis-plan'].prefills[0]
+  p.questionHypotheses.hypotheses = 'H1: X predicts Y.'
+  assert.equal(ap.apply(p).hypothesisRecap, 'H1: X predicts Y.')
 })
