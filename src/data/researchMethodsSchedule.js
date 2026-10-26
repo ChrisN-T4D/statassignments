@@ -452,13 +452,18 @@ export function chapterNumber (item) {
 export function chapterLinks (schedule, item, { classSlug, from } = {}) {
   const n = chapterNumber(item)
   const fromQuery = from ? { from } : {}
-  if (!n) return { n: null, name: item.label || item.moduleId, read: null, review: null }
+  if (n == null) return { n: null, name: item.label || item.moduleId, read: null, review: null }
   if (schedule.reading === 'stats') {
+    // Module 0 is the math refresher: it has adaptive math practice, not a Concept Review.
+    const isRefresher = n === 0
     return {
       n,
-      name: `Module ${n}`,
+      name: isRefresher ? (item.label || 'Math refresher') : `Module ${n}`,
       read: { path: `/class/${classSlug}`, query: { module: item.moduleId, tab: 'topics', ...fromQuery } },
-      review: { path: `/class/${classSlug}/practice`, query: { module: item.moduleId, ...fromQuery } }
+      review: isRefresher
+        ? { path: `/class/${classSlug}/math-practice`, query: fromQuery }
+        : { path: `/class/${classSlug}/practice`, query: { module: item.moduleId, ...fromQuery } },
+      reviewLabel: isRefresher ? 'Math Practice' : 'Concept Review'
     }
   }
   return {

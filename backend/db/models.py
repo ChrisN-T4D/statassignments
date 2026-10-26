@@ -478,6 +478,25 @@ class BoardReport(Base, TimestampMixin):
     resolved: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
 
+class Award(Base, TimestampMixin):
+    """A badge a student has earned. Created only by the verified claim endpoint (api/awards.py), never by the client."""
+
+    __tablename__ = "awards"
+    __table_args__ = (UniqueConstraint("user_id", "award_id", name="uq_awards_user_award"),)
+
+    id: Mapped[str] = mapped_column(String(ID_LEN), primary_key=True, default=_new_id)
+    user_id: Mapped[str] = mapped_column(String(ID_LEN), ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    # e.g. "math-topic:M0-O1" or "math-module:stats-module-0"
+    award_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    kind: Mapped[str] = mapped_column(String(16), nullable=False)  # topic | module
+    module_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    objective_id: Mapped[str | None] = mapped_column(String(128))
+    # practice (practice-mastered) < unverified (check passed with warning signs) < confirmed (check passed cleanly)
+    state: Mapped[str] = mapped_column(String(16), nullable=False)
+    earned_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow, nullable=False)
+    detail: Mapped[Any | None] = mapped_column(JSONB)
+
+
 COLLECTION_MODELS: dict[str, type[Base]] = {
     "users": User,
     "classes": Class,
@@ -495,6 +514,7 @@ COLLECTION_MODELS: dict[str, type[Base]] = {
     "learning_events": LearningEvent,
     "bkt_prototypes": BktPrototype,
     "feedback_reports": FeedbackReport,
+    "awards": Award,
 }
 
 FIELD_ALIASES: dict[str, dict[str, str]] = {
@@ -509,6 +529,7 @@ FIELD_ALIASES: dict[str, dict[str, str]] = {
     },
     "user_progress": {"user": "user_id"},
     "practice_attempts": {"user": "user_id"},
+    "awards": {"user": "user_id"},
     "topic_readings": {"user": "user_id"},
     "bkt_states": {"user": "user_id"},
     "software_lesson_metrics": {"user": "user_id"},

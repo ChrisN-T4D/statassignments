@@ -33,7 +33,7 @@
           :to="reviewLink(item)"
           class="rm-item rm-item-check"
         >
-          <span class="rm-item-label">Concept Review</span>
+          <span class="rm-item-label">{{ reviewLabel(item) }}</span>
           <span class="rm-item-badge">Review</span>
         </router-link>
       </template>
@@ -168,6 +168,10 @@ function linkFor(item) {
   if (item.kind === 'assignment-help') return { path: `/class/${props.classSlug}/assignment-help/${item.assignmentId}`, query: fromQuery() }
   if (item.kind === 'study-plan') return { path: `/class/${props.classSlug}/study-plan/${item.sectionId}`, query: fromQuery() }
   return null
+}
+
+function reviewLabel(item) {
+  return chapter(item).reviewLabel || 'Concept Review'
 }
 
 function reviewLink(item) {

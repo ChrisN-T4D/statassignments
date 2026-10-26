@@ -84,7 +84,7 @@ const steps = computed(() => {
     if (item.kind !== 'chapter') return
     const links = chapterLinks(loc.value.schedule, item, { classSlug: klass.value, from: ref.value })
     const n = links.n
-    if (!n) return
+    if (n == null) return
     const onChapter = props.target?.kind === 'chapter' && props.target.id === n
     out.push({
       key: `read-${n}`,
@@ -96,7 +96,7 @@ const steps = computed(() => {
     out.push({
       key: `review-${n}`,
       role: 'review',
-      label: 'Concept Review',
+      label: links.reviewLabel || 'Concept Review',
       to: links.review,
       current: onChapter && props.step === 'review'
     })

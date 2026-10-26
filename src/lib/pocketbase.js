@@ -185,6 +185,10 @@ export const pb = {
   collection(name) {
     return new CollectionClient(name)
   },
+  /** Call a custom API route with the signed-in user's token (same shape as the PocketBase SDK's send). */
+  send(path, options = {}) {
+    return apiFetch(path, options)
+  },
   async registerWithKey({ student_key, email, password, name }) {
     const data = await apiFetch(`/api/auth/register-with-key`, {
       method: 'POST',

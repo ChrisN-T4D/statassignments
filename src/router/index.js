@@ -7,6 +7,7 @@ import Home from '../views/Home.vue'
 import TopicView from '../views/TopicView.vue'
 import Auth from '../views/Auth.vue'
 import Practice from '../views/Practice.vue'
+import MathPractice from '../views/MathPractice.vue'
 import SoftwarePractice from '../views/SoftwarePractice.vue'
 import Profile from '../views/Profile.vue'
 import ClaimProfile from '../views/ClaimProfile.vue'
@@ -128,6 +129,12 @@ const routes = [
   },
   { path: '/class/:classId/topics', redirect: (to) => ({ path: `/class/${to.params.classId}`, query: to.query }) },
   {
+    path: '/class/:classId/math-practice',
+    name: 'class-math-practice',
+    component: MathPractice,
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/class/:classId/practice',
     name: 'class-practice',
     component: Practice,
@@ -238,6 +245,12 @@ router.beforeEach(async (to, from, next) => {
       path: '/class/research-methods',
       query: { module: 'rm-module-lab', tab },
     })
+    return
+  }
+
+  // Module 0 (Math Refresher) has adaptive math practice instead of a Concept Review.
+  if (to.name === 'class-practice' && ['stats-module-0', 'module-0', '0'].includes(String(to.query.module || ''))) {
+    next({ path: `/class/${to.params.classId}/math-practice`, query: { from: to.query.from } })
     return
   }
 

@@ -627,6 +627,20 @@
               <p>No concept review questions available for this module yet.</p>
             </div>
             <router-link
+              v-else-if="selectedModuleId === 'stats-module-0'"
+              :to="`/class/${classId}/math-practice`"
+              class="practice-link-card"
+            >
+              <div class="link-card-icon">
+                <img src="/content-review-icon.png" alt="Math practice" class="link-card-icon-img" />
+              </div>
+              <div class="link-card-content">
+                <h3>Start Math Practice</h3>
+                <p>Practice each topic until you have mastered it. New numbers every time.</p>
+              </div>
+              <span class="card-arrow">-></span>
+            </router-link>
+            <router-link
               v-else-if="conceptReviewQuestionCount > 0"
               :to="`/class/${classId}/practice?module=${selectedModuleId}`"
               class="practice-link-card"
@@ -640,7 +654,7 @@
               </div>
               <span class="card-arrow">-></span>
             </router-link>
-            <p v-if="!isResearchMethodsClass" class="print-hide" style="margin-top: 0.75rem;">
+            <p v-if="!isResearchMethodsClass && selectedModuleId !== 'stats-module-0'" class="print-hide" style="margin-top: 0.75rem;">
               <router-link
                 class="btn-secondary"
                 :to="`/class/${classId}/practice?module=${selectedModuleId}&print=1`"
@@ -1012,6 +1026,9 @@ const effectiveContentTabs = computed(() => {
     const concepts = standardContentTabs.find((t) => t.id === 'concepts')
     const software = standardContentTabs.find((t) => t.id === 'software')
     return [topics, concepts, ...labTabs, software].filter(Boolean)
+  }
+  if (selectedModuleId.value === 'stats-module-0') {
+    return standardContentTabs.map((t) => (t.id === 'concepts' ? { ...t, label: 'Math Practice' } : t))
   }
   return standardContentTabs
 })

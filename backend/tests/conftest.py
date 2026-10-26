@@ -24,6 +24,7 @@ from api.collections import router as collections_router
 from api.auth_register import router as auth_register_router
 from api.live_labs import router as live_labs_router
 from api.board import router as board_router
+from api.awards import router as awards_router
 
 
 class SyncASGIClient:
@@ -123,6 +124,7 @@ def client(db_session):
     app.include_router(auth_register_router)
     app.include_router(live_labs_router)
     app.include_router(board_router)
+    app.include_router(awards_router)
     app.dependency_overrides[get_db] = _get_db
     test_client = SyncASGIClient(app)
     try:

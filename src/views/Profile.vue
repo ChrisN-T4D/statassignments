@@ -39,6 +39,15 @@
 
         <ChangePasswordCard />
 
+        <div v-if="isAuthenticated" class="content-section badge-section">
+          <h2>Badges</h2>
+          <p class="section-subtext">Earn a badge for each topic you master, and a larger one when you finish a whole module.</p>
+          <div v-for="set in badgeSets" :key="set.id" class="badge-set">
+            <BadgeCase :set="set" :awards="awards" />
+            <router-link :to="set.practicePath" class="btn-secondary">Go to {{ set.title }} practice</router-link>
+          </div>
+        </div>
+
         <div class="feedback-card">
           <h2>Something wrong?</h2>
           <p>
@@ -299,9 +308,14 @@ import { useModule8Preferences } from '../composables/useModule8Preferences.js'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
 import { useAccessMode } from '../composables/useAccessMode.js'
 import ChangePasswordCard from '../components/ChangePasswordCard.vue'
+import BadgeCase from '../components/BadgeCase.vue'
+import { useAwards } from '../composables/useAwards.js'
+import { BADGE_SETS } from '../data/badges.js'
 
 const router = useRouter()
 const { user, isAuthenticated, signOut } = useAuth()
+const { awards, load: loadAwards } = useAwards()
+const badgeSets = BADGE_SETS
 const {
   isOfflinePrimary,
   hasProfile,
@@ -530,7 +544,10 @@ async function loadData() {
   }
 }
 
-onMounted(loadData)
+onMounted(() => {
+  loadData()
+  loadAwards()
+})
 
 watch(isAuthenticated, (newVal) => {
   if (newVal) {
@@ -752,6 +769,7 @@ watch(isAuthenticated, (newVal) => {
   transition: width 0.3s;
 }
 
+.badge-set { display: grid; gap: 0.75rem; justify-items: start; margin-top: 0.75rem; }
 .section-subtext {
   color: var(--text-secondary);
   font-size: 0.875rem;

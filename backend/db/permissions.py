@@ -54,7 +54,7 @@ def can_view(collection: str, user: User | None, record, db: Session) -> bool:
             return True
         return uid and str(getattr(record, "user_id", "")) == uid
 
-    if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states", "learning_events", "bkt_prototypes"):
+    if collection in ("user_progress", "practice_attempts", "topic_readings", "bkt_states", "learning_events", "bkt_prototypes", "awards"):
         if _is_instructor(user):
             return True
         return uid and str(getattr(record, "user_id", "")) == uid
@@ -85,6 +85,8 @@ def can_create(collection: str, user: User | None, payload: dict) -> bool:
     uid = str(user.id) if user else None
     if not uid:
         return collection == "software_lesson_metrics"
+    if collection == "awards":
+        return False  # earned through POST /api/awards/claim, which checks the evidence
 
     owner_fields = {
         "user_progress": "user",

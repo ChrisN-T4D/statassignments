@@ -16,8 +16,9 @@ export const STATISTICS = {
     {
       start: '2027-01-11',
       title: 'Why learn statistics',
-      why: 'Start here: see why psychologists need statistics, set up Methods Market, and introduce yourself.',
+      why: 'Start here: review the algebra you will use all semester, see why psychologists need statistics, set up Methods Market, and introduce yourself.',
       items: [
+        { role: 'read', kind: 'chapter', moduleId: 'stats-module-0', label: 'Math refresher (algebra)' },
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-1' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'm1-discussion', label: 'Module 1 discussion' }
       ]
