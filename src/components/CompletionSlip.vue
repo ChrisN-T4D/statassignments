@@ -5,7 +5,7 @@
       <p class="slip-status">Status: Completed</p>
       <dl class="slip-details">
         <div><dt>Student key</dt><dd>{{ studentKey || 'Not linked — claim your key to use this slip' }}</dd></div>
-        <div><dt>Activity</dt><dd>Concept Review</dd></div>
+        <div><dt>Activity</dt><dd>{{ activity }}</dd></div>
         <div><dt>Module</dt><dd>{{ moduleLabel }}</dd></div>
         <div v-if="scoreLabel"><dt>Score</dt><dd>{{ scoreLabel }}</dd></div>
         <div><dt>Completed</dt><dd>{{ completedAtLabel }}</dd></div>
@@ -28,6 +28,9 @@ import { computed } from 'vue'
 const props = defineProps({
   visible: { type: Boolean, default: false },
   studentKey: { type: String, default: '' },
+  activity: { type: String, default: 'Concept Review' },
+  /** Replaces the correct/total score, e.g. '7 of 7 topics mastered' */
+  scoreText: { type: String, default: '' },
   moduleLabel: { type: String, default: '' },
   correct: { type: Number, default: null },
   total: { type: Number, default: null },
@@ -39,6 +42,7 @@ const emit = defineEmits(['print'])
 const canPrint = computed(() => Boolean(props.studentKey))
 
 const scoreLabel = computed(() => {
+  if (props.scoreText) return props.scoreText
   if (props.correct == null || props.total == null) return ''
   return `${props.correct}/${props.total}`
 })
@@ -56,7 +60,7 @@ function slipText() {
   return [
     'PSYC 4213 · Methods Market completion slip',
     `Student key: ${props.studentKey}`,
-    'Activity: Concept Review',
+    `Activity: ${props.activity}`,
     `Module: ${props.moduleLabel}`,
     scoreLabel.value ? `Score: ${scoreLabel.value}` : null,
     `Completed: ${completedAtLabel.value}`,

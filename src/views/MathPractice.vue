@@ -1,5 +1,5 @@
 <template>
-  <div class="mp">
+  <div class="mp" :class="{ 'printing-slip': printFocus === 'slip' }">
     <header class="mp-head">
       <router-link :to="readingLink" class="mp-back">← Back to the Math Refresher reading</router-link>
       <h1>Math Practice</h1>
@@ -172,6 +172,16 @@
       A topic counts as mastered in practice after you answer {{ STREAK_NEEDED }} in a row correctly and the system is confident you know it.
       Answers that look copied or pasted from elsewhere count for less, so work each one yourself. The Mastery Check is how you show it.
     </p>
+
+    <CompletionSlip
+      :visible="slipVisible"
+      :student-key="studentKey || ''"
+      activity="Math Practice"
+      module-label="Module 0: Math Refresher"
+      score-text="All 7 topics mastered"
+      :completed-at="slipCompletedAt"
+      @print="printSlip"
+    />
   </div>
 </template>
 
@@ -195,6 +205,8 @@ import { useMathPractice } from '../composables/useMathPractice.js'
 import { useAwards } from '../composables/useAwards.js'
 import { badgeSetForModule } from '../data/badges.js'
 import BadgeCase from '../components/BadgeCase.vue'
+import CompletionSlip from '../components/CompletionSlip.vue'
+import { useAccessMode } from '../composables/useAccessMode.js'
 import { useTimeTracking } from '../composables/useTimeTracking.js'
 
 const route = useRoute()
@@ -204,6 +216,20 @@ const timeTracker = useTimeTracking('short-answer')
 const { awards, byAwardId, load: loadAwards, claim: claimAward } = useAwards()
 const badgeSet = badgeSetForModule('stats-module-0')
 const newBadge = ref('')
+const { studentKey, ensureLoaded: loadAccessMode } = useAccessMode()
+
+// The slip is the Canvas proof of Module 0: it appears once the server has recorded the module badge.
+const moduleAward = computed(() => byAwardId.value['math-module:stats-module-0'])
+const slipVisible = computed(() => Boolean(moduleAward.value))
+const slipCompletedAt = computed(() => moduleAward.value?.earned_at || '')
+const printFocus = ref(null)
+function printSlip() {
+  printFocus.value = 'slip'
+  nextTick(() => window.print())
+}
+function afterPrint() {
+  printFocus.value = null
+}
 
 const TOPICS = [
   { id: 'M0-O1', title: 'Order of operations', slug: 'order-of-operations' },
@@ -555,6 +581,8 @@ function finishCheck() {
 
 onMounted(async () => {
   document.addEventListener('visibilitychange', onVisibility)
+  window.addEventListener('afterprint', afterPrint)
+  loadAccessMode()
   status.value = await loadStatus(OBJECTIVE_IDS)
   checkStates.value = loadCheckStates(OBJECTIVE_IDS)
   await loadAwards()
@@ -580,6 +608,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('afterprint', afterPrint)
   document.removeEventListener('visibilitychange', onVisibility)
   stopTimer()
   timeTracker.stop()
@@ -665,4 +694,7 @@ onBeforeUnmount(() => {
 .mp-done { text-align: center; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 480px) { .mp-topics { grid-template-columns: repeat(2, 1fr); } }
+@media print {
+  .mp.printing-slip > :not(.completion-slip) { display: none !important; }
+}
 </style>
