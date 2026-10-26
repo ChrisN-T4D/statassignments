@@ -5,114 +5,126 @@
     <section class="content-section">
       <h3>Overview</h3>
       <p>
-        IBM SPSS Statistics has a user-friendly interface designed for statistical analysis.
-        Understanding the main components will help you navigate the software efficiently.
+        IBM SPSS Statistics works with <strong>three windows</strong> and one idea that runs through all of them:
+        you point and click through menus and dialog boxes, and SPSS writes the results into a separate output window.
+        Once you know which window you are in, most of the confusion about SPSS goes away.
+      </p>
+      <p>
+        Menu names below match recent versions of SPSS. If your copy looks slightly different, check the
+        <strong>Help</strong> menu or ask in the class forum. The steps are the same; a label may be reworded.
       </p>
     </section>
 
     <section class="content-section">
-      <h3>Main Windows and Views</h3>
+      <h3>The three windows</h3>
 
-      <h4>1. Data View</h4>
+      <h4>1. The Data Editor (where your data lives)</h4>
       <p>
-        The <strong>Data View</strong> is where you see your actual data in a spreadsheet format.
-        Each row represents a case (participant), and each column represents a variable.
+        The Data Editor has two tabs at the bottom left. You will switch between them constantly.
       </p>
       <ul>
-        <li>Rows are numbered sequentially (1, 2, 3...)</li>
-        <li>Columns have variable names at the top</li>
-        <li>You can enter, edit, and view data directly here</li>
-        <li>Similar to Excel, but with statistical capabilities</li>
+        <li><strong>Data View</strong>: a spreadsheet. Each <em>row</em> is a case (usually one participant) and each <em>column</em> is a variable.</li>
+        <li><strong>Variable View</strong>: the settings sheet. Each <em>row</em> describes one variable (its name, type, labels, and measurement level).</li>
       </ul>
-
-      <h4>2. Variable View</h4>
       <p>
-        The <strong>Variable View</strong> lets you define the properties of your variables.
-        Click the "Variable View" tab at the bottom left to switch to this view.
+        Tip: double-click a column heading in Data View to jump straight to that variable's row in Variable View.
       </p>
-      <p>Key columns in Variable View:</p>
-      <ul>
-        <li><strong>Name</strong>: Short variable name (no spaces, must start with a letter)</li>
-        <li><strong>Type</strong>: Numeric, String, Date, etc.</li>
-        <li><strong>Width</strong>: Number of digits displayed</li>
-        <li><strong>Decimals</strong>: Number of decimal places</li>
-        <li><strong>Label</strong>: Descriptive label for the variable</li>
-        <li><strong>Values</strong>: Define value labels (e.g., 1 = Male, 2 = Female)</li>
-        <li><strong>Missing</strong>: Specify missing value codes</li>
-        <li><strong>Measure</strong>: Scale (continuous), Ordinal, or Nominal</li>
-      </ul>
 
-      <h4>3. Output Viewer</h4>
+      <h4>2. The Viewer (where results appear)</h4>
       <p>
-        When you run an analysis, results appear in the <strong>Output Viewer</strong> window.
-        This shows tables, charts, and statistical results.
+        Every analysis you run and every chart you build is written to the <strong>Viewer</strong> (also called the Output window).
+        It opens automatically the first time you run something.
       </p>
       <ul>
-        <li>Left panel shows an outline/navigation tree</li>
-        <li>Right panel displays the actual output</li>
-        <li>You can export output to Word, PDF, or Excel</li>
+        <li>The <strong>left panel</strong> is an outline. Click an entry to jump to that table or chart.</li>
+        <li>The <strong>right panel</strong> holds the tables and charts themselves.</li>
+        <li>Output is <em>not</em> saved with your data. Save it separately as an <code>.spv</code> file, or export it (File &rarr; Export) to Word, Excel, or PDF.</li>
+        <li>Each new analysis is added below the last one, so the Viewer fills up. Delete anything you do not need by selecting it in the outline and pressing <kbd>Delete</kbd>.</li>
       </ul>
-    </section>
 
-    <section class="content-section">
-      <h3>Menu Bar</h3>
-      <p>The top menu provides access to all SPSS functions:</p>
-      <ul>
-        <li><strong>File</strong>: Open, save, import/export data</li>
-        <li><strong>Edit</strong>: Undo, redo, copy, paste</li>
-        <li><strong>View</strong>: Customize display options</li>
-        <li><strong>Data</strong>: Sort, merge, select cases, transform variables</li>
-        <li><strong>Transform</strong>: Compute new variables, recode values</li>
-        <li><strong>Analyze</strong>: Run statistical procedures</li>
-        <li><strong>Graphs</strong>: Create charts and visualizations</li>
-        <li><strong>Utilities</strong>: Additional tools and options</li>
-      </ul>
-    </section>
-
-    <section class="content-section">
-      <h3>Key Features</h3>
-
-      <h4>Dialog Boxes</h4>
+      <h4>3. The Syntax Editor (optional, for repeatability)</h4>
       <p>
-        Most analyses use dialog boxes to select variables and options. They follow a consistent pattern:
-      </p>
-      <ul>
-        <li>Variables list on the left</li>
-        <li>Arrow buttons to move variables to analysis boxes</li>
-        <li>OK, Paste, Reset, Cancel, and Help buttons at the bottom</li>
-        <li>Additional options accessible via buttons (Statistics, Plots, etc.)</li>
-      </ul>
-
-      <h4>Syntax Editor</h4>
-      <p>
-        Advanced users can write <strong>SPSS Syntax</strong> (programming commands) to automate analyses.
-        Access it via <em>File → New → Syntax</em>.
+        Behind every dialog box SPSS runs a short text command. The <strong>Syntax Editor</strong> lets you see, save, and rerun those commands.
+        Open a blank one with <em>File &rarr; New &rarr; Syntax</em>. In most dialogs you can click <strong>Paste</strong> instead of <strong>OK</strong>
+        to copy the command into the Syntax Editor without running it. You do not need syntax for this course unless an assignment says so,
+        but pasting syntax is a good way to keep a record of what you did.
       </p>
     </section>
 
     <section class="content-section">
-      <h3>Tips for Navigation</h3>
+      <h3>File types you will see</h3>
+      <table>
+        <thead><tr><th>Extension</th><th>What it holds</th></tr></thead>
+        <tbody>
+          <tr><td><code>.sav</code></td><td>SPSS data file (the data <em>and</em> the Variable View settings)</td></tr>
+          <tr><td><code>.spv</code></td><td>SPSS output file (what is in the Viewer)</td></tr>
+          <tr><td><code>.sps</code></td><td>SPSS syntax file</td></tr>
+        </tbody>
+      </table>
+      <p>These are three different files. Saving one does not save the others.</p>
+    </section>
+
+    <section class="content-section">
+      <h3>The menu bar</h3>
+      <p>Menus in the Data Editor, in the order you will meet them in this course:</p>
       <ul>
-        <li>Use <kbd>Ctrl+Tab</kbd> to switch between open windows</li>
-        <li>Double-click a variable name in Data View to jump to Variable View</li>
-        <li>Right-click on variables for quick access to common operations</li>
-        <li>The status bar at the bottom shows helpful information</li>
-        <li>Save your data file frequently (<kbd>Ctrl+S</kbd>)</li>
+        <li><strong>File</strong>: open, save, import, and export data and output.</li>
+        <li><strong>Edit</strong>: undo, copy and paste, and <em>Options</em> (default folders and display settings).</li>
+        <li><strong>View</strong>: show or hide value labels, gridlines, and the status bar.</li>
+        <li><strong>Data</strong>: sort cases, select cases, split a file by group, weight cases.</li>
+        <li><strong>Transform</strong>: <em>Compute Variable</em>, <em>Recode</em>, and other ways to create or change variables.</li>
+        <li><strong>Analyze</strong>: every statistical procedure. The submenus you will use most are
+          <em>Descriptive Statistics</em>, <em>Compare Means</em>, <em>Correlate</em>, <em>Regression</em>, and <em>Nonparametric Tests</em>.</li>
+        <li><strong>Graphs</strong>: the <em>Chart Builder</em> for histograms, bar charts, boxplots, and scatterplots.</li>
+        <li><strong>Utilities</strong>, <strong>Extensions</strong>, <strong>Window</strong>, <strong>Help</strong>: housekeeping, add-ons, switching windows, and the built-in help.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h3>How dialog boxes work</h3>
+      <p>Almost every Analyze or Graphs menu item opens a dialog box built the same way:</p>
+      <ol>
+        <li>Your variables are listed on the <strong>left</strong>.</li>
+        <li>Select a variable, then click the <strong>blue arrow</strong> to move it into the box on the right (such as <em>Variable(s)</em>, <em>Dependent List</em>, or <em>Factor</em>).</li>
+        <li>Buttons on the right (<em>Statistics&hellip;</em>, <em>Options&hellip;</em>, <em>Charts&hellip;</em>, <em>Plots&hellip;</em>) open a second dialog. Make your choices there and click <strong>Continue</strong>.</li>
+        <li>Click <strong>OK</strong> to run it, or <strong>Paste</strong> to copy the syntax instead.</li>
+      </ol>
+      <p>
+        If a dialog remembers your last choices from an earlier analysis, click <strong>Reset</strong> before you start so old settings do not carry over.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Set a default folder (do this once)</h3>
+      <p>
+        Choose <em>Edit &rarr; Options&hellip; &rarr; File Locations</em>. Under <strong>Data files</strong>, choose <em>Specified folder</em> and browse to the folder where you keep your course files.
+        From then on, File &rarr; Open and File &rarr; Save start in that folder instead of somewhere random.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Habits that save you grief</h3>
+      <ul>
+        <li>Save your <code>.sav</code> data file often (<kbd>Ctrl</kbd>+<kbd>S</kbd> on Windows, <kbd>Cmd</kbd>+<kbd>S</kbd> on Mac). SPSS does not autosave your data.</li>
+        <li>Save your data under a <strong>new name</strong> (File &rarr; Save As) before you recode or compute anything, so your original file stays untouched.</li>
+        <li>Check which window you are in before you save or close. The title bar says <em>Data Editor</em>, <em>Viewer</em>, or <em>Syntax Editor</em>.</li>
+        <li>Use the <strong>Window</strong> menu to switch between open windows.</li>
+        <li>Read the red or yellow notes SPSS writes into the Viewer. They often tell you why a result looks wrong.</li>
       </ul>
     </section>
 
     <div class="key-takeaways">
       <h3>Key Takeaways</h3>
       <ul>
-        <li>Data View shows your actual data (like a spreadsheet)</li>
-        <li>Variable View defines variable properties and measurement levels</li>
-        <li>Output Viewer displays analysis results</li>
-        <li>Dialog boxes provide point-and-click access to analyses</li>
-        <li>Switch between views using tabs at the bottom</li>
+        <li>Data lives in the Data Editor (Data View for values, Variable View for settings); results appear in the Viewer.</li>
+        <li>Data (<code>.sav</code>), output (<code>.spv</code>), and syntax (<code>.sps</code>) are saved separately.</li>
+        <li>Every analysis follows the same dialog pattern: move variables right with the arrow, set options, click OK.</li>
+        <li>Use Paste to record the syntax of what you did, and save under a new name before changing your data.</li>
       </ul>
     </div>
   </div>
   <div class="attribution">
-    <p><em>Interface guide for <strong>SPSS</strong>. The full conceptual chapter in the jamovi edition of <a href="https://davidfoxcroft.github.io/lsj-book/" target="_blank" rel="noopener">Learning Statistics with jamovi</a> (CC BY-SA 4.0) covers the same learning goals with jamovi-specific steps.</em></p>
+    <p><em>Interface guide written for this course. For extra reading on the SPSS windows and menus, see Chapter 3 of
+    <a href="https://stats.libretexts.org/Workbench/Learning_Statistics_with_SPSS_-_A_Tutorial_for_Psychology_Students_and_Other_Beginners/03%3A_Getting_Started_with_SPSS" target="_blank" rel="noopener">Learning Statistics with SPSS</a> (CC BY-SA 4.0).</em></p>
   </div>
 </section>

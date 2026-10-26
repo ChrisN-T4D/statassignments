@@ -5,6 +5,55 @@
  */
 export const topicsMeta = [
   {
+    "id": "order-of-operations",
+    "moduleId": "module-0",
+    "title": "Order of Operations",
+    "description": "Brackets, exponents, multiplication, division, addition, subtraction.",
+    "icon": "T"
+  },
+  {
+    "id": "solving-for-a-variable",
+    "moduleId": "module-0",
+    "title": "Solving for a Variable",
+    "description": "Undo operations to find an unknown in an equation or formula.",
+    "icon": "T"
+  },
+  {
+    "id": "fractions-and-decimals",
+    "moduleId": "module-0",
+    "title": "Fractions, Decimals, and Percentages",
+    "description": "Convert between forms and round sensibly.",
+    "icon": "T"
+  },
+  {
+    "id": "exponents-and-square-roots",
+    "moduleId": "module-0",
+    "title": "Exponents and Square Roots",
+    "description": "Squares, roots, and how variance and SD use them.",
+    "icon": "T"
+  },
+  {
+    "id": "summation-notation",
+    "moduleId": "module-0",
+    "title": "Summation Notation",
+    "description": "Read Σ, sums of squares, and deviations from the mean.",
+    "icon": "T"
+  },
+  {
+    "id": "reading-graphs",
+    "moduleId": "module-0",
+    "title": "Reading Graphs",
+    "description": "Axes, scales, bar charts, histograms, and scatterplots.",
+    "icon": "T"
+  },
+  {
+    "id": "algebra-symbols",
+    "moduleId": "module-0",
+    "title": "Algebra Symbols in Formulas",
+    "description": "The algebra notation formulas are written in: Σ, squares, roots, parentheses, absolute value, ±, and subscripts.",
+    "icon": "T"
+  },
+  {
     "id": "intro-to-stats",
     "moduleId": "module-1",
     "title": "Why Do We Learn Statistics?",

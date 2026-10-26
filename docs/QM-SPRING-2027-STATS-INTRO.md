@@ -34,7 +34,7 @@ Decision (Chris, 2026-10-23): Statistics has an online and an in-person version.
 | 1.4 | At risk | Policies are in the syllabus, but the packaged docx is stale (late work, calendar) | Replace attachment |
 | 1.5 | Likely met | Minimum Technical Requirements page; SPSS license named | Page is 432 characters: add how to obtain SPSS |
 | 1.6 | Met | Syllabus states expected skills (Canvas, installing software, recording your screen) | |
-| 1.7 | Met | Algebra and graphs prerequisite stated; math refresher offered | |
+| 1.7 | Met | Algebra and graphs prerequisite stated; math refresher (algebra) module in week 1 | |
 | 1.8 | At risk | Contact Me page; instructor video marked "[CONFIRM: record video]" in the draft | Record a 2-minute welcome or rewrite the page warmly |
 | 1.9 | Likely met | Introductions assignment (100 pts, in the 0% group) | Confirm points |
 | 2.1 | Met | Course-level objectives in the docx are measurable | Reconcile with S1 to S8 |

@@ -3,7 +3,7 @@
 // classId + moduleId keep Statistics M1 and Research Methods M1 from colliding.
 
 export const objectives = [
-  // Module 0: Math Refresher (optional warm-up)
+  // Module 0: Math Refresher
   {
     classId: 'statistics',
     moduleId: 'stats-module-0',
@@ -51,6 +51,14 @@ export const objectives = [
     objectiveType: 'content',
     objectiveId: 'M0-O6',
     objective: 'Read common graphs (bar charts, histograms, line plots): identify axes, scales, and what a point or bar represents.'
+  },
+  {
+    classId: 'statistics',
+    moduleId: 'stats-module-0',
+    module: 0,
+    objectiveType: 'content',
+    objectiveId: 'M0-O7',
+    objective: 'Name the algebra symbols used in formulas (Σ, squares, square roots, parentheses, absolute value, ±, inequality signs, subscripts) and say what each tells you to do.'
   },
 
   // Module 1: Why Learn Statistics

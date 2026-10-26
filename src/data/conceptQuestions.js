@@ -35,7 +35,7 @@ Question Types:
 // ============================================================
 
 export const statsModule0Questions = [
-  // ============ MODULE 0: Math Refresher (optional warm-up) ============
+  // ============ MODULE 0: Math Refresher ============
   {
     id: 'stats-m0-q1',
     moduleId: 'stats-module-0',
@@ -43,14 +43,14 @@ export const statsModule0Questions = [
     question: 'Evaluate: 4 + 3 × 2²',
     options: [
       { id: 'a', text: '14' },
-      { id: 'b', text: '28' },
-      { id: 'c', text: '22' },
+      { id: 'b', text: '16' },
+      { id: 'c', text: '28' },
       { id: 'd', text: '100' }
     ],
     correct: 'b',
     feedback: {
-      correct: 'Order of operations: exponent first (2² = 4), then multiplication (3 × 4 = 12), then addition (4 + 12 = 16... wait, check: 4 + 12 = 16). The correct evaluation is 4 + 3×4 = 16.',
-      incorrect: 'PEMDAS: exponent (2² = 4), then multiplication (3 × 4 = 12), then addition: 4 + 12 = 16.'
+      correct: 'Order of operations: exponent first (2² = 4), then multiplication (3 × 4 = 12), then addition: 4 + 12 = 16.',
+      incorrect: 'PEMDAS: exponent first (2² = 4), then multiplication (3 × 4 = 12), then addition: 4 + 12 = 16. Adding 4 + 3 first gives 28, which skips the order of operations.'
     },
     difficulty: 'easy'
   },
@@ -143,6 +143,78 @@ export const statsModule0Questions = [
       incorrect: 'x tells you horizontal position (hours), y vertical (score). High-right = many hours, high score.'
     },
     difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q7',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'The symbol Σ comes from algebra. What does it tell you to do?',
+    options: [
+      { id: 'a', text: 'Square the numbers that follow' },
+      { id: 'b', text: 'Add up everything that follows' },
+      { id: 'c', text: 'Find the square root' },
+      { id: 'd', text: 'Take the absolute value' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: 'Σ is the summation sign: add up everything that follows.',
+      incorrect: 'Σ (capital sigma) means add. Squaring is shown with a small raised 2, and the square root uses the radical sign √.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q8',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'What is |−7| + (−2)²?',
+    options: [
+      { id: 'a', text: '3' },
+      { id: 'b', text: '11' },
+      { id: 'c', text: '−11' },
+      { id: 'd', text: '5' }
+    ],
+    correct: 'b',
+    feedback: {
+      correct: '|−7| = 7 and (−2)² = 4, so the total is 11.',
+      incorrect: 'Absolute value drops the minus sign: |−7| = 7. Squaring a negative number gives a positive: (−2)² = 4. Then 7 + 4 = 11.'
+    },
+    difficulty: 'medium'
+  },
+  {
+    id: 'stats-m0-q9',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'In the symbol x₃, what does the small subscript 3 mean?',
+    options: [
+      { id: 'a', text: 'Cube the score' },
+      { id: 'b', text: 'Multiply x by 3' },
+      { id: 'c', text: 'The third score in the list' },
+      { id: 'd', text: 'Add 3 to x' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: 'A subscript is only a label. x₃ is the third score.',
+      incorrect: 'A subscript names which item in a list you mean. A power would be written raised, as in x³.'
+    },
+    difficulty: 'easy'
+  },
+  {
+    id: 'stats-m0-q10',
+    moduleId: 'stats-module-0',
+    type: 'multiple_choice',
+    question: 'For the scores 2, 5, 8, 1, which value equals Σx² (square each score, then add)?',
+    options: [
+      { id: 'a', text: '16' },
+      { id: 'b', text: '30' },
+      { id: 'c', text: '94' },
+      { id: 'd', text: '256' }
+    ],
+    correct: 'c',
+    feedback: {
+      correct: '4 + 25 + 64 + 1 = 94. Note that (Σx)² = 16² = 256 is different.',
+      incorrect: 'Square each score first: 4, 25, 64, 1. Their sum is 94. 256 is (Σx)², where you add first and square afterwards.'
+    },
+    difficulty: 'medium'
   },
 ]
 

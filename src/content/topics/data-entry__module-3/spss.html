@@ -3,47 +3,143 @@
     <h2>Entering and Importing Data in SPSS</h2>
 
     <section class="content-section">
-      <h3>Manual Data Entry</h3>
+      <h3>The rule for building a data file</h3>
       <p>
-        SPSS allows you to enter data directly into the Data View, similar to Excel.
+        In SPSS you <strong>define the variables first</strong> (Variable View) and <strong>enter the scores second</strong> (Data View).
+        Doing it in that order means every column already has the right type, labels, and measurement level when the numbers go in.
       </p>
-      <ul>
-        <li>Click any cell in Data View to enter a value</li>
-        <li>Press Tab or Enter to move to the next cell</li>
-        <li>Ensure variable types are set correctly in Variable View first</li>
-      </ul>
+    </section>
 
-      <h3>Importing Data from CSV/Excel</h3>
-      <p>
-        To import data: <em>File → Open → Data</em>, then select your file type.
-      </p>
-      <ul>
-        <li>SPSS can read .csv, .xlsx, .txt, and .sav files</li>
-        <li>Use the import wizard to specify delimiters and variable names</li>
-        <li>First row usually contains variable names</li>
-      </ul>
+    <section class="content-section">
+      <h3>Entering data by hand</h3>
+      <p>We will build a tiny file with five participants. Here is the data:</p>
+      <table>
+        <thead><tr><th>ID</th><th>Group</th><th>Age</th><th>SleepHours</th><th>Stress</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Control</td><td>19</td><td>7</td><td>12</td></tr>
+          <tr><td>2</td><td>Treatment</td><td>22</td><td>6</td><td>15</td></tr>
+          <tr><td>3</td><td>Control</td><td>20</td><td>8</td><td>9</td></tr>
+          <tr><td>4</td><td>Treatment</td><td>21</td><td>5</td><td>18</td></tr>
+          <tr><td>5</td><td>Control</td><td>23</td><td>7</td><td>11</td></tr>
+        </tbody>
+      </table>
 
-      <h3>Data Validation</h3>
+      <h4>Step 1: Start a new file</h4>
+      <p>Choose <em>File &rarr; New &rarr; Data</em>. You get an empty Data View.</p>
+
+      <h4>Step 2: Define each variable in Variable View</h4>
+      <p>Click the <strong>Variable View</strong> tab. Each row is one variable. For each of the five:</p>
+      <ol>
+        <li>Type the name in the <strong>Name</strong> column. Names must start with a letter and cannot contain spaces (use <code>SleepHours</code> or <code>Sleep_Hours</code>).</li>
+        <li>Leave <strong>Type</strong> as <em>Numeric</em>. (Group will be numeric too; see step 3.)</li>
+        <li>Set <strong>Decimals</strong> to 0 for whole numbers.</li>
+        <li>Type a longer description in <strong>Label</strong> (for example <code>Hours of sleep last night</code>). Labels appear in your output, so they make tables readable.</li>
+        <li>Set <strong>Measure</strong>: ID is <em>Nominal</em>, Group is <em>Nominal</em>, Age and SleepHours are <em>Scale</em>, and Stress (a total score) is <em>Scale</em>.</li>
+      </ol>
+
+      <h4>Step 3: Code the Group variable</h4>
       <p>
-        Check your data after import:
+        Enter groups as numbers and attach labels: in the <strong>Values</strong> cell for Group, click the <strong>&hellip;</strong> button,
+        add <code>1</code> = <code>Control</code>, click <strong>Add</strong>, then add <code>2</code> = <code>Treatment</code> and click <strong>Add</strong>. Click <strong>OK</strong>.
       </p>
+
+      <h4>Step 4: Type the scores in Data View</h4>
+      <p>
+        Return to the <strong>Data View</strong> tab and type down each column (Group as 1 or 2).
+        Press <kbd>Tab</kbd> to move right, <kbd>Enter</kbd> to move down. Use <em>View &rarr; Value Labels</em> to see Control and Treatment instead of 1 and 2.
+      </p>
+
+      <h4>Step 5: Save</h4>
+      <p>
+        Choose <em>File &rarr; Save As&hellip;</em>, pick your course folder, name the file (for example <code>sleep_practice</code>), and make sure
+        <em>Save as type</em> is <strong>SPSS Statistics (*.sav)</strong>.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Opening a data file</h3>
+      <p>
+        To open a file you have been given, choose <em>File &rarr; Open &rarr; Data&hellip;</em> and select it.
+        If you do not see your file, change <strong>Files of type</strong> at the bottom of the dialog (it may be set to <code>.sav</code> only).
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Importing Excel files</h3>
+      <ol>
+        <li>Choose <em>File &rarr; Open &rarr; Data&hellip;</em>.</li>
+        <li>Set <strong>Files of type</strong> to <em>Excel (*.xls, *.xlsx, *.xlsm)</em> and select your file.</li>
+        <li>In the box that opens, keep <strong>Read variable names from the first row of data</strong> ticked if row 1 has column headings.</li>
+        <li>Pick the worksheet if there is more than one, then click <strong>OK</strong>.</li>
+      </ol>
+      <p>Clean the spreadsheet first: headings in row 1, one case per row, no merged cells, no blank rows, and no totals row at the bottom.</p>
+    </section>
+
+    <section class="content-section">
+      <h3>Importing CSV and text files</h3>
+      <ol>
+        <li>Choose <em>File &rarr; Open &rarr; Data&hellip;</em> and set <strong>Files of type</strong> to <em>Text (*.txt, *.dat, *.csv, *.tab)</em> (or choose <em>File &rarr; Import Data &rarr; CSV Data</em>).</li>
+        <li>SPSS starts the <strong>Text Import Wizard</strong>. Work through its steps:
+          <ul>
+            <li>Predefined format: <em>No</em>.</li>
+            <li>How are your variables arranged? <em>Delimited</em>.</li>
+            <li>Are variable names at the top of your file? <em>Yes</em> (line 1).</li>
+            <li>Which delimiter? <em>Comma</em> for a CSV file.</li>
+            <li>Check the preview, then keep clicking <strong>Next</strong> and finish with <strong>Finish</strong>.</li>
+          </ul>
+        </li>
+      </ol>
+      <p>
+        Imported data arrives with SPSS's <em>guesses</em> for Type and Measure. Always open <strong>Variable View</strong> afterward and correct them.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Check your data after any import</h3>
+      <p>Five minutes here prevents wrong answers later.</p>
+      <ol>
+        <li><strong>Look at it.</strong> Scroll through Data View. Does it have the number of rows you expect? Are the columns what you expect?</li>
+        <li><strong>Check Variable View.</strong> Fix Type and Measure, add Labels, Values, and Missing codes.</li>
+        <li><strong>Run a frequency check.</strong> Choose <em>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</em>, move a categorical variable into <strong>Variable(s)</strong>, and click <strong>OK</strong>. Look for impossible or misspelled categories.</li>
+        <li><strong>Check the range.</strong> Choose <em>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</em>, move your numeric variables over, and click <strong>OK</strong>. Look at <strong>Minimum</strong> and <strong>Maximum</strong>. An age of 220 or a rating of 55 on a 1&ndash;5 scale is a typo.</li>
+      </ol>
+    </section>
+
+    <section class="content-section">
+      <h3>Saving and exporting</h3>
       <ul>
-        <li>Use <em>Analyze → Descriptive Statistics → Frequencies</em> to check for errors</li>
-        <li>Look for unexpected values or missing data</li>
-        <li>Verify variable types in Variable View</li>
+        <li><strong>Your data:</strong> <em>File &rarr; Save</em> (or <em>Save As</em>) as a <code>.sav</code> file. This keeps all your Variable View settings.</li>
+        <li><strong>A copy for other programs:</strong> <em>File &rarr; Save As&hellip;</em> and choose a different <strong>Save as type</strong> such as Excel or comma-delimited (<code>*.csv</code>). Other programs will not see value labels unless you keep the box for labels ticked.</li>
+        <li><strong>Your results:</strong> click in the Viewer, then <em>File &rarr; Export&hellip;</em> and choose Word, Excel, or PDF. Save the Viewer itself as <code>.spv</code> if you want to reopen it in SPSS.</li>
       </ul>
+    </section>
+
+    <section class="content-section">
+      <h3>When something goes wrong</h3>
+      <table>
+        <thead><tr><th>Problem</th><th>Likely cause and fix</th></tr></thead>
+        <tbody>
+          <tr><td>All the data landed in one column</td><td>Wrong delimiter in the Text Import Wizard. Reopen the file and pick Comma (or Tab).</td></tr>
+          <tr><td>The first row of data became variable names, or the headings became data</td><td>The "variable names at top" answer was reversed. Reopen and change it.</td></tr>
+          <tr><td>Group shows 1 and 2 instead of words</td><td>Turn on <em>View &rarr; Value Labels</em>, or add value labels in Variable View.</td></tr>
+          <tr><td>A mean looks far too large</td><td>A missing-value code such as 99 is being counted as a score. Declare it in the Missing column.</td></tr>
+          <tr><td>A numeric column imported as text (left-aligned)</td><td>Something non-numeric is in the column (a stray space, "N/A"). Fix it in the source file and reimport.</td></tr>
+          <tr><td>You cannot find the file to open</td><td>Change <em>Files of type</em> in the Open dialog to match the file's extension.</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <div class="key-takeaways">
       <h3>Key Takeaways</h3>
       <ul>
-        <li>Enter data in Data View or import from external files</li>
-        <li>Use File → Open → Data for imports</li>
-        <li>Always validate data after import</li>
+        <li>Define variables in Variable View first, then enter scores in Data View.</li>
+        <li>Open Excel and CSV files with File &rarr; Open &rarr; Data and change Files of type; check the delimiter and header-row choices.</li>
+        <li>After any import, fix Type and Measure, then run Frequencies and Descriptives to catch errors.</li>
+        <li>Save data as <code>.sav</code>; export output separately through File &rarr; Export.</li>
       </ul>
     </div>
   </div>
   <div class="attribution">
-    <p><em>Interface guide for <strong>SPSS</strong>. The full conceptual chapter in the jamovi edition of <a href="https://davidfoxcroft.github.io/lsj-book/" target="_blank" rel="noopener">Learning Statistics with jamovi</a> (CC BY-SA 4.0) covers the same learning goals with jamovi-specific steps.</em></p>
+    <p><em>Interface guide written for this course. The practice data above is invented for illustration.</em></p>
   </div>
 </section>

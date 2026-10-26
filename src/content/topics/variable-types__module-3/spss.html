@@ -1,18 +1,117 @@
 <section class="module-content topic-content software-guide-vue">
 <div class="software-content">
     <h2>Variable Types and Measurement Levels in SPSS</h2>
+
     <section class="content-section">
-      <h3>Data Types</h3>
-      <p>Understanding variable types and measurement levels is crucial for proper statistical analysis.</p>
-      <h3>Measurement Levels</h3>
+      <h3>Two settings, two different questions</h3>
+      <p>
+        Every variable in SPSS has a <strong>Type</strong> and a <strong>Measure</strong>. They sound alike, but they answer different questions:
+      </p>
       <ul>
-        <li><strong>Nominal</strong>: Categories with no order (e.g., gender, color)</li>
-        <li><strong>Ordinal</strong>: Ordered categories (e.g., education level, Likert scales)</li>
-        <li><strong>Scale/Continuous</strong>: Numeric measurements (e.g., age, test scores)</li>
+        <li><strong>Type</strong> asks: <em>what kind of thing is stored in this column?</em> (numbers, text, dates)</li>
+        <li><strong>Measure</strong> asks: <em>what does the variable mean?</em> (categories, ordered ranks, or amounts). This is the scale of measurement from Module 2.</li>
       </ul>
+      <p>
+        Both are set in <strong>Variable View</strong>. Open it with the tab at the bottom left of the Data Editor.
+      </p>
     </section>
+
+    <section class="content-section">
+      <h3>Type: what is stored</h3>
+      <p>Click the cell in the <strong>Type</strong> column, then the small <strong>&hellip;</strong> button, to open the Variable Type dialog.</p>
+      <table>
+        <thead><tr><th>Type</th><th>Use it for</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Numeric</td><td>Numbers you can calculate with, and numeric codes for groups</td><td>Age = 21; Group = 1</td></tr>
+          <tr><td>String</td><td>Text, such as names or open-ended answers. You cannot take a mean of a string.</td><td>"Amy"</td></tr>
+          <tr><td>Date</td><td>Dates and times in a chosen format</td><td>03/27/1972</td></tr>
+          <tr><td>Dollar / Custom currency</td><td>Money values</td><td>$12,300</td></tr>
+        </tbody>
+      </table>
+      <p>
+        <strong>Width</strong> and <strong>Decimals</strong> only control how many characters and decimal places SPSS displays.
+        Setting Decimals to 0 for a whole-number count (such as number of friends) keeps tables tidy. It does not round the stored value.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Measure: Nominal, Ordinal, or Scale</h3>
+      <p>SPSS has three measurement choices. They map onto the four scales you learned in Module 2:</p>
+      <table>
+        <thead><tr><th>SPSS Measure</th><th>Module 2 scale</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nominal</strong></td><td>Nominal</td><td>Major, group (control or treatment), yes/no</td></tr>
+          <tr><td><strong>Ordinal</strong></td><td>Ordinal</td><td>Class rank, "strongly disagree" to "strongly agree"</td></tr>
+          <tr><td><strong>Scale</strong></td><td>Interval and ratio</td><td>Temperature in &deg;C, reaction time, number of friends, income</td></tr>
+        </tbody>
+      </table>
+      <p>
+        SPSS has no separate setting for interval versus ratio. Both are called <strong>Scale</strong>.
+      </p>
+      <p>
+        SPSS makes a guess when you enter or import data. Numeric columns default to <em>Scale</em> and text columns to <em>Nominal</em>.
+        <strong>The guess is often wrong</strong>, so check the Measure column for every variable. A column of group codes (1, 2, 3) is numeric,
+        but it is <em>Nominal</em>, not Scale.
+      </p>
+      <p>
+        In dialog boxes, the variable list shows a small icon next to each name: a ruler for Scale, a bar chart for Ordinal, and three circles for Nominal.
+        If an icon looks wrong, fix the Measure setting.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Coding categories with value labels</h3>
+      <p>
+        Groups are usually stored as numbers (1, 2, 3) because many SPSS procedures need numbers. To keep the numbers readable, give each one a <strong>value label</strong>:
+      </p>
+      <ol>
+        <li>In Variable View, click the cell in the <strong>Values</strong> column for your variable, then the <strong>&hellip;</strong> button.</li>
+        <li>Type the code in <strong>Value</strong> (for example <code>1</code>) and its meaning in <strong>Label</strong> (for example <code>Control</code>).</li>
+        <li>Click <strong>Add</strong>. Repeat for every code (<code>2</code> = <code>Treatment</code>).</li>
+        <li>Click <strong>OK</strong>, then set <strong>Measure</strong> to <em>Nominal</em>.</li>
+      </ol>
+      <p>
+        Switch back to Data View and choose <em>View &rarr; Value Labels</em> to show the words instead of the numbers. This changes only what you see, not the stored values.
+      </p>
+      <p>
+        <strong>Watch out:</strong> SPSS will happily compute the mean of a column of group codes. The answer (a mean of 1.5, say) is meaningless.
+        Measure and value labels are how you and SPSS keep track of which numbers are amounts and which are just names.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h3>Missing values</h3>
+      <p>
+        A blank numeric cell is stored as <strong>system-missing</strong> and shown as a dot. If you used a code such as <code>99</code> for "no answer",
+        tell SPSS so it is left out of calculations:
+      </p>
+      <ol>
+        <li>In Variable View, click the <strong>Missing</strong> cell, then the <strong>&hellip;</strong> button.</li>
+        <li>Choose <em>Discrete missing values</em> and type <code>99</code> (you can list up to three codes).</li>
+        <li>Click <strong>OK</strong>.</li>
+      </ol>
+      <p>If you skip this step, SPSS treats 99 as a real score and every mean and standard deviation will be wrong.</p>
+    </section>
+
+    <section class="content-section">
+      <h3>A note on rating scales</h3>
+      <p>
+        A single 1&ndash;5 agreement item is technically <strong>ordinal</strong>. In practice, researchers often treat the <em>total</em> of many such items as Scale.
+        Your instructor will tell you which to use in an assignment. Whichever you choose, set the Measure to match so SPSS offers the right charts and options.
+      </p>
+    </section>
+
+    <div class="key-takeaways">
+      <h3>Key Takeaways</h3>
+      <ul>
+        <li>Type is what is stored (Numeric, String, Date); Measure is what it means (Nominal, Ordinal, Scale).</li>
+        <li>SPSS has one Scale setting for both interval and ratio data.</li>
+        <li>Always check the Measure column, because SPSS guesses it.</li>
+        <li>Give group codes value labels, and define missing-value codes such as 99 so they are not analyzed as scores.</li>
+      </ul>
+    </div>
   </div>
   <div class="attribution">
-    <p><em>Interface guide for <strong>SPSS</strong>. The full conceptual chapter in the jamovi edition of <a href="https://davidfoxcroft.github.io/lsj-book/" target="_blank" rel="noopener">Learning Statistics with jamovi</a> (CC BY-SA 4.0) covers the same learning goals with jamovi-specific steps.</em></p>
+    <p><em>Interface guide written for this course. Measurement levels are explained in Module 2.</em></p>
   </div>
 </section>

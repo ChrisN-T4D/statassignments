@@ -21,7 +21,7 @@ export const statisticsModules = [
     number: 0,
     title: 'Math Refresher',
     shortTitle: 'Refresher',
-    description: 'Optional warm-up: the algebra and graph-reading skills statistics builds on.',
+    description: 'The arithmetic, algebra, and graph-reading skills statistics builds on. Start here in week 1.',
     icon: 'M0',
     color: '#a78bfa',
     topics: [
@@ -30,7 +30,8 @@ export const statisticsModules = [
       'fractions-and-decimals',
       'exponents-and-square-roots',
       'summation-notation',
-      'reading-graphs'
+      'reading-graphs',
+      'algebra-symbols'
     ],
     textbookChapters: [],
     learningObjectives: [
@@ -39,7 +40,8 @@ export const statisticsModules = [
       'Work comfortably with fractions, decimals, and percentages',
       'Evaluate exponents and square roots',
       'Read summation notation (Sigma) and compute a simple sum',
-      'Read common graphs: axes, scales, points, and bars'
+      'Read common graphs: axes, scales, points, and bars',
+      'Name and read the algebra symbols used in formulas (Σ, squares, square roots, parentheses, absolute value, ±, inequality signs, subscripts)'
     ],
     hasSoftwarePractice: false
   },
@@ -786,6 +788,51 @@ export function getBenchmarks() {
 
 // Topics organized by module (for Statistics class - backwards compatible)
 export const topicsByModule = {
+  'stats-module-0': [
+    {
+      id: 'order-of-operations',
+      title: 'Order of Operations',
+      description: 'Brackets, exponents, multiplication, division, addition, subtraction.',
+      icon: 'T'
+    },
+    {
+      id: 'solving-for-a-variable',
+      title: 'Solving for a Variable',
+      description: 'Undo operations to find an unknown in an equation or formula.',
+      icon: 'T'
+    },
+    {
+      id: 'fractions-and-decimals',
+      title: 'Fractions, Decimals, and Percentages',
+      description: 'Convert between forms and round sensibly.',
+      icon: 'T'
+    },
+    {
+      id: 'exponents-and-square-roots',
+      title: 'Exponents and Square Roots',
+      description: 'Squares, roots, and how variance and SD use them.',
+      icon: 'T'
+    },
+    {
+      id: 'summation-notation',
+      title: 'Summation Notation',
+      description: 'Read Σ, sums of squares, and deviations from the mean.',
+      icon: 'T'
+    },
+    {
+      id: 'reading-graphs',
+      title: 'Reading Graphs',
+      description: 'Axes, scales, bar charts, histograms, and scatterplots.',
+      icon: 'T'
+    },
+    {
+      id: 'algebra-symbols',
+      title: 'Algebra Symbols in Formulas',
+      description: 'The algebra notation formulas are written in: Σ, squares, roots, parentheses, absolute value, ±, and subscripts.',
+      icon: 'T'
+    },
+
+  ],
   'stats-module-1': [
     {
       id: 'intro-to-stats',
