@@ -72,7 +72,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update'])
 
-const ws = computed(() => guidedWorksheet(props.sectionId))
+const ws = computed(() => guidedWorksheet(props.sectionId, props.classId))
 const answers = computed(() => (ws.value ? props.project[ws.value.key] ?? {} : {}))
 const progressLabel = computed(() => guidedProgressLabel(props.project, props.sectionId))
 

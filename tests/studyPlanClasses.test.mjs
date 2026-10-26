@@ -8,7 +8,7 @@ import { studyPlanSectionProgress } from '../src/lib/studyPlanProgress.js'
 import { THEORY_MENU } from '../src/data/capstoneTheorySelectionWorksheet.js'
 
 test('Research Methods keeps its sections; Intro to Research gets its own, in order', () => {
-  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section'])
+  assert.deepEqual(studyPlanSectionsFor('research-methods').map((s) => s.id), ['article-review', 'study-focus', 'question-hypotheses', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section', 'analysis-plan'])
   assert.deepEqual(studyPlanSectionsFor('intro-research').map((s) => s.id), ['article-review', 'theory-selection', 'study-focus', 'question-hypotheses', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section', 'analysis-plan'])
   assert.deepEqual(studyPlanSectionsFor('statistics'), [])
   assert.equal(hasStudyPlan('intro-research'), true)
@@ -23,15 +23,28 @@ test('class wording is laid over the shared section', () => {
 })
 
 test('every Study Plan item in a schedule points at a section its class shows', () => {
-  for (const slug of ['intro-research']) {
-    const ids = new Set(studyPlanSectionsFor(slug).map((s) => s.id))
+  // Fall Research Methods and Spring Experimental share the class slug research-methods
+  const classOf = { 'research-methods': 'research-methods', experimental: 'research-methods', 'intro-research': 'intro-research' }
+  for (const [slug, cls] of Object.entries(classOf)) {
+    const ids = new Set(studyPlanSectionsFor(cls).map((s) => s.id))
     for (const week of RESEARCH_METHODS_SCHEDULES[slug].weeks) {
       for (const it of week.items.filter((i) => i.kind === 'study-plan')) {
         assert.ok(ids.has(it.sectionId), `${slug}: ${it.sectionId} is not a section`)
-        assert.ok(it.due, `${slug}: ${it.sectionId} has no due date`)
+        assert.ok(it.due || it.dueLabel, `${slug}: ${it.sectionId} has no due date or label`)
       }
     }
   }
+})
+
+test('Question and Hypotheses is a Fall step and Analysis Plan a Spring Experimental one, in Research Methods', () => {
+  const fall = RESEARCH_METHODS_SCHEDULES['research-methods'].weeks.flatMap((w) => w.items.filter((i) => i.kind === 'study-plan').map((i) => i.sectionId))
+  const spring = RESEARCH_METHODS_SCHEDULES.experimental.weeks.flatMap((w) => w.items.filter((i) => i.kind === 'study-plan').map((i) => i.sectionId))
+  assert.ok(fall.includes('question-hypotheses'))
+  assert.ok(!fall.includes('analysis-plan'))
+  assert.ok(spring.includes('analysis-plan'))
+  assert.ok(!spring.includes('question-hypotheses'))
+  assert.equal(studyPlanDue('analysis-plan', new Date('2027-01-12T12:00:00'), 'research-methods').dueLabel, 'Before Jan 19')
+  assert.equal(studyPlanDue('question-hypotheses', new Date('2026-10-13T12:00:00'), 'research-methods').dueLabel, 'Week of Oct 12')
 })
 
 test('due dates come from the class own schedule', () => {
@@ -205,4 +218,15 @@ test('guided worksheets: copy-from buttons only fill what is empty', () => {
   const ap = GUIDED_WORKSHEETS['analysis-plan'].prefills[0]
   p.questionHypotheses.hypotheses = 'H1: X predicts Y.'
   assert.equal(ap.apply(p).hypothesisRecap, 'H1: X predicts Y.')
+})
+
+
+import { guidedWorksheet } from '../src/data/guidedWorksheets.js'
+
+test('worksheet wording follows the class', () => {
+  assert.match(guidedWorksheet('question-hypotheses', 'research-methods').objective, /before you choose a method/)
+  assert.match(guidedWorksheet('question-hypotheses', 'intro-research').objective, /first literature review draft/)
+  assert.match(guidedWorksheet('analysis-plan', 'research-methods').objective, /about to collect/)
+  assert.match(guidedWorksheet('analysis-plan', 'intro-research').objective, /would collect/)
+  assert.equal(guidedWorksheet('nope', 'research-methods'), null)
 })

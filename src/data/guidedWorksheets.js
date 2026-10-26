@@ -24,6 +24,13 @@ const QUESTION_HYPOTHESES = {
   objective:
     'Narrow your broad topic to one researchable question, using what your first literature review draft showed. A specific question, testable hypotheses (or guiding questions), and a reason it matters are the foundation of everything after this.',
   flow: 'Literature Review Draft (week 6) → <strong>Research Question and Hypotheses</strong> (week 7) → Literature Review Final (week 8)',
+  byClass: {
+    'research-methods': {
+      objective:
+        'Narrow your topic to one researchable question, using what your literature review showed. A specific question, testable hypotheses (or guiding questions), and a reason it matters come before you choose a method, because the method has to fit the question.',
+      flow: 'Lit Review Outline → <strong>Research Question and Hypotheses</strong> → Method Choice'
+    }
+  },
   blocks: [
     {
       id: 'problem',
@@ -416,6 +423,13 @@ const ANALYSIS_PLAN = {
   objective:
     'Plan how you would analyze the data your study would collect, so your design and your tests match your hypotheses. Quantitative students name the test for each hypothesis and say why it fits. Qualitative students explain how they would code and build themes.',
   flow: 'Methods Section → <strong>Analysis Plan</strong> → Full Draft Proposal',
+  byClass: {
+    'research-methods': {
+      objective:
+        'Plan how you will analyze the data you are about to collect, so your tests match your hypotheses before the first participant responds. For each hypothesis, name the test and why it fits, how you will check its assumptions, and what a result that supports it would look like. You will run these analyses for your poster.',
+      flow: 'Your approved IRB protocol → <strong>Analysis Plan</strong> → Data collection → Progress Report 4 and poster'
+    }
+  },
   blocks: [
     {
       id: 'recap',
@@ -496,8 +510,12 @@ export const GUIDED_WORKSHEETS = {
   'analysis-plan': ANALYSIS_PLAN
 }
 
-export function guidedWorksheet (sectionId) {
-  return GUIDED_WORKSHEETS[sectionId] ?? null
+/** A worksheet, with the wording for a class laid over it (objective and flow differ between Intro to Research and Research Methods). */
+export function guidedWorksheet (sectionId, classId = null) {
+  const ws = GUIDED_WORKSHEETS[sectionId]
+  if (!ws) return null
+  const over = classId ? ws.byClass?.[classId] : null
+  return over ? { ...ws, ...over } : ws
 }
 
 /** Every worksheet's saved answers, empty. Added to the project so old drafts load cleanly. */

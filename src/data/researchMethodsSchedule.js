@@ -99,6 +99,7 @@ const FALL = {
       why: 'Comparing the four pathways this week prepares you to choose the method your project will use.',
       note: 'Fall Break Fri',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'question-hypotheses', label: 'Research question and hypotheses', dueLabel: 'Week of Oct 12', note: 'Narrow your question before you choose a method: the method has to fit it.' },
         { role: 'do', kind: 'study-plan', sectionId: 'phase-4', label: 'Method choice', dueLabel: 'Week of Oct 12' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-phase-4-worksheet', label: 'Method choice help' },
         { role: 'help', kind: 'assignment-help', assignmentId: 'rm-path-1-survey', label: 'Path 1: Survey' },
@@ -217,6 +218,7 @@ const SPRING = {
       note: 'No class Mon (MLK)',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-data-by-path', label: 'Ch. 13 Inferential statistics' },
+        { role: 'do', kind: 'study-plan', sectionId: 'analysis-plan', label: 'Analysis plan', dueLabel: 'Before Jan 19', proposed: true, note: 'Plan the test for each hypothesis before data collection begins.' },
         { role: 'do', kind: 'task', label: 'Everyone begins data collection', due: '2027-01-19', proposed: true }
       ]
     },

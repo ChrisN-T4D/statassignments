@@ -33,7 +33,7 @@ export const STUDY_PLAN_SECTIONS = [
     id: 'question-hypotheses',
     title: 'Research Question and Hypotheses',
     shortTitle: 'Question and Hypotheses',
-    onlyFor: ['intro-research'],
+    onlyFor: ['intro-research', 'research-methods'],
     description: 'Narrow your broad topic to one researchable question, with hypotheses or guiding questions and a reason it matters.',
     submitNote: 'Submit in Canvas.'
   },
@@ -84,7 +84,7 @@ export const STUDY_PLAN_SECTIONS = [
     id: 'analysis-plan',
     title: 'Analysis Plan',
     shortTitle: 'Analysis Plan',
-    onlyFor: ['intro-research'],
+    onlyFor: ['intro-research', 'research-methods'],
     description: 'A test for each hypothesis, how you would check assumptions, and a mock APA table of what your results would look like.',
     submitNote: 'Submit in Canvas.'
   },

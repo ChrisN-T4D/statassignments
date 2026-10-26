@@ -9,12 +9,22 @@ export const STUDY_PLAN_CLASSES = {
   'research-methods': {
     course: 'PSYC 4223',
     intro: 'Your capstone draft workspace for PSYC 4223. Methods Market holds your notes and links to chapters; Canvas is where you submit for a grade.',
-    sectionIds: ['article-review', 'study-focus', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section'],
+    // Fall (PSYC 4223) and Spring Experimental (PSYC 4233) share this class: Question and Hypotheses is a Fall step, Analysis Plan a Spring one.
+    sectionIds: ['article-review', 'study-focus', 'question-hypotheses', 'phase-4', 'measures-draft', 'recruitment-consent', 'ethics-plan', 'methods-section', 'analysis-plan'],
     articleMin: 6,
     articleRange: '6 to 8',
     canvasLinks: true, // the RM Canvas assignment and wiki-page links exist
     flow: 'rm', // Phase 3 elevator speech and the four-path Phase 4 hand-offs
-    overrides: {}
+    overrides: {
+      'question-hypotheses': {
+        description: 'Narrow your topic to one researchable question, with hypotheses or guiding questions and a reason it matters, before you choose a method.',
+        submitNote: 'Not a Canvas submission; it feeds Method Choice and your IRB application.'
+      },
+      'analysis-plan': {
+        description: 'A test for each hypothesis, how you will check assumptions, and a mock APA table, planned before data collection begins.',
+        submitNote: 'Not a Canvas submission; it guides your analysis for the poster.'
+      }
+    }
   },
   'intro-research': {
     course: 'PSYC 5033',
