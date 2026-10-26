@@ -74,8 +74,7 @@ export const STATISTICS = {
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-4' },
         { role: 'do', kind: 'software', moduleId: 'stats-module-4', label: 'Module 4 software practice' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'm4-descriptives', label: 'Descriptive statistics assignment' },
-        { role: 'help', kind: 'assignment-help', assignmentId: 'm4-normality-quiz', label: 'Normality practice' },
-        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-discussion', label: 'Module 4 discussion' }
+        { role: 'help', kind: 'assignment-help', assignmentId: 'm4-normality-quiz', label: 'Normality practice' }
       ]
     },
     {
@@ -85,7 +84,8 @@ export const STATISTICS = {
       why: 'Graphs show what the numbers hide, and you will need both to explain results later.',
       items: [
         { role: 'read', kind: 'chapter', moduleId: 'stats-module-5' },
-        { role: 'do', kind: 'software', moduleId: 'stats-module-5', label: 'Module 5 software practice' }
+        { role: 'do', kind: 'software', moduleId: 'stats-module-5', label: 'Module 5 software practice' },
+        { role: 'do', kind: 'assignment-help', assignmentId: 'm4-discussion', label: 'Module 4 discussion' }
       ]
     },
     {
