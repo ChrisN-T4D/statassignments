@@ -36,14 +36,15 @@ import { downloadStudyPlanPdf } from '../../lib/capstoneExportPdf.js'
 
 const props = defineProps({
   sectionId: { type: String, required: true },
-  project: { type: Object, required: true }
+  project: { type: Object, required: true },
+  classId: { type: String, default: null }
 })
 
 const copied = ref(false)
 const pdfBusy = ref(false)
 const pdfError = ref('')
 
-const exportText = computed(() => buildExportText(props.sectionId, props.project))
+const exportText = computed(() => buildExportText(props.sectionId, props.project, props.classId))
 
 async function copyExport () {
   try {
@@ -59,7 +60,7 @@ async function downloadPdf () {
   pdfError.value = ''
   pdfBusy.value = true
   try {
-    await downloadStudyPlanPdf(props.sectionId, props.project)
+    await downloadStudyPlanPdf(props.sectionId, props.project, undefined, props.classId)
   } catch (err) {
     pdfError.value = err?.message || 'Could not build PDF.'
   } finally {

@@ -66,7 +66,7 @@ export function countPhase4Progress (project) {
   return { recapFilled, recapTotal: topFields.length, pathsExplored, pathsTotal: PHASE4_PATHWAYS.length, chosen }
 }
 
-export function countArticleCards (project) {
+export function countArticleCards (project, minRequired = ARTICLE_REVIEW_MIN_ARTICLES, rangeLabel = ARTICLE_REVIEW_CANVAS_RANGE_LABEL) {
   const cards = project?.articleReview?.articleCards ?? []
   let started = 0
   let complete = 0
@@ -81,16 +81,16 @@ export function countArticleCards (project) {
     started,
     complete,
     total: cards.length,
-    minRequired: ARTICLE_REVIEW_MIN_ARTICLES,
-    rangeLabel: ARTICLE_REVIEW_CANVAS_RANGE_LABEL
+    minRequired,
+    rangeLabel
   }
 }
 
-export function buildExportText (sectionId, project) {
+export function buildExportText (sectionId, project, classId = null) {
   if (!project) return ''
   switch (sectionId) {
     case 'article-review':
-      return buildArticleReviewExport(project)
+      return classId === 'intro-research' ? buildAnnotatedBibliographyExport(project) : buildArticleReviewExport(project)
     case 'study-focus':
       return buildLitReviewOutlineExport(project)
     case 'phase-3':
@@ -102,6 +102,21 @@ export function buildExportText (sectionId, project) {
     default:
       return ''
   }
+}
+
+/** Intro to Research: just the source cards. No project title, problem statement, or early question yet: those come after the literature review. */
+function buildAnnotatedBibliographyExport (project) {
+  const cards = project.articleReview?.articleCards ?? []
+  const lines = [sectionHeader('Annotated Bibliography')]
+  cards.forEach((card, i) => {
+    const hasContent = ARTICLE_CARD_FIELDS.some((f) => (card[f.id] ?? '').trim())
+    if (!hasContent) return
+    lines.push(sectionHeader(`Source ${i + 1}`))
+    for (const field of ARTICLE_CARD_FIELDS) {
+      lines.push(fieldBlock(field.exportLabel, card[field.id]))
+    }
+  })
+  return lines.join('\n').trim()
 }
 
 function buildArticleReviewExport (project) {

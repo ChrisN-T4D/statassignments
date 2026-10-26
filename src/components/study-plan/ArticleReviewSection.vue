@@ -1,13 +1,18 @@
 <template>
   <div ref="sectionRoot" class="article-review-section">
-    <ArticleReviewWalkthrough :root-el="sectionRoot" :before-step="onTourBeforeStep" />
+    <ArticleReviewWalkthrough v-if="!isIntro" :root-el="sectionRoot" :before-step="onTourBeforeStep" />
 
-    <p class="section-intro" data-tour="tour-intro">
-      Capture notes for each article in your own words. Canvas expects at least
-      <strong>{{ ARTICLE_REVIEW_MIN_ARTICLES }}</strong> completed reviews (up to
-      {{ ARTICLE_REVIEW_CANVAS_RANGE_LABEL }} on the template). Add as many article cards as you need here -
+    <p v-if="isIntro" class="section-intro" data-tour="tour-intro">
+      Your annotated bibliography needs <strong>{{ articleRange }}</strong> sources. Capture notes for each source in your own words: what the
+      study asked and why, how it was done, what it found, how good it is, and how it relates to your topic. Add as many cards as you need here;
       every card with content is included when you export.
-      <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
+    </p>
+    <p v-else class="section-intro" data-tour="tour-intro">
+      Capture notes for each article in your own words. Canvas expects at least
+      <strong>{{ articleMin }}</strong> completed reviews (up to
+      {{ articleRange }} on the template). Add as many article cards as you need here -
+      every card with content is included when you export.
+      <a v-if="canvasUrl" :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
     </p>
     <p class="progress-chip">{{ progressLabel }}</p>
     <p v-if="activeArticleNumber != null" class="editing-banner">
@@ -30,7 +35,7 @@
       <PeerReviewReference />
     </div>
 
-    <section class="worksheet-block" data-tour="tour-header">
+    <section v-if="!isIntro" class="worksheet-block" data-tour="tour-header">
       <h2 class="block-title">Header</h2>
       <SchemaField
         v-for="field in ARTICLE_REVIEW_HEADER_FIELDS"
@@ -85,7 +90,7 @@
       <span class="add-card-hint">{{ cardCount }} cards · export includes all with content</span>
     </div>
 
-    <section class="worksheet-block" data-tour="tour-problem">
+    <section v-if="!isIntro" class="worksheet-block" data-tour="tour-problem">
       <h2 class="block-title">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.sectionTitle }}</h2>
       <p class="block-intro">{{ ARTICLE_REVIEW_PROBLEM_STATEMENT.intro }}</p>
       <SchemaField
@@ -98,7 +103,7 @@
       />
     </section>
 
-    <section class="worksheet-block" data-tour="tour-rq">
+    <section v-if="!isIntro" class="worksheet-block" data-tour="tour-rq">
       <h2 class="block-title">{{ ARTICLE_REVIEW_RQ_HYPOTHESIS.sectionTitle }}</h2>
       <SchemaField
         v-for="field in ARTICLE_REVIEW_RQ_HYPOTHESIS.fields"
@@ -111,7 +116,7 @@
     </section>
 
     <div data-tour="tour-export">
-      <StudyPlanExportPanel section-id="article-review" :project="project" />
+      <StudyPlanExportPanel section-id="article-review" :project="project" :class-id="classId" />
     </div>
   </div>
 </template>
@@ -128,6 +133,7 @@ import {
   emptyArticleCard
 } from '../../data/capstoneArticleReviewWorksheet.js'
 import { CANVAS_RM_ASSIGNMENTS } from '../../data/researchMethodsCanvasLinks.js'
+import { studyPlanClass } from '../../data/studyPlanClasses.js'
 import { countArticleCards } from '../../lib/capstoneValidation.js'
 import SchemaField from './SchemaField.vue'
 import ArticleReviewWalkthrough from './ArticleReviewWalkthrough.vue'
@@ -136,12 +142,17 @@ import SourceSelfCheckPanel from './SourceSelfCheckPanel.vue'
 import StudyPlanExportPanel from './StudyPlanExportPanel.vue'
 
 const props = defineProps({
-  project: { type: Object, required: true }
+  project: { type: Object, required: true },
+  classId: { type: String, default: 'research-methods' }
 })
 
 const emit = defineEmits(['update'])
 
-const canvasUrl = CANVAS_RM_ASSIGNMENTS.articleReview
+const planConfig = computed(() => studyPlanClass(props.classId))
+const isIntro = computed(() => planConfig.value?.flow === 'intro')
+const articleMin = computed(() => planConfig.value?.articleMin ?? ARTICLE_REVIEW_MIN_ARTICLES)
+const articleRange = computed(() => planConfig.value?.articleRange ?? ARTICLE_REVIEW_CANVAS_RANGE_LABEL)
+const canvasUrl = computed(() => (planConfig.value?.canvasLinks === false ? null : CANVAS_RM_ASSIGNMENTS.articleReview))
 const sectionRoot = ref(null)
 const openCards = ref([true])
 
@@ -149,7 +160,7 @@ const articleReview = computed(() => props.project.articleReview ?? {})
 const cardCount = computed(() => articleReview.value.articleCards?.length ?? 0)
 
 const progressLabel = computed(() => {
-  const { complete, total, minRequired } = countArticleCards(props.project)
+  const { complete, total, minRequired } = countArticleCards(props.project, articleMin.value)
   return `${complete}/${minRequired} complete · ${total} cards`
 })
 

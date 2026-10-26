@@ -49,6 +49,7 @@ export const INTRO_RESEARCH = {
       title: 'Annotated bibliography and theory',
       why: 'Collect and summarize sources, and find the theory that frames your topic.',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'article-review', label: 'Annotated bibliography worksheet', due: '2027-02-07' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-annotated-bibliography', label: 'Annotated bibliography', due: '2027-02-07' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-theory-selection', label: 'Theory selection', due: '2027-02-07' }
       ]
@@ -58,6 +59,7 @@ export const INTRO_RESEARCH = {
       title: 'Literature review outline',
       why: 'Organize what you have read into an argument by idea, not article by article.',
       items: [
+        { role: 'do', kind: 'study-plan', sectionId: 'study-focus', label: 'Literature review outline worksheet', due: '2027-02-14' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-lit-outline', label: 'Literature review outline', due: '2027-02-14' }
       ]
     },
@@ -96,6 +98,8 @@ export const INTRO_RESEARCH = {
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-5' },
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-6' },
         { role: 'read', kind: 'chapter', moduleId: 'rm-module-7' },
+        { role: 'do', kind: 'study-plan', sectionId: 'phase-4', label: 'Method choice worksheet', due: '2027-03-14' },
+        { role: 'do', kind: 'study-plan', sectionId: 'measures-draft', label: 'Measures worksheet', due: '2027-03-14' },
         { role: 'do', kind: 'assignment-help', assignmentId: 'ir-method-choice', label: 'Method choice and measures', due: '2027-03-14' }
       ]
     },

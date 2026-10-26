@@ -47,8 +47,8 @@ function sectionFilename (sectionId) {
  * @param {object} project
  * @returns {Promise<Uint8Array>}
  */
-export async function buildStudyPlanPdfBytes (sectionId, project) {
-  const body = buildExportText(sectionId, project)
+export async function buildStudyPlanPdfBytes (sectionId, project, classId = null) {
+  const body = buildExportText(sectionId, project, classId)
   if (!body.trim()) {
     throw new Error('Nothing to export yet — add some content first.')
   }
@@ -114,8 +114,8 @@ export async function buildStudyPlanPdfBytes (sectionId, project) {
  * @param {object} project
  * @param {string} [filename]
  */
-export async function downloadStudyPlanPdf (sectionId, project, filename) {
-  const bytes = await buildStudyPlanPdfBytes(sectionId, project)
+export async function downloadStudyPlanPdf (sectionId, project, filename, classId = null) {
+  const bytes = await buildStudyPlanPdfBytes(sectionId, project, classId)
   const blob = new Blob([bytes], { type: 'application/pdf' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

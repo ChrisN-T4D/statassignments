@@ -5,22 +5,25 @@
     <div class="arc-banner" data-tour="tour-p4-intro">
       <p class="section-intro">
         {{ PHASE4_CANVAS.intro }}
-        <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
-        ·
-        <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Helpful Table ↗</a>
+        <template v-if="!isIntro">
+          <a :href="canvasUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Open Canvas assignment ↗</a>
+          ·
+          <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer" class="canvas-link">Helpful Table ↗</a>
+        </template>
       </p>
-      <p class="arc-flow">Phase 3 elevator speech + <strong>Phase 4 operationalization</strong> (week 11, submit together)</p>
+      <p v-if="isIntro" class="arc-flow">Lit Review Outline + narrowed question → <strong>Method Choice</strong> (week 9) → Measures (week 9)</p>
+      <p v-else class="arc-flow">Phase 3 elevator speech + <strong>Phase 4 operationalization</strong> (week 11, submit together)</p>
       <p class="progress-chip">{{ progressLabel }}</p>
     </div>
 
     <aside v-if="hasReminders" class="sidebar-reminders" data-tour="tour-p4-reminders">
-      <h2 class="sidebar-title">From Phase 3 and your outline</h2>
-      <p class="reminders-note">Use your elevator speech and outline as starting points for conceptual and operational IV/DV definitions and pathway choices.</p>
-      <div v-if="p3WhatWeKnow" class="reminder-block">
+      <h2 class="sidebar-title">{{ isIntro ? 'From your outline' : 'From Phase 3 and your outline' }}</h2>
+      <p class="reminders-note">{{ isIntro ? 'Use your outline and narrowed question as starting points for conceptual and operational IV/DV definitions and pathway choices.' : 'Use your elevator speech and outline as starting points for conceptual and operational IV/DV definitions and pathway choices.' }}</p>
+      <div v-if="p3WhatWeKnow && !isIntro" class="reminder-block">
         <h3>What we know (Phase 3)</h3>
         <p class="reminder-text">{{ p3WhatWeKnow }}</p>
       </div>
-      <div v-if="p3Gap" class="reminder-block">
+      <div v-if="p3Gap && !isIntro" class="reminder-block">
         <h3>The gap (Phase 3)</h3>
         <p class="reminder-text">{{ p3Gap }}</p>
       </div>
@@ -29,15 +32,16 @@
         <p class="reminder-text">{{ workingRq }}</p>
       </div>
       <div class="reminder-links">
-        <router-link :to="phase3Link" class="reminder-link">Open Phase 3 →</router-link>
+        <router-link v-if="!isIntro" :to="phase3Link" class="reminder-link">Open Phase 3 →</router-link>
         <router-link :to="outlineLink" class="reminder-link">Open Lit Review Outline →</router-link>
       </div>
     </aside>
 
     <aside v-else class="sidebar-reminders sidebar-empty" data-tour="tour-p4-reminders">
-      <h2 class="sidebar-title">From Phase 3 and your outline</h2>
-      <p class="reminders-note">Complete Phase 3 and your Lit Review Outline first, summaries will appear here.</p>
-      <router-link :to="phase3Link" class="reminder-link">Go to Phase 3 →</router-link>
+      <h2 class="sidebar-title">{{ isIntro ? 'From your outline' : 'From Phase 3 and your outline' }}</h2>
+      <p class="reminders-note">{{ isIntro ? 'Complete your Lit Review Outline first, and your working question will appear here.' : 'Complete Phase 3 and your Lit Review Outline first, summaries will appear here.' }}</p>
+      <router-link v-if="!isIntro" :to="phase3Link" class="reminder-link">Go to Phase 3 →</router-link>
+      <router-link v-else :to="outlineLink" class="reminder-link">Go to Lit Review Outline →</router-link>
     </aside>
 
     <section
@@ -70,7 +74,7 @@
       <h2 class="block-title">Part C: Exploration: Four Operational Paths</h2>
       <p class="block-intro">
         Explore each pathway. Mark a path as not viable if it does not fit your question.
-        Each path links to a Canvas guide and chapter.
+        {{ isIntro ? 'Each path links to a chapter.' : 'Each path links to a Canvas guide and chapter.' }}
       </p>
 
       <article
@@ -80,7 +84,7 @@
       >
         <div class="pathway-header">
           <h3 class="pathway-title">{{ pathway.label }}</h3>
-          <a :href="pathway.canvasGuideUrl" target="_blank" rel="noopener noreferrer" class="guide-link">
+          <a v-if="!isIntro" :href="pathway.canvasGuideUrl" target="_blank" rel="noopener noreferrer" class="guide-link">
             Canvas path guide ↗
           </a>
         </div>
@@ -108,9 +112,13 @@
     <section class="worksheet-block" data-tour="tour-p4-part-d">
       <h2 class="block-title">Part D: Comparative Analysis</h2>
       <p class="block-intro">
-        Compare pathways on feasibility, access, measurement, and ethics. Use the
-        <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer">Helpful Table</a>
-        in Canvas as a reference, you decide what fits.
+        Compare pathways on feasibility, access, measurement, and ethics.
+        <template v-if="!isIntro">
+          Use the
+          <a :href="helpfulTableUrl" target="_blank" rel="noopener noreferrer">Helpful Table</a>
+          in Canvas as a reference, you decide what fits.
+        </template>
+        <template v-else>You decide what fits your question.</template>
       </p>
       <div class="comparison-table-wrap">
         <table class="comparison-table">
@@ -174,6 +182,7 @@
 </template>
 
 <script setup>
+import { studyPlanClass } from '../../data/studyPlanClasses.js'
 import { ref, computed } from 'vue'
 import {
   PHASE4_CANVAS,
@@ -197,6 +206,7 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 
 const sectionRoot = ref(null)
+const isIntro = computed(() => studyPlanClass(props.classId)?.flow === 'intro')
 const canvasUrl = CANVAS_RM_ASSIGNMENTS.phase4
 const helpfulTableUrl = CANVAS_RM_WIKI_PAGES.helpfulTable
 

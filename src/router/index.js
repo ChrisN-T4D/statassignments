@@ -1,3 +1,4 @@
+import { hasStudyPlan } from '../data/studyPlanClasses.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import { pb } from '../lib/pocketbase'
 import { useAuth } from '../composables/useAuth'
@@ -270,7 +271,7 @@ router.beforeEach(async (to, from, next) => {
   const userRole = authUser.value?.role
 
   if (to.name === 'study-plan' || to.name === 'study-plan-section') {
-    if (to.params.classId !== 'research-methods') {
+    if (!hasStudyPlan(to.params.classId)) {
       next(to.params.classId ? `/class/${to.params.classId}` : '/')
       return
     }

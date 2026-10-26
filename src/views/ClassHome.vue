@@ -40,6 +40,10 @@
                 Assignment Help
               </router-link>
               <span class="header-links-sep">·</span>
+              <router-link :to="`/class/${classId}/study-plan`" class="assignment-help-link">
+                Study Plan
+              </router-link>
+              <span class="header-links-sep">·</span>
               <a
                 :href="CANVAS_HOME_URL"
                 target="_blank"
@@ -120,7 +124,7 @@
           <nav class="rm-sem-links" aria-label="Course resources">
             <router-link v-if="isIntroResearchClass" :to="`/class/${classId}/objectives`">Course objectives</router-link>
             <router-link :to="`/class/${classId}/assignment-help`">Assignment Help</router-link>
-            <router-link v-if="isResearchMethodsClass" :to="`/class/${classId}/study-plan`">Study Plan</router-link>
+            <router-link v-if="isResearchMethodsClass || isIntroResearchClass" :to="`/class/${classId}/study-plan`">Study Plan</router-link>
             <router-link :to="`/class/${classId}/jamovi-guides`">Jamovi guides</router-link>
             <router-link :to="`/class/${classId}/excel-guides`">Excel guides</router-link>
             <router-link

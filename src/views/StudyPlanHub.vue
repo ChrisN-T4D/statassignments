@@ -3,12 +3,9 @@
     <div class="container">
       <div class="hub-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
-        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" />
+        <WeekContextBar v-if="hasSchedule(classId)" :class-slug="String(classId)" />
         <h1 class="hub-title">Study Plan</h1>
-        <p class="hub-intro">
-          Your capstone draft workspace for PSYC 4223. Methods Market holds your notes and links to
-          chapters; Canvas is where you submit for a grade.
-        </p>
+        <p class="hub-intro">{{ planConfig?.intro }}</p>
         <p v-if="isGuestDraft" class="draft-note">
           Draft saved in this browser. Sign in to sync across devices when server storage is available.
         </p>
@@ -55,7 +52,7 @@
             <span v-if="section.due.status === 'this-week'" class="due-badge">Due this week</span>
             <template v-if="section.dueText">{{ section.dueText }} · </template>{{ section.submitNote }}
           </p>
-          <span class="section-card-progress">{{ studyPlanSectionProgress(project, section.id) }}</span>
+          <span class="section-card-progress">{{ studyPlanSectionProgress(project, section.id, classId) }}</span>
           <span class="section-card-cta">Open section →</span>
         </router-link>
       </div>
@@ -67,9 +64,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useCapstoneProject } from '../composables/useCapstoneProject'
-import { STUDY_PLAN_SECTIONS } from '../data/capstoneWorksheetSchemas.js'
+import { studyPlanSectionsFor } from '../data/capstoneWorksheetSchemas.js'
+import { studyPlanClass } from '../data/studyPlanClasses.js'
 import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
-import { studyPlanDue, formatStudyPlanDue } from '../data/researchMethodsSchedule.js'
+import { studyPlanDue, formatStudyPlanDue, hasSchedule } from '../data/researchMethodsSchedule.js'
 import WeekContextBar from '../components/WeekContextBar.vue'
 
 const props = defineProps({
@@ -79,9 +77,10 @@ const props = defineProps({
 const { project, updateProject, lastSavedAt, isGuestDraft } = useCapstoneProject(props.classId)
 
 /** Sections with their schedule due date (guidance; Canvas is official). */
+const planConfig = computed(() => studyPlanClass(props.classId))
 const sections = computed(() =>
-  STUDY_PLAN_SECTIONS.filter((section) => !section.retired).map((section) => {
-    const due = studyPlanDue(section.id)
+  studyPlanSectionsFor(props.classId).map((section) => {
+    const due = studyPlanDue(section.id, new Date(), props.classId)
     return { ...section, due, dueText: formatStudyPlanDue(due) }
   })
 )

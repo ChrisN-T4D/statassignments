@@ -3,7 +3,7 @@
     <div class="container" v-if="sectionMeta">
       <div class="section-header">
         <router-link :to="`/class/${classId}`" class="back-link">← Back to course</router-link>
-        <WeekContextBar v-if="classId === 'research-methods'" :class-slug="String(classId)" :target="{ kind: 'study-plan', id: sectionId }" />
+        <WeekContextBar v-if="hasSchedule(classId)" :class-slug="String(classId)" :target="{ kind: 'study-plan', id: sectionId }" />
       </div>
 
       <div class="section-sticky">
@@ -45,7 +45,7 @@ import Phase4Section from '../components/study-plan/Phase4Section.vue'
 import MeasuresDraftSection from '../components/study-plan/MeasuresDraftSection.vue'
 import WeekContextBar from '../components/WeekContextBar.vue'
 import { studyPlanSectionProgress } from '../lib/studyPlanProgress.js'
-import { studyPlanDue, formatStudyPlanDue } from '../data/researchMethodsSchedule.js'
+import { studyPlanDue, formatStudyPlanDue, hasSchedule } from '../data/researchMethodsSchedule.js'
 
 const props = defineProps({
   classId: { type: String, required: true },
@@ -54,11 +54,11 @@ const props = defineProps({
 
 const { project, updateProject } = useCapstoneProject(props.classId)
 
-const sectionMeta = computed(() => getStudyPlanSection(props.sectionId))
+const sectionMeta = computed(() => getStudyPlanSection(props.sectionId, props.classId))
 
-const due = computed(() => studyPlanDue(props.sectionId))
+const due = computed(() => studyPlanDue(props.sectionId, new Date(), props.classId))
 const dueText = computed(() => formatStudyPlanDue(due.value))
-const progressText = computed(() => studyPlanSectionProgress(project.value, props.sectionId))
+const progressText = computed(() => studyPlanSectionProgress(project.value, props.sectionId, props.classId))
 
 const sectionComponent = computed(() => {
   switch (props.sectionId) {

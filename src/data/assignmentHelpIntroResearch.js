@@ -92,6 +92,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-annotated-bibliography',
         name: 'Annotated Bibliography',
         type: 'assignment',
+        studyPlanSection: 'article-review',
         tips: [
           '5-7 scholarly sources. Each annotation summarizes the content, assesses quality, and explains relevance to your topic.',
           'Keep your reference list in APA 7 as you go: it becomes your literature review reference list.'
@@ -115,6 +116,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-lit-outline',
         name: 'Literature Review Outline',
         type: 'assignment',
+        studyPlanSection: 'study-focus',
         tips: [
           'Organize your sources by idea, not article by article.',
           'Under each idea, note where findings agree, where they conflict, and what is missing.',
@@ -170,6 +172,7 @@ export const assignmentHelpIntroResearch = [
         id: 'ir-method-choice',
         name: 'Method Choice and Measures',
         type: 'assignment',
+        studyPlanSection: 'phase-4',
         tips: [
           'Choose a quantitative, qualitative, or mixed-methods design and defend it against at least one alternative.',
           'Name a measure or data source for every variable in your hypotheses, and justify its reliability and validity.',

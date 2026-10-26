@@ -3,41 +3,49 @@
     <LitReviewOutlineWalkthrough :root-el="sectionRoot" />
 
     <div class="arc-banner" data-tour="tour-lro-intro">
-      <p class="section-intro">
+      <p v-if="isIntro" class="section-intro">
+        Use this <strong>literature review outline compiler</strong> to turn your sources into an argument before you write
+        the draft (week 5). Root your review in one organizing framework, sort evidence into theme buckets, and export
+        the outline to submit in Canvas and to build your Literature Review Draft from.
+      </p>
+      <p v-else class="section-intro">
         Use this <strong>literature review outline compiler</strong> while drafting (weeks 5–10).
         It is <strong>not a Canvas submission</strong>. Root your review in one organizing framework,
         sort evidence into theme buckets, and export for Draft 1.
       </p>
-      <p class="arc-flow">
+      <p v-if="isIntro" class="arc-flow">
+        Annotated Bibliography (week 4) → <strong>Lit Review Outline</strong> (week 5) → Literature Review Draft (week 6) → Narrow the question (week 7)
+      </p>
+      <p v-else class="arc-flow">
         Article Review (week 4) → <strong>Lit Review Outline</strong> (lit review weeks) → Phase 3 &amp; 4 (week 11)
       </p>
       <p class="progress-chip">{{ progressLabel }}</p>
     </div>
 
     <aside v-if="hasArticleReviewContext" class="reminders-panel" data-tour="tour-lro-reminders">
-      <h2 class="reminders-title">From your Article Review</h2>
-      <p class="reminders-note">Starting points, refine as you read more than your original article cards.</p>
+      <h2 class="reminders-title">{{ isIntro ? 'From your Annotated Bibliography' : 'From your Article Review' }}</h2>
+      <p class="reminders-note">{{ isIntro ? 'Your sources so far. Keep reading and refine as you go.' : 'Starting points, refine as you read more than your original article cards.' }}</p>
       <div v-if="articleProgress" class="reminder-block">
         <h3>Article cards</h3>
         <p class="reminder-text">{{ articleProgress }}</p>
       </div>
-      <div v-if="problemDraft" class="reminder-block">
+      <div v-if="problemDraft && !isIntro" class="reminder-block">
         <h3>Problem statement (draft)</h3>
         <p class="reminder-text">{{ problemDraft }}</p>
       </div>
-      <div v-if="earlyRq" class="reminder-block">
+      <div v-if="earlyRq && !isIntro" class="reminder-block">
         <h3>Early research question</h3>
         <p class="reminder-text">{{ earlyRq }}</p>
       </div>
-      <router-link :to="articleReviewLink" class="reminder-link">Open Article Review to update →</router-link>
+      <router-link :to="articleReviewLink" class="reminder-link">{{ isIntro ? 'Open Annotated Bibliography to update →' : 'Open Article Review to update →' }}</router-link>
     </aside>
 
     <aside v-else class="reminders-panel reminders-empty" data-tour="tour-lro-reminders">
-      <h2 class="reminders-title">From your Article Review</h2>
+      <h2 class="reminders-title">{{ isIntro ? 'From your Annotated Bibliography' : 'From your Article Review' }}</h2>
       <p class="reminders-note">
-        Complete Article Review first, your problem statement and early RQ will appear here as starting points.
+        {{ isIntro ? 'Add your sources in the Annotated Bibliography first, and your source count will appear here.' : 'Complete Article Review first, your problem statement and early RQ will appear here as starting points.' }}
       </p>
-      <router-link :to="articleReviewLink" class="reminder-link">Go to Article Review →</router-link>
+      <router-link :to="articleReviewLink" class="reminder-link">{{ isIntro ? 'Go to Annotated Bibliography →' : 'Go to Article Review →' }}</router-link>
     </aside>
 
     <section class="worksheet-block" data-tour="tour-lro-framework">
@@ -153,14 +161,19 @@
 
     <div class="feeds-forward">
       <h2 class="feeds-title">Where this outline goes next</h2>
-      <ul class="feeds-list">
+      <ul v-if="isIntro" class="feeds-list">
+        <li><strong>Gap</strong> → the gap you state in your Literature Review Final</li>
+        <li><strong>Working RQ</strong> → copy button in Method Choice, Part A</li>
+        <li><strong>Themes</strong> → the sections of your Literature Review Draft</li>
+      </ul>
+      <ul v-else class="feeds-list">
         <li><strong>Gap</strong> → reminder in Phase 3 elevator speech</li>
         <li><strong>Working RQ</strong> → copy button in Phase 4 Part A</li>
         <li><strong>Themes</strong> → “what we know” in your elevator speech</li>
       </ul>
       <div class="feeds-links">
-        <router-link :to="phase3Link" class="resource-link">Open Phase 3 →</router-link>
-        <router-link :to="phase4Link" class="resource-link">Open Phase 4 →</router-link>
+        <router-link v-if="!isIntro" :to="phase3Link" class="resource-link">Open Phase 3 →</router-link>
+        <router-link :to="phase4Link" class="resource-link">{{ isIntro ? 'Open Method Choice →' : 'Open Phase 4 →' }}</router-link>
       </div>
     </div>
 
@@ -171,6 +184,7 @@
 </template>
 
 <script setup>
+import { studyPlanClass } from '../../data/studyPlanClasses.js'
 import { ref, computed } from 'vue'
 import {
   ORGANIZING_FRAMEWORK_FIELDS,
@@ -194,6 +208,7 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 
 const sectionRoot = ref(null)
+const isIntro = computed(() => studyPlanClass(props.classId)?.flow === 'intro')
 const outline = computed(() => props.project.litReviewOutline ?? {})
 
 const progressLabel = computed(() => {

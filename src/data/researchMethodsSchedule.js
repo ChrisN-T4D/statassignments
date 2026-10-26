@@ -558,9 +558,13 @@ export function findTargetWeek (target, { from, today = new Date(), classSlug = 
  * Dates are guidance; Canvas has the official due dates.
  * @returns {{ status: string, due: string|null, dueLabel: string|null, label: string|null, weekIndex: number|null, schedule: object|null }}
  */
-export function studyPlanDue (sectionId, today = new Date()) {
+export function studyPlanDue (sectionId, today = new Date(), classSlug = null) {
   const none = { status: 'none', due: null, dueLabel: null, label: null, weekIndex: null, schedule: null }
-  for (const schedule of Object.values(RESEARCH_METHODS_SCHEDULES)) {
+  // Intro to Research has its own Study Plan weeks; every other class keeps matching against the Research Methods year (fall and spring)
+  const schedules = classSlug === 'intro-research'
+    ? [RESEARCH_METHODS_SCHEDULES['intro-research']]
+    : Object.entries(RESEARCH_METHODS_SCHEDULES).filter(([slug]) => slug !== 'intro-research').map(([, sch]) => sch)
+  for (const schedule of schedules) {
     const weekIndex = schedule.weeks.findIndex((w) =>
       w.items.some((it) => it.kind === 'study-plan' && it.sectionId === sectionId)
     )

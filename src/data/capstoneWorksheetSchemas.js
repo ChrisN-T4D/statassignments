@@ -8,6 +8,7 @@ import { emptyPhase3 } from './capstonePhase3Worksheet.js'
 import { emptyPhase4 } from './capstonePhase4Worksheet.js'
 import { emptyMeasuresDraft } from './capstoneMeasuresDraftWorksheet.js'
 import { emptyLitReviewOutline } from './capstoneLitReviewOutlineWorksheet.js'
+import { studyPlanClass } from './studyPlanClasses.js'
 
 export const STUDY_PLAN_SECTIONS = [
   {
@@ -60,8 +61,24 @@ export function emptyCapstoneProject () {
   }
 }
 
-export function getStudyPlanSection (sectionId) {
-  return STUDY_PLAN_SECTIONS.find((s) => s.id === sectionId) ?? null
+/**
+ * A section's metadata, with the class's wording laid over it (title, description, submit note).
+ * Without a class it returns the Research Methods original.
+ */
+export function getStudyPlanSection (sectionId, classId = null) {
+  const base = STUDY_PLAN_SECTIONS.find((s) => s.id === sectionId)
+  const cfg = classId ? studyPlanClass(classId) : null
+  if (cfg && cfg.sectionIds && !cfg.sectionIds.includes(sectionId)) return null
+  if (!base) return null
+  return { ...base, ...(cfg?.overrides?.[sectionId] ?? {}) }
+}
+
+/** The sections a class shows, in order, with the class's wording applied. */
+export function studyPlanSectionsFor (classId) {
+  const cfg = studyPlanClass(classId)
+  if (!cfg) return []
+  const ids = cfg.sectionIds ?? STUDY_PLAN_SECTIONS.filter((s) => !s.retired).map((s) => s.id)
+  return ids.map((id) => getStudyPlanSection(id, classId)).filter(Boolean)
 }
 
 /** Resolve dotted path like litReviewOutline.gapAndTransition.workingResearchQuestion */
