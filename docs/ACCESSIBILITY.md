@@ -15,7 +15,7 @@ Updated 2026-10-26. Tracked on the dashboard (card c700a4ca6).
 - Captions and transcripts: no videos yet. Every video needs both before it ships (see `public/videos/README.md`).
 - Downloadable PDFs and docx files: use real headings, alt text, and a set document language; export tagged PDFs.
 - UDL: "Ways to Learn Here" section added to the About page (multiple ways to engage with content, show knowledge, stay engaged). Per-module wording still not written.
-- Charts and plots drawn in the app: give each a text summary.
+- Charts in the sampling, central-tendency and central-limit labs now have text alternatives (numeric summaries or bin lists). Other visuals (progress bars, dashboards) not audited.
 
 ## Manual test (needs a person)
 Test with NVDA or VoiceOver on Chrome or Safari, keyboard only (no mouse):
