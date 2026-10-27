@@ -69,8 +69,10 @@
               </a>
               <span class="header-links-sep">·</span>
             </template>
-            <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
-            <span class="header-links-sep">·</span>
+            <template v-if="showJamoviGuides">
+              <router-link :to="`/class/${classId}/jamovi-guides`" class="assignment-help-link">Jamovi guides</router-link>
+              <span class="header-links-sep">·</span>
+            </template>
             <router-link :to="`/class/${classId}/excel-guides`" class="assignment-help-link">Excel guides</router-link>
             <template v-if="showDataAnalysisNav">
               <span class="header-links-sep">·</span>
@@ -125,7 +127,7 @@
             <router-link v-if="isIntroResearchClass" :to="`/class/${classId}/objectives`">Course objectives</router-link>
             <router-link :to="`/class/${classId}/assignment-help`">Assignment Help</router-link>
             <router-link v-if="isResearchMethodsClass || isIntroResearchClass" :to="`/class/${classId}/study-plan`">Study Plan</router-link>
-            <router-link :to="`/class/${classId}/jamovi-guides`">Jamovi guides</router-link>
+            <router-link v-if="showJamoviGuides" :to="`/class/${classId}/jamovi-guides`">Jamovi guides</router-link>
             <router-link :to="`/class/${classId}/excel-guides`">Excel guides</router-link>
             <router-link
               v-if="showDataAnalysisNav && !analysisLocked"
@@ -971,6 +973,8 @@ const selectedModuleId = ref(null)
 const activePartId = ref(null)
 const activeContentTab = ref('topics')
 const preferredSoftwareName = computed(() => getSoftwareName(preferredSoftware.value))
+// Jamovi guides are only useful to jamovi users (or someone who has not chosen yet)
+const showJamoviGuides = computed(() => !preferredSoftware.value || preferredSoftware.value === 'jamovi')
 const showModule8Selector = ref(false)
 
 const RM_MODULE_LAB_ID = 'rm-module-lab'

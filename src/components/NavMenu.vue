@@ -30,7 +30,7 @@
           <span>{{ selectedClass.short_name }}</span>
         </router-link>
         <router-link
-          v-if="selectedClass"
+          v-if="selectedClass && showJamoviGuides"
           :to="`/class/${selectedClassId}/jamovi-guides`"
           class="dropdown-item dropdown-item-sub"
           role="menuitem"
@@ -69,9 +69,12 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
+import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 
 const { user, isAuthenticated, signOut } = useAuth()
 const { selectedClass, selectedClassId, fetchClasses } = useClasses()
+
+const showJamoviGuides = computed(() => !preferredSoftware.value || preferredSoftware.value === 'jamovi')
 
 onMounted(() => {
   fetchClasses()

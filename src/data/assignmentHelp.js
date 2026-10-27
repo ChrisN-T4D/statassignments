@@ -130,7 +130,7 @@ export const assignmentHelpByModule = [
         name: 'Benchmark 1 (Test/Quiz)',
         tips: [
           ...benchmarkPracticeAssignment('benchmark-1').tips,
-          'Review levels of measurement, reliability, validity, and basic Jamovi/data concepts.'
+          'Review levels of measurement, reliability, validity, and basic data-handling concepts.'
         ],
         getHelp:
           'Review Module 1–3 topics and practice. If you\'re unsure on specific concepts, use the Topics and Software tabs for those modules before the graded benchmark.'
@@ -199,7 +199,7 @@ export const assignmentHelpByModule = [
         name: 'Benchmark 2 (Test/Quiz)',
         tips: [
           ...benchmarkPracticeAssignment('benchmark-2').tips,
-          'Use the Benchmark 2 Study Guide in the LMS: central tendency, frequency distributions, distribution shapes, variability, boxplots, levels of measurement, Jamovi applications.'
+          'Use the Benchmark 2 Study Guide in the LMS: central tendency, frequency distributions, distribution shapes, variability, boxplots, levels of measurement, software applications.'
         ],
         getHelp:
           'Review Modules 4–5 topics and the study guide. Practice choosing the right graph for categorical vs continuous data before the graded benchmark.'

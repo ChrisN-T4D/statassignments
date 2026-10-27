@@ -160,6 +160,7 @@
             <h3>❓ Need Help?</h3>
             <div class="help-links">
               <router-link
+                v-if="!preferredSoftware || preferredSoftware === 'jamovi'"
                 :to="`/class/${classIdForGuides}/jamovi-guides`"
                 class="help-link"
                 @click="closeDrawer"
@@ -488,7 +489,7 @@ const currentInstall = computed(() => {
 })
 
 const datasets = computed(() => {
-  // CSV files in public/ (site root). No .omv — students open CSV in jamovi via ☰ → Open.
+  // CSV files in public/ (site root). Plain CSV so any package can open them.
   return [
     {
       name: 'BMI and Exercise',

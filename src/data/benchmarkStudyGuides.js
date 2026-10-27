@@ -70,7 +70,7 @@ export const BENCHMARK_STUDY_GUIDES = {
           'Module 4 — Descriptive statistics (Chapter 4)',
           'Module 5 — Graphing & visualization (Chapters 5–6 pragmatic matters)',
           'Central tendency, variability, distribution shape, standard scores, and choosing graphs.',
-          'Jamovi (or your software) applications for descriptives and basic graphs.'
+          'Applications in your chosen software for descriptives and basic graphs.'
         ]
       },
       {
@@ -111,7 +111,7 @@ export const BENCHMARK_STUDY_GUIDES = {
           'Review Methods Market Topics: central tendency, variability, skew/kurtosis, standard scores, histograms, boxplots, bar charts, scatterplots.',
           'Complete Module 4–5 Concept Review and Software Practice.',
           'Practice Benchmark 2 formative test in Methods Market (30 questions per attempt).',
-          'Work Module 4 Descriptive Statistics assignment-style problems (Compute formulas in Jamovi).'
+          'Work Module 4 Descriptive Statistics assignment-style problems (compute formulas in your software).'
         ]
       }
     ]
