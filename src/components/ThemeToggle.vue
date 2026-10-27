@@ -51,7 +51,7 @@ const { isDark, toggleTheme } = useTheme()
 
 .theme-toggle:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
   background: var(--bg-elevated);
 }
 

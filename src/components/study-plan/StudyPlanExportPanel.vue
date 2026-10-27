@@ -110,7 +110,7 @@ async function downloadPdf () {
 
 .btn-secondary:hover:not(:disabled) {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .btn-secondary:disabled {
@@ -120,7 +120,7 @@ async function downloadPdf () {
 
 .export-error {
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--primary-text);
   margin: 0 0 0.75rem;
 }
 

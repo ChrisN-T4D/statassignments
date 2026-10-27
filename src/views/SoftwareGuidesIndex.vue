@@ -105,7 +105,7 @@ function lessonLink(lesson) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .guides-title {
@@ -172,12 +172,12 @@ function lessonLink(lesson) {
 }
 
 .guide-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .guide-number {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   min-width: 1.5rem;
 }
 

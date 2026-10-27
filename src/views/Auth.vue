@@ -324,7 +324,7 @@ async function handleResetPassword() {
 }
 
 .auth-footer a {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 500;
 }
 

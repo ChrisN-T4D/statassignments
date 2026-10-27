@@ -211,7 +211,7 @@ watch(() => props.schedule, () => nextTick(positionScroll))
 .rm-tl-badge.past { border-color: var(--success); color: var(--success); }
 .rm-tl-badge.selected {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
   background: color-mix(in srgb, var(--primary) 12%, var(--bg-card));
 }
 

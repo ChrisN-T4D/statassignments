@@ -642,7 +642,7 @@ onUnmounted(stopPoll)
 
 .flip-list li.heads {
   background: color-mix(in srgb, var(--primary) 18%, var(--bg-card));
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .flip-list li.tails {

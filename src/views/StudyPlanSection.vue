@@ -118,7 +118,7 @@ function onSectionUpdate (patch) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .section-sticky {

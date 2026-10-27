@@ -260,7 +260,7 @@ function cardStatus (card) {
 }
 
 .canvas-link {
-  color: var(--primary);
+  color: var(--primary-text);
   margin-left: 0.35rem;
 }
 
@@ -277,7 +277,7 @@ function cardStatus (card) {
 .editing-banner {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   margin: 0 0 0.75rem;
 }
 
@@ -302,7 +302,7 @@ function cardStatus (card) {
 
 .jump-btn.active {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .jump-btn.complete {
@@ -388,7 +388,7 @@ function cardStatus (card) {
   border: 1px dashed var(--border);
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;

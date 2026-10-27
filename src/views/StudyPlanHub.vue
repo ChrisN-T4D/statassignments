@@ -124,7 +124,7 @@ function formatSaved (iso) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .hub-title {
@@ -221,7 +221,7 @@ function formatSaved (iso) {
 
 .section-card-cta {
   font-size: 0.9rem;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 
@@ -252,7 +252,7 @@ function formatSaved (iso) {
 
 .due-now-go {
   margin-left: auto;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 

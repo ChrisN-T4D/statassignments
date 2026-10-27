@@ -64,7 +64,7 @@ function handlePopOut() {
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   background: white;
-  color: var(--primary);
+  color: var(--primary-text);
   border: 1px solid var(--primary);
   border-radius: 0.5rem;
   font-size: 0.9375rem;

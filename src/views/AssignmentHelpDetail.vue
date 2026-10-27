@@ -280,7 +280,7 @@ function formatTopicId (id) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .breadcrumb {
@@ -364,7 +364,7 @@ function formatTopicId (id) {
 
 .practice-test-link {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   display: inline-block;
   margin-bottom: 0.35rem;
@@ -514,7 +514,7 @@ function formatTopicId (id) {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 0.35rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 0.85rem;
 }
@@ -549,7 +549,7 @@ function formatTopicId (id) {
 .stuck-cta {
   display: inline-block;
   margin-top: 0.75rem;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   text-decoration: none;
 }

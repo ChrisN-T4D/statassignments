@@ -358,7 +358,7 @@ async function copy (text, which) {
   border-radius: 0.4rem;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 
@@ -422,7 +422,7 @@ async function copy (text, which) {
 }
 
 .resource-link {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 </style>

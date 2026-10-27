@@ -935,7 +935,7 @@ document.addEventListener('keydown', (e) => {
 
 .tool-card.dataset-card .download-icon {
   font-size: 1.25rem;
-  color: var(--primary);
+  color: var(--primary-text);
   flex-shrink: 0;
 }
 
@@ -987,7 +987,7 @@ document.addEventListener('keydown', (e) => {
 
 .download-icon {
   font-size: 1.25rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Software Links */

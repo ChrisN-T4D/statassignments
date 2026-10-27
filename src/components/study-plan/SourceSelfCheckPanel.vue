@@ -144,7 +144,7 @@ function topicLabel (topicId) {
   display: inline-block;
   margin-left: 1.5rem;
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 

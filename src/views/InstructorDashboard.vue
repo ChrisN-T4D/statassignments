@@ -860,7 +860,7 @@ onMounted(() => {
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .stat-label {
@@ -921,7 +921,7 @@ onMounted(() => {
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Tab Navigation */
@@ -946,12 +946,12 @@ onMounted(() => {
 }
 
 .tab-btn:hover {
-  color: var(--primary);
+  color: var(--primary-text);
   background: rgba(37, 99, 235, 0.05);
 }
 
 .tab-btn.active {
-  color: var(--primary);
+  color: var(--primary-text);
   background: rgba(37, 99, 235, 0.1);
   border-bottom: 2px solid var(--primary);
 }

@@ -461,7 +461,7 @@ watch(topicId, async (newTopicId, oldTopicId) => {
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .key-points-section {

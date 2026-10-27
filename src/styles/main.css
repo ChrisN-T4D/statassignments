@@ -12,6 +12,7 @@
   --primary: #dc2626;
   --primary-dark: #b91c1c;
   --primary-light: #ef4444;
+  --primary-text: #f87171;
   --secondary: #737373;
   --success: #22c55e;
   --success-bg: rgba(34, 197, 94, 0.1);
@@ -50,6 +51,7 @@
 
 /* Light theme - White base with black text, red accents */
 [data-theme="light"] {
+  --primary-text: #b91c1c;
   --bg-main: #ffffff;
   --bg-card: #f0f0f0;
   --bg-elevated: #e6e6e6;
@@ -175,7 +177,7 @@ body::after {
 }
 
 a {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -220,7 +222,7 @@ a:hover {
 }
 
 .logo span {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .nav {
@@ -241,7 +243,7 @@ a:hover {
 
 .nav a:hover,
 .nav a.router-link-active {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -314,7 +316,7 @@ a:hover {
 }
 
 .software-tab.active {
-  color: var(--primary);
+  color: var(--primary-text);
   border-bottom-color: var(--primary);
 }
 
@@ -635,7 +637,7 @@ a:hover {
 
 .note-title {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-bottom: 0.5rem;
 }
 
@@ -873,7 +875,7 @@ a:hover {
 }
 
 .breadcrumb a:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Steps/procedure list */

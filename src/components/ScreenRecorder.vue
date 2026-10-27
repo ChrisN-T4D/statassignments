@@ -1465,7 +1465,7 @@ onUnmounted(() => {
 }
 
 .instruction-text strong {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 
@@ -1601,7 +1601,7 @@ onUnmounted(() => {
   font-family: monospace;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .recording-actions {

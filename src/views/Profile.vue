@@ -653,7 +653,7 @@ watch(isAuthenticated, (newVal) => {
 }
 .access-mode-actions .btn-secondary.active {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 .access-error {
@@ -679,7 +679,7 @@ watch(isAuthenticated, (newVal) => {
 .stat-card .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .stat-card .stat-label {
@@ -1108,7 +1108,7 @@ watch(isAuthenticated, (newVal) => {
 .summary-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-bottom: 0.25rem;
 }
 

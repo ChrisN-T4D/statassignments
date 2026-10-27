@@ -321,7 +321,7 @@ watch(() => props.youtubeId, () => {
 .toggle-btn:hover {
   background: var(--bg-elevated);
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Responsive */

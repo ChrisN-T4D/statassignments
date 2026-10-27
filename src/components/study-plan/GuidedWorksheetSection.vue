@@ -130,7 +130,7 @@ function applyPrefill (pf) {
   border-radius: 0.4rem;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 
@@ -229,7 +229,7 @@ function applyPrefill (pf) {
 }
 
 .resource-link {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 </style>

@@ -80,13 +80,13 @@ const weeksFor = (id) => weeksForObjective(id)
 <style scoped>
 .course-objectives { padding: 1.5rem 0 3rem; min-height: 60vh; }
 .back-link { display: inline-block; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; margin-bottom: 0.75rem; }
-.back-link:hover { color: var(--primary); }
+.back-link:hover { color: var(--primary-text); }
 .page-title { font-size: 1.75rem; font-weight: 700; margin: 0 0 0.5rem 0; color: var(--text-primary); }
 .page-intro { color: var(--text-secondary); max-width: 42rem; line-height: 1.6; margin: 0 0 1.5rem 0; }
 .objective-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
 .objective-card { border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1rem 1.25rem; background: var(--bg-card, transparent); }
 .objective-head { display: flex; gap: 0.75rem; align-items: baseline; margin-bottom: 0.25rem; }
-.objective-id { font-weight: 700; color: var(--primary); }
+.objective-id { font-weight: 700; color: var(--primary-text); }
 .objective-slo { font-size: 0.8rem; color: var(--text-muted); }
 .objective-text { margin: 0 0 0.75rem 0; color: var(--text-primary); line-height: 1.55; }
 .objective-links { display: grid; gap: 0.5rem; }

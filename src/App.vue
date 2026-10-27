@@ -65,7 +65,7 @@ import BadgeToast from './components/BadgeToast.vue'
 }
 
 .logo-market {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .header-actions {

@@ -755,7 +755,7 @@ function formatTopicId(id) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .intro {
@@ -1034,7 +1034,7 @@ function formatTopicId(id) {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 0.35rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 0.85rem;
 }
@@ -1086,7 +1086,7 @@ function formatTopicId(id) {
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .not-found p {

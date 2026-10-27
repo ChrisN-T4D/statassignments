@@ -387,7 +387,7 @@ function articlePeeksForBucket (bucket) {
 .reminder-block h3 {
   font-size: 0.85rem;
   margin: 0 0 0.25rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .reminder-text {
@@ -400,7 +400,7 @@ function articlePeeksForBucket (bucket) {
 
 .reminder-link {
   font-size: 0.88rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -456,7 +456,7 @@ function articlePeeksForBucket (bucket) {
 .reference-area-title {
   font-size: 0.9rem;
   margin: 0 0 0.35rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .reference-list {
@@ -473,7 +473,7 @@ function articlePeeksForBucket (bucket) {
 
 .reference-link {
   margin-left: 0.35rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 0.8rem;
 }
@@ -556,7 +556,7 @@ function articlePeeksForBucket (bucket) {
   border: 1px dashed var(--border);
   border-radius: 0.45rem;
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
   font-size: 0.88rem;
 }
@@ -618,7 +618,7 @@ function articlePeeksForBucket (bucket) {
 
 .resource-link {
   font-size: 0.9rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -636,7 +636,7 @@ function articlePeeksForBucket (bucket) {
   border-radius: 0.4rem;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 </style>

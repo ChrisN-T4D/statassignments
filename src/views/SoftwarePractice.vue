@@ -735,7 +735,7 @@ watch(currentExercise, () => {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .page-header h1 {
@@ -799,7 +799,7 @@ watch(currentExercise, () => {
 
 .module-select-btn:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .module-select-btn.active {
@@ -939,7 +939,7 @@ watch(currentExercise, () => {
 }
 
 .status-icon.current {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: bold;
   font-size: 1.25rem;
 }
@@ -990,7 +990,7 @@ watch(currentExercise, () => {
 
 .dataset-link {
   font-size: 0.75rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
 }
@@ -1176,7 +1176,7 @@ watch(currentExercise, () => {
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .retry-prompt {
@@ -1405,7 +1405,7 @@ watch(currentExercise, () => {
 
 .lesson-card:hover .lesson-arrow {
   transform: translateX(4px);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 .summary-actions .btn-secondary {
   color: #111827;

@@ -72,7 +72,7 @@ import { PEER_REVIEW_REFERENCE } from '../../data/capstoneArticleReviewWorksheet
 .col-title {
   font-size: 0.9rem;
   margin: 0 0 0.5rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .ref-col ul {
@@ -103,7 +103,7 @@ import { PEER_REVIEW_REFERENCE } from '../../data/capstoneArticleReviewWorksheet
 
 .resource-link {
   font-size: 0.9rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 

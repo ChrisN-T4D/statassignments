@@ -202,7 +202,7 @@ function handleSkip() {
 .link-btn {
   background: none;
   border: none;
-  color: var(--primary);
+  color: var(--primary-text);
   font-size: 0.875rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;

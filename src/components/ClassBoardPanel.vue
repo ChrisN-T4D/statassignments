@@ -386,7 +386,7 @@ watch(() => props.classId, init)
 .board-row-title { font-weight: 600; }
 .board-row-meta { font-size: 0.78rem; color: var(--text-secondary); margin: 0; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
 .board-tag { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 0.35rem; padding: 0 0.4rem; font-size: 0.72rem; }
-.board-new { color: var(--primary); font-weight: 700; }
+.board-new { color: var(--primary-text); font-weight: 700; }
 .board-badge { display: inline-block; border-radius: 0.35rem; padding: 0 0.4rem; font-size: 0.72rem; font-weight: 600; margin-right: 0.25rem; }
 .board-badge.ok { background: var(--success-bg); color: var(--success); }
 .board-badge.warn { background: var(--warning-bg); color: var(--warning); }
@@ -400,7 +400,7 @@ watch(() => props.classId, init)
 .board-text { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0.4rem 0; line-height: 1.5; }
 .board-post-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 .board-link { background: none; border: none; padding: 0; font: inherit; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer; text-decoration: underline; text-align: left; }
-.board-link:hover, .board-link.on { color: var(--primary); }
+.board-link:hover, .board-link.on { color: var(--primary-text); }
 .board-link.danger:hover { color: var(--danger); }
 .board-replies-h { margin: 1rem 0 0.5rem; font-size: 0.9rem; color: var(--text-secondary); }
 .board-reply { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }

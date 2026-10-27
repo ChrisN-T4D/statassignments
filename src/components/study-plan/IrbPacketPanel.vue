@@ -80,7 +80,7 @@ const total = computed(() => progress.value.total)
 }
 
 .packet-link {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   text-decoration: none;
 }

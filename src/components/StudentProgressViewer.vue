@@ -536,7 +536,7 @@ onMounted(async () => {
 }
 
 .sub-tab-btn.active {
-  color: var(--primary);
+  color: var(--primary-text);
   border-bottom-color: var(--primary);
 }
 

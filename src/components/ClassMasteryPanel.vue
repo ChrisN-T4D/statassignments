@@ -254,7 +254,7 @@ function exportModule() {
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-bottom: 0.5rem;
 }
 .stat-label {

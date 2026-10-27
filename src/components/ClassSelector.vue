@@ -212,7 +212,7 @@ onUnmounted(() => {
 
 .check-icon {
   flex-shrink: 0;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-top: 0.125rem;
 }
 

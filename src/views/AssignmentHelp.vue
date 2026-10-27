@@ -174,7 +174,7 @@ function typeLabel (type) {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .week-panel {
@@ -211,7 +211,7 @@ function typeLabel (type) {
 .reviews-summary {
   cursor: pointer;
   margin-bottom: 0.5rem;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 
@@ -298,7 +298,7 @@ function typeLabel (type) {
 }
 
 .research-aid-link {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 
@@ -323,7 +323,7 @@ function typeLabel (type) {
 }
 
 .module-num {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .phase-label {
@@ -373,7 +373,7 @@ function typeLabel (type) {
   padding: 0.75rem 1rem;
   border: 1px solid var(--primary);
   border-radius: 0.5rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 600;

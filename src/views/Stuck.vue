@@ -132,7 +132,7 @@ const mailto = computed(() => buildHelpMailto({
 <style scoped>
 .stuck-page { padding: 1.5rem 0 3rem; min-height: 60vh; }
 .back-link { display: inline-block; margin-bottom: 0.75rem; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
-.back-link:hover { color: var(--primary); }
+.back-link:hover { color: var(--primary-text); }
 .stuck-title { margin: 0 0 0.5rem; font-size: 1.75rem; font-weight: 700; color: var(--text-primary); }
 .stuck-intro { max-width: 42rem; margin: 0 0 1.5rem; color: var(--text-secondary); line-height: 1.6; }
 .stuck-step { max-width: 42rem; margin-bottom: 1.5rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--bg-card); }
@@ -140,11 +140,11 @@ const mailto = computed(() => buildHelpMailto({
 .step-num { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.85rem; }
 .stuck-lead { margin: 0 0 0.75rem; color: var(--text-secondary); line-height: 1.6; }
 .stuck-tips, .stuck-links { margin: 0 0 0.75rem; padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.6; }
-.stuck-links a, .stuck-link { color: var(--primary); font-weight: 600; text-decoration: none; }
+.stuck-links a, .stuck-link { color: var(--primary-text); font-weight: 600; text-decoration: none; }
 .stuck-links a:hover, .stuck-link:hover { text-decoration: underline; }
 .stuck-email-btn { display: inline-block; padding: 0.7rem 1.4rem; border-radius: 0.5rem; background: var(--primary); color: #fff; font-weight: 600; text-decoration: none; }
 .stuck-board-btn { border: none; font: inherit; font-weight: 600; cursor: pointer; }
 .stuck-fallback { margin: 0.75rem 0 0; font-size: 0.85rem; color: var(--text-muted); }
 .stuck-broken { max-width: 42rem; font-size: 0.9rem; color: var(--text-muted); }
-.stuck-broken a { color: var(--primary); }
+.stuck-broken a { color: var(--primary-text); }
 </style>

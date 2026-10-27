@@ -1999,7 +1999,7 @@ watch(selectedModuleId, id => {
 .path-chapter-link {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -2145,7 +2145,7 @@ watch(selectedModuleId, id => {
 .part-tab-label {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .part-tab-title {
@@ -2215,7 +2215,7 @@ watch(selectedModuleId, id => {
 }
 
 .module-canvas-part-label {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
 }
 
@@ -2341,7 +2341,7 @@ watch(selectedModuleId, id => {
 
 .benchmark-help-link {
   display: inline-block;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
@@ -2723,7 +2723,7 @@ watch(selectedModuleId, id => {
 .practice-link-card:hover .card-arrow,
 .lesson-card:hover .card-arrow {
   transform: translateX(4px);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Practice Link Card */
@@ -2918,7 +2918,7 @@ button.practice-link-card {
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
   line-height: 1;
 }
 
@@ -3015,7 +3015,7 @@ button.practice-link-card {
 .module-settings-btn:hover {
   border-color: var(--primary);
   background: var(--bg-card);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Modal Overlay and Container */
@@ -3228,7 +3228,7 @@ button.practice-link-card {
 
 .phase-button-card:hover .card-arrow {
   transform: translateX(4px);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 @media (max-width: 768px) {

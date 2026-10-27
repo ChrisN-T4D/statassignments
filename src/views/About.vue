@@ -678,7 +678,7 @@ h2 {
   font-size: 2rem;
   margin-top: 3rem;
   margin-bottom: 1.5rem;
-  color: var(--primary);
+  color: var(--primary-text);
   border-bottom: 3px solid var(--primary);
   padding-bottom: 0.5rem;
 }
@@ -851,7 +851,7 @@ tbody tr:last-child td {
 
 .arch-box strong {
   display: block;
-  color: var(--primary);
+  color: var(--primary-text);
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
@@ -917,7 +917,7 @@ tbody tr:last-child td {
 
 .tech-item strong {
   display: block;
-  color: var(--primary);
+  color: var(--primary-text);
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
@@ -953,7 +953,7 @@ tbody tr:last-child td {
 .example-viz h5 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-bottom: 0.5rem;
 }
 

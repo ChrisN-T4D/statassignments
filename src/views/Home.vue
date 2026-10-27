@@ -156,7 +156,7 @@ onMounted(() => {
 }
 
 .hero h1 span {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .hero p {
@@ -207,7 +207,7 @@ onMounted(() => {
 .continue-next {
   margin-top: 0.5rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .classes-section h2 {
@@ -270,7 +270,7 @@ onMounted(() => {
 }
 
 .empty-classes a {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 500;
 }
 
@@ -377,7 +377,7 @@ onMounted(() => {
 }
 
 .footer-links a {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   font-weight: 500;
 }
@@ -398,7 +398,7 @@ onMounted(() => {
 }
 
 .footer-help a {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 

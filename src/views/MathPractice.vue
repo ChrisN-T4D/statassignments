@@ -617,7 +617,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .mp { max-width: 760px; margin: 0 auto; padding: 1rem 16px 3rem; color: var(--text-primary); }
-.mp-back { font-size: 0.9rem; color: var(--primary); text-decoration: none; }
+.mp-back { font-size: 0.9rem; color: var(--primary-text); text-decoration: none; }
 .mp h1 { margin: 0.5rem 0 0.25rem; font-size: 1.6rem; }
 .mp h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
 .mp-lede { color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.5; }
@@ -643,7 +643,7 @@ onBeforeUnmount(() => {
 .mp-streak { display: flex; gap: 4px; }
 .mp-streak i { width: 14px; height: 6px; border-radius: 3px; background: var(--border); display: block; }
 .mp-streak i.on { background: var(--success); }
-.mp-check-btn { min-height: 40px; padding: 0.35rem 0.6rem; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); cursor: pointer; }
+.mp-check-btn { min-height: 40px; padding: 0.35rem 0.6rem; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary-text); cursor: pointer; }
 .mp-check-btn:disabled { color: var(--text-secondary); border-color: var(--border); cursor: default; }
 .mp-badge { font-size: 0.85rem; font-weight: 700; color: var(--success); }
 .mp-newbadge { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin: 0 0 0.75rem; padding: 0.6rem 0.9rem; border-radius: 10px; background: var(--success-bg); font-weight: 600; }
@@ -655,7 +655,7 @@ onBeforeUnmount(() => {
 .mp-chip { font-size: 0.8rem; font-weight: 600; padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); background: var(--bg-elevated, var(--bg-main)); color: var(--text-primary); }
 .mp-timer { font-weight: 700; font-variant-numeric: tabular-nums; }
 .mp-timer.low { color: var(--danger); }
-.mp-link { font-size: 0.85rem; color: var(--primary); }
+.mp-link { font-size: 0.85rem; color: var(--primary-text); }
 .mp-prompt { font-size: 1.15rem; line-height: 1.5; margin: 0.5rem 0 0.75rem; }
 .mp-figure { margin: 0.5rem 0 1rem; }
 .mp-figure.small { max-width: 320px; }

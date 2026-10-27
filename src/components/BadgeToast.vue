@@ -42,6 +42,6 @@ watch(toast, (v) => {
   box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.35));
   font-weight: 600;
 }
-.badge-toast-link { color: var(--primary); font-size: 0.9rem; white-space: nowrap; }
+.badge-toast-link { color: var(--primary-text); font-size: 0.9rem; white-space: nowrap; }
 .badge-toast-x { border: 0; background: none; color: inherit; font-size: 1.3rem; cursor: pointer; min-width: 32px; min-height: 32px; line-height: 1; }
 </style>

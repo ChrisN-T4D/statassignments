@@ -1699,7 +1699,7 @@ watch(currentPhase, () => {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Header */
@@ -2303,7 +2303,7 @@ watch(currentPhase, () => {
 
 .btn-hint:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .checkpoint {
@@ -2745,7 +2745,7 @@ watch(currentPhase, () => {
 
 .next-guide-link {
   font-weight: 500;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -2785,7 +2785,7 @@ watch(currentPhase, () => {
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .summary-overlay {
@@ -3373,13 +3373,13 @@ watch(currentPhase, () => {
 }
 
 .section-tab:hover {
-  color: var(--primary);
+  color: var(--primary-text);
   background: var(--bg-elevated);
   transform: translateY(-2px);
 }
 
 .section-tab.active {
-  color: var(--primary);
+  color: var(--primary-text);
   background: var(--bg-elevated);
   border-color: var(--border);
   border-bottom: 2px solid var(--bg-elevated);

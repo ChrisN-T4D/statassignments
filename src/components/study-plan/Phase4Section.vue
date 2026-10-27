@@ -346,7 +346,7 @@ function pathwayShortLabel (pathway) {
 }
 
 .canvas-link {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -381,7 +381,7 @@ function pathwayShortLabel (pathway) {
 .reminder-block h3 {
   font-size: 0.85rem;
   margin: 0 0 0.25rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .reminder-text {
@@ -400,7 +400,7 @@ function pathwayShortLabel (pathway) {
 
 .reminder-link {
   font-size: 0.88rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -425,7 +425,7 @@ function pathwayShortLabel (pathway) {
 }
 
 .block-intro a {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .prefill-row {
@@ -441,7 +441,7 @@ function pathwayShortLabel (pathway) {
   border: 1px solid var(--border);
   border-radius: 0.4rem;
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 
@@ -469,7 +469,7 @@ function pathwayShortLabel (pathway) {
 
 .guide-link {
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 

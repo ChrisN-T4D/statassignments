@@ -124,7 +124,7 @@ function setField (id, value) {
 }
 
 .callout-link {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   text-decoration: none;
 }
@@ -196,7 +196,7 @@ function setField (id, value) {
 }
 
 .reminder-link {
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   text-decoration: none;
 }
@@ -218,7 +218,7 @@ function setField (id, value) {
 }
 
 .resource-link {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 </style>

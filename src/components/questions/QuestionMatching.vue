@@ -169,7 +169,7 @@ const allCorrect = computed(() => {
 
 .term-label {
   font-weight: 600;
-  color: var(--primary);
+  color: var(--primary-text);
   min-width: 1.5rem;
 }
 

@@ -332,7 +332,7 @@ function formatValue(value) {
 .count-num {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .count-label {
@@ -436,7 +436,7 @@ function formatValue(value) {
   border-radius: 0.5rem;
   border: 1px solid var(--primary);
   background: color-mix(in srgb, var(--primary) 12%, var(--bg-card));
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 600;
   cursor: pointer;
 }
@@ -484,7 +484,7 @@ function formatValue(value) {
 
 .tally-count {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-text);
   flex-shrink: 0;
 }
 

@@ -1471,7 +1471,7 @@ onMounted(() => {
 
 .exp-badge-t {
   background: color-mix(in srgb, var(--primary) 28%, transparent);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .exp-badge-warn {
@@ -2178,7 +2178,7 @@ onMounted(() => {
 }
 
 .exp-sampling-legend-random .exp-sampling-legend-heading {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .exp-sampling-legend-nonrandom .exp-sampling-legend-heading {
@@ -2293,7 +2293,7 @@ onMounted(() => {
 
 .exp-badge-rand {
   background: color-mix(in srgb, var(--primary) 22%, transparent);
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .exp-badge-norand {

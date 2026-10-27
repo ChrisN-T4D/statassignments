@@ -594,7 +594,7 @@ watch(variableMain, () => {
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .page-title {

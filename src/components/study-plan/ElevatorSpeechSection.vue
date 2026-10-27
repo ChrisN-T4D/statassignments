@@ -202,7 +202,7 @@ function setField (id, value) {
 }
 
 .canvas-link {
-  color: var(--primary);
+  color: var(--primary-text);
   margin-left: 0.35rem;
 }
 
@@ -237,7 +237,7 @@ function setField (id, value) {
 .reminder-block h3 {
   font-size: 0.85rem;
   margin: 0 0 0.25rem;
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 .reminder-text {
@@ -250,7 +250,7 @@ function setField (id, value) {
 
 .reminder-link {
   font-size: 0.88rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 
@@ -287,7 +287,7 @@ function setField (id, value) {
   border: 1px solid var(--border);
   border-radius: 0.4rem;
   background: transparent;
-  color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 
@@ -300,7 +300,7 @@ function setField (id, value) {
 
 .resource-link {
   font-size: 0.9rem;
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
 }
 </style>

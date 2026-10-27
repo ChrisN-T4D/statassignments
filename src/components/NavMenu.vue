@@ -212,7 +212,7 @@ onUnmounted(() => {
 }
 
 .dropdown-item-action {
-  color: var(--primary);
+  color: var(--primary-text);
 }
 
 /* Dropdown animation */

@@ -71,7 +71,7 @@ function onInput (e) {
 }
 
 .required-mark {
-  color: var(--primary);
+  color: var(--primary-text);
   margin-left: 0.15rem;
 }
 
@@ -85,7 +85,7 @@ function onInput (e) {
 .chapter-link {
   display: inline-block;
   font-size: 0.85rem;
-  color: var(--primary);
+  color: var(--primary-text);
   margin-bottom: 0.5rem;
   text-decoration: none;
 }
