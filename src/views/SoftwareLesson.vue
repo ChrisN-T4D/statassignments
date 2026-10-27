@@ -2645,7 +2645,7 @@ watch(currentPhase, () => {
 
 .missing-keywords {
   font-size: 0.875rem;
-  color: #ef4444;
+  color: var(--primary-text);
   font-weight: 500;
 }
 

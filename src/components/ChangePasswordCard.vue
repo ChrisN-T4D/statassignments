@@ -147,7 +147,7 @@ async function updatePassword() {
 }
 
 .error-message {
-  color: #dc2626;
+  color: var(--primary-text);
   font-size: 0.875rem;
   margin: 0 0 0.75rem 0;
 }

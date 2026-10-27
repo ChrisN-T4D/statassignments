@@ -43,7 +43,7 @@
 
         <div class="dataset-selector">
           <label>Select Collection:</label>
-          <select v-model="selectedCollection" @change="loadCollectionData">
+          <select v-model="selectedCollection" aria-label="Collection" @change="loadCollectionData">
             <option value="">-- Choose a collection --</option>
             <option value="users">Users</option>
             <option value="attempts">Attempts</option>
@@ -322,7 +322,7 @@
 
       <!-- Modal: Assign classes to user -->
       <div v-if="editingUser" class="modal-overlay" @click.self="editingUser = null">
-        <div class="modal assign-classes-modal">
+        <div class="modal assign-classes-modal" role="dialog" aria-modal="true" aria-label="Assign classes">
           <h3>Assign classes: {{ editingUser.email }}</h3>
           <p class="modal-hint">Select the classes this user can access on the home page. Admins see all classes regardless.</p>
           <div class="classes-checkbox-list">
@@ -342,7 +342,7 @@
 
       <!-- Modal: Add user(s) with dummy credentials -->
       <div v-if="showAddUserModal" class="modal-overlay" @click.self="closeAddUserModal">
-        <div class="modal add-user-modal" :class="{ 'modal-wide': createdCredentials.length > 0 }">
+        <div class="modal add-user-modal" role="dialog" aria-modal="true" aria-label="Add users" :class="{ 'modal-wide': createdCredentials.length > 0 }">
           <h3>{{ createdCredentials.length > 0 ? 'Credentials created' : 'Add users' }}</h3>
 
           <!-- Step 1: Form -->
@@ -356,7 +356,7 @@
               </div>
               <div class="form-group">
                 <label>Role</label>
-                <select v-model="newUserRole">
+                <select v-model="newUserRole" aria-label="Role">
                   <option value="student">Student</option>
                   <option value="instructor">Instructor</option>
                   <option value="admin">Admin</option>

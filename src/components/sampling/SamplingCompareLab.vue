@@ -15,12 +15,12 @@
       </label>
       <label class="field">
         <span>Batch count</span>
-        <input v-model.number="batchCount" type="number" min="1" max="500" step="1" />
+        <input v-model.number="batchCount" aria-label="Batch count" type="number" min="1" max="500" step="1" />
       </label>
       <div class="plan-picks">
         <label class="field plan-field">
           <span>Plan A</span>
-          <select v-model="planA.method" @change="onMethodChange('a')">
+          <select v-model="planA.method" aria-label="Plan A sampling method" @change="onMethodChange('a')">
             <optgroup label="Probability (random)">
               <option v-for="k in randomMethods" :key="'a-' + k" :value="k">
                 {{ SAMPLING_PLAN_META[k].shortTitle }}
@@ -36,7 +36,7 @@
         <span class="vs">vs</span>
         <label class="field plan-field">
           <span>Plan B</span>
-          <select v-model="planB.method" @change="onMethodChange('b')">
+          <select v-model="planB.method" aria-label="Plan B sampling method" @change="onMethodChange('b')">
             <optgroup label="Probability (random)">
               <option v-for="k in randomMethods" :key="'b-' + k" :value="k">
                 {{ SAMPLING_PLAN_META[k].shortTitle }}

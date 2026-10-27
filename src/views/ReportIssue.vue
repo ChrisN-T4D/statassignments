@@ -167,7 +167,7 @@ async function handleSubmit() {
 }
 
 .error-message {
-  color: #b91c1c;
+  color: var(--primary-text);
   font-size: 0.875rem;
 }
 

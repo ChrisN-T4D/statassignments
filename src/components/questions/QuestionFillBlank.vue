@@ -3,7 +3,7 @@
     <p class="question-text" v-html="formattedQuestion"></p>
 
     <div class="input-container">
-      <input
+      <input aria-label="Your answer"
         type="text"
         v-model="localAnswer"
         :disabled="submitted"

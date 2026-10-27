@@ -86,14 +86,14 @@
             <template v-else-if="q.type === 'matching'">
               <div v-for="(pair, pi) in q.pairs" :key="pi" class="batch-match-row">
                 <span class="batch-match-left">{{ pair.left }}</span>
-                <select v-model="batchMatch[q.id][pair.left]" class="batch-match-select">
+                <select v-model="batchMatch[q.id][pair.left]" class="batch-match-select" :aria-label="`Match for ${pair.left}`">
                   <option value="">Select match...</option>
                   <option v-for="(p, oi) in q.pairs" :key="oi" :value="p.right">{{ p.right }}</option>
                 </select>
               </div>
             </template>
             <template v-else>
-              <input type="text" v-model="batchAnswers[q.id]" class="batch-text" />
+              <input type="text" v-model="batchAnswers[q.id]" class="batch-text" aria-label="Your answer" />
             </template>
           </fieldset>
           <button type="submit" class="btn-primary">Submit all answers</button>
@@ -234,6 +234,7 @@
           <input
             v-model="numericAnswer"
             type="text"
+            aria-label="Your answer"
             placeholder="Enter your answer"
             :disabled="showResult || isSubmitting"
             @keyup.enter="submitNumericAnswer"
@@ -260,6 +261,7 @@
               <div class="matching-left">{{ pair.left }}</div>
               <select
                 v-model="matchingAnswers[pair.left]"
+                :aria-label="`Match for ${pair.left}`"
                 class="matching-select"
                 :disabled="showResult || isSubmitting"
                 @change="trackAnswerChange"
@@ -1286,7 +1288,7 @@ watch(currentProblem, async (problem) => {
 
 .difficulty-badge.hard {
   background: #fef2f2;
-  color: #dc2626;
+  color: var(--primary-text);
 }
 
 .topic-badge {
@@ -1385,7 +1387,7 @@ watch(currentProblem, async (problem) => {
 
 .feedback-message {
   margin-top: 1rem;
-  color: #dc2626;
+  color: var(--primary-text);
   font-size: 0.9rem;
 }
 
@@ -1406,7 +1408,7 @@ watch(currentProblem, async (problem) => {
 
 .result.incorrect {
   background: #fef2f2;
-  color: #dc2626;
+  color: var(--primary-text);
 }
 
 .result h3 {
@@ -1671,7 +1673,7 @@ watch(currentProblem, async (problem) => {
 }
 
 .incorrect-icon {
-  color: #ef4444;
+  color: var(--primary-text);
 }
 
 .cr-mode-bar {

@@ -287,7 +287,7 @@ function exportModule() {
   max-width: 28rem;
 }
 .error-message {
-  color: #b91c1c;
+  color: var(--primary-text);
   margin: 0.5rem 0;
 }
 .preview-note {

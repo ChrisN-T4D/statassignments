@@ -29,7 +29,7 @@
       </div>
 
       <!-- Hidden file input -->
-      <input
+      <input aria-label="Upload screenshot"
         type="file"
         ref="fileInput"
         accept="image/*"

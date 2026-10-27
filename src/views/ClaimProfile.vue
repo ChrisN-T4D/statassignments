@@ -213,7 +213,7 @@ onMounted(async () => {
 
 .error-message {
   background: #fef2f2;
-  color: #dc2626;
+  color: var(--primary-text);
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;

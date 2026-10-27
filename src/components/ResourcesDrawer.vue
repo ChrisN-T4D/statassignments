@@ -44,7 +44,7 @@
         <!-- Header -->
         <div class="drawer-header">
           <h2>📚 Resources</h2>
-          <button class="close-btn" @click="closeDrawer" title="Close">×</button>
+          <button class="close-btn" @click="closeDrawer" title="Close" aria-label="Close">×</button>
         </div>
 
         <!-- Content -->
@@ -817,7 +817,7 @@ document.addEventListener('keydown', (e) => {
 
 .dataset-download-error {
   margin-top: 0.75rem;
-  color: #b91c1c;
+  color: var(--primary-text);
 }
 
 .recorder-active-chip {

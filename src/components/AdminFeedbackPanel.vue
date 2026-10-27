@@ -43,7 +43,7 @@
         class="report-row"
         :class="{ resolved: report.status === 'resolved' }"
       >
-        <div class="report-summary" @click="toggleExpanded(report.id)">
+        <div class="report-summary" role="button" tabindex="0" :aria-expanded="expandedId === report.id" @click="toggleExpanded(report.id)" @keydown.enter.prevent="toggleExpanded(report.id)" @keydown.space.prevent="toggleExpanded(report.id)">
           <div class="report-meta">
             <span class="badge" :class="report.status">{{ report.status }}</span>
             <span class="badge category">{{ categoryLabel(report.category) }}</span>
@@ -278,7 +278,7 @@ watch([statusFilter, categoryFilter], () => {
 }
 
 .error-text {
-  color: #b91c1c;
+  color: var(--primary-text);
 }
 
 .report-list {

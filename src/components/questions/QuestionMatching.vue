@@ -29,7 +29,7 @@
           :key="'def-' + index"
           class="definition-item"
         >
-          <select
+          <select :aria-label="`Match for item ${index + 1}`"
             v-model="localMatches[index]"
             :disabled="submitted"
             class="match-select"

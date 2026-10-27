@@ -259,7 +259,7 @@
     <!-- Error Display -->
     <div v-if="error" class="recorder-error">
       <strong>⚠️ Error:</strong> {{ error }}
-      <button @click="error = null" class="btn-dismiss">✕</button>
+      <button @click="error = null" class="btn-dismiss" aria-label="Dismiss error">✕</button>
     </div>
 
     <!-- Full-screen prompt so Stop always surfaces download (drawer can be small) -->

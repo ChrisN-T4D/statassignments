@@ -83,12 +83,12 @@
 
         <!-- Password Reset Modal -->
         <div v-if="showResetPassword" class="modal-overlay" @click.self="showResetPassword = false">
-          <div class="modal">
+          <div class="modal" role="dialog" aria-modal="true" aria-label="Reset password">
             <h2>Reset Password</h2>
             <p>Enter your email and we'll send you a reset link.</p>
             <form @submit.prevent="handleResetPassword">
               <div class="form-group">
-                <input
+                <input aria-label="Email address"
                   v-model="resetEmail"
                   type="email"
                   placeholder="you@example.com"

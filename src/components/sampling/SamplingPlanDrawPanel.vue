@@ -103,7 +103,7 @@ const deltaClass = computed(() => {
 }
 .delta-ok { color: #15803d; }
 .delta-warn { color: #ca8a04; }
-.delta-bad { color: #dc2626; }
+.delta-bad { color: var(--primary-text); }
 .waiting,
 .draw-count {
   font-size: 0.85rem;

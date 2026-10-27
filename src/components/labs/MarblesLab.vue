@@ -29,10 +29,10 @@
       </div>
       <label class="field">
         <span>Draw size (n)</span>
-        <input v-model.number="soloN" type="number" min="1" max="50" />
+        <input v-model.number="soloN" type="number" min="1" max="50" aria-label="Number of draws" />
       </label>
       <label class="check-field">
-        <input v-model="soloWithReplacement" type="checkbox" />
+        <input v-model="soloWithReplacement" type="checkbox" aria-label="Draw with replacement" />
         <span>With replacement</span>
       </label>
       <div class="btn-row">

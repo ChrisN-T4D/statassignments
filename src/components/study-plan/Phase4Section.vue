@@ -133,6 +133,7 @@
               <th scope="row">{{ criterion.label }}</th>
               <td v-for="pathway in PHASE4_PATHWAYS" :key="pathway.id">
                 <textarea
+                  aria-label="Comparison table cell"
                   :value="comparisonTable[criterion.id]?.[pathway.id] ?? ''"
                   rows="2"
                   class="cell-input"

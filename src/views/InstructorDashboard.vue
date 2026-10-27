@@ -35,7 +35,7 @@
           <div class="content-section">
             <h2>Semester</h2>
             <div class="form-group" style="max-width: 300px;">
-              <select v-model="rosterSemesterId" @change="loadRosterStats">
+              <select v-model="rosterSemesterId" aria-label="Semester" @change="loadRosterStats">
                 <option value="">Select a semester</option>
                 <option v-for="sem in semesters" :key="sem.id" :value="sem.id">
                   {{ sem.name || sem.code }} {{ sem.is_active ? '(Active)' : '' }}
@@ -92,6 +92,7 @@
                     <td>{{ row.user ? 'Yes' : 'No' }}</td>
                     <td>
                       <select
+                        aria-label="Access mode"
                         :value="row.access_mode || 'online_primary'"
                         @change="changeAccessMode(row, $event.target.value)"
                       >
@@ -1102,13 +1103,13 @@ onMounted(() => {
 }
 
 .result-error {
-  color: #dc2626;
+  color: var(--primary-text);
 }
 
 /* Error message */
 .error-message {
   background: #fef2f2;
-  color: #dc2626;
+  color: var(--primary-text);
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;

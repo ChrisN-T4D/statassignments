@@ -232,7 +232,7 @@
               class="module-progress-item"
               :class="{ expanded: expandedModules.has(module.id) }"
             >
-              <div class="module-header" @click="toggleModuleExpansion(module.id)">
+              <div class="module-header" role="button" tabindex="0" :aria-expanded="expandedModules.has(module.id)" @click="toggleModuleExpansion(module.id)" @keydown.enter.prevent="toggleModuleExpansion(module.id)" @keydown.space.prevent="toggleModuleExpansion(module.id)">
                 <div class="module-info">
                   <span class="module-expand-icon">
                     {{ expandedModules.has(module.id) ? '▼' : '▶' }}
@@ -657,7 +657,7 @@ watch(isAuthenticated, (newVal) => {
   font-weight: 600;
 }
 .access-error {
-  color: #dc2626;
+  color: var(--primary-text);
   margin-top: 0.5rem;
 }
 
