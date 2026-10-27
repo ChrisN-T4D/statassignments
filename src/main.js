@@ -4,9 +4,11 @@ import router from './router'
 import './styles/main.css'
 import { useAuth } from './composables/useAuth'
 import VideoBox from './components/VideoBox.vue'
+import { dialogFocus } from './lib/dialogFocus'
 
 const app = createApp(App)
 app.use(router)
+app.directive('dialog-focus', dialogFocus)
 
 // Register VideoBox globally for use in v-html content
 app.component('VideoBox', VideoBox)

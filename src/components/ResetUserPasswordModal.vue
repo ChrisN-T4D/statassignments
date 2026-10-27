@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="modal-overlay" @click.self="emit('close')">
+  <div v-if="user" class="modal-overlay" v-dialog-focus="() => emit('close')" @click.self="emit('close')">
     <div class="modal reset-password-modal" role="dialog" aria-modal="true" aria-label="Reset password">
       <template v-if="!generatedPassword">
         <h3>Reset password</h3>

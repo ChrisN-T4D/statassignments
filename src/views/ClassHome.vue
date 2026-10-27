@@ -832,8 +832,8 @@
 
     <!-- Module 8 Selector Modal -->
     <Teleport to="body">
-      <div v-if="showModule8Selector" class="modal-overlay" @click.self="closeModule8Selector">
-        <div class="modal-container">
+      <div v-if="showModule8Selector" class="modal-overlay" v-dialog-focus="closeModule8Selector" @click.self="closeModule8Selector">
+        <div class="modal-container" role="dialog" aria-modal="true" aria-label="Choose Module 8 topics">
           <Module8Selector @save="closeModule8Selector" @skip="closeModule8Selector" />
         </div>
       </div>

@@ -321,7 +321,7 @@
       <ResetUserPasswordModal :user="resettingUser" @close="resettingUser = null" />
 
       <!-- Modal: Assign classes to user -->
-      <div v-if="editingUser" class="modal-overlay" @click.self="editingUser = null">
+      <div v-if="editingUser" class="modal-overlay" v-dialog-focus="() => (editingUser = null)" @click.self="editingUser = null">
         <div class="modal assign-classes-modal" role="dialog" aria-modal="true" aria-label="Assign classes">
           <h3>Assign classes: {{ editingUser.email }}</h3>
           <p class="modal-hint">Select the classes this user can access on the home page. Admins see all classes regardless.</p>
@@ -341,7 +341,7 @@
       </div>
 
       <!-- Modal: Add user(s) with dummy credentials -->
-      <div v-if="showAddUserModal" class="modal-overlay" @click.self="closeAddUserModal">
+      <div v-if="showAddUserModal" class="modal-overlay" v-dialog-focus="closeAddUserModal" @click.self="closeAddUserModal">
         <div class="modal add-user-modal" role="dialog" aria-modal="true" aria-label="Add users" :class="{ 'modal-wide': createdCredentials.length > 0 }">
           <h3>{{ createdCredentials.length > 0 ? 'Credentials created' : 'Add users' }}</h3>
 
