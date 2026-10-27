@@ -58,6 +58,48 @@
         </div>
       </section>
 
+      <!-- Credits and licensing -->
+      <section id="credits" class="faq-section">
+        <h2>Credits and Licensing</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>Statistics chapters</h4>
+            <p>
+              Many chapters are adapted from <em>Learning Statistics with jamovi</em> by Danielle J. Navarro
+              and David R. Foxcroft, licensed under
+              <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.
+              We changed the text, examples, and software instructions for this course (including the SPSS, R,
+              Excel, and Stata versions). Our adapted chapters are shared under the same license.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Research methods chapters</h4>
+            <p>
+              Research methods chapters are copied from <em>Research Methods in Psychology (4th edition)</em> by
+              Rajiv S. Jhangiani, I-Chant A. Chiang, Carrie Cuttler, and Dana C. Leighton, licensed under
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>.
+              Those chapters are for non-commercial educational use.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Comics and images</h4>
+            <p>
+              Comics from <a href="https://xkcd.com" target="_blank" rel="noopener noreferrer">xkcd.com</a> by Randall Munroe are used under
+              <a href="https://creativecommons.org/licenses/by-nc/2.5/" target="_blank" rel="noopener noreferrer">CC BY-NC 2.5</a>.
+              Each one is credited where it appears.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Original material</h4>
+            <p>
+              The Module 0 math refresher, software interface guides, practice questions, and sample data
+              written for this course are original to Methods Market, and sample data are invented for illustration.
+              Software names (SPSS, jamovi, R, Excel, Stata) belong to their owners.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- Core Educational Theory -->
       <section class="theory-section">
         <h2>Educational Theory Foundation</h2>
