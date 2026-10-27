@@ -144,7 +144,7 @@ export const assignmentHelpByModule = [
       ...methodsMarketPracticeAssignments(4),
       {
         id: 'm4-descriptives',
-        name: 'Descriptive Statistics (Week 7)',
+        name: 'Module 4 Assignment: Descriptive Statistics',
         type: 'assignment',
         tips: [
           'Enter the height data in one column in Jamovi (e.g. column name "Height"). Use Descriptives for N, mean, median, mode, range, variance, SD.',
@@ -163,7 +163,7 @@ export const assignmentHelpByModule = [
       },
       {
         id: 'm4-normality-quiz',
-        name: 'Week 8 Practice (Normality Quiz)',
+        name: 'Module 4 Practice (Normality Quiz)',
         type: 'practice',
         tips: [
           'Import Normality data.csv (from Tools) and follow the instructions at the top of the assignment, then answer the quiz questions.'
@@ -221,7 +221,7 @@ export const assignmentHelpByModule = [
       ...methodsMarketPracticeAssignments(7),
       {
         id: 'm7-hypothesis-scenarios',
-        name: 'Week 14 Assignment: Writing and Comparing Hypotheses, Choosing the Right Test',
+        name: 'Module 7 Assignment: Writing and Comparing Hypotheses, Choosing the Right Test',
         type: 'assignment',
         tips: [
           'For each scenario: (1) population and parameter, (2) H0 and H1 with symbols and direction, (3) one- vs two-sided and why, (4) Type I and Type II in context, (5) t-test vs ANOVA (two groups = t-test, three+ = ANOVA), (6) use AI to generate hypotheses and compare to yours.',
