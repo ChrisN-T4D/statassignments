@@ -53,17 +53,20 @@
 
   <h3>4.5.3 Using standard scores in SPSS</h3>
 
-  <p>SPSS doesn't have a built-in function to calculate z-scores in the Descriptives screen, but you can calculate them using the 'Compute' function. To create a new variable containing the z-scores for an existing variable:</p>
+  <p>SPSS will calculate z-scores for you inside the Descriptives dialog:</p>
 
   <ol>
-    <li>Go to 'Data' - 'Compute' in the menu bar</li>
-    <li>In the 'Compute' window, give your new variable a name (e.g., <code>z_score</code>)</li>
-    <li>In the formula box, enter the formula: <code>(variable_name - VMEAN(variable_name)) / VSTDEV(variable_name)</code>. Use VMEAN/VSTDEV for one column; MEAN(A,B) is mean of several variables per row.</li>
-    <li>Replace <code>variable_name</code> with the actual name of your variable</li>
-    <li>Click the green arrow to compute the new variable</li>
+    <li>Choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</strong></li>
+    <li>Move your variable into <strong>Variable(s)</strong></li>
+    <li>Tick <strong>Save standardized values as variables</strong> (just under the variable list)</li>
+    <li>Click <strong>OK</strong></li>
   </ol>
 
-  <p>Alternatively, many statistical packages (including SPSS) will automatically provide standardized values when you run certain analyses. For instance, when you run a regression analysis, SPSS will often provide both the raw regression coefficients and the standardized coefficients (which are calculated using z-scores).</p>
+  <p>Switch to Data View. SPSS has added a new column named <code>Z</code> followed by your variable name (for example <code>Zscore</code>). Each value is that case's z-score, computed from the sample mean and standard deviation. A z-score of 0 is exactly average, and about 95% of z-scores in roughly normal data fall between &minus;2 and +2.</p>
+
+  <p>You can also compute a z-score by hand with <strong>Transform &rarr; Compute Variable&hellip;</strong>. Type a name (for example <code>z_score</code>) in <strong>Target Variable</strong> and enter the formula in <strong>Numeric Expression</strong>, using the mean and standard deviation from your Descriptives table. For a variable with mean 17 and standard deviation 5, the expression is <code>(score - 17) / 5</code>. Click <strong>OK</strong>. Check a few rows by hand to make sure the answer matches.</p>
+
+  <p>Later, when you run a regression, SPSS also reports standardized coefficients, which are built from z-scores.</p>
 
   <h3>4.5.4 Standard scores and the normal distribution</h3>
 

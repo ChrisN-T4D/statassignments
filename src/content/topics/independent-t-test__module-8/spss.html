@@ -82,47 +82,31 @@
   </div>
 
   <div class="software-box">
-    <h3>Running Student's T-Test in SPSS</h3>
+    <h3>Running the Independent-Samples T-Test in SPSS</h3>
     <ol>
-      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
-      <li><strong>Dependent Variables:</strong> Select your outcome variable (e.g., exam score)</li>
-      <li><strong>Grouping Variable:</strong> Select your group variable (e.g., major)</li>
-      <li><strong>Tests:</strong> Check "Student's" (default)</li>
-      <li><strong>Additional Statistics:</strong>
-        <ul>
-          <li>Check "Mean difference" for effect</li>
-          <li>Check "Effect size" for Cohen's d</li>
-          <li>Check "Confidence interval" for 95% CI</li>
-          <li>Check "Descriptives" for group statistics</li>
-        </ul>
-      </li>
-      <li><strong>Assumption Checks:</strong>
-        <ul>
-          <li>Check "Normality" for Shapiro-Wilk test</li>
-          <li>Check "Equality of variances" for Levene's test</li>
-        </ul>
-      </li>
+      <li>Choose <strong>Analyze &rarr; Compare Means &rarr; Independent-Samples T Test&hellip;</strong> (newer versions: <em>Compare Means and Proportions</em>)</li>
+      <li><strong>Test Variable(s):</strong> move your outcome variable (e.g., exam score)</li>
+      <li><strong>Grouping Variable:</strong> move your group variable (e.g., major), then click <strong>Define Groups&hellip;</strong> and type the two codes (for example 1 and 2)</li>
+      <li>Click <strong>Options&hellip;</strong> to set the confidence level (95% by default)</li>
+      <li>In SPSS 27 and later, tick <strong>Estimate effect sizes</strong> in the main dialog to get Cohen's d. Click <strong>OK</strong></li>
     </ol>
 
     <h4>Interpreting Output:</h4>
-    <p><strong>Independent Samples T-Test Table:</strong></p>
+    <p><strong>Group Statistics table:</strong></p>
     <ul>
-      <li><strong>statistic:</strong> The t-value</li>
-      <li><strong>df:</strong> Degrees of freedom</li>
-      <li><strong>p:</strong> The p-value (significance)</li>
+      <li>N, Mean, Std. Deviation, and Std. Error Mean for each group (these go in your write-up)</li>
     </ul>
 
-    <p><strong>Descriptives Table:</strong></p>
+    <p><strong>Independent Samples Test table</strong> (two rows: <em>Equal variances assumed</em> and <em>Equal variances not assumed</em>):</p>
     <ul>
-      <li>Shows means, SDs, and Ns for each group</li>
+      <li><strong>Levene's Test for Equality of Variances (F and Sig.):</strong> tests H₀: variances are equal. If Sig. &gt; .05, read the <em>Equal variances assumed</em> row (Student's). If Sig. &lt; .05, read the <em>not assumed</em> row (Welch's)</li>
+      <li><strong>t:</strong> the t-value</li>
+      <li><strong>df:</strong> degrees of freedom</li>
+      <li><strong>Sig. (2-tailed):</strong> the p-value (report .000 as p &lt; .001)</li>
+      <li><strong>Mean Difference</strong>, <strong>Std. Error Difference</strong>, and the <strong>95% Confidence Interval of the Difference</strong></li>
     </ul>
 
-    <p><strong>Assumption Check - Levene's Test:</strong></p>
-    <ul>
-      <li>Tests H₀: variances are equal</li>
-      <li>If p > .05: variances are equal (assumption met)</li>
-      <li>If p < .05: variances differ (use Welch's test instead)</li>
-    </ul>
+    <p><strong>Independent Samples Effect Sizes table</strong> (SPSS 27+): Cohen's d and Hedges' correction with confidence intervals. In older versions, compute d = mean difference / pooled SD yourself.</p>
   </div>
 
   <h3>Assumptions</h3>

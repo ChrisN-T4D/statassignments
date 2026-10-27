@@ -6,16 +6,16 @@
   <p>
     One very important kind of data handling is being able to extract a particular subset of the data. For instance,
     you might be interested only in analysing data from one experimental condition, or you may want to look closely
-    at data from people over 50 years in age. Filters allow you to focus on specific observations without permanently
-    deleting or modifying your data.
+    at data from people over 50 years in age. In SPSS you do this with <strong>Data &rarr; Select Cases</strong>, which lets you focus on specific observations without permanently
+    deleting your data.
   </p>
 
   <div class="terminology-box">
     <h4>Terminology: Filters</h4>
     <ul>
       <li><strong>Filter</strong> – A logical expression that determines which rows to include in analysis</li>
-      <li><strong>Active filter</strong> – A filter that is currently applied (greyed-out rows are excluded)</li>
-      <li><strong>Filter column</strong> – The column showing checkmarks (✓) for included rows and grey for excluded rows</li>
+      <li><strong>Active filter</strong> – A filter that is currently applied (rows with a slash through the row number are excluded)</li>
+      <li><strong>Filter variable</strong> – The new column <code>filter_$</code> that SPSS adds (1 = selected, 0 = not selected). Unselected rows get a diagonal slash through the row number in Data View</li>
       <li><strong>Non-destructive</strong> – Filters hide rows temporarily; the original data remains intact</li>
     </ul>
   </div>
@@ -27,16 +27,21 @@
   </p>
 
   <ol>
-    <li>Click on <strong>Filters</strong> in the Data toolbar</li>
-    <li>In the Filter box, type a logical expression</li>
-    <li>Rows that don't meet the condition will be greyed out</li>
+    <li>Choose <strong>Data &rarr; Select Cases&hellip;</strong></li>
+    <li>Choose <strong>If condition is satisfied</strong> and click <strong>If&hellip;</strong></li>
+    <li>Type a logical expression in the box (see the logical-expressions chapter) and click <strong>Continue</strong></li>
+    <li>Leave <strong>Output</strong> on <strong>Filter out unselected cases</strong> and click <strong>OK</strong></li>
+    <li>Rows that don't meet the condition get a slash through their row number, and every later analysis ignores them</li>
   </ol>
-
+  <p>
+    <strong>To turn the filter off</strong>, return to <em>Data &rarr; Select Cases&hellip;</em> and choose <strong>All cases</strong>, then <strong>OK</strong>.
+    (Avoid the output option <em>Delete unselected cases</em>: it permanently removes rows.)
+  </p>
   <p>
     <strong>Example: Filter for one category</strong>
   </p>
 
-  <pre><code>speaker == 'makka-pakka'</code></pre>
+  <pre><code>speaker = 'makka-pakka'</code></pre>
 
   <p>
     This keeps only rows where the speaker variable equals "makka-pakka". All other rows are greyed out and
@@ -53,7 +58,7 @@
     <strong>Example: Filter for multiple values (OR)</strong>
   </p>
 
-  <pre><code>utterance == 'pip' or utterance == 'oo'</code></pre>
+  <pre><code>utterance = 'pip' OR utterance = 'oo'</code></pre>
 
   <p>
     This keeps rows where utterance is either "pip" or "oo".
@@ -63,7 +68,7 @@
     <strong>Example: Filter for a range (AND)</strong>
   </p>
 
-  <pre><code>Age >= 18 and Age <= 65</code></pre>
+  <pre><code>Age >= 18 AND Age <= 65</code></pre>
 
   <p>
     This keeps only rows for people aged 18 to 65.
@@ -73,7 +78,7 @@
     <strong>Example: Complex filter combining conditions</strong>
   </p>
 
-  <pre><code>(Age >= 18 and Age <= 65) or Status == "Student"</code></pre>
+  <pre><code>(Age >= 18 AND Age <= 65) OR Status = "Student"</code></pre>
 
   <p>
     This keeps adults aged 18-65 OR anyone with Status "Student" (regardless of age).
@@ -83,9 +88,9 @@
     <h4>Key Points: Working with Filters</h4>
     <ul>
       <li><strong>Non-destructive</strong> – Original data is never deleted; toggle filters on/off</li>
-      <li><strong>Visual feedback</strong> – Green checkmarks show included rows, grey shows excluded rows</li>
+      <li><strong>Visual feedback</strong> – A slash through the row number marks excluded rows, and the status bar shows <em>Filter On</em></li>
       <li><strong>Affects all analyses</strong> – When a filter is active, all statistical analyses use only the filtered data</li>
-      <li><strong>Multiple filters</strong> – You can create multiple filters and activate/deactivate them as needed</li>
+      <li><strong>One filter at a time</strong> – A new Select Cases replaces the previous one. Turn it off with <em>All cases</em> when finished</li>
       <li><strong>Check before reporting</strong> – Always verify which filters are active before finalizing results</li>
     </ul>
   </div>
@@ -114,7 +119,7 @@
   </p>
 
   <ul>
-    <li><strong>Name your filters</strong> – Use descriptive names like "Adults only" or "Exclude outliers"</li>
+    <li><strong>Rename the filter variable</strong> – Double-click <code>filter_$</code> in Variable View and give it a descriptive name such as <code>adults_only</code> (or use <em>Paste</em> and save the syntax)</li>
     <li><strong>Document the logic</strong> – Keep notes about why each filter was created</li>
     <li><strong>Deactivate when done</strong> – Turn off filters when you're finished with subgroup analyses</li>
     <li><strong>Check the N</strong> – Always note how many cases are included/excluded</li>
@@ -126,21 +131,15 @@
   <p>
     <strong>Exclude missing data for specific variables:</strong>
   </p>
-
-  <pre><code>NOT(ISNA(variable_name))</code></pre>
-
+  <pre><code>NOT(MISSING(variable_name))</code></pre>
   <p>
-    <strong>Keep only complete cases (no missing data on any variable):</strong>
+    <strong>Keep only complete cases (no missing data on any of three variables):</strong>
   </p>
-
-  <pre><code>NOT(ISNA(var1)) and NOT(ISNA(var2)) and NOT(ISNA(var3))</code></pre>
-
+  <pre><code>NOT(MISSING(var1)) AND NOT(MISSING(var2)) AND NOT(MISSING(var3))</code></pre>
   <p>
-    <strong>Exclude outliers based on z-scores:</strong>
+    <strong>Exclude outliers based on z-scores</strong> (first save z-scores with Descriptives &rarr; <em>Save standardized values as variables</em>, which makes <code>ZScore</code>):
   </p>
-
-  <pre><code>ABS(Z(Score)) < 3</code></pre>
-
+  <pre><code>ABS(ZScore) < 3</code></pre>
   <p>
     This keeps cases within 3 standard deviations of the mean.
   </p>

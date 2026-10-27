@@ -100,10 +100,11 @@
   <div class="SPSS-box">
     <h3>in SPSS</h3>
     <ol>
-      <li><strong>Analyses → Frequencies → One Sample Proportion Tests → N Outcomes</strong></li>
-      <li>Add your categorical variable</li>
-      <li>Check <strong>"Expected counts"</strong> to see E<sub>i</sub> values</li>
-      <li>To specify custom proportions: Expand <strong>"Expected Proportions"</strong> and enter ratios</li>
+      <li>Choose <strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; Chi-square&hellip;</strong></li>
+      <li>Move your categorical variable into <strong>Test Variable List</strong>. It must be numeric, so give a text variable numeric codes first (Transform &rarr; Automatic Recode)</li>
+      <li>Under <strong>Expected Values</strong>, choose <strong>All categories equal</strong>, or choose <strong>Values</strong> and type the expected proportion (or count) for each category in the order of the category codes, clicking <strong>Add</strong> after each</li>
+      <li>Click <strong>OK</strong>. The output lists Observed N, Expected N, and Residual for every category, then a Test Statistics table with <strong>Chi-Square</strong>, <strong>df</strong>, and <strong>Asymp. Sig.</strong></li>
+      <li>If your data are already counts (a table of totals), first use <strong>Data &rarr; Weight Cases</strong> and weight by the count variable</li>
     </ol>
   </div>
 

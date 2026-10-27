@@ -133,20 +133,19 @@
   <div class="SPSS-box">
     <h3>Checking Assumptions in SPSS</h3>
     <ol>
-      <li>Run your regression: <strong>Analyses → Regression → Linear Regression</strong></li>
-      <li>Under <strong>Assumption Checks</strong>:
+      <li>Run your regression: <strong>Analyze &rarr; Regression &rarr; Linear&hellip;</strong></li>
+      <li>Set up the variables as usual, then use these buttons:
         <ul>
-          <li>Check <strong>Q-Q plot of residuals</strong> (normality check)</li>
-          <li>Check <strong>Residual plots</strong> (linearity and homoscedasticity)</li>
-          <li>Check <strong>Cook's distance</strong> (influential observations)</li>
-          <li>Check <strong>Collinearity statistics</strong> (VIF for multicollinearity)</li>
+          <li><strong>Plots&hellip;</strong>: *ZRESID on Y and *ZPRED on X (residuals vs. fitted); tick <strong>Normal probability plot</strong> and <strong>Histogram</strong> (normality check)</li>
+          <li><strong>Save&hellip;</strong>: tick <strong>Cook's</strong> under Distances (influential observations); SPSS adds a <code>COO_1</code> column. Also tick <strong>Standardized</strong> residuals to find large residuals</li>
+          <li><strong>Statistics&hellip;</strong>: tick <strong>Collinearity diagnostics</strong> (VIF for multicollinearity)</li>
         </ul>
       </li>
       <li><strong>Interpreting plots:</strong>
         <ul>
-          <li><strong>Q-Q plot:</strong> Points should fall along the diagonal line</li>
-          <li><strong>Residuals vs. Fitted:</strong> Should show random scatter (no patterns)</li>
-          <li><strong>Scale-Location:</strong> Should show horizontal line (equal variance)</li>
+          <li><strong>Normal P-P plot:</strong> Points should fall along the diagonal line. (For a Q-Q plot, save the residuals and use Analyze &rarr; Descriptive Statistics &rarr; Q-Q Plots)</li>
+          <li><strong>Scatterplot of *ZRESID vs *ZPRED:</strong> Should show random scatter (no curve or funnel shape): this checks linearity and equal variance</li>
+          <li><strong>Cook's distance:</strong> Sort the <code>COO_1</code> column; values above about 1 (or clearly larger than the rest) deserve a look</li>
         </ul>
       </li>
     </ol>

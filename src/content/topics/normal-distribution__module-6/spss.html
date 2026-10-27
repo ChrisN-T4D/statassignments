@@ -179,14 +179,22 @@
   <h3>7.5.7 Working with the normal distribution in SPSS</h3>
 
   <p>
-    Statistical software like SPSS can:
+    SPSS has normal-distribution functions you can use in <strong>Transform &rarr; Compute Variable&hellip;</strong> (see the Function group <em>CDF &amp; Noncentral CDF</em>, <em>Inverse DF</em>, and <em>PDF</em>).
+    Open a data file with at least one row, name a target variable, and enter:
   </p>
-  <ul>
-    <li>Calculate probabilities for any normal distribution (e.g., P(X < 110) when X ~ N(100, 15))</li>
-    <li>Find z-scores and percentiles</li>
-    <li>Test whether sample data appears to come from a normal distribution</li>
-    <li>Create visual plots of normal distributions with different parameters</li>
-  </ul>
+  <table>
+    <thead><tr><th>You want</th><th>Expression</th><th>Example, X ~ N(100, 15)</th></tr></thead>
+    <tbody>
+      <tr><td>P(X &le; x)</td><td><code>CDF.NORMAL(x, mean, sd)</code></td><td><code>CDF.NORMAL(110, 100, 15)</code> = .7475</td></tr>
+      <tr><td>P(X &gt; x)</td><td><code>1 - CDF.NORMAL(x, mean, sd)</code></td><td><code>1 - CDF.NORMAL(115, 100, 15)</code> = .1587</td></tr>
+      <tr><td>Value at a percentile</td><td><code>IDF.NORMAL(p, mean, sd)</code></td><td><code>IDF.NORMAL(0.90, 100, 15)</code> = 119.2</td></tr>
+      <tr><td>z-score critical value</td><td><code>IDF.NORMAL(p, 0, 1)</code></td><td><code>IDF.NORMAL(0.975, 0, 1)</code> = 1.96</td></tr>
+      <tr><td>Random normal scores</td><td><code>RV.NORMAL(mean, sd)</code></td><td><code>RV.NORMAL(100, 15)</code></td></tr>
+    </tbody>
+  </table>
+  <p>
+    To get z-scores for a variable in your data, use Descriptives with <em>Save standardized values as variables</em> (Module 4). To test whether sample data look normal, use <strong>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</strong> with <em>Plots&hellip; &rarr; Normality plots with tests</em> (Shapiro-Wilk and a Q-Q plot).
+  </p>
 
   <p>
     Rather than memorizing normal distribution tables, modern practice relies on software to compute exact probabilities

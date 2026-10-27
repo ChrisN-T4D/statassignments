@@ -79,30 +79,19 @@
   <div class="software-box">
     <h3>Running Welch's T-Test in SPSS</h3>
     <ol>
-      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
-      <li><strong>Dependent Variables:</strong> Select your outcome variable</li>
-      <li><strong>Grouping Variable:</strong> Select your group variable</li>
-      <li><strong>Tests:</strong> Check "Welch's" (in addition to or instead of Student's)</li>
-      <li><strong>Additional Statistics:</strong>
-        <ul>
-          <li>Check "Mean difference"</li>
-          <li>Check "Effect size"</li>
-          <li>Check "Confidence interval"</li>
-          <li>Check "Descriptives"</li>
-        </ul>
-      </li>
-      <li><strong>Assumption Checks:</strong>
-        <ul>
-          <li>Check "Normality"</li>
-          <li>Check "Equality of variances" (to see if Welch's is needed)</li>
-        </ul>
-      </li>
+      <li>Choose <strong>Analyze &rarr; Compare Means &rarr; Independent-Samples T Test&hellip;</strong></li>
+      <li><strong>Test Variable(s):</strong> move your outcome variable</li>
+      <li><strong>Grouping Variable:</strong> move your group variable and click <strong>Define Groups&hellip;</strong> (enter the two group codes)</li>
+      <li>Click <strong>OK</strong>. SPSS always computes both versions in one table</li>
+      <li>In the <em>Independent Samples Test</em> table, <strong>Welch's t-test is the second row, <em>Equal variances not assumed</em></strong> (non-integer df). Student's is the first row</li>
+      <li>In SPSS 27 and later, tick <strong>Estimate effect sizes</strong> to get Cohen's d</li>
     </ol>
 
     <h4>Interpreting Levene's Test:</h4>
+    <p>Levene's Test appears in the same table (columns <em>F</em> and <em>Sig.</em>).</p>
     <ul>
-      <li>If p > .05: Equal variances (Student's okay, but Welch's still safe)</li>
-      <li>If p < .05: Unequal variances (definitely use Welch's!)</li>
+      <li>If Sig. &gt; .05: equal variances (Student's okay, but Welch's still safe)</li>
+      <li>If Sig. &lt; .05: unequal variances (definitely use the Welch row!)</li>
     </ul>
   </div>
 

@@ -58,12 +58,11 @@
   <div class="SPSS-box">
     <h3>Running Repeated Measures ANOVA in SPSS</h3>
     <ol>
-      <li><strong>Analyses → ANOVA → Repeated Measures ANOVA</strong></li>
-      <li>Create a <strong>Repeated Measures Factor</strong> (e.g., "Task") with 3 levels: Speech, Conceptual, Syntax</li>
-      <li>Move each variable to <strong>Repeated Measures Cells</strong></li>
-      <li>Under "Assumption Checks," check <strong>Sphericity tests</strong></li>
-      <li>Check <strong>Sphericity Corrections</strong>: Greenhouse-Geisser, Huynh-Feldt</li>
-      <li>Add post-hoc tests as needed</li>
+      <li>Choose <strong>Analyze &rarr; General Linear Model &rarr; Repeated Measures&hellip;</strong></li>
+      <li>Type a <strong>Within-Subject Factor Name</strong> (e.g., "Task") and <strong>Number of Levels</strong> (3: Speech, Conceptual, Syntax), click <strong>Add</strong>, then <strong>Define</strong></li>
+      <li>Move each variable (Speech, Conceptual, Syntax) into <strong>Within-Subjects Variables</strong>, in order</li>
+      <li>Click <strong>Options&hellip;</strong>: tick <strong>Descriptive statistics</strong> and <strong>Estimates of effect size</strong>. For pairwise comparisons, move the factor into <em>Display Means for</em>, tick <strong>Compare main effects</strong>, and choose <strong>Bonferroni</strong>. Click <strong>Continue</strong>, then <strong>OK</strong></li>
+      <li>Read <strong>Mauchly's Test of Sphericity</strong>. If Sig. &lt; .05, use the <strong>Greenhouse-Geisser</strong> (or Huynh-Feldt) row in <em>Tests of Within-Subjects Effects</em>; otherwise use the Sphericity Assumed row. Partial Eta Squared is in the same table</li>
     </ol>
   </div>
 
@@ -72,7 +71,7 @@
     <p><strong>Mauchly's W = 0.85, p = .72</strong> → Sphericity met</p>
     <p><strong>F(2, 10) = 6.93, p = .013, η² = 0.58</strong></p>
     <p><em>Interpretation:</em> Task type significantly affects performance. 58% of variance explained by task.</p>
-    <p><strong>Post-hoc (Holm):</strong> Speech > Syntax (p = .01), other comparisons ns</p>
+    <p><strong>Post-hoc (Bonferroni):</strong> Speech > Syntax (p = .01), other comparisons ns</p>
   </div>
 
   <div class="key-points-box">
@@ -88,6 +87,6 @@
   <div class="warning-box">
     <h3>Friedman Test (Non-Parametric Alternative)</h3>
     <p>If normality violated, use <strong>Friedman test</strong> (like Kruskal-Wallis for repeated measures)</p>
-    <p><strong>Analyses → ANOVA → Non-Parametric → Repeated Measures ANOVA</strong></p>
+    <p><strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; K Related Samples&hellip;</strong>: move the repeated variables into <strong>Test Variables</strong> and keep <strong>Friedman</strong> ticked. The output reports a χ² statistic, df, and Asymp. Sig.</p>
   </div>
 </section>

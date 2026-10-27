@@ -22,15 +22,14 @@
   </ul>
   <div class="SPSS-box">
     <h4>in SPSS</h4>
-    <p>Under "Assumption Checks," select <strong>Homogeneity tests</strong></p>
+    <p>In <strong>Analyze &rarr; Compare Means &rarr; One-Way ANOVA&hellip;</strong>, click <strong>Options&hellip;</strong> and tick <strong>Homogeneity of variance test</strong>. The <em>Test of Homogeneity of Variances</em> table gives Levene's statistic, df1, df2, and Sig. (use the row based on the mean).</p>
     <p><em>Example result:</em> F(2, 15) = 1.45, p = .27 → Assumption met</p>
   </div>
 
   <h4>If Violated → Use Welch's ANOVA</h4>
   <p>Welch's test does NOT assume equal variances (like Welch's t-test)</p>
   <div class="SPSS-box">
-    <p><strong>Analyses → ANOVA → One-Way ANOVA → Welch's</strong></p>
-    <p>Reports adjusted F-statistic with modified df</p>
+    <p>In <strong>Analyze &rarr; Compare Means &rarr; One-Way ANOVA&hellip; &rarr; Options&hellip;</strong>, tick <strong>Welch</strong> (and optionally <strong>Brown-Forsythe</strong>). The <em>Robust Tests of Equality of Means</em> table reports the adjusted F-statistic with modified df.</p>
   </div>
 
   <h3>2. Normality of Residuals</h3>
@@ -41,14 +40,14 @@
     <li><strong>Shapiro-Wilk test:</strong> p > .05 indicates normality</li>
   </ul>
   <div class="SPSS-box">
-    <p>Under "Assumption Checks," select <strong>Normality (Q-Q plot)</strong></p>
+    <p>One way: <strong>Analyze &rarr; General Linear Model &rarr; Univariate&hellip;</strong>, set up the model, click <strong>Save&hellip;</strong> and tick <strong>Unstandardized</strong> residuals (SPSS adds <code>RES_1</code> to your data). Then run <strong>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</strong> on <code>RES_1</code> with <strong>Plots&hellip; &rarr; Normality plots with tests</strong>. Read the <strong>Shapiro-Wilk</strong> row and the Normal Q-Q plot. A quicker check is to run Explore on the outcome with the group variable in the Factor List and look at each group.</p>
   </div>
 
   <h4>If Violated → Use Kruskal-Wallis Test</h4>
   <p><strong>Non-parametric alternative</strong> to one-way ANOVA (works on ranks)</p>
   <div class="SPSS-box">
-    <p><strong>Analyses → ANOVA → Non-Parametric → One-Way ANOVA (Kruskal-Wallis)</strong></p>
-    <p>Reports χ² statistic instead of F</p>
+    <p><strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; K Independent Samples&hellip;</strong>: move the outcome into <strong>Test Variable List</strong>, the grouping variable into <strong>Grouping Variable</strong>, click <strong>Define Range&hellip;</strong> (smallest and largest group code), and keep <strong>Kruskal-Wallis H</strong> ticked.</p>
+    <p>The Test Statistics table reports a χ² statistic (labeled Kruskal-Wallis H), df, and Asymp. Sig. instead of F</p>
   </div>
 
   <h3>3. Independence</h3>

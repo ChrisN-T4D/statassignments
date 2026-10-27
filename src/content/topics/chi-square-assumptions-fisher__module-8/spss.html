@@ -32,8 +32,8 @@
   <div class="example-box">
     <h4>Checking in SPSS:</h4>
     <ol>
-      <li>Run contingency table analysis</li>
-      <li>Check <strong>"Expected counts"</strong> under Cells</li>
+      <li>Run <strong>Analyze &rarr; Descriptive Statistics &rarr; Crosstabs&hellip;</strong></li>
+      <li>In <strong>Cells&hellip;</strong> tick <strong>Expected</strong> counts (the footnote under the Chi-Square Tests table also reports the number of cells with expected count below 5)</li>
       <li>Examine all E<sub>ij</sub> values</li>
       <li>If any are < 5, consider Fisher exact test</li>
     </ol>
@@ -116,11 +116,11 @@
   <div class="SPSS-box">
     <h3>in SPSS</h3>
     <ol>
-      <li><strong>Analyses → Frequencies → Contingency Tables → Independent Samples</strong></li>
-      <li>Set up your 2×2 table</li>
-      <li>Under <strong>Statistics</strong>, check <strong>"Fisher's exact test"</strong></li>
-      <li>SPSS shows both χ² and Fisher exact p-value</li>
-      <li>Use Fisher's p-value when expected frequencies are small</li>
+      <li>Choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Crosstabs&hellip;</strong> and set up your 2&times;2 table (one variable in Row(s), one in Column(s))</li>
+      <li>Click <strong>Statistics&hellip;</strong>, tick <strong>Chi-square</strong>, and click <strong>Continue</strong>; in <strong>Cells&hellip;</strong> tick <strong>Expected</strong></li>
+      <li>For a 2&times;2 table SPSS automatically adds <strong>Fisher's Exact Test</strong> to the <em>Chi-Square Tests</em> table (use the <strong>Exact Sig. (2-sided)</strong> value). There is no box to tick</li>
+      <li>The table shows Pearson Chi-Square, Continuity Correction, Likelihood Ratio, and Fisher's Exact Test side by side, with a footnote counting cells that have expected counts under 5</li>
+      <li>Use Fisher's p-value when expected frequencies are small. For tables larger than 2&times;2, the <strong>Exact&hellip;</strong> button (if your license includes it) gives an exact test</li>
     </ol>
   </div>
 

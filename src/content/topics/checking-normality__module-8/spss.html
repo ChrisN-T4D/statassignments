@@ -145,39 +145,32 @@
   <div class="software-box">
     <h3>Checking Normality in SPSS</h3>
 
-    <h4>For One-Sample T-Test:</h4>
+    <p>All three checks use the same procedure, <strong>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</strong>. In the dialog, click <strong>Plots&hellip;</strong> and tick <strong>Normality plots with tests</strong> (you can untick Stem-and-leaf and keep Histogram). The output adds a <em>Tests of Normality</em> table (read the <strong>Shapiro-Wilk</strong> row; the Kolmogorov-Smirnov row is less reliable) and a <strong>Normal Q-Q Plot</strong>.</p>
+
+    <h4>For a One-Sample T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → One Sample T-Test</li>
-      <li>Under "Assumption Checks", check "Normality"</li>
-      <li>SPSS will show Shapiro-Wilk test for your variable</li>
+      <li>Move your variable into <strong>Dependent List</strong></li>
+      <li>Tick Normality plots with tests, then <strong>OK</strong></li>
+      <li>Read Shapiro-Wilk for your variable and look at its Q-Q plot</li>
     </ol>
 
-    <h4>For Independent Samples T-Test:</h4>
+    <h4>For an Independent-Samples T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → Independent Samples T-Test</li>
-      <li>Under "Assumption Checks", check "Normality"</li>
-      <li>SPSS will show Shapiro-Wilk for EACH group separately</li>
+      <li>Move the outcome into <strong>Dependent List</strong> and the grouping variable into <strong>Factor List</strong></li>
+      <li>Tick Normality plots with tests, then <strong>OK</strong></li>
+      <li>SPSS shows Shapiro-Wilk and a Q-Q plot for EACH group separately</li>
       <li><strong>Important:</strong> Check normality for both groups!</li>
     </ol>
 
-    <h4>For Paired Samples T-Test:</h4>
+    <h4>For a Paired-Samples T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → Paired Samples T-Test</li>
-      <li>Under "Assumption Checks", check "Normality"</li>
-      <li>SPSS tests normality of the <strong>difference scores</strong></li>
-      <li><strong>Critical:</strong> Test DIFFERENCES, not original variables!</li>
+      <li>First create the difference scores: <strong>Transform &rarr; Compute Variable&hellip;</strong>, target <code>diff</code>, expression <code>post - pre</code> (your two variables)</li>
+      <li>Run Explore on <code>diff</code> with Normality plots with tests</li>
+      <li><strong>Critical:</strong> Test the DIFFERENCES, not the original variables!</li>
     </ol>
 
-    <h4>Creating QQ Plots in SPSS:</h4>
-    <p><strong>Note:</strong> QQ plots are not currently available directly in SPSS's t-test module. To create QQ plots:</p>
-    <ol>
-      <li>Analyses → Exploration → Descriptives</li>
-      <li>Move your variable(s) to Variables box</li>
-      <li>Under "Plots", check "Q-Q"</li>
-      <li>SPSS will display a Q-Q plot for each variable</li>
-    </ol>
-
-    <p><strong>For paired data:</strong> You must first create a difference variable, then make a QQ plot of that difference.</p>
+    <h4>Q-Q plots on their own:</h4>
+    <p>Use <strong>Analyze &rarr; Descriptive Statistics &rarr; Q-Q Plots&hellip;</strong>, move your variable(s) into <strong>Variables</strong>, keep <strong>Normal</strong> as the test distribution, and click <strong>OK</strong>. You get a Q-Q plot and a detrended version for each variable.</p>
   </div>
 
   <h3>What to Do When Normality is Violated</h3>

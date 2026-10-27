@@ -151,11 +151,12 @@
   <div class="SPSS-box">
     <h3>Running One-Way ANOVA in SPSS</h3>
     <ol>
-      <li><strong>Analyses → ANOVA → ANOVA</strong></li>
-      <li>Move <strong>mood.gain</strong> to "Dependent Variable"</li>
-      <li>Move <strong>drug</strong> to "Fixed Factors"</li>
-      <li>Under "Effect Size," check <strong>η² (eta-squared)</strong></li>
-      <li>Under "Assumption Checks," check <strong>Homogeneity tests</strong> and <strong>Normality (Q-Q plot)</strong></li>
+      <li>Choose <strong>Analyze &rarr; Compare Means &rarr; One-Way ANOVA&hellip;</strong></li>
+      <li>Move <strong>mood.gain</strong> into <strong>Dependent List</strong> and <strong>drug</strong> into <strong>Factor</strong> (numeric group codes, with value labels)</li>
+      <li>Click <strong>Options&hellip;</strong> and tick <strong>Descriptive</strong>, <strong>Homogeneity of variance test</strong>, and <strong>Welch</strong> (as a backup), then <strong>Continue</strong>. Click <strong>OK</strong></li>
+      <li>Read the <em>ANOVA</em> table: Between Groups and Within Groups rows with Sum of Squares, df, Mean Square, <strong>F</strong>, and <strong>Sig.</strong></li>
+      <li>For η² (eta-squared): <strong>Analyze &rarr; General Linear Model &rarr; Univariate&hellip;</strong>, drug into <strong>Fixed Factor(s)</strong>, mood.gain into <strong>Dependent Variable</strong>, <strong>Options&hellip; &rarr; Estimates of effect size</strong>. In a one-way design, <em>Partial Eta Squared</em> equals η². Or compute η² = SS<sub>between</sub> / SS<sub>total</sub> from the ANOVA table</li>
+      <li>For a Q-Q plot and normality test of the residuals, see the ANOVA assumptions chapter</li>
     </ol>
   </div>
 

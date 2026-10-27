@@ -5,7 +5,7 @@
 
   <p>
     A key concept in data transformations is the idea of a <strong>logical value</strong>. A logical value is an
-    assertion about whether something is true or false. in SPSS, there are two logical values: TRUE and FALSE.
+    assertion about whether something is true or false. SPSS evaluates a logical expression to either true or false. When you store the result in a variable with Compute Variable, true is saved as <strong>1</strong> and false as <strong>0</strong>.
   </p>
 
   <div class="terminology-box">
@@ -24,58 +24,58 @@
       </thead>
       <tbody>
         <tr>
-          <td>==</td>
+          <td>=  (or EQ)</td>
           <td>Equal to</td>
-          <td>2 + 2 == 4</td>
-          <td>TRUE</td>
+          <td>2 + 2 = 4</td>
+          <td>true (1)</td>
         </tr>
         <tr>
-          <td>!=</td>
+          <td>~=  (or &lt;&gt; or NE)</td>
           <td>Not equal to</td>
-          <td>2 + 2 != 5</td>
-          <td>TRUE</td>
+          <td>2 + 2 ~= 5</td>
+          <td>true (1)</td>
         </tr>
         <tr>
           <td>&lt;</td>
           <td>Less than</td>
           <td>2 &lt; 3</td>
-          <td>TRUE</td>
+          <td>true (1)</td>
         </tr>
         <tr>
           <td>&lt;=</td>
           <td>Less than or equal</td>
           <td>2 &lt;= 2</td>
-          <td>TRUE</td>
+          <td>true (1)</td>
         </tr>
         <tr>
           <td>&gt;</td>
           <td>Greater than</td>
           <td>3 &gt; 2</td>
-          <td>TRUE</td>
+          <td>true (1)</td>
         </tr>
         <tr>
           <td>&gt;=</td>
           <td>Greater than or equal</td>
           <td>3 &gt;= 3</td>
-          <td>TRUE</td>
+          <td>true (1)</td>
         </tr>
         <tr>
-          <td>and</td>
+          <td>AND  (or &amp;)</td>
           <td>Both conditions true</td>
-          <td>(2==2) and (3==3)</td>
-          <td>TRUE</td>
+          <td>(2=2) AND (3=3)</td>
+          <td>true (1)</td>
         </tr>
         <tr>
-          <td>or</td>
+          <td>OR  (or |)</td>
           <td>At least one condition true</td>
-          <td>(2==2) or (2==3)</td>
-          <td>TRUE</td>
+          <td>(2=2) OR (2=3)</td>
+          <td>true (1)</td>
         </tr>
         <tr>
-          <td>NOT()</td>
+          <td>NOT  (or ~)</td>
           <td>Negates the condition</td>
-          <td>NOT(2==3)</td>
-          <td>TRUE</td>
+          <td>NOT(2=3)</td>
+          <td>true (1)</td>
         </tr>
       </tbody>
     </table>
@@ -84,33 +84,31 @@
   <h3>6.2.1 Assessing mathematical truths</h3>
 
   <p>
-    You can use the equality operator <strong>==</strong> to force SPSS to make a "true or false" judgment.
-    For example, you can create a computed variable with the formula:
+    You can see how SPSS judges a statement by saving it in a computed variable. Choose <strong>Transform &rarr; Compute Variable&hellip;</strong>,
+    type <code>test</code> in <strong>Target Variable</strong>, and enter this in <strong>Numeric Expression</strong>:
   </p>
-
-  <pre><code>2 + 2 == 4</code></pre>
-
+  <pre><code>2 + 2 = 4</code></pre>
   <p>
-    This will create a column of TRUE values because 2 + 2 does indeed equal 4. If you try:
+    Click <strong>OK</strong>. The new column <code>test</code> is filled with <strong>1</strong> (true), because 2 + 2 does indeed equal 4. If you try:
   </p>
-
-  <pre><code>2 + 2 == 5</code></pre>
-
+  <pre><code>2 + 2 = 5</code></pre>
   <p>
-    You'll get a column of FALSE values because this statement is not true.
+    you get a column of <strong>0</strong> (false). Logical expressions are the same ones you type into <em>Select Cases &rarr; If</em> and
+    into the <em>If</em> button inside Compute Variable.
   </p>
 
   <div class="critical-points">
-    <h4>Critical Point: = vs. ==</h4>
+    <h4>Critical Point: = does two jobs in SPSS</h4>
     <p>
-      A common error when writing logical commands is confusing <strong>=</strong> with <strong>==</strong>:
+      Many programs use <strong>==</strong> to test equality. SPSS does not; typing <code>==</code> gives an error. In SPSS:
     </p>
     <ul>
-      <li><strong>=</strong> (single equals) – Assignment operator (not typically used in SPSS formulas)</li>
-      <li><strong>==</strong> (double equals) – Equality test operator (checks if two things are equal)</li>
+      <li>In a <strong>Compute Variable</strong> dialog, the target name and expression are in separate boxes, so no assignment symbol is needed.</li>
+      <li>In a condition (Select Cases &rarr; If, or the If button), a single <strong>=</strong> means "is equal to".</li>
+      <li>Use <strong>~=</strong> (or <strong>&lt;&gt;</strong>) for "not equal to".</li>
     </ul>
     <p>
-      Always use <strong>==</strong> when you want to test if two values are equal!
+      In pasted syntax you will see <code>COMPUTE test = (2 + 2 = 4).</code> The first <code>=</code> assigns; the second tests.
     </p>
   </div>
 
@@ -121,18 +119,18 @@
   </p>
 
   <ul>
-    <li><strong>and</strong> – Both conditions must be true</li>
-    <li><strong>or</strong> – At least one condition must be true</li>
-    <li><strong>NOT()</strong> – Reverses the truth value</li>
+    <li><strong>AND</strong> – Both conditions must be true</li>
+    <li><strong>OR</strong> – At least one condition must be true</li>
+    <li><strong>NOT</strong> – Reverses the truth value</li>
   </ul>
 
   <p>
     Examples:
   </p>
 
-  <pre><code>(Age >= 18) and (Age <= 65)  # TRUE for adults 18-65
-(Status == "Student") or (Status == "Faculty")  # TRUE for students or faculty
-NOT(Score < 50)  # TRUE for scores 50 or above</code></pre>
+  <pre><code>(Age >= 18) AND (Age <= 65)       /* true for adults 18-65 */
+(Status = "Student") OR (Status = "Faculty")   /* true for students or faculty */
+NOT(Score < 50)                    /* true for scores 50 or above */</code></pre>
 
   <h3>6.2.3 Applying logical operations to text</h3>
 
@@ -141,9 +139,9 @@ NOT(Score < 50)  # TRUE for scores 50 or above</code></pre>
   </p>
 
   <ul>
-    <li><code>"cat" == "cat"</code> is TRUE</li>
-    <li><code>"cat" == "CAT"</code> is FALSE (case-sensitive!)</li>
-    <li><code>" cat" == "cat"</code> is FALSE (extra space matters!)</li>
+    <li><code>"cat" = "cat"</code> is true</li>
+    <li><code>"cat" = "CAT"</code> is false (case-sensitive!)</li>
+    <li><code>" cat" = "cat"</code> is false (a space at the <em>start</em> matters; SPSS ignores spaces at the <em>end</em> of a string)</li>
   </ul>
 
   <div class="key-points">
@@ -151,7 +149,7 @@ NOT(Score < 50)  # TRUE for scores 50 or above</code></pre>
     <ul>
       <li><strong>Case matters</strong> – "Cat", "cat", and "CAT" are all different</li>
       <li><strong>Spacing matters</strong> – Extra spaces make strings different</li>
-      <li><strong>Alphabetical order</strong> – You can use &lt; and &gt; with text ("cat" &lt; "dog" is TRUE)</li>
+      <li><strong>Alphabetical order</strong> – You can use &lt; and &gt; with text ("cat" &lt; "dog" is true)</li>
       <li><strong>Uppercase before lowercase</strong> – All uppercase letters come before all lowercase in alphabetical ordering</li>
     </ul>
   </div>

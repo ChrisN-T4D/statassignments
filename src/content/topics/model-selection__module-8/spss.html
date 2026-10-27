@@ -144,29 +144,29 @@
     <h4>Method 1: Manual Comparison (AIC)</h4>
     <ol>
       <li>Run <strong>Linear Regression</strong> for each model</li>
-      <li>Under <strong>Model Fit</strong>, check <strong>AIC</strong></li>
-      <li>Compare AIC values across models</li>
+      <li>SPSS's Linear Regression does not print AIC. From each model's <em>ANOVA</em> table, take the Residual sum of squares (SS<sub>res</sub>) and compute <strong>AIC = n &times; ln(SS<sub>res</sub> / n) + 2k</strong>, where n is the number of cases and k is the number of estimated coefficients (predictors plus the constant)</li>
+      <li>Compare AIC values across models (only the differences matter)</li>
       <li>Choose model with lowest AIC (considering theory)</li>
     </ol>
 
-    <h4>Method 2: Hierarchical Regression (Model Builder)</h4>
+    <h4>Method 2: Hierarchical Regression (Blocks)</h4>
     <ol>
-      <li>Go to <strong>Analyses → Regression → Linear Regression</strong></li>
-      <li>Click <strong>Model Builder</strong></li>
-      <li><strong>Block 1:</strong> Add first set of predictors</li>
-      <li><strong>Block 2:</strong> Add second set of predictors</li>
-      <li>View <strong>Model Comparisons</strong> table for:
+      <li>Choose <strong>Analyze &rarr; Regression &rarr; Linear&hellip;</strong></li>
+      <li><strong>Block 1 of 1:</strong> move the first set of predictors into <strong>Independent(s)</strong></li>
+      <li>Click <strong>Next</strong> to open <strong>Block 2 of 2</strong> and add the second set of predictors</li>
+      <li>Click <strong>Statistics&hellip;</strong> and tick <strong>R squared change</strong>, then <strong>Continue</strong> and <strong>OK</strong></li>
+      <li>The <em>Model Summary</em> table has one row per block, with columns for:
         <ul>
-          <li>ΔR² between models</li>
-          <li>F-test comparing models</li>
-          <li>AIC for each model</li>
+          <li>R Square Change (ΔR²) between models</li>
+          <li>F Change, df1, df2, and Sig. F Change (the F-test comparing the models)</li>
+          <li>Adjusted R Square for each model</li>
         </ul>
       </li>
     </ol>
 
     <h4>Method 3: Stepwise (Advanced)</h4>
     <ol>
-      <li>Some statistical software offers automated stepwise selection</li>
+      <li>SPSS offers automated selection in the Linear Regression dialog (change <strong>Method</strong> from Enter to Stepwise, Forward, or Backward)</li>
       <li><strong>Warning:</strong> Automated selection should be used cautiously</li>
       <li>Theory-driven selection is generally preferred</li>
     </ol>

@@ -24,21 +24,25 @@
   <h3>5.3.1 Creating bar graphs in SPSS</h3>
 
   <p>
-    To create a bar graph in SPSS, first make sure your categorical variable is in the 'Variables' box under
-    'Exploration' → 'Descriptives'. If you want to display only specific categories, you can use the 'Filters'
-    function to include only those values you're interested in.
+    A bar graph of counts needs one categorical variable (for example <code>Group</code> from Module 3, with value labels).
+    Make sure its <strong>Measure</strong> is Nominal or Ordinal first.
   </p>
-
-  <p>
-    For example, if you want to create a bar graph showing data for only four specific teams, you would:
-  </p>
-
   <ol>
-    <li>Open the 'Filters' screen</li>
-    <li>Create a filter using the "==" operator to match specific values (e.g., <code>variable == 'Category1' or variable == 'Category2'</code>)</li>
-    <li>Click on the 'Bar plot' checkbox in the Plots options</li>
+    <li>Choose <strong>Graphs &rarr; Chart Builder&hellip;</strong></li>
+    <li>In the <strong>Gallery</strong> choose <strong>Bar</strong> and drag <em>Simple Bar</em> (the first picture) into the preview area</li>
+    <li>Drag your categorical variable onto the x-axis box. The y-axis defaults to <em>Count</em></li>
+    <li>Click <strong>OK</strong></li>
   </ol>
-
+  <p>
+    A quicker route is <strong>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</strong> with <strong>Charts&hellip; &rarr; Bar charts</strong>
+    (frequencies or percentages). To plot a mean for each group instead of a count, drag a Scale variable onto the y-axis in Chart Builder; the bar height becomes the mean of that variable for each category.
+  </p>
+  <p>
+    To show only some categories (for example four teams out of eighteen), use <strong>Data &rarr; Select Cases&hellip;</strong>, choose
+    <strong>If condition is satisfied</strong>, click <strong>If&hellip;</strong>, and enter something like <code>team = 1 OR team = 2 OR team = 3</code> (for a coded variable)
+    or <code>team = "Hawthorn"</code> (for a string variable). Then build the chart. Turn the selection off afterward with <em>Data &rarr; Select Cases &rarr; All cases</em>;
+    the filter chapter in this module explains why.
+  </p>
   <div class="critical-points">
     <h4>Critical Point: Bar Graphs vs. Histograms</h4>
     <p>
@@ -80,9 +84,9 @@
   <h3>5.3.2 Saving graphs</h3>
 
   <p>
-    Once you've created a bar graph (or any plot) in SPSS, you can save it by right-clicking on the plot image
-    and saving it to a file. SPSS allows you to save in formats such as 'eps', 'svg', or 'pdf'. These formats
-    all produce high-quality images that you can include in reports, presentations, or papers.
+    Charts appear in the Viewer along with your tables. To use one in a report, right-click it and choose <strong>Copy</strong>, then paste into Word or PowerPoint,
+    or right-click and choose <strong>Export&hellip;</strong> to save it as a PNG, JPEG, or PDF file. To restyle a chart (titles, axis labels, colors, bar order),
+    double-click it to open the <strong>Chart Editor</strong>. You can also export everything in the Viewer at once with <strong>File &rarr; Export&hellip;</strong>.
   </p>
 
   <div class="key-points">

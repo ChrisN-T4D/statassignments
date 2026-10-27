@@ -54,8 +54,8 @@
     <h4>Critical Point</h4>
     <p>
       In practice, when testing means with real data, you almost always use the t-distribution rather than the normal
-      distribution, because you rarely know the true population standard deviation. Software like SPSS automatically
-      uses t-tests for comparing means.
+      distribution, because you rarely know the true population standard deviation. SPSS's t-test procedures
+      (Analyze &rarr; Compare Means) use the t-distribution for you, and <code>CDF.T</code> and <code>IDF.T</code> in Compute Variable give t probabilities and critical values.
     </p>
   </div>
 
@@ -166,7 +166,7 @@
   </div>
 
   <p>
-    <strong>Practical note:</strong> Statistical software handles the details of these distributions automatically. When
+    <strong>Practical note:</strong> SPSS handles the details of these distributions automatically (and also offers CDF.T, CDF.CHISQ, CDF.F and the matching IDF functions in Compute Variable). When
     you run a t-test in SPSS, it uses the t-distribution with the appropriate degrees of freedom. When you run a chi-square
     test of independence, it uses the χ² distribution. Understanding what these distributions represent helps you interpret
     the output correctly, even if you don't calculate probabilities by hand.

@@ -194,18 +194,18 @@
   <h3>8.5.6 Confidence intervals in SPSS</h3>
 
   <p>
-    SPSS automatically calculates confidence intervals for many statistics. When you run descriptive statistics or
-    statistical tests, you can request CIs:
+    SPSS reports confidence intervals inside several procedures. The Descriptives dialog does <em>not</em> give a CI; use one of these:
   </p>
 
   <ul>
-    <li><strong>Descriptives:</strong> Check "Confidence interval" under "Statistics" to get CIs for means</li>
-    <li><strong>t-tests:</strong> SPSS reports CIs for mean differences</li>
-    <li><strong>Regression:</strong> CIs are provided for regression coefficients</li>
+    <li><strong>Explore:</strong> <em>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</em>. The Descriptives table includes <em>95% Confidence Interval for Mean</em> (lower and upper bound). Click <strong>Statistics&hellip;</strong> to change the level.</li>
+    <li><strong>One-Sample T Test:</strong> <em>Analyze &rarr; Compare Means &rarr; One-Sample T Test&hellip;</em>. The CI shown is for the difference from the test value; use <strong>Options&hellip;</strong> to set the confidence level.</li>
+    <li><strong>Independent / Paired Samples T Test:</strong> SPSS reports a CI for the mean difference.</li>
+    <li><strong>Regression:</strong> in <em>Statistics&hellip;</em> tick <strong>Confidence intervals</strong> to get CIs for the coefficients.</li>
   </ul>
 
   <p>
-    You can typically choose the confidence level (90%, 95%, or 99%). The default is usually 95%.
+    You can choose the confidence level (90%, 95%, or 99%); the default is 95%. To find a critical value yourself, use Compute Variable: <code>IDF.T(0.975, 24)</code> returns t* = 2.064 for a 95% CI with df = 24.
   </p>
 
   <h3>8.5.7 Using confidence intervals for inference</h3>

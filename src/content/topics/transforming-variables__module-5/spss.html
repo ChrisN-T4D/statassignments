@@ -24,71 +24,79 @@
   <p>
     To create a computed variable in SPSS:
   </p>
-
   <ol>
-    <li>Go to <strong>Data → Compute</strong></li>
-    <li>Name your new variable</li>
-    <li>Enter a formula in the formula box</li>
+    <li>Choose <strong>Transform &rarr; Compute Variable&hellip;</strong></li>
+    <li>Type a name for the new variable in <strong>Target Variable</strong> (letters, numbers, underscores; no spaces)</li>
+    <li>Enter a formula in <strong>Numeric Expression</strong></li>
+    <li>Click <strong>OK</strong>. The new column appears at the right end of Data View</li>
   </ol>
-
   <p>
     <strong>Example: Centering a Likert scale</strong><br>
-    If you have a 1-7 Likert scale and want to center it so the midpoint is 0:
+    If you have a 1-7 Likert scale and want to center it so the midpoint is 0, name the target <code>likert_centred</code> and enter:
   </p>
-
-  <pre><code>likert.raw - 4</code></pre>
-
+  <pre><code>likert_raw - 4</code></pre>
   <p>
-    This transforms the scale from 1-7 to -3 to +3, making the neutral point 0.
+    This transforms the scale from 1-7 to -3 to +3, making the neutral point 0. Remember to set the new variable's <strong>Measure</strong> and add a Label in Variable View.
   </p>
 
   <h3>6.3.2 Using the ABS() function for opinion strength</h3>
 
   <p>
     Sometimes you want to separate the <em>strength</em> of an opinion from its <em>direction</em>.
-    The <strong>ABS()</strong> function (absolute value) is perfect for this:
+    The <strong>ABS()</strong> function (absolute value) is perfect for this. With target <code>likert_strength</code>:
   </p>
-
-  <pre><code>ABS(likert.centred)</code></pre>
-
+  <pre><code>ABS(likert_centred)</code></pre>
   <p>
     This creates a variable showing how far from neutral each response is, regardless of positive or negative direction.
   </p>
 
-  <h3>6.3.3 Using IF() statements for conditional transformations</h3>
+  <h3>6.3.3 Conditional transformations</h3>
 
   <p>
-    The <strong>IF()</strong> function has three parts:
+    To compute a value only for the rows that meet a condition, click the <strong>If&hellip;</strong> button in the Compute Variable dialog,
+    choose <strong>Include if case satisfies condition</strong>, and type a logical expression. Rows that fail the condition are left <em>missing</em> in the new variable.
   </p>
-
-  <pre><code>IF(condition, value_if_true, value_if_false)</code></pre>
-
   <p>
-    <strong>Example: Creating a pass/fail variable</strong>
+    <strong>Example: Creating a pass/fail variable.</strong> Make a numeric variable <code>passed</code> in two steps.
   </p>
-
-  <pre><code>IF(Score >= 60, "Pass", "Fail")</code></pre>
+  <ol>
+    <li>Compute <code>passed</code> = <code>0</code> (for everyone).</li>
+    <li>Compute <code>passed</code> = <code>1</code> with <strong>If&hellip;</strong> set to <code>Score >= 60</code>. Click <strong>OK</strong> and confirm that you want to change the existing variable.</li>
+  </ol>
+  <p>
+    Then give <code>passed</code> value labels (0 = Fail, 1 = Pass) and set Measure to Nominal. A shortcut for yes/no variables is to compute the logical expression itself:
+    target <code>passed</code>, expression <code>Score >= 60</code>. This stores 1 for true and 0 for false.
+  </p>
 
   <div class="key-points">
-    <h4>Key Points: Nested IF Statements</h4>
-    <p>
-      You can nest IF statements to create multiple categories:
-    </p>
-    <pre><code>IF(Age >= 0 and Age <= 20, "Young",
-IF(Age >= 21 and Age <= 40, "Adult",
-IF(Age >= 41 and Age <= 60, "Older")))</code></pre>
-    <p>
-      <strong>Important:</strong> Count your parentheses! Each IF needs to close with a matching ).
-    </p>
+    <h4>Key Points: Conditional rules</h4>
+    <ul>
+      <li>The If dialog uses the same operators as Select Cases: <code>=</code>, <code>~=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>AND</code>, <code>OR</code>, <code>NOT</code>.</li>
+      <li>Rows that do not meet the condition keep their old value (if the variable already exists) or become missing (if it is new).</li>
+      <li>For more than two categories, use <strong>Recode</strong> (next section), which is easier to read than several stacked conditions.</li>
+    </ul>
   </div>
 
   <h3>6.3.4 Collapsing a variable into categories</h3>
 
   <p>
     Often you'll want to group continuous data into a smaller number of discrete categories. For example,
-    collapsing age into young/adult/older categories can make analysis and interpretation easier.
+    collapsing age into young/adult/older categories can make analysis and interpretation easier. In SPSS use
+    <strong>Transform &rarr; Recode into Different Variables&hellip;</strong>:
   </p>
-
+  <ol>
+    <li>Move <strong>Age</strong> into the box, type a name such as <code>age_group</code> under <strong>Output Variable</strong>, and click <strong>Change</strong></li>
+    <li>Click <strong>Old and New Values&hellip;</strong></li>
+    <li>Choose <strong>Range, LOWEST through value</strong>, type 20, and under <strong>New Value</strong> type 1, then <strong>Add</strong></li>
+    <li>Choose <strong>Range</strong>, type 21 through 40, new value 2, <strong>Add</strong></li>
+    <li>Choose <strong>Range, value through HIGHEST</strong>, type 41, new value 3, <strong>Add</strong></li>
+    <li>Click <strong>Continue</strong>, then <strong>OK</strong></li>
+    <li>In Variable View, give <code>age_group</code> value labels (1 = Young, 2 = Adult, 3 = Older) and set Measure to Ordinal</li>
+  </ol>
+  <p>
+    Always choose <strong>Recode into Different Variables</strong>, not <em>Into Same Variables</em>. The "Same" option overwrites your original data, and Undo is not always available later.
+    SPSS also has <strong>Transform &rarr; Visual Binning&hellip;</strong>, which draws a histogram so you can place the cut points by eye.
+  </p>
   <p>
     However, be cautious: collapsing continuous data into categories loses information. Only do this when
     the resulting categories are meaningful for your research question.
@@ -107,47 +115,19 @@ IF(Age >= 41 and Age <= 60, "Older")))</code></pre>
     </ul>
   </div>
 
-  <h3>6.3.5 Creating reusable transformations</h3>
+  <h3>6.3.5 Repeating a transformation on several variables</h3>
 
   <p>
-    When you need to apply the same transformation to multiple variables (e.g., multiple questionnaire items),
-    use <strong>Data → Transform</strong>:
+    When you need the same transformation for several variables (for example, many questionnaire items), you do not have to retype the dialog each time.
+    Build the first one with Compute Variable, but click <strong>Paste</strong> instead of OK. The Syntax Editor then holds a line such as:
   </p>
-
-  <ol>
-    <li>Click the variable you want to transform</li>
-    <li>Click <strong>Data → Transform</strong></li>
-    <li>Name your new variable and transformation</li>
-    <li>Use <strong>$source</strong> in your formula to refer to the original variable</li>
-  </ol>
-
+  <pre><code>COMPUTE item1_strength = ABS(item1 - 4).
+EXECUTE.</code></pre>
   <p>
-    Example formula:
+    Copy that line once for each variable, change the names, and choose <strong>Run &rarr; All</strong>. Pasting syntax is also the best way to keep a record of exactly which transformations you made.
   </p>
-
-  <pre><code>ABS($source - 4)</code></pre>
-
   <p>
-    This transformation can then be applied to other variables by selecting them and choosing your saved transformation
-    from the "using transform" dropdown.
-  </p>
-
-  <h3>6.3.6 Using Transform with conditional rules</h3>
-
-  <p>
-    The Transform interface also has an <strong>"Add condition" button (+)</strong> that lets you create multiple
-    conditional rules visually:
-  </p>
-
-  <ol>
-    <li>Click the <strong>+</strong> button next to the formula box</li>
-    <li>Add conditions like: <code>if $source <= 20 use "young"</code></li>
-    <li>Add another: <code>if $source <= 40 use "adult"</code></li>
-    <li>In the "else" box: <code>use "older"</code></li>
-  </ol>
-
-  <p>
-    This approach is often easier to read and maintain than nested IF statements.
+    Check every new variable with <strong>Descriptives</strong> (is the minimum and maximum what you expect?) and a quick Frequencies table for any recoded categories.
   </p>
 
   <div class="attribution">

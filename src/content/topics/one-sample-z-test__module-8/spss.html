@@ -117,4 +117,14 @@
       <li>Why we need the t-test for real data</li>
     </ul>
   </div>
+  <div class="SPSS-box">
+    <h3>In SPSS</h3>
+    <p>SPSS has no menu for a one-sample z-test (another reason it is rarely used). If σ is known, work it out with <strong>Transform &rarr; Compute Variable&hellip;</strong> in any data file that has at least one row:</p>
+    <ol>
+      <li>Target <code>z</code>, expression <code>(72.3 - 67.5) / (9.5 / SQRT(20))</code>. The result is 2.26</li>
+      <li>Target <code>p</code>, expression <code>2 * (1 - CDF.NORMAL(ABS(z), 0, 1))</code>. The result is .024 (two-tailed)</li>
+    </ol>
+    <p>When σ is unknown, use the one-sample t-test instead (Analyze &rarr; Compare Means &rarr; One-Sample T Test).</p>
+  </div>
+
 </section>

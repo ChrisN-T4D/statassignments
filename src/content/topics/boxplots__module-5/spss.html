@@ -28,10 +28,11 @@
   <h3>5.2.1 Creating boxplots in SPSS</h3>
 
   <p>
-    The easiest way to describe what a boxplot looks like is just to draw one. Click on the
-    'Box plot' checkbox in the Plots options and SPSS will draw the most basic boxplot possible. When you look at this plot, interpret it as follows:
+    The easiest way to describe what a boxplot looks like is just to draw one. Choose <strong>Graphs &rarr; Chart Builder&hellip;</strong>, pick
+    <strong>Boxplot</strong> in the Gallery, drag <em>Simple Boxplot</em> into the preview area, and drag your Scale variable onto the y-axis. (The x-axis stays empty for a single boxplot.)
+    Click <strong>OK</strong>. A boxplot also comes free with <strong>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</strong>: under <em>Display</em> choose
+    <em>Both</em> or <em>Plots</em>, and in <strong>Plots&hellip;</strong> tick <strong>Factor levels together</strong> under <em>Boxplots</em>. When you look at the plot, interpret it as follows:
   </p>
-
   <ul>
     <li>The <strong>thick line in the middle</strong> of the box is the median</li>
     <li>The <strong>box itself</strong> spans the range from the 25th percentile to the 75th percentile</li>
@@ -52,22 +53,17 @@
   <h3>5.2.2 Violin plots</h3>
 
   <p>
-    A variation on the traditional boxplot is the <strong>violin plot</strong>. Violin plots are similar to boxplots
-    except that they also show the kernel probability density of the data at different values.
-    Typically, violin plots will include a marker for the median of the data and a box indicating the
-    interquartile range, as in standard boxplots. in SPSS you can achieve this by checking both the 'Violin' and the 'Box plot' checkboxes.
-  </p>
-
-  <p>
-    You can also turn on the 'Data' checkbox to show the actual data points on the plot. However, this can make
-    the graph a bit too busy. Clarity is simplicity, so in practice it might be
-    better to just use a simple boxplot.
+    A variation on the traditional boxplot is the <strong>violin plot</strong>, which also shows the kernel density of the data at different values.
+    SPSS has no violin plot in its standard menus, so in this course you will use the simple boxplot together with a histogram when you want to see the shape of the data.
+    Seeing both the box (median and IQR) and the histogram (shape) gives you nearly all the information a violin plot would.
   </p>
 
   <h3>5.2.3 Drawing multiple boxplots</h3>
 
   <p>
-    One powerful feature of boxplots is the ability to draw multiple boxplots at once for different groups. This allows you to compare distributions across categories. To do this, move a grouping variable into the 'Split by' box in SPSS's Descriptives window.
+    One powerful feature of boxplots is the ability to draw multiple boxplots at once for different groups, so you can compare distributions across categories.
+    In Chart Builder, drag a categorical variable (such as <code>gender</code> or <code>Group</code>) onto the <strong>x-axis</strong> box as well as the Scale variable onto the y-axis.
+    In Explore, put the grouping variable in the <strong>Factor List</strong>. SPSS draws one box per group on the same scale.
   </p>
 
   <p>
@@ -82,7 +78,7 @@
 
   <p>
     Because the boxplot automatically separates out those observations that lie outside a certain
-    range, depicting them with a dot in SPSS, people often use them as an informal method
+    range, depicting them with a circle in SPSS (and an asterisk for extreme ones, more than 3 IQRs from the box), people often use them as an informal method
     for detecting <strong>outliers</strong>: observations that are "suspiciously" distant from the rest of the data.
   </p>
 
@@ -94,7 +90,7 @@
     <ul>
       <li><strong>Don't automatically delete outliers</strong> – They might represent real, important observations</li>
       <li><strong>Investigate the source</strong> – Check if it's a data entry error or a genuine extreme value</li>
-      <li><strong>Use filters to identify</strong> – in SPSS, create a filter to find observations beyond a threshold</li>
+      <li><strong>Find the cases</strong> – SPSS labels outlying points with their row number in the boxplot; look those rows up in Data View, or use <em>Data &rarr; Select Cases</em> to list cases beyond a threshold</li>
       <li><strong>Document your decision</strong> – Whether you keep or remove outliers, explain your reasoning</li>
     </ul>
     <p>

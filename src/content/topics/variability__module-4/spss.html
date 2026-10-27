@@ -25,7 +25,7 @@
 
   <h3>4.2.1 Range</h3>
 
-  <p>The <strong>range</strong> of a variable is very simple: it's the biggest value minus the smallest value. For the AFL winning margins data, the maximum value is 116, and the minimum value is 0. We can calculate these values in SPSS simply by adding them from the drop down list of statistics options in the 'Exploration' - 'Descriptives' analysis window. This gives us the following output:</p>
+  <p>The <strong>range</strong> of a variable is very simple: it's the biggest value minus the smallest value. For the AFL winning margins data, the maximum value is 116, and the minimum value is 0, so the range is 116 points. In SPSS, choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</strong>, move the variable into <strong>Variable(s)</strong>, and click <strong>Options&hellip;</strong>. Tick <strong>Range</strong>, <strong>Minimum</strong>, and <strong>Maximum</strong>, click <strong>Continue</strong>, then <strong>OK</strong>. This gives us the following output:</p>
 
   <table>
     <thead>
@@ -35,14 +35,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Minimum</td>
-        <td>0.000</td>
-      </tr>
-      <tr>
-        <td>Maximum</td>
-        <td>116.0</td>
-      </tr>
+      <tr><td>Range</td><td>116</td></tr>
+      <tr><td>Minimum</td><td>0</td></tr>
+      <tr><td>Maximum</td><td>116</td></tr>
     </tbody>
   </table>
 
@@ -58,28 +53,20 @@
 
   <p>Think of it like this: the 10th percentile of a data set is the smallest number <em>x</em> such that 10% of the data is less than <em>x</em>. In fact, we can be a bit more precise. Suppose we sorted the data from smallest to largest. Then the 10th percentile is the value that separates the bottom 10% of the data from the top 90% of the data. The median is the 50th percentile, since half of the data is smaller and half of the data is larger. Similarly, we can calculate 25th percentile (the <strong>lower quartile</strong>) and the 75th percentile (the <strong>upper quartile</strong>). The difference between the upper quartile and the lower quartile is the interquartile range.</p>
 
-  <p>Let's have a look at how to calculate the IQR in SPSS. In the Descriptives analysis window, select 'IQR' from the Statistics - Dispersion options. This should give us the following output:</p>
+  <p>Let's have a look at how to calculate the IQR in SPSS. There are two routes:</p>
 
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th>afl.margins</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>IQR</td>
-        <td>36.50</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li><strong>Explore:</strong> choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</strong>, move the variable into <strong>Dependent List</strong>, and click <strong>OK</strong>. The <em>Descriptives</em> table includes a row called <strong>Interquartile Range</strong>, along with the median, variance, standard deviation, skewness, and kurtosis.</li>
+    <li><strong>Frequencies:</strong> choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</strong>, click <strong>Statistics&hellip;</strong>, tick <strong>Quartiles</strong>, and read the 25th and 75th percentiles. The IQR is the 75th minus the 25th.</li>
+  </ul>
 
-  <p>While it's obvious how to interpret the range, it's a little less obvious how to interpret the IQR. The simplest way to think about it is like this: the interquartile range is the range spanned by the "middle half" of the data. That is, one quarter of the data is less than 19.00, one quarter of the data is greater than 55.50, and the remaining half of the data lies in between. The IQR is a bit more robust than the range. For example, if we go back to our toy example from the previous section, with one extremely large outlier...</p>
+  <p>Statistics programs use slightly different rules for placing a quartile between two data values, so the quartiles (and the IQR) that SPSS reports can differ a little from those in other software or in a textbook. Report what your software gives you and say which program you used.</p>
+
+  <p>While it's obvious how to interpret the range, it's a little less obvious how to interpret the IQR. The simplest way to think about it is like this: the interquartile range is the range spanned by the "middle half" of the data. That is, one quarter of the data is less than the lower quartile, one quarter of the data is greater than the upper quartile, and the remaining half of the data lies in between. The IQR is a bit more robust than the range. For example, if we go back to our toy example from the previous section, with one extremely large outlier...</p>
 
   <p class="code-block">-100, 2, 3, 4, 5, 6, 7, 8, 9, 10</p>
 
-  <p>...the range is very large (110), but if we calculate the IQR (e.g., using the IQR function in SPSS) we see that it's much smaller, only 5. So, the IQR is much more robust to outliers than the range is.</p>
+  <p>...the range is very large (110), but if we calculate the IQR (for example with Explore) we see that it's much smaller, only about 5. So, the IQR is much more robust to outliers than the range is.</p>
 
   <h3>4.2.3 Mean absolute deviation</h3>
 
@@ -124,11 +111,9 @@
     </tbody>
   </table>
 
-  <p>Notice that these deviations can be positive or negative. If we take the mean of these deviations, we'll get zero. This should not be surprising: the big positive deviations and the big negative deviations cancel each other out. So we need a way to get rid of the signs. One way to do this is to take the <em>absolute value</em>. So instead of calculating the difference <em>X<sub>i</sub></em> - <em>X̄</em>, we calculate the absolute value of the difference, |<em>X<sub>i</sub></em> - <em>X̄</em>|. The mean of these absolute deviations is the <strong>mean absolute deviation</strong>. We can use SPSS to calculate the mean absolute deviation from the mean, although SPSS does not provide this statistic by default. However, we can use the Rj Editor (see section 3.2) to run an R command to get SPSS to calculate it for us:</p>
+  <p>Notice that these deviations can be positive or negative. If we take the mean of these deviations, we'll get zero. This should not be surprising: the big positive deviations and the big negative deviations cancel each other out. So we need a way to get rid of the signs. One way to do this is to take the <em>absolute value</em>. So instead of calculating the difference <em>X<sub>i</sub></em> - <em>X̄</em>, we calculate the absolute value of the difference, |<em>X<sub>i</sub></em> - <em>X̄</em>|. The mean of these absolute deviations is the <strong>mean absolute deviation</strong>. SPSS does not have a menu option for the mean absolute deviation, but you can build it in two steps. First, choose <strong>Transform &rarr; Compute Variable&hellip;</strong>, type <code>absdev</code> in <strong>Target Variable</strong>, and enter <code>ABS(afl.margins - 35.30)</code> in <strong>Numeric Expression</strong> (35.30 is the mean from section 4.1.2). Click <strong>OK</strong>. Second, run <strong>Descriptives</strong> on <code>absdev</code>; its mean is the mean absolute deviation.</p>
 
-  <p class="code-block">mean(abs(data[['afl.margins']] - mean(data[['afl.margins']])), na.rm=TRUE)</p>
-
-  <p>The output is 24.5. This means that, on average, the difference between an AFL winning margin and the mean winning margin is 24.5 points. The MAD is a bit like the IQR in that it's measuring the middle spread of the data. It has some theoretical advantages over the IQR, but it's not used as frequently in practice.</p>
+  <p>For the first five games in the table above, the absolute deviations are 20.7, 4.3, 20.7, 27.3, and 3.3, so their mean is 76.3 / 5 = 15.26. This means that, on average, a winning margin in those five games sits about 15.3 points from the mean of 35.3. The MAD is a bit like the IQR in that it measures typical spread. It has some theoretical advantages, but it's not used as frequently in practice.</p>
 
   <h3>4.2.4 Variance</h3>
 
@@ -177,6 +162,23 @@
 
   <p>Notice that the variance is actually quite large relative to the original data. That's because we squared all the deviations. So what we should do is take the square root of the variance. When we do that, we get a quantity called the <strong>standard deviation</strong>, which we'll talk about in the next section. But first, let's look at the variance a bit more carefully.</p>
 
+  <div class="formula-box">
+    <p><strong>σ² = Σ(<em>X<sub>i</sub></em> - μ)² / N</strong> (population variance)</p>
+  </div>
+
+  <div class="terminology-box">
+    <h4>How to read the variance and SD formulas</h4>
+    <p>Read s² = Σ(Xᵢ − X̄)² / (n − 1) from the inside out:</p>
+    <ol>
+      <li><strong>Xᵢ − X̄</strong>: how far one score is from the sample mean (its deviation).</li>
+      <li><strong>(Xᵢ − X̄)²</strong>: square it so negative and positive deviations do not cancel.</li>
+      <li><strong>Σ</strong>: add up the squared deviations for all scores (the sum of squares).</li>
+      <li><strong>/ (n − 1)</strong>: divide by one less than the number of scores. The result, s², is the sample variance.</li>
+      <li><strong>s = √s²</strong>: take the square root to get back to the original units. s is the sample standard deviation.</li>
+    </ol>
+    <p>The population versions use Greek letters: σ² for the variance and σ for the standard deviation, with μ in place of X̄ and N in place of n − 1. SPSS always reports the sample versions (n − 1), labelled <strong>Variance</strong> and <strong>Std. Deviation</strong>.</p>
+  </div>
+
   <p>In practice, there's actually a slight complication. What I outlined above is how to calculate the variance when you have data from a <em>population</em>. However, when you have data from a <em>sample</em> (which is almost always the case in practice), there's a subtle bias in the calculation. To remove this bias, we divide by <em>n</em> - 1 rather than <em>n</em>. So the formula for the <strong>sample variance</strong> is:</p>
 
   <div class="formula-box">
@@ -185,7 +187,7 @@
 
   <p>This is the formula that SPSS uses when you ask it to calculate the variance. The logic behind the <em>n</em> - 1 correction is a bit technical, but the basic idea is that when you calculate the sample variance, you're using the sample mean <em>X̄</em> as an estimate of the population mean. Because the sample mean is calculated from the same data as the variance, it tends to be "too close" to the data. To compensate for this, we divide by <em>n</em> - 1 instead of <em>n</em>.</p>
 
-  <p>Now let's try to get SPSS to calculate the variance. In the 'Descriptives' window, select the 'Variance' check box from the 'Statistics - Dispersion' options. This gives us the following output:</p>
+  <p>Now let's try to get SPSS to calculate the variance. In the Descriptives dialog, click <strong>Options&hellip;</strong> and tick <strong>Variance</strong>. This gives us the following output:</p>
 
   <table>
     <thead>
@@ -212,7 +214,7 @@
     <p><strong>s = √[Σ(<em>X<sub>i</sub></em> - <em>X̄</em>)² / (<em>n</em> - 1)]</strong></p>
   </div>
 
-  <p>The standard deviation has the same units as the data, so it's easier to interpret than the variance. For the AFL margins data, SPSS tells us that the standard deviation is 26.0 points. In the 'Descriptives' window in SPSS, we can check the 'Std. deviation' option under 'Statistics - Dispersion'. This will give us the following output:</p>
+  <p>The standard deviation has the same units as the data, so it's easier to interpret than the variance. For the AFL margins data, SPSS tells us that the standard deviation is 26.0 points. In the Descriptives dialog, <strong>Std. deviation</strong> is ticked by default under <strong>Options&hellip;</strong>. This will give us the following output:</p>
 
   <table>
     <thead>
@@ -245,8 +247,8 @@
 
   <ul>
     <li><strong>Range</strong>. Gives you the full spread of the data, and it's very easy to calculate. But it's extremely sensitive to outliers.</li>
-    <li><strong>IQR</strong>. Tells you where the "middle half" of the data sits. It's robust to outliers, and intuitively meaningful. It pairs well with the median. Unfortunately, SPSS doesn't provide any tools to calculate the interquartile range directly (though you can calculate it manually by looking at the 25th and 75th percentiles).</li>
-    <li><strong>MAD</strong>. Measures the average deviation from a reference point (usually the mean or median). It's robust to outliers if you use the median as the reference point. Like the IQR, SPSS doesn't calculate this directly.</li>
+    <li><strong>IQR</strong>. Tells you where the "middle half" of the data sits. It's robust to outliers, and intuitively meaningful. It pairs well with the median. In SPSS, get it from <strong>Explore</strong>, or subtract the quartiles from <strong>Frequencies</strong>.</li>
+    <li><strong>MAD</strong>. Measures the average deviation from a reference point (usually the mean or median). It's robust to outliers if you use the median as the reference point. SPSS does not offer it in a menu; use Compute Variable as shown above.</li>
     <li><strong>Variance</strong>. Measures the average squared deviation from the mean. It's closely linked to many important statistical tools. However, it's not robust to outliers, and it's in squared units, which is a bit weird.</li>
     <li><strong>Standard deviation</strong>. The square root of the variance. It's in the same units as the data, which makes it easier to interpret. If the data are roughly normally distributed, the 68-95-99.7 rule provides a nice way to interpret it. It's the measure that statisticians use most often.</li>
   </ul>

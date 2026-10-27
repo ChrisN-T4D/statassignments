@@ -110,23 +110,50 @@
     X̄ = (1/N) Σ Xᵢ
   </p>
 
+  <div class="terminology-box">
+    <h4>How to read the formula, one symbol at a time</h4>
+    <p>X̄ = (1/N) Σ Xᵢ is just "add them up, then divide by how many there are." Read it from the inside out:</p>
+    <ol>
+      <li><strong>Xᵢ</strong> is "the i-th score." For the five AFL games, X₁ = 56, X₂ = 31, and so on.</li>
+      <li><strong>Σ Xᵢ</strong> means "add up all the Xᵢ values": 56 + 31 + 56 + 8 + 32 = 183.</li>
+      <li><strong>1/N</strong> means "divide by N, the number of scores": 183 / 5 = 36.6.</li>
+      <li><strong>X̄</strong> (read "X-bar") is the answer: the sample mean.</li>
+    </ol>
+    <p>Symbols you will meet again and again. Latin letters describe a <em>sample</em>; Greek letters describe a <em>population</em>:</p>
+    <table>
+      <thead><tr><th>Symbol</th><th>How to say it</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td>n or N</td><td>"n" / "capital N"</td><td>number of scores. Many books use <em>n</em> for a sample and <em>N</em> for a population (this chapter uses N loosely); say which you mean.</td></tr>
+        <tr><td>X̄</td><td>"X-bar"</td><td>mean of a sample</td></tr>
+        <tr><td>μ</td><td>"mu"</td><td>mean of a population</td></tr>
+        <tr><td>s</td><td>"s"</td><td>standard deviation of a sample</td></tr>
+        <tr><td>σ</td><td>"sigma" (lowercase)</td><td>standard deviation of a population</td></tr>
+        <tr><td>Σ</td><td>"sigma" (capital)</td><td>"add up everything that follows." Not the same as lowercase σ.</td></tr>
+      </tbody>
+    </table>
+    <p>In SPSS output, X̄ appears as <strong>Mean</strong>, s as <strong>Std. Deviation</strong>, and n as <strong>N</strong>.</p>
+  </div>
+
   <h4>4.1.2 Calculating the mean in SPSS</h4>
 
   <p>
-    When the number of observations starts to become large it's much easier to do these sorts of calculations using
-    a computer. To calculate the mean using all the AFL margins data in SPSS:
+    When the number of observations starts to become large it's much easier to let the computer do the arithmetic.
+    To calculate the mean of the AFL margins variable (<code>afl.margins</code>) in SPSS:
   </p>
 
   <ol>
-    <li>Click on the <strong>Exploration</strong> button and then click <strong>Descriptives</strong></li>
-    <li>Highlight the <strong>afl.margins</strong> variable and click the right arrow to move it into the Variables box</li>
-    <li>As soon as you do that a Table appears on the right showing descriptive statistics</li>
+    <li>Choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</strong></li>
+    <li>Select <strong>afl.margins</strong> in the left list and click the blue arrow to move it into the <strong>Variable(s)</strong> box</li>
+    <li>Click <strong>OK</strong></li>
   </ol>
 
   <p>
-    The mean value for the afl.margins variable is <strong>35.30</strong>. Other information presented includes the
-    total number of observations (N=176), the number of missing values (none), and the Median, Minimum and Maximum
-    values for the variable.
+    The Viewer shows a <em>Descriptive Statistics</em> table. The mean is <strong>35.30</strong>, based on N = 176 games.
+    By default the table also shows the minimum, maximum, and standard deviation.
+  </p>
+  <p>
+    You can follow along with any Scale variable in the Tools datasets; the numbers quoted here come from the AFL data.
+    The Descriptives dialog reports the mean but not the median or mode. For those, use <strong>Frequencies</strong> (next section).
   </p>
 
   <h3>4.1.3 The median</h3>
@@ -154,7 +181,7 @@
 
   <p>
     and there are two middle numbers, 31 and 32. The median is defined as the average of those two numbers, which is
-    31.5. in SPSS the Median value provided for the afl.margins variable is 30.50.
+    31.5. Frequencies in SPSS gives a median of 30.50 for the afl.margins variable. To get it, choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</strong>, move afl.margins into <strong>Variable(s)</strong>, click <strong>Statistics&hellip;</strong>, tick <strong>Median</strong> (and <strong>Mean</strong> and <strong>Mode</strong> while you are there), click <strong>Continue</strong>, and untick <strong>Display frequency tables</strong> before you click <strong>OK</strong>. A table with a row for every distinct margin is not useful here.
   </p>
 
   <h3>4.1.4 Mean or median? What's the difference?</h3>
@@ -289,9 +316,9 @@
 
   <p>
     The <strong>mode</strong> of a sample is very simple. It is the value that occurs most frequently. For the AFL
-    winning margins data, we can use SPSS to produce a frequency table. Under 'Exploration' - 'Descriptives' click
-    the small check box labelled 'Frequency tables' and then look for the most common value. You can also check the
-    'Mode' checkbox in the Statistics section to have SPSS calculate it directly.
+    winning margins data, use <strong>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</strong>, click <strong>Statistics&hellip;</strong>,
+    and tick <strong>Mode</strong>. If you leave <strong>Display frequency tables</strong> ticked, SPSS also lists every value with its count, so you can
+    see which value is most common. If several values tie, SPSS reports only the smallest and adds a footnote saying that multiple modes exist.
   </p>
 
   <p>

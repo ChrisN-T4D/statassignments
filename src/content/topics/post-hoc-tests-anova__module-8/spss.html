@@ -51,10 +51,11 @@
   <div class="SPSS-box">
     <h3>Post-Hoc Tests in SPSS</h3>
     <ol>
-      <li>In ANOVA analysis, go to <strong>Post Hoc Tests</strong></li>
-      <li>Move <strong>drug</strong> to the right panel</li>
-      <li>Under "Correction," select <strong>Holm</strong> (recommended)</li>
-      <li>Results show all pairwise comparisons with adjusted p-values</li>
+      <li>Choose <strong>Analyze &rarr; Compare Means &rarr; One-Way ANOVA&hellip;</strong> and set up the Dependent List and Factor</li>
+      <li>Click <strong>Post Hoc&hellip;</strong></li>
+      <li>Under <em>Equal Variances Assumed</em> tick <strong>Tukey</strong> (all pairwise comparisons) or <strong>Bonferroni</strong>; under <em>Equal Variances Not Assumed</em> tick <strong>Games-Howell</strong> if Levene's test was significant</li>
+      <li>Click <strong>Continue</strong> and <strong>OK</strong>. The <em>Multiple Comparisons</em> table shows every pair with Mean Difference, Std. Error, <strong>Sig.</strong> (already adjusted), and a 95% CI</li>
+      <li>SPSS's One-Way dialog does not offer the Holm correction. Tukey or Bonferroni is the usual substitute, and the logic is the same: adjusted p-values for unplanned comparisons</li>
     </ol>
   </div>
 
@@ -69,7 +70,7 @@
     <h3>Key Points</h3>
     <ul>
       <li><strong>Always use correction</strong> for post-hoc (unplanned) comparisons</li>
-      <li><strong>Holm correction</strong> is the go-to method (more powerful than Bonferroni)</li>
+      <li><strong>Holm correction</strong> is more powerful than Bonferroni; in SPSS use <strong>Tukey</strong> (equal variances) or <strong>Games-Howell</strong> (unequal variances)</li>
       <li>Report adjusted p-values in results</li>
       <li>Don't run post-hoc if ANOVA is non-significant (protects against fishing)</li>
     </ul>

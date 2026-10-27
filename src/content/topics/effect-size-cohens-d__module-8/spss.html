@@ -146,30 +146,31 @@
 
   <div class="software-box">
     <h3>Getting Cohen's d in SPSS</h3>
-    <p>SPSS automatically calculates effect sizes when you check the appropriate option:</p>
+    <p>In <strong>SPSS 27 and later</strong>, each t-test dialog has an <strong>Estimate effect sizes</strong> checkbox. Tick it and SPSS adds an <em>Effects Sizes</em> table with Cohen's d, Hedges' correction, and 95% confidence intervals:</p>
 
     <h4>One-Sample T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → One Sample T-Test</li>
-      <li>Check "Effect size" under Additional Statistics</li>
-      <li>SPSS reports Cohen's d</li>
+      <li>Analyze &rarr; Compare Means &rarr; One-Sample T Test&hellip;</li>
+      <li>Tick <strong>Estimate effect sizes</strong></li>
+      <li>The standardizer is the sample standard deviation</li>
     </ol>
 
-    <h4>Independent Samples T-Test:</h4>
+    <h4>Independent-Samples T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → Independent Samples T-Test</li>
-      <li>Check "Effect size" under Additional Statistics</li>
-      <li>SPSS reports Cohen's d (based on pooled SD)</li>
+      <li>Analyze &rarr; Compare Means &rarr; Independent-Samples T Test&hellip;</li>
+      <li>Tick <strong>Estimate effect sizes</strong></li>
+      <li>The standardizer is the pooled standard deviation</li>
     </ol>
 
-    <h4>Paired Samples T-Test:</h4>
+    <h4>Paired-Samples T-Test:</h4>
     <ol>
-      <li>Analyses → T-Tests → Paired Samples T-Test</li>
-      <li>Check "Effect size" under Additional Statistics</li>
-      <li>SPSS reports Cohen's d (based on SD of differences)</li>
+      <li>Analyze &rarr; Compare Means &rarr; Paired-Samples T Test&hellip;</li>
+      <li>Tick <strong>Estimate effect sizes</strong></li>
+      <li>The table gives d based on the standard deviation of the differences</li>
     </ol>
 
-    <p><strong>Note:</strong> SPSS may also show "Hedges' g", which is a bias-corrected version of Cohen's d. For large samples, d and g are nearly identical.</p>
+    <p><strong>If your version has no such checkbox</strong>, compute it by hand from the output: d = Mean Difference / SD (one-sample: the Std. Deviation in One-Sample Statistics; independent: the pooled SD; paired: the Std. Deviation of the paired differences).</p>
+    <p><strong>Note:</strong> SPSS also shows "Hedges' correction", a bias-corrected version of Cohen's d. For large samples, d and Hedges' g are nearly identical.</p>
   </div>
 
   <h3>Cohen's d vs. Other Effect Sizes</h3>

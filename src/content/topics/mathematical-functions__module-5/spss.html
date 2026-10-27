@@ -4,7 +4,7 @@
   <h2 id="mathematical-functions-title">6.4 Mathematical Functions and Operations</h2>
 
   <p>
-    SPSS has a range of mathematical functions built into it that are useful for data transformations.
+    SPSS has a range of mathematical functions built into it that you can use in <strong>Transform &rarr; Compute Variable&hellip;</strong> (find them in the <em>Function group</em> list, under Arithmetic). Type the expression in <strong>Numeric Expression</strong> and name the new variable in <strong>Target Variable</strong>.
     While most of the book focuses on functions strictly necessary for specific analyses, logarithms and
     exponentials deserve special attention because they appear everywhere in statistics.
   </p>
@@ -35,8 +35,8 @@
         </tr>
         <tr>
           <td>Logarithm (base 10)</td>
-          <td>LOG10(x)</td>
-          <td>LOG10(1000)</td>
+          <td>LG10(x)</td>
+          <td>LG10(1000)</td>
           <td>3</td>
         </tr>
         <tr>
@@ -78,7 +78,7 @@
   </p>
 
   <p>
-    The <strong>LOG10()</strong> function in SPSS calculates logarithms in base 10.
+    The <strong>LG10()</strong> function in SPSS calculates logarithms in base 10. Use it in <strong>Transform &rarr; Compute Variable&hellip;</strong>, for example <code>LG10(income)</code>. (SPSS calls it LG10, not LOG10.)
   </p>
 
   <h3>6.4.2 Natural logarithms and Euler's number</h3>
@@ -104,7 +104,7 @@
     in SPSS, use <strong>EXP()</strong>:
   </p>
 
-  <pre><code>EXP(2)  # Calculates e^2 ≈ 7.389</code></pre>
+  <pre><code>EXP(2)   /* e^2 = 7.389 */</code></pre>
 
   <p>
     Because e appears so frequently in statistical formulas, the exponential function (and its inverse, the natural
@@ -127,9 +127,9 @@
       Different bases serve different purposes:
     </p>
     <ul>
-      <li><strong>LOG10()</strong> – Easy to interpret (each unit = 10-fold change), good for presentation</li>
+      <li><strong>LG10()</strong> – Easy to interpret (each unit = 10-fold change), good for presentation</li>
       <li><strong>LN()</strong> – Natural logarithm, preferred in statistical theory and many formulas</li>
-      <li><strong>Base 2</strong> – Common in computer science and genetics (doubling/halving)</li>
+      <li><strong>Base 2</strong> – Common in computer science and genetics (doubling/halving). SPSS has no base-2 function; use <code>LN(x) / LN(2)</code></li>
     </ul>
     <p>
       In practice, the choice often doesn't matter much for analysis, but <strong>LN()</strong> is most common in statistics.

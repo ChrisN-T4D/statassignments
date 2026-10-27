@@ -203,6 +203,7 @@
     <p>p = .046</p>
 
     <p><strong>Conclusion:</strong> Stress scores significantly decreased from pre (M = 26.7) to post (M = 23.8), Wilcoxon W = 2, p = .046.</p>
+    <p><em>In SPSS:</em> the Test Statistics table shows <strong>Z</strong> and <strong>Asymp. Sig. (2-tailed)</strong>, not W. The Ranks table gives the Sum of Ranks for negative and positive ranks; W is the smaller of the two, so you can still report W as computed by hand. With very small samples, click <strong>Exact&hellip;</strong> in the dialog (if available) for an exact p-value.</p>
   </div>
 
   <div class="software-box">
@@ -210,34 +211,31 @@
 
     <h4>Mann-Whitney U Test:</h4>
     <ol>
-      <li><strong>Analyses → T-Tests → Independent Samples T-Test</strong></li>
-      <li>Set up dependent and grouping variables as usual</li>
-      <li>Under "Tests", check <strong>"Mann-Whitney U"</strong></li>
-      <li>SPSS will run both Student's t-test and Mann-Whitney side-by-side</li>
+      <li>Choose <strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; 2 Independent Samples&hellip;</strong></li>
+      <li>Move the outcome into <strong>Test Variable List</strong> and the grouping variable into <strong>Grouping Variable</strong>, then click <strong>Define Groups&hellip;</strong> and enter the two codes</li>
+      <li>Keep <strong>Mann-Whitney U</strong> ticked under <em>Test Type</em> and click <strong>OK</strong></li>
       <li>Output shows:
         <ul>
-          <li><strong>U:</strong> Mann-Whitney U statistic</li>
-          <li><strong>W:</strong> Wilcoxon rank-sum (equivalent to U)</li>
-          <li><strong>p:</strong> Significance level</li>
+          <li><strong>Ranks:</strong> N, Mean Rank, and Sum of Ranks for each group</li>
+          <li><strong>Test Statistics:</strong> <strong>Mann-Whitney U</strong>, <strong>Wilcoxon W</strong> (equivalent), <strong>Z</strong>, and <strong>Asymp. Sig. (2-tailed)</strong> (an exact significance is printed when the sample is small)</li>
         </ul>
       </li>
     </ol>
 
     <h4>Wilcoxon Signed-Rank Test:</h4>
     <ol>
-      <li><strong>Analyses → T-Tests → Paired Samples T-Test</strong></li>
-      <li>Set up paired variables as usual</li>
-      <li>Under "Tests", check <strong>"Wilcoxon rank"</strong></li>
-      <li>SPSS will run both paired t-test and Wilcoxon side-by-side</li>
+      <li>Choose <strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; 2 Related Samples&hellip;</strong></li>
+      <li>Move the two measurements into <strong>Test Pairs</strong> as a pair</li>
+      <li>Keep <strong>Wilcoxon</strong> ticked under <em>Test Type</em> and click <strong>OK</strong></li>
       <li>Output shows:
         <ul>
-          <li><strong>W:</strong> Wilcoxon signed-rank statistic</li>
-          <li><strong>p:</strong> Significance level</li>
+          <li><strong>Ranks:</strong> counts of negative, positive, and tied differences, with mean ranks</li>
+          <li><strong>Test Statistics:</strong> <strong>Z</strong> (SPSS reports Z, not W) and <strong>Asymp. Sig. (2-tailed)</strong></li>
         </ul>
       </li>
     </ol>
 
-    <p><strong>Note:</strong> SPSS doesn't have a built-in one-sample Wilcoxon signed-rank test, but you can create a difference variable (score - hypothesized value) and test if its median = 0 using the paired test.</p>
+    <p><strong>Note:</strong> For a one-sample version, create a difference variable (score minus the hypothesized value) with Compute Variable and test whether it differs from 0 using <strong>Analyze &rarr; Nonparametric Tests &rarr; One Sample&hellip;</strong> (Customize analysis &rarr; Compare median to hypothesized, Wilcoxon signed-rank) on the original variable, or by pairing the variable with a constant column.</p>
   </div>
 
   <h3>Interpreting Results: Parametric vs. Nonparametric</h3>

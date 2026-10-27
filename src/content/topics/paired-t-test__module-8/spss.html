@@ -110,49 +110,20 @@
   <div class="software-box">
     <h3>Running Paired-Samples T-Test in SPSS</h3>
     <ol>
-      <li><strong>Analyses → T-Tests → Paired Samples T-Test</strong></li>
-      <li><strong>Paired Variables:</strong>
-        <ul>
-          <li>Move both variables into the "Paired Variables" box</li>
-          <li>They should appear as a pair (e.g., "Pre-test - Post-test")</li>
-        </ul>
-      </li>
-      <li><strong>Tests:</strong>
-        <ul>
-          <li>"Student's t" is checked by default</li>
-          <li>Can also check "Wilcoxon rank" for nonparametric alternative</li>
-        </ul>
-      </li>
-      <li><strong>Hypothesis:</strong>
-        <ul>
-          <li>Measure 1 ≠ Measure 2 (two-tailed, default)</li>
-          <li>Measure 1 > Measure 2 (one-tailed)</li>
-          <li>Measure 1 < Measure 2 (one-tailed)</li>
-        </ul>
-      </li>
-      <li><strong>Additional Statistics:</strong>
-        <ul>
-          <li>Check "Mean difference" (shows D̄)</li>
-          <li>Check "SE difference" (shows SE of difference)</li>
-          <li>Check "Effect size" (Cohen's d for differences)</li>
-          <li>Check "Confidence interval"</li>
-          <li>Check "Descriptives" (means for both measurements)</li>
-        </ul>
-      </li>
-      <li><strong>Assumption Checks:</strong>
-        <ul>
-          <li>Check "Normality" to test if <em>difference scores</em> are normal</li>
-        </ul>
-      </li>
+      <li>Choose <strong>Analyze &rarr; Compare Means &rarr; Paired-Samples T Test&hellip;</strong></li>
+      <li><strong>Paired Variables:</strong> click into <em>Variable 1</em> and <em>Variable 2</em> (or select two variables and click the arrow) so they appear as a pair (e.g., "Pre-test - Post-test"). SPSS computes Variable 1 minus Variable 2</li>
+      <li>Click <strong>Options&hellip;</strong> to set the confidence level (95% by default)</li>
+      <li>In SPSS 27 and later, tick <strong>Estimate effect sizes</strong> (Cohen's d for the differences)</li>
+      <li>To check normality of the <em>difference scores</em>, use Transform &rarr; Compute Variable to make <code>diff = pre - post</code>, then Explore on <code>diff</code> with Normality plots with tests</li>
+      <li>For the nonparametric alternative use <strong>Analyze &rarr; Nonparametric Tests &rarr; Legacy Dialogs &rarr; 2 Related Samples&hellip;</strong> with <strong>Wilcoxon</strong> ticked</li>
     </ol>
 
     <h4>Interpreting Output:</h4>
     <ul>
-      <li><strong>statistic:</strong> The t-value</li>
-      <li><strong>df:</strong> N - 1 (number of pairs minus 1)</li>
-      <li><strong>p:</strong> Significance level</li>
-      <li><strong>Mean difference:</strong> D̄ (average change)</li>
-      <li><strong>Effect size:</strong> Cohen's d calculated on difference scores</li>
+      <li><strong>Paired Samples Statistics:</strong> Mean, N, SD, and SE for each measurement</li>
+      <li><strong>Paired Samples Correlations:</strong> how strongly the two measurements are related</li>
+      <li><strong>Paired Samples Test:</strong> <strong>Mean</strong> (D̄, average difference), Std. Deviation and Std. Error Mean of the differences, the 95% CI of the difference, <strong>t</strong>, <strong>df</strong> (number of pairs minus 1), and <strong>Sig. (2-tailed)</strong></li>
+      <li><strong>Effect size:</strong> Cohen's d calculated on difference scores (SPSS 27+)</li>
     </ul>
   </div>
 

@@ -48,10 +48,23 @@
   <h3>5.1.1 Creating histograms in SPSS</h3>
 
   <p>
-    Drawing a histogram in SPSS is straightforward. Open up the 'Plots' options
-    under 'Exploration' → 'Descriptives' and click the 'Histogram' checkbox. SPSS
-    defaults to labeling the y-axis as 'density' and the x-axis with the variable name. The bins
-    are selected automatically.
+    There are two quick routes in SPSS. Both use the data you already know from Module 4 (for example <code>bmi</code> in bmi_and_exercise.csv).
+  </p>
+  <p>
+    <strong>Chart Builder (the main tool for all graphs).</strong> Choose <strong>Graphs &rarr; Chart Builder&hellip;</strong>. If SPSS warns you to check
+    measurement levels, click <strong>OK</strong> (this is why Module 3 had you set Measure correctly). In the <strong>Gallery</strong> tab choose
+    <strong>Histogram</strong>, then drag the first picture (<em>Simple Histogram</em>) into the preview area. Drag <strong>bmi</strong> from the variable list
+    onto the x-axis box, and click <strong>OK</strong>. The y-axis is labeled <em>Frequency</em> (the count in each bin), and SPSS picks the bins automatically.
+    The Viewer also shows the mean, standard deviation, and N beside the chart.
+  </p>
+  <p>
+    <strong>Frequencies.</strong> Choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</strong>, move the variable into
+    <strong>Variable(s)</strong>, click <strong>Charts&hellip;</strong>, choose <strong>Histograms</strong> (optionally <em>Show normal curve on histogram</em>),
+    click <strong>Continue</strong>, and untick <strong>Display frequency tables</strong>. The <strong>Explore</strong> dialog (Plots&hellip; &rarr; Histogram) works too.
+  </p>
+  <p>
+    To change the number of bins, double-click the chart in the Viewer to open the <strong>Chart Editor</strong>, double-click a bar, and use the
+    <em>Binning</em> tab to set the interval width or the number of intervals.
   </p>
 
   <p>
@@ -63,13 +76,12 @@
   <h3>5.1.2 Density plots</h3>
 
   <p>
-    One additional feature that SPSS provides is the ability to plot a 'Density' curve. You
-    can do this by clicking the 'Density' checkbox under the 'Plots' options. A density plot visualizes the distribution
-    of data over a continuous interval or time period. This chart is a variation of a histogram that
-    uses <strong>kernel smoothing</strong> to plot values, allowing for smoother distributions by smoothing out
-    the noise.
+    A <strong>density plot</strong> visualizes the distribution of data as a smooth curve rather than as bars. It is a variation of a histogram that
+    uses <strong>kernel smoothing</strong>, which smooths out the noise. SPSS does not draw a kernel density curve from a simple menu choice.
+    The closest built-in option is to overlay a <strong>normal curve</strong> on the histogram (tick <em>Display normal curve</em> in the
+    Chart Builder's <em>Element Properties</em> panel, or <em>Show normal curve on histogram</em> in Frequencies). That curve is the shape the data would
+    have if they were perfectly normal, so comparing it with the bars is a quick informal check of normality.
   </p>
-
   <div class="critical-points">
     <h4>Critical Point: Histograms vs. Density Plots</h4>
     <p>
