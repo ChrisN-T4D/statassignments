@@ -11,7 +11,7 @@ Updated 2026-10-26. Tracked on the dashboard (card c700a4ca6).
 - Click-to-expand rows are keyboard operable (`role="button"`, Enter/Space, `aria-expanded`); modals have `role="dialog"`; icon-only buttons and unlabeled form controls have `aria-label`.
 
 ## Not done
-- Modals do not trap focus or close on Escape.
+- Modals (5) now trap focus, close on Escape and return focus (`v-dialog-focus`, src/lib/dialogFocus.js); not yet tested in a browser.
 - Captions and transcripts: no videos yet. Every video needs both before it ships (see `public/videos/README.md`).
 - Downloadable PDFs and docx files: use real headings, alt text, and a set document language; export tagged PDFs.
 - UDL: offer more than one way to engage with each module (read, worked example, interactive lesson, software practice); say so on the module page.
