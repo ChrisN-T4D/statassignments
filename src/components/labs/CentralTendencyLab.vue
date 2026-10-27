@@ -170,11 +170,17 @@
         </div>
       </div>
 
-      <div v-if="histBins.length" class="histogram" aria-label="Score histogram">
+      <div v-if="histBins.length" class="histogram" role="group" aria-label="Score histogram">
+        <ul class="sr-only">
+          <li v-for="(bin, i) in histBins" :key="'sr-' + i">
+            {{ bin.bin_start.toFixed(1) }} to {{ bin.bin_end.toFixed(1) }}: {{ bin.count }}
+          </li>
+        </ul>
         <div
           v-for="(bin, i) in histBins"
           :key="i"
           class="hist-col"
+          aria-hidden="true"
           :title="`${bin.bin_start.toFixed(1)}–${bin.bin_end.toFixed(1)}: ${bin.count}`"
         >
           <div class="hist-bar-wrap">

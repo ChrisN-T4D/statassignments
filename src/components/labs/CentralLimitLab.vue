@@ -151,9 +151,14 @@
         </div>
       </div>
 
-      <div v-if="histBins.length" class="histogram" aria-label="Histogram of sample means">
+      <div v-if="histBins.length" class="histogram" role="group" aria-label="Histogram of sample means">
         <h3>Sampling distribution of means</h3>
-        <div class="hist-bars">
+        <ul class="sr-only">
+          <li v-for="(bin, i) in histBins" :key="'sr-' + i">
+            {{ Number(bin.bin_start).toFixed(1) }} to {{ Number(bin.bin_end).toFixed(1) }}: {{ bin.count }}
+          </li>
+        </ul>
+        <div class="hist-bars" aria-hidden="true">
           <div
             v-for="(bin, i) in histBins"
             :key="'bin-' + i"

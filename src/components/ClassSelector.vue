@@ -14,7 +14,7 @@
         <span class="class-name">{{ selectedClass.short_name }}</span>
       </span>
       <span v-else class="placeholder">Select Class</span>
-      <svg class="chevron" :class="{ open: isOpen }" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="chevron" aria-hidden="true" :class="{ open: isOpen }" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
     </button>
@@ -37,7 +37,7 @@
             <span class="class-name">{{ getClassDisplayName(cls) }}</span>
             <span class="class-description">{{ cls.description }}</span>
           </div>
-          <svg v-if="selectedClassId === cls.id" class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg v-if="selectedClassId === cls.id" class="check-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </button>

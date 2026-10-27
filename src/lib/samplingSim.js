@@ -854,3 +854,14 @@ export function xbarStripDots(means, popMean, lo, hi, width = 360, height = 48) 
     muX,
   }))
 }
+
+/** Plain-text summary of a list of numbers, for screen readers. */
+export function describeValues(values, label = 'values') {
+  const v = (values || []).filter((x) => Number.isFinite(x))
+  if (!v.length) return `No ${label} yet.`
+  const n = v.length
+  const m = v.reduce((a, b) => a + b, 0) / n
+  const sd = n > 1 ? Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1)) : 0
+  const r = (x) => (Math.round(x * 100) / 100).toString()
+  return `${n} ${label}, mean ${r(m)}, standard deviation ${r(sd)}, from ${r(Math.min(...v))} to ${r(Math.max(...v))}.`
+}

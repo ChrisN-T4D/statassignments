@@ -72,7 +72,7 @@
       </p>
       <div class="hist-wrap">
         <div class="hist-title">Individual scores (everyone on roster)</div>
-        <svg class="hist-svg" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
+        <svg class="hist-svg" role="img" :aria-label="'Histogram of individual scores. ' + describeValues(people.map((p) => p.score), 'scores')" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
           <rect
             v-for="(bin, i) in histPopulation"
             :key="'pop' + i"
@@ -182,7 +182,7 @@
       <div class="hist-compare">
         <div class="hist-panel">
           <div class="hist-title">{{ SAMPLING_PLAN_META[planA.method].shortTitle }} (Plan A)</div>
-          <svg class="hist-svg" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
+          <svg class="hist-svg" role="img" :aria-label="'Histogram of Plan A scores. ' + describeValues(planA.pooledScores, 'scores')" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
             <rect
               v-for="(bin, i) in histPlanA"
               :key="'ha' + i"
@@ -198,7 +198,7 @@
         </div>
         <div v-if="planB.method !== planA.method || planB.pooledScores.length" class="hist-panel">
           <div class="hist-title">{{ SAMPLING_PLAN_META[planB.method].shortTitle }} (Plan B)</div>
-          <svg class="hist-svg" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
+          <svg class="hist-svg" role="img" :aria-label="'Histogram of Plan B scores. ' + describeValues(planB.pooledScores, 'scores')" :viewBox="'0 0 ' + histW + ' ' + histH" xmlns="http://www.w3.org/2000/svg">
             <rect
               v-for="(bin, i) in histPlanB"
               :key="'hb' + i"
@@ -222,6 +222,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import {
   SAMPLING_PLAN_META,
   buildCompareHistograms,
+  describeValues,
   buildRosterHeatmapBins,
   clusterKForSample,
   isListWalkMethod,

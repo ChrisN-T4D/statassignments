@@ -1,7 +1,7 @@
 <template>
   <div class="strip-wrap">
     <div class="strip-title">{{ title }} — each dot is one x̄</div>
-    <svg class="strip-svg" :viewBox="'0 0 ' + width + ' ' + height" xmlns="http://www.w3.org/2000/svg">
+    <svg class="strip-svg" role="img" :aria-label="summary" :viewBox="'0 0 ' + width + ' ' + height" xmlns="http://www.w3.org/2000/svg">
       <line :x1="muX" :x2="muX" y1="4" :y2="height - 4" class="mu-line" />
       <text :x="muX + 3" y="12" class="mu-label">μ</text>
       <circle
@@ -18,7 +18,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { xbarStripDots } from '../../lib/samplingSim.js'
+import { describeValues, xbarStripDots } from '../../lib/samplingSim.js'
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -32,6 +32,10 @@ const props = defineProps({
 
 const dots = computed(() =>
   xbarStripDots(props.means, props.popMean, props.lo, props.hi, props.width, props.height)
+)
+
+const summary = computed(
+  () => `${props.title}, sample means. ${describeValues(props.means, 'sample means')} Population mean ${Math.round(props.popMean * 100) / 100}.`
 )
 
 const muX = computed(() => {
