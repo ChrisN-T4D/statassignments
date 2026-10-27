@@ -58,6 +58,36 @@
         </div>
       </section>
 
+      <!-- Ways to learn (UDL) -->
+      <section id="ways-to-learn" class="faq-section">
+        <h2>Ways to Learn Here</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h4>More than one way to take in an idea</h4>
+            <p>
+              Each topic has a written chapter, worked examples with the numbers shown, and step-by-step software
+              lessons. You can start with whichever suits you and come back to the others.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>More than one way to show what you know</h4>
+            <p>
+              Practice mixes multiple choice, fill-in, matching, and calculation questions, and software practice
+              asks you to run the analysis yourself. You get feedback after each attempt and can try again.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Ways to stay engaged</h4>
+            <p>
+              Work at your own pace; the platform tracks mastery per objective and points you to what to review.
+              Choose the software you will use (SPSS, jamovi, R, Excel, or Stata) and switch between light and dark
+              themes. If something is hard to use or read, tell us through
+              <router-link to="/report-issue">Report an issue</router-link>.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- Credits and licensing -->
       <section id="credits" class="faq-section">
         <h2>Credits and Licensing</h2>
