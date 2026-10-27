@@ -21,6 +21,6 @@ Last updated 2026-10-26. Public summary: About page, "Credits and Licensing". Ro
 
 ## Open items
 
-- Confirm who holds copyright on original material and fill in `NOTICE`.
+- Source text: copyright stays with the named authors (confirmed by Chris 2026-10-26). Still to confirm: who holds copyright on material written only for this course (Module 0, interface guides, practice questions, sample data).
 - Check whether the SPSS/R/Excel/Stata adaptation notes should also name the exact Navarro/Foxcroft edition and chapter.
 - Check `public/` images and data files for sources (not audited).
