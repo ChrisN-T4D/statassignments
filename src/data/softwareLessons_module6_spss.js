@@ -51,37 +51,37 @@ const normalProbabilityPhases = {
   weDo: {
     type: 'guided_practice',
     title: 'Guided: areas under the IQ curve',
-    scenario: 'IQ: &mu; = 100, &sigma; = 15. Compute each in SPSS with Compute Variable.',
+    scenario: 'IQ: μ = 100, σ = 15. Compute each in SPSS with Compute Variable.',
     steps: [
       {
-        instruction: 'P(X &le; 85)? Build CDF.NORMAL(85, 100, 15).',
-        hint: 'Answer &asymp; 0.159. Compare with the 68% rule: 85 is z = &minus;1.',
-        checkpoint: '&asymp;16% of scores at or below 85.'
+        instruction: 'P(X ≤ 85)? Build CDF.NORMAL(85, 100, 15).',
+        hint: 'Answer ≈ 0.159. Compare with the 68% rule: 85 is z = −1.',
+        checkpoint: '≈16% of scores at or below 85.'
       },
       {
-        instruction: 'P(X &gt; 130)? Remember: 1 &minus; CDF.',
-        hint: '1 &minus; CDF.NORMAL(130, 100, 15) &asymp; 1 &minus; 0.977 = 0.023.',
-        checkpoint: '&asymp;2.3% above 130 — matches the 95% rule.'
+        instruction: 'P(X > 130)? Remember: 1 − CDF.',
+        hint: '1 − CDF.NORMAL(130, 100, 15) ≈ 1 − 0.977 = 0.023.',
+        checkpoint: '≈2.3% above 130 — matches the 95% rule.'
       },
       {
-        instruction: 'P(85 &le; X &le; 115)? Difference of two CDFs.',
-        hint: 'CDF.NORMAL(115,...) &minus; CDF.NORMAL(85,...) &asymp; 0.841 &minus; 0.159.',
-        checkpoint: '&asymp;0.682 — the 68% rule.'
+        instruction: 'P(85 ≤ X ≤ 115)? Difference of two CDFs.',
+        hint: 'CDF.NORMAL(115,...) − CDF.NORMAL(85,...) ≈ 0.841 − 0.159.',
+        checkpoint: '≈0.682 — the 68% rule.'
       }
     ],
     assessment: {
       type: 'multiple_choice',
-      question: 'Which SPSS expression gives P(X &gt; 120) for &mu; = 100, &sigma; = 15?',
+      question: 'Which SPSS expression gives P(X > 120) for μ = 100, σ = 15?',
       options: [
         'CDF.NORMAL(120, 100, 15)',
-        '1 &minus; CDF.NORMAL(120, 100, 15)',
+        '1 − CDF.NORMAL(120, 100, 15)',
         'IDF.NORMAL(120, 100, 15)',
         'CDF.NORMAL(100, 120, 15)'
       ],
       correctAnswer: 1,
       feedback: {
         correct: 'Correct — CDF gives the area below, so subtract from 1 for the area above.',
-        incorrect: 'CDF.NORMAL gives the area to the LEFT; flip it with 1 &minus; for above. IDF is for percentiles.'
+        incorrect: 'CDF.NORMAL gives the area to the LEFT; flip it with 1 − for above. IDF is for percentiles.'
       }
     }
   },
@@ -92,14 +92,14 @@ const normalProbabilityPhases = {
     assessment: [
       {
         type: 'multiple_choice',
-        question: 'The 90th percentile of IQ (&mu; = 100, &sigma; = 15) is closest to:',
+        question: 'The 90th percentile of IQ (μ = 100, σ = 15) is closest to:',
         options: ['109', '115', '119', '130'],
         correctAnswer: 2,
-        feedback: { correct: 'Good — IDF.NORMAL(0.90, 100, 15) &asymp; 119.2.', incorrect: 'Build IDF.NORMAL(0.90, 100, 15) in SPSS and compare.' }
+        feedback: { correct: 'Good — IDF.NORMAL(0.90, 100, 15) ≈ 119.2.', incorrect: 'Build IDF.NORMAL(0.90, 100, 15) in SPSS and compare.' }
       },
       {
         type: 'fill_blank',
-        question: 'P(X &le; 100) for IQ (&mu; = 100, &sigma; = 15) equals ______.',
+        question: 'P(X ≤ 100) for IQ (μ = 100, σ = 15) equals ______.',
         answer: '0.5',
         feedback: { correct: 'The mean is the 50th percentile of a symmetric distribution.', incorrect: 'Half the distribution lies below the mean.' }
       }
@@ -161,7 +161,7 @@ const confidenceIntervalPhases = {
       {
         instruction: 'What happens to the CI if we compute it for a 50-row subset?',
         hint: 'Use Data → Select Cases (random sample, n = 50), rerun Explore.',
-        checkpoint: 'SE grows (SD/&radic;50), so the CI widens — smaller n, less precision.'
+        checkpoint: 'SE grows (SD/√50), so the CI widens — smaller n, less precision.'
       },
       {
         instruction: 'Where else in SPSS will you find this same CI?',
@@ -192,10 +192,10 @@ const confidenceIntervalPhases = {
     assessment: [
       {
         type: 'multiple_choice',
-        question: 'SE = SD/&radic;n. If n quadruples, the SE...',
+        question: 'SE = SD/√n. If n quadruples, the SE...',
         options: ['quadruples', 'doubles', 'halves', 'is divided by 4'],
         correctAnswer: 2,
-        feedback: { correct: '&radic;4 = 2, so SE halves.', incorrect: 'SE shrinks with the SQUARE ROOT of n, not n itself.' }
+        feedback: { correct: '√4 = 2, so SE halves.', incorrect: 'SE shrinks with the SQUARE ROOT of n, not n itself.' }
       },
       {
         type: 'multiple_choice',

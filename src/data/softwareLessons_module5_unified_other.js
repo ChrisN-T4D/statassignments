@@ -63,67 +63,100 @@ export const module5UnifiedLessonsOther = [
     title: 'Graphing and Data Manipulation in SPSS',
     software: 'spss',
     objectives: [
-      'Create histograms for continuous variables',
-      'Use Select Cases to analyze subsets',
-      'Recode and compute variables for categories and centered scores'
+      'Build histograms, boxplots, and bar charts with Chart Builder',
+      'Use Select Cases with logical expressions to analyze subsets',
+      'Use Compute Variable and Recode into Different Variables to center, transform, and categorize'
     ],
-    estimatedTime: 75,
+    estimatedTime: 60,
     phases: {
       iDo: {
         type: 'multi_section',
-        title: 'Learn: Histograms, Select Cases, and Recode',
+        title: 'Learn: Graphs, Select Cases, and Transformations',
         sections: [
           {
             id: 'creating-histograms',
-            title: 'Histograms in SPSS',
-            objectives: ['Build a histogram', 'Assess shape'],
+            title: 'Charts in Chart Builder',
+            objectives: ['Build a histogram', 'Build a boxplot and a bar chart', 'Read distribution shape'],
             estimatedTime: 20,
             content: [
               {
-                type: 'text',
-                content:
-                  '**Graphs → Chart Builder** (or **Legacy Dialogs → Histogram**). Drag your continuous variable (e.g. Extraversion) to the Y axis as histogram. Run the chart. Check symmetry, skew, and number of peaks.'
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Dataset (Tools bar):</strong> Learn uses <strong>bmi_and_exercise.csv</strong> (open it with <strong>File &rarr; Open &rarr; Data&hellip;</strong>, Files of type: Text). Apply uses <strong>personality_data.csv</strong>. Before graphing, check in Variable View that numeric variables are <strong>Scale</strong> and category variables are <strong>Nominal</strong> or <strong>Ordinal</strong>; Chart Builder uses Measure to offer the right options.'
               },
               {
                 type: 'step_sequence',
                 steps: [
-                  { step: 1, title: 'Chart Builder', description: '**Graphs → Chart Builder**. Choose Histogram.' },
-                  { step: 2, title: 'Variable', description: 'Drag **Extraversion** (or BMI) to the horizontal axis.' },
-                  { step: 3, title: 'OK', description: 'Run and read shape in the Output window.' }
+                  { step: 1, title: 'Open Chart Builder', description: 'Choose <strong>Graphs &rarr; Chart Builder&hellip;</strong>. If SPSS reminds you to check measurement levels, click <strong>OK</strong>.' },
+                  { step: 2, title: 'Pick the chart', description: 'In the <strong>Gallery</strong> tab choose <strong>Histogram</strong> (or <strong>Boxplot</strong>, or <strong>Bar</strong>) and drag the first picture (<em>Simple &hellip;</em>) up into the preview area.' },
+                  { step: 3, title: 'Add the variable', description: 'Drag <strong>bmi</strong> from the variable list onto the x-axis box (for a boxplot, onto the y-axis). For a bar chart of counts, drag a categorical variable onto the x-axis.' },
+                  { step: 4, title: 'Run and read', description: 'Click <strong>OK</strong>. The chart appears in the Viewer. Double-click it to open the Chart Editor and change titles, bin width, or colors.' }
                 ]
+              },
+              {
+                type: 'text',
+                content: 'Read a histogram for <strong>shape</strong>: is it symmetric or skewed (long tail to one side)? One peak or two? Are there bars far from the rest? For bmi, compare the histogram with the skewness value from Module 4. For a boxplot, the thick line is the median, the box is the middle half (Q1 to Q3), and circles beyond the whiskers are potential outliers (SPSS prints their row numbers).'
+              },
+              {
+                type: 'callout',
+                style: 'tip',
+                content: 'Histogram: continuous data. Bar chart: categories. Boxplot: compare groups or spot outliers. Scatterplot (Scatter/Dot gallery): two continuous variables.'
               }
             ]
           },
           {
             id: 'filtering-data',
-            title: 'Select Cases in SPSS',
-            objectives: ['Include rows by condition'],
-            estimatedTime: 25,
+            title: 'Select Cases and logical expressions',
+            objectives: ['Include rows by condition', 'Write a logical expression with AND/OR', 'Turn selection off'],
+            estimatedTime: 15,
             content: [
               {
-                type: 'text',
-                content:
-                  '**Data → Select Cases**. Choose **If condition is satisfied**. Condition example: **Extraversion >= 4**. Turn selection off later with **All cases** to restore the full file.'
+                type: 'step_sequence',
+                steps: [
+                  { step: 1, title: 'Open Select Cases', description: 'Choose <strong>Data &rarr; Select Cases&hellip;</strong>.' },
+                  { step: 2, title: 'Set the condition', description: 'Choose <strong>If condition is satisfied</strong>, click <strong>If&hellip;</strong>, type <strong>bmi >= 25</strong>, and click <strong>Continue</strong>.' },
+                  { step: 3, title: 'Apply', description: 'Leave Output on <strong>Filter out unselected cases</strong> and click <strong>OK</strong>. Unselected rows get a slash through their row number.' },
+                  { step: 4, title: 'Check and turn off', description: 'Run Descriptives to see the smaller N. When finished, go back to <strong>Data &rarr; Select Cases&hellip;</strong>, choose <strong>All cases</strong>, and click OK.' }
+                ]
               },
               {
                 type: 'definition_list',
                 items: [
-                  { term: '>=', icon: '≥', definition: 'Extraversion >= 4 keeps scores 4 and 5', color: '#3b82f6' },
-                  { term: 'and / or', icon: '&', definition: 'Combine with AND / OR in the condition dialog', color: '#10b981' }
+                  { term: '=  and  ~=', icon: '=', definition: 'Equal and not equal in a condition. SPSS uses a single <code>=</code> for equality; <code>==</code> is an error.', color: '#3b82f6' },
+                  { term: '>=  <=  >  <', icon: '≥', definition: '<code>bmi &gt;= 25</code> keeps BMI of 25 and above.', color: '#7c3aed' },
+                  { term: 'AND / OR / NOT', icon: '&', definition: '<code>bmi &gt;= 25 AND exercise_per_week &lt; 2</code> needs both. Use parentheses to control grouping.', color: '#10b981' }
                 ]
+              },
+              {
+                type: 'callout',
+                style: 'warning',
+                content: 'Never choose <strong>Delete unselected cases</strong> in Select Cases. It removes rows permanently. Always note the N and the condition when you report results from a selected subset.'
               }
             ]
           },
           {
             id: 'transforming-variables',
-            title: 'Recode and Compute in SPSS',
-            objectives: ['High/Low categories', 'Center a variable'],
-            estimatedTime: 30,
+            title: 'Compute Variable and Recode',
+            objectives: ['Center a variable', 'Apply a function', 'Create categories with Recode into Different Variables'],
+            estimatedTime: 25,
             content: [
               {
                 type: 'text',
-                content:
-                  '**Transform → Recode into Different Variables**: range 4 through highest → **High**, else → **Low** (or use **Recode into Same Variables** carefully). For centering: **Transform → Compute**: **Ex_cent = Extraversion - MEAN(Extraversion)**.'
+                content: '<strong>Compute Variable</strong> (<em>Transform &rarr; Compute Variable&hellip;</em>): type a name in <strong>Target Variable</strong> and a formula in <strong>Numeric Expression</strong>. To <strong>center</strong> bmi, first read its mean from Descriptives (29.81), then enter <code>bmi - 29.81</code> for <code>bmi_c</code>. SPSS has no function that returns the column mean inside Compute (<code>MEAN()</code> averages across the variables you list for each row), so type in the mean from your output. Other expressions: <code>ABS(bmi_c)</code>, <code>LN(bmi)</code>, <code>LG10(bmi)</code>, <code>SQRT(bmi)</code>.'
+              },
+              {
+                type: 'text',
+                content: '<strong>Recode</strong> to make categories: <em>Transform &rarr; Recode into Different Variables&hellip;</em>. Move <strong>bmi</strong> in, name the output <code>bmi_cat</code>, click <strong>Change</strong>, then <strong>Old and New Values&hellip;</strong>. Add the rules <em>Range, LOWEST through 18.49 &rarr; 1</em>, <em>Range 18.5 through 24.99 &rarr; 2</em>, <em>Range, value through HIGHEST: 25 &rarr; 3</em>, and finish with Continue and OK. In Variable View add value labels (1 = Underweight, 2 = Normal, 3 = Overweight) and set Measure to Ordinal.'
+              },
+              {
+                type: 'callout',
+                style: 'warning',
+                content: 'Always choose <strong>Into Different Variables</strong>, not <em>Into Same Variables</em>, which overwrites your original data. Check every new variable with Descriptives (min and max) or Frequencies.'
+              },
+              {
+                type: 'callout',
+                style: 'tip',
+                content: 'For the same transformation on several variables, click <strong>Paste</strong> instead of OK, copy the COMPUTE line in the Syntax Editor, change the variable names, and choose <strong>Run &rarr; All</strong>.'
               }
             ]
           }
@@ -132,22 +165,37 @@ export const module5UnifiedLessonsOther = [
       weDo: {
         type: 'guided_practice',
         title: 'Practice: SPSS',
-        instructions: 'Use personality-style data with Extraversion.',
+        instructions: 'Use bmi_and_exercise.csv from the Tools bar.',
         steps: [
           {
-            instruction: 'Chart Builder: histogram of Extraversion.',
-            hint: 'Graphs menu.',
-            checkpoint: 'Histogram visible in output.'
+            instruction: 'Open bmi_and_exercise.csv, then use Graphs > Chart Builder to draw a histogram of bmi.',
+            hint: 'Gallery: Histogram, then drag the first picture into the preview area and drag bmi onto the x-axis.',
+            checkpoint: 'A histogram of bmi appears in the Viewer. You can say whether it is symmetric or skewed.'
           },
           {
-            instruction: 'Select Cases: Extraversion >= 4; run Descriptives to confirm N changed.',
-            hint: 'Data → Select Cases.',
-            checkpoint: 'Subset active.'
+            instruction: 'Draw a boxplot of bmi (Chart Builder > Boxplot > Simple Boxplot).',
+            hint: 'Drag bmi onto the y-axis.',
+            checkpoint: 'You can point to the median, the box, and any circles beyond the whiskers.'
           },
           {
-            instruction: 'Recode Extraversion to High/Low; Compute centered Extraversion.',
-            hint: 'Transform menu.',
-            checkpoint: 'New variables in Data View.'
+            instruction: 'Select Cases: Data > Select Cases > If condition is satisfied, with bmi >= 25. Run Descriptives on bmi and note N.',
+            hint: 'Unselected rows have a slash through their row number.',
+            checkpoint: 'N is smaller than 250 and the minimum is at least 25.'
+          },
+          {
+            instruction: 'Turn the selection off (Data > Select Cases > All cases) and run Descriptives again.',
+            hint: 'The status bar no longer says Filter On.',
+            checkpoint: 'N is back to 250.'
+          },
+          {
+            instruction: 'Compute bmi_c = bmi minus the mean from Descriptives, then check that its mean is about 0.',
+            hint: 'Transform > Compute Variable. Numeric Expression: bmi - 29.81',
+            checkpoint: 'The new column bmi_c appears in Data View and its mean is essentially 0.'
+          },
+          {
+            instruction: 'Recode bmi into Different Variables: under 18.5, 18.5 to under 25, 25 and over. Add value labels, then run Frequencies on bmi_cat.',
+            hint: 'Use Range, LOWEST through value and Range, value through HIGHEST.',
+            checkpoint: 'The Frequencies table has three labeled categories that add up to 250.'
           }
         ]
       },
@@ -156,16 +204,42 @@ export const module5UnifiedLessonsOther = [
         errorDiagnostic: [
           {
             id: 'm5-spss-filter',
-            scenario: 'Select Cases shows 0 cases for Gender = "F".',
-            errorMessage: 'No cases',
+            scenario: 'Select Cases with the condition Gender = "F" selects 0 cases.',
+            errorMessage: 'No cases selected',
             options: [
-              'Values may be coded 0/1 or labels differ — check Value Labels',
-              'SPSS cannot filter',
-              'You must delete other rows',
+              'The values may be coded differently (for example 1/2, or "Female"); check Frequencies and Value Labels',
+              'SPSS cannot select cases',
+              'You must delete the other rows first',
               'Use Excel only'
             ],
             correct: 0,
-            explanation: 'Match exact values and string case; inspect Frequencies first.'
+            explanation: 'The condition must match the stored values exactly, including case for text. Run Frequencies on the variable first to see what values it holds.'
+          },
+          {
+            id: 'm5-spss-equals',
+            scenario: 'You typed bmi == 25 in the Select Cases If box and SPSS shows a syntax error.',
+            errorMessage: 'Syntax error',
+            options: [
+              'SPSS uses a single = for equality in a condition: bmi = 25',
+              'Select Cases cannot use numbers',
+              'The variable must be String',
+              'Restart SPSS'
+            ],
+            correct: 0,
+            explanation: 'Many programs use ==, but SPSS uses a single = for comparison in conditions, and ~= for not equal.'
+          },
+          {
+            id: 'm5-spss-recode-same',
+            scenario: 'You recoded Age into three groups with Recode into Same Variables. Now you cannot get the original ages back.',
+            errorMessage: 'No error message; the original values are gone.',
+            options: [
+              'Recode into Same Variables overwrote the original. Use Into Different Variables next time and keep the original file',
+              'SPSS always stores a backup',
+              'Restart SPSS and the ages return',
+              'Change Measure to Scale'
+            ],
+            correct: 0,
+            explanation: 'Into Same Variables replaces the old values. Recoding into a new variable keeps the original data intact.'
           }
         ],
         outputInterpretation: []

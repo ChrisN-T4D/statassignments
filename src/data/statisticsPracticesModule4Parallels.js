@@ -23,16 +23,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'descriptive-stats',
     practiceObjectiveKey: 'm4-deviation-scores',
-    title: 'Deviation scores in SPSS (Compute)',
-    description: 'Use Compute to create Extraversion minus the mean of Extraversion.',
-    instructions:
-      'Transform > Compute Variable. Target: DEV_EX. Numeric expression: Extraversion - MEAN(Extraversion). (If your variable name differs, substitute it.) Run Descriptives on DEV_EX and note the mean is ~0.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'MEAN(Extraversion) uses the variable mean across cases in SPSS Compute.',
-    submission: 'Screenshot of Compute dialog or output showing DEV_EX.',
     order: 1,
-    is_active: true
+    software_type: 'spss',
+    title: 'Calculate Deviation Scores in SPSS',
+    description: 'Using the personality dataset, create deviation scores for extraversion (X minus the mean)',
+    instructions: 'Open personality_data.csv from Tools (File > Open > Data, Files of type: Text). Run Analyze > Descriptive Statistics > Descriptives on extraversion and note the mean. Then use Transform > Compute Variable to create extraversion_dev = extraversion - [that mean]. Run Descriptives on extraversion_dev.',
+    hint: 'Type the mean from your Descriptives table into the Numeric Expression. The mean of the new variable should be essentially 0.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Screenshot of the Compute Variable dialog and the Descriptives table for extraversion_dev.'
   },
   {
     module: 'module-4',
@@ -85,16 +84,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'z-scores',
     practiceObjectiveKey: 'm4-z-scores',
-    title: 'Z-scores in SPSS',
-    description: 'Save standardized scores for Extraversion.',
-    instructions:
-      'Analyze > Descriptive Statistics > Descriptives. Add Extraversion. Check “Save standardized values as variables.” Run and find ZExtraversion (or similar) in Data View.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'The new variable name is usually Z + variable name.',
-    submission: 'Screenshot of Descriptives dialog or Data View with z column.',
     order: 2,
-    is_active: true
+    software_type: 'spss',
+    title: 'Calculate Z-Scores in SPSS',
+    description: 'Using the personality dataset, standardize extraversion to z-scores',
+    instructions: 'Using personality_data.csv from Tools, choose Analyze > Descriptive Statistics > Descriptives, move extraversion into Variable(s), tick Save standardized values as variables, and click OK. Find the new column (Zextraversion) in Data View.',
+    hint: 'The checkbox is just under the variable list in the Descriptives dialog. The new variable name starts with Z.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Screenshot of Data View showing the Zextraversion column.'
   },
   {
     module: 'module-4',
@@ -147,16 +145,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'normality',
     practiceObjectiveKey: 'm4-normality',
-    title: 'Normality check in SPSS',
-    description: 'Shapiro–Wilk or Explore for Extraversion.',
-    instructions:
-      'Analyze > Descriptive Statistics > Explore. Add Extraversion. Under Plots check Normality plots with tests, or use Shapiro–Wilk from Descriptives if available in your version.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'Explore is a common path for normality tests and Q–Q plots.',
-    submission: 'Screenshot of tests output.',
     order: 3,
-    is_active: true
+    software_type: 'spss',
+    title: 'Test for Normality in SPSS',
+    description: 'Using the personality dataset, check whether extraversion is normally distributed (Shapiro-Wilk and Q-Q plot)',
+    instructions: 'Using personality_data.csv from Tools, choose Analyze > Descriptive Statistics > Explore. Move extraversion into Dependent List, click Plots, tick Normality plots with tests, then Continue and OK. Report the Shapiro-Wilk Sig. value and describe the Q-Q plot.',
+    hint: 'Use the Shapiro-Wilk row of the Tests of Normality table. A Sig. below .05 suggests the data are not normal. Check the Normal Q-Q plot too.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Screenshot of the Tests of Normality table and 1-2 sentences interpreting it with the Q-Q plot.'
   },
   {
     module: 'module-4',
@@ -209,16 +206,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'descriptive-stats',
     practiceObjectiveKey: 'm4-report-descriptives',
-    title: 'Report descriptives in SPSS',
-    description: 'Frequencies/Descriptives for Extraversion.',
-    instructions:
-      'Analyze > Descriptive Statistics > Descriptives. Request mean, median, std deviation, min, max. Summarize in prose.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'Options button selects statistics.',
-    submission: 'Table screenshot + 1–2 sentences.',
     order: 4,
-    is_active: true
+    software_type: 'spss',
+    title: 'Report Descriptives for One Variable in SPSS',
+    description: 'Using the personality dataset, summarize mean, median, SD, and min/max for extraversion',
+    instructions: 'Using personality_data.csv from Tools, run Analyze > Descriptive Statistics > Frequencies on extraversion (Statistics: Mean, Median, Std. deviation, Minimum, Maximum; untick Display frequency tables). Write a short summary of the mean, median, SD, and range.',
+    hint: 'Descriptives does not give the median. Use Frequencies (Statistics button) or Explore.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Screenshot of the Statistics table and a short write-up with the values.'
   },
   {
     module: 'module-4',
@@ -271,16 +267,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'descriptive-stats',
     practiceObjectiveKey: 'm4-split-by-group',
-    title: 'Descriptives by group in SPSS',
-    description: 'Split-file or Explore by group.',
-    instructions:
-      'Use Data > Split File > Compare groups, then Descriptives for Extraversion; or Explore with factor list for groups.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'Turn Split File off after you finish.',
-    submission: 'Output screenshot + comparison sentences.',
     order: 5,
-    is_active: true
+    software_type: 'spss',
+    title: 'Descriptives by Group in SPSS',
+    description: 'Using the personality dataset, compare extraversion by a grouping variable',
+    instructions: 'Using personality_data.csv from Tools, choose Analyze > Descriptive Statistics > Explore. Move extraversion into Dependent List and gender into Factor List, then OK. (Alternatively use Data > Split File with Compare groups, and turn it off afterward.) Identify which group has the higher center and which has the larger spread.',
+    hint: 'Compare the mean/median and the standard deviation in each group block of the Descriptives table. If you used Split File, remember to switch it back to Analyze all cases.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Output screenshot and 2-3 sentences comparing the groups.'
   },
   {
     module: 'module-4',
@@ -333,16 +328,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'z-scores',
     practiceObjectiveKey: 'm4-z-inspect',
-    title: 'Inspect z-scores in SPSS',
-    description: 'Sort or filter ZExtraversion to find |z| ≥ 2.',
-    instructions:
-      'Create z-scores (prior task). In Data View, sort descending on Z column or use Select Cases IF abs(ZExtraversion) >= 2.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'Variable name may be ZEXTRAVERSION etc.',
-    submission: 'Screenshot showing extreme z rows.',
     order: 6,
-    is_active: true
+    software_type: 'spss',
+    title: 'Create and Inspect Z-Scores in SPSS',
+    description: 'Using the personality dataset, create z-scores for extraversion and identify extreme values',
+    instructions: 'Using personality_data.csv from Tools, create z-scores for extraversion with Descriptives (Save standardized values as variables). Then sort the Zextraversion column (right-click the column heading, Sort Descending/Ascending) and identify any cases with |z| of 2 or more.',
+    hint: 'Sort the z column both ways and look at the top and bottom rows.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Screenshot showing the z-score column sorted and any extreme rows.'
   },
   {
     module: 'module-4',
@@ -395,16 +389,15 @@ export const module4SoftwarePracticeParallels = [
     module: 'module-4',
     topic: 'descriptive-stats',
     practiceObjectiveKey: 'm4-skew-justify',
-    title: 'Skew and reporting in SPSS',
-    description: 'From Descriptives or Explore, use skewness and plot.',
-    instructions:
-      'Request skewness and histogram. Argue for mean/SD vs median/IQR in 2–3 sentences.',
-    software_type: 'spss',
-    exercise_type: 'instructional',
-    hint: 'Explore provides plots + normality skew info.',
-    submission: 'Output + justification.',
     order: 7,
-    is_active: true
+    software_type: 'spss',
+    title: 'Evaluate Skew and Outliers in SPSS',
+    description: 'Using the personality dataset, justify reporting median/IQR when appropriate',
+    instructions: 'Using personality_data.csv from Tools, run Analyze > Descriptive Statistics > Explore on extraversion (or another scale variable) with Plots set to Histogram and Boxplots (and Normality plots with tests). Use skewness, kurtosis, the histogram, and the boxplot to judge whether the distribution is skewed or has outliers. Justify whether mean and SD or median and IQR is the better summary.',
+    hint: 'Skewness near 0 and a symmetric histogram support the mean and SD. A clear tail or outlier circles on the boxplot support the median and IQR.',
+    exercise_type: 'instructional',
+    is_active: true,
+    submission: 'Explore output screenshot and a short justification (2-3 sentences).'
   },
   {
     module: 'module-4',

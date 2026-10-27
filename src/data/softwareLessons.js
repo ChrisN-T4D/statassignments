@@ -33,6 +33,7 @@ import { module6SpssLessons } from './softwareLessons_module6_spss.js'
 import { module6LessonsOther } from './softwareLessons_module6_other.js'
 import { module7LessonsOther } from './softwareLessons_module7_other.js'
 import { module7UnifiedLessons } from './softwareLessons_module7_unified.js'
+import { module7SpssLessons } from './softwareLessons_module7_spss.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
 import { module8UnifiedLessonsOther } from './softwareLessons_module8_unified_other.js'
 import { module8SpssLessons } from './softwareLessons_module8_spss.js'
@@ -386,6 +387,7 @@ export const softwareLessons = [
   ...module7UnifiedLessons,
 
   ...module7LessonsOther,
+  ...module7SpssLessons,
 
   ...module8UnifiedLessons,
   ...module8UnifiedLessonsOther,

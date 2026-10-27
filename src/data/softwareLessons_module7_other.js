@@ -103,19 +103,6 @@ const P_VALUE_PHASES = {
 
 export const module7LessonsOther = [
   {
-    id: 'spss-interpreting-pvalues',
-    module: 'stats-module-7',
-    title: 'Interpreting P-Values and Making Decisions',
-    software: 'spss',
-    objectives: [
-      'Interpret p in context',
-      'Compare p to α',
-      'Avoid common misinterpretations'
-    ],
-    estimatedTime: 20,
-    phases: { ...P_VALUE_PHASES }
-  },
-  {
     id: 'r-interpreting-pvalues',
     module: 'stats-module-7',
     title: 'Interpreting P-Values and Making Decisions',
@@ -156,74 +143,6 @@ export const module7LessonsOther = [
   },
 
   // --- Binomial ---
-  {
-    id: 'spss-binomial-test',
-    module: 'stats-module-7',
-    title: 'Running a Binomial Test in SPSS',
-    software: 'spss',
-    objectives: ['Binomial test for proportion', 'Interpret p', 'Set test proportion'],
-    estimatedTime: 20,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'Binomial test',
-        content: [
-          {
-            type: 'text',
-            content:
-              'Tests whether the proportion of one outcome differs from a hypothesized value (e.g. 0.5 for guessing). **Analyze → Nonparametric Tests → Legacy Dialogs → Binomial** (or One Sample Nonparametric depending on version). Move binary variable; set Test Proportion.'
-          },
-          {
-            type: 'code',
-            language: 'text',
-            code: 'Example output: Test proportion = 0.5, Observed prop = 0.62, p = 0.021 → reject H₀ at α=.05.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Coin flip example',
-        scenario: '52 heads of 80 flips.',
-        data: { description: '0/1 outcome variable', file: '' },
-        steps: [
-          { instruction: 'Legacy Dialogs → Binomial.', hint: 'Nonparametric', checkpoint: 'Dialog open' },
-          { instruction: 'Outcome variable in Test Variable List.', hint: '', checkpoint: 'Variable set' },
-          { instruction: 'Test proportion = 0.5, two-sided.', hint: '', checkpoint: 'Run' },
-          { instruction: 'Read p and proportion.', hint: '', checkpoint: 'Interpret' }
-        ],
-        assessment: {
-          type: 'multiple_choice',
-          question: 'p = 0.264 for 52/80 heads vs 0.5. Conclusion?',
-          options: ['Biased coin proved', 'Fair coin proved', 'Do not reject H₀', 'Invalid test'],
-          correctAnswer: 2,
-          feedback: { correct: 'Yes - p > .05.', incorrect: 'Fail to reject when p > α.' }
-        }
-      },
-      youDo: {
-        type: 'independent_practice',
-        title: 'Treatment proportion',
-        scenario: '58/120 vs 0.40 baseline.',
-        task: 'Run binomial with test value 0.40.',
-        data: { description: 'Binary improved', file: '', variables: [] },
-        assessment: [
-          {
-            type: 'multiple_choice',
-            question: 'Test value for “different from old 40%”?',
-            options: ['0.50', '0.40', '0.58', '0.48'],
-            correctAnswer: 1,
-            feedback: { correct: 'H₀: π = 0.40', incorrect: 'Match the reference proportion.' }
-          },
-          {
-            type: 'multiple_choice',
-            question: 'p = 0.091 at α = 0.05?',
-            options: ['Reject H₀', 'Fail to reject H₀', 'Invalid', 'Need χ²'],
-            correctAnswer: 1,
-            feedback: { correct: 'p > .05', incorrect: 'Fail to reject when p > α.' }
-          }
-        ]
-      }
-    }
-  },
   {
     id: 'r-binomial-test',
     module: 'stats-module-7',
@@ -387,71 +306,6 @@ export const module7LessonsOther = [
   },
 
   // --- One-sample t ---
-  {
-    id: 'spss-one-sample-t-test',
-    module: 'stats-module-7',
-    title: 'One-Sample t-Test in SPSS',
-    software: 'spss',
-    objectives: ['One-sample t', 'Effect size', 'Assumptions'],
-    estimatedTime: 25,
-    phases: {
-      iDo: {
-        type: 'demonstration',
-        title: 'One-sample t',
-        content: [
-          {
-            type: 'text',
-            content:
-              '**Analyze → Compare Means → One-Sample T Test** (or **Analyze → Compare Proportions** menu paths vary). Move dependent variable; set Test Value = hypothesized μ. Request effect size if available (version-dependent).'
-          },
-          {
-            type: 'code',
-            language: 'text',
-            code: 't(df) = ..., p = ..., mean difference vs test value; Cohen d if printed.'
-          }
-        ]
-      },
-      weDo: {
-        type: 'guided_practice',
-        title: 'Reaction time vs 250 ms',
-        scenario: '30 students.',
-        data: { description: 'reaction_time ms', file: '' },
-        steps: [
-          { instruction: 'One-Sample T Test; variable reaction_time.', hint: '', checkpoint: '' },
-          { instruction: 'Test Value = 250.', hint: '', checkpoint: '' },
-          { instruction: 'Two-tailed; check options for CI and effect size.', hint: '', checkpoint: '' }
-        ],
-        assessment: {
-          type: 'multiple_choice',
-          question: 'p = 0.069, α = 0.05?',
-          options: ['Reject H₀', 'Fail to reject H₀'],
-          correctAnswer: 1,
-          feedback: { correct: '', incorrect: '' }
-        }
-      },
-      youDo: {
-        type: 'independent_practice',
-        title: 'Body temp vs 98.6',
-        scenario: '40 adults.',
-        assessment: [
-          {
-            type: 'multiple_choice',
-            question: 'Test value (°F)?',
-            options: ['98.6', '37', '0', '40'],
-            correctAnswer: 0,
-            feedback: { correct: '', incorrect: '' }
-          },
-          {
-            type: 'fill_blank',
-            question: 'df for one-sample t with n=40 is ____',
-            answer: ['39'],
-            caseSensitive: false,
-            feedback: { correct: 'n-1', incorrect: '39' }
-          }
-        ]
-      }
-    }
-  },
   {
     id: 'r-one-sample-t-test',
     module: 'stats-module-7',

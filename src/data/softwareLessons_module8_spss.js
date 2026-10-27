@@ -37,7 +37,7 @@ const tTestPhases = {
             step: 4,
             title: 'Effect size',
             description:
-              'SPSS does not print Cohen\'s d in the standard output. Compute it from the Group Statistics table: <strong>d = (M&#8321; &minus; M&#8322;) / s&#772;</strong>, with pooled s&#772; = &radic;((s&#178;&#8321; + s&#178;&#8322;)/2) for equal group sizes. Judge against the 0.2 / 0.5 / 0.8 benchmarks.'
+              'In SPSS 27 and later, tick <strong>Estimate effect sizes</strong> in the t-test dialog to get Cohen\'s d with a confidence interval. In older versions SPSS does not print it, so compute it from the Group Statistics table: <strong>d = (M&#8321; &minus; M&#8322;) / s&#772;</strong>, with pooled s&#772; = &radic;((s&#178;&#8321; + s&#178;&#8322;)/2) for equal group sizes. Judge against the 0.2 / 0.5 / 0.8 benchmarks.'
           }
         ]
       },
@@ -104,9 +104,9 @@ const tTestPhases = {
       },
       {
         type: 'fill_blank',
-        question: 'M&#8321; = 30, M&#8322; = 25, s&#8321; = 10, s&#8322; = 10. Cohen\'s d = ______.',
+        question: 'M₁ = 30, M₂ = 25, s₁ = 10, s₂ = 10. Cohen\'s d = ______.',
         answer: '0.5',
-        feedback: { correct: 'd = 5/10 = 0.5 — a medium effect.', incorrect: 'd = (M&#8321;&minus;M&#8322;)/pooled SD = 5/10 = 0.5.' }
+        feedback: { correct: 'd = 5/10 = 0.5 — a medium effect.', incorrect: 'd = (M₁−M₂)/pooled SD = 5/10 = 0.5.' }
       }
     ]
   }
@@ -151,7 +151,7 @@ const correlationRegressionPhases = {
   weDo: {
     type: 'guided_practice',
     title: 'Guided: interpret SPSS correlation output',
-    scenario: 'Bivariate Correlations table: age × bmi r = .31, p &lt; .001, n = 250.',
+    scenario: 'Bivariate Correlations table: age × bmi r = .31, p < .001, n = 250.',
     steps: [
       {
         instruction: 'Strength and direction of r = .31?',
@@ -161,7 +161,7 @@ const correlationRegressionPhases = {
       {
         instruction: 'Variance explained?',
         hint: 'Square r.',
-        checkpoint: 'r&sup2; &asymp; .096 → about 9.6%.'
+        checkpoint: 'r² ≈ .096 → about 9.6%.'
       },
       {
         instruction: 'Does the correlation show age CAUSES higher BMI?',
@@ -171,7 +171,7 @@ const correlationRegressionPhases = {
     ],
     assessment: {
       type: 'multiple_choice',
-      question: 'r = &minus;.60 between sleep hours and anxiety. Best interpretation?',
+      question: 'r = −.60 between sleep hours and anxiety. Best interpretation?',
       options: [
         'Sleep causes lower anxiety',
         'More sleep goes with less anxiety; 36% of variance shared',
@@ -180,15 +180,15 @@ const correlationRegressionPhases = {
       ],
       correctAnswer: 1,
       feedback: {
-        correct: 'Correct — direction, strength, r&sup2;, and no causal claim.',
-        incorrect: 'Describe direction and strength (r&sup2; = .36), and skip causal language.'
+        correct: 'Correct — direction, strength, r², and no causal claim.',
+        incorrect: 'Describe direction and strength (r² = .36), and skip causal language.'
       }
     }
   },
   youDo: {
     type: 'independent_practice',
     title: 'Regression output check',
-    scenario: 'Linear regression: slope B = 0.42 (p &lt; .001), Constant = 22.1.',
+    scenario: 'Linear regression: slope B = 0.42 (p < .001), Constant = 22.1.',
     assessment: [
       {
         type: 'fill_blank',
@@ -287,7 +287,7 @@ const chiSquareAnovaPhases = {
     ],
     assessment: {
       type: 'multiple_choice',
-      question: 'F = 9.4, p &lt; .001 in a one-way ANOVA with three groups. This tells you:',
+      question: 'F = 9.4, p < .001 in a one-way ANOVA with three groups. This tells you:',
       options: [
         'Group 1 differs from Group 2 specifically',
         'At least one group mean differs from the others',
@@ -316,7 +316,7 @@ const chiSquareAnovaPhases = {
           'Increase alpha'
         ],
         correctAnswer: 1,
-        feedback: { correct: 'Right — small expected counts distort &chi;&sup2;; collapse categories or use exact tests.', incorrect: 'Small expected counts are the classic chi-square violation.' }
+        feedback: { correct: 'Right — small expected counts distort χ²; collapse categories or use exact tests.', incorrect: 'Small expected counts are the classic chi-square violation.' }
       },
       {
         type: 'multiple_choice',
@@ -356,7 +356,7 @@ export const module8SpssLessons = [
     objectives: [
       'Run a Pearson correlation with Bivariate Correlations',
       'Run a simple linear regression and interpret the slope',
-      'Report r, r&sup2;, and regression results in APA style'
+      'Report r, r², and regression results in APA style'
     ],
     estimatedTime: 30,
     phases: correlationRegressionPhases

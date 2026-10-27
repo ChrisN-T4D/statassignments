@@ -43,10 +43,10 @@ export const module4DescriptiveLessonsOther = [
     title: 'Running Descriptive Statistics in SPSS',
     software: 'spss',
     objectives: [
-      'Run Descriptives for continuous variables',
-      'Interpret N, mean, median, SD, min, max',
-      'Use Compute to create deviation and squared deviation variables',
-      'Relate sum of squared deviations to variance and SD'
+      'Run Descriptives and Frequencies and read N, mean, median, SD, min, max',
+      'Get skewness, kurtosis, the IQR, and a normality test from Explore',
+      'Use Compute Variable to build deviation and squared deviation scores',
+      'Relate the sum of squared deviations (SS) to variance and SD'
     ],
     estimatedTime: 35,
     phases: {
@@ -56,111 +56,102 @@ export const module4DescriptiveLessonsOther = [
         sections: [
           {
             id: 'running-descriptives',
-            title: 'Descriptive statistics',
-            objectives: ['Run Descriptives', 'Select variables', 'Read the table'],
-            estimatedTime: 10,
+            title: 'Descriptives: mean, SD, minimum, maximum',
+            objectives: ['Run Descriptives', 'Read the table', 'Match output labels to notation'],
+            estimatedTime: 8,
             content: [
               {
-                type: 'text',
-                content:
-                  'Use **Analyze → Descriptive Statistics → Descriptives**. Move **BMI** and **exercise** (or your variable names) into the Variable(s) list. Click **Options** and ensure Mean, Std deviation, Minimum, Maximum are checked. Use your **BMI and exercise** dataset.'
+                type: 'callout',
+                style: 'tip',
+                content: '<strong>Dataset (Tools bar):</strong> In Methods Market, open <strong>Tools</strong> (right side) and download <strong>bmi_and_exercise.csv</strong>. In SPSS use <strong>File &rarr; Open &rarr; Data&hellip;</strong>, set Files of type to Text, and work through the Text Import Wizard from Module 3 (Delimited, names at top, Comma). The variables are <strong>consumption_vegetables_per_day</strong>, <strong>bmi</strong>, and <strong>exercise_per_week</strong>. Check Variable View: all three should be Numeric and Scale.'
               },
               {
                 type: 'step_sequence',
                 steps: [
-                  {
-                    step: 1,
-                    title: 'Open Descriptives',
-                    description: 'Menu: **Analyze → Descriptive Statistics → Descriptives**.'
-                  },
-                  {
-                    step: 2,
-                    title: 'Add variables',
-                    description: 'Move continuous variables (e.g. BMI, exercise_hours) into the Variable(s) box.'
-                  },
-                  {
-                    step: 3,
-                    title: 'Choose statistics',
-                    description: 'Click **Options**. Include at least Mean, Std. deviation, Minimum, Maximum. OK to run.'
-                  },
-                  {
-                    step: 4,
-                    title: 'Read output',
-                    description: 'The table lists N, mean, SD, min, max per variable.'
-                  }
+                  { step: 1, title: 'Open Descriptives', description: 'Choose <strong>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</strong>' },
+                  { step: 2, title: 'Add variables', description: 'Select <strong>bmi</strong> and <strong>exercise_per_week</strong> and click the blue arrow to move them into <strong>Variable(s)</strong>.' },
+                  { step: 3, title: 'Choose statistics', description: 'Click <strong>Options&hellip;</strong>. Mean, Std. deviation, Minimum, and Maximum are ticked by default. Also tick <strong>Variance</strong> and <strong>Range</strong>, then <strong>Continue</strong>.' },
+                  { step: 4, title: 'Run and read', description: 'Click <strong>OK</strong>. In the Viewer, the <em>Descriptive Statistics</em> table lists N, Minimum, Maximum, Mean, Std. Deviation, and Variance for each variable.' }
                 ]
+              },
+              {
+                type: 'text',
+                content: 'Match SPSS labels to the notation from the chapter: <strong>N</strong> is the number of scores, <strong>Mean</strong> is X&#772; (&ldquo;X-bar&rdquo;), <strong>Std. Deviation</strong> is <em>s</em>, and <strong>Variance</strong> is <em>s</em>&sup2;. SPSS always uses the sample formulas (dividing by n &minus; 1). For <strong>bmi</strong> you should see N = 250, Mean &asymp; 29.81, and Std. Deviation &asymp; 8.24.'
+              },
+              {
+                type: 'callout',
+                style: 'warning',
+                content: 'Descriptives does <strong>not</strong> give the median, mode, or IQR. Those come from Frequencies and Explore (next section).'
+              }
+            ]
+          },
+          {
+            id: 'frequencies-explore',
+            title: 'Median, mode, IQR, skewness, and normality',
+            objectives: ['Get the median and mode from Frequencies', 'Use Explore for IQR, skewness, kurtosis', 'Read a normality test'],
+            estimatedTime: 10,
+            content: [
+              {
+                type: 'text',
+                content: '<strong>Frequencies</strong> for the median and mode: <em>Analyze &rarr; Descriptive Statistics &rarr; Frequencies&hellip;</em>, move <strong>bmi</strong> into Variable(s), click <strong>Statistics&hellip;</strong>, tick <strong>Mean, Median, Mode</strong> (and <strong>Quartiles</strong>, <strong>Skewness</strong>, <strong>Kurtosis</strong> if you like), click <strong>Continue</strong>, and <strong>untick Display frequency tables</strong> before OK. A continuous variable like BMI would otherwise produce a table with a row for every value.'
+              },
+              {
+                type: 'text',
+                content: '<strong>Explore</strong> gives most of this in one place: <em>Analyze &rarr; Descriptive Statistics &rarr; Explore&hellip;</em>, move <strong>bmi</strong> into <strong>Dependent List</strong>. Under <strong>Display</strong> keep <em>Both</em>. The <em>Descriptives</em> table includes the mean, median, variance, SD, minimum, maximum, range, <strong>Interquartile Range</strong>, <strong>Skewness</strong>, and <strong>Kurtosis</strong> (each with a standard error).'
+              },
+              {
+                type: 'text',
+                content: 'To check normality, click <strong>Plots&hellip;</strong> in Explore and tick <strong>Normality plots with tests</strong>. The output adds a <em>Tests of Normality</em> table. Use the <strong>Shapiro-Wilk</strong> row: a Sig. below .05 suggests the data are not normally distributed. Also look at the Normal Q-Q plot; points close to the line suggest normality. With large samples tiny departures can be &ldquo;significant&rdquo;, so combine the test with the plot and the skewness value.'
               },
               {
                 type: 'callout',
                 style: 'tip',
-                content:
-                  'For skewness/kurtosis or percentiles, use **Analyze → Descriptive Statistics → Explore** or check additional options where available.'
+                content: 'Rule of thumb for reporting: if the distribution is roughly symmetric, report the mean and SD. If it is clearly skewed or has outliers, report the median and IQR.'
               }
             ]
           },
           {
             id: 'computing-deviations',
             title: 'Deviation scores (X − mean)',
-            objectives: ['Use Compute Variable', 'Create BMI − mean(BMI)'],
-            estimatedTime: 10,
+            objectives: ['Use Compute Variable', 'Create bmi minus the mean of bmi'],
+            estimatedTime: 7,
             content: [
               {
                 type: 'text',
-                content:
-                  '**Deviation** = X − mean of X. In SPSS: **Transform → Compute Variable**. First note the mean of BMI from **Descriptives**. Target variable: e.g. **bmi_dev**. Numeric expression: **BMI − [paste mean]** OR use **Aggregate** to add the sample mean as a variable then subtract. Simple path: type the numeric mean from output, e.g. **BMI − 24.5** (replace with your mean).'
+                content: 'A <strong>deviation</strong> is X<sub>i</sub> &minus; X&#772;: how far one score is from the mean. Get the mean of <strong>bmi</strong> from Descriptives first (29.81), then build the new variable.'
               },
               {
                 type: 'step_sequence',
                 steps: [
-                  {
-                    step: 1,
-                    title: 'Compute Variable',
-                    description: '**Transform → Compute Variable**.'
-                  },
-                  {
-                    step: 2,
-                    title: 'Target name',
-                    description: 'Target Variable: **bmi_dev** (or similar).'
-                  },
-                  {
-                    step: 3,
-                    title: 'Expression',
-                    description: 'Numeric Expression: **BMI − [mean from Descriptives]** (use your BMI variable name and paste the reported mean).'
-                  },
-                  {
-                    step: 4,
-                    title: 'Verify',
-                    description: 'Run **Descriptives** on **bmi_dev** — the mean should be ~0.'
-                  }
+                  { step: 1, title: 'Open Compute Variable', description: 'Choose <strong>Transform &rarr; Compute Variable&hellip;</strong>' },
+                  { step: 2, title: 'Name the target', description: 'In <strong>Target Variable</strong> type <strong>bmi_dev</strong>.' },
+                  { step: 3, title: 'Enter the expression', description: 'In <strong>Numeric Expression</strong> type <strong>bmi - 29.81</strong> (use the mean you read from your table; for exact results copy the full mean from the table by double-clicking it, or give SPSS more decimals).' },
+                  { step: 4, title: 'Verify', description: 'Click <strong>OK</strong>, then run Descriptives on <strong>bmi_dev</strong>. The mean should be very close to 0, because deviations from the mean always sum to zero.' }
                 ]
               }
             ]
           },
           {
             id: 'squared-deviations-ss',
-            title: 'Squared deviations and SS',
-            objectives: ['Compute (X − mean)²', 'Sum squared deviations'],
-            estimatedTime: 10,
+            title: 'Squared deviations, SS, variance, and SD',
+            objectives: ['Compute (X − mean)²', 'Sum squared deviations', 'Rebuild the variance and SD'],
+            estimatedTime: 7,
             content: [
               {
                 type: 'text',
-                content:
-                  'Create **bmi_sqdev** = **(BMI − mean)²** using the same mean as before. Sum of squared deviations **SS** = sum of that column. In SPSS: **Descriptives** on **bmi_sqdev** with **Sum** in Options, or **Aggregate** / **Excel-style** manual check. Variance = SS/(N−1); SD = √variance — compare to SD of BMI from Descriptives.'
+                content: 'Square each deviation and add them up: SS = &Sigma;(X<sub>i</sub> &minus; X&#772;)&sup2;. Dividing SS by n &minus; 1 gives the sample variance s&sup2;, and the square root gives s.'
               },
               {
                 type: 'step_sequence',
                 steps: [
-                  {
-                    step: 1,
-                    title: 'Squared deviation',
-                    description: '**Transform → Compute**: **bmi_sqdev = (BMI − mean)²** (same mean constant as above).'
-                  },
-                  {
-                    step: 2,
-                    title: 'Sum (SS)',
-                    description: '**Analyze → Descriptives → Descriptives** on **bmi_sqdev**, **Options → Sum**. That sum is SS for BMI (using that mean).'
-                  }
+                  { step: 1, title: 'Squared deviation', description: '<strong>Transform &rarr; Compute Variable&hellip;</strong>: Target <strong>bmi_sqdev</strong>, Numeric Expression <strong>bmi_dev ** 2</strong>. Click OK.' },
+                  { step: 2, title: 'Sum them (SS)', description: '<strong>Analyze &rarr; Descriptive Statistics &rarr; Descriptives&hellip;</strong> on <strong>bmi_sqdev</strong>; <strong>Options&hellip; &rarr; Sum</strong>. The sum is SS, about 16,920 for bmi.' },
+                  { step: 3, title: 'Rebuild the variance and SD', description: 'Variance = SS / (n − 1) = 16,920 / 249 ≈ 67.95. SD = √67.95 ≈ 8.24. Compare with the Std. Deviation SPSS reported earlier.' }
                 ]
+              },
+              {
+                type: 'text',
+                content: 'Small differences in the last digits come from rounding the mean to two decimals.'
               }
             ]
           }
@@ -168,28 +159,33 @@ export const module4DescriptiveLessonsOther = [
       },
       weDo: {
         type: 'guided_practice',
-        title: 'Guided practice: Descriptives and compute',
-        instructions: 'Follow along in SPSS with BMI and exercise data.',
+        title: 'Guided practice: Descriptives and Compute',
+        instructions: 'Follow along in SPSS with the BMI and exercise data (bmi_and_exercise.csv from Tools).',
         steps: [
           {
-            instruction: 'Open your dataset with BMI and exercise columns.',
-            hint: 'CSV: **File → Import Data → CSV** (or open .sav).',
-            checkpoint: 'Variables appear in Data View.'
+            instruction: 'Open bmi_and_exercise.csv with File → Open → Data… (Files of type: Text) and complete the Text Import Wizard.',
+            hint: 'Delimited; variable names at top of file: Yes; delimiter: Comma. Then check Variable View: all three variables should be Numeric and Scale.',
+            checkpoint: 'Three variables appear in Data View, with 250 rows.'
           },
           {
-            instruction: 'Run Descriptives on BMI and exercise; record mean of BMI.',
-            hint: 'Analyze → Descriptive Statistics → Descriptives.',
-            checkpoint: 'You have a mean for BMI.'
+            instruction: 'Run Analyze → Descriptive Statistics → Descriptives… on bmi and exercise_per_week. Record the mean of bmi.',
+            hint: 'Move both variables into Variable(s), then OK.',
+            checkpoint: 'N = 250. The mean of bmi is about 29.81 and its Std. Deviation about 8.24.'
           },
           {
-            instruction: 'Compute bmi_dev = BMI minus that mean; Descriptives on bmi_dev (mean ~0).',
-            hint: 'Transform → Compute Variable.',
-            checkpoint: 'Deviation column mean near zero.'
+            instruction: 'Run Analyze → Descriptive Statistics → Explore… on bmi. Find the median, the IQR, and the skewness.',
+            hint: 'The Descriptives table has rows for Median, Interquartile Range, and Skewness.',
+            checkpoint: 'You can state whether the bmi mean and median are close and whether skewness is near 0.'
           },
           {
-            instruction: 'Compute bmi_sqdev = (BMI − mean)²; get Sum of bmi_sqdev as SS.',
-            hint: 'Descriptives → Options → Sum.',
-            checkpoint: 'SS matches SS = (N−1)×variance relationship with reported SD.'
+            instruction: 'Compute bmi_dev = bmi minus the mean with Transform → Compute Variable…. Run Descriptives on bmi_dev.',
+            hint: 'Numeric Expression: bmi - 29.81',
+            checkpoint: 'The mean of bmi_dev is essentially 0 (it may show as a tiny number such as .0000).'
+          },
+          {
+            instruction: 'Compute bmi_sqdev = bmi_dev ** 2, then use Descriptives with Options → Sum to get SS. Calculate SS / 249 and compare with the variance of bmi.',
+            hint: 'Variance = SS / (n − 1) with n = 250.',
+            checkpoint: 'SS is about 16,920 and SS / 249 is about 67.95, matching the variance from Descriptives (and its square root matches the SD).'
           }
         ]
       },
@@ -199,15 +195,41 @@ export const module4DescriptiveLessonsOther = [
           {
             id: 'spss-desc-1',
             scenario: 'Descriptives runs but N is smaller than your row count.',
-            errorMessage: 'Listwise missing handling',
+            errorMessage: 'The Descriptive Statistics table shows N = 241 for a file with 250 rows.',
             options: [
-              'SPSS deleted all rows',
-              'Some variables have missing values; SPSS uses valid N per analysis',
+              'SPSS deleted rows from the file',
+              'Some cases have missing values on that variable; SPSS only uses valid cases',
               'You must use Excel instead',
-              'Variable is string type'
+              'The variable is a string'
             ],
             correct: 1,
-            explanation: 'Descriptives uses valid cases; missing values on included variables reduce N.'
+            explanation: 'Descriptives reports valid N. Blank cells or declared missing-value codes reduce N. Check Variable View for missing codes, then look at the Data View for blanks.'
+          },
+          {
+            id: 'spss-desc-2',
+            scenario: 'You wanted the median of a variable and ran Descriptives, but there is no median in the table.',
+            errorMessage: 'No error message; the Median is simply not listed.',
+            options: [
+              'The data have no median',
+              'Descriptives does not offer a median; use Frequencies (Statistics) or Explore',
+              'Change the variable to Nominal',
+              'Turn on Split File'
+            ],
+            correct: 1,
+            explanation: 'Descriptives only offers mean, sum, SD, variance, range, min, max, standard error, kurtosis, and skewness. The median, mode, and quartiles come from Frequencies or Explore.'
+          },
+          {
+            id: 'spss-desc-3',
+            scenario: 'Earlier you used Data → Split File to compare two groups. Now every new analysis is printing separate tables for each group, which you did not want.',
+            errorMessage: 'No error message. Split File is still switched on.',
+            options: [
+              'Delete the grouping variable',
+              'Go to Data → Split File and choose Analyze all cases, do not create groups',
+              'Restart SPSS and discard your data',
+              'Change Measure to Scale'
+            ],
+            correct: 1,
+            explanation: 'Split File stays active until you turn it off. Switch it back to Analyze all cases.'
           }
         ],
         outputInterpretation: []

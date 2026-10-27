@@ -452,13 +452,13 @@ export const module3UnifiedLessons = [
     title: 'SPSS Software Fundamentals',
     software: 'spss',
     objectives: [
-      'Identify the Data View and Variable View tabs',
-      'Locate the Output window and Syntax editor',
-      'Import CSV and Excel files into SPSS',
-      'Set variable types and measurement levels',
-      'Apply variable and value labels'
+      'Tell the Data Editor, Viewer, and Syntax Editor apart',
+      'Build a small data file by defining variables first, then entering scores',
+      'Open Excel and CSV files and fix what the import guessed wrong',
+      'Set Type, Measure, labels, value labels, and missing values in Variable View',
+      'Check imported data with Frequencies and Descriptives, then save and export'
     ],
-    estimatedTime: 35, // Total: 15+20
+    estimatedTime: 35, // Learn 15 + Guided 20
     phases: {
       iDo: {
         type: 'multi_section',
@@ -466,68 +466,123 @@ export const module3UnifiedLessons = [
         sections: [
           {
             id: 'interface',
-            title: 'Getting to Know the SPSS Interface',
+            title: 'The Three SPSS Windows',
             objectives: [
-              'Identify the Data View and Variable View tabs',
-              'Locate the Output window and Syntax editor',
-              'Run a simple command from the menus'
+              'Tell the Data Editor, Viewer, and Syntax Editor apart',
+              'Switch between Data View and Variable View',
+              'Use the standard dialog box pattern, including Paste'
             ],
-            estimatedTime: 15,
+            estimatedTime: 5,
             content: [
               {
                 type: 'text',
-                content: 'SPSS has three core areas: the Data Editor (Data View and Variable View), the Output window, and the Syntax editor.'
-              },
-              {
-                type: 'annotated_image',
-                image: '/images/lessons/spss/spss-interface-overview.png',
-                alt: 'SPSS Data Editor with Data View and Variable View tabs',
-                annotations: [
-                  { x: 10, y: 5, label: 'Data View', description: 'Rows are cases, columns are variables' },
-                  { x: 30, y: 5, label: 'Variable View', description: 'Define type, labels, and missing values' },
-                  { x: 70, y: 5, label: 'Output window', description: 'Tables and charts appear here' }
-                ]
-              },
-              {
-                type: 'callout',
-                style: 'tip',
-                content: 'You can paste most menu actions to Syntax (Paste) and run them later for reproducibility.'
-              }
-            ]
-          },
-          {
-            id: 'import-data',
-            title: 'Importing Data and Defining Variables in SPSS',
-            objectives: [
-              'Import a CSV or Excel file',
-              'Set variable types and measurement levels',
-              'Apply variable and value labels'
-            ],
-            estimatedTime: 20,
-            content: [
-              {
-                type: 'text',
-                content: 'SPSS can import CSV and Excel files. After import, always check variable types and measurement levels in Variable View.'
+                content: 'SPSS uses menus and dialog boxes, and it writes every result into a separate window. Knowing which window you are in clears up most early confusion.'
               },
               {
                 type: 'definition_list',
                 items: [
                   {
-                    term: 'Type',
-                    icon: 'T',
-                    definition: 'Numeric, String, or Date; controls how SPSS reads values.',
+                    term: 'Data Editor',
+                    icon: 'D',
+                    definition: 'Where your data lives. <strong>Data View</strong> is a spreadsheet (a row is a case, a column is a variable). <strong>Variable View</strong> has one row per variable and holds its settings. Both tabs are at the bottom left.',
                     color: '#dc2626'
                   },
                   {
-                    term: 'Label',
-                    icon: 'L',
-                    definition: 'Longer description used in output.',
+                    term: 'Viewer',
+                    icon: 'V',
+                    definition: 'Where every table and chart appears. Saved separately as an <code>.spv</code> file. Export it through <strong>File &rarr; Export</strong> for Word, Excel, or PDF.',
                     color: '#7c3aed'
                   },
                   {
-                    term: 'Measure',
-                    icon: 'M',
-                    definition: 'Nominal, Ordinal, or Scale.',
+                    term: 'Syntax Editor',
+                    icon: 'S',
+                    definition: 'The text commands behind each dialog. Open it with <strong>File &rarr; New &rarr; Syntax</strong>. Saved as an <code>.sps</code> file.',
+                    color: '#0ea5e9'
+                  }
+                ]
+              },
+              {
+                type: 'text',
+                content: 'Almost every <strong>Analyze</strong> or <strong>Graphs</strong> item opens the same kind of dialog: variables on the left, a blue arrow to move them into a box on the right, optional buttons such as <em>Statistics&hellip;</em> or <em>Options&hellip;</em> (finish each with <strong>Continue</strong>), then <strong>OK</strong> to run or <strong>Paste</strong> to copy the command into Syntax without running it.'
+              },
+              {
+                type: 'callout',
+                style: 'tip',
+                content: 'Data (<code>.sav</code>), output (<code>.spv</code>), and syntax (<code>.sps</code>) are three separate files. Saving one does not save the others, and SPSS does not autosave your data.'
+              }
+            ]
+          },
+          {
+            id: 'build-data',
+            title: 'Building a Data File by Hand',
+            objectives: [
+              'Define variables in Variable View before entering scores',
+              'Give group codes value labels'
+            ],
+            estimatedTime: 4,
+            content: [
+              {
+                type: 'text',
+                content: 'The rule: <strong>define the variables first (Variable View), then enter the scores (Data View).</strong> Each column then has the right type, labels, and measurement level before any number goes in.'
+              },
+              {
+                type: 'step_sequence',
+                steps: [
+                  {
+                    step: 1,
+                    title: 'Start a new file',
+                    description: 'Choose <strong>File &rarr; New &rarr; Data</strong>.'
+                  },
+                  {
+                    step: 2,
+                    title: 'Name the variables',
+                    description: 'Open <strong>Variable View</strong>. In the Name column type one name per row. Names start with a letter and have no spaces (use <strong>SleepHours</strong> or <strong>Sleep_Hours</strong>).'
+                  },
+                  {
+                    step: 3,
+                    title: 'Set Decimals, Label, and Measure',
+                    description: 'Set Decimals to 0 for whole numbers, add a longer description in <strong>Label</strong>, and choose the <strong>Measure</strong> (Group is Nominal; Age is Scale).'
+                  },
+                  {
+                    step: 4,
+                    title: 'Add value labels to Group',
+                    description: 'Click the Values cell for Group, then the <strong>&hellip;</strong> button. Type <strong>1</strong> in Value and <strong>Control</strong> in Label, click <strong>Add</strong>, then repeat for <strong>2 = Treatment</strong>. Click <strong>OK</strong>.'
+                  },
+                  {
+                    step: 5,
+                    title: 'Enter the scores',
+                    description: 'Return to <strong>Data View</strong> and type down each column. Tab moves right, Enter moves down. <strong>View &rarr; Value Labels</strong> shows the words instead of 1 and 2.'
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 'import-data',
+            title: 'Opening and Importing Files',
+            objectives: [
+              'Open Excel and CSV files',
+              'Check the Text Import Wizard choices'
+            ],
+            estimatedTime: 3,
+            content: [
+              {
+                type: 'text',
+                content: 'Use <strong>File &rarr; Open &rarr; Data&hellip;</strong> for everything, and change <strong>Files of type</strong> at the bottom of the dialog if your file does not appear.'
+              },
+              {
+                type: 'definition_list',
+                items: [
+                  {
+                    term: 'Excel',
+                    icon: 'X',
+                    definition: 'Set Files of type to Excel. Keep <em>Read variable names from the first row of data</em> ticked if row 1 has headings. Pick the worksheet, then OK.',
+                    color: '#16a34a'
+                  },
+                  {
+                    term: 'CSV / text',
+                    icon: 'C',
+                    definition: 'Set Files of type to Text (*.txt, *.dat, *.csv, *.tab). In the Text Import Wizard answer: Predefined format <em>No</em>; Delimited; variable names at top <em>Yes</em>; delimiter <em>Comma</em>; then Next until Finish.',
                     color: '#0ea5e9'
                   }
                 ]
@@ -535,7 +590,31 @@ export const module3UnifiedLessons = [
               {
                 type: 'callout',
                 style: 'warning',
-                content: 'If a numeric column imports as text, you must change Type to Numeric or analyses will fail.'
+                content: 'Imported Type and Measure are only SPSS\'s guesses. A numeric column that arrives left-aligned (as text) usually has a stray space or “N/A” in it. Fix the source file and import again.'
+              }
+            ]
+          },
+          {
+            id: 'variable-settings',
+            title: 'Type, Measure, Labels, and Missing Values',
+            objectives: [
+              'Distinguish Type from Measure',
+              'Declare missing-value codes'
+            ],
+            estimatedTime: 3,
+            content: [
+              {
+                type: 'text',
+                content: '<strong>Type</strong> asks what is stored (Numeric, String, Date). <strong>Measure</strong> asks what it means: <strong>Nominal</strong> for categories, <strong>Ordinal</strong> for ordered ranks, and <strong>Scale</strong> for interval and ratio data (SPSS has no separate setting for the two).'
+              },
+              {
+                type: 'callout',
+                style: 'warning',
+                content: 'A column of group codes (1, 2, 3) is Numeric but <strong>Nominal</strong>. SPSS will happily average it, and the answer means nothing.'
+              },
+              {
+                type: 'text',
+                content: 'If you used a code such as 99 for &ldquo;no answer&rdquo;, open the <strong>Missing</strong> cell, click <strong>&hellip;</strong>, choose <strong>Discrete missing values</strong>, and type 99. Otherwise SPSS counts it as a real score and every mean and SD is wrong.'
               }
             ]
           }
@@ -544,59 +623,111 @@ export const module3UnifiedLessons = [
       weDo: {
         type: 'guided_practice',
         title: 'Guided Practice: SPSS Fundamentals',
-        instructions: 'Follow these step-by-step exercises in SPSS. Each step has an instruction, a hint if you get stuck, and a checkpoint so you know when you\'ve done it correctly.',
+        instructions: 'Follow these steps in SPSS. Each step has a hint if you get stuck and a checkpoint so you know it worked.',
         steps: [
           {
-            instruction: 'Open SPSS and create a new blank dataset. Go to the menu bar and choose File > New > Data. This opens a blank Data Editor so you can define variables and enter data.',
-            hint: 'If SPSS is already open with a previous dataset, use File > New > Data to start fresh. You should see a grid with rows and columns; the columns are initially named var00001, var00002, and so on.',
-            checkpoint: 'The Data Editor is open in Data View. You see a grid where each column is a variable and each row will be a case (e.g., one person). The left side shows row numbers; the top shows column headers.'
+            instruction: 'Start a new data file with File → New → Data, then click the Variable View tab at the bottom left.',
+            hint: 'The two tabs are at the bottom left of the Data Editor. In Variable View each row is one variable and the columns are Name, Type, Width, Decimals, Label, Values, Missing, and Measure.',
+            checkpoint: 'You are in Variable View with an empty list of variables.'
           },
           {
-            instruction: 'Switch to Variable View. At the bottom of the Data Editor window you will see two tabs: "Data View" and "Variable View". Click the "Variable View" tab. Here you define variable names, types, labels, and measurement levels instead of typing data.',
-            hint: 'The Variable View tab is in the same window as the data grid, at the bottom. In Variable View, each row is one variable (one column from Data View). You will see columns like Name, Type, Width, Decimals, Label, Values, Missing, and Measure.',
-            checkpoint: 'You are now in Variable View. Each row corresponds to a variable. You can see columns for Name, Type, Label, and Measure. This is where you will set variable types and measurement levels.'
+            instruction: 'Define two variables. Row 1: Name Group, Decimals 0, Label “Study group”, Measure Nominal. Row 2: Name Score, Decimals 0, Label “Quiz score (0–100)”, Measure Scale.',
+            hint: 'Click a Measure cell and choose from the drop-down list. Names cannot contain spaces.',
+            checkpoint: 'Two rows appear in Variable View with the names, labels, and measures above.'
           },
           {
-            instruction: 'Return to Data View and enter a few numbers. Click the "Data View" tab. In the first column (under var00001), type 70 in the first row, 82 in the second, and 95 in the third. You can double-click the column header in Variable View first to rename this variable to "Score" if you like.',
-            hint: 'In Data View, click the first cell of the first column and type 70, then press Enter and type 82, then 95. To name the column "Score", switch to Variable View, click the Name cell for the first variable, and type Score.',
-            checkpoint: 'You have at least three numbers (e.g., 70, 82, 95) in one column. The column may be named var00001 or Score. You have practiced entering numeric data in Data View.'
+            instruction: 'Add value labels to Group: click its Values cell, then …. Add 1 = Control and 2 = Treatment, clicking Add after each, then OK.',
+            hint: 'You must click Add after each pair, or the label is not saved.',
+            checkpoint: 'The Values cell for Group now reads {1, Control}…'
           },
           {
-            instruction: 'Open the Frequencies dialog and paste to Syntax. Go to the menu: Analyze > Descriptive Statistics > Frequencies. In the dialog, you can move a variable into the Variable(s) box, then click "Paste" (not OK). This writes the command to a Syntax window so you can run or edit it later.',
-            hint: 'Paste sends the command to the Syntax Editor instead of running it immediately. After clicking Paste, a Syntax window opens with a line like FREQUENCIES VARIABLES=Score. You can run it from the Syntax window with Run > All.',
-            checkpoint: 'A Syntax window is open and contains a FREQUENCIES (or similar) command. You have seen how menu actions can be pasted to Syntax for reproducibility.'
+            instruction: 'Switch to Data View and enter five cases. Group: 1, 2, 1, 2, 1. Score: 70, 82, 95, 64, 88. Then choose View → Value Labels.',
+            hint: 'Press Tab to move right and Enter to move down. If value labels do not show, make sure the View menu item is ticked.',
+            checkpoint: 'Group shows Control and Treatment, and you have five rows of data.'
           },
           {
-            instruction: 'Import a CSV file. Use File > Open > Data. In the file dialog, set "Files of type" to CSV (*.csv) or "All Files" so your CSV appears. Select your file and click Open. Follow any import wizard steps (e.g., delimiter, encoding) if they appear.',
-            hint: 'If your CSV does not show up, change the file type dropdown to "CSV (*.csv)" or "All Files (*.*)". After opening, check Data View to confirm your variables and values loaded correctly.',
-            checkpoint: 'Your CSV data appears in the Data Editor. Variables appear as columns and cases as rows. You can switch to Variable View to see or edit variable names and types.'
+            instruction: 'Choose Analyze → Descriptive Statistics → Frequencies…, move Group into Variable(s), and click Paste (not OK). Then in the Syntax Editor choose Run → All.',
+            hint: 'Paste writes a line such as FREQUENCIES VARIABLES=Group. Run → All runs everything in the Syntax window.',
+            checkpoint: 'A Syntax Editor window holds a FREQUENCIES command, and the Viewer shows a table with 3 Control and 2 Treatment cases.'
           },
           {
-            instruction: 'In Variable View, check the Type for each variable. Click each cell in the "Type" column. Numeric is for numbers; String is for text. If a column that should be numeric was read as string (e.g., because of a header), change it to Numeric and ensure decimal places are set as needed.',
-            hint: 'Click the Type cell for a variable; a dialog opens. Choose "Numeric" for quantitative data and "String" for text (e.g., IDs or labels). Set width and decimals as appropriate for numeric variables.',
-            checkpoint: 'Every variable has a Type set (Numeric or String). Variables that hold numbers are Numeric; variables that hold text only are String.'
+            instruction: 'Use Analyze → Descriptive Statistics → Descriptives… on Score and click OK. Look at N, Minimum, and Maximum in the Viewer.',
+            hint: 'This is the range check you run after any import. Minimum should be 64 and Maximum 95.',
+            checkpoint: 'N = 5, Minimum = 64, Maximum = 95. You are confident none of the values is a typo.'
           },
           {
-            instruction: 'Set the Measure (measurement level) for each variable. In Variable View, click the "Measure" column for each variable. Choose Scale for continuous numeric variables (e.g., score, age), Ordinal for ordered categories (e.g., Likert scale), and Nominal for unordered categories (e.g., group name, gender).',
-            hint: 'Scale = interval/ratio (numeric with meaningful differences). Ordinal = ordered categories (e.g., 1=Low, 2=Medium, 3=High). Nominal = unordered categories (e.g., group A, B, C). This affects which analyses SPSS will allow and how results are labeled.',
-            checkpoint: 'The Measure column is filled in for all variables. Scale is used for continuous measures, Ordinal for ordered categories, and Nominal for unordered categories.'
+            instruction: 'Save the data with File → Save As…, name it practice_m3, and confirm Save as type is SPSS Statistics (*.sav). Then click in the Viewer and use File → Export… to save your output as Word or PDF.',
+            hint: 'The data and the output are saved separately. The .sav file keeps your Variable View settings; the export holds only the tables.',
+            checkpoint: 'You have a practice_m3.sav file and an exported copy of the output.'
           },
           {
-            instruction: 'Add a Variable Label for at least one variable. In Variable View, click the "Label" cell for a variable and type a longer description (e.g., "Total score on the quiz"). Labels appear in output tables and charts and help others understand your variables.',
-            hint: 'The Label column is for a human-readable description. For example, for a variable named "totscore" you might add the label "Total quiz score (0–100)".',
-            checkpoint: 'At least one variable has a label in the Label column. When you run analyses, this label can appear in the output instead of (or in addition to) the short variable name.'
+            instruction: 'Open a CSV from the Tools bar with File → Open → Data… (Files of type: Text). Work through the Text Import Wizard (Delimited, names at top, Comma), then open Variable View and check each variable\'s Type and Measure.',
+            hint: 'If everything lands in one column, you picked the wrong delimiter; reopen the file. If the headings became data, the “names at top” answer was reversed.',
+            checkpoint: 'Each variable sits in its own column with sensible names. Numeric variables are Numeric (right-aligned), and group codes are Nominal.'
           }
         ]
       },
       selfCheck: {
         screenshotRecognition: [],
-        errorDiagnostic: [],
-        outputInterpretation: []
+        errorDiagnostic: [
+          {
+            id: 'spss-error-all-one-column',
+            scenario: 'You opened a CSV with File > Open > Data. In Data View, all the values are crammed into a single column, separated by commas.',
+            errorMessage: 'No error message. The data look wrong.',
+            options: [
+              'Delete the extra commas by hand',
+              'Reopen the file and choose Comma as the delimiter in the Text Import Wizard',
+              'Change Measure to Scale',
+              'Change Decimals to 0'
+            ],
+            correct: 1,
+            explanation: 'The Text Import Wizard split on the wrong delimiter. Reopen the file and choose Comma (or Tab for a tab-separated file).'
+          },
+          {
+            id: 'spss-error-missing-99',
+            scenario: 'Your survey uses 99 for “no answer”. The mean age is 41, but every participant is between 18 and 25.',
+            errorMessage: 'No error message. The mean is far too large.',
+            options: [
+              'The 99s are being counted as real ages; declare 99 as a missing value in Variable View',
+              'Set Measure to Nominal',
+              'Change Type to String',
+              'Run Frequencies instead of Descriptives'
+            ],
+            correct: 0,
+            explanation: 'SPSS only ignores a code if you declare it. Use the Missing column in Variable View (Discrete missing values → 99).'
+          },
+          {
+            id: 'spss-error-group-mean',
+            scenario: 'Descriptives reports a mean of 1.5 for the variable Group (1 = Control, 2 = Treatment).',
+            errorMessage: 'No error message. The result is meaningless.',
+            options: [
+              'The mean is correct; report it',
+              'Group is a nominal category; set Measure to Nominal and use Frequencies, not Descriptives',
+              'Change Type to Date',
+              'Increase Decimals'
+            ],
+            correct: 1,
+            explanation: 'The numbers are only codes. SPSS will compute a mean of any numeric column, so you have to tell it (and yourself) that Group is Nominal and summarize it with counts.'
+          }
+        ],
+        outputInterpretation: [
+          {
+            id: 'spss-output-window',
+            question: 'You ran Analyze > Descriptive Statistics > Frequencies, then closed SPSS after saving only your .sav file. Next day you cannot find your frequency table. What happened, and what should you have done?',
+            placeholder: 'Explain where results appear and how to keep them...',
+            hint: 'Think about which file holds the data and which holds the tables.',
+            requiredKeywords: [
+              'viewer', 'output', 'spv', 'export', 'separate', 'separately', 'not saved', 'sav', 'data'
+            ],
+            minRequiredKeywords: 2,
+            feedback: 'Results are written to the Viewer, not the data file. The .sav file holds only data and Variable View settings. Save the Viewer as an .spv file (or use File > Export to make a Word or PDF copy) before you close.'
+          }
+        ]
       },
       youDo: {
         type: 'independent_practice',
         title: 'Apply Your Skills',
-        summary: 'In this Apply phase, you will independently complete exercises that reinforce SPSS fundamentals. You\'ll practice creating new datasets, navigating between Data View and Variable View, importing CSV files, setting variable types (Numeric vs String) and measurement levels (Nominal, Ordinal, Scale), adding variable labels, and using the Syntax editor. These exercises help you become comfortable with SPSS data management on your own. Each exercise has detailed instructions and a hint button if you get stuck.',
+        summary: 'In this Apply phase, you will work on your own: create a new dataset and define a variable, import a CSV file and confirm its variables are Numeric, add variable and value labels, and save your data as .sav and export a CSV copy. Each exercise has detailed instructions and a hint button if you get stuck.',
         instructions: 'Complete these hands-on exercises independently. Each exercise has step-by-step instructions and a hint button if you need help. Work through them in order, and mark each as complete when you\'ve finished. You can use the recording tools to document your work if needed.'
       }
     }
