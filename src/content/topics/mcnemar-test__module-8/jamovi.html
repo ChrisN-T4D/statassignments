@@ -28,7 +28,7 @@
 
     <h4>Standard contingency table (WRONG for this data):</h4>
     <table class="stats-table">
-      <tr><th></th><th>Before: Yes</th><th>Before: No</th></tr>
+      <tr><th scope="col"></th><th scope="col">Before: Yes</th><th scope="col">Before: No</th></tr>
       <tr><td>After: Yes</td><td>30</td><td>70</td></tr>
       <tr><td>After: No</td><td>10</td><td>90</td></tr>
     </table>
@@ -36,10 +36,10 @@
 
     <h4>Correct format for McNemar (same data):</h4>
     <table class="stats-table">
-      <tr><th></th><th>Before: Yes</th><th>Before: No</th><th>Total</th></tr>
+      <tr><th scope="col"></th><th scope="col">Before: Yes</th><th scope="col">Before: No</th><th scope="col">Total</th></tr>
       <tr><td>After: Yes</td><td>5</td><td>5</td><td>10</td></tr>
       <tr><td>After: No</td><td>25</td><td>65</td><td>90</td></tr>
-      <tr><th>Total</th><th>30</th><th>70</th><th>100</th></tr>
+      <tr><th scope="col">Total</th><th scope="col">30</th><th scope="col">70</th><th scope="col">100</th></tr>
     </table>
     <p><em>Now each of the 100 people appears in exactly one cell</em></p>
   </div>
@@ -48,7 +48,7 @@
   <div class="formula-box">
     <h4>The four cells represent:</h4>
     <table class="stats-table">
-      <tr><th></th><th>Before: Yes</th><th>Before: No</th></tr>
+      <tr><th scope="col"></th><th scope="col">Before: Yes</th><th scope="col">Before: No</th></tr>
       <tr><td>After: Yes</td><td><strong>a</strong> = stayed Yes (5)</td><td><strong>b</strong> = changed No→Yes (5)</td></tr>
       <tr><td>After: No</td><td><strong>c</strong> = changed Yes→No (25)</td><td><strong>d</strong> = stayed No (65)</td></tr>
     </table>
@@ -124,9 +124,9 @@
   <div class="formula-box">
     <table class="stats-table">
       <tr>
-        <th></th>
-        <th>McNemar</th>
-        <th>Chi-Square Independence</th>
+        <th scope="col"></th>
+        <th scope="col">McNemar</th>
+        <th scope="col">Chi-Square Independence</th>
       </tr>
       <tr>
         <td><strong>Design</strong></td>

@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header class="header">
       <div class="container header-content">
         <router-link to="/" class="logo">
@@ -16,7 +17,7 @@
 
     <CourseSwitcher />
 
-    <main>
+    <main id="main-content" tabindex="-1">
       <router-view />
     </main>
 
