@@ -9,7 +9,7 @@ Last updated 2026-10-26. Public summary: About page, "Credits and Licensing". Ro
 | Navarro and Foxcroft, *Learning Statistics with jamovi* | CC BY-SA 4.0 | Statistics chapters, Modules 3-8, all five software tracks | `<div class="attribution">` at the end of each page, or the "software-adaptation-note" at the top of non-jamovi tracks |
 | Jhangiani, Chiang, Cuttler and Leighton, *Research Methods in Psychology* 4e | CC BY-NC-SA 4.0 | `rm-chapter-*` pages | "This content is copied from..." line |
 | xkcd (Randall Munroe) | CC BY-NC 2.5 | A few `rm-chapter-*` pages | Caption on each comic |
-| Written for this course | Holder to confirm | Module 0, Module 3 interface chapters (`data-entry`, `variable-types`, `screen-recording-tutorial`), practice questions, sample data | Where present: "written for this course" |
+| Written for this course | Chris (Methods Market author) | Module 0, Module 3 interface chapters (`data-entry`, `variable-types`, `screen-recording-tutorial`), practice questions, sample data | Where present: "written for this course" |
 
 ## Rules when adding or editing a page
 
@@ -21,6 +21,6 @@ Last updated 2026-10-26. Public summary: About page, "Credits and Licensing". Ro
 
 ## Open items
 
-- Source text: copyright stays with the named authors (confirmed by Chris 2026-10-26). Still to confirm: who holds copyright on material written only for this course (Module 0, interface guides, practice questions, sample data).
+- Source text: copyright stays with the named authors (confirmed by Chris 2026-10-26). Material written only for this course (Module 0, interface guides, practice questions, sample data) is held by Chris (confirmed 2026-10-26); add the full legal name to `NOTICE`.
 - Check whether the SPSS/R/Excel/Stata adaptation notes should also name the exact Navarro/Foxcroft edition and chapter.
 - Check `public/` images and data files for sources (not audited).

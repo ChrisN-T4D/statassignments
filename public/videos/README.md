@@ -37,8 +37,8 @@ Add this HTML to your topic's `contentHtml` in `src/data/topics.js`:
 ```
 
 **How to get YouTube Video ID:**
-- From URL `https://www.youtube.com/watch?v=dQw4w9WgXcQ`
-- Video ID is: `dQw4w9WgXcQ` (everything after `v=`)
+- From URL `https://www.youtube.com/watch?v=YOUR_VIDEO_ID`
+- Video ID is: `YOUR_VIDEO_ID` (everything after `v=`)
 
 ### Method 2: Self-Hosted Video
 
