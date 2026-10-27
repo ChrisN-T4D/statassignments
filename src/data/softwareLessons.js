@@ -36,7 +36,6 @@ import { module7UnifiedLessons } from './softwareLessons_module7_unified.js'
 import { module7SpssLessons } from './softwareLessons_module7_spss.js'
 import { module8UnifiedLessons } from './softwareLessons_module8_unified.js'
 import { module8UnifiedLessonsOther } from './softwareLessons_module8_unified_other.js'
-import { module8SpssLessons } from './softwareLessons_module8_spss.js'
 import { excelGuidesLessons } from './softwareLessons_excel_guides.js'
 
 export const softwareLessons = [
@@ -44,7 +43,6 @@ export const softwareLessons = [
   ...module3UnifiedLessons,
 
   ...module6SpssLessons,
-  ...module8SpssLessons,
 
   // ============ Excel Guides (Stats Made Easy style) ============
   ...excelGuidesLessons,

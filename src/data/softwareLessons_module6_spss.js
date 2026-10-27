@@ -208,35 +208,88 @@ const confidenceIntervalPhases = {
   }
 }
 
+// The viewer takes one unified lesson per module: multi_section Learn, guided steps,
+// a self-check, and Apply (the exercises are in the Parallels files). The two older
+// demonstration-style lessons are folded into it.
+const mcToDiagnostic = (id, q) => ({
+  id,
+  scenario: q.question,
+  errorMessage: 'Which answer is correct?',
+  options: q.options,
+  correct: q.correctAnswer,
+  explanation: q.feedback.correct
+})
+
+const normalMc = normalProbabilityPhases.weDo.assessment
+const ciMc = confidenceIntervalPhases.weDo.assessment
+const normalDrill = normalProbabilityPhases.youDo.assessment.filter((q) => q.type === 'multiple_choice')
+const ciDrill = confidenceIntervalPhases.youDo.assessment.filter((q) => q.type === 'multiple_choice')
+
 export const module6SpssLessons = [
   {
-    id: 'spss-module-6-normal-ci',
+    id: 'spss-module-6-unified',
     module: 'stats-module-6',
     title: 'Normal Probabilities and Confidence Intervals in SPSS',
     software: 'spss',
     objectives: [
       'Compute normal-distribution probabilities with CDF.NORMAL and percentiles with IDF.NORMAL',
-      'Produce and read a 95% confidence interval with Explore',
-      'Distinguish SD from SE and interpret a CI correctly'
+      'Produce and read a 95% confidence interval for a mean with Explore',
+      'Tell SD from SE and interpret a confidence interval correctly',
+      'Explain how sample size affects interval width'
     ],
-    estimatedTime: 35,
+    estimatedTime: 60,
     phases: {
-      iDo: normalProbabilityPhases.iDo,
-      weDo: normalProbabilityPhases.weDo,
-      youDo: normalProbabilityPhases.youDo
+      iDo: {
+        type: 'multi_section',
+        title: 'Learn: Normal Probabilities and Confidence Intervals',
+        sections: [
+          {
+            id: 'normal-probabilities',
+            title: 'Normal Probabilities with Compute Variable',
+            objectives: [
+              'Build CDF.NORMAL and IDF.NORMAL expressions',
+              'Find the area above a value and between two values'
+            ],
+            estimatedTime: 25,
+            content: normalProbabilityPhases.iDo.content
+          },
+          {
+            id: 'confidence-intervals',
+            title: 'Confidence Intervals with Explore',
+            objectives: [
+              'Run Explore and find the 95% CI for the mean',
+              'Separate SD (individuals) from SE (sample means)'
+            ],
+            estimatedTime: 25,
+            content: confidenceIntervalPhases.iDo.content
+          }
+        ]
+      },
+      weDo: {
+        type: 'guided_practice',
+        title: 'Guided Practice: Probabilities and Confidence Intervals (SPSS)',
+        instructions:
+          'Follow along in SPSS. For the IQ steps use Transform > Compute Variable with mu = 100 and sigma = 15. For the CI steps open bmi_and_exercise.csv from Tools.',
+        steps: [...normalProbabilityPhases.weDo.steps, ...confidenceIntervalPhases.weDo.steps]
+      },
+      selfCheck: {
+        screenshotRecognition: [],
+        errorDiagnostic: [
+          mcToDiagnostic('m6-spss-normal-above', normalMc),
+          mcToDiagnostic('m6-spss-ci-meaning', ciMc),
+          ...normalDrill.map((q, i) => mcToDiagnostic(`m6-spss-normal-drill-${i}`, q)),
+          ...ciDrill.map((q, i) => mcToDiagnostic(`m6-spss-ci-drill-${i}`, q))
+        ],
+        outputInterpretation: []
+      },
+      youDo: {
+        type: 'independent_practice',
+        title: 'Apply Your Skills',
+        summary:
+          'Record yourself completing Module 6 Software Practice in SPSS on a different file than Learn and Practice: open personality_data.csv from Tools. Compute normal probabilities with Compute Variable, then use Explore to get a 95% confidence interval for the mean of a continuous scale such as extraversion or age. Then complete the Module 6 Apply exercises below.',
+        instructions:
+          'Start recording (Tools or your phone). Open personality_data.csv from Tools, complete each exercise below in SPSS, then stop, download the video, and upload it to Canvas as Module 6: Software Practice. Mark each exercise complete when finished.'
+      }
     }
-  },
-  {
-    id: 'spss-module-6-confidence-intervals',
-    module: 'stats-module-6',
-    title: 'Confidence Intervals in SPSS',
-    software: 'spss',
-    objectives: [
-      'Compute a 95% CI for a mean with Explore',
-      'Interpret what a confidence interval does and does not mean',
-      'Explain how n affects interval width'
-    ],
-    estimatedTime: 25,
-    phases: confidenceIntervalPhases
   }
 ]

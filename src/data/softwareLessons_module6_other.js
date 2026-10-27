@@ -200,34 +200,6 @@ function ciLesson (id, software, title, weSteps) {
 
 export const module6LessonsOther = [
   normalLesson(
-    'spss-normal-distribution',
-    'spss',
-    'Working with the Normal Distribution in SPSS',
-    'IQ column; mean 100 SD 15 for reference z.',
-    [
-      {
-        instruction: 'Enter IQ scores in one column (Continuous).',
-        hint: 'Variable View type Numeric.',
-        checkpoint: '9 values entered.'
-      },
-      {
-        instruction: 'Descriptive Statistics → Descriptives on IQ.',
-        hint: 'Analyze menu.',
-        checkpoint: 'Mean and SD on output.'
-      },
-      {
-        instruction: 'Transform → Compute: z_pop = (IQ - 100) / 15.',
-        hint: 'Test value population μ, σ.',
-        checkpoint: 'Z column created.'
-      },
-      {
-        instruction: 'Count how many IQs fall between 85 and 115 (±1 SD from 100).',
-        hint: 'Empirical rule expectation ~68% for large normal samples.',
-        checkpoint: 'Rough check vs 68%.'
-      }
-    ]
-  ),
-  normalLesson(
     'r-normal-distribution',
     'r',
     'Working with the Normal Distribution in R',
@@ -263,10 +235,6 @@ export const module6LessonsOther = [
       { instruction: '`count if iq >= 85 & iq <= 115`', hint: '', checkpoint: 'count' }
     ]
   ),
-  ciLesson('spss-confidence-intervals', 'spss', 'Understanding Confidence Intervals in SPSS', [
-    { instruction: 'Enter 10 scores; Descriptives → Options → Confidence interval for mean.', hint: 'Analyze → Descriptive Statistics', checkpoint: 'CI shown' },
-    { instruction: 'Add 10 more scores; rerun.', hint: 'Larger n', checkpoint: 'CI narrower' }
-  ]),
   ciLesson('r-confidence-intervals', 'r', 'Understanding Confidence Intervals in R', [
     { instruction: '`t.test(x, conf.level=0.95)$conf.int` for one sample.', hint: '10 values', checkpoint: 'interval' },
     { instruction: 'Append 10 values; rerun t.test.', hint: '', checkpoint: 'narrower' }

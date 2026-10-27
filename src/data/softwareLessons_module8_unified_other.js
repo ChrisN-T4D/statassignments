@@ -523,6 +523,21 @@ const m8WeDoSPSS = {
     'Work through one short example per analysis in SPSS. Use practice datasets from your course or the class data files.',
   steps: [
     {
+      instruction: 'Choose the test first. Meditation group vs control group on anxiety scores: which menu?',
+      hint: 'Two different groups of people.',
+      checkpoint: 'Analyze > Compare Means > Independent-Samples T Test; Levene\'s test decides which row to read.'
+    },
+    {
+      instruction: 'Same students, exam 1 vs exam 2: which menu? Then, if Levene\'s p = .02, which row do you report?',
+      hint: 'Same people twice means paired. For the independent test, a small Levene p means variances differ.',
+      checkpoint: 'Paired-Samples T Test; for unequal variances read the "Equal variances not assumed" (Welch) row.'
+    },
+    {
+      instruction: 'Is major (Psych, Nursing, Business) related to study-abroad intent (yes/no)? Do exam scores differ across THREE teaching methods?',
+      hint: 'Count the variables and what kind they are.',
+      checkpoint: 'Two categorical variables: Crosstabs chi-square. Three or more means: One-Way ANOVA (Tukey post hoc).'
+    },
+    {
       instruction: 'χ² **Goodness-of-fit**: Nonparametric (One Sample / Legacy Chi-square) with expected proportions.',
       hint: 'Analyze → Nonparametric Tests',
       checkpoint: 'χ², df, p in output; check expected counts.'
