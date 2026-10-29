@@ -23,4 +23,9 @@ Last updated 2026-10-26. Public summary: About page, "Credits and Licensing". Ro
 
 - Source text: copyright stays with the named authors (confirmed by Chris 2026-10-26). Material written only for this course (Module 0, interface guides, practice questions, sample data) is held by Chris (confirmed 2026-10-26); add the full legal name to `NOTICE`.
 - Check whether the SPSS/R/Excel/Stata adaptation notes should also name the exact Navarro/Foxcroft edition and chapter.
-- Check `public/` images and data files for sources (not audited).
+- `public/` audit (2026-10-28, from file names, headers and git history only; no reverse image search):
+  - xkcd: used only as text lines ("retrieved from ... CC-BY-NC 2.5") in `rm-chapter-5/7/12/13`; no comic image files are in the repo. Credit and license are present. Stays fine while the site is free to students.
+  - Lesson/self-check screenshots (50 PNGs under `public/images`) are of jamovi and SPSS windows; assumed captured by Chris. Confirm none came from the textbooks.
+  - Software icons (`jamovi-icon.png`, `SPSS-icon.png`, `r-icon.png`, `rstudio-icon.png`, `excel-icon.png`, `stata-icon.png`): product logos used to name the software. Trademarks belong to their owners; consider a one-line note on the About page.
+  - Data files: `bmi_and_exercise.csv`, `Normality data.csv`, `module4sampledata.csv`, `Final Benchmark Data.csv` look made for the course. **Provenance unknown, ask Chris:** `personality_data.csv` (778 rows with ethnicity) and `cleanedWide.Sample2.open.access.csv` (survey data with a REDCap-style layout). If either is a published open dataset, add its citation and license here and in the lesson that uses it.
+  - `logo_gif.gif`, `under-construction.gif`: source unknown; under-construction.gif should be removed before launch if it is not shown to students.
