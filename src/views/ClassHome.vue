@@ -206,6 +206,18 @@
                     <span v-if="mod.navBadge" class="module-nav-badge">{{ mod.navBadge }}</span>
                   </button>
                 </div>
+                <p v-if="phase.relatedItems?.length" class="nav-related">
+                  <span class="nav-related-label">Related reading:</span>
+                  <button
+                    v-for="rel in phase.relatedItems"
+                    :key="rel.id"
+                    type="button"
+                    class="nav-related-link"
+                    @click="selectNavItem(rel)"
+                  >
+                    Ch. {{ rel.number }}: {{ getNavItemLabel(rel) }}
+                  </button>
+                </p>
               </div>
             </template>
             <div v-else class="module-list">
@@ -2192,6 +2204,30 @@ watch(selectedModuleId, id => {
 
 .nav-phase:last-child {
   margin-bottom: 0;
+}
+
+.nav-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+}
+
+.nav-related-label {
+  color: var(--text-secondary);
+}
+
+.nav-related-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--primary-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
 }
 
 .nav-phase-label {

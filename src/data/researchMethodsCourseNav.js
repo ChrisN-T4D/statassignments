@@ -3,6 +3,8 @@
  * Part → phase → items (Pressbooks chapter modules, Study Plan sections, assignment-help links).
  * Each item appears once, in the phase that owns it (the first phase that needs it). Later phases
  * link back to earlier readings rather than repeating them.
+ * A phase may list `related` chapter module ids: readings owned by an earlier phase that this phase
+ * also leans on. They render as links under the phase, not as separate nav items.
  */
 
 import { STUDY_PLAN_SECTIONS } from './capstoneWorksheetSchemas.js'
@@ -61,7 +63,8 @@ export const RESEARCH_METHODS_PARTS = [
         label: 'Phase 3 & 4: Research question & operationalization',
         items: [
           { kind: 'study-plan', sectionId: 'phase-4' }
-        ]
+        ],
+        related: ['rm-module-2', 'rm-module-4']
       },
       {
         id: 'methods-section',
@@ -70,7 +73,8 @@ export const RESEARCH_METHODS_PARTS = [
           { kind: 'study-plan', sectionId: 'methods-section' },
           { kind: 'chapter', moduleId: 'rm-module-10' },
           { kind: 'chapter', moduleId: 'rm-module-lab' }
-        ]
+        ],
+        related: ['rm-module-4', 'rm-module-5', 'rm-module-6', 'rm-module-7', 'rm-module-9', 'rm-module-11']
       },
       {
         id: 'method-paths',
@@ -109,7 +113,8 @@ export const RESEARCH_METHODS_PARTS = [
           { kind: 'assignment-help', assignmentId: 'rm-irb-first-draft' },
           { kind: 'assignment-help', assignmentId: 'rm-irb-final-draft' },
           { kind: 'assignment-help', assignmentId: 'rm-irb-status-update' }
-        ]
+        ],
+        related: ['rm-module-3']
       }
     ]
   },
@@ -220,7 +225,8 @@ export function groupResearchMethodsCourseNav (modules) {
     const phases = part.phases
       .map((phase) => ({
         ...phase,
-        items: phase.items.map((item) => resolveNavItem(item, modulesById)).filter(Boolean)
+        items: phase.items.map((item) => resolveNavItem(item, modulesById)).filter(Boolean),
+        relatedItems: (phase.related || []).map((id) => resolveChapterItem({ moduleId: id }, modulesById)).filter(Boolean)
       }))
       .filter((phase) => phase.items.length > 0)
     const modulesFlat = phases.flatMap((phase) => phase.items)
