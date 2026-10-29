@@ -16,6 +16,16 @@
         </h1>
       </div>
 
+      <details v-if="moduleInfo?.learningObjectives?.length" open class="topic-objectives">
+        <summary>
+          <h2>Learning objectives</h2>
+        </summary>
+        <p class="topic-objectives-lead">By the end of this module, you will be able to:</p>
+        <ul>
+          <li v-for="(obj, idx) in moduleInfo.learningObjectives" :key="idx">{{ obj }}</li>
+        </ul>
+      </details>
+
       <!-- Topic Content (per preferred software; see resolveTopicHtml) -->
       <div v-if="resolvedContentHtml" class="topic-content" v-html="resolvedContentHtml"></div>
 
@@ -415,6 +425,45 @@ watch(topicId, async (newTopicId, oldTopicId) => {
 </script>
 
 <style scoped>
+
+.topic-objectives {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.topic-objectives summary {
+  cursor: pointer;
+}
+
+.topic-objectives h2 {
+  display: inline;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.topic-objectives-lead {
+  margin: 0.5rem 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+.topic-objectives ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.topic-objectives li {
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
 .topic-title-icon {
   width: 28px;
   height: 28px;
