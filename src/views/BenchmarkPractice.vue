@@ -1,6 +1,7 @@
 <template>
   <div class="benchmark-practice" :class="{ 'printing-packet': printFocus === 'packet' }">
     <div class="container">
+      <WeekContextBar v-if="hasSchedule(classId)" :class-slug="String(classId)" />
       <template v-if="config">
         <!-- Back -->
         <router-link :to="backUrl" class="back-link">← Assignment Help: {{ config.title }}</router-link>
@@ -312,6 +313,8 @@ import { shuffleMcOptions } from '../lib/shuffleQuestionOptions.js'
 import { scoreConceptAnswer } from '../lib/conceptReviewScoring.js'
 import { pb } from '../lib/pocketbase'
 import ConceptReviewPrintPacket from '../components/ConceptReviewPrintPacket.vue'
+import WeekContextBar from '../components/WeekContextBar.vue'
+import { hasSchedule } from '../data/researchMethodsSchedule'
 
 const route = useRoute()
 const classId = computed(() => route.params.classId)
