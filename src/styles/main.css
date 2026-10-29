@@ -442,6 +442,14 @@ a:hover {
   margin-bottom: 1rem;
 }
 
+/* Links inside running text are underlined so colour is not the only cue (WCAG 1.4.1) */
+.topic-content p a,
+.topic-content li a,
+.topic-content td a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .topic-content ul,
 .topic-content ol {
   margin-left: 1.5rem;
