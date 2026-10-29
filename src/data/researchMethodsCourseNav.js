@@ -1,6 +1,8 @@
 /**
  * PSYC 4223 Research Methods — course navigation aligned with Canvas assignment groups.
  * Part → phase → items (Pressbooks chapter modules, Study Plan sections, assignment-help links).
+ * Each item appears once, in the phase that owns it (the first phase that needs it). Later phases
+ * link back to earlier readings rather than repeating them.
  */
 
 import { STUDY_PLAN_SECTIONS } from './capstoneWorksheetSchemas.js'
@@ -58,23 +60,15 @@ export const RESEARCH_METHODS_PARTS = [
         id: 'phase-3-4',
         label: 'Phase 3 & 4: Research question & operationalization',
         items: [
-          { kind: 'study-plan', sectionId: 'phase-3' },
-          { kind: 'study-plan', sectionId: 'phase-4' },
-          { kind: 'chapter', moduleId: 'rm-module-2' },
-          { kind: 'chapter', moduleId: 'rm-module-4' }
+          { kind: 'study-plan', sectionId: 'phase-4' }
         ]
       },
       {
         id: 'methods-section',
         label: 'Methods Section',
         items: [
-          { kind: 'chapter', moduleId: 'rm-module-4' },
-          { kind: 'chapter', moduleId: 'rm-module-5' },
-          { kind: 'chapter', moduleId: 'rm-module-6' },
-          { kind: 'chapter', moduleId: 'rm-module-7' },
-          { kind: 'chapter', moduleId: 'rm-module-9' },
+          { kind: 'study-plan', sectionId: 'methods-section' },
           { kind: 'chapter', moduleId: 'rm-module-10' },
-          { kind: 'chapter', moduleId: 'rm-module-11' },
           { kind: 'chapter', moduleId: 'rm-module-lab' }
         ]
       },
@@ -112,7 +106,6 @@ export const RESEARCH_METHODS_PARTS = [
         id: 'irb',
         label: 'IRB Submission',
         items: [
-          { kind: 'chapter', moduleId: 'rm-module-3' },
           { kind: 'assignment-help', assignmentId: 'rm-irb-first-draft' },
           { kind: 'assignment-help', assignmentId: 'rm-irb-final-draft' },
           { kind: 'assignment-help', assignmentId: 'rm-irb-status-update' }
