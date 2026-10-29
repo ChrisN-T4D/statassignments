@@ -269,6 +269,7 @@
         <!-- Learning Objectives -->
         <div v-if="selectedModule.learningObjectives?.length" class="learning-objectives">
           <h3>Learning Objectives</h3>
+          <p class="learning-objectives-lead">By the end of this module, you will be able to:</p>
           <ul>
             <li v-for="(obj, idx) in selectedModule.learningObjectives" :key="idx">
               {{ replaceJamoviLabel(obj, selectedModule.id) }}
@@ -2507,6 +2508,12 @@ watch(selectedModuleId, id => {
   letter-spacing: 0.05em;
   color: var(--text-secondary);
   margin: 0 0 0.75rem 0;
+}
+
+.learning-objectives-lead {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
 }
 
 .learning-objectives ul {

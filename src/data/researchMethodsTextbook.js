@@ -138,99 +138,97 @@ export const PRESSBOOKS_CHAPTERS = [
 ]
 
 /**
- * Learning objectives keyed by Pressbooks chapter (rm-module-N).
- * Realigned from an older 12-module syllabus block that did not match chapter numbers.
+ * Module-level learning objectives keyed by Pressbooks chapter (rm-module-N).
+ * Written as measurable, learner-centered outcomes (QM 7th Ed. SRS 2.2 / 2.3): each begins with an
+ * observable verb and is rendered under "By the end of this module, you will be able to:" (ClassHome.vue).
+ * Keep these consistent with the finer-grained RM*-O* items in objectives.js and with the
+ * assessments (concept review, assignment help, capstone worksheets) that measure them.
  */
 export const LEARNING_OBJECTIVES_BY_MODULE = {
   'rm-module-1': [
-    'Why research matters: evaluating credibility and claims.',
-    'Humans as limited information processors: schemas, categorization, and stereotyping.',
-    'Heuristics and bias in judgment: representativeness, availability, and confirmation bias.',
-    'How thinking goes wrong (Shermer\'s four categories) and implications for research skepticism.',
-    'Laws, theories, and hypotheses; what makes a good research question.'
+    'Distinguish scientific, empirical, and falsifiable claims from common-sense and pseudoscientific claims.',
+    'Explain how schemas, heuristics (representativeness, availability), and confirmation bias distort everyday judgment.',
+    'Define law, theory, and hypothesis, and explain how theories are revised in light of evidence.',
+    'Evaluate whether a research question is empirical, falsifiable, and worth asking.'
   ],
   'rm-module-2': [
-    'Generating research ideas and moving from broad interests to researchable questions.',
-    'Literature searching and working backward through citations to map a topic area.',
-    'Evaluating evidence and building the rationale (gaps; third-variable thinking).',
-    'From question to plan: aligning question, design, measures, and feasibility.'
+    'Move from a broad topic of interest to a researchable question and a testable hypothesis.',
+    'Search the literature and trace citations backward and forward to map a topic area.',
+    'Build a rationale that identifies a gap in the literature and a plausible third-variable explanation.',
+    'Align question, design, measures, and feasibility in a draft research plan.'
   ],
   'rm-module-3': [
-    'Why ethical review exists: history and cases motivating oversight (Belmont principles).',
-    'IRB purpose, structure, and review types; what counts as research and human subjects.',
-    'Informed consent and debriefing; confidentiality and risk/benefit logic.',
-    'Deception, incentives, participant pools, and research with children.',
-    'IRB proposal components and required training (e.g., CITI-style modules).'
+    'Apply the Belmont principles (respect, beneficence, justice) to a proposed human-subjects study.',
+    'Classify a study by IRB review type and identify what counts as research with human subjects.',
+    'Draft informed-consent, debriefing, and confidentiality procedures that fit a study\'s risks and benefits.',
+    'Evaluate deception, incentives, and recruitment practices for coercion and for protections of vulnerable populations.',
+    'Assemble the required components of an IRB proposal and complete the required human-research training.'
   ],
   'rm-module-4': [
-    'Measurement as ideal vs real: constructs, operationalization, and measurement limits.',
-    'Scale types: nominal, ordinal, interval, ratio; anchors and what you can conclude.',
-    'Finding measures: literature mining and databases (e.g., PsycTESTS, HaPI).',
-    'Reliability: forms of reliability; internal consistency and Cronbach\'s alpha.',
-    'Validity and practical selection: content, criterion, construct; scoring and social desirability.'
+    'Write conceptual and operational definitions for a construct.',
+    'Classify variables by scale of measurement (nominal, ordinal, interval, ratio) and state which conclusions each scale supports.',
+    'Locate published measures in the literature and databases (e.g., PsycTESTS, HaPI).',
+    'Distinguish forms of reliability (test-retest, internal consistency) and validity (face, content, criterion, construct), and explain how a measure can be reliable but not valid.',
+    'Select a measure for a study and justify the choice using its reliability, validity, and susceptibility to social desirability.'
   ],
   'rm-module-5': [
-    'What research can tell you: certainty, correlation vs causation, language that matches design.',
-    'Experimental vs quasi-experimental vs correlational; IV/DV and quasi-IV.',
-    'Internal validity threats and remedies (demand characteristics, blinding, manipulation checks).',
-    'External and ecological validity; lab, field, survey, and online settings.',
-    'Between-subjects structure: random assignment, manipulated IVs, and DV selection.',
-    'Control and internal validity: standardized procedures and cover stories.',
-    'Who are the participants? Sampling, representativeness, and recruitment channels.',
-    'Ethics of recruitment and incentives; data quality in field and online contexts.'
+    'Identify the independent and dependent variables in a study and distinguish random assignment from random sampling.',
+    'Match the strength of a causal claim to the design that produced the evidence (experimental, quasi-experimental, correlational).',
+    'Identify threats to internal validity (confounds, demand characteristics, experimenter effects) and propose controls such as blinding, placebo conditions, and manipulation checks.',
+    'Compare between-subjects and within-subjects designs, including counterbalancing and carryover effects.',
+    'Evaluate external and ecological validity across lab, field, and online settings.',
+    'Describe an ethical, representative recruitment and sampling plan for an experiment.'
   ],
   'rm-module-6': [
-    'Correlational logic: predicting relationships and using association language correctly.',
-    'Quasi-experimental and group-difference logic: preexisting groups and causal limits.',
-    'Validity and interpretation in non-randomized comparisons (confounds).',
-    'What qualitative research is for and how it differs from quantitative approaches.',
-    'Qualitative collection: interviews, focus groups, and case-based approaches.',
-    'Coding, theme development, and transparency of interpretation.',
-    'Credibility, reflexivity, and protections when data are personal or sensitive.'
+    'Interpret a correlation without inferring causation, naming directionality and third-variable alternatives.',
+    'Describe non-experimental methods (naturalistic and participant observation, case study, archival, content analysis) and choose one that fits a question.',
+    'Explain how cross-sectional comparisons of pre-existing groups limit causal conclusions.',
+    'Contrast qualitative and quantitative approaches in purpose, data collection (interviews, focus groups), and analysis.',
+    'Outline a transparent coding and theme-development process and the protections needed for sensitive qualitative data.'
   ],
   'rm-module-7': [
-    'When and why to develop your own measure (and when to avoid it).',
-    'Item writing and response formats: stems, anchors, open vs closed-ended.',
-    'Demographics and socially sensitive wording; self-identification approaches.',
-    'Survey structure: question order, sensitive items, and pilot testing.',
-    'Online survey tools, exporting data, and internal-validity concerns of remote completion.'
+    'Decide whether to adopt an existing measure or write a new survey, and justify the decision.',
+    'Write and revise survey items (stems, anchors, open vs. closed formats), avoiding double-barreled and leading wording.',
+    'Word demographic and sensitive items respectfully.',
+    'Sequence survey items and pilot-test a survey to reduce order effects and response bias.',
+    'Define sampling frame, coverage error, and nonresponse bias, and administer an online survey while managing its internal-validity concerns.'
   ],
   'rm-module-8': [
-    'Quasi-experimental logic in practice: preexisting groups and quasi-IVs.',
-    'Choosing analyses conceptually by question and design.',
-    'Validity and interpretation issues in non-randomized group comparisons.'
+    'Explain why quasi-experiments lack random assignment and compare one-group and nonequivalent-control-group designs.',
+    'Describe conceptually how interrupted time-series, regression-discontinuity, and difference-in-differences designs address non-equivalence.',
+    'Identify threats to validity in quasi-experiments (including pretest sensitization) and phrase causal conclusions with appropriate caution.'
   ],
   'rm-module-9': [
-    'Within-subjects logic: why use it and what it changes about inference.',
-    'Order and carryover effects; counterbalancing strategies.',
-    'Fatigue, learning, and participant experience as threats to validity.',
-    'Interpreting within-subjects findings and reporting caveats.'
+    'Count the conditions in a factorial design and distinguish main effects from interactions.',
+    'Interpret cell means, simple effects, and crossover (disordinal) interactions from a table or graph.',
+    'Justify adding a second factor and explain how random assignment and interaction plots support interpretation.'
   ],
   'rm-module-10': [
-    'Single-subject design logic, variants, and when they are appropriate.',
-    'Baseline, intervention, and reversal logic in single-case designs.',
-    'Interpreting single-subject data and limits to generalization.'
+    'Describe single-subject designs (stable baseline, reversal/ABA, multiple baseline, changing criterion) and their limitations.',
+    'Evaluate single-subject data using visual analysis of level, trend, variability, and overlap, and check treatment integrity.',
+    'State when a single-subject design is appropriate and how replication strengthens its external validity.'
   ],
   'rm-module-11': [
-    'Integrating the research process: question, design, measures, sampling, and ethics.',
-    'Interpreting results responsibly: alternative explanations and accurate language.',
-    'Preparing research products: documentation, replication, and reporting workflow.',
-    'APA style and communicating findings in papers and presentations.'
+    'Format a student research paper in APA style (title page, citations, methods, tables, figures, references with DOIs).',
+    'Write a discussion section that links results to hypotheses and prior literature, reports effect sizes, and acknowledges limitations.',
+    'Plan a conference poster and a short oral presentation for a research audience.',
+    'Describe open-science practices (preregistration, data and materials sharing) that support replication.'
   ],
   'rm-module-12': [
-    'Describing variables and distributions for research reports.',
-    'Expressing relationships between variables with appropriate descriptive statistics.',
-    'Presenting statistical results clearly in tables and text.'
+    'Calculate and interpret measures of central tendency and variability, including the effects of outliers and skew.',
+    'Select an appropriate graph or table for categorical versus quantitative variables.',
+    'Describe a relationship between two variables using an appropriate descriptive statistic and report it in APA format.'
   ],
   'rm-module-13': [
-    'Null hypothesis testing logic and decision rules.',
-    'Common inferential tests and when each applies.',
-    'Effect size, power, and replicability concerns.'
+    'State a null hypothesis and explain Type I error and what a p-value does and does not mean.',
+    'Choose a common inferential test (e.g., t-test, ANOVA, correlation, chi-square) that fits a design and variable types.',
+    'Interpret effect size, confidence intervals, and power, and avoid treating "fail to reject" as proof of the null.',
+    'Explain why replication, familywise error, and practical (vs. statistical) significance matter when interpreting results.'
   ],
   'rm-module-lab': [
-    'Distinguish random vs non-random assignment to conditions.',
-    'Compare simple random, stratified, cluster, and convenience sampling.',
-    'Connect sampling and assignment choices to internal and external validity.'
+    'Distinguish random from non-random assignment to conditions by running the simulation.',
+    'Compare simple random, stratified, cluster, and convenience sampling and predict how each affects representativeness.',
+    'Explain how sampling and assignment choices affect external and internal validity.'
   ]
 }
 
@@ -346,6 +344,14 @@ export const CANVAS_COURSE_PARTS = [
 
 /** Experimental Design course — design chapters + experimental-focused analysis (no capstone paths). */
 export const EXPERIMENTAL_COURSE_PARTS = [
+  {
+    id: 'proposal',
+    label: 'Proposal',
+    title: 'Proposal, ethics & dissemination',
+    description:
+      'Develop a testable research proposal, plan IRB-ready ethics procedures, and prepare the APA paper, class presentation, and research-day poster.',
+    moduleIds: ['rm-module-2', 'rm-module-3', 'rm-module-11']
+  },
   {
     id: 'design',
     label: 'Design',

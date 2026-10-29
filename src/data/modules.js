@@ -520,9 +520,9 @@ export const researchMethodsModulesBase = [
     topics: [],
     isPathDataSection: true,
     learningObjectives: [
-      'Read Ch. 12–13 with your methodology path in mind',
-      'Pick analyses appropriate to your research design',
-      'Run step-by-step instructions in jamovi, SPSS, or Excel'
+      'Identify which Ch. 12–13 concepts apply to your methodology path',
+      'Select analyses appropriate to your research design and variable types',
+      'Run the selected analysis in jamovi, SPSS, or Excel by following the step-by-step instructions'
     ]
   },
   {
@@ -538,8 +538,8 @@ export const researchMethodsModulesBase = [
     isDataAnalysisTool: true,
     learningObjectives: [
       'Match your research question to an appropriate analysis',
-      'Run the analysis in your chosen software with clear menu paths',
-      'Know what to report in your write-up'
+      'Run the analysis in your chosen software using the menu paths provided',
+      'Identify which results to report in your write-up'
     ]
   }
 ]
@@ -585,6 +585,9 @@ function enrichResearchMethodsModule (mod) {
 export const researchMethodsModules = researchMethodsModulesBase.map(enrichResearchMethodsModule)
 
 const EXPERIMENTAL_MODULE_IDS = [
+  'rm-module-2',
+  'rm-module-3',
+  'rm-module-11',
   'rm-module-4',
   'rm-module-5',
   'rm-module-8',
@@ -592,6 +595,20 @@ const EXPERIMENTAL_MODULE_IDS = [
   'rm-module-lab',
   'rm-module-data-by-path'
 ]
+
+/** Experimental Design framing for shared chapters (no capstone Part/Phase wording). */
+const EXPERIMENTAL_MODULE_OVERRIDES = {
+  'rm-module-2': {
+    description: 'From research topic to hypothesis, design, analysis, and reporting — the structure of your experimental proposal.'
+  },
+  'rm-module-3': {
+    description:
+      'Ethical principles, informed consent, debriefing, and IRB review — what your proposal needs before data collection.'
+  },
+  'rm-module-11': {
+    description: 'APA style and communicating findings in a paper, class presentation, and research-day poster.'
+  }
+}
 
 function buildExperimentalModules () {
   return researchMethodsModulesBase
@@ -607,13 +624,14 @@ function buildExperimentalModules () {
             'Ch. 12–13 and software steps for experimental and quasi-experimental designs (descriptives, t-tests, ANOVA).',
           fixedMethodPathId: 'path-3-experimental',
           learningObjectives: [
-            'Read Ch. 12–13 with experimental designs in mind',
-            'Choose analyses for group comparisons (t-tests, ANOVA)',
-            'Run step-by-step instructions in jamovi, SPSS, or Excel'
+            'Identify which Ch. 12–13 concepts apply to experimental and quasi-experimental designs',
+            'Select an appropriate group-comparison analysis (t-test or ANOVA) for a design',
+            'Run the selected analysis in jamovi, SPSS, or Excel by following the step-by-step instructions'
           ]
         })
       }
-      return enrichResearchMethodsModule(withClass)
+      const override = EXPERIMENTAL_MODULE_OVERRIDES[withClass.id]
+      return enrichResearchMethodsModule(override ? { ...withClass, ...override } : withClass)
     })
 }
 
