@@ -2146,7 +2146,7 @@ watch(selectedModuleId, id => {
 .objective-practice-summary {
   margin-top: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: var(--bg-secondary, #f6f7fb);
+  background: var(--bg-elevated);
   border-radius: 8px;
 }
 .objective-practice-summary h4 {
@@ -2163,6 +2163,9 @@ watch(selectedModuleId, id => {
 }
 .objective-map-gap {
   color: #8a6d1a;
+}
+:root:not([data-theme="light"]) .objective-map-gap {
+  color: var(--warning);
 }
 
 /* Learning Objectives */
