@@ -2133,7 +2133,7 @@ watch(selectedModuleId, id => {
   padding: 0.75rem 1rem;
   border: 1px solid var(--border, #e2e8f0);
   border-radius: 0.5rem;
-  background: var(--bg-subtle, #f8fafc);
+  background: var(--bg-elevated);
 }
 
 .rm-lab-assignment-extra summary {
@@ -2435,8 +2435,8 @@ button.practice-link-card {
 }
 
 .sampling-lab-promo {
-  border-color: #93c5fd;
-  background: #eff6ff;
+  border-color: rgba(96, 165, 250, 0.55);
+  background: rgba(59, 130, 246, 0.14);
 }
 
 .link-card-icon {
