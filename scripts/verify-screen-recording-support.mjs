@@ -7,6 +7,7 @@ import {
   fileExtensionForMime,
   getDisplayMediaConstraintAttempts,
   detectRecordingSupport,
+  classifyDisplaySurface,
   isMp4MimeType,
   RECORDER_TIMESLICE_MS
 } from '../src/utils/screenRecordingSupport.js'
@@ -78,8 +79,16 @@ function assert(cond, msg) {
     'every attempt includes video'
   )
   assert(
-    !JSON.stringify(attempts).includes('displaySurface'),
-    'constraints omit displaySurface (Safari / multi-monitor safe)'
+    !JSON.stringify(attempts).includes('"exact"'),
+    'no constraint is hard-required (exact), so no browser can reject the request'
+  )
+  assert(
+    attempts[0].video.displaySurface === 'monitor' && attempts[0].selfBrowserSurface === 'exclude',
+    'first attempt hints the picker toward the entire screen and hides this tab'
+  )
+  assert(
+    attempts.slice(-2).every((c) => !JSON.stringify(c).includes('displaySurface')),
+    'last-resort attempts carry no picker hints (Safari / multi-monitor safe)'
   )
   assert(
     attempts.some((c) => c.audio === false),
@@ -126,6 +135,16 @@ function assert(cond, msg) {
   assert(fileExtensionForMime('video/mp4') === 'mp4', 'plain mp4')
   assert(fileExtensionForMime('video/webm;codecs=vp8') === 'webm', 'webm with codecs')
   assert(fileExtensionForMime('VIDEO/MP4;CODECS=AVC1') === 'mp4', 'case-insensitive mime')
+}
+
+// Surface classification: tab shares must be rejected, window shares warned
+{
+  assert(classifyDisplaySurface({ displaySurface: 'browser' }).level === 'block', 'browser tab share is blocked')
+  assert(classifyDisplaySurface({ displaySurface: 'browser' }).ok === false, 'browser tab share is not ok')
+  assert(classifyDisplaySurface({ displaySurface: 'window' }).level === 'warn', 'window share warns')
+  assert(classifyDisplaySurface({ displaySurface: 'monitor' }).level === 'ok', 'monitor share is ok')
+  assert(classifyDisplaySurface({}).level === 'ok', 'browsers that do not report a surface are ok')
+  assert(classifyDisplaySurface(undefined).level === 'ok', 'missing settings are ok')
 }
 
 if (failed > 0) {

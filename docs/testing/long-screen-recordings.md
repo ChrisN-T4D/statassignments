@@ -82,3 +82,35 @@ size and optional JS heap samples are not a total-browser RAM benchmark.
 No production service, configuration or data was changed. Development-host SSH
 was unavailable; tests ran in an isolated GitHub checkout, not the neu2 compose
 stack. No merge or deployment is part of this change.
+
+## Reliability fixes: tab switching and audio (2026-11-03)
+
+Symptoms reported: video froze (audio kept going) when students switched from
+Methods Market to jamovi; some recordings had missing audio.
+
+Causes and fixes:
+
+- **Camera overlay froze in a hidden tab.** The overlay canvas was redrawn with
+  `requestAnimationFrame`, which browsers stop in a hidden tab. It is now driven
+  by a Worker timer and `ImageCapture.grabFrame()` (`recordingHealth.js`).
+- **Shared "Chrome Tab".** A tab share records only that tab, so jamovi never
+  appears. The picker now hints "Entire Screen" and hides this tab; after the
+  student picks, `displaySurface === 'browser'` is refused and released, and
+  `'window'` records with a warning.
+- **Camera path dropped audio.** The canvas stream has no audio, so with the
+  camera on and the mic off, screen audio was lost. Audio is now always built
+  from screen audio and/or mic (a single source is an independent clone; two
+  sources are mixed, with the mixer resumed if the browser suspends it).
+- **Silent mic went unnoticed.** Added a live mic level meter, a dead-mic check at
+  Start, `ended`/`mute` warnings, and a 20-second silence warning.
+- **Freeze detector.** The recorded picture is fingerprinted every 2 s; 45 s of no
+  change warns the student (paused time does not count).
+
+Checks: `npm run verify:screen-recorder` (now includes
+`scripts/verify-recording-health.mjs`) and
+`scripts/verify-recorder-background-tab.mjs` (fake camera and mic; records while
+a second tab is in front, then decodes the file to check for frozen seconds and
+audible audio). Headless Chromium never hides a tab, so that script simulates a
+hidden tab by stubbing `requestAnimationFrame`. Against the pre-fix recorder it
+fails (frozen seconds 3-11); against the fix it passes. It cannot prove behavior
+in a real hidden tab: confirm on a real Windows/Mac machine with jamovi.

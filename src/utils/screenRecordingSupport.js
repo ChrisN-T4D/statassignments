@@ -54,17 +54,62 @@ export function isMp4MimeType(mimeType = '') {
  * Retry without system audio when audio constraints are rejected.
  */
 export function getDisplayMediaConstraintAttempts() {
+  // displaySurface is only a *hint* to the picker (not a hard requirement), so
+  // it cannot fail on laptops that lack that surface. The other top-level
+  // options are ignored by browsers that do not know them.
   const video = {
     width: { ideal: 1920, max: 1920 },
     height: { ideal: 1080, max: 1080 },
     frameRate: { ideal: 15, max: 15 }
   }
+  const hinted = { ...video, displaySurface: 'monitor' }
+  const picker = {
+    selfBrowserSurface: 'exclude',
+    surfaceSwitching: 'include',
+    monitorTypeSurfaces: 'include',
+    systemAudio: 'include'
+  }
   return [
+    { video: hinted, audio: true, ...picker },
+    { video: hinted, audio: false, ...picker },
     { video, audio: true },
     { video, audio: false },
     { video: true, audio: true },
     { video: true, audio: false }
   ]
+}
+
+/**
+ * Decide whether the surface the student picked can show other applications.
+ * A shared browser TAB only records that one tab: switching to jamovi leaves
+ * the recording on a frozen Methods Market page, so it must be rejected.
+ * A shared WINDOW works only while that window stays in view.
+ * Browsers that do not report displaySurface (Firefox, Safari) return ok.
+ *
+ * @param {{displaySurface?: string}} [settings] MediaTrackSettings
+ * @returns {{ok: boolean, level: 'ok'|'warn'|'block', surface: string, message: string}}
+ */
+export function classifyDisplaySurface(settings = {}) {
+  const surface = settings?.displaySurface || ''
+  if (surface === 'browser') {
+    return {
+      ok: false,
+      level: 'block',
+      surface,
+      message:
+        'You shared a browser tab, which cannot show jamovi or any other program. Click Start Recording again and choose the "Entire Screen" tab at the top of the window, then pick your screen.'
+    }
+  }
+  if (surface === 'window') {
+    return {
+      ok: true,
+      level: 'warn',
+      surface,
+      message:
+        'You shared a single window. Only that window is recorded, so anything you do in another program will not appear. If you need to switch programs, stop and restart, choosing "Entire Screen".'
+    }
+  }
+  return { ok: true, level: 'ok', surface, message: '' }
 }
 
 /**

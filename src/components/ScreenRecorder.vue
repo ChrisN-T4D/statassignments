@@ -42,7 +42,7 @@
               Start Recording
             </button>
             <p class="tool-hint">
-              You'll be asked to select what to record (entire screen, window, or browser tab). Works in Chrome, Edge, Firefox, and Safari on desktop.
+              A window will ask what to share. Pick the <strong>Entire Screen</strong> tab at the top and choose your screen, so jamovi and other programs are recorded when you switch to them. Do <strong>not</strong> choose "Chrome Tab". Works in Chrome, Edge, Firefox, and Safari on desktop.
             </p>
           </div>
         </div>
@@ -75,6 +75,20 @@
                   Click <strong>"Allow"</strong> to narrate your recording.
                 </p>
               </div>
+            </div>
+
+            <div v-if="micEnabled && micStream" class="mic-meter-wrap">
+              <div
+                class="mic-meter"
+                role="meter"
+                aria-label="Microphone level"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                :aria-valuenow="Math.round(micLevel * 100)"
+              >
+                <div class="mic-meter-fill" :style="{ width: Math.round(micLevel * 100) + '%' }"></div>
+              </div>
+              <p class="tool-hint">Say something. The bar should move. If it stays flat, pick a different microphone in your browser or system settings.</p>
             </div>
 
             <!-- Permission Help (when enabled but no stream) -->
@@ -205,6 +219,18 @@
         </div>
       </template>
 
+      <div v-if="(isRecording || isPaused) && warningList.length" class="rec-warnings">
+        <p
+          v-for="w in warningList"
+          :key="w.message"
+          class="rec-warning"
+          :class="'rec-warning-' + w.level"
+          role="alert"
+        >
+          {{ w.message }}
+        </p>
+      </div>
+
       <p v-if="isRecording || isPaused" class="tool-hint" role="status">
         {{ storageOnDisk ? 'Recording is being stored temporarily on this device. Download it when finished.' : 'Temporary storage is unavailable. Recording will stop at the memory limit so you can save it.' }}
         Keep this page open and your computer awake.
@@ -315,8 +341,18 @@ import {
   detectRecordingSupport,
   canPauseMediaRecorder,
   isMp4MimeType,
+  classifyDisplaySurface,
   RECORDER_TIMESLICE_MS
 } from '../utils/screenRecordingSupport.js'
+import {
+  FINGERPRINT_W,
+  FINGERPRINT_H,
+  createFreezeTracker,
+  createSilenceTracker,
+  peakFromTimeDomain,
+  createBackgroundTimer,
+  createFrameGrabber
+} from '../utils/recordingHealth.js'
 
 const props = defineProps({
   allowUpload: {
@@ -399,7 +435,25 @@ const sourceScreenStream = ref(null)
 // Canvas compositing for camera overlay
 const compositeCanvas = ref(null)
 const compositeContext = ref(null)
-const compositeAnimationFrame = ref(null)
+let compositeStop = null
+let freezeStop = null
+let micMeterStop = null
+let micMeterCtx = null
+let silenceTracker = createSilenceTracker()
+const micLevel = ref(0)
+
+// Live notices while recording: { [key]: { level: 'warn'|'info', message } }
+const warnings = ref({})
+const warningList = computed(() => Object.values(warnings.value))
+function setWarning(key, level, message) {
+  warnings.value = { ...warnings.value, [key]: { level, message } }
+}
+function clearWarning(key) {
+  if (!(key in warnings.value)) return
+  const next = { ...warnings.value }
+  delete next[key]
+  warnings.value = next
+}
 
 // Timer
 const startTime = ref(0)
@@ -438,6 +492,7 @@ async function handleMicToggle() {
         }
       })
       micStream.value = stream
+      startMicMeter(stream)
     } catch (err) {
       console.error('Microphone access denied:', err)
       micEnabled.value = false
@@ -446,6 +501,7 @@ async function handleMicToggle() {
     }
   } else {
     // Stop microphone stream
+    stopMicMeter()
     if (micStream.value) {
       micStream.value.getTracks().forEach(track => track.stop())
       micStream.value = null
@@ -484,39 +540,183 @@ async function handleCameraToggle() {
   }
 }
 
-// Combine audio streams (screen audio + microphone)
-async function combineAudioStreams(screenStream, microphoneStream) {
+// Live microphone level, also used to notice a mic that goes silent mid-recording
+function startMicMeter(stream) {
+  stopMicMeter()
   const AudioCtx = window.AudioContext || window.webkitAudioContext
-  if (!AudioCtx) {
-    return microphoneStream?.getAudioTracks()?.[0] || null
+  if (!AudioCtx || !stream) return
+  try {
+    const ctx = new AudioCtx()
+    micMeterCtx = ctx
+    ctx.resume?.().catch?.(() => {})
+    const analyser = ctx.createAnalyser()
+    analyser.fftSize = 1024
+    ctx.createMediaStreamSource(stream).connect(analyser)
+    const bytes = new Uint8Array(analyser.fftSize)
+    silenceTracker = createSilenceTracker()
+    micMeterStop = createBackgroundTimer(() => {
+      if (ctx.state !== 'running') {
+        ctx.resume?.().catch?.(() => {})
+        return
+      }
+      analyser.getByteTimeDomainData(bytes)
+      const peak = peakFromTimeDomain(bytes)
+      micLevel.value = Math.min(1, peak * 2.5)
+      if (isRecording.value || isPaused.value) {
+        const { silent } = silenceTracker.sample(peak, Date.now(), { paused: isPaused.value })
+        if (silent) {
+          setWarning('micSilent', 'warn', 'We have not heard your microphone for 20 seconds. If you are narrating, check that the right microphone is selected and not muted.')
+        } else {
+          clearWarning('micSilent')
+        }
+      }
+    }, 250)
+  } catch (_) {
+    stopMicMeter()
   }
+}
+
+function stopMicMeter() {
+  if (micMeterStop) {
+    micMeterStop()
+    micMeterStop = null
+  }
+  if (micMeterCtx) {
+    micMeterCtx.close?.().catch?.(() => {})
+    micMeterCtx = null
+  }
+  micLevel.value = 0
+}
+
+// The mic is opened when the toggle is flipped, possibly long before Start.
+// A headset unplugged or switched since then leaves a dead track.
+async function ensureMicLive() {
+  const track = micStream.value?.getAudioTracks?.()[0]
+  if (track && track.readyState === 'live') return true
+  micStream.value?.getTracks().forEach((t) => t.stop())
+  micStream.value = null
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    })
+    micStream.value = stream
+    startMicMeter(stream)
+    return true
+  } catch (_) {
+    return false
+  }
+}
+
+// Build the one audio track for the recording from screen audio and/or mic.
+// One source -> an independent clone of that track (no AudioContext needed, so
+// it cannot be silenced by a suspended context). Two sources -> mix them.
+async function buildRecordingAudioTrack(screenStream, microphoneStream) {
+  const sources = []
+  const screenTracks = screenStream.getAudioTracks().filter((t) => t.readyState === 'live')
+  if (screenTracks.length) sources.push(new MediaStream(screenTracks))
+  const micTrack = microphoneStream?.getAudioTracks().find((t) => t.readyState === 'live')
+  if (micTrack) sources.push(new MediaStream([micTrack]))
+
+  if (sources.length === 0) return null
+  if (sources.length === 1) return sources[0].getAudioTracks()[0].clone()
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext
+  if (!AudioCtx) return micTrack ? micTrack.clone() : screenTracks[0].clone()
 
   const audioContext = new AudioCtx()
   mixAudioContext.value = audioContext
-  if (audioContext.state === 'suspended') {
-    try {
-      await audioContext.resume()
-    } catch (_) {
-      /* Safari may still allow destinations after a user gesture */
+  const keepRunning = () => {
+    if (audioContext.state !== 'running' && audioContext.state !== 'closed') {
+      audioContext.resume().catch(() => {})
     }
+  }
+  audioContext.onstatechange = () => {
+    if (audioContext.state === 'running') clearWarning('audioSuspended')
+    else keepRunning()
+  }
+  try {
+    await audioContext.resume()
+  } catch (_) {
+    /* retried via onstatechange / the check below */
   }
 
   const destination = audioContext.createMediaStreamDestination()
-
-  const screenAudioTracks = screenStream.getAudioTracks()
-  if (screenAudioTracks.length > 0) {
-    const screenSource = audioContext.createMediaStreamSource(
-      new MediaStream(screenAudioTracks)
-    )
-    screenSource.connect(destination)
+  for (const stream of sources) {
+    audioContext.createMediaStreamSource(stream).connect(destination)
   }
-
-  if (microphoneStream) {
-    const micSource = audioContext.createMediaStreamSource(microphoneStream)
-    micSource.connect(destination)
-  }
+  setTimeout(() => {
+    if (audioContext.state !== 'running' && audioContext.state !== 'closed') {
+      setWarning('audioSuspended', 'warn', 'Your browser paused the audio mixer, so sound may be missing from this recording. Click anywhere on this page. If it persists, stop, save, and start again.')
+    }
+  }, 1500)
 
   return destination.stream.getAudioTracks()[0] || null
+}
+
+// Warn if the screen picker or the mic stop delivering during a recording
+function watchRecordingInputs(screenStream, microphoneStream) {
+  const micTrack = microphoneStream?.getAudioTracks()[0]
+  if (micTrack) {
+    const lost = () => {
+      if (isRecording.value || isPaused.value) {
+        setWarning('micLost', 'warn', 'Your microphone stopped sending audio (was a headset unplugged or switched?). Your voice is NOT being recorded. Stop and save, fix the microphone, then record the rest.')
+      }
+    }
+    micTrack.addEventListener('ended', lost)
+    micTrack.addEventListener('mute', lost)
+    micTrack.addEventListener('unmute', () => clearWarning('micLost'))
+  }
+  const screenTrack = screenStream.getVideoTracks()[0]
+  if (screenTrack) {
+    screenTrack.addEventListener('mute', () => {
+      if (isRecording.value || isPaused.value) {
+        setWarning('screenMuted', 'warn', 'Your browser stopped sending screen pictures. The video may be frozen. Check that you are sharing "Entire Screen".')
+      }
+    })
+    screenTrack.addEventListener('unmute', () => clearWarning('screenMuted'))
+  }
+}
+
+// Sample the track that is actually being recorded; warn if the picture stops changing
+function startFreezeMonitor(recordedVideoTrack) {
+  stopFreezeMonitor()
+  const video = prepareVideoElement(new MediaStream([recordedVideoTrack]))
+  video.play().catch(() => {})
+  const grab = createFrameGrabber(recordedVideoTrack, video)
+  const canvas = document.createElement('canvas')
+  canvas.width = FINGERPRINT_W
+  canvas.height = FINGERPRINT_H
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })
+  if (!ctx) return
+  const tracker = createFreezeTracker()
+  let busy = false
+  freezeStop = createBackgroundTimer(async () => {
+    if (busy) return
+    busy = true
+    try {
+      const frame = await grab()
+      if (!frame) return
+      ctx.drawImage(frame, 0, 0, FINGERPRINT_W, FINGERPRINT_H)
+      const { data } = ctx.getImageData(0, 0, FINGERPRINT_W, FINGERPRINT_H)
+      const { frozen } = tracker.sample(data, Date.now(), { paused: isPaused.value })
+      if (frozen) {
+        setWarning('freeze', 'warn', 'Nothing on the recorded screen has changed for 45 seconds. If you are working in another program, your recording may not be capturing it. Stop, save, and start again choosing "Entire Screen".')
+      } else {
+        clearWarning('freeze')
+      }
+    } catch (_) {
+      /* a missed sample is fine */
+    } finally {
+      busy = false
+    }
+  }, 2000)
+}
+
+function stopFreezeMonitor() {
+  if (freezeStop) {
+    freezeStop()
+    freezeStop = null
+  }
 }
 
 function prepareVideoElement(stream) {
@@ -577,14 +777,29 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
   const bubbleX = canvas.width - bubbleWidth - bubblePadding
   const bubbleY = canvas.height - bubbleHeight - bubblePadding
 
-  let lastFrame = -Infinity
-  function drawFrame(now = 0) {
-    compositeAnimationFrame.value = requestAnimationFrame(drawFrame)
-    if (now - lastFrame < 1000 / 15) return
-    lastFrame = now
-    ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height)
+  // requestAnimationFrame stops in a hidden tab, which froze the video as soon
+  // as the student switched to jamovi. Drive the loop from a Worker timer and
+  // grab frames with ImageCapture (works while hidden) instead.
+  const grabScreen = createFrameGrabber(screenStream.getVideoTracks()[0], screenVideo)
+  const grabCamera = createFrameGrabber(cameraVideoStream.getVideoTracks()[0], cameraVideo)
+  let drawing = false
+  async function drawFrame() {
+    if (drawing) return
+    drawing = true
+    try {
+      const screenFrame = await grabScreen()
+      if (screenFrame) ctx.drawImage(screenFrame, 0, 0, canvas.width, canvas.height)
+      const cameraFrame = await grabCamera()
+      drawCameraBubble(cameraFrame)
+    } catch (_) {
+      /* skip this frame */
+    } finally {
+      drawing = false
+    }
+  }
 
-    if (cameraVideo.readyState >= 2) {
+  function drawCameraBubble(cameraFrame) {
+    if (cameraFrame) {
       ctx.save()
       const radius = 10
       ctx.beginPath()
@@ -599,7 +814,7 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
       ctx.quadraticCurveTo(bubbleX, bubbleY, bubbleX + radius, bubbleY)
       ctx.closePath()
       ctx.clip()
-      ctx.drawImage(cameraVideo, bubbleX, bubbleY, bubbleWidth, bubbleHeight)
+      ctx.drawImage(cameraFrame, bubbleX, bubbleY, bubbleWidth, bubbleHeight)
       ctx.restore()
 
       ctx.strokeStyle = '#4f46e5'
@@ -620,6 +835,7 @@ async function createCompositeStream(screenStream, cameraVideoStream) {
   }
 
   drawFrame()
+  compositeStop = createBackgroundTimer(drawFrame, Math.round(1000 / 15))
   return canvas.captureStream(15)
 }
 
@@ -706,6 +922,25 @@ async function startRecording() {
       return
     }
     sourceScreenStream.value = screenStream
+    warnings.value = {}
+
+    // A shared browser tab cannot show jamovi; stop before recording anything.
+    const surface = classifyDisplaySurface(screenStream.getVideoTracks()[0]?.getSettings?.() || {})
+    if (surface.level === 'block') {
+      screenStream.getTracks().forEach((track) => track.stop())
+      sourceScreenStream.value = null
+      error.value = surface.message
+      return
+    }
+    if (surface.level === 'warn') setWarning('surface', 'warn', surface.message)
+
+    if (micEnabled.value && !(await ensureMicLive())) {
+      screenStream.getTracks().forEach((track) => track.stop())
+      sourceScreenStream.value = null
+      micEnabled.value = false
+      error.value = 'Your microphone is not available (it may have been unplugged or switched). Check it, turn the microphone back on, and start again.'
+      return
+    }
     recordingBuffer = await createRecordingBuffer({
       onPressure(reason) {
         error.value = reason === 'storage'
@@ -732,20 +967,18 @@ async function startRecording() {
       }
     }
 
-    let finalStream = videoStream
-
-    if (micEnabled.value && micStream.value) {
-      const videoTrack = videoStream.getVideoTracks()[0]
-      const combinedAudioTrack = await combineAudioStreams(screenStream, micStream.value)
-      const tracks = [videoTrack]
-      if (combinedAudioTrack) {
-        tracks.push(combinedAudioTrack)
-      } else {
-        const micTrack = micStream.value.getAudioTracks()[0]
-        if (micTrack) tracks.push(micTrack)
-      }
-      finalStream = new MediaStream(tracks)
+    // Always carry audio, with or without the camera overlay: the canvas
+    // stream has no audio of its own, so screen sound was previously lost.
+    const micForRecording = micEnabled.value ? micStream.value : null
+    const audioTrack = await buildRecordingAudioTrack(screenStream, micForRecording)
+    const recordedVideoTrack = videoStream.getVideoTracks()[0]
+    const finalStream = new MediaStream(audioTrack ? [recordedVideoTrack, audioTrack] : [recordedVideoTrack])
+    if (!audioTrack) {
+      setWarning('noAudio', 'info', micEnabled.value
+        ? 'No audio is reaching the recording. Check your microphone.'
+        : 'No audio is being recorded. Turn the microphone on before you start if you want to narrate.')
     }
+    watchRecordingInputs(screenStream, micForRecording)
 
     mediaStream.value = finalStream
     activeMimeType.value = getSupportedRecorderMimeType()
@@ -788,6 +1021,7 @@ async function startRecording() {
     startMediaRecorder(mediaRecorder.value)
     isRecording.value = true
     isPaused.value = false
+    startFreezeMonitor(recordedVideoTrack)
 
     elapsedTime.value = 0
     startTimer()
@@ -839,10 +1073,11 @@ function resumeRecording() {
 function cleanupCaptureStreams() {
   clearInterval(flushInterval)
   flushInterval = null
-  if (compositeAnimationFrame.value) {
-    cancelAnimationFrame(compositeAnimationFrame.value)
-    compositeAnimationFrame.value = null
+  if (compositeStop) {
+    compositeStop()
+    compositeStop = null
   }
+  stopFreezeMonitor()
 
   if (mediaStream.value) {
     mediaStream.value.getTracks().forEach((track) => {
@@ -915,6 +1150,7 @@ async function handleRecordingStop() {
   for (const stream of [micStream.value, cameraStream.value]) {
     stream?.getTracks().forEach(track => track.stop())
   }
+  stopMicMeter()
   micStream.value = null
   cameraStream.value = null
   micEnabled.value = false
@@ -1500,6 +1736,59 @@ onUnmounted(() => {
 }
 
 /* Permission Denied Help */
+.mic-meter-wrap {
+  margin-top: 0.5rem;
+}
+
+.mic-meter {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border-color, #d1d5db);
+  overflow: hidden;
+  margin-bottom: 0.375rem;
+}
+
+.mic-meter-fill {
+  height: 100%;
+  background: #16a34a;
+  transition: width 0.1s linear;
+}
+
+.rec-warnings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.rec-warning {
+  margin: 0;
+  padding: 0.625rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border: 1px solid #f59e0b;
+  background: #451a03;
+  color: #fde68a;
+}
+
+.rec-warning-info {
+  border-color: #3b82f6;
+  background: #172554;
+  color: #bfdbfe;
+}
+
+:global([data-theme='light']) .rec-warning {
+  background: #fffbeb;
+  color: #78350f;
+}
+
+:global([data-theme='light']) .rec-warning-info {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
 .av-error-help {
   margin-top: 1rem;
   padding: 1rem;
