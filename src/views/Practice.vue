@@ -349,6 +349,8 @@ import { useTimeTracking } from '../composables/useTimeTracking'
 import { getObjectivesForQuestion } from '../data/questionObjectiveMap'
 import { getObjectiveById } from '../data/objectives'
 import { applySoftwareLabelsToText } from '../data/softwareObjectiveLabels.js'
+import {useModule8Preferences} from '../composables/useModule8Preferences.js'
+import {filterModule8Questions} from '../data/module8Chapters.js'
 import { getQuestionsByModule } from '../data/conceptQuestions'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
 import { pb } from '../lib/pocketbase'
@@ -499,9 +501,11 @@ const isStatisticsPractice = computed(() => {
 
 const statsModuleId = computed(() => toStatsModuleId(getSelectedTopicId()))
 
+const module8Prefs = useModule8Preferences()
 const moduleQuestions = computed(() => {
   if (!statsModuleId.value) return []
-  return getQuestionsByModule(statsModuleId.value) || []
+  const questions=getQuestionsByModule(statsModuleId.value) || [];
+  return statsModuleId.value==='stats-module-8' ? filterModule8Questions(questions,module8Prefs.selectedChapters.value) : questions
 })
 
 const moduleLabel = computed(() => {

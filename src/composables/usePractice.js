@@ -6,6 +6,7 @@ import { prepareConceptQuestionForSoftware } from '../data/conceptQuestionSoftwa
 import { preferredSoftware } from './usePreferredSoftware.js'
 import { updateBKT, predictPerformance } from './useBKT'
 import { getObjectivesForQuestion, getQuestionsForObjective } from '../data/questionObjectiveMap'
+import {filterModule8Questions} from '../data/module8Chapters.js'
 import { useModule8Preferences } from './useModule8Preferences'
 
 const VALID_DIFFICULTIES = new Set(['easy', 'medium', 'hard'])
@@ -101,88 +102,11 @@ export function usePractice() {
   async function fetchProblems(topicId = null) {
     loading.value = true
 
-    // Handle Module 8 customization
     if (topicId === 'stats-module-8') {
-      const module8Prefs = useModule8Preferences()
-
-      // If topics are selected, fetch only selected topics
-      if (module8Prefs.selectedTopics.value.size > 0) {
-        const selectedTopicIds = Array.from(module8Prefs.selectedTopics.value)
-
-        try {
-          // Build filter for multiple topics
-          const topicFilters = selectedTopicIds.map(tid => `topic_id = "${tid}"`).join(' || ')
-          const filter = `(${topicFilters})`
-
-          const records = await pb.collection('practice_problems').getFullList({
-            filter,
-            sort: 'created'
-          })
-
-          if (records.length > 0) {
-            problems.value = records.map(p => {
-              let options = typeof p.options === 'string' ? JSON.parse(p.options) : p.options
-
-              // Safe JSON parsing for correct_answer
-              let correctAnswer = p.correct_answer
-              if (typeof p.correct_answer === 'string') {
-                try {
-                  correctAnswer = JSON.parse(p.correct_answer)
-                } catch {
-                  correctAnswer = p.correct_answer
-                }
-              }
-
-              const originalOptions = [...(options || [])]
-              if (options && Array.isArray(options) && options[0]?.text) {
-                options = options.map(opt => opt.text)
-              }
-
-              if (correctAnswer && originalOptions[0]?.id) {
-                if (Array.isArray(correctAnswer)) {
-                  correctAnswer = correctAnswer.map(id => {
-                    const opt = originalOptions.find(o => o.id === id)
-                    return opt ? opt.text : id
-                  })
-                } else {
-                  const opt = originalOptions.find(o => o.id === correctAnswer)
-                  correctAnswer = opt ? opt.text : correctAnswer
-                }
-              }
-
-              return {
-                ...p,
-                id: p.question_id || p.id,
-                options,
-                correct_answer: correctAnswer
-              }
-            })
-          } else {
-            // Fallback to static questions for selected topics
-            let allSelectedQuestions = []
-            for (const tid of selectedTopicIds) {
-              const topicQuestions = getQuestionsByModule(tid)
-              allSelectedQuestions.push(...topicQuestions)
-            }
-            problems.value = allSelectedQuestions.map(convertQuestion).filter(Boolean)
-          }
-
-          loading.value = false
-          return problems.value
-        } catch (err) {
-          console.error('Error fetching Module 8 customized problems:', err)
-          // Fallback to static questions
-          let allSelectedQuestions = []
-          for (const tid of selectedTopicIds) {
-            const topicQuestions = getQuestionsByModule(tid)
-            allSelectedQuestions.push(...topicQuestions)
-          }
-          problems.value = allSelectedQuestions.map(convertQuestion).filter(Boolean)
-          loading.value = false
-          return problems.value
-        }
-      }
-      // If no selection, fall through to default behavior
+      const prefs=useModule8Preferences();
+      problems.value=filterModule8Questions(getQuestionsByModule(topicId),prefs.selectedChapters.value).map(convertQuestion).filter(Boolean);
+      loading.value=false;
+      return problems.value;
     }
 
     // Research Methods banks are canonical in static files (always use them).

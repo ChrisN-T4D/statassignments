@@ -98,7 +98,29 @@ export function scopeModule8Lesson(lesson,keys) {
  const stepChapters=['chapter-10','chapter-10','chapter-11','chapter-11','chapter-11','chapter-12','chapter-12','chapter-12','chapter-13'];
  phases.weDo={...phases.weDo,instructions:'Complete every guided step below for your selected chapters. Other chapters are optional.',steps:(phases.weDo?.steps||[]).filter((s,i)=>selected.includes(s.chapter || stepChapters[i]))};
  const checkTopics={'chapter-10':['Category counts and associations','Average paired change','Predicting a continuous outcome','Comparing several means'],'chapter-11':['Comparing one mean or two means, including paired data','Category counts only','Predicting outcomes only','Comparing four independent means only'],'chapter-12':['Relationships and prediction for quantitative variables','Paired category counts','Expected category proportions','Comparing three group means only'],'chapter-13':['Comparing three or more means or repeated conditions','Only comparing two category counts','Only a single reference mean','Only predicting one outcome']};
- phases.selfCheck={screenshotRecognition:selected.map(k=>({id:'chapter-purpose-'+k,question:'Which question is addressed by '+CHAPTERS[k].title+'?',options:checkTopics[k],correct:0,explanation:CHAPTER_GUIDANCE[k].why}))};
+ phases.selfCheck={title:'Analysis choice self-check',description:'Choose the analysis purpose that matches each selected chapter.',screenshotRecognition:selected.map(k=>({id:'chapter-purpose-'+k,question:'Which question is addressed by '+CHAPTERS[k].title+'?',options:checkTopics[k],correct:0,explanation:CHAPTER_GUIDANCE[k].why}))};
  phases.youDo={...phases.youDo,instructions:'Complete all listed Apply tasks for your selected chapters, using the exact datasets named in each task. Record your work and submit the required evidence through the existing submission workflow. Unselected chapters are optional and do not count as unfinished work.'};
  return {...lesson,completionId:module8CompletionId(lesson.id,selected),overview:'Choose a minimum of two complete chapters. Finish the readings, Learn walkthroughs, guided practice, self-check and required Apply tasks for each selected chapter. Additional chapters are optional.',objectives:selected.map(k=>CHAPTERS[k].title+': '+CHAPTER_GUIDANCE[k].includes),estimatedTime:sections.reduce((n,s)=>n+(s.estimatedTime||0),0),phases};
+}
+
+const QUESTION_CHAPTERS={
+ 'stats-m8-q1':['chapter-11'],'stats-m8-q2':['chapter-11'],'stats-m8-q3':['chapter-12'],
+ 'stats-m8-q4':['chapter-12'],'stats-m8-q5':['chapter-11','chapter-13'],
+ 'stats-m8-q6':['chapter-12'],'stats-m8-q7':['chapter-11'],'stats-m8-q8':['chapter-11'],
+ 'stats-m8-q9':['chapter-10'],'stats-m8-q10':['chapter-10','chapter-11','chapter-12','chapter-13'],
+ 'stats-m8-q11':['chapter-12'],'stats-m8-q12':['chapter-12'],
+ 'stats-m8-q13':['chapter-10','chapter-11','chapter-12','chapter-13'],
+ 'stats-m8-q14':['chapter-12'],'stats-m8-q15':['chapter-13'],'stats-m8-q16':['chapter-13'],
+ 'stats-m8-q17':['chapter-10','chapter-11','chapter-12','chapter-13'],
+ 'stats-m8-q18':['chapter-11','chapter-13'],'stats-m8-q19':['chapter-11']
+};
+export function filterModule8Questions(questions,keys) {
+ const selected=validChapters(keys);
+ return questions.filter(q=>{
+  if(q.moduleId!=='stats-module-8')return true;
+  const chapters=QUESTION_CHAPTERS[q.id];
+  if(!chapters) return false;
+  // The matching question requires every chapter in its scenarios.
+  return q.id==='stats-m8-q10' ? chapters.every(k=>selected.includes(k)) : chapters.some(k=>selected.includes(k));
+ });
 }

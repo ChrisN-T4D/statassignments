@@ -755,6 +755,7 @@ import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { computeModuleProgress, pickSoftwareLessonForProgress } from '../lib/moduleProgress.js'
 import { getLessonsByModule } from '../data/softwareLessons'
+import {filterModule8Questions} from '../data/module8Chapters.js'
 import Module8Plan from '../components/Module8Plan.vue'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
@@ -1037,7 +1038,9 @@ const moduleTopics = computed(() => {
 })
 
 const conceptReviewQuestionCount = computed(() =>
-  selectedModuleId.value ? getQuestionsByModule(selectedModuleId.value).length : 0
+  selectedModuleId.value ? (selectedModuleId.value==='stats-module-8'
+    ? filterModule8Questions(getQuestionsByModule(selectedModuleId.value),module8Prefs.selectedChapters.value).length
+    : getQuestionsByModule(selectedModuleId.value).length) : 0
 )
 
 // Get module items with chapters preserved (for UI rendering)

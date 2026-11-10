@@ -450,8 +450,8 @@
           <div class="selfcheck-exercises">
             <!-- Screenshot Recognition -->
             <div v-if="lesson.phases.selfCheck?.screenshotRecognition" class="selfcheck-section">
-              <h3 class="selfcheck-title">📸 Screenshot Recognition</h3>
-              <p class="selfcheck-description">Identify what's shown in these software screenshots</p>
+              <h3 class="selfcheck-title">{{ lesson.phases.selfCheck.title || 'Screenshot Recognition' }}</h3>
+              <p class="selfcheck-description">{{ lesson.phases.selfCheck.description || "Identify what is shown in these software screenshots." }}</p>
 
               <div
                 v-for="(exercise, i) in lesson.phases.selfCheck.screenshotRecognition"
@@ -695,7 +695,11 @@
                   <div class="objective-number">{{ index + 1 }}</div>
                   <div class="objective-content">
                     <h4>{{ exercise.title }}</h4>
-                    <p class="objective-description">{{ exercise.description }}</p>
+                    <template v-if="exercise.module === 'module-8'">
+ <p class="objective-description">{{ exercise.instructions }}</p>
+ <p v-if="exercise.dataset"><a :href="exercise.dataset.url" download>Download {{ exercise.dataset.filename }}</a></p>
+ <p class="objective-description"><strong>Expected result and evidence:</strong> {{ exercise.submission || 'Produce the requested analysis output, show the named variables and options, and explain your result in context. Include a screenshot or recorded output. For explanation-only tasks, provide the requested written response.' }}</p>
+ </template><p v-else class="objective-description">{{ exercise.description }}</p>
                     <div v-if="exercise.hint" class="objective-hint-section">
                       <button 
                         class="btn-hint" 

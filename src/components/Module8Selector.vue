@@ -26,5 +26,11 @@ function save(){if(prefs.saveChapters(draft.value))emit('save');else error.value
 </script>
 <style scoped>
 .module8-selector{padding:1.5rem;background:var(--bg-card);color:var(--text-primary);max-width:900px;margin:auto}
-p,li{line-height:1.6}.chapters{display:grid;gap:1rem}article{border:1px solid var(--border);border-radius:.6rem;padding:1rem}label{font-weight:700}input{margin-right:.6rem}button{margin-top:1rem;padding:.8rem 1.2rem}button:disabled{opacity:.55}
+p,li{line-height:1.6}.chapters{display:grid;gap:1rem}article{border:1px solid var(--border);border-radius:.6rem;padding:1rem}label{font-weight:700}input{margin-right:.6rem}button{margin-top:1rem;padding:.8rem 1.2rem}button{border:1px solid var(--border);border-radius:.5rem;background:var(--bg-elevated);color:var(--text-primary);font-weight:700}
+button:not(:disabled){background:#b91c1c;border-color:#b91c1c;color:#fff;cursor:pointer}
+button:not(:disabled):hover{background:#991b1b}
+button:focus-visible{outline:3px solid #f87171;outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed}
+ol{padding-left:1.5rem;margin:.85rem 0 .25rem}li{padding-left:.2rem;margin:.45rem 0}
+h2{margin-bottom:.8rem}p{margin:.7rem 0}article{padding:1.25rem}label{display:flex;align-items:flex-start;gap:.5rem}input{flex-shrink:0;margin-top:.35rem}
 </style>
