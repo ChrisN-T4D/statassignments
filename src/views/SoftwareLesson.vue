@@ -1426,6 +1426,11 @@ function getExerciseInstructions(exercise, exerciseNumber) {
     `
   }
 
+  if (exercise.dataset) {
+    const ds = exercise.dataset;
+    html += `<div class="content-box"><h3>Required dataset</h3><a href="${ds.url}" download>Download ${ds.filename}</a><p>Use these columns: ${ds.columns.join(", ")}. Synthetic teaching data; no data creation required.</p></div>`;
+  }
+
   if (exercise.sample_data) {
     html += `
       <div class="content-box">
@@ -1499,6 +1504,11 @@ function getAllExercisesInstructions() {
 
     if (exercise.hint) {
       html += `<p><strong>💡 Hint:</strong> ${exercise.hint}</p>`
+    }
+
+    if (exercise.dataset) {
+      const ds = exercise.dataset;
+      html += `<p><a href="${ds.url}" download>Download ${ds.filename}</a> — required columns: ${ds.columns.join(", ")}</p>`;
     }
 
     if (exercise.sample_data) {

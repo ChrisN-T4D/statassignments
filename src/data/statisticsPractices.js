@@ -1,3 +1,4 @@
+import { withModule8Dataset } from './module8Datasets.js'
 import { module4SoftwarePracticeParallels } from './statisticsPracticesModule4Parallels.js'
 import { modules5to8SoftwarePracticeParallels } from './statisticsPracticesModules5to8Parallels.js'
 
@@ -2855,7 +2856,7 @@ export const statisticsExercises = [
 
   ...module4SoftwarePracticeParallels,
   ...modules5to8SoftwarePracticeParallels
-]
+].map(withModule8Dataset)
 
 // Helper to get exercises by module
 export function getExercisesByModule(moduleId) {

@@ -206,6 +206,7 @@
 </template>
 
 <script setup>
+import { module8Datasets } from '../data/module8Datasets.js'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import ScreenRecorder from './ScreenRecorder.vue'
@@ -490,6 +491,7 @@ const currentInstall = computed(() => {
 const datasets = computed(() => {
   // CSV files in public/ (site root). No .omv — students open CSV in jamovi via ☰ → Open.
   return [
+    ...module8Datasets,
     {
       name: 'BMI and Exercise',
       description: 'bmi, exercise_per_week, vegetables — Software Practice class CSV',

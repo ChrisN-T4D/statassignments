@@ -589,6 +589,11 @@ function getExerciseInstructions() {
     `
   }
 
+  if (currentExercise.value.dataset) {
+    const ds = currentExercise.value.dataset;
+    html += `<div class="content-box"><h3>Required dataset</h3><a href="${ds.url}" download>Download ${ds.filename}</a><p>Use these columns: ${ds.columns.join(", ")}. Synthetic teaching data; no data creation required.</p></div>`;
+  }
+
   // Add dataset links
   if (datasetLinks.length > 0) {
     html += `
