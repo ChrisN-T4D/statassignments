@@ -1,5 +1,6 @@
 <template>
-  <div v-if="lesson && lesson.software && lesson.software !== 'jamovi'" class="lesson-page">
+  <div v-if="lesson?.module === 'stats-module-8' && !module8Prefs.hasCompletedSelection.value" class="lesson-page"><Module8Selector @save="loadLesson" /></div>
+  <div v-else-if="lesson && lesson.software && lesson.software !== 'jamovi'" class="lesson-page">
     <div class="container">
       <router-link :to="backLink" class="back-link">Back</router-link>
       <SoftwarePracticeUnderConstruction
@@ -10,6 +11,7 @@
   </div>
   <div class="lesson-page" :class="{ 'print-packet-open': showPrintPacket }" v-else-if="lesson">
     <div class="container">
+      <Module8Plan v-if="lesson.module === 'stats-module-8'" />
       <!-- Lesson Header -->
       <div class="lesson-header">
         <router-link :to="backLink" class="back-link">Back</router-link>
@@ -795,6 +797,10 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
+import Module8Selector from '../components/Module8Selector.vue'
+import Module8Plan from '../components/Module8Plan.vue'
+import {useModule8Preferences} from '../composables/useModule8Preferences.js'
+import {scopeModule8Lesson} from '../data/module8Chapters.js'
 import { getLessonById, getLessonsByModule } from '../data/softwareLessons'
 import SoftwarePracticeUnderConstruction from '../components/SoftwarePracticeUnderConstruction.vue'
 import { getModuleById } from '../data/modules'
@@ -829,6 +835,7 @@ const { user } = useAuth()
 const isAdmin = computed(() => user.value?.role === 'admin')
 
 // State
+const module8Prefs = useModule8Preferences()
 const lesson = ref(null)
 const currentPhase = ref('iDo')
 const completedPhases = ref([])
@@ -967,6 +974,7 @@ const lessonExercises = computed(() => {
   // Get exercises for this module that match the lesson's software
   const moduleExercises = statisticsExercises.filter(ex =>
     ex.module === moduleId &&
+    (moduleId !== 'module-8' || module8Prefs.isExerciseSelected(ex)) &&
     ex.is_active &&
     ex.software_type === lesson.value.software &&
     (lesson.value.software === 'jamovi' || ex.exercise_type !== 'menu_navigation')
@@ -1101,7 +1109,7 @@ function goToJamoviLesson() {
 
 function loadLesson() {
   const lessonId = route.params.lessonId
-  lesson.value = getLessonById(lessonId)
+  lesson.value = scopeModule8Lesson(getLessonById(lessonId), module8Prefs.selectedChapters.value)
   imageLoadFailed.value = new Set()
 }
 
@@ -1146,7 +1154,7 @@ function completePhase(phase) {
   if (!completedPhases.value.includes(phase)) {
     completedPhases.value.push(phase)
   }
-  if (lesson.value?.id) setCompletedPhases(lesson.value.id, completedPhases.value)
+  if (lesson.value?.id) setCompletedPhases(lesson.value.completionId || lesson.value.id, completedPhases.value)
   trackPhaseCompleted(lesson.value, phase)
 
   // Move to next phase: iDo → weDo → selfCheck → youDo
@@ -1344,8 +1352,9 @@ function recordLessonCompletion() {
     const raw = localStorage.getItem('completedSoftwareLessons')
     const parsed = raw ? JSON.parse(raw) : []
     const ids = Array.isArray(parsed) ? parsed : []
-    if (!ids.includes(lesson.value.id)) {
-      ids.push(lesson.value.id)
+    const completionId = lesson.value.completionId || lesson.value.id
+    if (!ids.includes(completionId)) {
+      ids.push(completionId)
       localStorage.setItem('completedSoftwareLessons', JSON.stringify(ids))
     }
   } catch (err) {
@@ -1561,7 +1570,7 @@ function toggleHint(exerciseTitle) {
  */
 function saveCompletedExercises() {
   try {
-    const lessonId = lesson.value?.id
+    const lessonId = lesson.value?.completionId || lesson.value?.id
     if (!lessonId) return
 
     const key = `lesson-exercises-${lessonId}`
@@ -1577,7 +1586,7 @@ function saveCompletedExercises() {
  */
 function loadCompletedExercises() {
   try {
-    const lessonId = lesson.value?.id
+    const lessonId = lesson.value?.completionId || lesson.value?.id
     if (!lessonId) return
 
     const key = `lesson-exercises-${lessonId}`
@@ -1648,7 +1657,7 @@ onMounted(() => {
   loadLesson()
   loadCompletedExercises()
   attachCopyButtons()
-  const lessonId = lesson.value?.id
+  const lessonId = lesson.value?.completionId || lesson.value?.id
   if (lessonId) {
     const saved = getCompletedPhases(lessonId)
     if (saved.length) completedPhases.value = saved
@@ -1667,7 +1676,7 @@ watch(() => route.params.lessonId, () => {
   loadLesson()
   loadCompletedExercises()
   currentPhase.value = 'iDo'
-  const lessonId = lesson.value?.id
+  const lessonId = lesson.value?.completionId || lesson.value?.id
   completedPhases.value = lessonId ? getCompletedPhases(lessonId) : []
   currentStep.value = 0
   currentSectionIndex.value = 0

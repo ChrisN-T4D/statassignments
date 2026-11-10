@@ -3,6 +3,7 @@
  * Counts only what students can complete in the UI for that module + software track.
  */
 
+import {CHAPTERS, module8CompletionId} from '../data/module8Chapters.js'
 import { getTopicsForModule } from '../data/modules.js'
 import { getLessonsByModule } from '../data/softwareLessons.js'
 import { getQuestionsByModule } from '../data/conceptQuestions.js'
@@ -91,9 +92,15 @@ export function computeModuleProgress ({
   const hasConceptReview = (getQuestionsByModule(moduleId) || []).length > 0
   const contentReviewComplete = hasConceptReview && crSet.has(moduleId)
 
+  const selectionPending = moduleId === 'stats-module-8' && selectedTopicIds != null && toSet(selectedTopicIds).size === 0
+  if (selectionPending) return emptyProgress()
   const softwareLesson = pickSoftwareLessonForProgress(moduleId, preferredSoftware)
   const totalLessons = softwareLesson ? 1 : 0
-  const completedLessons = softwareLesson && lessonSet.has(softwareLesson.id) ? 1 : 0
+  const selectedChapters = moduleId === 'stats-module-8' && selectedTopicIds != null
+    ? Object.entries(CHAPTERS).filter(([,c])=>c.topics.every(id=>toSet(selectedTopicIds).has(id))).map(([k])=>k) : [];
+  const completionId = moduleId === 'stats-module-8' && softwareLesson
+    ? module8CompletionId(softwareLesson.id, selectedChapters) : softwareLesson?.id;
+  const completedLessons = softwareLesson && lessonSet.has(completionId) ? 1 : 0
 
   const todos = todoExercisesForModule(moduleId, preferredSoftware)
   // Legacy You-Do list only when there is no unified/software lesson UI.

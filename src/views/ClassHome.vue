@@ -168,12 +168,13 @@
             v-if="selectedModuleId === 'stats-module-8' && module8Prefs.hasCompletedSelection.value"
             @click="openModule8Selector"
             class="module-settings-btn"
-            title="Change topic selection"
+            title="Change selected chapters"
           >
-            ⚙️ Customize
+            Change chapters
           </button>
         </div>
 
+        <Module8Plan v-if="selectedModuleId === 'stats-module-8' && module8Prefs.hasCompletedSelection.value" />
         <!-- Learning Objectives -->
         <div v-if="selectedModule.learningObjectives?.length" class="learning-objectives">
           <h3>Learning Objectives</h3>
@@ -754,6 +755,7 @@ import { software } from '../data/topics'
 import { statisticsExercises } from '../data/statisticsPractices'
 import { computeModuleProgress, pickSoftwareLessonForProgress } from '../lib/moduleProgress.js'
 import { getLessonsByModule } from '../data/softwareLessons'
+import Module8Plan from '../components/Module8Plan.vue'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { useLessonPhaseProgress } from '../composables/useLessonPhaseProgress'
 import { preferredSoftware } from '../composables/usePreferredSoftware.js'
@@ -1054,7 +1056,7 @@ const moduleItems = computed(() => {
 
   // If no selection made yet, show all items
   if (module8Prefs.selectedTopics.value.size === 0) {
-    return items
+    return []
   }
 
   // Filter items based on selection
@@ -1393,7 +1395,7 @@ function openModule8Selector() {
 }
 
 function closeModule8Selector() {
-  showModule8Selector.value = false
+  if (module8Prefs.hasCompletedSelection.value) showModule8Selector.value = false
 }
 
 function normalizeRouteValue(value) {

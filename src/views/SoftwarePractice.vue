@@ -8,6 +8,7 @@
         <p>Learn, Practice, Apply structure for learning how to use the software.</p>
       </div>
 
+      <template v-if="selectedModule === 'module-8'"><Module8Selector v-if="!module8Prefs.hasCompletedSelection.value" /><Module8Plan v-else /></template>
       <!-- Software Selection -->
       <div class="software-selector">
         <button
@@ -201,6 +202,9 @@ import { statisticsExercises, statisticsModules } from '../data/statisticsPracti
 import { getLessonsBySoftware } from '../data/softwareLessons.js'
 import { useAuth } from '../composables/useAuth'
 import { useClasses } from '../composables/useClasses'
+import {module8CompletionId} from '../data/module8Chapters.js'
+import Module8Selector from '../components/Module8Selector.vue'
+import Module8Plan from '../components/Module8Plan.vue'
 import { useModule8Preferences } from '../composables/useModule8Preferences'
 import { preferredSoftware, setPreferredSoftware, defaultSoftware } from '../composables/usePreferredSoftware.js'
 import { getClassDisplayName } from '../utils/classDisplayName'
@@ -339,8 +343,8 @@ const staticExercises = computed(() => {
     })
 
     // For Module 8, further filter by selected topics
-    if (selectedModule.value === 'module-8' && module8Prefs.selectedTopics.value.size > 0) {
-      filtered = filtered.filter(ex => module8Prefs.isTopicSelected(ex.topic))
+    if (selectedModule.value === 'module-8') {
+      filtered = filtered.filter(ex => module8Prefs.isExerciseSelected(ex))
     }
 
     return filtered
@@ -348,11 +352,11 @@ const staticExercises = computed(() => {
   // If we have a topicId, filter by topic
   if (topicId.value) {
     return statisticsExercises.filter(ex =>
-      ex.topic === topicId.value && (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation"
+      (ex.module !== 'module-8' || module8Prefs.isExerciseSelected(ex)) && ex.topic === topicId.value && (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation"
     )
   }
   // Default: show all jamovi exercises
-  return statisticsExercises.filter(ex => (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation")
+  return statisticsExercises.filter(ex => (ex.module !== 'module-8' || module8Prefs.isExerciseSelected(ex)) && (ex.software_type === selectedSoftware.value || ex.software_type === 'conceptual') && ex.exercise_type !== "menu_navigation")
 })
 
 // Methods
@@ -479,7 +483,7 @@ function loadProgress() {
   progress.value = {
     completed:
       exercises.filter(ex => ex.isCompleted).length +
-      filteredLessons.value.filter(lesson => getCompletedLessonIds().has(lesson.id)).length,
+      filteredLessons.value.filter(lesson => getCompletedLessonIds().has(lesson.module === 'stats-module-8' ? module8CompletionId(lesson.id, module8Prefs.selectedChapters.value) : lesson.id)).length,
     total: exercises.length + filteredLessons.value.length,
     exercises
   }
@@ -696,7 +700,7 @@ onMounted(async () => {
   attachCopyButtons()
 })
 
-watch([classId, topicId, selectedSoftware, requestedModuleId], () => {
+watch([classId, topicId, selectedSoftware, requestedModuleId, module8Prefs.selectedChapters], () => {
   currentExercise.value = null
   if (requestedModuleId.value) {
     selectedModule.value = requestedModuleId.value
