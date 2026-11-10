@@ -151,7 +151,8 @@
 
           <div class="instruction-card">
             <h3>Instructions</h3>
-            <p>{{ currentExercise.instructions }}</p>
+            <ul v-if="currentExercise.module === 'module-8'" class="task-directions"><li v-for="(item, i) in instructionItems(currentExercise)" :key="i">{{ item }}</li></ul>
+            <p v-else>{{ currentExercise.instructions }}</p>
             <p v-if="currentExercise.hint" class="instruction-hint">
               Hint: {{ currentExercise.hint }}
             </p>
@@ -195,6 +196,7 @@
 </template>
 
 <script setup>
+import { instructionItems, instructionHtml } from '../lib/practiceInstructions.js'
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { topics, software } from '../data/topics.js'
@@ -573,7 +575,7 @@ function getExerciseInstructions() {
     <h1>${currentExercise.value.title}</h1>
     <div class="content-box">
       <h3>Instructions</h3>
-      <p>${currentExercise.value.instructions}</p>
+      ${currentExercise.value.module === 'module-8' ? instructionHtml(currentExercise.value) : `<p>${currentExercise.value.instructions}</p>`}
     </div>
   `
 
@@ -1450,6 +1452,8 @@ watch(currentExercise, () => {
   color: var(--text-primary);
   font-weight: 600;
 }
+.task-directions { padding-left: 1.5rem; line-height: 1.6; }
+.task-directions li { margin: .5rem 0; padding-left: .2rem; }
 </style>
 
 

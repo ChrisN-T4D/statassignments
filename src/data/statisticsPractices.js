@@ -1,4 +1,4 @@
-import { withModule8Dataset } from './module8Datasets.js'
+import { withModule8Dataset, consolidateModule8Exercises } from './module8Datasets.js'
 import { module4SoftwarePracticeParallels } from './statisticsPracticesModule4Parallels.js'
 import { modules5to8SoftwarePracticeParallels } from './statisticsPracticesModules5to8Parallels.js'
 
@@ -52,7 +52,7 @@ export const statisticsModules = [
 ]
 
 // Software practice tasks ('To Do in Software') organized by module
-export const statisticsExercises = [
+export const statisticsExercises = consolidateModule8Exercises([
   // ============ MODULE 2: Research Design & Measurement ============
   {
     module: 'module-2',
@@ -2856,7 +2856,7 @@ export const statisticsExercises = [
 
   ...module4SoftwarePracticeParallels,
   ...modules5to8SoftwarePracticeParallels
-].map(withModule8Dataset)
+].map(withModule8Dataset))
 
 // Helper to get exercises by module
 export function getExercisesByModule(moduleId) {

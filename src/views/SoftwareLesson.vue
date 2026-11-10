@@ -696,7 +696,7 @@
                   <div class="objective-content">
                     <h4>{{ exercise.title }}</h4>
                     <template v-if="exercise.module === 'module-8'">
- <p class="objective-description">{{ exercise.instructions }}</p>
+ <ul class="task-directions objective-description"><li v-for="(item, i) in instructionItems(exercise)" :key="i">{{ item }}</li></ul>
  <p v-if="exercise.dataset"><a :href="exercise.dataset.url" download>Download {{ exercise.dataset.filename }}</a></p>
  <p class="objective-description"><strong>Expected result and evidence:</strong> {{ exercise.submission || 'Produce the requested analysis output, show the named variables and options, and explain your result in context. Include a screenshot or recorded output. For explanation-only tasks, provide the requested written response.' }}</p>
  </template><p v-else class="objective-description">{{ exercise.description }}</p>
@@ -798,6 +798,7 @@
 </template>
 
 <script setup>
+import { instructionItems, instructionHtml } from '../lib/practiceInstructions.js'
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
@@ -1427,7 +1428,7 @@ function getExerciseInstructions(exercise, exerciseNumber) {
     </div>
     <div class="content-box">
       <h3>Instructions</h3>
-      <p>${exercise.instructions}</p>
+      ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<p>${exercise.instructions}</p>`}
     </div>
   `
 
@@ -1512,7 +1513,7 @@ function getAllExercisesInstructions() {
       <div class="content-box">
         <h2>Exercise ${exerciseNumber}: ${exercise.title}</h2>
         <p><strong>Description:</strong> ${exercise.description}</p>
-        <p><strong>Instructions:</strong> ${exercise.instructions}</p>
+        ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<p><strong>Instructions:</strong> ${exercise.instructions}</p>`}
     `
 
     if (exercise.hint) {
@@ -3544,6 +3545,7 @@ watch(currentPhase, () => {
     order: -1;
   }
 }
+.task-directions { padding-left: 1.5rem; line-height: 1.6; }
+.task-directions li { margin: .5rem 0; padding-left: .2rem; }
 </style>
-
 

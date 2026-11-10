@@ -44,14 +44,20 @@ export const module8Datasets = [
   }
 ];
 const plans = {
-  "m8-cohens-d-onesample": {"file":"module8_learning.csv","columns":["Score"],"task":"Run a one-sample t-test of Score against a reference mean of 70. Compute one-sample Cohen’s d = (mean(Score) - 70) / sample SD(Score). Report the mean, SD, d and its direction. Interpret the standardized difference in context. This is a hypothetical teaching reference, not a population norm."},
+  "m8-cohens-d-onesample": {
+    "file": "module8_learning.csv",
+    "columns": [
+      "Score"
+    ],
+    "task": "Run a one-sample t-test of Score against a reference mean of 70. Compute one-sample Cohen’s d = (mean(Score) - 70) / sample SD(Score). Report the mean, SD, d and its direction. Interpret the standardized difference in context. This is a hypothetical teaching reference, not a population norm."
+  },
   "m8-ttest-independent-nav": {
     "file": "module8_learning.csv",
     "columns": [
       "Group",
       "Score"
     ],
-    "task": "Compare Score between Control and Treatment with an independent-samples t-test. Check assumptions, report group descriptives, the mean difference and its 95% CI, t, df, p and effect size. Explain the result in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-independent-t-report": {
     "file": "module8_learning.csv",
@@ -59,7 +65,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Compare Score between Control and Treatment with an independent-samples t-test. Check assumptions, report group descriptives, the mean difference and its 95% CI, t, df, p and effect size. Explain the result in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-full-writeup": {
     "file": "module8_learning.csv",
@@ -67,7 +73,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Compare Score between Control and Treatment with an independent-samples t-test. Check assumptions, report group descriptives, the mean difference and its 95% CI, t, df, p and effect size. Explain the result in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-manuscript-results": {
     "file": "module8_learning.csv",
@@ -75,7 +81,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Compare Score between Control and Treatment with an independent-samples t-test. Check assumptions, report group descriptives, the mean difference and its 95% CI, t, df, p and effect size. Explain the result in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-student-welch": {
     "file": "module8_learning.csv",
@@ -99,7 +105,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Check homogeneity of variance for Score by Group with Levene’s test. Report its p-value and explain the implication for Student versus Welch testing."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-shapiro": {
     "file": "module8_learning.csv",
@@ -107,7 +113,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Inspect Score separately by Group with Q-Q plots and Shapiro-Wilk tests. Describe the evidence without treating a normality p-value alone as an automatic test-selection rule."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-qq-plot": {
     "file": "module8_learning.csv",
@@ -115,7 +121,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Inspect Score separately by Group with Q-Q plots and Shapiro-Wilk tests. Describe the evidence without treating a normality p-value alone as an automatic test-selection rule."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-one-sided": {
     "file": "module8_learning.csv",
@@ -131,7 +137,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Run an independent-samples t-test of Score by Group. Enable Cohen’s d and the 95% confidence interval for the mean difference. Interpret magnitude, direction and uncertainty in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-ci-mean-diff": {
     "file": "module8_learning.csv",
@@ -139,7 +145,7 @@ const plans = {
       "Group",
       "Score"
     ],
-    "task": "Run an independent-samples t-test of Score by Group. Enable Cohen’s d and the 95% confidence interval for the mean difference. Interpret magnitude, direction and uncertainty in context."
+    "task": "Compare Score between Control and Treatment with an independent-samples t-test.\nCheck group Q-Q plots, Shapiro-Wilk tests and Levene’s test; explain the evidence together.\nReport group means and SDs, mean difference with 95% CI, t, df, p and Cohen’s d.\nInterpret direction, magnitude and uncertainty; write one APA-style results paragraph."
   },
   "m8-ttest-paired-nav": {
     "file": "module8_learning.csv",
@@ -181,7 +187,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Plot StudyHours (X) against ExamScore (Y).\nCalculate Pearson’s r and its p-value.\nInterpret direction and strength alongside the scatterplot; do not claim causation."
   },
   "m8-correlation-interpret": {
     "file": "module8_learning.csv",
@@ -191,7 +197,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Plot StudyHours (X) against ExamScore (Y).\nCalculate Pearson’s r and its p-value.\nInterpret direction and strength alongside the scatterplot; do not claim causation."
   },
   "m8-scatterplot-regression-line": {
     "file": "module8_learning.csv",
@@ -201,7 +207,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Plot StudyHours (X) against ExamScore (Y).\nAdd a fitted linear regression line.\nDescribe the relationship and how well the line follows the observations."
   },
   "m8-scatterplot-grouped": {
     "file": "module8_learning.csv",
@@ -211,7 +217,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Plot StudyHours (X) against ExamScore (Y), colored or paneled by Group.\nCompare patterns between Control and Treatment."
   },
   "m8-scatterplot-matrix": {
     "file": "module8_learning.csv",
@@ -221,7 +227,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Create a scatterplot matrix of StudyHours, ExamScore and SleepHours (or three pairwise scatterplots).\nDescribe the patterns and any unusual observations."
   },
   "m8-regression-simple-nav": {
     "file": "module8_learning.csv",
@@ -231,7 +237,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Fit ExamScore predicted by StudyHours.\nReport slope, its uncertainty and p-value, and R-squared.\nInterpret the slope and variance explained in context; do not claim causation."
   },
   "m8-regression-simple-interpret": {
     "file": "module8_learning.csv",
@@ -241,7 +247,7 @@ const plans = {
       "SleepHours",
       "Group"
     ],
-    "task": "Plot StudyHours (X) against ExamScore (Y), calculate Pearson correlation, and fit ExamScore predicted by StudyHours. Interpret direction, slope and R-squared without claiming causation. For a scatterplot matrix include SleepHours; for grouped plots color by Group. Use the plot or model requested in the task title."
+    "task": "Fit ExamScore predicted by StudyHours.\nReport slope, its uncertainty and p-value, and R-squared.\nInterpret the slope and variance explained in context; do not claim causation."
   },
   "m8-anova-oneway-nav": {
     "file": "module8_learning.csv",
@@ -249,7 +255,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA. Method is the categorical factor; MethodScore is continuous. Check assumptions, report F, df, p and eta-squared, and use Holm-adjusted post-hoc comparisons where appropriate. Write a contextual results paragraph. In jamovi, use GAMLj if requested in the title; in other packages use the equivalent one-way model."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-oneway-ch13": {
     "file": "module8_learning.csv",
@@ -257,7 +263,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA. Method is the categorical factor; MethodScore is continuous. Check assumptions, report F, df, p and eta-squared, and use Holm-adjusted post-hoc comparisons where appropriate. Write a contextual results paragraph. In jamovi, use GAMLj if requested in the title; in other packages use the equivalent one-way model."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-gamlj-oneway": {
     "file": "module8_learning.csv",
@@ -265,7 +271,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA. Method is the categorical factor; MethodScore is continuous. Check assumptions, report F, df, p and eta-squared, and use Holm-adjusted post-hoc comparisons where appropriate. Write a contextual results paragraph. In jamovi, use GAMLj if requested in the title; in other packages use the equivalent one-way model."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-full-writeup": {
     "file": "module8_learning.csv",
@@ -273,7 +279,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA. Method is the categorical factor; MethodScore is continuous. Check assumptions, report F, df, p and eta-squared, and use Holm-adjusted post-hoc comparisons where appropriate. Write a contextual results paragraph. In jamovi, use GAMLj if requested in the title; in other packages use the equivalent one-way model."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-factorial-gamlj": {
     "file": "module8_learning.csv",
@@ -290,7 +296,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Run one-way ANOVA of MethodScore by Method and obtain all pairwise post-hoc comparisons with Holm correction. Explain adjusted p-values."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-levene": {
     "file": "module8_learning.csv",
@@ -298,7 +304,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Fit one-way ANOVA of MethodScore by Method. Inspect Levene’s test and a Q-Q plot of model residuals; report the evidence for the assumptions."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-qq-residuals": {
     "file": "module8_learning.csv",
@@ -306,7 +312,7 @@ const plans = {
       "Method",
       "MethodScore"
     ],
-    "task": "Fit one-way ANOVA of MethodScore by Method. Inspect Levene’s test and a Q-Q plot of model residuals; report the evidence for the assumptions."
+    "task": "Compare MethodScore across Traditional, Online and Hybrid using one-way ANOVA.\nInspect Levene’s test and a Q-Q plot of model residuals; explain the assumption checks.\nReport F, df, p and eta-squared.\nObtain Holm-adjusted pairwise post-hoc comparisons where appropriate; explain adjusted p-values.\nWrite one contextual APA-style results paragraph."
   },
   "m8-anova-welch": {
     "file": "module8_learning.csv",
@@ -331,7 +337,7 @@ const plans = {
       "Conceptual",
       "Syntax"
     ],
-    "task": "Each row is one participant measured on three tasks. Define a within-participant factor Task with levels Speech, Conceptual and Syntax and assign the corresponding columns. Run repeated-measures ANOVA, inspect Mauchly’s test and report a correction if needed. For the Friedman task, run Friedman on the same three paired columns instead. Use all 90 rows."
+    "task": "Use all 90 rows; each row is one participant measured on three tasks.\nDefine within-participant factor Task: Speech, Conceptual and Syntax; assign the matching columns.\nRun repeated-measures ANOVA and inspect Mauchly’s test.\nReport the test and an appropriate sphericity correction if needed; interpret the result."
   },
   "m8-anova-mauchly": {
     "file": "module8_learning.csv",
@@ -340,7 +346,7 @@ const plans = {
       "Conceptual",
       "Syntax"
     ],
-    "task": "Each row is one participant measured on three tasks. Define a within-participant factor Task with levels Speech, Conceptual and Syntax and assign the corresponding columns. Run repeated-measures ANOVA, inspect Mauchly’s test and report a correction if needed. For the Friedman task, run Friedman on the same three paired columns instead. Use all 90 rows."
+    "task": "Use all 90 rows; each row is one participant measured on three tasks.\nDefine within-participant factor Task: Speech, Conceptual and Syntax; assign the matching columns.\nRun repeated-measures ANOVA and inspect Mauchly’s test.\nReport the test and an appropriate sphericity correction if needed; interpret the result."
   },
   "m8-anova-friedman": {
     "file": "module8_learning.csv",
@@ -349,21 +355,21 @@ const plans = {
       "Conceptual",
       "Syntax"
     ],
-    "task": "Each row is one participant measured on three tasks. Define a within-participant factor Task with levels Speech, Conceptual and Syntax and assign the corresponding columns. Run repeated-measures ANOVA, inspect Mauchly’s test and report a correction if needed. For the Friedman task, run Friedman on the same three paired columns instead. Use all 90 rows."
+    "task": "Use all 90 participants’ paired Speech, Conceptual and Syntax scores.\nRun Friedman on these three columns.\nReport the statistic and p-value; interpret the rank-based result."
   },
   "m8-chisq-gof": {
     "file": "module8_suits.csv",
     "columns": [
       "Suit"
     ],
-    "task": "Run chi-square goodness-of-fit on Suit. For the equal-proportions task use .25 per suit; for custom proportions use clubs=.20, diamonds=.30, hearts=.30, spades=.20. The file has 200 rows: clubs=35, diamonds=51, hearts=64, spades=50. Report observed/expected counts, chi-square, df and p."
+    "task": "Run chi-square goodness-of-fit on Suit using .25 expected proportion per suit.\nReport observed and expected counts, chi-square, df and p; interpret the result."
   },
   "m8-chisq-custom-proportions": {
     "file": "module8_suits.csv",
     "columns": [
       "Suit"
     ],
-    "task": "Run chi-square goodness-of-fit on Suit. For the equal-proportions task use .25 per suit; for custom proportions use clubs=.20, diamonds=.30, hearts=.30, spades=.20. The file has 200 rows: clubs=35, diamonds=51, hearts=64, spades=50. Report observed/expected counts, chi-square, df and p."
+    "task": "Run chi-square goodness-of-fit on Suit using clubs=.20, diamonds=.30, hearts=.30 and spades=.20.\nReport observed and expected counts, chi-square, df and p; compare with equal proportions."
   },
   "m8-chisq-independence": {
     "file": "module8_survey.csv",
@@ -371,7 +377,7 @@ const plans = {
       "Major",
       "StressLevel"
     ],
-    "task": "Use the supplied 300 simulated survey records, not a survey you must conduct. Test association between Major (Psychology, Biology, Math) and StressLevel (Low, Medium, High) with chi-square independence. State hypotheses, display observed/expected counts, check assumptions, report chi-square, df, p and Cramér’s V, and interpret the result. For the residuals task also inspect standardized residuals; report what you observe rather than assuming significance."
+    "task": "State hypotheses for Major and StressLevel using the 300 supplied survey records.\nDisplay observed and expected counts; check chi-square assumptions.\nRun chi-square independence and report chi-square, df, p and Cramér’s V.\nInspect standardized residuals and describe which cells contribute to the association.\nWrite one contextual results paragraph using your actual output."
   },
   "m8-chisq-cramers-v": {
     "file": "module8_survey.csv",
@@ -379,7 +385,7 @@ const plans = {
       "Major",
       "StressLevel"
     ],
-    "task": "Use the supplied 300 simulated survey records, not a survey you must conduct. Test association between Major (Psychology, Biology, Math) and StressLevel (Low, Medium, High) with chi-square independence. State hypotheses, display observed/expected counts, check assumptions, report chi-square, df, p and Cramér’s V, and interpret the result. For the residuals task also inspect standardized residuals; report what you observe rather than assuming significance."
+    "task": "State hypotheses for Major and StressLevel using the 300 supplied survey records.\nDisplay observed and expected counts; check chi-square assumptions.\nRun chi-square independence and report chi-square, df, p and Cramér’s V.\nInspect standardized residuals and describe which cells contribute to the association.\nWrite one contextual results paragraph using your actual output."
   },
   "m8-chisq-apa-writeup": {
     "file": "module8_survey.csv",
@@ -387,7 +393,7 @@ const plans = {
       "Major",
       "StressLevel"
     ],
-    "task": "Use the supplied 300 simulated survey records, not a survey you must conduct. Test association between Major (Psychology, Biology, Math) and StressLevel (Low, Medium, High) with chi-square independence. State hypotheses, display observed/expected counts, check assumptions, report chi-square, df, p and Cramér’s V, and interpret the result. For the residuals task also inspect standardized residuals; report what you observe rather than assuming significance."
+    "task": "State hypotheses for Major and StressLevel using the 300 supplied survey records.\nDisplay observed and expected counts; check chi-square assumptions.\nRun chi-square independence and report chi-square, df, p and Cramér’s V.\nInspect standardized residuals and describe which cells contribute to the association.\nWrite one contextual results paragraph using your actual output."
   },
   "m8-chisq-standardized-residuals": {
     "file": "module8_survey.csv",
@@ -395,7 +401,7 @@ const plans = {
       "Major",
       "StressLevel"
     ],
-    "task": "Use the supplied 300 simulated survey records, not a survey you must conduct. Test association between Major (Psychology, Biology, Math) and StressLevel (Low, Medium, High) with chi-square independence. State hypotheses, display observed/expected counts, check assumptions, report chi-square, df, p and Cramér’s V, and interpret the result. For the residuals task also inspect standardized residuals; report what you observe rather than assuming significance."
+    "task": "State hypotheses for Major and StressLevel using the 300 supplied survey records.\nDisplay observed and expected counts; check chi-square assumptions.\nRun chi-square independence and report chi-square, df, p and Cramér’s V.\nInspect standardized residuals and describe which cells contribute to the association.\nWrite one contextual results paragraph using your actual output."
   },
   "m8-chisq-survey-analysis": {
     "file": "module8_survey.csv",
@@ -403,7 +409,7 @@ const plans = {
       "Major",
       "StressLevel"
     ],
-    "task": "Use the supplied 300 simulated survey records, not a survey you must conduct. Test association between Major (Psychology, Biology, Math) and StressLevel (Low, Medium, High) with chi-square independence. State hypotheses, display observed/expected counts, check assumptions, report chi-square, df, p and Cramér’s V, and interpret the result. For the residuals task also inspect standardized residuals; report what you observe rather than assuming significance."
+    "task": "State hypotheses for Major and StressLevel using the 300 supplied survey records.\nDisplay observed and expected counts; check chi-square assumptions.\nRun chi-square independence and report chi-square, df, p and Cramér’s V.\nInspect standardized residuals and describe which cells contribute to the association.\nWrite one contextual results paragraph using your actual output."
   },
   "m8-chisq-expected-freq": {
     "file": "module8_contingency.csv",
@@ -411,7 +417,7 @@ const plans = {
       "Group",
       "Outcome"
     ],
-    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure. Display expected counts and verify one by row total × column total / 100. Run chi-square independence. For hand calculation compare the uncorrected statistic; for continuity correction compare corrected and uncorrected results."
+    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure.\nDisplay expected counts; verify one using row total × column total / 100.\nCalculate χ² = Σ[(O − E)² / E] by hand and compare with the uncorrected software statistic.\nCompare corrected and uncorrected chi-square results; explain the continuity correction."
   },
   "m8-chisq-continuity": {
     "file": "module8_contingency.csv",
@@ -419,7 +425,7 @@ const plans = {
       "Group",
       "Outcome"
     ],
-    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure. Display expected counts and verify one by row total × column total / 100. Run chi-square independence. For hand calculation compare the uncorrected statistic; for continuity correction compare corrected and uncorrected results."
+    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure.\nDisplay expected counts; verify one using row total × column total / 100.\nCalculate χ² = Σ[(O − E)² / E] by hand and compare with the uncorrected software statistic.\nCompare corrected and uncorrected chi-square results; explain the continuity correction."
   },
   "m8-chisq-assumptions": {
     "file": "module8_contingency.csv",
@@ -427,7 +433,7 @@ const plans = {
       "Group",
       "Outcome"
     ],
-    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure. Display expected counts and verify one by row total × column total / 100. Run chi-square independence. For hand calculation compare the uncorrected statistic; for continuity correction compare corrected and uncorrected results."
+    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure.\nDisplay expected counts; verify one using row total × column total / 100.\nCalculate χ² = Σ[(O − E)² / E] by hand and compare with the uncorrected software statistic.\nCompare corrected and uncorrected chi-square results; explain the continuity correction."
   },
   "m8-chisq-by-hand": {
     "file": "module8_contingency.csv",
@@ -435,7 +441,7 @@ const plans = {
       "Group",
       "Outcome"
     ],
-    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure. Display expected counts and verify one by row total × column total / 100. Run chi-square independence. For hand calculation compare the uncorrected statistic; for continuity correction compare corrected and uncorrected results."
+    "task": "Cross-tabulate Group and Outcome: A has 30 Success and 20 Failure; B has 15 Success and 35 Failure.\nDisplay expected counts; verify one using row total × column total / 100.\nCalculate χ² = Σ[(O − E)² / E] by hand and compare with the uncorrected software statistic.\nCompare corrected and uncorrected chi-square results; explain the continuity correction."
   },
   "m8-chisq-fisher": {
     "file": "module8_small_counts.csv",
@@ -462,11 +468,115 @@ export function withModule8Dataset(exercise) {
       return {...exercise, instructions: exercise.instructions + ' This is an explanation task; no new dataset or experiment is required.'};
     return exercise;
   }
+  const instructionSteps = [
+    'Open '+plan.file+' from Tools → Datasets or the download link.',
+    'Use columns (case-sensitive): '+plan.columns.join(', ')+'. Set categories to nominal and measurements to continuous.',
+    ...plan.task.split(/\n|(?<=\.)\s+(?=[A-Z])/).filter(Boolean),
+    'Keep your output and explanation as evidence. Reuse this supplied synthetic file for related tasks.'
+  ];
   return {...exercise,
+    instructionSteps,
+    submission: 'Submit the requested output and your explanation using your actual results.',
     dataset: {filename: plan.file, url: '/'+plan.file, columns: plan.columns},
-    instructions: 'Download '+plan.file+' from Tools → Datasets (or the link below) and open it in your chosen software. These are synthetic teaching records; do not invent, collect or simulate data and do not use lsj-data for this task. Reuse this file for related tasks. Columns (case-sensitive): '+plan.columns.join(', ')+'. Set grouping/category columns to nominal and measurement columns to continuous. '+plan.task,
+    instructions: instructionSteps.join('\n'),
     description: 'Use '+plan.file+' — '+plan.columns.join(', ')+'.',
     hint: 'Use '+exercise.software_type+' to perform the analysis requested in the title. ID identifies rows and is never an outcome or predictor. Report your actual results; example numbers from other datasets are not answer targets.',
     sample_data: null, sample_answer: undefined, success_message: undefined
   };
+}
+
+// Consolidate repeated analyses within each software package, retaining distinct methods.
+const taskGroups = [
+  [
+    "Chi-square association: assumptions, effect size and report",
+    [
+      "m8-chisq-independence",
+      "m8-chisq-cramers-v",
+      "m8-chisq-apa-writeup",
+      "m8-chisq-standardized-residuals",
+      "m8-chisq-survey-analysis"
+    ]
+  ],
+  [
+    "Expected counts, hand calculation and continuity correction",
+    [
+      "m8-chisq-expected-freq",
+      "m8-chisq-continuity",
+      "m8-chisq-assumptions",
+      "m8-chisq-by-hand"
+    ]
+  ],
+  [
+    "Independent t-test: assumptions, effect size and report",
+    [
+      "m8-ttest-independent-nav",
+      "m8-independent-t-report",
+      "m8-ttest-full-writeup",
+      "m8-ttest-manuscript-results",
+      "m8-ttest-levene",
+      "m8-ttest-shapiro",
+      "m8-ttest-qq-plot",
+      "m8-ttest-cohens-d-nav",
+      "m8-ttest-ci-mean-diff"
+    ]
+  ],
+  [
+    "Student versus Welch: variances and degrees of freedom",
+    [
+      "m8-ttest-student-welch",
+      "m8-ttest-pooled-vs-welch"
+    ]
+  ],
+  [
+    "Paired t-test and difference scores",
+    [
+      "m8-ttest-paired-nav",
+      "m8-ttest-difference-scores"
+    ]
+  ],
+  [
+    "Pearson correlation and interpretation",
+    [
+      "m8-correlation-pearson-nav",
+      "m8-correlation-interpret"
+    ]
+  ],
+  [
+    "Simple regression and interpretation",
+    [
+      "m8-regression-simple-nav",
+      "m8-regression-simple-interpret"
+    ]
+  ],
+  [
+    "One-way ANOVA: assumptions, post-hoc tests and report",
+    [
+      "m8-anova-oneway-nav",
+      "m8-anova-oneway-ch13",
+      "m8-anova-gamlj-oneway",
+      "m8-anova-full-writeup",
+      "m8-anova-posthoc-holm",
+      "m8-anova-levene",
+      "m8-anova-qq-residuals"
+    ]
+  ],
+  [
+    "Repeated-measures ANOVA and sphericity",
+    [
+      "m8-anova-repeated-measures",
+      "m8-anova-mauchly"
+    ]
+  ]
+];
+export function consolidateModule8Exercises(exercises) {
+ const seen = new Set();
+ return exercises.flatMap(exercise => {
+  if (exercise.module !== 'module-8' || !exercise.is_active) return [exercise];
+  const group = taskGroups.find(([, keys]) => keys.includes(exercise.practiceObjectiveKey));
+  if (!group) return [exercise];
+  const id = exercise.software_type + ':' + group[0];
+  if (seen.has(id)) return [];
+  seen.add(id);
+  return [{...exercise, title: group[0], exercise_type: 'instructional'}];
+ });
 }

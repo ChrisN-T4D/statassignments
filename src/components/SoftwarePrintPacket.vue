@@ -46,7 +46,8 @@
       <ol v-if="youDoTasks.length" class="you-tasks">
         <li v-for="(task, i) in youDoTasks" :key="i">
           <strong>{{ task.title }}</strong>
-          <p>{{ task.instructions || task.description }}</p>
+          <ul v-if="task.module === 'module-8'"><li v-for="(item, index) in instructionItems(task)" :key="index">{{ item }}</li></ul>
+          <p v-else>{{ task.instructions || task.description }}</p>
         </li>
       </ol>
     </section>
@@ -54,6 +55,7 @@
 </template>
 
 <script setup>
+import { instructionItems } from '../lib/practiceInstructions.js'
 defineProps({
   lessonTitle: { type: String, default: 'Software Practice' },
   softwareLabel: { type: String, default: 'jamovi' },
