@@ -1279,6 +1279,20 @@ export const statisticsExercises = consolidateModule8Exercises([
   },
   {
     module: 'module-6',
+    topic: 'probability-rules',
+    practiceObjectiveKey: 'm6-probability-rules',
+    title: 'Apply the Addition and Multiplication Rules',
+    description: 'Check the basic probability rules against the binomial calculator',
+    instructions: '<ol><li>Look for <strong>distrACTION</strong> in the Analyses ribbon. If it is missing, click <strong>Modules</strong> (+, top right) &gt; <strong>jamovi library</strong>, find <strong>distrACTION</strong>, and click <strong>Install</strong>.</li><li>Go to <strong>Analyses &gt; distrACTION &gt; Binomial Distribution</strong> and set <strong>n = 3</strong> flips and <strong>p = 0.5</strong>.</li><li><strong>Multiplication rule (independent events):</strong> compute P(X = 3), three heads in three flips. Check it equals 0.5 &times; 0.5 &times; 0.5 = 0.125.</li><li><strong>Addition rule (mutually exclusive events):</strong> compute P(X = 0) and P(X = 1). Check that P(0 or 1 heads) = P(X = 0) + P(X = 1) = 0.125 + 0.375 = 0.5.</li><li><strong>Complement rule:</strong> compute P(X &ge; 1), at least one head, and check it equals 1 &minus; P(X = 0) = 0.875.</li><li>Say why each rule applies here: flips are independent; 0 heads and 1 head cannot both happen.</li></ol>',
+    software_type: 'jamovi',
+    exercise_type: 'instructional',
+    hint: 'Multiply for "and" with independent events. Add for "or" with mutually exclusive events. Complement: P(not A) = 1 &minus; P(A).',
+    submission: 'Recording showing the three calculator results next to your hand calculations and your explanation of each rule.',
+    order: 6.5,
+    is_active: true
+  },
+  {
+    module: 'module-6',
     topic: 'probability-concepts',
     practiceObjectiveKey: 'm6-frequentist-vs-bayesian',
     title: 'Frequentist vs Bayesian Interpretation',
@@ -1297,10 +1311,10 @@ export const statisticsExercises = consolidateModule8Exercises([
     practiceObjectiveKey: 'm6-empirical-rule',
     title: 'Apply the Empirical Rule',
     description: 'Use the 68-95-99.7 rule for normal distributions',
-    instructions: '<ol><li>Open <strong>personality_data.csv</strong> from Tools (File &gt; Open).</li><li>Run <strong>Analyses &gt; Exploration &gt; Descriptives</strong> on <strong>extraversion</strong> and show <strong>Mean</strong> and <strong>Std. deviation</strong>.</li><li>Compute mean &minus; 1 SD and mean + 1 SD (calculator or a new computed variable).</li><li>Add a <strong>Filter</strong> (Data tab) with the formula <code>extraversion &gt;= LOWER and extraversion &lt;= UPPER</code> (type your two numbers), and read how many rows remain vs. the total N.</li><li>Repeat for &plusmn;2 SD. Compare the percentages to the 68% / 95% rule and say whether extraversion is close to normal.</li></ol>',
+    instructions: '<ol><li>Open <strong>personality_data.csv</strong> from Tools (File &gt; Open).</li><li>Run <strong>Analyses &gt; Exploration &gt; Descriptives</strong> on <strong>extraversion</strong> and note the <strong>Mean</strong> and <strong>Std. deviation</strong>.</li><li>In <strong>Data &gt; Compute</strong>, create <strong>z_extra</strong> = <code>(extraversion &minus; MEAN) / SD</code>, typing your two numbers from step 2.</li><li>Add a <strong>Filter</strong> (Data tab) <code>ABS(z_extra) &lt;= 1</code>. Compare the number of rows kept with the total N to get the percentage within 1 SD.</li><li>Change the filter to <code>ABS(z_extra) &lt;= 2</code> and repeat. Compare both percentages with the 68% and 95% of the empirical rule.</li><li>Say whether extraversion looks close to normal.</li></ol>',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Percent within = rows kept &divide; total rows. Turn the filter off afterwards.',
+    hint: 'z = (score \u2212 mean) / SD. Percent within = rows kept \u00f7 total rows. Turn the filter off afterwards.',
     submission: 'Recording showing the SD, the two filtered counts, and your comparison to 68-95-99.7.',
     order: 8,
     is_active: true

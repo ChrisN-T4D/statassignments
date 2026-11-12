@@ -8,10 +8,13 @@ export const module6UnifiedLessons = [
     title: 'Normal Distribution and Confidence Intervals in Jamovi',
     software: 'jamovi',
     objectives: [
-      'Compute z-scores with Data → Compute',
-      'Interpret z-scores using the empirical rule',
-      'Request a confidence interval for the mean in Descriptives',
-      'Explain how sample size affects CI width'
+      'Find normal and binomial probabilities with distrACTION',
+      'Check the addition, multiplication and complement rules against calculator results',
+      'Compute z-scores with Data → Compute and apply the empirical rule (68-95-99.7)',
+      'Simulate random samples and sampling distributions with computed variables (law of large numbers, central limit theorem)',
+      'Compare sampling methods and explain the sample SD as an estimate of the population SD',
+      'Request a confidence interval for the mean in Descriptives and explain how sample size affects its width',
+      'Interpret confidence intervals, and explain frequentist vs Bayesian readings and when to use z, t, χ² and F'
     ],
     estimatedTime: 50,
     phases: {
@@ -292,7 +295,7 @@ export const module6UnifiedLessons = [
         type: 'independent_practice',
         title: 'Apply Your Skills',
         summary:
-          'Record yourself completing the 15 exercises below in jamovi, talking through each step. Use <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv) for the data tasks; the probability and sampling-simulation tasks use the distrACTION module and computed variables. Each exercise lists numbered steps and what to show in your recording.',
+          'Record yourself completing the 16 exercises below in jamovi, talking through each step. Use <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv) for the data tasks; the probability and sampling-simulation tasks use the distrACTION module and computed variables. Each exercise lists numbered steps and what to show in your recording.',
         instructions:
           'Start recording (Tools or your phone). Open <strong>personality_data.csv</strong> from Tools, complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 6: Software Practice. Mark each exercise complete when finished.'
         // Exercises come from statisticsPractices.js (module-6, software jamovi)
