@@ -47,7 +47,10 @@
         <li v-for="(task, i) in youDoTasks" :key="i">
           <strong>{{ task.title }}</strong>
           <ul v-if="task.module === 'module-8'"><li v-for="(item, index) in instructionItems(task)" :key="index">{{ item }}</li></ul>
-          <p v-else>{{ task.instructions || task.description }}</p>
+          <template v-else>
+            <div class="task-body" v-html="task.instructions || task.description"></div>
+            <p v-if="task.submission" class="task-submit"><strong>Show in your recording:</strong> <span v-html="task.submission"></span></p>
+          </template>
         </li>
       </ol>
     </section>

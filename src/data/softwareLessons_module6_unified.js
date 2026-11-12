@@ -292,7 +292,7 @@ export const module6UnifiedLessons = [
         type: 'independent_practice',
         title: 'Apply Your Skills',
         summary:
-          'Record yourself completing the Module 6 Software Practice tasks in jamovi. Use a <strong>different</strong> Tools file than Learn/Practice: open <strong>personality_data.csv</strong> (not bmi_and_exercise.csv). Run z-scores and a confidence interval for the mean on a continuous scale such as <strong>extraversion</strong> or <strong>age</strong>, then complete the Module 6 Apply exercises below.',
+          'Record yourself completing the 15 exercises below in jamovi, talking through each step. Use <strong>personality_data.csv</strong> from Tools (not bmi_and_exercise.csv) for the data tasks; the probability and sampling-simulation tasks use the distrACTION module and computed variables. Each exercise lists numbered steps and what to show in your recording.',
         instructions:
           'Start recording (Tools or your phone). Open <strong>personality_data.csv</strong> from Tools, complete each exercise below in jamovi, then stop, download the video, and upload it to Canvas as Module 6: Software Practice. Mark each exercise complete when finished.'
         // Exercises come from statisticsPractices.js (module-6, software jamovi)

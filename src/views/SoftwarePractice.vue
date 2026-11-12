@@ -152,9 +152,9 @@
           <div class="instruction-card">
             <h3>Instructions</h3>
             <ul v-if="currentExercise.module === 'module-8'" class="task-directions"><li v-for="(item, i) in instructionItems(currentExercise)" :key="i">{{ item }}</li></ul>
-            <p v-else>{{ currentExercise.instructions }}</p>
+            <div v-else v-html="currentExercise.instructions"></div>
             <p v-if="currentExercise.hint" class="instruction-hint">
-              Hint: {{ currentExercise.hint }}
+              Hint: <span v-html="currentExercise.hint"></span>
             </p>
             <div v-if="currentExercise.submission" class="submission-note">
               Submit: {{ currentExercise.submission }}
