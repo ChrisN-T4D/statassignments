@@ -575,7 +575,7 @@ function getExerciseInstructions() {
     <h1>${currentExercise.value.title}</h1>
     <div class="content-box">
       <h3>Instructions</h3>
-      ${currentExercise.value.module === 'module-8' ? instructionHtml(currentExercise.value) : `<p>${currentExercise.value.instructions}</p>`}
+      ${currentExercise.value.module === 'module-8' ? instructionHtml(currentExercise.value) : `<div>${currentExercise.value.instructions}</div>`}
     </div>
   `
 

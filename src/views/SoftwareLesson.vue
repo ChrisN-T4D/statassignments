@@ -699,7 +699,12 @@
  <ul class="task-directions objective-description"><li v-for="(item, i) in instructionItems(exercise)" :key="i">{{ item }}</li></ul>
  <p v-if="exercise.dataset"><a :href="exercise.dataset.url" download>Download {{ exercise.dataset.filename }}</a></p>
  <p class="objective-description"><strong>Expected result and evidence:</strong> {{ exercise.submission || 'Produce the requested analysis output, show the named variables and options, and explain your result in context. Include a screenshot or recorded output. For explanation-only tasks, provide the requested written response.' }}</p>
- </template><p v-else class="objective-description">{{ exercise.description }}</p>
+ </template>
+                    <template v-else-if="exercise.module === 'module-6'">
+                      <div class="objective-description module6-steps" v-html="exercise.instructions"></div>
+                      <p v-if="exercise.submission" class="objective-description"><strong>Show in your recording:</strong> <span v-html="exercise.submission"></span></p>
+                    </template>
+                    <p v-else class="objective-description">{{ exercise.description }}</p>
                     <div v-if="exercise.hint" class="objective-hint-section">
                       <button 
                         class="btn-hint" 
@@ -708,7 +713,8 @@
                       >
                         💡 {{ showHints[exercise.title] ? 'Hide Hint' : 'Show Hint' }}
                       </button>
-                      <div v-if="showHints[exercise.title]" class="hint-content">
+                      <div v-if="showHints[exercise.title] && exercise.module === 'module-6'" class="hint-content" v-html="exercise.hint"></div>
+                      <div v-else-if="showHints[exercise.title]" class="hint-content">
                         {{ exercise.hint }}
                       </div>
                     </div>
@@ -1428,7 +1434,7 @@ function getExerciseInstructions(exercise, exerciseNumber) {
     </div>
     <div class="content-box">
       <h3>Instructions</h3>
-      ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<p>${exercise.instructions}</p>`}
+      ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<div>${exercise.instructions}</div>`}
     </div>
   `
 
@@ -1513,7 +1519,7 @@ function getAllExercisesInstructions() {
       <div class="content-box">
         <h2>Exercise ${exerciseNumber}: ${exercise.title}</h2>
         <p><strong>Description:</strong> ${exercise.description}</p>
-        ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<p><strong>Instructions:</strong> ${exercise.instructions}</p>`}
+        ${exercise.module === 'module-8' ? instructionHtml(exercise) : `<div><strong>Instructions:</strong> ${exercise.instructions}</div>`}
     `
 
     if (exercise.hint) {
@@ -3546,6 +3552,10 @@ watch(currentPhase, () => {
   }
 }
 .task-directions { padding-left: 1.5rem; line-height: 1.6; }
+.module6-steps { line-height: 1.6; }
+.module6-steps ol { padding-left: 1.5rem; margin: .5rem 0; }
+.module6-steps li { margin: .5rem 0; }
+.module6-steps p { margin: .25rem 0 .5rem; }
 .task-directions li { margin: .5rem 0; padding-left: .2rem; }
 </style>
 
