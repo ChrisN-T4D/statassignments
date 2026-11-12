@@ -50,6 +50,7 @@
           <template v-else>
             <div class="task-body" v-html="task.instructions || task.description"></div>
             <p v-if="task.submission" class="task-submit"><strong>Show in your recording:</strong> <span v-html="task.submission"></span></p>
+            <div v-if="task.module === 'module-6' && task.hint" class="task-hint"><strong>Hint:</strong> <span v-html="task.hint"></span></div>
           </template>
         </li>
       </ol>
