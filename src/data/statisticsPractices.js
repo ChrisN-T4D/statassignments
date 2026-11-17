@@ -2667,7 +2667,7 @@ export const statisticsExercises = consolidateModule8Exercises([
     instructions: 'Run a one-way ANOVA comparing mood improvement across three drugs (Placebo, Anxifree, Joyzepam). Include effect size (eta-squared).',
     software_type: 'jamovi',
     exercise_type: 'menu_navigation',
-    hint: 'Use Analyses > ANOVA > ANOVA. Move outcome to Dependent Variable and grouping factor to Fixed Factors.',
+    hint: 'Use Analyses > ANOVA > ANOVA. Move outcome to Dependent Variable and grouping factor to Fixed Factors. If you cannot find eta-squared (η²), use Analyses > ANOVA > ANOVA rather than One-Way ANOVA, then select η² under Effect Size. With one grouping variable in Fixed Factors, this is still a one-way ANOVA.',
     expected_selections: [
       { menu: 'analyses', option: 'anova', subOption: 'anova' }
     ],
@@ -2863,7 +2863,7 @@ export const statisticsExercises = consolidateModule8Exercises([
     instructions: 'Conduct a full one-way ANOVA analysis including: (1) Check assumptions (Levene, Q-Q plot), (2) Run ANOVA with effect size, (3) Conduct post-hoc tests with Holm correction, (4) Write complete APA-formatted results.',
     software_type: 'jamovi',
     exercise_type: 'instructional',
-    hint: 'Report: F(df_between, df_within) = F-value, p = p-value, η² = effect size. Then describe post-hoc findings.',
+    hint: 'Report: F(df_between, df_within) = F-value, p = p-value, η² = effect size. Then describe post-hoc findings. If you cannot find eta-squared (η²), use Analyses > ANOVA > ANOVA rather than One-Way ANOVA, then select η² under Effect Size. With one grouping variable in Fixed Factors, this is still a one-way ANOVA. The ANOVA analysis also provides Holm-adjusted post-hoc comparisons.',
     sample_answer: 'A one-way ANOVA was conducted to compare mood improvement across three drug conditions (Placebo, Anxifree, Joyzepam). Levene\'s test indicated homogeneity of variance (p = .27), and Q-Q plot suggested normally distributed residuals. The ANOVA revealed a significant effect of drug type, F(2, 15) = 18.61, p < .001, η² = 0.71. Post-hoc tests using Holm correction showed that Joyzepam produced significantly greater mood improvement than both Anxifree (p = .001) and Placebo (p < .001). No significant difference was found between Anxifree and Placebo (p = .15).',
     submission: 'Complete analysis including: (1) Assumption checks, (2) jamovi output screenshot, (3) APA-formatted results paragraph (4-6 sentences)',
     order: 58,

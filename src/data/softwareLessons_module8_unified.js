@@ -539,7 +539,7 @@ export const module8UnifiedLessons = [
           },
           {
             instruction: 'Tools → personality_data.csv → ☰ Open. One-Way ANOVA: Dependent = extraversion, Grouping = ethnicity. Add post-hoc if significant.',
-            hint: 'Analyses → ANOVA → One-Way ANOVA. Tukey or Holm post-hoc; request η².',
+            hint: 'If you cannot find eta-squared (η²), use Analyses > ANOVA > ANOVA rather than One-Way ANOVA, then select η² under Effect Size. With one grouping variable in Fixed Factors, this is still a one-way ANOVA. This ANOVA analysis also provides Tukey or Holm post-hoc comparisons.',
             checkpoint: 'You can compare 3+ ethnicity groups and read which pairs differ.'
           }
         ]
